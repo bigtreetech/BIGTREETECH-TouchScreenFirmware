@@ -68,12 +68,12 @@ void menuPreheat(void)
     LABEL_PREHEAT,
     // icon                          label
     {
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
-      {ICON_PREHEAT,                 LABEL_BACKGROUND},
+      {ICON_PREHEAT,                 LABEL_NULL},
+      {ICON_PREHEAT,                 LABEL_NULL},
+      {ICON_PREHEAT,                 LABEL_NULL},
+      {ICON_PREHEAT,                 LABEL_NULL},
+      {ICON_PREHEAT,                 LABEL_NULL},
+      {ICON_PREHEAT,                 LABEL_NULL},
       {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
       {ICON_BACK,                    LABEL_BACK},
     }

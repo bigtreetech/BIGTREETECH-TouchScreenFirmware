@@ -15,7 +15,7 @@ typedef enum
   #undef  X_CHAR
   //keep below items always at the end
   CHARICON_NUM,
-  CHARICON_BACKGROUND
+  CHARICON_NULL
 } CHAR_ICON;
 
 extern const uint16_t charIconColor[CHARICON_NUM];

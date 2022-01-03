@@ -86,15 +86,15 @@ void listViewSetCurPage(uint8_t curPage)
       }
       else
       {
-        listItems.items[i].icon = CHARICON_BACKGROUND;
+        listItems.items[i].icon = CHARICON_NULL;
       }
     }
   }
 
   // only 1 page or in first page, hide up button
-  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_BACKGROUND : CHARICON_PAGEUP;
+  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_NULL : CHARICON_PAGEUP;
   // only 1 page or in last page, hide down button
-  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_BACKGROUND : CHARICON_PAGEDOWN;
+  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_NULL : CHARICON_PAGEDOWN;
 
   listItems.items[7].icon = CHARICON_BACK;
 
@@ -166,7 +166,7 @@ void listViewRefreshItem(uint16_t item)
   }
   else
   {
-    listItems.items[cur_i].icon = CHARICON_BACKGROUND;
+    listItems.items[cur_i].icon = CHARICON_NULL;
   }
   menuDrawListItem(&listItems.items[cur_i], cur_i);
 }
@@ -183,7 +183,7 @@ uint16_t listViewGetSelectedIndex(void)
 
     if (cur_index < maxItemCount)
     {
-      if (totalItems[cur_index].icon != CHARICON_BACKGROUND)
+      if (totalItems[cur_index].icon != CHARICON_NULL)
         return cur_index;
       else
         return KEY_IDLE;

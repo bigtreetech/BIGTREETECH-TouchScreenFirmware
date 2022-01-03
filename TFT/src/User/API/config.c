@@ -556,6 +556,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
+    case C_INDEX_EVENT_LED:
     case C_INDEX_FILE_COMMENT_PARSING:
       SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_EMULATED_M600) + INDEX_EMULATED_M600), getOnOff());
       break;
@@ -563,11 +564,11 @@ void parseConfigKey(uint16_t index)
     //----------------------------UI Settings
 
     case C_INDEX_ROTATED_UI:
-      #ifdef PORTRAIT
-        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 2, 3);
-      #else
-        SET_VALID_INT_VALUE(infoSettings.rotated_ui, 0, 1);
-      #endif
+      if (infoSettings.rotated_ui != getOnOff())
+      {
+        scheduleRotate = true;
+        infoSettings.rotated_ui = getOnOff();
+      }
       break;
 
     case C_INDEX_LANGUAGE:

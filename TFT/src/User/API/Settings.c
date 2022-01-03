@@ -24,14 +24,11 @@ void initSettings(void)
 // General Settings
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) | (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
+                                         (EVENT_LED << INDEX_EVENT_LED) |
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
 // UI Settings
-  #ifdef PORTRAIT
-    infoSettings.rotated_ui             = 3;
-  #else
-    infoSettings.rotated_ui             = ROTATED_UI;
-  #endif
+  infoSettings.rotated_ui             = ROTATED_UI;
   infoSettings.language               = LANGUAGE;
   infoSettings.status_screen          = STATUS_SCREEN;
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];

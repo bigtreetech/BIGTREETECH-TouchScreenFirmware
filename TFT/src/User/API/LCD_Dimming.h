@@ -79,6 +79,14 @@ extern "C" {
 
 #endif  // LCD_LED_PWM_CHANNEL
 
+#if defined(LCD_LED_PWM_CHANNEL) && defined(LED_COLOR_PIN)
+  void LCD_SetKnobLedIdle(bool enabled);
+
+  #define LCD_SET_KNOB_LED_IDLE(enabled) LCD_SetKnobLedIdle(enabled)
+#else
+  #define LCD_SET_KNOB_LED_IDLE(enabled)
+#endif  // LCD_LED_PWM_CHANNEL && LED_COLOR_PIN
+
 #ifdef __cplusplus
 }
 #endif

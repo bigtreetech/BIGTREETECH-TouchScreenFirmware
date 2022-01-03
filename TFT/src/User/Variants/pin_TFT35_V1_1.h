@@ -1,5 +1,5 @@
-#ifndef _PIN_TFT35_V1_1_H_ // modify to actual filename !!!
-#define _PIN_TFT35_V1_1_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT35_V1_1_H_  // modify to actual filename !!!
+#define _PIN_TFT35_V1_1_H_  // modify to actual filename !!!
 
 // Hardware version config
 #ifndef HARDWARE_VERSION

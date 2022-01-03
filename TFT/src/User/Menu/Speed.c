@@ -29,8 +29,8 @@ void menuSpeed(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
       {ICON_E_5_PERCENT,             LABEL_5_PERCENT},

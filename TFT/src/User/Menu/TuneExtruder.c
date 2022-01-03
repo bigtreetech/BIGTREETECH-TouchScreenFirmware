@@ -3,7 +3,7 @@
 
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 4
 
-#define EXTRUDE_LEN 100.0f // in MM
+#define EXTRUDE_LEN 100.0f  // in MM
 
 static uint8_t tool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
@@ -50,12 +50,16 @@ static inline void extrudeFilament(void)
 {
   // Home extruder
   mustStoreScript("G28\nG90\n");
+
+  if (tool_index != heatGetCurrentTool())
+    storeCmd("%s\n", tool_change[tool_index]);
+
   // Raise Z axis to pause height
   mustStoreCmd("G0 Z%.3f F%d\n", coordinateGetAxisActual(Z_AXIS) + infoSettings.pause_z_raise,
-                  infoSettings.pause_feedrate[FEEDRATE_Z]);
+               infoSettings.pause_feedrate[FEEDRATE_Z]);
   // Move to pause location
   mustStoreCmd("G0 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
-                  infoSettings.pause_feedrate[FEEDRATE_XY]);
+               infoSettings.pause_feedrate[FEEDRATE_XY]);
   // extrude 100MM
   mustStoreScript("M83\nG1 F50 E%.2f\nM82\n", EXTRUDE_LEN);
 
@@ -71,8 +75,8 @@ void menuTuneExtruder(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
       {ICON_5_DEGREE,                LABEL_5_DEGREE},
@@ -124,7 +128,7 @@ void menuTuneExtruder(void)
         break;
 
       case KEY_ICON_4:
-        tool_index = (tool_index + 1) % infoSettings.hotend_count;
+        tool_index = (tool_index + 1) % infoSettings.ext_count;
 
         temperatureReDraw(tool_index, NULL, false);
         break;
@@ -208,8 +212,8 @@ void menuNewExtruderESteps(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_EEPROM_SAVE,             LABEL_SAVE},
       {ICON_1_MM,                    LABEL_1_MM},

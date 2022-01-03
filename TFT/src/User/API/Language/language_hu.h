@@ -4,6 +4,7 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "Emulált M600"
     #define STRING_EMULATED_M109_M190     "Emulált M109 / M190"
+    #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "Fájl megjegyzés elemzése"
     #define STRING_ROTATED_UI             "Forgatás"
     #define STRING_LANGUAGE               "Magyar"

@@ -57,10 +57,10 @@ void menuDialog(void);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
 
-#define popupReminder(_type, _title, _msg)                        \
-  {                                                               \
-    setDialogText(_title, _msg, LABEL_CONFIRM, LABEL_BACKGROUND); \
-    showDialog(_type, NULL, NULL, NULL);                          \
+#define popupReminder(_type, _title, _msg)                  \
+  {                                                         \
+    setDialogText(_title, _msg, LABEL_CONFIRM, LABEL_NULL); \
+    showDialog(_type, NULL, NULL, NULL);                    \
   }
 
 #ifdef __cplusplus

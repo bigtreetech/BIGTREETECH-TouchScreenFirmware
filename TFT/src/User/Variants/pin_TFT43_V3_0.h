@@ -1,9 +1,13 @@
-#ifndef _PIN_TFT43_V3_0_H_ // modify to actual filename !!!
-#define _PIN_TFT43_V3_0_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT43_V3_0_H_  // modify to actual filename !!!
+#define _PIN_TFT43_V3_0_H_  // modify to actual filename !!!
 
 #ifndef TFT_RESOLUTION
   #define TFT_RESOLUTION
-  #include "./Resolution/TFT_480X272.h"
+  #ifdef PORTRAIT_MODE
+    #include "./Resolution/TFT_272X480.h"
+  #else
+    #include "./Resolution/TFT_480X272.h"
+  #endif
 #endif
 
 #ifndef ROOT_DIR

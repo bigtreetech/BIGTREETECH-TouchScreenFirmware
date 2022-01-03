@@ -1,5 +1,5 @@
-#ifndef _PIN_TFT50_V3_0_H_ // modify to actual filename !!!
-#define _PIN_TFT50_V3_0_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
+#define _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
 
 #ifndef ROOT_DIR
   #define ROOT_DIR "TFT50"

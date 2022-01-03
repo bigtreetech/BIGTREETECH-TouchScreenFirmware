@@ -179,6 +179,8 @@ extern "C" {
 
 #endif  // LED_COLOR_PIN
 
+void LED_SetColor(uint8_t r, uint8_t g, uint8_t b, bool skipPrinterLed);
+
 #ifdef __cplusplus
 }
 #endif
