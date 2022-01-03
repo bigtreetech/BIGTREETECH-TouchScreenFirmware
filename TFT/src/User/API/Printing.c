@@ -478,6 +478,8 @@ void printAbort(void)
   if (loopDetected) return;
   if (!infoPrinting.printing) return;
 
+  loopDetected = true;
+
   switch (infoFile.source)
   {
     case REMOTE_HOST:  // nothing to do
@@ -573,16 +575,12 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
       if (isPause)  // pause
       {
-        // restore status before pause
-        // if pause was triggered through M0/M1 then break
         if (pauseType == PAUSE_M0)
         {
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
-          break;
         }
-
-        // do not send any command if the pause originated outside TFT
-        if (pauseType < PAUSE_EXTERNAL)
+        else  // send command only if the pause originated from TFT
+        if (pauseType == PAUSE_NORMAL)
         {
           coordinateGetAll(&tmp);
 
@@ -614,11 +612,9 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         if (infoPrinting.pauseType == PAUSE_M0)
         {
           breakAndContinue();  // clear the queue and send a break and continue
-          break;
         }
-
-        // do not send any command if the pause originated outside TFT
-        if (infoPrinting.pauseType < PAUSE_EXTERNAL)
+        else  // send command only if the pause originated from TFT
+        if (pauseType == PAUSE_NORMAL)
         {
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
