@@ -806,7 +806,7 @@ void menuDrawTitle(const uint8_t *content)
   if (content)
   {
     if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
-    {
+    { // hide file extension in printing menu title if needed
       hideExtension((char *)content);
       GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
       restoreExtension((char *)content);
@@ -835,8 +835,7 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_NULL)
-      menuDrawTitle(labelGetAddress(&curListItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
