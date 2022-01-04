@@ -71,6 +71,8 @@ void gocdeIconDraw(void)
   // draw gcode files
   for (; (i + baseIndex < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
   {
+    restoreFileExtension(i + baseIndex - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
+
     if (EnterDir(infoFile.file[i + baseIndex - infoFile.folderCount]) == false)  // always use short filename for file path
       break;
     // if model preview bmp exists, display bmp directly without writing to flash
