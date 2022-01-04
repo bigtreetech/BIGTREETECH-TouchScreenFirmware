@@ -151,7 +151,9 @@ char * hideFileExtension(uint8_t index)
   {
     extPos = isSupportedFile(filename);
 
-    if (extPos != NULL)  // if filename provides a supported filename extension
+    // if filename provides a supported filename extension then 
+    // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+    if (extPos != NULL && filename[strlen(filename) + 1] == 0)
       filename[extPos - filename] = 0;  // temporary hide filename extension
   }
 
@@ -163,7 +165,9 @@ char * hideFileExtension(uint8_t index)
     {
       extPos = isSupportedFile(filename);
 
-      if (extPos != NULL)  // if filename provides a supported filename extension
+      // if filename provides a supported filename extension then 
+      // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+      if (extPos != NULL && filename[strlen(filename) + 1] == 0)
         filename[extPos - filename] = 0;  // temporary hide filename extension
     }
   }

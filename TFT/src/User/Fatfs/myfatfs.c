@@ -12,7 +12,7 @@ FATFS fatfs[FF_VOLUMES];  // FATFS work area
  * @param name2 name of second file/folder
  * @param date2 date/time for second file/folder
  */
-bool compareFile(char * name1, int32_t date1, char * name2, int32_t date2)
+bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
 {
   // sort by date
   if (infoSettings.files_sort_by <= SORT_DATE_OLD_FIRST)
@@ -68,8 +68,8 @@ bool scanPrintFilesFatFs(void)
   FILINFO finfo;
   uint16_t len = 0;
   DIR dir;
-  int32_t folderDate[FILE_NUM];
-  int32_t fileDate[FILE_NUM];
+  uint32_t folderDate[FILE_NUM];
+  uint32_t fileDate[FILE_NUM];
 
   clearInfoFile();
 
@@ -96,7 +96,7 @@ bool scanPrintFilesFatFs(void)
         break;
 
       // copy date/time modified
-      folderDate[infoFile.folderCount] = (finfo.fdate * 100000) + finfo.ftime;
+      folderDate[infoFile.folderCount] = ((uint32_t)(finfo.fdate) << 16) | finfo.ftime;
       // copy folder name
       memcpy(infoFile.folder[infoFile.folderCount++], finfo.fname, len);
     }
@@ -113,7 +113,7 @@ bool scanPrintFilesFatFs(void)
         break;
 
       // copy date/time modified
-      fileDate[infoFile.fileCount] = (finfo.fdate * 100000) + finfo.ftime;
+      fileDate[infoFile.fileCount] = ((uint32_t)(finfo.fdate) << 16) | finfo.ftime;
       // copy file name
       strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
       infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
