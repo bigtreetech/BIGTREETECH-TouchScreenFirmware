@@ -1,5 +1,5 @@
 #include "FlashStore.h"
-#include "STM32_Flash.h"
+#include "HAL_Flash.h"
 #include <string.h>
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
@@ -47,7 +47,7 @@ void readStoredPara(void)
   uint32_t index = 0;
   uint32_t sign = 0;
 
-  STM32_FlashRead(data, PARA_SIZE);
+  HAL_FlashRead(data, PARA_SIZE);
 
   sign = byteToWord(data + (index += 4), 4);
   if (sign == TSC_SIGN)
@@ -85,7 +85,7 @@ void storePara(void)
   wordToByte(PARA_SIGN, data + (index += 4));
   memcpy(data + (index += 4), &infoSettings, sizeof(SETTINGS));
 
-  STM32_FlashWrite(data, PARA_SIZE);
+  HAL_FlashWrite(data, PARA_SIZE);
 }
 
 bool readIsTSCExist(void)
