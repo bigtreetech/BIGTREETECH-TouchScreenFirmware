@@ -3,6 +3,8 @@
 #include "ListItem.h"
 #include "Notification.h"
 
+#define STATUS_BAR_REFRESH_TIME 2000 // refresh time in ms
+
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE
   // exhibitRect is 2 ICON Space in the Lowest Row and 2 Center column.
@@ -660,8 +662,7 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
   reminder.inf = inf;
   reminder.status = status;
-  reminder.time = OS_GetTimeMs() + 2000;  // 2 seconds
-
+  reminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
     GUI_SetColor(infoSettings.reminder_color);
@@ -679,7 +680,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
   volumeReminder.inf = inf;
   volumeReminder.status = status;
-  volumeReminder.time = OS_GetTimeMs() + 2000;
+  volumeReminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
@@ -699,7 +700,7 @@ void busyIndicator(SYS_STATUS status)
     GUI_SetColor(infoSettings.font_color);
   }
   busySign.status = status;
-  busySign.time = OS_GetTimeMs() + 2000;
+  busySign.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 }
 
 void loopReminderClear(void)
