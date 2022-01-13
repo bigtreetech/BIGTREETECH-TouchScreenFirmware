@@ -329,7 +329,7 @@ bool model_DirectDisplay_Base64PNG(GUI_POINT pos, FIL *gcodeFile)
   uint32_t base64_len;
   char buf[256];
 
-  dbg_printf("PNG Gcode: %s\n", gcode);
+  dbg_printf("Finding BASE64PNG\n");
 
   // Find thumbnail block with correct picture size
   base64_len = modelFileSeekToThumbnailBase64PNG(gcodeFile, ICON_WIDTH, ICON_HEIGHT);
@@ -389,20 +389,22 @@ bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
 {
   char buf[39];
 
+  dbg_printf("Finding RGB565 by signature\n");
+
   // Find thumbnail begin marker for the right thumbnail resolution and read the base64 length
   snprintf(buf, sizeof(buf), "; bigtree thumbnail begin %hux%hu", width, height);
-  dbg_print("Start search\n");
 
-  if (!modelFileFind(fp, buf))
-    return false;
+  if (modelFileFind(fp, buf))
+  {
+    dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
 
-  dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
+    // Seek to the start of the RGB565 block
+    if (modelFileFind(fp, ";"))
+      return true;
+  }
 
-  // Seek to the start of the RGB565 block
-  if (!modelFileFind(fp, ";"))
-    return false;
-
-  return true;
+  dbg_printf("bigtree thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
+  return false;
 }
 
 #endif
@@ -416,25 +418,23 @@ bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
  */
 bool model_DirectDisplay_Classic(GUI_POINT pos, FIL *gcodeFile)
 {
-  dbg_printf("RGB565 Gcode: %s\n", gcode);
-
   // try finding RGB565 thumbnail signature
   #if (THUMBNAIL_PARSER >= PARSER_RGB565)
     // Move the file cursor to the signature location if found
     if (!modelFileSeekToThumbnailRGB565(gcodeFile, ICON_WIDTH, ICON_HEIGHT))
-    {
-      dbg_printf("bigtree thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
-      return false;
-    }
-    else
   #endif
   {
+    dbg_printf("Finding RGB565 by predefined offset\n");
+
     // Move the file cursor to the predefined location
     f_lseek(gcodeFile, MODEL_PREVIEW_OFFSET);
 
     // Check whether the icon size matches
     if (modelFileReadHalfword(gcodeFile) != ICON_WIDTH || modelFileReadHalfword(gcodeFile) != ICON_HEIGHT)
+    {
+      dbg_printf("RGB565 not found\n");
       return false;
+    }
   }
 
   LCD_SetWindow(pos.x, pos.y, pos.x + ICON_WIDTH - 1, pos.y + ICON_HEIGHT - 1);
@@ -449,6 +449,8 @@ bool model_DirectDisplay_Classic(GUI_POINT pos, FIL *gcodeFile)
 bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 {
   FIL gcodeFile;
+
+  dbg_printf("Opening file: %s\n", gcode);
 
   if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
     return false;
