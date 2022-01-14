@@ -296,4 +296,4 @@ u8 EEPROM_WriteData(uint16_t MemAddress, uint8_t* pBuffer, uint32_t BufferSize)
   return err;
 }
 
-#endif // defined(I2C_EEPROM)
+#endif  // defined(I2C_EEPROM)
