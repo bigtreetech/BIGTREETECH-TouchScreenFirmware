@@ -18,6 +18,7 @@ extern "C" {
 #define CONFIG_SERIAL_PORT            "serial_port:"
 #define CONFIG_EMULATED_M600          "emulated_m600:"
 #define CONFIG_EMULATED_M109_M190     "emulated_m109_m190:"
+#define CONFIG_EVENT_LED              "event_led:"
 #define CONFIG_FILE_COMMENT_PARSING   "file_comment_parsing:"
 
 //-----------------------------UI Settings
@@ -39,6 +40,7 @@ extern "C" {
 #define CONFIG_ACK_NOTIFICATION       "ack_notification:"
 #define CONFIG_FILES_SORT_BY          "files_sort_by:"
 #define CONFIG_FILES_LIST_MODE        "files_list_mode:"
+#define CONFIG_FILENAME_EXTENSION     "filename_extension:"
 #define CONFIG_FAN_SPEED_PERCENTAGE   "fan_speed_percentage:"
 #define CONFIG_PERSISTENT_INFO        "persistent_info:"
 #define CONFIG_TERMINAL_ACK           "terminal_ack:"

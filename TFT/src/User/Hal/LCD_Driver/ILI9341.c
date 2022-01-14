@@ -125,7 +125,12 @@
   void ILI9341_SetDirection(uint8_t rotate)
   {
     LCD_WR_REG(0X36);
-    LCD_WR_DATA(rotate ? ILI9341_180_DEGREE_REG_VALUE : ILI9341_0_DEGREE_REG_VALUE);
+
+    #ifdef PORTRAIT_MODE
+      LCD_WR_DATA(rotate ? ILI9341_270_DEGREE_REG_VALUE : ILI9341_90_DEGREE_REG_VALUE);
+    #else
+      LCD_WR_DATA(rotate ? ILI9341_180_DEGREE_REG_VALUE : ILI9341_0_DEGREE_REG_VALUE);
+    #endif
   }
 
   void ILI9341_SetWindow(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey)

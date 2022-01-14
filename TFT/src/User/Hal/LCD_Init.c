@@ -231,6 +231,7 @@ void LCD_Init(void)
 {
   LCD_HardwareConfig();
   LCD_Init_Sequential();
+  LCD_RefreshDirection(0);
   GUI_Clear(BLACK);
   Delay_ms(120);
 

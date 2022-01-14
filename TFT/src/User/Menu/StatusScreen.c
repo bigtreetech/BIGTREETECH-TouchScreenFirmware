@@ -14,37 +14,43 @@
 
 #define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 
+#ifdef PORTRAIT_MODE
+  #define XYZ_STATUS " X: %.2f  Y: %.2f  Z: %.2f "
+#else
+  #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
+#endif
+
 const MENUITEMS StatusItems = {
   // title
   LABEL_READY,
   // icon                          label
   {
-    {ICON_STATUS_NOZZLE,           LABEL_BACKGROUND},
-    {ICON_STATUS_BED,              LABEL_BACKGROUND},
-    {ICON_STATUS_FAN,              LABEL_BACKGROUND},
-    {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
+    {ICON_STATUS_NOZZLE,           LABEL_NULL},
+    {ICON_STATUS_BED,              LABEL_NULL},
+    {ICON_STATUS_FAN,              LABEL_NULL},
+    {ICON_STATUS_SPEED,            LABEL_NULL},
     #ifdef TFT70_V3_0
-      {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+      {ICON_STATUS_FLOW,             LABEL_NULL},
       {ICON_MAINMENU,                LABEL_MAINMENU},
     #else
       {ICON_MAINMENU,                LABEL_MAINMENU},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
     #endif
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_PRINT,                   LABEL_PRINT},
   }
 };
 
 const ITEM BedItems[2] = {
   // icon                        label
-  {ICON_STATUS_BED,              LABEL_BACKGROUND},
-  {ICON_STATUS_CHAMBER,          LABEL_BACKGROUND},
+  {ICON_STATUS_BED,              LABEL_NULL},
+  {ICON_STATUS_CHAMBER,          LABEL_NULL},
 };
 
 const ITEM SpeedItems[2] = {
   // icon                        label
-  {ICON_STATUS_SPEED,            LABEL_BACKGROUND},
-  {ICON_STATUS_FLOW,             LABEL_BACKGROUND},
+  {ICON_STATUS_SPEED,            LABEL_NULL},
+  {ICON_STATUS_FLOW,             LABEL_NULL},
 };
 
 static int8_t lastConnection_status = -1;
@@ -63,11 +69,19 @@ const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
 #endif
 
 // info box msg area
-const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                           START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+#ifdef PORTRAIT_MODE
+  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y +  1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
-                            START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+  const GUI_RECT RecGantry = {START_X-2,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                              START_X+2 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+#else
+  const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                             START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+
+  const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+#endif
 
 void drawLiveText(uint8_t index, LIVE_INFO *lvIcon, const ITEM *lvItem)
 {
@@ -326,7 +340,7 @@ void drawStatus(void)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
   GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
-  sprintf(tempstr, "   X: %.2f   Y: %.2f   Z: %.2f   ", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
+  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
           coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
 

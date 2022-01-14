@@ -1,13 +1,19 @@
-#ifndef _PIN_TFT35_V3_0_H_ // modify to actual filename !!!
-#define _PIN_TFT35_V3_0_H_ // modify to actual filename !!!
+#ifndef _PIN_TFT35_V3_0_H_  // modify to actual filename !!!
+#define _PIN_TFT35_V3_0_H_  // modify to actual filename !!!
 
 // MCU type (STM32F10x, STM32F2xx)
 #include "stm32f2xx.h"
 
+//#undef PORTRAIT_MODE  // comment this line in case the TFT variant supports Portrait Mode
+
 // LCD resolution, font and icon size
 #ifndef TFT_RESOLUTION
   #define TFT_RESOLUTION
-  #include "./Resolution/TFT_480X320.h"
+  #ifdef PORTRAIT_MODE
+    #include "./Resolution/TFT_320X480.h"
+  #else
+    #include "./Resolution/TFT_480X320.h"
+  #endif
 #endif
 
 #ifndef ROOT_DIR

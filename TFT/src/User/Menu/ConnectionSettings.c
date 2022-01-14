@@ -153,8 +153,8 @@ void menuConnectionSettings(void)
       {ICON_STOP,                    LABEL_EMERGENCYSTOP},
       {ICON_RESET_VALUE,             LABEL_RESET},
       {ICON_BAUD_RATE,               LABEL_ON},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };

@@ -8,13 +8,13 @@ void menuMeshValid(void)
     LABEL_MESH_VALID,
     // icon             label
     {
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_PREHEAT,    LABEL_BACKGROUND},
-      {ICON_BACKGROUND, LABEL_BACKGROUND},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_PREHEAT,    LABEL_NULL},
+      {ICON_NULL,       LABEL_NULL},
       {ICON_BACK,       LABEL_BACK},
     }
   };

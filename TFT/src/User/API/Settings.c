@@ -24,6 +24,7 @@ void initSettings(void)
 // General Settings
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) | (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
+                                         (EVENT_LED << INDEX_EVENT_LED) |
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
 
 // UI Settings
@@ -45,6 +46,7 @@ void initSettings(void)
   infoSettings.ack_notification       = ACK_NOTIFICATION;
   infoSettings.files_sort_by          = FILES_SORT_BY;
   infoSettings.files_list_mode        = FILES_LIST_MODE;
+  infoSettings.filename_extension     = FILENAME_EXTENSION;
   infoSettings.fan_percentage         = FAN_SPEED_PERCENTAGE;
   infoSettings.persistent_info        = PERSISTENT_INFO;
   infoSettings.terminal_ack           = TERMINAL_ACK;

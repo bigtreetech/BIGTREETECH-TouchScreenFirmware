@@ -7,6 +7,8 @@ extern "C" {
 
 #define ILI9341_0_DEGREE_REG_VALUE   0X68
 #define ILI9341_180_DEGREE_REG_VALUE 0XA8
+#define ILI9341_90_DEGREE_REG_VALUE  0XC8
+#define ILI9341_270_DEGREE_REG_VALUE 0X08
 
 uint8_t LCD_DriveIsILI9341(void);
 void ILI9341_Init_Sequential(void);

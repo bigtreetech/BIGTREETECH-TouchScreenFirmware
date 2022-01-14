@@ -9,6 +9,8 @@ if flags.get("HARDWARE") == "MKS_TFT28_V4.0":
     filename = "MKSTFT28"
 else:
     filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")
+if flags.get("PORTRAIT_MODE") != None:
+    filename = filename + flags.get("PORTRAIT_MODE")
 #print(filename)
 print("Done.")
 
