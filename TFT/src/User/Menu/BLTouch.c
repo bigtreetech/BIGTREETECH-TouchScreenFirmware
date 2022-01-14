@@ -1,7 +1,7 @@
 #include "BLTouch.h"
 #include "includes.h"
 
-const char * const SERVO_GCODE = "M280 P0 S%d\n";
+#define SERVO_GCODE "M280 P0 S%d\n"
 
 const MENUITEMS BLTouchItems = {
   // title

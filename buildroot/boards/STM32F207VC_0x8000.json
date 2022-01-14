@@ -39,7 +39,7 @@
       "stlink",
       "blackmagic",
       "mbed",
-	  "cmsis-dap"
+      "cmsis-dap"
     ]
   },
   "url": "https://www.st.com/content/st_com/en/products/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus/stm32-high-performance-mcus/stm32f2-series/stm32f2x5.html",

@@ -49,7 +49,7 @@
 #define DISABLE_JTAG   // free JTAG(PB3/PB4) for SPI3
 //#define DISABLE_DEBUG  // free all pins
 
-// LCD Backlight pin (PWM can adjust brightness)
+// LCD Backlight pin (adjust brightness with LED PWM)
 //#define LCD_LED_PIN           PA8
 //#define LCD_LED_PIN_ALTERNATE 0
 //#define LCD_LED_PWM_CHANNEL   _TIM1_CH1
@@ -66,8 +66,8 @@
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3
 #endif
 
-// XPT2046 Software SPI Pins (touch screen ic)
-// need CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
+// XPT2046 Software SPI Pins for touch screen
+// needs CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
 #define XPT2046_CS   PC0
 #define XPT2046_SCK  PB3
 #define XPT2046_MISO PB4
@@ -87,7 +87,7 @@
 // SD Card CD detect pin
 #define SD_CD_PIN PC6
 
-// W25Qxx SPI pins
+// W25Qxx SPI Flash Memory pins
 #define W25Qxx_SPEED  1      // stm32f103 spi1 max 4 division
 #define W25Qxx_SPI    _SPI1
 #define W25Qxx_CS_PIN PA4
@@ -98,7 +98,7 @@
 //  #define ST7920_SPI _SPI2
 //#endif
 
-// Buzzer support
+// Buzzer PWM support
 #define BUZZER_PIN PB2
 
 // LCD Encoder support
@@ -110,11 +110,12 @@
 //#define U_DISK_SUPPORT
 //#define USE_USB_OTG_FS
 
-// Extend function(PS_ON, filament_detect)
+// Auto Power Off Detection pin
 #ifndef PS_ON_PIN
   #define PS_ON_PIN PD12
 #endif
 
+// Filament Runout Detection pin
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN PD11
 #endif

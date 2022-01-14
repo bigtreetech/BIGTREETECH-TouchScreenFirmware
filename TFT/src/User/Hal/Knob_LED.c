@@ -34,7 +34,7 @@ void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
   uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
-  while(frameTimeStamp == OS_GetTimeMs());
+  while (frameTimeStamp == OS_GetTimeMs());
 
   __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
   TIM6->ARR = cycle;
