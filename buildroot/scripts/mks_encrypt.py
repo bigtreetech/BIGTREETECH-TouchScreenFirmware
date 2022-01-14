@@ -26,8 +26,8 @@ def mks_encrypt_firmware(source, target, env):
             exit(1)
         resultFile.write(chunk)
 
-        localFile.seek(320)      # Go to file position 0x140
-        while localFile.tell() < 320 + 30720:   # Encode until: 0x7940
+        localFile.seek(320)                    # Go to file position 0x140
+        while localFile.tell() < 320 + 30720:  # Encode until: 0x7940
             for i in range(32):
                 tmp = localFile.read(1)
                 tmp1, = struct.unpack('B', tmp)
