@@ -519,7 +519,7 @@ void printAbort(void)
 
       if (infoHost.printing == true)
       {
-        GUI_Clear(infoSettings.bg_color);  // delete screen otherwise action buttons would be visible from previous dialog
+        REDRAW_MENU();
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
         while (infoHost.printing == true)  // wait for the printer to settle down
         {
