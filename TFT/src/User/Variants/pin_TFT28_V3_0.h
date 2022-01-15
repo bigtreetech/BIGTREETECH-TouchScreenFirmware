@@ -11,6 +11,7 @@
   #endif
 #endif
 
+// Root folder for fonts and icons
 #ifndef ROOT_DIR
   #define ROOT_DIR "TFT28"
 #endif
@@ -21,8 +22,9 @@
 #endif
 
 // LCD interface
+// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER       ST7789  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558].
+  #define TFTLCD_DRIVER       ST7789
   #define TFTLCD_DRIVER_SPEED 0x05
 #endif
 
