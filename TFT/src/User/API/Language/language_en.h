@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Persistent Status Info"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on"    
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen Mode"
     #define STRING_MARLIN_SHOW_TITLE      "Show Title"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"

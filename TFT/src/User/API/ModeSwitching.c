@@ -32,13 +32,20 @@ void Mode_Switch(void)
           uint32_t startUpTime = OS_GetTimeMs();
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-          LOGO_ReadDisplay();
-          updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
+          
+            if (CONFIG_SHOW_BOOTSCREEN == 1)
+                  {
+                    LOGO_ReadDisplay();
+                    updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
-          while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // display logo BTT_BOOTSCREEN_TIME ms
-          {
-            loopProcess();
-          }
+                    while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // display logo BTT_BOOTSCREEN_TIME ms
+                    {
+                      loopProcess();
+                    }
+                  } else {
+                    updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
+                  }
+                  
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
           modeFreshBoot = false;

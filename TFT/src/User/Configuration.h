@@ -276,6 +276,18 @@
  */
 #define LAYER_DISP_TYPE 0  // Default: 0
 
+/**
+ * Show Bootscreen Setting in Config.ini
+#   Options: [No: 0, Yes: 1]
+ */
+#define SHOW_BOOTSCREEN 0  // Default: 0
+
+/**
+ * Alert Heaters are still on
+ *  Options: [No: 0, Yes: 1]
+ */
+#define ALERT_HEATERS_ON 0  // Default: 0
+
 //================================================================================
 //============================= Marlin Mode Settings =============================
 //========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========

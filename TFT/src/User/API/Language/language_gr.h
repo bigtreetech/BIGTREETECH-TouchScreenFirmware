@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Πληροφορίες μόνιμης κατάστασης"
     #define STRING_TERMINAL_ACK           "Εμφάνιση ACK στο τερματικό"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"

@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
     #define STRING_TERMINAL_ACK           "ACK терминала (C°)"
     #define STRING_SERIAL_ALWAYS_ON       "Серийный порт Всегда ВКЛЮЧЕН"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь экран"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin тип режима"

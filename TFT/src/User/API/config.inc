@@ -40,6 +40,9 @@ X_CONFIG (TERMINAL_ACK)
 X_CONFIG (NOTIFICATION_M117)
 X_CONFIG (PROG_DISP_TYPE)
 X_CONFIG (LAYER_DISP_TYPE)
+X_CONFIG (SHOW_BOOTSCREEN)
+X_CONFIG (ALERT_HEATERS_ON)
+
 //-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 X_CONFIG (MODE)
 X_CONFIG (SERIAL_ALWAYS_ON)
@@ -159,4 +162,4 @@ X_CONFIG (CANCEL_GCODE_ENABLED)
 X_CONFIG (START_GCODE)
 X_CONFIG (END_GCODE)
 X_CONFIG (CANCEL_GCODE)
-// After changing/adding/removing a config, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
+// After changing/adding/removing a config, change the 'CONFIG_FLASH_SIGN' in 'Settings.h' and 'PARA_SIGN' in 'FlashStore.c'
