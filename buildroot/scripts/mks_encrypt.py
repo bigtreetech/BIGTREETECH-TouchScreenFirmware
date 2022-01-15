@@ -3,15 +3,17 @@ import struct, os, platform, shutil
 from os import path
 
 def mks_encrypt_firmware(source, target, env):
-    print("Encrypting MKS Firmware...")
-    buildDir = env.subst('$BUILD_DIR')
+    print("Encrypting MKS firmware...")
+    build_dir = env.subst('$BUILD_DIR')
+    file_name = "/" + env['PROGNAME'] + ".bin"
+    file_path = build_dir + file_name
     build_flags = env.ParseFlags(env['BUILD_FLAGS'])
     flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
-    filename = flags.get("HARDWARE") + "." + flags.get("SOFTWARE_VERSION")
-    filename_short = flags.get("HARDWARE_SHORT") + flags.get("SOFTWARE_VERSION_SHORT")
-    sourceFile = buildDir + "\\" + filename + ".BIN"
-    mksFile = filename[:-10] + ".BIN"
-    destinationFile = buildDir + "\\" + mksFile
+    target_dir = flags.get("BINARY_DIRECTORY")
+    if target_dir == None:
+        target_dir = "Copy to SD Card root directory to update"
+    sourceFile = file_path
+    destinationFile = target_dir + file_name + "_encrypted"
 
     if path.exists(sourceFile):
         key = [163, 189, 173, 13, 65, 17, 187, 141, 220, 128, 45, 208, 210, 196, 155, 30, 38, 235, 227, 51, 74, 21, 228, 10, 179, 177, 60, 147, 187, 175, 247, 62]
@@ -43,9 +45,10 @@ def mks_encrypt_firmware(source, target, env):
         resultFile.write(chunk)
         localFile.close()
         resultFile.close()
-        print("UNENCRYPTED MKS Firmware file (rename to upload!): " + sourceFile)
-        print("ENCRYPTED MKS Firmware file: " + destinationFile)
+        print("UNENCRYPTED MKS firmware file (rename to upload!): " + sourceFile)
+        print("ENCRYPTED MKS firmware file: " + destinationFile)
     else:
-        print("ERROR: MKS Firmware file not found!")
+        print("ERROR: MKS firmware file not found!")
+    print("Done.")
 
 env.AddPostAction("buildprog", mks_encrypt_firmware)
