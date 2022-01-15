@@ -127,8 +127,8 @@ bool scanPrintFilesGcodeFs(void)
         infoFile.longFile[infoFile.fileCount] = 0;  // long filename is not supported, so always set it to 0
       }
 
-      char* rest = pline;
-      char* file = strtok_r(rest, " ", &rest);  // remove file size from pline
+      char *rest = pline;
+      char *file = strtok_r(rest, " ", &rest);  // remove file size from pline
 
       // NOTE: no need to filter files based on filename extension because files are already filtered by Marlin,
       // so leave the following block commented
@@ -157,10 +157,25 @@ bool scanPrintFilesGcodeFs(void)
       if (infoFile.folderCount >= FOLDER_NUM)
         continue;  // folder max number is FOLDER_NUM
 
-      char* rest = pline;
-      char* folder = strtok_r(rest, "/", &rest);
-
       bool found = false;
+      char *rest = pline;
+      char *folder = strtok_r(rest, "/", &rest);
+      char *longFolder = NULL;
+
+      if (infoMachineSettings.longFilename == ENABLED)
+      {
+        char *Pstr_tmp;
+
+        longFolder = request_M33(folder) + 1;  // "+ 1" removes leading "/"
+        Pstr_tmp = strstr(longFolder, "\nok");
+     
+        if (Pstr_tmp != NULL)
+          *Pstr_tmp = 0;  // remove end of M33 command
+
+        if (strcmp(longFolder, "???") == 0)  // no long folder name exist
+          longFolder = folder;               // same as short folder name
+      }
+
       for (int i = 0; i < infoFile.folderCount; i++)
       {
         if (strcmp(folder, infoFile.folder[i]) == 0)
@@ -172,11 +187,16 @@ bool scanPrintFilesGcodeFs(void)
 
       if (!found)
       {
-        uint16_t len = strlen(folder) + 1;
-        infoFile.folder[infoFile.folderCount] = malloc(len);
+        infoFile.folder[infoFile.folderCount] = malloc(strlen(folder) + 1);
+        infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
+
         if (infoFile.folder[infoFile.folderCount] == NULL)
           break;
-        strcpy(infoFile.folder[infoFile.folderCount++], folder);
+          
+        strcpy(infoFile.folder[infoFile.folderCount], folder);
+        strcpy(infoFile.longFolder[infoFile.folderCount], longFolder);
+        infoFile.folderCount++;
+
       }
     }
   }

@@ -103,7 +103,10 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
-    setDynamicLabel(itemPos, infoFile.folder[index]);
+    if (infoMachineSettings.longFilename == ENABLED)
+      setDynamicLabel(itemPos, infoFile.longFolder[index]);
+    else
+      setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
