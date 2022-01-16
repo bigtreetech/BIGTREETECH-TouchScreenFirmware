@@ -103,7 +103,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
-    if (infoMachineSettings.longFilename == ENABLED)
+    if (infoFile.longFolder[index] != NULL)
       setDynamicLabel(itemPos, infoFile.longFolder[index]);
     else
       setDynamicLabel(itemPos, infoFile.folder[index]);

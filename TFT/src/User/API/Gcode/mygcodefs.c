@@ -52,13 +52,13 @@ bool scanPrintFilesGcodeFs(void)
     return true;
   }
 
-  char *ret = request_M20();
-  char *data = malloc(strlen(ret) + 1);
+  char* ret = request_M20();
+  char* data = malloc(strlen(ret) + 1);
   strcpy(data, ret);
   clearRequestCommandInfo();
 
-  char *s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
-  char *line = strtok(data, s);
+  char* s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
+  char* line = strtok(data, s);
 
   for (; line != NULL; line = strtok(NULL, s))
   {
@@ -75,7 +75,7 @@ bool scanPrintFilesGcodeFs(void)
       continue;
 
     // e.g. "sub_dir/cap.gcode" -> "cap.gcode", "sub_dir/sub_dir_2/cap2.gcode" -> "sub_dir_2/cap.gcode"
-    char *pline = line + (strlen(infoFile.title) - 4);  // we remove the 4 bytes related to prefix "bSD:" in infoFile.title
+    char* pline = line + (strlen(infoFile.title) - 4);  // we remove the 4 bytes related to prefix "bSD:" in infoFile.title
 
     if (strchr(pline, '/') == NULL)  // if FILE
     {
@@ -84,7 +84,7 @@ bool scanPrintFilesGcodeFs(void)
 
       if (infoMachineSettings.longFilename == ENABLED)
       {
-        char *Pstr_tmp = strrchr(line, ' ');  // check and remove file size at the end of line
+        char* Pstr_tmp = strrchr(line, ' ');  // check and remove file size at the end of line
         if (Pstr_tmp != NULL)
           *Pstr_tmp = 0;
 
@@ -127,8 +127,8 @@ bool scanPrintFilesGcodeFs(void)
         infoFile.longFile[infoFile.fileCount] = 0;  // long filename is not supported, so always set it to 0
       }
 
-      char *rest = pline;
-      char *file = strtok_r(rest, " ", &rest);  // remove file size from pline
+      char* rest = pline;
+      char* file = strtok_r(rest, " ", &rest);  // remove file size from pline
 
       // NOTE: no need to filter files based on filename extension because files are already filtered by Marlin,
       // so leave the following block commented
@@ -158,22 +158,29 @@ bool scanPrintFilesGcodeFs(void)
         continue;  // folder max number is FOLDER_NUM
 
       bool found = false;
-      char *rest = pline;
-      char *folder = strtok_r(rest, "/", &rest);
-      char *longFolder = NULL;
+      char* rest = pline;
+      char* folder = strtok_r(rest, "/", &rest);
+      char* longFolder = NULL;
 
       if (infoMachineSettings.longFilename == ENABLED)
       {
-        char *Pstr_tmp;
+        char* Pstr_tmp = malloc(pline - line + strlen(folder) + 1);
 
-        longFolder = request_M33(folder) + 1;  // "+ 1" removes leading "/"
+        Pstr_tmp[0] = '\0';
+        strncat(Pstr_tmp, line, pline - line + strlen(folder));  // construct full path to folder
+        longFolder = request_M33(Pstr_tmp);  // retrieve long folder names (if exist)
+        free(Pstr_tmp);
+
         Pstr_tmp = strstr(longFolder, "\nok");
-     
         if (Pstr_tmp != NULL)
           *Pstr_tmp = 0;  // remove end of M33 command
 
+        Pstr_tmp = strrchr(longFolder, '/');  // retrieve last folder from full path
+        if (Pstr_tmp != NULL)
+          longFolder = Pstr_tmp + 1;  // ditch the trailing "/"
+
         if (strcmp(longFolder, "???") == 0)  // no long folder name exist
-          longFolder = folder;               // same as short folder name
+          longFolder = NULL;
       }
 
       for (int i = 0; i < infoFile.folderCount; i++)
@@ -188,13 +195,17 @@ bool scanPrintFilesGcodeFs(void)
       if (!found)
       {
         infoFile.folder[infoFile.folderCount] = malloc(strlen(folder) + 1);
-        infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
+        if (longFolder != NULL)  // avoid allocating space if there's no long folder name
+          infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
 
         if (infoFile.folder[infoFile.folderCount] == NULL)
           break;
           
         strcpy(infoFile.folder[infoFile.folderCount], folder);
-        strcpy(infoFile.longFolder[infoFile.folderCount], longFolder);
+        if(longFolder != NULL)
+          strcpy(infoFile.longFolder[infoFile.folderCount], longFolder);
+        else
+          infoFile.longFolder[infoFile.folderCount] = NULL;
         infoFile.folderCount++;
 
       }
