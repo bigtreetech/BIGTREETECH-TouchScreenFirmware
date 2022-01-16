@@ -59,6 +59,7 @@ bool scanPrintFilesGcodeFs(void)
 
   char* s = strstr(data, "\r\n") ? "\r\n" : "\n";  // smoothieware report with \r\n, marlin reports with \n
   char* line = strtok(data, s);
+  char* Pstr_tmp;
 
   for (; line != NULL; line = strtok(NULL, s))
   {
@@ -74,6 +75,10 @@ bool scanPrintFilesGcodeFs(void)
     if (strlen(infoFile.title) > 5 && strstr(line, infoFile.title + 5) == NULL)  // if "line" doesn't include current directory
       continue;
 
+    Pstr_tmp = strrchr(line, ' ');  // check and remove file size at the end of line
+    if (Pstr_tmp != NULL)
+      *Pstr_tmp = 0;
+
     // e.g. "sub_dir/cap.gcode" -> "cap.gcode", "sub_dir/sub_dir_2/cap2.gcode" -> "sub_dir_2/cap.gcode"
     char* pline = line + (strlen(infoFile.title) - 4);  // we remove the 4 bytes related to prefix "bSD:" in infoFile.title
 
@@ -83,16 +88,8 @@ bool scanPrintFilesGcodeFs(void)
         continue;  // Gcode max number is FILE_NUM
 
       if (infoMachineSettings.longFilename == ENABLED)
-      {
-        char* Pstr_tmp = strrchr(line, ' ');  // check and remove file size at the end of line
-        if (Pstr_tmp != NULL)
-          *Pstr_tmp = 0;
-
-        char *longfilename;
-        if (strrchr(line, '~') != NULL)      // check if file name is 8.3 format
-          longfilename = request_M33(line);  // if 8.1 format, retrieve long filename
-        else
-          longfilename = line;
+      { // get long filename
+        char *longFilename = request_M33(line);  // retrieve long filename (if exists)
 
         /*
           When AUTO_REPORT_TEMPERATURES is enabled by M155, The response of M33 may become the following
@@ -102,33 +99,32 @@ bool scanPrintFilesGcodeFs(void)
             ok
           So the longfilename will be parsed "0.00 @:0 B@:0" instead of "1.gcode" if the truncated character is '\n' not string "\nok"
         */
-        Pstr_tmp = strstr(longfilename, "\nok");
+ 
+        Pstr_tmp = strstr(longFilename, "\nok");
         if (Pstr_tmp != NULL)
           *Pstr_tmp = 0;  // remove end of M33 command
 
-        Pstr_tmp = strrchr(longfilename, '/');  // remove folder information
-        if (Pstr_tmp == NULL)
-          Pstr_tmp = longfilename;
-        else
-          Pstr_tmp++;
+        Pstr_tmp = strrchr(longFilename, '/');  // remove folder information
+        if (Pstr_tmp != NULL)
+          longFilename = Pstr_tmp + 1;  // ditch the trailing "/"
 
-        infoFile.longFile[infoFile.fileCount] = malloc(strlen(Pstr_tmp) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
+        if (strcmp(longFilename, "???") == 0)  // no long filename exist
+          longFilename = pline;
+
+        infoFile.longFile[infoFile.fileCount] = malloc(strlen(longFilename) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
         if (infoFile.longFile[infoFile.fileCount] == NULL)
         {
           clearRequestCommandInfo();
           break;
         }
         // copy file name and set the flag for filename extension check
-        strncpy(infoFile.longFile[infoFile.fileCount], Pstr_tmp, strlen(Pstr_tmp) + 2);  // "+2": space for terminating null character and the flag for filename extension check
+        strncpy(infoFile.longFile[infoFile.fileCount], longFilename, strlen(longFilename) + 2);  // "+2": space for terminating null character and the flag for filename extension check
         clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
       {
-        infoFile.longFile[infoFile.fileCount] = 0;  // long filename is not supported, so always set it to 0
+        infoFile.longFile[infoFile.fileCount] = NULL;  // long filename is not supported, so always set it to 0
       }
-
-      char* rest = pline;
-      char* file = strtok_r(rest, " ", &rest);  // remove file size from pline
 
       // NOTE: no need to filter files based on filename extension because files are already filtered by Marlin,
       // so leave the following block commented
@@ -140,7 +136,9 @@ bool scanPrintFilesGcodeFs(void)
         continue;
       }*/
 
-      infoFile.file[infoFile.fileCount] = malloc(strlen(file) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
+      // get short filename
+
+      infoFile.file[infoFile.fileCount] = malloc(strlen(pline) + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
       if (infoFile.file[infoFile.fileCount] == NULL)
       {
         if (infoFile.longFile[infoFile.fileCount] != 0)
@@ -149,7 +147,7 @@ bool scanPrintFilesGcodeFs(void)
         break;
       }
       // copy file name and set the flag for filename extension check
-      strncpy(infoFile.file[infoFile.fileCount], file, strlen(file) + 2);  // "+2": space for terminating null character and the flag for filename extension check
+      strncpy(infoFile.file[infoFile.fileCount], pline, strlen(pline) + 2);  // "+2": space for terminating null character and the flag for filename extension check
       infoFile.fileCount++;
     }
     else  // if DIRECTORY
@@ -164,7 +162,7 @@ bool scanPrintFilesGcodeFs(void)
 
       if (infoMachineSettings.longFilename == ENABLED)
       {
-        char* Pstr_tmp = malloc(pline - line + strlen(folder) + 1);
+        Pstr_tmp = malloc(pline - line + strlen(folder) + 1);
 
         Pstr_tmp[0] = '\0';
         strncat(Pstr_tmp, line, pline - line + strlen(folder));  // construct full path to folder
@@ -201,7 +199,7 @@ bool scanPrintFilesGcodeFs(void)
           
         strcpy(infoFile.folder[infoFile.folderCount], folder);
 
-        if(longFolder != NULL)
+        if (longFolder != NULL)
         {
           infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
           if (infoFile.longFolder[infoFile.folderCount] != NULL)
@@ -211,7 +209,6 @@ bool scanPrintFilesGcodeFs(void)
           infoFile.longFolder[infoFile.folderCount] = NULL;
 
         infoFile.folderCount++;
-
       }
     }
   }

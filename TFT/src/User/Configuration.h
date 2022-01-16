@@ -1004,7 +1004,7 @@
  * Serial Communication Debug
  * Uncomment/Enable to forward/dump all serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
  */
-#define DEBUG_SERIAL_COMM  // Default: commented (disabled)
+// #define DEBUG_SERIAL_COMM  // Default: commented (disabled)
 
 /**
  * Config File Debug
