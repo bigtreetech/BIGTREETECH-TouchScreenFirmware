@@ -5,15 +5,14 @@ from os import path
 def mks_encrypt_firmware(source, target, env):
     print("Encrypting MKS firmware...")
     build_dir = env.subst('$BUILD_DIR')
-    file_name = "/" + env['PROGNAME'] + ".bin"
-    file_path = build_dir + file_name
+    filename = "/" + env['PROGNAME']
     build_flags = env.ParseFlags(env['BUILD_FLAGS'])
     flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
     target_dir = flags.get("BINARY_DIRECTORY")
     if target_dir == None:
         target_dir = "Copy to SD Card root directory to update"
-    sourceFile = file_path
-    destinationFile = target_dir + file_name + "_encrypted"
+    sourceFile = build_dir + filename + ".bin"
+    destinationFile = target_dir + filename + "_encrypted" + ".bin"
 
     if path.exists(sourceFile):
         key = [163, 189, 173, 13, 65, 17, 187, 141, 220, 128, 45, 208, 210, 196, 155, 30, 38, 235, 227, 51, 74, 21, 228, 10, 179, 177, 60, 147, 187, 175, 247, 62]
