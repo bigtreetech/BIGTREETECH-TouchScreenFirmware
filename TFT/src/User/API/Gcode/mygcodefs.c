@@ -195,17 +195,21 @@ bool scanPrintFilesGcodeFs(void)
       if (!found)
       {
         infoFile.folder[infoFile.folderCount] = malloc(strlen(folder) + 1);
-        if (longFolder != NULL)  // avoid allocating space if there's no long folder name
-          infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
 
         if (infoFile.folder[infoFile.folderCount] == NULL)
           break;
           
         strcpy(infoFile.folder[infoFile.folderCount], folder);
+
         if(longFolder != NULL)
-          strcpy(infoFile.longFolder[infoFile.folderCount], longFolder);
+        {
+          infoFile.longFolder[infoFile.folderCount] = malloc(strlen(longFolder) + 1);
+          if (infoFile.longFolder[infoFile.folderCount] != NULL)
+            strcpy(infoFile.longFolder[infoFile.folderCount], longFolder);
+        }
         else
           infoFile.longFolder[infoFile.folderCount] = NULL;
+
         infoFile.folderCount++;
 
       }
