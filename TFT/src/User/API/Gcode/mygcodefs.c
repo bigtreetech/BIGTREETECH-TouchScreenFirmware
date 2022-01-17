@@ -71,16 +71,22 @@ bool scanPrintFilesGcodeFs(void)
       line++;            // (use a common file path) e.g. "/sub_dir/cap.gcode" -> "sub_dir/cap.gcode"
 
     // "line" never has "/" at the beginning of a path (e.g. "sub_dir/cap.gcode") while "infoFile.title" has it
-    // (e.g. "bSD:/sub_dir"), so we skip it during the check of current directory match (index 5 used instead of 4)
-    if (strlen(infoFile.title) > 5 && strstr(line, infoFile.title + 5) == NULL)  // if "line" doesn't include current directory
-      continue;
+    // (e.g. "bSD:/sub_dir"), so we skip it during the check of current folder match (index 5 used instead of 4)
+    Pstr_tmp = strstr(line, infoFile.title + 5);  // "+ 5" skips the 5 bytes related to prefix "bSD:/" in infoFile.title
+    if (strlen(infoFile.title) > 5)  // we're in a subfolder
+    {
+      if (Pstr_tmp == NULL)  // if "line" doesn't include current folder
+        continue;
+      else if (Pstr_tmp[strlen(infoFile.title + 5)] != '/')  // "+ 5" skips the prefix "bSD:/" in infoFile.title
+        continue;  // because it's a file, not a folder
+    }
 
     Pstr_tmp = strrchr(line, ' ');  // check and remove file size at the end of line
     if (Pstr_tmp != NULL)
       *Pstr_tmp = 0;
 
     // e.g. "sub_dir/cap.gcode" -> "cap.gcode", "sub_dir/sub_dir_2/cap2.gcode" -> "sub_dir_2/cap.gcode"
-    char* pline = line + (strlen(infoFile.title) - 4);  // we remove the 4 bytes related to prefix "bSD:" in infoFile.title
+    char* pline = line + (strlen(infoFile.title) - 4);  // "- 4" represents the 4 bytes related to prefix "bSD:" in infoFile.title
 
     if (strchr(pline, '/') == NULL)  // if FILE
     {
@@ -150,7 +156,7 @@ bool scanPrintFilesGcodeFs(void)
       strncpy(infoFile.file[infoFile.fileCount], pline, strlen(pline) + 2);  // "+2": space for terminating null character and the flag for filename extension check
       infoFile.fileCount++;
     }
-    else  // if DIRECTORY
+    else  // if FOLDER
     {
       if (infoFile.folderCount >= FOLDER_NUM)
         continue;  // folder max number is FOLDER_NUM

@@ -101,8 +101,8 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
   if (index < infoFile.folderCount)  // folder
   {
     item->icon = CHARICON_FOLDER;
-    item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
+    item->titlelabel.index = LABEL_DYNAMIC;
     if (infoFile.longFolder[index] != NULL)
       setDynamicLabel(itemPos, infoFile.longFolder[index]);
     else
