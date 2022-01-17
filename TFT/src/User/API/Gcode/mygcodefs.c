@@ -72,9 +72,9 @@ bool scanPrintFilesGcodeFs(void)
 
     // "line" never has "/" at the beginning of a path (e.g. "sub_dir/cap.gcode") while "infoFile.title" has it
     // (e.g. "bSD:/sub_dir"), so we skip it during the check of current folder match (index 5 used instead of 4)
-    Pstr_tmp = strstr(line, infoFile.title + 5);  // "+ 5" skips the 5 bytes related to prefix "bSD:/" in infoFile.title
     if (strlen(infoFile.title) > 5)  // we're in a subfolder
     {
+      Pstr_tmp = strstr(line, infoFile.title + 5);  // "+ 5" skips the 5 bytes related to prefix "bSD:/" in infoFile.title
       if (Pstr_tmp == NULL)  // if "line" doesn't include current folder
         continue;
       else if (Pstr_tmp[strlen(infoFile.title + 5)] != '/')  // "+ 5" skips the prefix "bSD:/" in infoFile.title
