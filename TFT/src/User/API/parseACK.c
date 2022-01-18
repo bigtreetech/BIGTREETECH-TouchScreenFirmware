@@ -1248,10 +1248,10 @@ void parseACK(void)
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
         for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
-    // forward data ony if serial port is enabled
+          // forward data only if serial port is enabled
           if (infoSettings.serial_port[i] > 0
               #ifdef SERIAL_DEBUG_PORT
-                && serialPort[i].port != SERIAL_DEBUG_PORT // do not forward data to serial debug port
+                && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
               #endif
               )
           {
@@ -1274,10 +1274,10 @@ void parseRcvGcode(void)
 {
   for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
   {
-    // forward data ony if serial port is enabled
+    // forward data only if serial port is enabled
     if (infoSettings.serial_port[i] > 0
         #ifdef SERIAL_DEBUG_PORT
-          && serialPort[i].port != SERIAL_DEBUG_PORT // do not forward data to serial debug port
+          && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
         #endif
         )
     {
