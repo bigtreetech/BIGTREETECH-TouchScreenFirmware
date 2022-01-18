@@ -229,9 +229,13 @@ The TFT firmware update includes up to four elements and is done in three steps:
 - `V3.0`: hardware version
 - `27`: software version
 
-Exception: For the MKS TFT28 the binary file name must be `MKSTFT28.bin`.
+Notes for MKS TFT firmwares:
+1) Any binary file for an MKS firmware (e.g. MKS_TFT28_V3.0.27.x.bin) must be renamed to MKSTFTxx.bin (e.g. MKSTFT28.bin, MKSTFT35.bin etc...)
+2) For MKS TFT35, two binary files are provided:
+ 1) encrypted version: usable on a stock MKS TFT35 (based on a bootloader with encryption)
+ 2) unencrypted version: usable with a bootloader without encryption
 
-Attention TFT35 owners. There are currently three different kinds of firmware available: V3.0, E3_V3.0 and B1_V3.0. Please make sure to use the firmware which matches your TFT screen.
+Note for BTT TFT35 firmwares: There are currently three different kinds of firmware available: V3.0, E3_V3.0 and B1_V3.0. Please make sure to use the firmware which matches your TFT screen.
 
 
 **element 2:** Fonts and Icons (in the `TFT*` or `MKS` folder):
@@ -371,6 +375,7 @@ See [Customisation guides](https://github.com/bigtreetech/BIGTREETECH-TouchScree
 ;MKS_TFT28_V3_0
 ;MKS_TFT28_V4_0
 ;MKS_TFT28_NEW_GENIUS
+;MKS_TFT35_V1_0
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
@@ -431,13 +436,14 @@ M118 A1 P0 action:pause
 M118 A1 P0 action:resume
   
 **time remaining progress:**
-M118 A1 P0 action:notification Time Left hms (e.g. 02h04m06s)
-  
-M117 Time Left hms
+M118 A1 P0 action:notification Time Left <XX>h<YY>m<ZZ>s (e.g. 02h04m06s)
+or
+M117 Time Left <XX>h<YY>m<ZZ>s
+
 **file data progress:**
-  
-M118 A1 P0 action:notification Data Left / (e.g. 123/12345)
-M117 Data Left /
+M118 A1 P0 action:notification Data Left <XXXX>/<YYYY> (e.g. 123/12345)
+or
+M117 Data Left <XXXX>/<YYYY>
 
 When the trigger "print_start" is received, the TFT switches to Printing menu.
 Once on Printing menu, the "pause", "resume" and "stop" buttons on the menu will be disabled.

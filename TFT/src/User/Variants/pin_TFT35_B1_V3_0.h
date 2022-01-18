@@ -6,6 +6,7 @@
   #define HARDWARE_VERSION "TFT35_B1_V3.0"
 #endif
 
+// Neopixel LEDs number
 #ifndef NEOPIXEL_PIXELS
   #define NEOPIXEL_PIXELS 2
 #endif

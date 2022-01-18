@@ -36,7 +36,7 @@
     "maximum_size": 249856,
     "protocol": "cmsis-dap",
     "protocols": [
-	  "cmsis-dap",
+      "cmsis-dap",
       "jlink",
       "stlink",
       "blackmagic",
