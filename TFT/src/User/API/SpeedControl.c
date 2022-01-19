@@ -67,7 +67,7 @@ void speedQuery(void)
   {
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeCmd("M220\nM221\n");
+      speedQueryWait = (storeCmd("M220\n") | storeCmd("M221\n"));
     }
     else
     {

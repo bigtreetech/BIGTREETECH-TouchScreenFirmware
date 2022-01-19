@@ -59,6 +59,7 @@ void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
+// Do not send multiple commands at once !!! (ex "M220\nM221\n")
 bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
@@ -81,6 +82,8 @@ bool storeCmd(const char * format, ...)
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
 // is available to store the command.
+// Do not send multiple commands at once !!! (ex "M220\nM221\n")
+// For multiple commands at once use mustStoreScript()
 void mustStoreCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return;
