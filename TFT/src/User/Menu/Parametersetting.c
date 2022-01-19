@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "Parametersetting.h"
 #include "includes.h"
 
@@ -174,7 +175,7 @@ void menuShowParameter(void)
 
           if (val != getParameter(cur_parameter, key_num))
           {
-            sendParameterCmd(cur_parameter, key_num, val);
+            sendParameterCmd(cur_parameter, key_num, val);    // send gcode cmd to printer
           }
 
           setDynamicValue(key_num, val);
@@ -379,8 +380,8 @@ bool temperatureStatusValid(void)
 
 void loopTemperatureStatus(void)
 {
-  if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
-  if (!temperatureStatusValid()) return;
+  if(getMenuType() == MENU_TYPE_FULLSCREEN) return;
+  if (!temperatureStatusValid()) return;    // if temperature status not needed just return
 
   uint8_t tmpHeater[3];  // chamber, bed, hotend
   uint8_t tmpIndex = 0;
@@ -429,9 +430,9 @@ int16_t drawTemperatureStatus(void)
     if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
     {
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-      tmpHeater[tmpIndex++] = NOZZLE0;
+      tmpHeater[tmpIndex++] = TOOL0;
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
-      tmpHeater[tmpIndex++] = NOZZLE1;
+      tmpHeater[tmpIndex++] = TOOL1;
     }
     else  // singl or mixing hotend
     {

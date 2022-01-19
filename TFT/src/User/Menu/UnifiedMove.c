@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "UnifiedMove.h"
 #include "includes.h"
 
@@ -10,8 +11,9 @@ void menuUnifiedMove(void)
     {
       {ICON_HOME,                    LABEL_HOME},
       {ICON_MOVE,                    LABEL_MOVE},
-      {ICON_EXTRUDE,                 LABEL_EXTRUDE},
-      {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
+      //{ICON_EXTRUDE,                 LABEL_EXTRUDE},  //TG 2/10/21 was EXTRUDE, removed for CNC
+      {ICON_REMOVED,				 LABEL_REMOVED},
+	  {ICON_DISABLE_STEPPERS,        LABEL_DISABLE_STEPPERS},
       {ICON_BABYSTEP,                LABEL_BABYSTEP},
       {ICON_MANUAL_LEVEL,            LABEL_LEVELING},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -43,7 +45,7 @@ void menuUnifiedMove(void)
         break;
 
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuExtrude;
+        //infoMenu.menu[++infoMenu.cur] = menuExtrude; //TG removed for CNC
         break;
 
       case KEY_ICON_3:

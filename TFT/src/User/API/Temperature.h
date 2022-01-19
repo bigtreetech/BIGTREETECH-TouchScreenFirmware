@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #ifndef _TEMPERATURE_H_
 #define _TEMPERATURE_H_
 
@@ -11,7 +13,7 @@ extern "C" {
 #include "Settings.h"
 
 #define TEMPERATURE_QUERY_FAST_SECONDS 1  // "M105" query temperature every 1s
-#define TEMPERATURE_QUERY_SLOW_SECONDS 3  // 3s
+#define TEMPERATURE_QUERY_SLOW_SECONDS 1  // "M155" vquery  //TG 2/21/21 set faster was 3
 
 typedef enum {
   WAIT_NONE = 0,
@@ -27,13 +29,9 @@ typedef enum {
 
 enum
 {
-  NOZZLE0 = 0,
-  NOZZLE1,
-  NOZZLE2,
-  NOZZLE3,
-  NOZZLE4,
-  NOZZLE5,
-  BED = MAX_HOTEND_COUNT,
+  TOOL0 = 0,    //TG 2/4/21  reduced tools
+  TOOL1,
+  BED,
   CHAMBER,
 };
 
@@ -49,11 +47,11 @@ typedef struct
 {
   union {
     struct {
-      _HEATER hotend[MAX_HOTEND_COUNT];
+      _HEATER hotend[MAX_SPINDLE_COUNT];
       _HEATER bed;
       _HEATER chamber;
     };
-    _HEATER T[MAX_HEATER_COUNT];
+    _HEATER T[MAX_TOOL_COUNT];
   };
   uint8_t toolIndex;
 } HEATER;

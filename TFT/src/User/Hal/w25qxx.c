@@ -1,6 +1,9 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "w25qxx.h"
 
 /*************************** W25Qxx SPI Interface ported by the underlying pattern ***************************/
+//TG  the W25Q64 is a 64Mbit SPI NOR Flash
+
 //#define W25Qxx_SPI     _SPI3
 //#define W25Qxx_SPEED   0
 //#define W25Qxx_CS_PIN PA4

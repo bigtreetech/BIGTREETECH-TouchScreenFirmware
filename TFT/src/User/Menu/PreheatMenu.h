@@ -1,6 +1,6 @@
 #ifndef _PREHEATMENU_H_
 #define _PREHEATMENU_H_
-
+//TG MODIFIED BY T.GIOIOSA
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -11,8 +11,8 @@ typedef enum
 {
   BOTH = 0,
   BED_PREHEAT = 1,
-  NOZZLE0_PREHEAT = 2,
-} TOOLPREHEAT;
+  TOOL0_PREHEAT = 2,
+}TOOLPREHEAT;
 
 void menuPreheat(void);
 

@@ -1,4 +1,4 @@
-/**
+/** //TG MODIFIED BY T.GIOIOSA
 * CONFIG Kewords Generation
 * Usage: X_CONFIG(VALUE)
 * 'VALUE' is the keyword name without the 'CONFIG_'
@@ -7,7 +7,19 @@
 */
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
 
+//--------------------------------------------NEW additions
 X_CONFIG(STATUS_SCREEN)
+X_CONFIG(CNCMODE)             //TG 1/12/20 new
+X_CONFIG(SPINDLE_USE_PID)     //TG 9/27/21 new
+X_CONFIG(LASERMODE)           //TG 1/12/20 new
+X_CONFIG(SPINDLE_COUNT)       //TG 2/5/21
+X_CONFIG(SPINDLE_CTRL_COUNT)  //TG 2/5/21
+X_CONFIG(SPINDLE_PMAX)        //TG 2/5/21
+X_CONFIG(SPINDLE_RMAX)        //TG 2/5/21
+X_CONFIG(LCD_POWER_UNIT)      //TG 2/4/21
+X_CONFIG(CUTTER_POWER_UNIT)   //TG 2/14/21 new
+X_CONFIG(VACUUM_CTL_PIN)      //TG 2/17/21 new
+//----------------------------Titles, menus, colors
 X_CONFIG(UART_BAUDRATE)
 X_CONFIG(LANGUAGE)
 X_CONFIG(TITLE_BG)
@@ -83,6 +95,9 @@ X_CONFIG(PREHEAT_TEMP_3)
 X_CONFIG(PREHEAT_TEMP_4)
 X_CONFIG(PREHEAT_TEMP_5)
 X_CONFIG(PREHEAT_TEMP_6)
+//-----------------------------Z min Touch Plate
+X_CONFIG(TOUCHPLATE_ON)
+X_CONFIG(TOUCHPLATE_HEIGHT)
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 X_CONFIG(PS_ON)
 X_CONFIG(PS_LOGIC)
@@ -102,8 +117,8 @@ X_CONFIG(TOUCH_SOUND)
 X_CONFIG(TOAST_SOUND)
 X_CONFIG(ALERT_SOUND)
 X_CONFIG(HEATER_SOUND)
-X_CONFIG(KNOB_COLOR)
-X_CONFIG(KNOB_LED_IDLE)
+X_CONFIG(KNOB_COLOR)      //TG removed 8/22/21
+X_CONFIG(KNOB_LED_IDLE)   //TG removed 8/22/21
 X_CONFIG(BRIGHTNESS)
 X_CONFIG(BRIGHTNESS_IDLE)
 X_CONFIG(BRIGHTNESS_IDLE_DELAY)
@@ -145,5 +160,6 @@ X_CONFIG(CANCEL_GCODE_ON)
 X_CONFIG(START_GCODE)
 X_CONFIG(END_GCODE)
 X_CONFIG(CANCEL_GCODE)
+
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c

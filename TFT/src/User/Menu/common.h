@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
@@ -5,8 +6,10 @@
 extern "C" {
 #endif
 #include "menu.h"
-#include "Heat.h"
-
+//#include "Heat.h"     //TG 8/22/21 removed for CNC
+#include "Settings.h"   //TG 8/22/21 added when removing Heat.h for CNC
+#define ITEM_RPM_NUM            4   //TG 2/5/21
+#define ITEM_PWM_NUM            3   //TG 2/14/21
 #define ITEM_DEGREE_NUM         3
 #define ITEM_SPEED_NUM          3
 #define ITEM_PERCENT_STEPS_NUM  3
@@ -18,10 +21,21 @@ extern "C" {
 extern uint8_t currentTool;
 extern uint8_t currentFan;
 extern uint8_t currentSpeedID;
+uint8_t currentSpindleSpeedID; //TG 2/24/21 new
 
-extern const ITEM itemTool[MAX_HEATER_COUNT];
-extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM];
-extern const uint8_t degreeSteps[ITEM_DEGREE_NUM];
+extern const ITEM itemTool[MAX_TOOL_COUNT];
+extern const ITEM itemSpindle[MAX_TOOL_COUNT];
+extern const ITEM itemLaser[MAX_TOOL_COUNT];
+extern const ITEM itemVacuum[MAX_TOOL_COUNT];
+extern const ITEM itemDegreeSteps[ITEM_DEGREE_NUM]; //TG 1/16/20 remove after completed dev, replaced by RPM 
+extern const u8 degreeSteps[ITEM_DEGREE_NUM];
+
+extern const ITEM itemRPMSteps[ITEM_RPM_NUM];       //TG 1/16/20 new for RPM
+extern const u16 RPMSteps[ITEM_RPM_NUM];
+
+const ITEM itemPWMSteps[ITEM_PWM_NUM]; 
+const uint8_t PWMSteps[ITEM_PWM_NUM];
+
 
 extern const ITEM itemSpeed[ITEM_SPEED_NUM];
 

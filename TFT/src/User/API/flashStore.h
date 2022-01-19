@@ -1,3 +1,4 @@
+//TG MODIFIED*****
 #ifndef _FLASHSTORE_H_
 #define _FLASHSTORE_H_
 
@@ -9,7 +10,8 @@ extern "C" {
 #include "variants.h"
 #include "Settings.h"
 
-#define PARA_SIZE 256  // Max size of settings buffer to read/write
+// should this be 768 as in prior versions?
+#define PARA_SIZE 512  //TG 8/30/21 increased from 256 Max size of settings buffer to read/write
 
 void readStoredPara(void);
 void storePara(void);

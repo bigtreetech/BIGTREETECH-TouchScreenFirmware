@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "Printing.h"
 #include "includes.h"
 
@@ -144,7 +146,7 @@ void shutdownLoop(void)
 {
   bool tempIsLower = true;
 
-  for (uint8_t i = NOZZLE0; i < infoSettings.hotend_count; i++)
+  for (uint8_t i = TOOL0; i < infoSettings.hotend_count; i++)
   {
     if (heatGetCurrentTemp(i) >= AUTO_SHUT_DOWN_MAXTEMP)
       tempIsLower = false;

@@ -1,9 +1,15 @@
+//TG MODIFIED*****
+/* Flash read and write to the parameter storage area PARA_SIZE=768 dwords, SIGN_ADDRESS=0x08004000
+   so the parameter storage are in flash is from 0x0800400 - 0x08004300 (768 dwords), but there is room
+   for more up to 0x08007FF0. If more features are added that need settings stored add them to
+   readStoredPara() and storePara() below, also adjust PARA_SIZE upwards!
+*/
 #include <string.h>
 #include "flashStore.h"
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20210311  // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20210927  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
                               // in the "infoSettingsReset()" function
 enum
@@ -46,20 +52,19 @@ void readStoredPara(void)
   uint8_t data[PARA_SIZE];
   uint32_t index = 0;
   uint32_t sign = 0;
-
-  STM32_FlashRead(data, PARA_SIZE);
+  STM32_FlashRead(data, PARA_SIZE);	// read parameters into data[] array
 
   sign = byteToWord(data + (index += 4), 4);
-  if (sign == TSC_SIGN)
+  if (sign == TSC_SIGN)	// compare word32 at 0x8004000 to 0x20201205(TSC_SIGN)
   {
     paraStatus |= PARA_TSC_EXIST;  // If the touch screen calibration parameter already exists
-    for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++)
+    for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++) // get next 7 dwords of cal data
     {
       TSC_Para[i] = byteToWord(data + (index += 4), 4);
     }
   }
 
-  sign = byteToWord(data + (index += 4), 4);
+  sign = byteToWord(data + (index += 4), 4);   // compare word32 at 0x8004028 to 0x20202712(PARA_SIGN)
   if (sign != PARA_SIGN)  // If the settings parameter is illegal, reset settings parameter
   {
     paraStatus = PARA_WAS_RESTORED;

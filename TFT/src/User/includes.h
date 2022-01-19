@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _INCLUDES_H_
 #define _INCLUDES_H_
 
@@ -83,7 +84,8 @@
 
 //menu
 #include "MainPage.h"
-#include "Heat.h"
+//#include "Heat.h"
+#include "Spindle.h"                   //TG 1/16/20 replaces Heat.h
 #include "PreheatMenu.h"
 #include "Move.h"
 #include "Home.h"
@@ -96,7 +98,7 @@
 #include "NotificationMenu.h"
 
 #include "Babystep.h"
-#include "Extrude.h"
+//#include "Extrude.h"            //TG 2/8/21  removing Extrude module
 #include "LoadUnload.h"
 #include "RRFMacros.h"
 #include "Fan.h"
@@ -121,12 +123,18 @@
 #include "StatusScreen.h"
 
 #include "Tuning.h"
-#include "Pid.h"
-#include "TuneExtruder.h"
+//#include "Pid.h"              //TG 2/14/21 removed for CNC
+//#include "TuneExtruder.h"     //TG 2/10/21 removed for CNC
 #include "ConnectionSettings.h"
 #include "MeshTuner.h"
 #include "MeshEditor.h"
 #include "CaseLight.h"
+
+#include "Laser.h"              //TG 1/12/20 new
+#include "Spindle.h"            //TG 2/4/21 new
+
+//#include "SpindleSpeed.h"       //TG 8/31/21 not needed unless trying to use spindle on fan PWM
+#include "Vacuum.h"        //TG 1/12/20 new
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #ifndef _LANGUAGE_KEYWORDS_H_
 #define _LANGUAGE_KEYWORDS_H_
 
@@ -36,8 +38,8 @@ extern "C" {
 #define LANG_KEY_TOAST_SOUND                  "label_toast_sound:"
 #define LANG_KEY_ALERT_SOUND                  "label_alert_sound:"
 #define LANG_KEY_HEATER_SOUND                 "label_heater_sound:"
-#define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
-#define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
+#define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"     //TG removed 8/22/21
+#define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"      //TG removed 8/22/21
 #define LANG_KEY_LCD_BRIGHTNESS               "label_lcd_brightness:"
 #define LANG_KEY_LCD_IDLE_BRIGHTNESS          "label_lcd_idle_brightness:"
 #define LANG_KEY_LCD_IDLE_DELAY               "label_lcd_idle_delay:"
@@ -185,7 +187,7 @@ extern "C" {
 #define LANG_KEY_REPEAT                       "label_repeat:"
 
 // Printer Tools
-#define LANG_KEY_NOZZLE                       "label_nozzle:"
+//#define LANG_KEY_NOZZLE                       "label_nozzle:"     //TG 1/14/20 removed for adding Spindle
 #define LANG_KEY_BED                          "label_bed:"
 #define LANG_KEY_CHAMBER                      "label_chamber:"
 #define LANG_KEY_FAN                          "label_fan:"
@@ -243,7 +245,8 @@ extern "C" {
 #define LANG_KEY_MOVE                         "label_move:"
 #define LANG_KEY_HOME                         "label_home:"
 #define LANG_KEY_PRINT                        "label_print:"
-#define LANG_KEY_EXTRUDE                      "label_extrude:"
+//#define LANG_KEY_EXTRUDE                      "label_extrude:"                //TG 2/10/21 removed for CNC
+
 #define LANG_KEY_SETTINGS                     "label_settings:"
 #define LANG_KEY_SCREEN_SETTINGS              "label_screen_settings:"
 #define LANG_KEY_MACHINE_SETTINGS             "label_machine_settings:"
@@ -320,18 +323,18 @@ extern "C" {
 #define LANG_KEY_PID_START_INFO               "label_pid_start_info:"
 #define LANG_KEY_PID_START_INFO_2             "label_pid_start_info_2:"
 #define LANG_KEY_PID_START_INFO_3             "label_pid_start_info_3:"
-#define LANG_KEY_TUNE_EXTRUDER                "label_tune_extruder:"
-#define LANG_KEY_TUNE_EXT_EXTRUDE_100         "label_tune_ext_extrude_100:"
-#define LANG_KEY_TUNE_EXT_TEMP                "label_tune_ext_temp:"
-#define LANG_KEY_TUNE_EXT_TEMPLOW             "label_tune_ext_templow:"
-#define LANG_KEY_TUNE_EXT_DESIREDVAL          "label_tune_ext_desiredval:"
-#define LANG_KEY_TUNE_EXT_MARK120MM           "label_tune_ext_mark120mm:"
-#define LANG_KEY_TUNE_EXT_HEATOFF             "label_tune_ext_heatoff:"
-#define LANG_KEY_TUNE_EXT_ADJ_ESTEPS          "label_tune_ext_adj_esteps:"
-#define LANG_KEY_TUNE_EXT_ESTEPS_SAVED        "label_tune_ext_esteps_saved:"
-#define LANG_KEY_TUNE_EXT_MEASURED            "label_tune_ext_measured:"
-#define LANG_KEY_TUNE_EXT_OLD_ESTEP           "label_tune_ext_old_estep:"
-#define LANG_KEY_TUNE_EXT_NEW_ESTEP           "label_tune_ext_new_estep:"
+//#define LANG_KEY_TUNE_EXTRUDER                "label_tune_extruder:"              //TG 2/10/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_EXTRUDE_100         "label_tune_ext_extrude_100:"       //TG 2/10/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_TEMP                "label_tune_ext_temp:"              //TG 2/10/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_TEMPLOW             "label_tune_ext_templow:"           //TG 2/18/21 removed for CNC           
+//#define LANG_KEY_TUNE_EXT_DESIREDVAL          "label_tune_ext_desiredval:"        //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_MARK120MM           "label_tune_ext_mark120mm:"         //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_HEATOFF             "label_tune_ext_heatoff:"           //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_ADJ_ESTEPS          "label_tune_ext_adj_esteps:"        //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_ESTEPS_SAVED        "label_tune_ext_esteps_saved:"      //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_MEASURED            "label_tune_ext_measured:"          //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_OLD_ESTEP           "label_tune_ext_old_estep:"         //TG 2/18/21 removed for CNC
+//#define LANG_KEY_TUNE_EXT_NEW_ESTEP           "label_tune_ext_new_estep:"         //TG 2/18/21 removed for CNC
 #define LANG_KEY_CONNECTION_SETTINGS          "label_connection_settings:"
 #define LANG_KEY_NOTIFICATIONS                "label_notifications:"
 #define LANG_KEY_MESH_EDITOR                  "label_mesh_editor:"
@@ -339,20 +342,60 @@ extern "C" {
 #define LANG_KEY_CASE_LIGHT                   "label_case_light:"
 #define LANG_KEY_LOAD_STARTED                 "label_load_started:"
 #define LANG_KEY_UNLOAD_STARTED               "label_unload_started:"
-#define LANG_KEY_HEATERS_ON                   "label_heaters_on:"
+//#define LANG_KEY_HEATERS_ON                   "label_heaters_on:"       //TG removed 8/22/21
 #define LANG_KEY_PRINT_FINISHED               "label_print_finished:"
 #define LANG_KEY_MAIN_SCREEN                  "label_main_screen:"
 #define LANG_KEY_PREVIOUS_PRINT_DATA          "label_previous_print_data:"
 #define LANG_KEY_PRINT_TIME                   "label_print_time:"
-#define LANG_KEY_FILAMENT_LENGTH              "label_filament_length:"
+#define LANG_KEY_FILAMENT_LENGTH              "label_filament_length:"    //TG 2/18/21 removed
 #define LANG_KEY_FILAMENT_WEIGHT              "label_filament_weight:"
 #define LANG_KEY_FILAMENT_COST                "label_filament_cost:"
 #define LANG_KEY_NO_FILAMENT_STATS            "label_no_filament_stats:"
 #define LANG_KEY_CLICK_FOR_MORE               "label_click_for_more:"
-#define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"
+//#define LANG_KEY_EXT_TEMPLOW                  "label_ext_templow:"        //TG 2/18/21 removed
 #define LANG_KEY_HEAT_HOTEND                  "label_heat_hotend:"
 #define LANG_KEY_Z_ALIGN                      "label_z_align:"
 #define LANG_KEY_MACROS                       "label_macros:"
+
+#define LANG_KEY_TGMENU                       "label_TG Menu:"
+#define LANG_KEY_M503                         "label_Read EEPROM:"
+#define LANG_KEY_VACUUM                       "label_vacuum:"               //TG 1/12/20 new
+#define LANG_KEY_SPINDLE                      "label_spindle:"              //TG 1/12/20 new
+#define LANG_KEY_LASER                        "label_laser:"                //TG 1/12/20 new
+#define LANG_KEY_ZERO_X                       "label_Zero X:"               //TG 1/12/20 new
+#define LANG_KEY_ZERO_Y                       "label_Zero Y:"               //TG 1/12/20 new
+#define LANG_KEY_ZERO_Z                       "label_Zero Z:"               //TG 1/12/20 new
+#define LANG_KEY_XY                           "label_XY:"                   //TG 1/12/20 new
+#define LANG_KEY_CUT                          "label_Cut:"                  //TG 1/12/20 new
+#define LANG_KEY_LASER_2                      "label_Laser 2%:"             //TG 1/12/20 new
+#define LANG_KEY_LASER_100                    "label_Laser 100%:"           //TG 1/12/20 new
+#define LANG_KEY_LASER_OFF                    "label_Laser Off:"            //TG 1/12/20 new
+#define LANG_KEY_SPINDLE_ROTATION             "label_Spindle Rotation:"     //TG 1/12/20 new
+#define LANG_KEY_LASER_MODE                   "label_Laser Mode:"           //TG 1/12/20 new
+#define LANG_KEY_CW                           "label_CW:"                   //TG 1/12/20 new
+#define LANG_KEY_CCW                          "label_CCW:"                  //TG 1/12/20 new
+#define LANG_KEY_SPINDLE_RMAX                 "label_Spindle RPM Max:"      //TG 2/5/21 new
+#define LANG_KEY_SPINDLE_PMAX                 "label_Spindle PWM Max:"      //TG 2/5/21 new
+#define LANG_KEY_LCD_POWER_UNIT               "label_LCD Spindle units:"    //TG 2/5/21 new
+#define LANG_KEY_PCT                          "label_%:"                    //TG 2/5/21 new
+#define LANG_KEY_RPM                          "label_RPM:"                  //TG 2/5/21 new
+#define LANG_KEY_500_RPM                      "label_500_RPM:"              //TG 2/10/21 new
+#define LANG_KEY_1000_RPM                     "label_1000_RPM:"             //TG 2/10/21 new
+#define LANG_KEY_5000_RPM                     "label_5000_RPM:"             //TG 2/10/21 new
+#define LANG_KEY_10000_RPM                    "label_10000_RPM:"            //TG 2/10/21 new
+#define LANG_KEY_SSTART                       "label_Start:"                //TG 2/5/21 new
+#define LANG_KEY_SSTOP                        "label_Stop:"                 //TG 2/5/21 new
+#define LANG_KEY_CUTTER_POWER_UNIT            "label_Marlin Cutter Units:"  //TG 2/5/21 new
+#define LANG_KEY_PWM                          "label_PWM:"                  //TG 2/5/21 new
+#define LANG_KEY_AUTO_MODE                    "label_Auto Mode:"            //TG 2/5/21 new
+#define LANG_KEY_AUTO_ON                      "label_Auto ON:"              //TG 2/5/21 new
+#define LANG_KEY_REMOVED                      "label_Removed:"              //TG 2/18/21 new
+#define LANG_KEY_INVERT_XAXIS                 "label_invert_xaxis:"
+#define LANG_KEY_INVERT_YAXIS                 "label_invert_yaxis:"
+#define LANG_KEY_INVERT_ZAXIS                 "label_invert_zaxis:"
+#define LANG_KEY_SPINDLE_USE_PID              "label_Spindle_use_PID:"      //TG 9/27/21 new
+//#define LANG_KEY_Z_0                          "label_Z to 0mm:"
+//#define LANG_KEY_Z_300                        "label_Z to 300mm:"
 
 #ifdef __cplusplus
 }

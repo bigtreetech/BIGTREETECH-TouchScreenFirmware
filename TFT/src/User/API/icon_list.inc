@@ -1,30 +1,32 @@
-/**
+/** //TG MODIFIED*****
 * Icon Keywords Generation
 * Usage: X_ICON(VALUE)
 * 'VALUE' is the keyword name without the 'ICON_'
 *
 * Description: https://en.wikipedia.org/wiki/X_Macro
+*
+* After changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
 */
-//after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h
+
 
 X_ICON (HEAT)
 X_ICON (MOVE)
 X_ICON (HOME)
 X_ICON (DISABLE_STEPPERS)
 X_ICON (PRINT)
-X_ICON (EXTRUDE)
+//X_ICON (EXTRUDE)		//TG 2/18/21 removed
 X_ICON (FAN)
 X_ICON (SETTINGS)
 X_ICON (LEVELING)
 X_ICON (Z_FADE)
 X_ICON (INC)
 X_ICON (DEC)
-X_ICON (NOZZLE)
-X_ICON (BED)
+//X_ICON (NOZZLE)		//TG 2/18/21 removed
+//X_ICON (BED)			//TG 2/18/21 removed
 X_ICON (CHAMBER)
-X_ICON (1_DEGREE)
-X_ICON (5_DEGREE)
-X_ICON (10_DEGREE)
+//X_ICON (1_DEGREE)     //TG 2/18/21 removed
+//X_ICON (5_DEGREE)     //TG 2/18/21 removed
+//X_ICON (10_DEGREE)    //TG 2/18/21 removed
 X_ICON (APPLY)
 X_ICON (STOP)
 X_ICON (BACK)
@@ -52,11 +54,11 @@ X_ICON (UNLOAD)
 X_ICON (SLOW_SPEED)
 X_ICON (NORMAL_SPEED)
 X_ICON (FAST_SPEED)
-X_ICON (E_1_MM)
-X_ICON (E_5_MM)
-X_ICON (E_10_MM)
-X_ICON (E_100_MM)
-X_ICON (E_200_MM)
+//X_ICON (E_1_MM)               //TG removed in CNC version, make room for RPM icons
+//X_ICON (E_5_MM)               //TG removed in CNC version, make room for RPM icons
+//X_ICON (E_10_MM)              //TG removed in CNC version, make room for RPM icons
+//X_ICON (E_100_MM)             //TG removed in CNC version, make room for RPM icons
+//X_ICON (E_200_MM)             //TG removed in CNC version, make room for RPM icons
 X_ICON (E_1_PERCENT)
 X_ICON (E_5_PERCENT)
 X_ICON (E_10_PERCENT)
@@ -114,8 +116,8 @@ X_ICON (RESET_VALUE)
 X_ICON (GLOBAL_CHAMBER)
 X_ICON (GLOBAL_BED)
 X_ICON (GLOBAL_NOZZLE)
-X_ICON (PRINTING_NOZZLE)
-X_ICON (PRINTING_BED)
+//X_ICON (PRINTING_NOZZLE)		//TG 2/18/21 removed
+//X_ICON (PRINTING_BED)			//TG 2/18/21 removed
 X_ICON (PRINTING_FAN)
 X_ICON (PRINTING_TIMER)
 X_ICON (PRINTING_ZLAYER)
@@ -124,9 +126,9 @@ X_ICON (PRINTING_FLOW)
 X_ICON (MAINMENU)
 X_ICON (HOME_MOVE)
 X_ICON (HEAT_FAN)
-X_ICON (COOLDOWN)
-X_ICON (STATUS_NOZZLE)
-X_ICON (STATUS_BED)
+//X_ICON (COOLDOWN)             //TG 2/18/21 removed
+//X_ICON (STATUS_NOZZLE)        //TG 1/14/20 replacing with SPINDLE
+//X_ICON (STATUS_BED)           //TG 1/14/20 replacing with VACUUM
 X_ICON (STATUS_FAN)
 X_ICON (STATUS_SPEED)
 X_ICON (STATUS_FLOW)
@@ -143,5 +145,35 @@ X_ICON (CASE_LIGHT)
 X_ICON (Z_ALIGN)
 X_ICON (MESH_EDITOR)
 X_ICON (BRIGHTNESS)
-
+X_ICON (TGMENU)             //TG 1/12/20 new
+X_ICON (M503)               //TG 1/12/20 new
+X_ICON (GLOBAL_VACUUM)       //TG 1/12/20 new
+X_ICON (GLOBAL_SPINDLE)     //TG 1/12/20 new
+X_ICON (GLOBAL_LASER)       //TG 1/12/20 new
+X_ICON (PRINTING_VACUUM)     //TG 1/12/20 new
+X_ICON (PRINTING_SPINDLE)   //TG 1/12/20 new
+X_ICON (PRINTING_LASER)     //TG 1/12/20 new
+X_ICON (STATUS_VACUUM)       //TG 1/12/20 new
+X_ICON (STATUS_SPINDLE)     //TG 1/12/20 new
+X_ICON (STATUS_LASER  )     //TG 1/12/20 new
+X_ICON (SPINDLE)            //TG 1/12/20 new
+X_ICON (VACUUM)              //TG 1/12/20 new
+X_ICON (LASER)              //TG 1/12/20 new
+X_ICON (LASER_2)            //TG 1/12/20 new
+X_ICON (LASER_100)          //TG 1/12/20 new
+X_ICON (LASER_OFF)          //TG 1/12/20 new
+X_ICON (ZERO_X)             //TG 1/12/20 new
+X_ICON (ZERO_Y)             //TG 1/12/20 new
+X_ICON (ZERO_Z)             //TG 1/12/20 new
+X_ICON (500_RPM)            //TG 2/10/21 new
+X_ICON (1000_RPM)           //TG 2/10/21 new
+X_ICON (5000_RPM)           //TG 2/10/21 new
+X_ICON (10000_RPM)          //TG 2/10/21 new
+X_ICON (SSTART)             //TG 2/10/21 new
+X_ICON (SSTOP)              //TG 2/10/21 new
+X_ICON (AUTO_MODE)          //TG 2/18/21 new
+X_ICON (AUTO_ON)            //TG 2/18/21 new
+X_ICON (REMOVED)            //TG 2/18/21 new
+//X_ICON (Z_0)
+//X_ICON (Z_300)
 //after changing/adding/removing an icon, change the ICON_FLASH_SIGN in Settings.h

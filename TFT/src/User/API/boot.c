@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "boot.h"
 #include "includes.h"
 
@@ -30,6 +32,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
   FIL bmpFile;
   char magic[2];
   uint16_t w, h;
+  int w1, h1;             //TG 8/30/21 added these to first read sizeof(int) 4 byte values correctly, then convert 2 byte values w,h
   int bytePerLine;
   short bpp;
   int offset;
@@ -44,7 +47,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
     return BMP_NOTFOUND;
 
   f_read(&bmpFile, magic, 2, &mybr);
-  if (memcmp(magic, "BM", 2))
+  if (memcmp(magic, "BM", 2))	// compare 1st two bytes of file, must = "BM"
   {
     f_close(&bmpFile);
     return BMP_INVALIDFILE;
@@ -52,9 +55,11 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
 
   f_lseek(&bmpFile, 10);
   f_read(&bmpFile, &offset, sizeof(int), &mybr);
-  f_lseek(&bmpFile, 18);
-  f_read(&bmpFile, &w, sizeof(int), &mybr);
-  f_read(&bmpFile, &h, sizeof(int), &mybr);
+  f_lseek(&bmpFile, 18);                                      //TG loc 18 is width(4 bytes) and at 22 bytes in is height(4 bytes)
+  f_read(&bmpFile, &w1, sizeof(int), &mybr);                  //TG read sizeof(int) 4 bytes into w1 (int)
+  w = (uint16_t)w1;                                           //TG copy to original w as 2 bytes (uint16_t)
+  f_read(&bmpFile, &h1, sizeof(int), &mybr);                  //TG read sizeof(int) 4 bytes into h1 (int)
+  h=(uint16_t)h1;                                             //TG copy to original h as 2 bytes (uint16_t)
   f_lseek(&bmpFile, 28);
   f_read(&bmpFile, &bpp, sizeof(short), &mybr);
 
@@ -77,10 +82,10 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
     W25Qxx_EraseSector(addr + bnum * W25QXX_SECTOR_SIZE);
   }
   bnum = 0;
-  //store size of BMP
-  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  //store size of BMP as first two bytes
+  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));         // copies the two bytes at w, buf is a 256 byte buffer defined up above
   bnum += sizeof(uint16_t);
-  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));  // copies the two bytes at h
   bnum += sizeof(uint16_t);
 
   for (int j = 0; j < h; j++)
@@ -99,7 +104,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
       buf[bnum++] = (uint8_t)(pix.color >> 8);
       buf[bnum++] = (uint8_t)(pix.color & 0xFF);
 
-      if (bnum == 256)
+      if (bnum == 256)		// every 256 bytes write a page to flash
       {
         W25Qxx_WritePage(buf, addr, 256);
         addr += 256;
@@ -116,7 +121,7 @@ BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
 
 bool updateIcon(void)
 {
-  uint16_t found = 0;
+  uint16_t found = 0;		//TG these two were declared static in prior versions
   uint16_t notfound = 0;
   char nowBmp[64];
   char tempstr[50];
@@ -139,7 +144,7 @@ bool updateIcon(void)
   }
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispString(5, PADDING, (uint8_t *)"Updating Icons");
+  GUI_DispString(5, PADDING, (uint8_t *)"Updating Icons");	//TG prepare to process icons
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
@@ -268,7 +273,7 @@ static inline void scanResetDir(void)
     infoSettingsReset();
     LCD_RefreshDirection();
     TSC_Calibration();
-    storePara();
+    storePara();		// do a flash store		
     f_rename(TFT_RESET_FILE, TFT_RESET_FILE ".DONE");
   }
 }
@@ -333,6 +338,10 @@ void scanUpdates(void)
     uint32_t saved_flash_sign[sign_count];
     W25Qxx_ReadBuffer((uint8_t*)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
 
+    //TG******** uncomment this block after testing
+    // the byte_ascii file on SD is actually 0xd60 bytes (3,424)
+    // the word_unicode file on SD is actually 0x00480000 bytes (4,718,592)
+    // the large_byte_ascii file on SD is actually 0x1ab7 (6,839)
     if (f_dir_exists(FONT_ROOT_DIR))
     {
       if (updateFont(FONT_ROOT_DIR "/byte_ascii.fon", BYTE_ASCII_ADDR) &&
@@ -352,7 +361,8 @@ void scanUpdates(void)
         flash_sign_updated = true;
       }
     }
-    if (getConfigFromFile() && (saved_flash_sign[config_sign] != CONFIG_CHECK_SIGN))
+	//TG******** uncomment this block after testing     
+	if (getConfigFromFile() && (saved_flash_sign[config_sign] != CONFIG_CHECK_SIGN))
     {
       saved_flash_sign[config_sign] = CONFIG_CHECK_SIGN;
       flash_sign_updated = true;
@@ -362,7 +372,7 @@ void scanUpdates(void)
       saved_flash_sign[lang_sign] = LANGUAGE_CHECK_SIGN;
       flash_sign_updated = true;
     }
-    scanRenameUpdate();
+    scanRenameUpdate();	//TG******** uncomment after testing
     scanResetDir();
 
     if (flash_sign_updated)

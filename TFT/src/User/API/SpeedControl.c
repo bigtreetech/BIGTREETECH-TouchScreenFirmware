@@ -1,11 +1,13 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "SpeedControl.h"
 #include "includes.h"
 
 const char *const speedCmd[SPEED_NUM] = {"M220","M221"};
 
-static uint16_t setPercent[SPEED_NUM] = {100, 100};
-static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};
-static uint16_t curPercent[SPEED_NUM] = {100, 100};
+static uint16_t setPercent[SPEED_NUM]     = {100, 100};  //Speed  Flow
+static uint16_t lastSetPercent[SPEED_NUM] = {100, 100};  //Speed  Flow
+static uint16_t curPercent[SPEED_NUM]  = {100, 100};  //Speed  Flow
 
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
@@ -50,10 +52,14 @@ void speedQuerySetWait(bool wait)
   speedQueryWait = wait;
 }
 
-void speedQuery(void)
+void speedQuery(void)   // ask printer for speed and flow of current hotend  //TG 2/21/21 mod to ignore M221
 {
   if (infoHost.connected && !infoHost.wait && !speedQueryWait)
   {
-    speedQueryWait = storeCmd("M220\nM221\n");
+    if(infoSettings.hotend_count > 0) 
+      speedQueryWait = storeCmd("M220\nM221 D%d\n",heatGetCurrentTool());
+    else  
+      speedQueryWait = storeCmd("M220\n");
+
   }
 }

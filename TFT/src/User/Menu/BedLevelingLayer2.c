@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "BedLevelingLayer2.h"
 #include "includes.h"
 
@@ -46,7 +47,7 @@ void menuBedLevelingLayer2(void)
   {
     if (infoSettings.touchmi_sensor != 0)
     {
-      bedLevelingLayer2Items.items[4].icon = ICON_NOZZLE;
+      // bedLevelingLayer2Items.items[4].icon = ICON_NOZZLE;  //TG Either reinstate icon, or remove bed leveling completely!!
       bedLevelingLayer2Items.items[4].label.index = LABEL_TOUCHMI;
     }
     else

@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
@@ -11,16 +13,31 @@ extern "C" {
 #include "ff.h"
 
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in flashStore.c
-
+//TG These strings are what is searched for in the config.ini file set by the user, these strings map to the defines
 #define LINE_MAX_CHAR                 100
 #define CONFIG_FILE_PATH              "0:config.ini"
 #define LANG_FILE_PATH                "0:language.ini"
 
 //-----------------------------General Settings
 #define CONFIG_STATUS_SCREEN          "status_screen:"
+//-----------------------------NEW additions
+#define CONFIG_CNCMODE              "cnc_mode:"               //TG 1/12/20 new
+#define CONFIG_SPINDLE_USE_PID      "spindle_use_pid:"        //TG 9/27/21 new
+#define CONFIG_LASERMODE            "laser_mode:"             //TG 1/12/20 new
+#define CONFIG_SPINDLE_COUNT        "spindle_count:"          //TG 2/5/21
+#define CONFIG_SPINDLE_CTRL_COUNT   "spindle_ctrl_count:"     //TG 2/5/21
+#define CONFIG_SPINDLE_PMAX         "spindle_pwm_max:"        //TG 2/5/21
+#define CONFIG_SPINDLE_RMAX         "spindle_rpm_max:"        //TG 2/5/21
+#define CONFIG_LCD_POWER_UNIT       "lcd_power_unit:"         //TG 2/4/21
+#define CONFIG_CUTTER_POWER_UNIT    "cutter_power_unit:"      //TG 2/14/21
+#define CONFIG_VACUUM_CTL_PIN       "vacuum_ctl_pin:"         //TG 2/17/21
+
+//-----------------------------Z min Touch Plate              //TG 1/12/20 new
+#define CONFIG_TOUCHPLATE_ON        "touchplate_on:"          //TG 1/12/20 new 
+#define CONFIG_TOUCHPLATE_HEIGHT    "touchplate_height:"      //TG 1/12/20 new
+
 #define CONFIG_UART_BAUDRATE          "baudrate:"
 #define CONFIG_LANGUAGE               "language:"
-
 #define CONFIG_TITLE_BG               "title_back_color:"
 #define CONFIG_MENU_BG_COLOR          "background_color:"
 #define CONFIG_MENU_FONT_COLOR        "font_color:"
@@ -170,6 +187,8 @@ extern "C" {
 #define MAX_DELAY_SEC             100       // time delay (sec) over this will not pe parsed.
 #define MAX_RETRACT_LIMIT         20        // retract length over this will not be parsed.
 #define MAX_FAN_SPEED             255       // fan speed (PWM) over this will not be parsed.
+#define MAX_SPINDLE_PWM_SPEED     1023      //TG 10/2/21 spindle speed (PWM) over this will not be parsed.
+#define MAX_SPINDLE_RPM_SPEED     40000     //TG 2/5/21 spindle speed (RPM) over this will not be parsed.
 
 #define MIN_SIZE_LIMIT            -2000     // machine size less than this will not be parsed.
 #define NAME_MIN_LENGTH           3         // minimum name length
@@ -186,6 +205,8 @@ extern "C" {
 #define MIN_SPEED_LIMIT           10        // speed less than this will not pe parsed.
 #define MIN_RETRACT_LIMIT         0         // retract length less than this will not be parsed.
 #define MIN_FAN_SPEED             25        // fan speed (PWM) less than this will not be parsed.
+#define MIN_SPINDLE_PWM_SPEED     0         //TG 2/5/21 spindle speed (PWM) less than this will not be parsed.
+#define MIN_SPINDLE_RPM_SPEED     0         //TG 2/5/21 spindle speed (RPM) less than this will not be parsed.
 
 typedef struct
 {

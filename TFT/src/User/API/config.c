@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "config.h"
 
 //#define CONFIG_DEBUG  // To be used only when calling 'getConfigFromFile()' after boot process
@@ -21,7 +23,7 @@ uint16_t foundkeys = 0;
 
 CONFIGFILE * CurConfigFile;
 char * cur_line = NULL;
-static uint16_t c_index = 0;
+static uint16_t c_index = 0;		//TG remember....static also means only visible in this file!
 
 uint8_t customcode_index = 0;
 uint8_t customcode_good[CUSTOM_GCODES_COUNT];
@@ -527,11 +529,47 @@ void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
-    //----------------------------General Settings
+    //---------------------------------------------------TG newly added for CNC
 
     case C_INDEX_STATUS_SCREEN:
       infoSettings.status_screen = getOnOff();
       break;
+    case C_INDEX_CNCMODE: //TG 1/12/20 new
+      infoSettings.spin_dir = getOnOff();
+      break;
+    case C_INDEX_SPINDLE_USE_PID: //TG 9/27/21 new
+      infoSettings.spindle_use_pid = getOnOff();
+      break;
+    case C_INDEX_LASERMODE: //TG 1/12/20 new
+      infoSettings.laser_mode = getOnOff();
+      break;
+    case C_INDEX_LCD_POWER_UNIT: //TG 2/4/21 added new
+      infoSettings.cutter_disp_unit = getOnOff();
+      break;
+    case C_INDEX_SPINDLE_COUNT: // TG 2/5/21 added new
+      SET_VALID_INT_VALUE(infoSettings.spindle_count, 0, MAX_SPINDLE_COUNT);
+      break;
+    case C_INDEX_SPINDLE_CTRL_COUNT: // TG 2/5/21 added new
+      SET_VALID_INT_VALUE(infoSettings.spindle_ctrl_count, 0, MAX_SPINDLE_CTRL_COUNT);
+      break;
+    case C_INDEX_SPINDLE_PMAX: //TG 2/5/21 added
+      SET_VALID_INT_VALUE(infoSettings.spindle_pwm_max[0], MIN_SPINDLE_PWM_SPEED, MAX_SPINDLE_PWM_SPEED);
+      break;
+    case C_INDEX_SPINDLE_RMAX: //TG 2/5/21 added
+      SET_VALID_INT_VALUE(infoSettings.spindle_rpm_max[0], MIN_SPINDLE_RPM_SPEED, MAX_SPINDLE_RPM_SPEED);
+      break;
+    case C_INDEX_CUTTER_POWER_UNIT: //TG 2/14/21 added
+      SET_VALID_INT_VALUE(infoSettings.cutter_power_unit,0,2);
+      break;
+    case C_INDEX_VACUUM_CTL_PIN:    //TG 2/17/21 added
+      SET_VALID_INT_VALUE(infoSettings.vacuum_ctl_pin,0,157);   //TG port pinmapping doesn't go beyond 0x9D
+      break;
+    //-------------------------Z min Touch Plate: //TG 1/12/20 new
+    case C_INDEX_TOUCHPLATE_ON:                                                         
+      infoSettings.touchplate_on = getOnOff();                                          
+      break;
+    
+    
 
     case C_INDEX_UART_BAUDRATE:
       SET_VALID_INT_VALUE(infoSettings.baudrate, 0, BAUDRATE_COUNT - 1);
@@ -669,7 +707,7 @@ void parseConfigKey(uint16_t index)
     //----------------------------Printer / Machine Settings
 
     case C_INDEX_HOTEND_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.hotend_count, 1, MAX_HOTEND_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.hotend_count, 0, MAX_SPINDLE_COUNT);    //TG 1/9/20 to allow zero extruders was MIN_EXT_COUNT
       break;
 
     case C_INDEX_HEATED_BED:
@@ -681,7 +719,7 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_EXT_COUNT:
-      SET_VALID_INT_VALUE(infoSettings.ext_count, 1, MAX_EXT_COUNT);
+      SET_VALID_INT_VALUE(infoSettings.ext_count, 0, MAX_EXT_COUNT); //TG 1/10/20  allow zero extruders-was 1
       break;
 
     case C_INDEX_FAN_COUNT:
@@ -692,15 +730,12 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.fan_ctrl_count, 0, MAX_FAN_CTRL_COUNT);
       break;
 
-    case C_INDEX_MAX_TEMP:
-      if (key_seen("T0:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE0], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
-      if (key_seen("T1:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE1], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
-      if (key_seen("T2:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE2], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
-      if (key_seen("T3:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE3], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
-      if (key_seen("T4:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE4], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
-      if (key_seen("T5:")) SET_VALID_INT_VALUE(infoSettings.max_temp[NOZZLE5], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+    case C_INDEX_MAX_TEMP:    //TG 1/16/20 reduced this set to only 4 items
       if (key_seen("BED:")) SET_VALID_INT_VALUE(infoSettings.max_temp[BED], MIN_BED_TEMP, MAX_BED_TEMP);
       if (key_seen("CHAMBER:")) SET_VALID_INT_VALUE(infoSettings.max_temp[CHAMBER], MIN_CHAMBER_TEMP, MAX_CHAMBER_TEMP);
+      if (key_seen("T0:")) SET_VALID_INT_VALUE(infoSettings.max_temp[TOOL0], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("T1:")) SET_VALID_INT_VALUE(infoSettings.max_temp[TOOL1], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+
       break;
 
     case C_INDEX_MIN_TEMP:

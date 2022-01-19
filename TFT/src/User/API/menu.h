@@ -1,3 +1,4 @@
+//TG MODIFIED*****
 #ifndef _MENU_H_
 #define _MENU_H_
 
@@ -136,9 +137,11 @@ typedef struct
  LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
 
-void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item); //TG added
+void showSingleLiveIconLine(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item, uint8_t linenum); //TG added
 
 extern const GUI_RECT exhibitRect;
+extern const GUI_RECT exhibitRectLower;   //TG new
 extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
 extern const GUI_RECT rect_of_titleBar[1];

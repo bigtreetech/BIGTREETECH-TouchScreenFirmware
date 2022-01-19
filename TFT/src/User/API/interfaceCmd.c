@@ -1,3 +1,4 @@
+//TG MODIFIED*****
 #include "interfaceCmd.h"
 #include "includes.h"
 
@@ -215,8 +216,8 @@ void sendDequeuedCmd(char * gcode, bool avoid_terminal)
 // Parse and send gcode cmd in infoCmd.
 void sendQueueCmd(void)
 {
-  if (infoHost.wait == true) return;
-  if (infoCmd.count == 0) return;
+  if (infoHost.wait == true)    return;    // wait to send flag set?
+  if (infoCmd.count == 0)       return;    // no commands to send?
 
   bool avoid_terminal = false;
   uint16_t  cmd = 0;
@@ -244,6 +245,10 @@ void sendQueueCmd(void)
       switch (cmd)
       {
         case 0:
+		  //TG this was in prior versions, but not in V27
+          //if (isPrinting())
+          //  setPrintPause(true,true);
+          //break;
         case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // Abort printing by "M0" in RepRapFirmware
           {

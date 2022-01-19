@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _STATUSSCREEN_H_
 #define _STATUSSCREEN_H_
 
@@ -20,17 +21,20 @@ extern "C" {
 
 extern const GUI_POINT ss_title_point;
 extern const GUI_POINT ss_val_point;
+extern const GUI_POINT ss_val2_point;
 extern const GUI_RECT msgRect;
 
 void menuStatus(void);
-void drawTemperature(void);
-void storegantry(int n, float val);
+void drawAllLiveIconData(void);
+void drawSingleLiveIconLine(uint8_t currentSpeedID);
+
+//void storegantry(int n, float val);       //TG 1/12/20 seems to not be used in this version
 void statusScreen_setMsg(const uint8_t *title,const uint8_t *msg);
 void statusScreen_setReady(void);
 void drawStatusScreenMsg(void);
-float getAxisLocation(uint8_t n);
-void gantry_dec(int n, float val);
-void gantry_inc(int n, float val);
+//float getAxisLocation(uint8_t n);         //TG 1/12/20 seems to not be used in this version
+//void gantry_dec(int n, float val);        //TG 1/12/20 seems to not be used in this version
+//void gantry_inc(int n, float val);        //TG 1/12/20 seems to not be used in this version
 
 #ifdef __cplusplus
 }

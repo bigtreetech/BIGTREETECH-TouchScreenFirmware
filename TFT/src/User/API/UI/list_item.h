@@ -1,4 +1,5 @@
 // *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
+//TG MODIFIED BY T.GIOIOSA
 
 #ifndef _LIST_ITEM_H_
 #define _LIST_ITEM_H_
@@ -42,9 +43,10 @@ uint8_t * IconCharSelect(uint8_t sel);
 void setDynamicLabel(uint8_t i, char * label);  //set list item title to any text
 char * getDynamicLabel(uint8_t i);              //get the custom text of the list item title
 
-void setDynamicTextValue(uint8_t i, char * txt);  //set list item value to any text (upto 7 characters)
-char * getDynamicTextValue(uint8_t i);            //get the custom text of the list item value
-void setDynamicValue(uint8_t i, float value);     //set list item value to any numeric value (upto 7 digits)
+void setDynamicTextValue(uint8_t i, char * txt);      //set list item value to any text (upto 7 characters)
+char * getDynamicTextValue(uint8_t i);                //get the custom text of the list item value
+void setDynamicValue(uint8_t i, float value);         //set list item value to any numeric float value (upto 7 digits)
+void setDynamicIntValue(uint8_t i, uint16_t value);   //TG 2/5/21 set list item value to any int value (upto 7 digits)
 
 void DrawCharIcon(const GUI_RECT * rect, ICON_POS iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color);
 void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * curitem, bool pressed);

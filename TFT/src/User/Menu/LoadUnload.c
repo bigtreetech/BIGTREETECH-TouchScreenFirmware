@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "LoadUnload.h"
 #include "includes.h"
 
@@ -15,14 +16,14 @@ const MENUITEMS loadUnloadItems = {
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_LOAD,                    LABEL_LOAD},
-    {ICON_NOZZLE,                  LABEL_NOZZLE},
+    {ICON_SPINDLE,                 LABEL_SPINDLE},
     {ICON_HEAT,                    LABEL_HEAT},
-    {ICON_COOLDOWN,                LABEL_COOLDOWN},
+    {ICON_REMOVED,                 LABEL_REMOVED},    //TG 2/18/21 was COOLDOWN
     {ICON_BACK,                    LABEL_BACK},
   }
 };
 
-static uint8_t tool_index = NOZZLE0;
+static uint8_t tool_index = TOOL0;
 static uint8_t lastCmd = NONE;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
@@ -91,10 +92,10 @@ void menuLoadUnload(void)
           lastCmd = NONE;
           break;
 
-        case KEY_ICON_5:
-          infoMenu.menu[++infoMenu.cur] = menuHeat;
-          lastCmd = NONE;
-          break;
+      	case KEY_ICON_5:
+	        infoMenu.menu[++infoMenu.cur] = menuSpindle;
+	        lastCmd = NONE;
+	      break;
 
         case KEY_ICON_6:
           heatCoolDown();

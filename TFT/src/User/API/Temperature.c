@@ -1,24 +1,26 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "includes.h"
 #include "Temperature.h"
 
-const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
-const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
-const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
-const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
+const char *const heaterID[MAX_TOOL_COUNT]      = HEAT_SIGN_ID;
+const char *const heatDisplayID[MAX_TOOL_COUNT] = HEAT_DISPLAY_ID;
+const char *const heatCmd[MAX_TOOL_COUNT]       = HEAT_CMD;
+const char *const heatWaitCmd[MAX_TOOL_COUNT]   = HEAT_WAIT_CMD;
 
-static HEATER  heater = {{}, NOZZLE0};
-static int16_t lastTarget[MAX_HEATER_COUNT] = {0};
+static HEATER  heater = {{}, TOOL0};
+static int16_t lastTarget[MAX_TOOL_COUNT] = {0};
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static bool    heat_update_waiting = false;
-static bool    heat_send_waiting[MAX_HEATER_COUNT];
+static bool    heat_send_waiting[MAX_TOOL_COUNT];
 
 uint32_t nextHeatCheckTime = 0;
 #define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
 
 static uint8_t fixHeaterIndex(uint8_t index)
 {
-  if (infoSettings.hotend_count == 1)
-    index = (index < MAX_HOTEND_COUNT) ? NOZZLE0 : index;
+  if (infoSettings.hotend_count == 1)   //TG 1/9/20 to allow zero extruders was MIN_EXT_COUNT
+    index = (index < MAX_SPINDLE_COUNT) ? TOOL0 : index;
   return index;
 }
 
@@ -75,7 +77,7 @@ int16_t heatGetCurrentTemp(uint8_t index)
 // Disable all heater/hotends
 void heatCoolDown(void)
 {
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)
   {
     heatSetTargetTemp(i, 0);
   }
@@ -90,7 +92,7 @@ bool heatGetIsWaiting(uint8_t index)
 // Check all heater if there is a heater waiting to be waited
 bool heatHasWaiting(void)
 {
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)
   {
     if (heater.T[i].waiting != WAIT_NONE)
       return true;
@@ -115,7 +117,7 @@ void heatSetIsWaiting(uint8_t tool, HEATER_WAIT isWaiting)
 
 void heatClearIsWaiting(void)
 {
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)
   {
     heater.T[i].waiting = WAIT_NONE;
   }
@@ -139,13 +141,13 @@ uint8_t heatGetCurrentTool(void)
 // Get current hotend index in arry T[]
 uint8_t heatGetCurrentHotend(void)
 {
-  return (infoSettings.hotend_count == 1) ? NOZZLE0 : heater.toolIndex;
+  return (infoSettings.hotend_count == 1) ? TOOL0 : heater.toolIndex;   //TG 1/9/20 to allow zero extruders  was MIN_EXT_COUNT
 }
 
 // Check whether the index is a valid heater index.
 bool heaterIsValid(uint8_t index)
 {
-  if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
+  if (index >= infoSettings.hotend_count && index < MAX_SPINDLE_COUNT)
     return false;
   if (!infoSettings.bed_en && index == BED)
     return false;
@@ -201,10 +203,11 @@ void updateNextHeatCheckTime(void)
   nextHeatCheckTime = OS_GetTimeMs() + heat_update_seconds * 1000;
 }
 
-void loopCheckHeater(void)
+void loopCheckHeater(void)    //TG this gets called from loopBackEnd()
 {
   // Send M105 to query the temperatures, if motherboard does not supports M155 (AUTO_REPORT_TEMPERATURES) feature
   // to automatically report the temperatures.
+  //TG This gets sent the very first time the backEnd loop runs after startup so first code sent to printer is M105
   if (!infoMachineSettings.autoReportTemp)
   {
     do
@@ -235,7 +238,7 @@ void loopCheckHeater(void)
   }
 
   // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)
   {
     if (heater.T[i].waiting == WAIT_NONE)
     {
@@ -256,13 +259,14 @@ void loopCheckHeater(void)
     if (heatHasWaiting())
       continue;
 
-    if (infoMenu.menu[infoMenu.cur] == menuHeat)
+    if (infoMenu.menu[infoMenu.cur] == menuSpindle)
       break;
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
 
   // Query heaters if they reached the target temperature (only if not prining)
-  for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
+	// If the target temperature changes, send a Gcode to set the motherboard  
+	for (uint8_t i = 0; (i < MAX_TOOL_COUNT) && (!isPrinting()); i++)
   {
     if (heater.T[i].status == SETTLED)
     {
@@ -289,7 +293,7 @@ void loopCheckHeater(void)
     heater.T[i].status = SETTLED;
   }
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a Gcode to set the motherboard
+  for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)  // If the target temperature changes, send a Gcode to set the motherboard
   {
     if (lastTarget[i] != heater.T[i].target)
     {

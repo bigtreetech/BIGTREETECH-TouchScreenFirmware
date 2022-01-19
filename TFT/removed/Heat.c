@@ -1,7 +1,9 @@
-#include "Heat.h"
+//TG MODIFIED BY T.GIOIOSA
+//#include "Heat.h"     //TG 8/22/21 removed for CNC
 #include "includes.h"
+//TG 08/20/21 shouldn't need to modify this file as it isn't really used
 
-static uint8_t tool_index = NOZZLE0;
+static uint8_t tool_index = TOOL0;
 static uint8_t degreeSteps_index = 1;
 
 void heatSetCurrentIndex(uint8_t index)
@@ -21,8 +23,8 @@ void menuHeat(void)
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_INC,                     LABEL_INC},
-      {ICON_NOZZLE,                  LABEL_NOZZLE},
-      {ICON_5_DEGREE,                LABEL_5_DEGREE},
+      {ICON_SPINDLE,                 LABEL_SPINDLE},   //TG changed for CNC
+      {ICON_500_RPM,                 LABEL_500_RPM},  //TG changed for CNC
       {ICON_STOP,                    LABEL_STOP},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -77,7 +79,7 @@ void menuHeat(void)
       case KEY_ICON_4:
         do
         {
-          tool_index = (tool_index + 1) % MAX_HEATER_COUNT;
+          tool_index = (tool_index + 1) % MAX_TOOL_COUNT;
         } while (!heaterIsValid(tool_index));
 
         heatItems.items[key_num] = itemTool[tool_index];

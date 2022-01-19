@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "FeatureSettings.h"
 #include "includes.h"
 
@@ -20,6 +21,24 @@ LISTITEMS featureSettingsItems = {
 //
 //parameter values
 //
+#define TOGGLE_NUM   2      //TG ON/OFF button
+const uint16_t toggleitem[TOGGLE_NUM] = {ICONCHAR_TOGGLE_OFF, ICONCHAR_TOGGLE_ON};
+
+#define ONOFF_NUM   2      //TG 2/5/21 new for ON/OFF texts
+const LABEL OnOffitem[ONOFF_NUM] = {LABEL_OFF, LABEL_ON};
+
+#define PCT_RPM_NUM   2      //TG 2/5/21 new for RPM/PCT texts
+const LABEL PctRpmitem[PCT_RPM_NUM] = {LABEL_RPM , LABEL_PCT};
+
+#define CUTTER_PWR_UNIT_NUM  CUTTER_PWR_SIZE      //TG 2/5/21 new for MRPM, MPWM, MPCT texts
+const LABEL cutterPwrUnititem[CUTTER_PWR_UNIT_NUM] = {LABEL_RPM, LABEL_PCT, LABEL_PWM};
+
+#define SPINDLE_SPIN_NUM 2  //TG CW/CCW for spindle rotation
+const LABEL itemSpindleSpin[SPINDLE_SPIN_NUM] = {
+                                              //item value text(only for custom value)
+                                              LABEL_CCW,
+                                              LABEL_CW
+                                            };
 
 #define ITEM_TOGGLE_AUTO_NUM 3
 const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
@@ -54,6 +73,16 @@ typedef enum
   SKEY_TERMINAL_ACK = 0,
   SKEY_PERSISTENT_INFO,
   SKEY_FILE_LIST_MODE,
+  SKEY_SPIN,              //TG 1/12/20 new
+  SKEY_SPINDLE_RMAX,      //TG 2/5/21 new
+  SKEY_SPINDLE_PMAX,      //TG 2/5/21 new
+  SKEY_LCD_DISP_UNIT,     //TG 2/5/21 new
+  SKEY_CUTTER_POWER_UNIT, //TG 2/14/21 new
+  SKEY_SPINDLE_USE_PID,   //TG 9/27/21 new
+  SKEY_LASER,             //TG 1/12/20 new
+  SKEY_INVERT_X,
+  SKEY_INVERT_Y,
+  SKEY_INVERT_Z,
   SKEY_ACK_NOTIFICATION,
   SKEY_EMULATE_M600,
   SKEY_SERIAL_ALWAYS_ON,
@@ -86,6 +115,14 @@ typedef enum
   SKEY_START_GCODE_ENABLED,
   SKEY_END_GCODE_ENABLED,
   SKEY_CANCEL_GCODE_ENABLED,
+  #ifdef LCD_LED_PWM_CHANNEL
+    SKEY_LCD_BRIGHTNESS,
+    SKEY_LCD_BRIGTHNESS_DIM,
+    SKEY_LCD_DIM_IDLE_TIMER,
+  #endif
+  #ifdef ST7920_SPI
+    SKEY_ST7920_FULLSCREEN,
+  #endif
   SKEY_RESET_SETTINGS,        // Keep reset always at the bottom of the settings menu list.
   SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
@@ -97,9 +134,20 @@ int fe_cur_page = 0;
 //set item types
 //
 LISTITEM settingPage[SKEY_COUNT] = {
+  // .icon                 .itemType          .titlelabel                      .valueLabel
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PERSISTENT_INFO,        LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_LIST_MODE,         LABEL_BACKGROUND},
+  {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_SPINDLE_ROTATION,         LABEL_CW},          //TG 1/12/20 new
+  {ICONCHAR_SETTING1,    LIST_CUSTOMVALUE,   LABEL_SPINDLE_RMAX ,            LABEL_DYNAMIC},     //TG 1/12/20 new
+  {ICONCHAR_SETTING1,    LIST_CUSTOMVALUE,   LABEL_SPINDLE_PMAX ,            LABEL_DYNAMIC},     //TG 1/12/20 new
+  {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_LCD_POWER_UNIT,           LABEL_RPM},         //TG 1/12/20 new
+  {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_CUTTER_POWER_UNIT,        LABEL_RPM},         //TG 1/14/20 new
+  {ICONCHAR_BLANK,       LIST_TOGGLE,        LABEL_SPINDLE_USE_PID,          LABEL_OFF},         //TG 9/27/21 new
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,               LABEL_BACKGROUND},  //TG 1/12/20 new
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_XAXIS,             LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_YAXIS,             LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_ZAXIS,             LABEL_BACKGROUND},
   {ICONCHAR_BLANK,       LIST_CUSTOMVALUE,   LABEL_ACK_NOTIFICATION,       LABEL_DYNAMIC},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATE_M600,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_BACKGROUND},
@@ -132,6 +180,14 @@ LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_START_GCODE_ENABLED,    LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_END_GCODE_ENABLED,      LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CANCEL_GCODE_ENABLED,   LABEL_BACKGROUND},
+  #ifdef LCD_LED_PWM_CHANNEL
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_BRIGHTNESS,           LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_IDLE_BRIGHTNESS,      LABEL_DYNAMIC},
+    {ICONCHAR_BLANK,      LIST_CUSTOMVALUE,   LABEL_LCD_IDLE_DELAY,           LABEL_DYNAMIC},
+  #endif
+  #ifdef ST7920_SPI
+    {ICONCHAR_BLANK,      LIST_TOGGLE,        LABEL_MARLIN_FULLSCREEN,        LABEL_OFF},  //TG fix for V27
+  #endif
   // Keep reset settings always at the bottom of the settings menu list.
   {ICONCHAR_BLANK,       LIST_MOREBUTTON,    LABEL_SETTINGS_RESET,         LABEL_BACKGROUND}
 };
@@ -165,6 +221,68 @@ void updateFeatureSettings(uint8_t key_val)
     case SKEY_FILE_LIST_MODE:
       infoSettings.file_listmode = (infoSettings.file_listmode + 1) % ITEM_TOGGLE_NUM;
       settingPage[item_index].icon = iconToggle[infoSettings.file_listmode];
+      break;
+
+    case SKEY_LCD_DISP_UNIT:   //TG 2/5/21 new
+      infoSettings.cutter_disp_unit = (infoSettings.cutter_disp_unit + 1) % CUTTER_PWR_UNIT_NUM;
+      settingPage[item_index].valueLabel = cutterPwrUnititem[infoSettings.cutter_disp_unit];
+      break;
+    
+    case SKEY_CUTTER_POWER_UNIT:
+      infoSettings.cutter_power_unit = (infoSettings.cutter_power_unit + 1) % CUTTER_PWR_UNIT_NUM;
+      settingPage[item_index].valueLabel = cutterPwrUnititem[infoSettings.cutter_power_unit];
+
+      break;
+    case SKEY_SPINDLE_RMAX:      //TG 2/5/21 new
+     {
+      //char tempstr[8];
+      uint32_t val = infoSettings.spindle_rpm_max[0];    //getParameter(0, key_val);
+      val = numPadInt(NULL, val, val, false);
+      val = NOBEYOND(0,val,default_max_spindleRPM[0]);
+      //sprintf(tempstr,(char *)textSelect(LABEL_SPINDLE_RMAX ),val);   //TG 2/13/21 needed for Marlin mode?
+      infoSettings.spindle_rpm_max[0] = val;
+      setDynamicIntValue(key_val, val);
+      menuDrawListPage(&featureSettingsItems);
+      break;
+     }
+
+    case SKEY_SPINDLE_PMAX:      //TG 2/5/21 new
+     {
+      //char tempstr[8];
+      uint16_t val = infoSettings.spindle_pwm_max[0];    //getParameter(0, key_val);
+      val = numPadInt(NULL, val, val, false);
+      val = NOBEYOND(0,val,default_max_spindlePWM[0]);
+      //sprintf(tempstr,(char *)textSelect(LABEL_SPINDLE_PMAX ),val);   //TG 2/13/21 needed for Marlin mode?
+      infoSettings.spindle_pwm_max[0] = val;
+      setDynamicIntValue(key_val, val);
+      menuDrawListPage(&featureSettingsItems);
+      break;
+     }
+
+    case SKEY_SPINDLE_USE_PID:    //TG 1/12/20 new
+      infoSettings.spindle_use_pid = (infoSettings.spindle_use_pid + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.spindle_use_pid];
+      storeCmd("%s S%d \n", "M7979", infoSettings.spindle_use_pid);
+     break;
+
+    case SKEY_LASER:    //TG 1/12/20 new
+      infoSettings.laser_mode = (infoSettings.laser_mode + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
+     break;
+
+    case SKEY_INVERT_X:
+      infoSettings.invert_axis[X_AXIS] = (infoSettings.invert_axis[X_AXIS] + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
+     break;
+
+    case SKEY_INVERT_Y:
+      infoSettings.invert_axis[Y_AXIS] = (infoSettings.invert_axis[Y_AXIS] + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
+      break;
+
+    case SKEY_INVERT_Z:
+      infoSettings.invert_axis[Z_AXIS] = (infoSettings.invert_axis[Z_AXIS] + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
       break;
 
     case SKEY_ACK_NOTIFICATION:
@@ -265,6 +383,43 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.send_cancel_gcode = (infoSettings.send_cancel_gcode + 1) % ITEM_TOGGLE_NUM;
       settingPage[item_index].icon = iconToggle[infoSettings.send_cancel_gcode];
       break;
+    
+	#ifdef LCD_LED_PWM_CHANNEL
+      case SKEY_LCD_BRIGHTNESS:
+      {
+        infoSettings.lcd_brightness = (infoSettings.lcd_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        if(infoSettings.lcd_brightness == 0)
+          infoSettings.lcd_brightness = 1; //In Normal it should not be off. Set back to 5%
+
+        char tempstr[8];
+        sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        setDynamicTextValue(key_val, tempstr);
+        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+        break;
+      }
+
+      case SKEY_LCD_BRIGTHNESS_DIM:
+      {
+        infoSettings.lcd_idle_brightness = (infoSettings.lcd_idle_brightness + 1) % ITEM_BRIGHTNESS_NUM;
+        char tempstr[8];
+        sprintf(tempstr,(char *)textSelect(LABEL_PERCENT_VALUE),LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+        setDynamicTextValue(key_val,tempstr);
+        break;
+      }
+
+      case SKEY_LCD_DIM_IDLE_TIMER:
+        infoSettings.lcd_idle_timer = (infoSettings.lcd_idle_timer + 1) % ITEM_SECONDS_NUM;
+        settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+        break;
+
+    #endif //LCD_LED_PWM_CHANNEL
+
+    #ifdef ST7920_SPI
+    case SKEY_ST7920_FULLSCREEN:
+      infoSettings.marlin_mode_fullscreen = (infoSettings.marlin_mode_fullscreen + 1) % TOGGLE_NUM;
+      settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+      break;
+    #endif
 
     case SKEY_RESET_SETTINGS:
       setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
@@ -301,6 +456,48 @@ void loadFeatureSettings()
 
         case SKEY_FILE_LIST_MODE:
           settingPage[item_index].icon = iconToggle[infoSettings.file_listmode];
+          break;
+
+        case SKEY_SPIN:            //TG 1/12/20 new
+          //settingPage[item_index].icon = toggleitem[infoSettings.spin_dir];
+          settingPage[item_index].valueLabel = itemSpindleSpin[infoSettings.spin_dir];
+        break;
+
+        case SKEY_SPINDLE_RMAX:      //TG 2/5/21 new
+          setDynamicIntValue(i,infoSettings.spindle_rpm_max[0]);
+          break;
+
+        case SKEY_SPINDLE_PMAX:      //TG 2/5/21 new
+          setDynamicIntValue(i,infoSettings.spindle_pwm_max[0]);
+          break;
+
+        case SKEY_LCD_DISP_UNIT:   //TG 2/5/21 new
+          settingPage[item_index].valueLabel = cutterPwrUnititem[infoSettings.cutter_disp_unit];
+          break;
+
+        case SKEY_CUTTER_POWER_UNIT:
+          settingPage[item_index].valueLabel = cutterPwrUnititem[infoSettings.cutter_power_unit];
+          break;
+          
+        case SKEY_SPINDLE_USE_PID:    //TG 9/27/21 new
+          settingPage[item_index].icon = toggleitem[infoSettings.spindle_use_pid];
+          storeCmd("%s S%d \n", "M7979", infoSettings.spindle_use_pid);
+          break;
+
+        case SKEY_LASER:          //TG 1/12/20 new
+          settingPage[item_index].icon = toggleitem[infoSettings.laser_mode];
+          break;
+
+        case SKEY_INVERT_X:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[X_AXIS]];
+          break;
+
+        case SKEY_INVERT_Y:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Y_AXIS]];
+          break;
+
+        case SKEY_INVERT_Z:
+          settingPage[item_index].icon = toggleitem[infoSettings.invert_axis[Z_AXIS]];
           break;
 
         case SKEY_ACK_NOTIFICATION:
@@ -383,6 +580,32 @@ void loadFeatureSettings()
         case SKEY_CANCEL_GCODE_ENABLED:
           settingPage[item_index].icon = iconToggle[infoSettings.send_cancel_gcode];
           break;
+
+        #ifdef LCD_LED_PWM_CHANNEL
+          case SKEY_LCD_BRIGHTNESS:
+          {
+            char tempstr[8];
+            sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+            setDynamicTextValue(i, tempstr);
+            break;
+          }
+          case SKEY_LCD_BRIGTHNESS_DIM:
+          {
+            char tempstr[8];
+            sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
+            setDynamicTextValue(i, tempstr);
+            break;
+          }
+          case SKEY_LCD_DIM_IDLE_TIMER:
+            settingPage[item_index].valueLabel = itemDimTime[infoSettings.lcd_idle_timer];
+            break;
+        #endif //PS_ON_PIN
+
+        #ifdef ST7920_SPI
+          case SKEY_ST7920_FULLSCREEN:
+            settingPage[item_index].icon = toggleitem[infoSettings.marlin_mode_fullscreen];
+            break;
+        #endif
 
         case SKEY_RESET_SETTINGS:
           break;
@@ -475,7 +698,7 @@ void menuFeatureSettings(void)
     loopProcess();
   }
 
-  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))  //TG compare, if no settings changed then returns zero
   {
     storePara();
   }

@@ -1,8 +1,13 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "xpt2046.h"
 #include "GPIO_Init.h"
 #include "includes.h"
 
-/***************************************** XPT2046 SPI mode low-level porting interface********************************************/
+//TG************************************* XPT2046 SPI mode low-level porting interface********************************************
+/*  XPT2046 is a 4-wire resistive touchscreen controller. It detects the pressed XY location by two ADC reads
+   It can also detect touchscreen pressure and also has an on-chip temperature sensor
+   see https://www.buydisplay.com/download/ic/XPT2046.pdf for info
+*/
 
 //XPT2046 SPI related-using analog SPI  //XPT2046 SPIRelated-Using Analog SPI
 _SW_SPI xpt2046;
@@ -34,7 +39,7 @@ void XPT2046_Init(void)
   XPT2046_CS_Set(1);
 }
 
-//Reading pen interrupt  //Reading pen interrupt
+//Reading pen interrupt  //pen means touchscreen pressed sensor
 u8 XPT2046_Read_Pen(void)
 {
   return GPIO_GetLevel(XPT2046_TPEN);

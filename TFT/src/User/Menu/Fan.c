@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "Fan.h"
 #include "includes.h"
 
@@ -28,9 +29,22 @@ void menuFan(void)
     }
   };
 
+  MENUITEMS laserItems = {            //TG 1/12/20 this menu was added
+  // title
+  LABEL_LASER,
+  // icon                       label
+   {{ICON_DEC,                  LABEL_DEC},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_BACKGROUND,           LABEL_BACKGROUND},
+    {ICON_INC,                  LABEL_INC},
+    {ICON_LASER_2 ,             LABEL_LASER_2},
+    {ICON_LASER_100,            LABEL_LASER_100},
+    {ICON_LASER_OFF,            LABEL_LASER_OFF},
+    {ICON_BACK,                 LABEL_BACK},}
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
   LASTFAN lastFan;
-
   fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));
   lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
@@ -39,7 +53,14 @@ void menuFan(void)
   else
     fanItems.items[KEY_ICON_4] = itemFan[1];
 
-  menuDrawPage(&fanItems);
+  if (infoSettings.laser_mode != 1)   //TG 1/12/20 added if,then,else to allow laser menu, previous was only what's in the if 
+  {
+    menuDrawPage(&fanItems);
+  }
+  else
+  {
+    menuDrawPage(&laserItems);
+  }
   fanReDraw(fan_index, false);
 
   #if LCD_ENCODER_SUPPORT

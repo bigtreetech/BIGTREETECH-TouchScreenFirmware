@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "Printing.h"
 #include "includes.h"
 
@@ -40,15 +41,15 @@ bool hasFilamentData;
 #define TOGGLE_TIME     2000  // 1 seconds is 1000
 #define LAYER_DRAW_TIME 500   // 1 seconds is 1000
 
-#define LAYER_TITLE "Layer"
-#define EXT_ICON_POS 0
-#define BED_ICON_POS 1
-#define FAN_ICON_POS 2
-#define TIM_ICON_POS 3
-#define Z_ICON_POS   4
-#define SPD_ICON_POS 5
+#define LAYER_TITLE "Layer"                    //TG defines layout of the printing_icons (small) at upper half of screen
+#define SPDL_ICON_POS 0
+#define VAC_ICON_POS  1
+#define FAN_ICON_POS  2
+#define TIM_ICON_POS  3
+#define Z_ICON_POS    4
+#define SPD_ICON_POS  5
 
-const ITEM itemIsPause[2] = {
+const ITEM itemIsPause[2] = {                   //TG changes the icon from pause to resume
   // icon                        label
   {ICON_PAUSE,                   LABEL_PAUSE},
   {ICON_RESUME,                  LABEL_RESUME},
@@ -126,37 +127,41 @@ void menuBeforePrinting(void)
   infoMenu.menu[infoMenu.cur] = menuPrinting;
 }
 
-static inline void reValueNozzle(int icon_pos)
+static inline void reValueSpindle(int icon_pos)    //TG updates the spindle display at icon(0), for the current tool index
 {
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));
+  //sprintf(tempstr, "%d/%d", heatGetCurrentTemp(currentTool), heatGetTargetTemp(currentTool));  //TG get new temps for the current tool
+  sprintf(tempstr, "%d", currentSpindleSpeedID ? convertSpeed_Marlin_2_LCD(currentTool,spindleGetCurSpeed(currentTool)) : 
+       convertSpeed_Marlin_2_LCD(currentTool,spindleGetSetSpeed(currentTool)));
 
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_NOZZLE);
+  //TG 1/14/20 modified below to show Spidle or Laser during printing
+  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, infoSettings.laser_mode==0 ? ICON_PRINTING_SPINDLE:ICON_PRINTING_LASER);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)heatDisplayID[currentTool]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
+                 (u8 *)heatDisplayID[currentTool]);                       //TG display name ID of current tool
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);    //TG print current/target temps for currentTool
+  GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X + 5*BYTE_WIDTH,
+                 printinfo_points[icon_pos].y, currentSpindleSpeedID ? (u8*)"Act" : (u8*)"Set");
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reValueBed(int icon_pos)
-{
+static inline void reValueVacuum(int icon_pos)       //TG updates the temps display at icon(0-7), for the BED (only one)
+{ //TG 1/14/20 show Vacuum status (dust collection state)
   char tempstr[10];
-  sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));
-
+  //sprintf(tempstr, "%d/%d", heatGetCurrentTemp(BED), heatGetTargetTemp(BED));   //TG get new temps for the bed
+  sprintf(tempstr, "%s %s", (vacuumState & 2) == 2 ? (char*)"Auto" : (char*)"", (vacuumState & 1) == 1 ? (char*)"On" : (char*)"Off");
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
-  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_BED);
+  ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_VACUUM);
   GUI_DispString(printinfo_points[icon_pos].x + PICON_TITLE_X, printinfo_points[icon_pos].y + PICON_TITLE_Y,
-                 (uint8_t *)heatDisplayID[BED]);
-  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (uint8_t *)tempstr);
+                 (u8 *)vacuumDisplayID[0]);
+  GUI_DispStringInPrect(&printinfo_val_rect[icon_pos], (u8 *)tempstr);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawFan(int icon_pos)
+static inline void reDrawFan(int icon_pos)        //TG updates the fan speed or percent display at icon(0-7), for the current tool index
 {
   char tempstr[10];
-
-  if (infoSettings.fan_percentage == 1)
+  if (infoSettings.fan_percentage == 1)           //TG pick speed or % based on flag
     sprintf(tempstr, "%d%%", fanGetCurPercent(currentFan));
   else
     sprintf(tempstr, "%d", fanGetCurSpeed(currentFan));
@@ -169,12 +174,12 @@ static inline void reDrawFan(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawSpeed(int icon_pos)
+static inline void reDrawSpeed(int icon_pos)      //TG updates the print speed or flow display at icon(0-7) for printing
 {
   char tempstr[10];
 
-  if (currentSpeedID == 0)
-    ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_SPEED);
+  if(currentSpeedID == 0)       //TG choose speed or flow depending on currentSpeedID flag
+    ICON_ReadDisplay(printinfo_points[icon_pos].x,printinfo_points[icon_pos].y,ICON_PRINTING_SPEED);
   else
     ICON_ReadDisplay(printinfo_points[icon_pos].x, printinfo_points[icon_pos].y, ICON_PRINTING_FLOW);
 
@@ -186,7 +191,7 @@ static inline void reDrawSpeed(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawTime(int icon_pos)
+static inline void reDrawTime(int icon_pos)       //TG updates the time string at icon(0-7)
 {
   uint8_t hour, min, sec;
 
@@ -201,7 +206,7 @@ static inline void reDrawTime(int icon_pos)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
 }
 
-static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
+static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)   //TG updates the % completed display at icon(0-7), for the print
 {
   char buf[6];
   uint8_t newProgress = getPrintProgress();
@@ -216,9 +221,9 @@ static inline void reDrawProgress(int icon_pos, uint8_t prevProgress)
   GUI_FillRectColor(ProgressBar.x0 + progStart, ProgressBar.y0, ProgressBar.x0 + progEnd, ProgressBar.y1, MAT_ORANGE);
 }
 
-static inline void reDrawLayer(int icon_pos)
+static inline void reDrawLayer(int icon_pos)      //TG updates the layer height display at icon(0-7), for the print
 {
-  if (OS_GetTimeMs() > nextLayerDrawTime)
+  if (OS_GetTimeMs() > nextLayerDrawTime)		  //TG draw every 500ms
   {
     char tempstr[10];
 
@@ -235,25 +240,31 @@ static inline void reDrawLayer(int icon_pos)
   }
 }
 
-static inline void toggleInfo(void)
+static inline void toggleInfo(void)     //TG handle multiple hotends, fans, etc. if more than one cycle thru them
 {
-  if (nextScreenUpdate(TOGGLE_TIME))
+  if (nextScreenUpdate(TOGGLE_TIME))	//TG every 2000ms
   {
-    if (infoSettings.hotend_count > 1)
-    {
-      currentTool = (currentTool + 1) % infoSettings.hotend_count;
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueNozzle(EXT_ICON_POS);
-    }
+	//TG commented out not needed    
+	//if (infoSettings.hotend_count > 1)
+    //{
+    //  currentTool = (currentTool + 1) % infoSettings.hotend_count;
+    //  RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+    //  reValueNozzle(EXT_ICON_POS);
+    //}
 
     if ((infoSettings.fan_count + infoSettings.fan_ctrl_count) > 1)
     {
-      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count);
+      currentFan = (currentFan + 1) % (infoSettings.fan_count + infoSettings.fan_ctrl_count); // cycle thru number of fans
       RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reDrawFan(FAN_ICON_POS);
+      reDrawFan(FAN_ICON_POS); // update the speed/% for new fan
     }
 
-    currentSpeedID = (currentSpeedID + 1) % 2;
+    //currentSpeedID = (currentSpeedID + 1) % 2;  //TG 2/24/21 don't toggle plot speed / flow
+    currentSpindleSpeedID = (currentSpindleSpeedID + 1) % 2;  // toggle between spindle Actual and spindle Set speeds
+
+    RAPID_SERIAL_LOOP();              // perform backend printing loop before drawing to avoid printer idling
+    reValueSpindle(SPDL_ICON_POS);     // update the speeds for spindle Act or Set (based on currentSpindleSpeedID)
+
     RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
     reDrawSpeed(SPD_ICON_POS);
     speedQuery();
@@ -266,10 +277,10 @@ static inline void toggleInfo(void)
   }
 }
 
-static inline void printingDrawPage(void)
+static inline void printingDrawPage(void) //TG 2/23/21 redraws entire printing menu
 {
-  reValueNozzle(EXT_ICON_POS);
-  reValueBed(BED_ICON_POS);
+  reValueSpindle(SPDL_ICON_POS);
+  reValueVacuum(VAC_ICON_POS);
   reDrawFan(FAN_ICON_POS);
   reDrawTime(TIM_ICON_POS);
   GUI_SetColor(ORANGE);
@@ -284,7 +295,7 @@ static inline void printingDrawPage(void)
   reDrawSpeed(SPD_ICON_POS);
 }
 
-void drawPrintInfo(void)
+void drawPrintInfo(void) //TG called at start of menu and stop of printing
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -352,8 +363,8 @@ void menuPrinting(void)
     LABEL_BACKGROUND,
     // icon                          label
     {
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_BACKGROUND,              LABEL_BACKGROUND}, // these are the 8 printing status icons that occupy the space
+      {ICON_BACKGROUND,              LABEL_BACKGROUND}, // of large icons 0 - 3
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
       {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -363,16 +374,22 @@ void menuPrinting(void)
     }
   };
 
-  uint8_t nowFan[MAX_FAN_COUNT] = {0};
-  uint8_t oldProgress = 0;
-  uint16_t curspeed[2] = {0};
-  uint32_t time = 0;
-  HEATER nowHeat;
+  // so we can track when speed changes happen and display them quickly
+  uint16_t lastCurrent = spindleGetCurSpeed(currentTool);
+  uint16_t lastTarget = spindleGetSetSpeed(currentTool);
+
+  uint8_t   nowFan[MAX_FAN_COUNT] = {0};    // so state of fan can be checked for change
+  uint8_t   oldProgress = 0;                //TG 8/21/21 added to fix V27
+  uint8_t   nowVac = 0;                     // so state of vacuum can be checked for change
+  uint16_t  curspeed[2] = {0};
+  uint32_t  time = 0;
+  //HEATER    nowHeat;    //TG 2/23/21 take out for CNC
   float curLayer = 0;
   bool lastPause = isPaused();
-  bool lastPrinting = isPrinting();
+  bool lastPrinting = isPrinting();  //TG returns 1=printing, 0=idle
+  //memset(&nowHeat, 0, sizeof(HEATER));  //TG 2/23/21 take out for CNC
 
-  memset(&nowHeat, 0, sizeof(HEATER));
+
 
   if (lastPrinting == true)
   {
@@ -380,7 +397,7 @@ void menuPrinting(void)
       printingItems.title.address = (uint8_t *) infoFile.Longfile[infoFile.fileIndex];
     else
       printingItems.title.address = getPrintName(infoFile.title);
-    printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+    printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];  //TG below line displays STL preview if it exists, otherwise BABYSTEP icon
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else // returned to this menu after a print was done (ex: after a popup)
@@ -406,26 +423,24 @@ void menuPrinting(void)
   {
     //Scroll_DispString(&titleScroll, LEFT); // Scroll display file name will take too many CPU cycles
 
-    // check nozzle temp change
-    if (nowHeat.T[currentTool].current != heatGetCurrentTemp(currentTool) ||
-        nowHeat.T[currentTool].target != heatGetTargetTemp(currentTool))
+    //check spindle speeds change  //TG 2/23/21 since reValueSpindle gets called in toggle() function, 
+    //this isn't absolutely necessay, but it does allow quicker than 2 sec display of speed changes from toggle()
+    if(spindleGetCurSpeed(currentTool) != lastCurrent || spindleGetSetSpeed(currentTool) != lastTarget)
     {
-      nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
-      nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueNozzle(EXT_ICON_POS);
+      lastCurrent = spindleGetCurSpeed(currentTool);
+      lastTarget = spindleGetSetSpeed(currentTool);
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
+      reValueSpindle(SPDL_ICON_POS);
     }
 
-    // check bed temp change
-    if (nowHeat.T[BED].current != heatGetCurrentTemp(BED) || nowHeat.T[BED].target != heatGetTargetTemp(BED))
+    //check Vacuum change  //TG 2/23/21
+    if(nowVac != vacuumState)
     {
-      nowHeat.T[BED].current = heatGetCurrentTemp(BED);
-      nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
-      reValueBed(BED_ICON_POS);
+      RAPID_SERIAL_LOOP();   //perform backend printing loop before drawing to avoid printer idling
+      reValueVacuum(VAC_ICON_POS);
     }
 
-    // check Fan speed change
+    //check Fan speed change  //TG 2/23/21 is fan needed?
     if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
@@ -469,7 +484,7 @@ void menuPrinting(void)
     if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
+      RAPID_SERIAL_LOOP();  //perform backend printing loop before drawing to avoid printer idling
       reDrawSpeed(SPD_ICON_POS);
     }
 

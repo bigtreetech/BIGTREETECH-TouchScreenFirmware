@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _SANITYCHECK_H_
 #define _SANITYCHECK_H_
 
@@ -134,7 +135,7 @@
   #error "TOOL_NUM is now HOTEND_NUM. Please update your Configuration.h file."
 #endif
 
-#if HOTEND_NUM > MAX_HOTEND_COUNT
+#if HOTEND_NUM > MAX_SPINDLE_COUNT    //TG fixed for CNC
   #error "HOTEND_NUM can not be more than 6"
 #endif
 

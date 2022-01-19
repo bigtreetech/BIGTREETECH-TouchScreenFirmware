@@ -1,4 +1,5 @@
 #include "Numpad.h"
+//TG MODIFIED BY T.GIOIOSA
 
 const GUI_RECT rect_of_numkey[KEY_NUM]={
   {0*SKEYWIDTH, ICON_START_Y+0*SKEYHEIGHT, 1*SKEYWIDTH, ICON_START_Y+1*SKEYHEIGHT},//1
@@ -316,7 +317,7 @@ double numPadFloat(u8* title, double old_val, double reset_val, bool negative)
     }
 }
 
-//Numpad for integer numbers
+//Numpad for integer numbers  //TG displays a number pad on screen for numerical input
 int32_t numPadInt(u8* title, int32_t old_val, int32_t reset_val, bool negative)
 {
     NUM_KEY_VALUES key_num = NUM_KEY_IDLE;

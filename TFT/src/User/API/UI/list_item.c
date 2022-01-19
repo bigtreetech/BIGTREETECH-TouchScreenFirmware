@@ -1,4 +1,5 @@
 // *List View Mode ** Author: Gurmeet Athwal https://github.com/guruathwal **
+//TG MODIFIED BY T.GIOIOSA
 
 #include "list_item.h"
 #include "includes.h"
@@ -6,7 +7,7 @@
 #include "GUI.h"
 
 char * dynamic_label[LISTITEM_PER_PAGE];
-char dynamic_text_value[LISTITEM_PER_PAGE][10];
+char dynamic_text_value[LISTITEM_PER_PAGE][10];		// allow 5 list item value strings of 7 chars max
 
 const uint16_t ICON_COLOR[ICONCHAR_NUM]=
 {
@@ -267,6 +268,13 @@ void setDynamicValue(uint8_t i, float value)
     sprintf(dynamic_text_value[i], "%.2f", value);
   else
     sprintf(dynamic_text_value[i], "%.1f", value);
+}
+
+void setDynamicIntValue(uint8_t i, uint16_t value)  //TG 2/5/21 added this function to set Dynamic Integer values
+{
+  char tempstr[8];
+  sprintf(tempstr, "%d", value);
+  setDynamicTextValue(i, tempstr);
 }
 
 // get the text starting point on screen based on rectangle edges and desired icon position

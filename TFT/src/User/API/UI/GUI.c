@@ -1,3 +1,5 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "GUI.h"
 #include "includes.h"
 
@@ -824,7 +826,7 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index)
 /****************************************************     Widget    *******************************************************************/
 #define RADIO_SELECTED_COLOR GREEN
 #define RADIO_IDLE_COLOR     WHITE
-void RADIO_Create(RADIO *radio)
+void RADIO_Create(RADIO *radio)       //TG radio button green or white for list meu options
 {
   uint16_t tmp = GUI_GetColor();
   uint8_t i=0;

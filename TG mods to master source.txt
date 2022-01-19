@@ -1,0 +1,120 @@
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\Copy to SD Card root directory to update - Unified Menu Material theme\config.ini
+  36,2: #//TG 11/1/20 changed from 5 to 6 for 250000 baud
+  151,2: #//TG 11/1/20 changed this
+  185,2: #//TG 11/1/20 changed BED was 150
+  202,2: #//TG 11/1/20 changed these
+  272,2: #//TG 11/1/20 modified these (6 maximum)
+  313,3: ##//TG 11/1/20 enabled this
+  318,2: #//TG 11/1/20 changed this was 0, SWX1 sensor is non-inverting
+  323,2: #//TG increased due to false triggers (was 100)
+  439,2: #//TG 11/1/20 enabled this
+  444,2: #//TG 11/1/20 enabled this
+
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\TFT\src\User\API\menu.c
+  5,1: //TG this code draws, handles, processes, and responds to menus
+
+
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\TFT\src\User\API\parseACK.c
+  550,33:     // Parse and store ABL type //TG Is this broken??
+
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\TFT\src\User\API\Settings.h
+  30,40: #define ICON_FLASH_SIGN       20201031 //TG (YYYYMMDD) change if any icon(s) is added or removed
+
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\TFT\src\User\Menu\FeatureSettings.c
+  4,1: //TG Layout for the page
+  55,1: //TG here is where you would expand the list if needed, but also need to expand
+  111,5:     //TG this list item has only a LABEL value, no ON/OFF TOGGLE (red dot)
+  361,29:       #ifdef LED_COLOR_PIN  //TG only on the E3 version
+  372,35:       #ifdef LCD_LED_PWM_CHANNEL  //TG LCD brightness control
+  440,35: void menuFeatureSettings(void)    //TG handles the Feature List Menu up,dn, and back buttons
+  449,51:     key_num = menuKeyGetValue();                  //TG get a pressed key?
+  452,51:     case KEY_ICON_5:                              //TG  up arrow, load prev list
+  462,51:     case KEY_ICON_6:                              //TG  dn arrow, load next list
+  472,51:     case KEY_ICON_7:                              //TG back arrow, load prev infoMenu
+
+C:\Users\tony\Documents\3D Printers\Marlin Firmware\BIGTREETECH-TouchScreenFirmware-master\TFT\src\User\Menu\SettingsMenu.c
+  120,59:      {ICON_BACKGROUND,              LABEL_BACKGROUND},    //TG available button?
+  121,59:      {ICON_BACKGROUND,              LABEL_BACKGROUND},    //TG available button?
+
+
+To create a new icon for a button to be used in menus, first choose a name for the
+icon   ex: CUSTOM_1, then create a .bmp file for the button and name it ex: CUSTOM_1.bmp
+
+Now, to be able to use it in menus do the following:
+
+First we must ADD a few new keywords into these 4 files so the rest of the code knows about them:
+TFT\src\User\API\icon_list.inc			ex: X_ICON (CUSTOM_1)			
+TFT\src\User\API\Language\Language.inc		ex: X_WORD (CUSTOM_1)
+TFT\src\User\API\Language\language_en.h		ex: #define STRING_CUSTOM_1	"TG Menu"
+TFT\src\User\API\Language\language_keywords.h	ex: #define LANG_KEY_CUSTOM_1	"label_custom_1:"
+
+Now, to implement the new icon as a button in a menu, we find an empty slot in one of the existing menus and
+modify the const MENUITEMS array for that parent menu. For example, we'll use the Settings Menu as the parent
+menu for our new button because it has some empty positions in it (each menu page can have 7 buttons max).
+So open the code file for the Settings Menu (TFT\src\User\Menu\SettingsMenu.c in this case).
+We see there is a const MENUITEMS array named settingsItems and we also see this array has two unused
+entries at indexes 5 and 6 (they're set to ICON_BACKGROUND,LABEL_BACKGROUND which means empty).
+So we can add our new button in like so, replacing with our new values:
+
+const MENUITEMS settingsItems = {
+    // title
+    LABEL_SETTINGS,
+    // icon                         label
+    {{ICON_SCREEN_SETTINGS,         LABEL_SCREEN_SETTINGS},
+     {ICON_MACHINE_SETTINGS,        LABEL_MACHINE_SETTINGS},
+     {ICON_FEATURE_SETTINGS,        LABEL_FEATURE_SETTINGS},
+     {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
+     {ICON_CONNECTION_SETTINGS,     LABEL_CONNECTION_SETTINGS},
+     {ICON_CUSTOM_1,                LABEL_CUSTOM_1},              <-- we overwrite the previous ICON_BACKGROUND, LABEL_BACKGROUND
+     {ICON_BACKGROUND,              LABEL_BACKGROUND},		      with the name and text label of our custom icon
+     {ICON_BACK,                    LABEL_BACK},}
+  };
+
+Any time a new keyword is added to the lists we have to change these signs in TFT\src\User\API\Settings.h:
+#define LANGUAGE_FLASH_SIGN   20201107 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+
+#define ICON_FLASH_SIGN       20201107 //(YYYYMMDD) change if any icon(s) is added or removed
+
+Finally, we need to add some code to handle what happens when our custom button is pressed.
+There's usually a code block like shown below for the parent menu not too far after the
+const MENUITEMS <parentmenuname> block we modified above. Put your handling code in this code block.
+
+while(infoMenu.menu[infoMenu.cur] == menuSettings)
+  {
+    key_num = menuKeyGetValue();
+    switch(key_num)
+    {
+      case KEY_ICON_0:
+        infoMenu.menu[++infoMenu.cur] = menuScreenSettings;
+        break;
+
+      case KEY_ICON_1:
+        mustStoreCmd("M503 S0\n");
+        infoMenu.menu[++infoMenu.cur] = menuMachineSettings;
+        break;
+
+      case KEY_ICON_2:
+        infoMenu.menu[++infoMenu.cur] = menuFeatureSettings;
+        break;
+
+      case KEY_ICON_3:
+        infoMenu.menu[++infoMenu.cur] = menuInfo;
+        break;
+
+      case KEY_ICON_4:
+        infoMenu.menu[++infoMenu.cur] = menuConnectionSettings;
+        break;
+
+      case KEY_ICON_5:							<-- here we add the case for custom_1 button
+        infoMenu.menu[++infoMenu.cur] = menuConnectionSettings;		    at position 5 in the menu. You can call
+        break;								    another menu or handle some task here.
+
+      case KEY_ICON_7:
+        infoMenu.cur--;
+        break;
+
+      default:
+        break;
+    }
+    loopProcess();
+  }

@@ -1,5 +1,6 @@
 #include "PreheatMenu.h"
 #include "includes.h"
+//TG MODIFIED BY T.GIOIOSA
 
 const GUI_POINT preheat_title = {ICON_WIDTH / 2, PREHEAT_TITLE_Y };
 const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_TOOL_Y};
@@ -7,14 +8,14 @@ const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_BED_Y};
 
 const ITEM itemToolPreheat[] = {
   // icon                        label
-  {ICON_PREHEAT_BOTH,            LABEL_PREHEAT_BOTH},
-  {ICON_BED,                     LABEL_BED},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
-  {ICON_NOZZLE,                  LABEL_NOZZLE},
+  {ICON_PREHEAT_BOTH,             LABEL_PREHEAT_BOTH},
+  {ICON_VACUUM,                   LABEL_VACUUM},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
+  {ICON_SPINDLE,                  LABEL_SPINDLE},
 };
 
 // Redraw Preheat icon details
@@ -116,7 +117,7 @@ void menuPreheat(void)
             heatSetTargetTemp(BED, infoSettings.preheat_bed[key_num]);
             break;
 
-          case NOZZLE0_PREHEAT:
+          case TOOL0_PREHEAT:
             heatSetTargetTemp(heatGetCurrentHotend(), infoSettings.preheat_temp[key_num]);
             break;
         }

@@ -1,10 +1,19 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210311
+#define CONFIG_VERSION 20210927
 
 //===========================================================================
 //============================= General Settings ============================
 //===========================================================================
+
+/**
+ * NOTE: This version is customized for CNC/LASER operationn by T.Gioiosa 2/14/21
+ * 
+ * To work with RepRapFirmware, Add M575 P1 S2 B115200 to the end of config.g file in sd card
+ * uncomment for RepRapFirmware
+*/
+//#define RepRapFirmware
 
 /**
  * Screenshot for documentation
@@ -34,7 +43,7 @@
  *
  * Options: [2400: 0, 9600: 1, 19200: 2, 38400: 3, 57600: 4, 115200: 5, 250000: 6, 500000: 7, 1000000: 8]
  */
-#define BAUDRATE 5  // Default: 5
+#define BAUDRATE 6  // Default: 5
 
 /**
  * Default Primary Language (for Touch-Mode only)
@@ -52,7 +61,6 @@
 
 /**
  * Default Touch Mode Color Options
- *
  * Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
  *           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
  *          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
@@ -66,10 +74,6 @@
 #define LISTVIEW_BORDER_COLOR      15  // Border color in List view (Default: 15)
 #define LISTVIEW_ICON_COLOR        15  // icon color in List view (Default: 15)
 
-// Mesh Leveling Display Colors
-// Set the colors used for drawing the mesh with the minimun and maximum value in the grid.
-#define MESH_MIN_COLOR 7  // Default: 7
-#define MESH_MAX_COLOR 2  // Default: 2
 
 //===========================================================================
 //=========================== Marlin Mode Settings ==========================
@@ -98,14 +102,14 @@
 // Text displayed at the top of the TFT in Marlin Mode
 #define MARLIN_BANNER_TEXT "Marlin Mode"  // Default: "Marlin Mode"
 
-// Show banner text at the top of the TFT in Marlin Mode
+// Show banner text at the top of the TFT in Marlin Mode.
 #define MARLIN_SHOW_BANNER true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * Run Marlin Mode in Fullscreen
  *
- * Options: 0: Disabled (RECOMMENDED FOR TFT24)
- *          1: Enabled
+ * Options:  0: Disabled. RECOMMENDED FOR TFT24
+ *           1: Enabled Marlin Fullscreen mode.
  */
 #define MARLIN_MODE_FULLSCREEN 0  // Default: 0
 
@@ -119,7 +123,7 @@
  */
 #define SERIAL_ALWAYS_ON 0  // Default: 0
 
-/**
+/**Touch Mode Settings
  * LCD/Touch Encoder
  * In case LCD/Touch Encoder's sliding buttons (pin LCD_ENCA_PIN and LCD_ENCB_PIN)
  * don't produce any movement on menu, try to increase the delay (e.g. 64).
@@ -130,25 +134,30 @@
 //=========================== Machine Settings ==============================
 //===========================================================================
 
-#define HOTEND_NUM      1  // set in 1~6
-#define EXTRUDER_NUM    1  // set in 1~6
-#define FAN_NUM         1  // set in 1~6
-#define FAN_CTRL_NUM    0  // set in 1~2
-#define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
-                           // of the number of extruders)
+#define HOTEND_NUM   0      //TG 1/9/20 to allow zero hotends     set in 1~6   was MIN_EXT_COUNT  
+#define EXTRUDER_NUM 0      //TG 1/9/20 to allow zero extruders   set in 1~6   was MIN_EXT_COUNT
+#define FAN_NUM      1      // set in 1~6
+#define FAN_CTRL_NUM 0      // set in 1~2
+#define SPINDLE_NUM  1      //TG 2/4/21 only one spindle allowed
+#define SPINDLE_CTL_NUM  0  //TG 2/4/21
+#define LASER_NUM    1      //TG 2/4/21
+#define CUTTER_POWER_UNIT MRPM  //TG 2/14/21  choose MPWM, MRPM, or MPCT must match Marlin's CUTTER_POWER_UNIT
+#define MIXING_EXTRUDER 0 // set default 0, for mixing_extruder 1 (this option turns off autodetection of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
 #define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
 #define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
 
-#define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}
-#define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
-#define HEAT_DISPLAY_ID  {"T0",      "T1",      "T2",      "T3",      "T4",      "T5",      "Bed",  "Chamber"}
-#define HEAT_CMD         {"M104 T0", "M104 T1", "M104 T2", "M104 T3", "M104 T4", "M104 T5", "M140", "M141"};
-#define HEAT_WAIT_CMD    {"M109 T0", "M109 T1", "M109 T2", "M109 T3", "M109 T4", "M109 T5", "M190", "M191"};
+//TODO add _ID and _CMD for LASER and DUSTC
+#define HEAT_MAX_TEMP    {275,       275,        130,      65}   //max temperature can be set   //TODO change for RPM
+//TG these need to say T0,T1,... because they're used to check incoming acks from the printer and the marlin doesn't send S0,S1....
+#define HEAT_SIGN_ID     {"T0:",     "T1:",     "B:",      "C:"};           //TODO change name for spindles
+#define HEAT_DISPLAY_ID  {"S0",      "S1",      "Bed",     "Chamber"};      //TODO change name for spindles
+#define HEAT_CMD         {"M104 T0", "M104 T1", "M140",    "M141"};         //TODO change for RPM reads
+#define HEAT_WAIT_CMD    {"M109 T0", "M109 T1", "M190",    "M191"};         //TODO change for RPM reads
 
-#define TOOL_CHANGE      {"T0",   "T1",      "T2",      "T3",      "T4",      "T5"}
-#define EXTRUDER_ID      {"E0",   "E1",      "E2",      "E3",      "E4",      "E5"}
+#define TOOL_CHANGE      {"T0",      "T1",      "T2",      "T3"}
+#define EXTRUDER_ID      {"E0",      "E1",      "E2",      "E3"}
 
 // Prevent extrusion if the temperature is below set temperature
 #define PREVENT_COLD_EXTRUSION_MINTEMP 180
@@ -159,18 +168,33 @@
  *  1: FAN_TYPE_CTRL_S  - Controller fan speed for stepper or hot bed ON (Check Marlin GCode M710)
  *  2: FAN_TYPE_CTRL_I  - Controller fan idle speed  (Check Marlin gcode - M710)
  *  8: FAN_TYPE_UNKNOWN - Unknown / Not defined
- */
+*/
 #define FAN_MAX_PWM      {       255,       255,       255,       255,       255,       255,       255,       255 };
 #define FAN_DISPLAY_ID   {      "F0",      "F1",      "F2",      "F3",      "F4",      "F5",     "CtL",     "CtI" };
 #define FAN_CMD          { "M106 P0", "M106 P1", "M106 P2", "M106 P3", "M106 P4", "M106 P5",    "M710",    "M710" };
 #define FAN_TYPE         {         0,         0,         0,         0,         0,         0,         1,         2 };
+
+//TG 2/4/21 Spindle control options
+// Logically there can only be one spindle, although there can be multiple tool changes to it
+#define SPINDLE_MAX_RPM      {28000};
+#define SPINDLE_MAX_PWM      {1023};    //TG - 10/2/21 increased PWM resolution
+#define SPINDLE_SIGN_ID      {"S0:"};
+#define SPINDLE_DISPLAY_ID   {"S0"};
+#define SPINDLE_CMD          { "M"};
+#define SPINDLE_TYPE         {   0};
+
+//TG 2/17/21 Vacuum control options
+#define VACUUM_SIGN_ID      {"V0:"};
+#define VACUUM_DISPLAY_ID   {"V0"};
+#define VACUUM_CMD          {"M42"};
+#define VACUUM_CTL_PIN      122;      //TG Must match VACUUM_ENA_PIN defined in Marlin!!  -  P1_22 (define it as P122 for LPC1769)
+
 
 // Speed/flow rate names displayed in status screen
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
 #define AXIS_DISPLAY_ID  {"X",  "Y",  "Z",   "E0",  "E1"}  // (X, Y, Z, E0, E1)
-
 // Default X & Y speed (mm/min)
 #define SPEED_XY_SLOW   1000
 #define SPEED_XY_NORMAL 3000
@@ -190,9 +214,9 @@
 #define X_MIN_POS   0
 #define Y_MIN_POS   0
 #define Z_MIN_POS   0
-#define X_MAX_POS 235
-#define Y_MAX_POS 235
-#define Z_MAX_POS 250
+#define X_MAX_POS 520
+#define Y_MAX_POS 520
+#define Z_MAX_POS 75
 
 /**
  * Raised Z height for probing
@@ -296,7 +320,7 @@
 
 // PID autotune
 #define PID_CMD {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""};
-#define PID_PROCESS_TIMEOUT (15 * 60000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)
+#define PID_PROCESS_TIMEOUT (15 * 90000)  // (MilliSeconds, 1 minute = 60000 MilliSeconds)//TG increased from 60s
 
 /**
  * M600 ; emulate M600
@@ -357,7 +381,6 @@
  *          6: LED_BLUE,    7: LED_INDIGO,  8: LED_VIOLET
 */
 #define STARTUP_KNOB_LED_COLOR 1  // Default: 1
-
 // Keep the LED state in Marlin Mode
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE
 
@@ -396,7 +419,6 @@
  */
 #define BUZZER_FREQUENCY_DURATION_MS     20  // (MilliSeconds) Default: 20
 #define BUZZER_FREQUENCY_HZ           10000  // (Hz) Default: 10000 (20Hz to 60000Hz)
-
 /**
  * Buzzer pin state when buzzer is idle or no sound is playing
  *
@@ -424,8 +446,6 @@
  */
 #define ACK_NOTIFICATION_STYLE 1  // Default: 1
 
-// Fan speed as a percentage instead of PWM value
-#define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
 
 /**
  * Mesh Editor Keyboard on left side
@@ -433,6 +453,15 @@
  * Enable MESH_LEFT_KEYBOARD to draw the mesh editor keyboard on left side of the screen.
  */
 //#define MESH_LEFT_KEYBOARD
+
+// Mesh Leveling Display Colors
+// Set the colors used for drawing the mesh with the minimun and maximum value in the grid.
+// Options:  0: WHITE,      1: BLACK,       2: RED,      3: GREEN,     4: BLUE,   5: CYAN,
+//           6: MAGENTA,    7: YELLOW,      8: ORANGE,   9: PURPLE,   10: LIME,  11: BROWN,
+//          12: DARKBLUE,  13: DARKGREEN,  14: GRAY,    15: DARKGRAY
+//
+#define MESH_MIN_COLOR 7  // Default: 7
+#define MESH_MAX_COLOR 2  // Default: 2
 
 //
 // Terminal Keyboard / Numpad settings
@@ -506,6 +535,27 @@
 
 // Raise Z axis on resume (on power loss with UPS)
 #define POWER_LOSS_ZRAISE 10  // (mm) Default: 10
+
+// Enable Status Screen         //TG 1/12/20 new
+// Enable this to show status screen as the default home screen. Disabling it will show a static menu.
+#define ENABLE_STATUS_SCREEN true //to enabled: true | to disabled: false
+
+// Enable CNC mode mutually exclusive to UNIFIED_MENU
+#define SPINDLE_ROTATION 1              //TG 1/12/20 new used by spin direction
+
+// Speed control of spindle PID=1 Manual=0
+#define SPINDLE_USE_PID  0              //TG 9/27/21 new
+
+// Enable Laser interface instead of the spindle interface (for CNC mode only).
+#define LASER_MODE false         //TG 1/12/20 new
+
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_OFFSET 0.0   //TG 1/12/20 new
+
+
+// Fan speed as a percentage instead of PWM value
+#define SHOW_FAN_PERCENTAGE true  // To enabled: true | To disabled: false (Default: true)
+#define SET_LCD_POWER_UNIT RPM   //TG 2/4/21 show spindle speed as RPM, PCT, or PWM
 
 /**
  * Rapid Serial Communication

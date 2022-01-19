@@ -1,5 +1,8 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "PowerFailed.h"
 #include "includes.h"
+
+const char *const tool_change[] = TOOL_CHANGE;  //TG 2/8/21 put this here was in Extrude.c which was removed
 
 BREAK_POINT  infoBreakPoint;
 char powerFailedFileName[256];
@@ -56,7 +59,7 @@ void powerFailedCache(u32 offset)
     infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
     infoBreakPoint.flow = speedGetCurPercent(1);  // Flow percent
 
-    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    for (uint8_t i = 0; i < MAX_TOOL_COUNT; i++)
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
@@ -125,7 +128,7 @@ bool powerOffGetData(void)
   if (f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br)   != FR_OK) return false;
 
   setPrintModelIcon(model_icon);
-  for (int8_t i = MAX_HEATER_COUNT - 1; i >= 0; i--)
+  for (int8_t i = MAX_TOOL_COUNT - 1; i >= 0; i--)
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);

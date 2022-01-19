@@ -1,3 +1,4 @@
+//TG MODIFIED*****
 #include "Settings.h"
 #include "includes.h"
 
@@ -6,6 +7,8 @@ MACHINESETTINGS infoMachineSettings;
 
 const uint16_t default_max_temp[]      = HEAT_MAX_TEMP;
 const uint16_t default_max_fanPWM[]    = FAN_MAX_PWM;
+const u16 default_max_spindlePWM[]     = SPINDLE_MAX_PWM;   //TG 2/5/21
+const u16 default_max_spindleRPM[]     = SPINDLE_MAX_RPM;   //TG 2/5/21
 const uint16_t default_size_min[]      = {X_MIN_POS,Y_MIN_POS,Z_MIN_POS};
 const uint16_t default_size_max[]      = {X_MAX_POS,Y_MAX_POS,Z_MAX_POS};
 const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
@@ -17,7 +20,7 @@ const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
 const uint16_t default_preheat_bed[]   = PREHEAT_BED;
 const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
-// Reset settings data
+// Reset settings data from config.ini file
 void infoSettingsReset(void)
 {
 // General Settings
@@ -25,6 +28,25 @@ void infoSettingsReset(void)
   infoSettings.baudrate               = BAUDRATE;
   infoSettings.language               = LANG_DEFAULT;
 
+// CNC related settings         //TG 1/12/20 new
+  infoSettings.spin_dir               = SPINDLE_ROTATION;         //TG 1/12/20 new
+  infoSettings.spindle_use_pid        = SPINDLE_USE_PID;          //TG 1/12/20 new
+  storeCmd("%s S%d \n", "M7979", infoSettings.spindle_use_pid);   //TG send cmd to Marlin to update there
+  infoSettings.laser_mode             = LASER_MODE;               //TG 1/12/20 new
+  infoSettings.touchplate_on          = ENABLED;                  //TG 1/12/20 new
+  infoSettings.touchplate_height      = TOUCHPLATE_OFFSET;        //TG 1/12/20 new
+  infoSettings.spindle_count          = SPINDLE_NUM;              //TG 2/5/21 new
+  infoSettings.spindle_ctrl_count     = SPINDLE_CTL_NUM;          //TG 2/5/21 new
+  infoSettings.cutter_disp_unit       = MRPM;                     //TG 2/16/21 new
+  infoSettings.cutter_power_unit      = MRPM;                     //TG 2/16/21 new
+  infoSettings.vacuum_ctl_pin         = VACUUM_CTL_PIN;           //TG 2/17/21 new           
+  for (int i = 0; i < MAX_SPINDLE_COUNT; i++)                     //TG 2/5/21 new
+  {
+    infoSettings.spindle_pwm_max[i]   = default_max_spindlePWM[i];  //TG 2/5/21 new
+    infoSettings.spindle_rpm_max[i]   = default_max_spindleRPM[i];  //TG 2/5/21 new
+  }
+
+// General Settings
   infoSettings.title_bg_color         = lcd_colors[TITLE_BACKGROUND_COLOR];
   infoSettings.bg_color               = lcd_colors[BACKGROUND_COLOR];
   infoSettings.font_color             = lcd_colors[FONT_COLOR];
@@ -122,7 +144,7 @@ void infoSettingsReset(void)
   infoSettings.send_cancel_gcode      = ENABLED;
 
 // All the remaining array initializations
-  for (int i = 0; i < MAX_HEATER_COUNT; i++)
+  for (int i = 0; i < MAX_TOOL_COUNT; i++)  //TG was MAX_HEATER_COUNT
   {
     infoSettings.max_temp[i]          = default_max_temp[i];
   }
@@ -186,6 +208,7 @@ void initMachineSetting(void)
   infoMachineSettings.softwareEndstops        = ENABLED;
 
   fanControlInit();
+  spindleControlInit();   //TG 2/4/21 added
 }
 
 void setupMachine(void)
@@ -258,15 +281,16 @@ void checkflashSign(void)
 {
   //cur_flash_sign[lang_sign] = flash_sign[lang_sign];  // ignore language signature not implemented yet
 
+  // these check the SPI (flash cur_flash_sign) against this bin's (flash_sign)
   bool statusfont = getFlashSignStatus(font_sign);
   bool statusconfig = getFlashSignStatus(config_sign);
   bool statuslang = getFlashSignStatus(lang_sign);
   bool statusicon = getFlashSignStatus(icon_sign);
 
-  if (!statuslang)
+  if (!statuslang)                                  // if language signs don't match
     infoSettings.language = LANG_DEFAULT;
 
-  if (!statusfont || !statusicon || !statusconfig)
+  if (!statusfont || !statusicon || !statusconfig)  // if any of these differ?
   {
     int ypos = BYTE_HEIGHT + 5;
     GUI_Clear(BLACK);
@@ -299,7 +323,7 @@ void checkflashSign(void)
     ypos += BYTE_HEIGHT;
     GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
                                                                              "files and press the reset button\nto update.");
-    while (1);
+    while (1);    // loop forever - requires hard reset
   }
 }
 
@@ -310,6 +334,6 @@ bool getFlashSignStatus(int index)
   uint32_t addr = FLASH_SIGN_ADDR;
   uint32_t len = sizeof(flash_sign);
 
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
-  return (flash_sign[index] == cur_flash_sign[index]);
+  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);  // get the flash sign array from SPI flash
+  return (flash_sign[index] == cur_flash_sign[index]);      // return true if the indexed sign matches
 }

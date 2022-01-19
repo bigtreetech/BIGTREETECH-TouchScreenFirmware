@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #ifndef _HEAT_H_
 #define _HEAT_H_
 

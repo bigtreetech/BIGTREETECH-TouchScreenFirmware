@@ -1,6 +1,8 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #ifndef _BOOT_H_
 #define _BOOT_H_
-
+//TG MODIFIED *****
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,18 +14,18 @@ extern "C" {
 #define W25QXX_SECTOR_SIZE (0x1000) // 4096-4K
 
 #ifndef LOGO_MAX_SIZE
-  #define LOGO_MAX_SIZE            0x4B000
-  #define WORD_UNICODE_SIZE       0x480000
-  #define BYTE_ASCII_SIZE           0x1000
-  #define LARGE_FONT_SIZE           0x3000
-  #define FLASH_SIGN_SIZE           0x1000    //store status of last font/icon/config update
-  #define LANGUAGE_SIZE            0x14000    //Language pack size
-  #define STRINGS_STORE_MAX_SIZE    0x5000    //label strings max size
-  #define PRINT_GCODES_MAX_SIZE     0x5000    //start/end/cancel gcodes  max size
-  #define CUSTOM_GCODE_MAX_SIZE     0x5000    //custom gocdes max size
+  #define LOGO_MAX_SIZE            0x4B000    // 307Kb, 77K dwords
+  #define WORD_UNICODE_SIZE       0x480000    // 4,718,592 bytes,  1,179,648 dwords
+  #define BYTE_ASCII_SIZE           0x1000    // 4096 bytes
+  #define LARGE_FONT_SIZE           0x3000    // 12,288 bytes
+  #define FLASH_SIGN_SIZE           0x1000    // store status of last font/icon/config update
+  #define LANGUAGE_SIZE            0x14000    // Language pack size
+  #define STRINGS_STORE_MAX_SIZE    0x5000    // label strings max size   20,480 bytes, 5,120 dwords
+  #define PRINT_GCODES_MAX_SIZE     0x5000    // start/end/cancel gcodes  max size
+  #define CUSTOM_GCODE_MAX_SIZE     0x5000    // custom gocdes max size
   #define ICON_MAX_SIZE             0x5000
   #define INFOBOX_MAX_SIZE          0xB000
-  #define SMALL_ICON_MAX_SIZE       0x2000
+  #define SMALL_ICON_MAX_SIZE       0x2000	  // 8192 bytes
 #endif
 
 //address in spiflash W25Qxx
@@ -62,9 +64,9 @@ enum
 //  ICON_RESERVE
 
 // Preview should be in the last place before ICON_BACKGROUND to save flash storage space
-  ICON_PREVIEW,
+  ICON_PREVIEW,			//TG space allocated for preview icon of print file if available
 // Back ground sign
-  ICON_BACKGROUND
+  ICON_BACKGROUND		//TG space for blank background used to clear icons
 };
 
 

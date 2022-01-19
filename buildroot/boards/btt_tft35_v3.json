@@ -1,0 +1,59 @@
+{
+  "build": {
+    "core": "stm32",
+    "cpu": "cortex-m3",
+    "extra_flags": "-DSTM32F207xx",
+    "f_cpu": "120000000L",
+    "mcu": "stm32f207vct6",
+    "product_line": "STM32F207xx",
+    "variant": "NUCLEO_F207ZG",
+    "hwids": [
+      [
+        "0x0411",
+        "0x0002"
+      ]
+    ]
+  },
+  "connectivity": [
+    "can",
+    "ethernet"
+  ],
+  "debug": {
+    "default_tools": [
+      "stlink"
+    ],
+    "jlink_device": "STM32F207VCT6",
+    "onboard_tools": [
+      "stlink"
+    ],
+    "openocd_target": "stm32f2x",
+    "svd_path": "STM32F20x.svd"
+  },
+  "frameworks": [
+    "arduino",
+    "cmsis",
+    "mbed",
+    "stm32cube",
+    "libopencm3",
+    "zephyr"
+  ],
+  "name": "BTT TFT35 V3 (96k RAM  256k-32k Flash)",
+  "upload": {
+    "maximum_ram_size": 98304,
+    "maximum_size": 229376,
+    "protocol": "stlink",
+    "openocd_target": "stm32f2x",
+    "protocols": [
+      "jlink",
+      "cmsis-dap",
+      "stlink",
+      "blackmagic",
+      "mbed",
+      "dfu"
+    ],
+    "offset_address": "0x08008000"
+    
+  },
+  "url": "https://www.st.com/content/st_com/en/products/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus/stm32-high-performance-mcus/stm32f2-series/stm32f2x5.html",
+  "vendor": "ST"
+}

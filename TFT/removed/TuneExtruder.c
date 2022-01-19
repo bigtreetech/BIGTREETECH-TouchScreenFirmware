@@ -1,9 +1,11 @@
+//TG MODIFIED BY T.GIOIOSA
+
 #include "TuneExtruder.h"
 #include "includes.h"
 
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 4
 
-static uint8_t tool_index = NOZZLE0;
+static uint8_t tool_index = TOOL0;
 static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
 

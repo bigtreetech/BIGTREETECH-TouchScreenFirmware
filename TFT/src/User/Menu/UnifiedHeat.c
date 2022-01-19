@@ -1,3 +1,4 @@
+//TG MODIFIED BY T.GIOIOSA
 #include "UnifiedHeat.h"
 #include "includes.h"
 
@@ -11,7 +12,7 @@ const MENUITEMS UnifiedHeatItems = {
     {ICON_FAN,                     LABEL_FAN},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_COOLDOWN,                LABEL_COOLDOWN},
+   {ICON_REMOVED,                 LABEL_REMOVED},       //TG 2/18/21 was COOLDOWN
     {ICON_BACKGROUND,              LABEL_BACKGROUND},
     {ICON_BACK,                    LABEL_BACK},
   }
@@ -33,7 +34,7 @@ void menuUnifiedHeat(void)
         break;
 
       case KEY_ICON_1:
-        infoMenu.menu[++infoMenu.cur] = menuHeat;
+        infoMenu.menu[++infoMenu.cur] = menuSpindle;
         break;
 
       case KEY_ICON_2:
@@ -41,7 +42,7 @@ void menuUnifiedHeat(void)
         break;
 
       case KEY_ICON_5:
-        heatCoolDown();
+        //heatCoolDown();
         break;
 
       case KEY_ICON_7:
