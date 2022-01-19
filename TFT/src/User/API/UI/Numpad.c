@@ -291,7 +291,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
           {
             nowIndex = lastIndex = 0;
           }
-          else if(ParameterBuf[0] == '-' && ParameterBuf[1] == '0' && nowIndex == 2)  // avoid "-0x", change to "-x"
+          else if (ParameterBuf[0] == '-' && ParameterBuf[1] == '0' && nowIndex == 2)  // avoid "-0x", change to "-x"
           {
             nowIndex = lastIndex = 1;
           }
