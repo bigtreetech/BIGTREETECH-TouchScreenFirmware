@@ -31,6 +31,7 @@ extern "C" {
 #define CATALAN       18
 #define TRAD_CHINESE  19
 #define UKRAINIAN     20
+#define BRAZIL        21
 
 enum
 {
