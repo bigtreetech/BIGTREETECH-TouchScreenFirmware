@@ -1,6 +1,10 @@
 #include "HW_Init.h"
 #include "includes.h"
 
+#ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM support for MKS_TFT35_V1_0
+  #include "i2c_eeprom.h"
+#endif
+
 void HW_GetClocksFreq(CLOCKS *clk)
 {
   RCC_GetClocksFreq(&clk->rccClocks);
@@ -33,7 +37,7 @@ void HW_Init(void)
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);  // disable JTAG & SWD
   #endif
 
-  #if defined(MKS_TFT)
+  #if defined(MKS_TFT) && !defined (MKS_TFT35_V1_0)  // not used by MKS_TFT35_V1_0
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif
@@ -42,6 +46,11 @@ void HW_Init(void)
   OS_TimerInitMs();  // system clock timer, cycle 1ms, called after XPT2046_Init()
   W25Qxx_Init();
   LCD_Init();
+
+  #ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM support for MKS_TFT35_V1_0
+    i2C_Init_EEPROM();
+  #endif
+
   readStoredPara();  // read settings parameter
 
   #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)

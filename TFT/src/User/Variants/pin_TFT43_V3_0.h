@@ -10,6 +10,7 @@
   #endif
 #endif
 
+// Root folder for fonts and icons
 #ifndef ROOT_DIR
   #define ROOT_DIR "TFT43"
 #endif
@@ -20,8 +21,9 @@
 #endif
 
 // LCD interface
+// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER       SSD1963  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558, SSD1963].
+  #define TFTLCD_DRIVER       SSD1963
   #define TFTLCD_DRIVER_SPEED 0x10     // SSD1963 needs slower speed
 #endif
 
@@ -38,6 +40,7 @@
   #define SSD_VER_FRONT_PORCH 1
 #endif
 
+// Neopixel LEDs number
 #ifndef NEOPIXEL_PIXELS
   #define NEOPIXEL_PIXELS 2
 #endif
