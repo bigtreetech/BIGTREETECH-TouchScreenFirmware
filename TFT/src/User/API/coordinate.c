@@ -127,8 +127,10 @@ void coordinateQuery(uint8_t seconds)
     else  // send M114 if delay is less than 1 second or auto report is disabled
     {
       // turn off auto report if it was turned on
-      char * strQueryOff = (infoMachineSettings.autoReportPos == 1 && curQuerySeconds > 0) ? "M154 S0\n" : "";
-      coordinateQueryWait = (storeCmd("%s", strQueryOff) == true ? storeCmd ("M114\n") : false);
+      if (infoMachineSettings.autoReportPos == 1 && curQuerySeconds > 0)
+        coordinateQueryWait = (storeCmd("M154 S0\n") == true ? storeCmd ("M114\n") : false);
+      else
+        coordinateQueryWait = storeCmd ("M114\n");
     }
 
     if (coordinateQueryWait)
