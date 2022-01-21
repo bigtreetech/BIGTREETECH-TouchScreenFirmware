@@ -88,7 +88,7 @@ bool storeCmd(const char * format, ...)
     return false;
   }
   
-  if (cmd_count == 1)
+  if (cmd_count < 2)
     commonStoreCmd(&infoCmd, format, va);
   else
     mustStoreScript(script);
