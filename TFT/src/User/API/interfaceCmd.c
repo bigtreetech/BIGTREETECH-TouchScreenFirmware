@@ -64,16 +64,34 @@ bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  char script[256];
+  va_list va;
+  va_start(va, format);
+  vsnprintf(script, 256, format, va);
+  va_end(va);  
+
+  uint8_t cmd_count = 0;
+  char* Ptmp_chr = script;
+
+  while ((Ptmp_chr = strchr(Ptmp_chr, '\n')) != NULL)  // count the number of commands
+  {
+	  cmd_count++;
+	  Ptmp_chr++;
+  }
+
+  // If there's not enough room for all the commands, do not send anything
+  // because there might be command groups that must remain so, it could
+  // result in errors or different outcome if one is sent without the other
+  if (infoCmd.count + cmd_count > CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
-
-  va_list va;
-  va_start(va, format);
-  commonStoreCmd(&infoCmd, format, va);
-  va_end(va);
+  
+  if (cmd_count == 1)
+    commonStoreCmd(&infoCmd, format, va);
+  else
+    mustStoreScript(script);
 
   return true;
 }
