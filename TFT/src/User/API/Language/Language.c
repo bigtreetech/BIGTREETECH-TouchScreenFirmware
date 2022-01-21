@@ -45,7 +45,7 @@
 #elif SYSTEM_LANGUAGE == UKRAINIAN
   #include "language_uk.h"
 #elif SYSTEM_LANGUAGE == BRAZIL
-  #include "language_br.h"  
+  #include "language_br.h"
 #else
   #error "Error: invalid language defined"
 #endif
