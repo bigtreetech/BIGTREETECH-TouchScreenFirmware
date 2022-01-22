@@ -300,7 +300,7 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
-        LED_SetColor(0, 0, 0, false);  // set (neopixel) LED light to OFF
+        LED_SetColor(255, 255, 255, false);  // Restore (neopixel) LED light to ON after exit
         LCD_SET_KNOB_LED_IDLE(true);   // restore infoSettings.knob_led_idle and knob LED color to their default values
 
         CLOSE_MENU();

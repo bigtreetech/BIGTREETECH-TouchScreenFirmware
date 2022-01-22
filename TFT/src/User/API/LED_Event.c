@@ -82,7 +82,7 @@ void LED_CheckEvent(void)
       heatingDone = false;   // reset flag to "false"
       printingDone = false;  // reset flag to "false"
 
-      LED_SetColor(0, 0, 0, false);  // set (neopixel) LED light to OFF
+      LED_SetColor(255, 255, 255, false);  // Keep (neopixel) LED light to ON
       LCD_SET_KNOB_LED_IDLE(true);   // restore infoSettings.knob_led_idle and knob LED color to their default values
 
       return;
