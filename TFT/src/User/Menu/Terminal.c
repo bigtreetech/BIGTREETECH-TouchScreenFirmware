@@ -589,6 +589,16 @@ TERMINAL_SRC getLastSrc(char * ptr)
       ptr = terminalBuf + terminalData->bufSize;
   }
 
+  if (lastSrc == SRC_TERMINAL_COUNT)  // if a source identifier is not found
+  {
+    // if terminal has a valid source, use it (it should be always that because
+    // at least a message has been buffered if this function is invoked)
+    if (terminalData->lastSrc != SRC_TERMINAL_COUNT)
+      lastSrc = terminalData->lastSrc;
+    else
+      lastSrc = SRC_TERMINAL_ACK;  // otherwise, use ACK type as default source (it should never happen)
+  }
+
   return lastSrc;
 }
 
@@ -694,8 +704,7 @@ void menuTerminalWindow(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   CHAR_INFO info;
-  TERMINAL_SRC src = SRC_TERMINAL_GCODE;  // default source
-  TERMINAL_SRC oldSrc = SRC_TERMINAL_GCODE;
+  TERMINAL_SRC src = SRC_TERMINAL_ACK;  // default source
   uint8_t oldPageCount = 0;
   uint8_t oldPageIndex = 0;
   uint8_t pageTableIndex = 0;
@@ -747,10 +756,7 @@ void menuTerminalWindow(void)
         pageTableIndex = terminalData->pageTail + (terminalData->maxPageCount - terminalData->pageIndex);
 
       bufIndex = terminalData->pageTable[pageTableIndex] - terminalBuf;
-      oldSrc = getLastSrc(terminalData->pageTable[pageTableIndex]);
-
-      if (oldSrc != SRC_TERMINAL_COUNT)  // if a source identifier is found, set it. Otherwise continue to use the current one
-        src = oldSrc;
+      src = getLastSrc(terminalData->pageTable[pageTableIndex]);
 
       cursorX = CURSOR_START_X;
       cursorY = terminalAreaRect[0].y0;
@@ -801,7 +807,7 @@ void menuTerminalWindow(void)
 
       // check source identifier
       if (info.codePoint == 0x5 || info.codePoint == 0x6)
-        oldSrc = src = info.codePoint - 0x5;
+        src = info.codePoint - 0x5;
 
       // check next line
       if (cursorX + info.pixelWidth > terminalAreaRect[0].x1 ||
