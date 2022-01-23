@@ -267,14 +267,16 @@ static bool cmd_start_with(const CMD cmd, const char* key)
 // Check the presence of the specified 'code' character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for (cmd_index = 0; cmd_index < cmd_len; cmd_index++)
+  char* pChr_tmp;
+
+  pChr_tmp = strchr(cmd_ptr, code);
+
+  if (pChr_tmp != NULL)
   {
-    if (cmd_ptr[cmd_index] == code)
-    {
-      cmd_index += 1;
-      return true;
-    }
+    cmd_index = pChr_tmp - cmd_ptr +1;
+    return true;
   }
+
   return false;
 }
 
