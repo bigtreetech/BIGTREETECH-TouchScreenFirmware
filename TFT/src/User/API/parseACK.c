@@ -111,7 +111,7 @@ bool syncL2CacheFromL1(uint8_t port)
   return true;
 }
 
-static bool ack_cmp(const char * str)
+/*static bool ack_cmp(const char * str)
 {
   uint16_t i;
   for (i = 0; i < dmaL2Cache_len && str[i] != 0; i++)
@@ -122,9 +122,17 @@ static bool ack_cmp(const char * str)
   if (str[i] != 0)
     return false;
   return true;
+}*/
+
+static bool ack_cmp(const char * str)
+{
+  if (strcmp(dmaL2Cache, str) != 0)
+    return false;
+
+  return true;
 }
 
-static bool ack_seen(const char * str)
+/*static bool ack_seen(const char * str)
 {
   int16_t str_len = strlen(str);
   int16_t max_len = dmaL2Cache_len - str_len;
@@ -145,9 +153,26 @@ static bool ack_seen(const char * str)
     }
   }
   return false;
+}*/
+
+static bool ack_seen(const char * str)
+{
+  uint16_t str_len = strlen(str);
+  char* pStr_tmp;
+
+  if (str_len > dmaL2Cache_len)  // if str is longer than data present in cache, no match can be found
+    return false;
+
+  if ((pStr_tmp = strstr(dmaL2Cache, str)) != NULL)
+  {
+    ack_index = pStr_tmp - dmaL2Cache + str_len;
+    return true;
+  }
+  
+  return false;
 }
 
-static bool ack_continue_seen(const char * str)
+/*static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
   int16_t str_len = strlen(str);
   int16_t max_len = dmaL2Cache_len - str_len;
@@ -169,6 +194,23 @@ static bool ack_continue_seen(const char * str)
     }
   }
   ack_index = ack_index_orig;
+  return false;
+}*/
+
+static bool ack_continue_seen(const char * str)
+{
+  uint16_t str_len = strlen(str);
+  char* pStr_tmp;
+
+  if (str_len > strlen(&dmaL2Cache[ack_index]))  // if str is longer than data left in cache, no match can be found
+    return false;
+
+  if ((pStr_tmp = strstr(&dmaL2Cache[ack_index], str)) != NULL)
+  {
+    ack_index = pStr_tmp - dmaL2Cache + str_len;
+    return true;
+  }
+  
   return false;
 }
 
@@ -449,7 +491,7 @@ void parseACK(void)
       avoid_terminal = true;
     }
 
-    // Onboard sd Gcode command response
+  // Onboard sd Gcode command response
 
     if (requestCommandInfo.inWaitResponse)
     {
@@ -1136,7 +1178,7 @@ void parseACK(void)
         infoMachineSettings.autoReportTemp = ack_value();
         if (infoMachineSettings.autoReportTemp)
         {
-          storeCmd("M155 ");
+          storeCmd("M155 S%u\n", heatGetUpdateSeconds());
         }
       }
       else if (ack_seen("Cap:AUTOREPORT_POS:"))
