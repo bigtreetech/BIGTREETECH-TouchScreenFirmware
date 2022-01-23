@@ -1075,9 +1075,9 @@ KEY_VALUES menuKeyGetValue(void)
           {
             tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
           }
-          else if(MENU_IS(menuPrinting))
+          else if (MENU_IS(menuPrinting))
           {
-            if(isPrinting() || infoHost.printing == true)
+            if (isPrinting() || infoHost.printing == true)
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
