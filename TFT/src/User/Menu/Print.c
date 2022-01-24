@@ -101,9 +101,12 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
   if (index < infoFile.folderCount)  // folder
   {
     item->icon = CHARICON_FOLDER;
-    item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
-    setDynamicLabel(itemPos, infoFile.folder[index]);
+    item->titlelabel.index = LABEL_DYNAMIC;
+    if (infoFile.longFolder[index] != NULL)
+      setDynamicLabel(itemPos, infoFile.longFolder[index]);
+    else
+      setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
@@ -312,7 +315,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
@@ -410,7 +413,7 @@ void menuPrint(void)
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)
-          printInfoPopup();
+          printSummaryPopup();
         break;
 
       case KEY_ICON_7:

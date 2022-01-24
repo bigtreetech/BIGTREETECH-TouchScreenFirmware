@@ -8,15 +8,6 @@
 COMMENT gCode_comment = {0, true};
 bool M73R_presence = false;
 
-void lowerCase(char * tempChar)
-{
-  for (uint8_t i=0; i < strlen(tempChar); i++)
-  {
-    if (tempChar[i] >= 'A' && tempChar[i] <= 'Z')
-      tempChar[i] = tempChar[i] + HIGH_TO_LOW_CASE;
-  }
-}
-
 void setM73R_presence(bool present)
 {
   M73R_presence = present;
@@ -33,11 +24,11 @@ void parseComment(void)
   if (gCode_comment.content[0] == 'l' || gCode_comment.content[0] == 'L')
   {
     temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
-    lowerCase(temp_char);
+    strlwr(temp_char);
     if (strcmp(temp_char, "layer") == 0)
     { // check for "layer" keyword in comment (layer number or layer count)
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
-      lowerCase(temp_char);
+      strlwr(temp_char);
       if (strcmp(temp_char, "count") == 0)  // check if next word is "count"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
@@ -60,12 +51,12 @@ void parseComment(void)
   else if (gCode_comment.content[0] == 't' || gCode_comment.content[0] == 'T')
   {
     temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
-    lowerCase(temp_char);
+    strlwr(temp_char);
     // check for "time" keyword in comment to retrieve total or elapsed time, Cura specific
     if (strcmp(temp_char, "time") == 0 && M73R_presence == false)  // check if first word is "time"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
-      lowerCase(temp_char);
+      strlwr(temp_char);
       if (strcmp(temp_char, "elapsed") == 0 && getPrintExpectedTime() > 0)  // check if next word is "elapsed"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
@@ -85,12 +76,12 @@ void parseComment(void)
   else if (gCode_comment.content[0] == 'r' || gCode_comment.content[0] == 'R')
   {
     temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
-    lowerCase(temp_char);
+    strlwr(temp_char);
     // check for "remaining" keyword in comment to retrieve remaining time, IdeaMaker specific
     if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
-      lowerCase(temp_char);
+      strlwr(temp_char);
       if (strcmp(temp_char, "time") == 0)  // check if next word is "time"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);

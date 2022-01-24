@@ -20,7 +20,7 @@ typedef struct
 
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // Only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue.
-char * cmd_ptr;
+char* cmd_ptr;
 uint8_t cmd_len;
 uint8_t cmd_index;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
@@ -48,7 +48,7 @@ bool isEnqueued(const CMD cmd)
 }
 
 // Common store cmd.
-void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
+void commonStoreCmd(GCODE_QUEUE* pQueue, const char* format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
 
@@ -92,6 +92,7 @@ bool storeCmd(const char* format, ...)
     commonStoreCmd(&infoCmd, format, va);
   else
     mustStoreScript(script);
+
   return true;
 }
 
@@ -99,7 +100,9 @@ bool storeCmd(const char* format, ...)
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
 // is available to store the command.
-void mustStoreCmd(const char * format, ...)
+// Do not send multiple commands at once !!! (ex "M220\nM221\n")
+// For multiple commands at once use mustStoreScript()
+void mustStoreCmd(const char* format, ...)
 {
   if (strlen(format) == 0) return;
 
@@ -170,7 +173,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 // Store gcode cmd to infoCacheCmd queue.
 // This command will be moved to infoCmd queue by loopPrintFromTFT() -> moveCacheToCmd().
 // This function is used only to restore the printing status after a power failed.
-void mustStoreCacheCmd(const char * format, ...)
+void mustStoreCacheCmd(const char* format, ...)
 {
   if (isFullCmdQueue())
   {
@@ -221,7 +224,7 @@ static inline bool getCmd(void)
 // Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
-  char * purgeStr = "[Purged] ";
+  char* purgeStr = "[Purged] ";
 
   if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
       infoMachineSettings.firmwareType != FW_NOT_DETECTED)                  // purge the command
@@ -259,7 +262,7 @@ bool sendCmd(bool purge, bool avoidTerminal)
 }
 
 // Check if 'cmd' starts with 'key'.
-static bool cmd_start_with(const CMD cmd, const char * key)
+static bool cmd_start_with(const CMD cmd, const char* key)
 {
   return (strstr(cmd, key) - cmd == cmd_index) ? true : false;
 }
@@ -267,14 +270,16 @@ static bool cmd_start_with(const CMD cmd, const char * key)
 // Check the presence of the specified 'code' character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for (cmd_index = 0; cmd_index < cmd_len; cmd_index++)
+  char* pChr_tmp;
+
+  pChr_tmp = strchr(cmd_ptr, code);
+
+  if (pChr_tmp != NULL)
   {
-    if (cmd_ptr[cmd_index] == code)
-    {
-      cmd_index += 1;
-      return true;
-    }
+    cmd_index = pChr_tmp - cmd_ptr +1;
+    return true;
   }
+
   return false;
 }
 

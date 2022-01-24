@@ -111,49 +111,13 @@ bool syncL2CacheFromL1(uint8_t port)
   return true;
 }
 
-/*static bool ack_cmp(const char * str)
-{
-  uint16_t i;
-  for (i = 0; i < dmaL2Cache_len && str[i] != 0; i++)
-  {
-    if (str[i] != dmaL2Cache[i])
-      return false;
-  }
-  if (str[i] != 0)
-    return false;
-  return true;
-}*/
-
 static bool ack_cmp(const char * str)
 {
-  if (strcmp(dmaL2Cache, str) != 0)
-    return false;
+  if (strcmp(dmaL2Cache, str) == 0)
+    return true;
 
-  return true;
-}
-
-/*static bool ack_seen(const char * str)
-{
-  int16_t str_len = strlen(str);
-  int16_t max_len = dmaL2Cache_len - str_len;
-
-  if (max_len < 0)  // if str is longer than data present in cache, no match can be found
-    return false;
-
-  uint16_t i;
-
-  for (ack_index = 0; ack_index <= max_len; ack_index++)
-  {
-    for (i = 0; i < str_len && str[i] == dmaL2Cache[ack_index + i]; i++)
-    {}
-    if (i == str_len)  // if end of str is reached, a match was found
-    {
-      ack_index += i;
-      return true;
-    }
-  }
   return false;
-}*/
+}
 
 static bool ack_seen(const char * str)
 {
@@ -171,31 +135,6 @@ static bool ack_seen(const char * str)
   
   return false;
 }
-
-/*static bool ack_continue_seen(const char * str)
-{ // unlike "ack_seen()", this retains "ack_index" if the searched string is not found
-  int16_t str_len = strlen(str);
-  int16_t max_len = dmaL2Cache_len - str_len;
-
-  if (max_len < 0)  // if str is longer than data present in cache, no match can be found
-    return false;
-
-  uint16_t ack_index_orig = ack_index;
-  uint16_t i;
-
-  for (; ack_index <= max_len; ack_index++)
-  {
-    for (i = 0; i < str_len && str[i] == dmaL2Cache[ack_index + i]; i++)
-    {}
-    if (i == str_len)  // if end of str is reached, a match was found
-    {
-      ack_index += i;
-      return true;
-    }
-  }
-  ack_index = ack_index_orig;
-  return false;
-}*/
 
 static bool ack_continue_seen(const char * str)
 {
