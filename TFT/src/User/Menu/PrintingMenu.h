@@ -9,7 +9,7 @@ extern "C" {
 
 void menuBeforePrinting(void);
 void menuPrinting(void);
-void printInfoPopup(void);
+void printSummaryPopup(void);
 
 extern bool hasFilamentData;
 

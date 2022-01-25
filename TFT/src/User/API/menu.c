@@ -829,8 +829,7 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_NULL)
-      menuDrawTitle(labelGetAddress(&curListItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
