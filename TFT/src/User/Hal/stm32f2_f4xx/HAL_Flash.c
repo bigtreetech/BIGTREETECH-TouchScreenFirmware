@@ -1,4 +1,4 @@
-#include "STM32_Flash.h"
+#include "HAL_Flash.h"
 #include "my_misc.h"
 
 /*
@@ -18,18 +18,18 @@ Sector 11 0x080E 0000 - 0x080F FFFF 128 Kbyte
 #define SIGN_ADDRESS (0x08004000)  // reserve the second sector (16KB) to save user parameters
 #define FLASH_SECTOR FLASH_Sector_1
 
-void STM32_FlashRead(u8 *data, u32 len)
+void HAL_FlashRead(uint8_t *data, uint32_t len)
 {
-  u32 i = 0;
+  uint32_t i = 0;
   for (i = 0; i < len; i++)
   {
-    data[i] = *(vu8*)(SIGN_ADDRESS + i);
+    data[i] = *(volatile uint8_t*)(SIGN_ADDRESS + i);
   }
 }
 
-void STM32_FlashWrite(u8 *data, u32 len)
+void HAL_FlashWrite(uint8_t *data, uint32_t len)
 {
-  u32 i = 0;
+  uint32_t i = 0;
   FLASH_Unlock();
   FLASH_EraseSector(FLASH_SECTOR, VoltageRange_1);
   for (i = 0; i < len; i++)

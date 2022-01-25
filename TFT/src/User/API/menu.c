@@ -1267,7 +1267,7 @@ void loopBackEnd(void)
   }
 
   #ifdef U_DISK_SUPPORT
-    USBH_Process(&USB_OTG_Core, &USB_Host);
+    USB_LoopProcess();
   #endif
 
   #ifdef FIL_RUNOUT_PIN
