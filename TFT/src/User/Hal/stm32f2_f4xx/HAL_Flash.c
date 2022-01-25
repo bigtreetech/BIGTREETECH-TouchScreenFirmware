@@ -15,7 +15,7 @@ Sector 6 0x0804 0000 - 0x0805 FFFF 128 Kbyte
 Sector 11 0x080E 0000 - 0x080F FFFF 128 Kbyte
 */
 
-#ifdef MKS_TFT35_V1_0  // IRON_MKS, MKS_TFT35_V1_0 bootloader is 48KB, adjust flash mapping
+#ifdef MKS_TFT35_V1_0  // MKS_TFT35_V1_0 bootloader is 48KB, adjust flash mapping
   // use darkspr1te alternative small loader to fix this issue and return to using 16kb lower flash for param storage or switch to I2C
   // if we use getsector routine it returns this value anyway, so FLASH_SECTOR is not used
   #define SIGN_ADDRESS (0x08040000)    // reserve the last 128k for user params or we damage the boot loader on this board
@@ -25,7 +25,7 @@ Sector 11 0x080E 0000 - 0x080F FFFF 128 Kbyte
   #define FLASH_SECTOR FLASH_Sector_1
 #endif
 
-#ifdef MKS_TFT35_V1_0  // IRON_MKS
+#ifdef MKS_TFT35_V1_0
 
 static uint32_t GetSector(uint32_t Address)
 {
@@ -99,8 +99,8 @@ void HAL_FlashWrite(uint8_t *data, uint32_t len)
   uint32_t i = 0;
   FLASH_Unlock();
 
-#ifdef MKS_TFT35_V1_0  // IRON_MKS, added for MKS_TFT35_V1_0 support
-  FLASH_EraseSector(GetSector(SIGN_ADDRESS), VoltageRange_1);  // IRON2
+#ifdef MKS_TFT35_V1_0  // added for MKS_TFT35_V1_0 support
+  FLASH_EraseSector(GetSector(SIGN_ADDRESS), VoltageRange_1);
 #else
   FLASH_EraseSector(FLASH_SECTOR, VoltageRange_1);
 #endif

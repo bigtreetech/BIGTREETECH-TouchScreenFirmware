@@ -2,7 +2,7 @@
 #include "HAL_Flash.h"
 #include <string.h>
 
-#ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
+#ifdef I2C_EEPROM  // added I2C_EEPROM suppport for MKS_TFT35_V1_0
   #include "i2c_eeprom.h"
 #endif
 
@@ -51,7 +51,7 @@ void readStoredPara(void)
   uint32_t index = 0;
   uint32_t sign = 0;
 
-#ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
+#ifdef I2C_EEPROM  // added I2C_EEPROM suppport for MKS_TFT35_V1_0
   EEPROM_FlashRead(data, PARA_SIZE);
 #else
   HAL_FlashRead(data, PARA_SIZE);
@@ -93,8 +93,8 @@ void storePara(void)
   wordToByte(PARA_SIGN, data + (index += 4));
   memcpy(data + (index += 4), &infoSettings, sizeof(SETTINGS));
 
-#ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
-  EEPROM_FlashWrite(data, PARA_SIZE);  // IRON, store settings in I2C_EEPROM
+#ifdef I2C_EEPROM                      // added I2C_EEPROM suppport for MKS_TFT35_V1_0
+  EEPROM_FlashWrite(data, PARA_SIZE);  // store settings in I2C_EEPROM
 #else
   HAL_FlashWrite(data, PARA_SIZE);
 #endif

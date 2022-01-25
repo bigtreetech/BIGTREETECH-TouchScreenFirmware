@@ -3,7 +3,7 @@
 #include "ListItem.h"
 #include "Notification.h"
 
-#define STATUS_BAR_REFRESH_TIME 2000 // refresh time in ms
+#define STATUS_BAR_REFRESH_TIME 2000  // refresh time in ms
 
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE

@@ -40,7 +40,7 @@
 // Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER       (ILI9488 | NT35310)
-  #define TFTLCD_DRIVER_SPEED 0x03                 // IRON, testing, was 0x10
+  #define TFTLCD_DRIVER_SPEED 0x03                 // testing, was 0x10
 #endif
 
 #define STM32_HAS_FSMC  // FSMC 8080 interface (high speed) or normal IO interface (low speed)
@@ -48,23 +48,23 @@
   #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
-// Debug support (free pins for other functions)
-//#define DISABLE_JTAG   // disable JTAG, enable SWD
-//#define DISABLE_DEBUG  // disable JTAG & SWD, free up pins PA13, PA14 for SPI3
-
 // LCD Backlight pins (adjust brightness with LED PWM)
-#define LCD_LED_PIN           PA1
-#define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM2
-#define LCD_LED_PWM_TIMER     TIM2
-#define LCD_LED_PWM_CHANNEL   _TIM2_CH2
+#ifndef LCD_LED_PIN
+  #define LCD_LED_PIN           PA1
+  #define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM2
+  #define LCD_LED_PWM_CHANNEL   _TIM2_CH2
+  #define LCD_LED_PWM_TIMER     TIM2
+#endif
 
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
 // SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
-#define SERIAL_PORT       _USART3  // default USART port for host communication PB10 PB11
-#define SERIAL_PORT_2     _USART1  // ESP3D port PA9 PA10
-#define SERIAL_PORT_3     _USART6  // Optional debug serial port
-#define SERIAL_PORT_ESP3D _USART1  // ESP3D port
-#define SERIAL_PORT_HOST  _USART3  // default USART port for host communication
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT       _USART3  // default USART port for host communication PB10 PB11
+  #define SERIAL_PORT_2     _USART1  // ESP3D port PA9 PA10
+  #define SERIAL_PORT_3     _USART6  // Optional debug serial port
+  #define SERIAL_PORT_ESP3D _USART1  // ESP3D port
+  #define SERIAL_PORT_HOST  _USART3  // default USART port for host communication
+#endif
 
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
@@ -97,15 +97,17 @@
 #define SD_CD_PIN PD3
 
 // W25Qxx SPI Flash Memory pins
-#define W25Qxx_SPEED  0      // IRON, affects touch screen (XPT2046), was 1 (0 is fastest, 7 is slowest)
+#define W25Qxx_SPEED  0      // affects touch screen (XPT2046), was 1 (0 is fastest, 7 is slowest)
 #define W25Qxx_SPI    _SPI1
 #define W25Qxx_CS_PIN PB9
 
 // Buzzer PWM pin
-#define BUZZER_PIN           PA2
-#define BUZZER_PIN_ALTERNATE GPIO_AF_TIM5  // alternate function 2 for PWM
-#define BUZZER_PWM_TIMER     TIM5
-#define BUZZER_PWM_CHANNEL   _TIM5_CH3
+#ifndef BUZZER_PIN
+  #define BUZZER_PIN           PA2
+  #define BUZZER_PIN_ALTERNATE GPIO_AF_TIM5  // alternate function 2 for PWM
+  #define BUZZER_PWM_CHANNEL   _TIM5_CH3
+  #define BUZZER_PWM_TIMER     TIM5
+#endif
 
 // LCD Encoder pins
 // It can be added using available pins (PB0, PB1, PB4, PB5). Switch encoder/button to ground
@@ -116,8 +118,10 @@
 #define LCD_BTN_PIN  PB5
 
 // U disk support
-#define U_DISK_SUPPORT
-#define USE_USB_OTG_FS
+#ifndef U_DISK_SUPPORT
+  #define U_DISK_SUPPORT
+  #define USE_USB_OTG_FS
+#endif
 
 // Auto Power Off Detection pin
 #ifndef PS_ON_PIN

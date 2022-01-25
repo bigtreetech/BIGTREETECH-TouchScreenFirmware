@@ -47,25 +47,18 @@
   #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
-// Debug support (free pins for other functions)
-//#define DISABLE_JTAG   // free JTAG (PB3/PB4) for SPI3
-//#define DISABLE_DEBUG  // free all pins
-
-// LCD Backlight pins (adjust brightness with LED PWM)
-//#define LCD_LED_PIN           PD14
-//#define LCD_LED_PIN_ALTERNATE 0
-//#define LCD_LED_PWM_CHANNEL   _TIM4_CH3
-
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
 // SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
-#define SERIAL_PORT   _USART2  // default USART port
-#define SERIAL_PORT_2 _USART1
-#define SERIAL_PORT_3 _USART3
-#define USART2_TX_PIN PD5
-#define USART2_RX_PIN PD6
-#define USART3_TX_PIN PD8
-#define USART3_RX_PIN PD9
-//#define SERIAL_PORT_4 _UART4
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT   _USART2  // default USART port
+  #define SERIAL_PORT_2 _USART1
+  #define SERIAL_PORT_3 _USART3
+  #define USART2_TX_PIN PD5
+  #define USART2_RX_PIN PD6
+  #define USART3_TX_PIN PD8
+  #define USART3_RX_PIN PD9
+  //#define SERIAL_PORT_4 _UART4
+#endif
 
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
@@ -82,12 +75,14 @@
 
 // SD Card SDIO/SPI pins
 //#define SD_SDIO_SUPPORT
-#define SD_SPI_SUPPORT
-#ifdef SD_SPI_SUPPORT
-  #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 1      // 2 frequency division
-  #define SD_SPI        _SPI1
-  #define SD_CS_PIN     PD11
+#ifndef SD_SPI_SUPPORT
+  #define SD_SPI_SUPPORT
+  #ifdef SD_SPI_SUPPORT
+    #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
+    #define SD_HIGH_SPEED 1      // 2 frequency division
+    #define SD_SPI        _SPI1
+    #define SD_CS_PIN     PD11
+  #endif
 #endif
 
 // SD Card CD Detect pin
@@ -203,13 +198,16 @@
 #endif
 
 // Buzzer PWM pin
-#define BUZZER_PIN PA2
+#ifndef BUZZER_PIN
+  #define BUZZER_PIN PA2
+#endif
 
 // Marlin mode + LCD Encoder pins
 #ifdef ST7920_EMULATOR
-  // free JTAG(PB3/PB4) for SPI3 and free SWDIO PA13 PA14 for encoder pins
+  // free JTAG (PB3/PB4) for SPI3 and free SWDIO PA13 PA14 for encoder pins
   #define DISABLE_DEBUG() RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); \
                           GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE)
+
   #define LCD_ENCA_PIN  PA13    // map ENCA pin to JTAG DIO pin
   #define LCD_ENCB_PIN  PA14    // map ENCB pin to JTAG CLK pin
 
@@ -224,8 +222,10 @@
 #endif
 
 // U disk support
-#define U_DISK_SUPPORT
-#define USE_USB_OTG_FS
+#ifndef U_DISK_SUPPORT
+  #define U_DISK_SUPPORT
+  #define USE_USB_OTG_FS
+#endif
 
 #if !defined(ST7920_EMULATOR) || defined(SPI3_PIN_SMART_USAGE)
   // Auto Power Off Detection pin

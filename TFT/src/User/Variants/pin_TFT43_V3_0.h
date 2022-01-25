@@ -27,7 +27,7 @@
   #define TFTLCD_DRIVER_SPEED 0x10     // SSD1963 needs slower speed
 #endif
 
-#ifndef SSD1963_LCD_PARA
+#ifndef SSD1963_LCD_PARA  // only for TFTLCD_DRIVER SSD1963
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY  12  // 12Mhz
 

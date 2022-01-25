@@ -1253,7 +1253,7 @@ void parseACK(void)
               #ifdef SERIAL_DEBUG_PORT
                 && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
               #endif
-              )
+             )
           {
             Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
@@ -1279,7 +1279,7 @@ void parseRcvGcode(void)
         #ifdef SERIAL_DEBUG_PORT
           && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
         #endif
-        )
+       )
     {
       while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
       {

@@ -3,7 +3,7 @@
 
 #include "variants.h"  // for uint8_t etc...
 
-#ifdef MKS_TFT35_V1_0  // IRON_MKS, added for MKS TFT 35 V1.0 support
+#ifdef MKS_TFT35_V1_0  // added for MKS TFT 35 V1.0 support
   #define ADDR_FLASH_SECTOR_0  ((uint32_t)0x08000000)  // Base @ of Sector 0, 16 Kbytes
   #define ADDR_FLASH_SECTOR_1  ((uint32_t)0x08004000)  // Base @ of Sector 1, 16 Kbytes
   #define ADDR_FLASH_SECTOR_2  ((uint32_t)0x08008000)  // Base @ of Sector 2, 16 Kbytes

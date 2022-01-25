@@ -51,10 +51,6 @@
   #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
-// Debug support (free pins for other functions)
-//#define DISABLE_JTAG   // free JTAG (PB3/PB4) for SPI3
-//#define DISABLE_DEBUG  // free all pins
-
 // LCD Backlight pins (adjust brightness with LED PWM)
 #ifndef LCD_LED_PIN
   #define LCD_LED_PIN           PD12
@@ -64,10 +60,12 @@
 
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
 // SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
-#define SERIAL_PORT   _USART2  // default USART port
-#define SERIAL_PORT_2 _USART1
-#define SERIAL_PORT_3 _USART3
-#define SERIAL_PORT_4 _UART4
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT   _USART2  // default USART port
+  #define SERIAL_PORT_2 _USART1
+  #define SERIAL_PORT_3 _USART3
+  #define SERIAL_PORT_4 _UART4
+#endif
 
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
@@ -132,7 +130,9 @@
 #endif
 
 // Buzzer PWM pin
-#define BUZZER_PIN PD13
+#ifndef BUZZER_PIN
+  #define BUZZER_PIN PD13
+#endif
 
 // LCD Encoder pins
 #define LCD_ENCA_PIN   PA8
@@ -159,15 +159,6 @@
   //#define FIL_RUNOUT_PIN_3 PB11  // extruder T3.            It's the same pin as USART3 RX
   //#define FIL_RUNOUT_PIN_4 PA0   // extruder T4.            It's the same pin as USART4 TX
   //#define FIL_RUNOUT_PIN_5 PA1   // extruder T5.            It's the same pin as USART4 RX
-#endif
-
-#ifndef LED_COLOR_PIN
-  #define LED_COLOR_PIN PC7
-  #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
-  #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
-#endif
-#ifndef NEOPIXEL_PIXELS
-  #define NEOPIXEL_PIXELS 2
 #endif
 
 #endif

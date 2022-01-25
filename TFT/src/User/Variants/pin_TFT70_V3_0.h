@@ -45,7 +45,7 @@
   #define TFTLCD_DRIVER_SPEED 0x10     // SSD1963 needs slower speed
 #endif
 
-#ifndef SSD1963_LCD_PARA
+#ifndef SSD1963_LCD_PARA  // only for TFTLCD_DRIVER SSD1963
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY  30   // 30Mhz
 
@@ -63,21 +63,21 @@
   #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
-// Debug support (free pins for other functions)
-//#define DISABLE_JTAG   // free JTAG (PB3/PB4) for SPI3
-//#define DISABLE_DEBUG  // free all pins
-
 // LCD Backlight pins (adjust brightness with LED PWM)
-#define LCD_LED_PIN           PD12
-#define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
-#define LCD_LED_PWM_CHANNEL   _TIM4_CH1
+#ifndef LCD_LED_PIN
+  #define LCD_LED_PIN           PD12
+  #define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
+  #define LCD_LED_PWM_CHANNEL   _TIM4_CH1
+#endif
 
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
 // SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
-#define SERIAL_PORT   _USART2  // default USART port
-#define SERIAL_PORT_2 _USART1
-#define SERIAL_PORT_3 _USART3
-#define SERIAL_PORT_4 _UART4
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT   _USART2  // default USART port
+  #define SERIAL_PORT_2 _USART1
+  #define SERIAL_PORT_3 _USART3
+  #define SERIAL_PORT_4 _UART4
+#endif
 
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
@@ -94,12 +94,14 @@
 
 // SD Card SDIO/SPI pins
 //#define SD_SDIO_SUPPORT
-#define SD_SPI_SUPPORT
-#ifdef SD_SPI_SUPPORT
-  #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 0      // 2 frequency division
-  #define SD_SPI        _SPI1
-  #define SD_CS_PIN     PA4
+#ifndef SD_SPI_SUPPORT
+  #define SD_SPI_SUPPORT
+  #ifdef SD_SPI_SUPPORT
+    #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
+    #define SD_HIGH_SPEED 0      // 2 frequency division
+    #define SD_SPI        _SPI1
+    #define SD_CS_PIN     PA4
+  #endif
 #endif
 
 // SD Card CD Detect pin
@@ -140,7 +142,9 @@
 #endif
 
 // Buzzer PWM pin
-#define BUZZER_PIN PD13
+#ifndef BUZZER_PIN
+  #define BUZZER_PIN PD13
+#endif
 
 // LCD Encoder pins
 #define LCD_ENCA_PIN   PA8
@@ -149,8 +153,10 @@
 #define LCD_ENC_EN_PIN PC6
 
 // U disk support
-#define U_DISK_SUPPORT
-#define USE_USB_OTG_FS
+#ifndef U_DISK_SUPPORT
+  #define U_DISK_SUPPORT
+  #define USE_USB_OTG_FS
+#endif
 
 // Auto Power Off Detection pin
 #ifndef PS_ON_PIN
@@ -163,9 +169,11 @@
 #endif
 
 // Knob LED Color pins
-#define LED_COLOR_PIN PC7
-#define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
-#define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
+#ifndef LED_COLOR_PIN
+  #define LED_COLOR_PIN PC7
+  #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
+  #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
+#endif
 
 // Neopixel LEDs number
 #ifndef NEOPIXEL_PIXELS

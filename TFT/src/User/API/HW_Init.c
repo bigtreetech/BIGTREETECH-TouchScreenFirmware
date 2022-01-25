@@ -1,7 +1,7 @@
 #include "HW_Init.h"
 #include "includes.h"
 
-#ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM support for MKS_TFT35_V1_0
+#ifdef I2C_EEPROM  // added I2C_EEPROM support for MKS_TFT35_V1_0
   #include "i2c_eeprom.h"
 #endif
 
@@ -52,7 +52,7 @@ void HW_Init(void)
   W25Qxx_Init();
   LCD_Init();
 
-  #ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM support for MKS_TFT35_V1_0
+  #ifdef I2C_EEPROM  // added I2C_EEPROM support for MKS_TFT35_V1_0
     i2C_Init_EEPROM();
   #endif
 
