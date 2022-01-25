@@ -60,38 +60,21 @@ void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
-bool storeCmd(const char* format, ...)
+bool storeCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return false;
 
-  char script[256];
-  va_list va;
-  va_start(va, format);
-  vsnprintf(script, 256, format, va);
-  va_end(va);  
-
-  uint8_t cmd_count = 0;
-  char* pChr_tmp = script;
-
-  while ((pChr_tmp = strchr(pChr_tmp, '\n')) != NULL)  // count the number of commands
-  {
-	  cmd_count++;
-	  pChr_tmp++;
-  }
-
-  // If there's not enough room for all the commands, do not send anything
-  // because there might be command groups that must remain so, it could
-  // result in errors or different outcome if one is sent without the other
-  if (infoCmd.count + cmd_count > CMD_QUEUE_SIZE)
+  if (isFullCmdQueue())
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
     return false;
   }
-  
-  if (cmd_count == 1)
-    commonStoreCmd(&infoCmd, format, va);
-  else
-    mustStoreScript(script);
+
+  va_list va;
+  va_start(va, format);
+  commonStoreCmd(&infoCmd, format, va);
+  va_end(va);
+
   return true;
 }
 
@@ -121,7 +104,7 @@ void mustStoreCmd(const char * format, ...)
 
 // Store Script cmd to infoCmd queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
-void mustStoreScript(const char* format, ...)
+void mustStoreScript(const char * format, ...)
 {
   if (strlen(format) == 0) return;
 
@@ -131,17 +114,21 @@ void mustStoreScript(const char* format, ...)
   vsnprintf(script, 256, format, va);
   va_end(va);
 
-  char* pCmd_begin = script;
-  char* pCmd_end = script;
+  char * p = script;
+  uint16_t i = 0;
   CMD cmd;
-
-  while ((pCmd_end = strchr(pCmd_begin, '\n')) != NULL)
+  for (;;)
   {
-    pCmd_end++;  // include the '\n' too
-    cmd[0] = '\0';
-    strncat(cmd, pCmd_begin, pCmd_end - pCmd_begin);
-    mustStoreCmd("%s", cmd);
-    pCmd_begin = pCmd_end;
+    char c = *p++;
+    if (!c) return;
+    cmd[i++] = c;
+
+    if (c == '\n')
+    {
+      cmd[i] = 0;
+      mustStoreCmd("%s", cmd);
+      i = 0;
+    }
   }
 }
 
@@ -216,6 +203,12 @@ static inline bool getCmd(void)
   cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
+}
+
+void updateCmd(const char * buf)
+{
+  strcat(cmd_ptr, buf);       // append buf to gcode
+  cmd_len = strlen(cmd_ptr);  // new length of gcode
 }
 
 // Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
@@ -705,6 +698,12 @@ void sendQueueCmd(void)
             {
               heatSyncUpdateSeconds(cmd_value());
             }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
+              updateCmd(buf);
+            }
           }
           break;
 
@@ -748,6 +747,12 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(i, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
+              updateCmd(buf);
               heatSetSendWaiting(i, false);
             }
           }
@@ -813,6 +818,12 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(BED, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
+              updateCmd(buf);
               heatSetSendWaiting(BED, false);
             }
           }
@@ -839,6 +850,12 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(CHAMBER, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
+              updateCmd(buf);
               heatSetSendWaiting(CHAMBER, false);
             }
           }
