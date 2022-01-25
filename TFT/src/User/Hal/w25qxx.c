@@ -11,7 +11,7 @@ const uint8_t cap_ID[14] = {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18
 const uint32_t flash_size[14] = {KB(64), KB(128), KB(256), KB(512), MB(1), MB(2), MB(4), MB(8), MB(16), MB(32), MB(8), MB(8), KB(256), KB(512)};
 
 //Chip Select
-void W25Qxx_SPI_CS_Set(u8 level)
+void W25Qxx_SPI_CS_Set(uint8_t level)
 {
   GPIO_SetLevel(W25Qxx_CS_PIN, level);
 }

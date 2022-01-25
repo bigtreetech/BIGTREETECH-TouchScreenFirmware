@@ -47,7 +47,9 @@
 
 // Debug disable, free pins for other function
 //#define DISABLE_JTAG   // free JTAG(PB3/PB4) for SPI3
-#define DISABLE_DEBUG  // free all pins
+// free all pins
+#define DISABLE_DEBUG() RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); \
+                        GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE)
 
 // LCD Backlight pin (PWM can adjust brightness)
 #define LCD_LED_PIN           PA8
