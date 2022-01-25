@@ -11,13 +11,13 @@ uint16_t LCD_RD_DATA(void)
   return ram;
 }
 
-void LCD_WriteReg(u8 LCD_Reg, u16 LCD_RegValue)
+void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
   LCD->LCD_RAM = LCD_RegValue;
 }
 
-u16 LCD_ReadReg(u8 LCD_Reg)
+uint16_t LCD_ReadReg(uint8_t LCD_Reg)
 {
   LCD_WR_REG(LCD_Reg);
   Delay_us(5);

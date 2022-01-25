@@ -2,7 +2,10 @@
 #define _PIN_TFT35_V3_0_H_  // modify to actual filename !!!
 
 // MCU type (STM32F10x, STM32F2xx, STM32F4xx)
-#include "stm32f2xx.h"
+#ifndef MCU_TYPE
+  #define MCU_TYPE
+  #include "stm32f2xx.h"
+#endif
 
 //#undef PORTRAIT_MODE  // comment this line in case the TFT variant supports Portrait Mode
 
@@ -53,9 +56,11 @@
 //#define DISABLE_DEBUG  // free all pins
 
 // LCD Backlight pins (adjust brightness with LED PWM)
-#define LCD_LED_PIN           PD12
-#define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
-#define LCD_LED_PWM_CHANNEL   _TIM4_CH1
+#ifndef LCD_LED_PIN
+  #define LCD_LED_PIN           PD12
+  #define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
+  #define LCD_LED_PWM_CHANNEL   _TIM4_CH1
+#endif
 
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
 // SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
@@ -79,12 +84,14 @@
 
 // SD Card SDIO/SPI pins
 //#define SD_SDIO_SUPPORT
-#define SD_SPI_SUPPORT
-#ifdef SD_SPI_SUPPORT
-  #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 0      // 2 frequency division
-  #define SD_SPI        _SPI1
-  #define SD_CS_PIN     PA4
+#ifndef SD_SPI_SUPPORT
+  #define SD_SPI_SUPPORT
+  #ifdef SD_SPI_SUPPORT
+    #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
+    #define SD_HIGH_SPEED 0      // 2 frequency division
+    #define SD_SPI        _SPI1
+    #define SD_CS_PIN     PA4
+  #endif
 #endif
 
 // SD Card CD Detect pin
@@ -134,8 +141,10 @@
 #define LCD_ENC_EN_PIN PC6
 
 // U disk support
-#define U_DISK_SUPPORT
-#define USE_USB_OTG_FS
+#ifndef U_DISK_SUPPORT
+  #define U_DISK_SUPPORT
+  #define USE_USB_OTG_FS
+#endif
 
 // Auto Power Off Detection pin
 #ifndef PS_ON_PIN
@@ -150,6 +159,15 @@
   //#define FIL_RUNOUT_PIN_3 PB11  // extruder T3.            It's the same pin as USART3 RX
   //#define FIL_RUNOUT_PIN_4 PA0   // extruder T4.            It's the same pin as USART4 TX
   //#define FIL_RUNOUT_PIN_5 PA1   // extruder T5.            It's the same pin as USART4 RX
+#endif
+
+#ifndef LED_COLOR_PIN
+  #define LED_COLOR_PIN PC7
+  #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
+  #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
+#endif
+#ifndef NEOPIXEL_PIXELS
+  #define NEOPIXEL_PIXELS 2
 #endif
 
 #endif

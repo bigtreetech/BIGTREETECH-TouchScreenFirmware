@@ -1,5 +1,5 @@
 #include "FlashStore.h"
-#include "STM32_Flash.h"
+#include "HAL_Flash.h"
 #include <string.h>
 
 #ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
@@ -54,7 +54,7 @@ void readStoredPara(void)
 #ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
   EEPROM_FlashRead(data, PARA_SIZE);
 #else
-  STM32_FlashRead(data, PARA_SIZE);
+  HAL_FlashRead(data, PARA_SIZE);
 #endif
 
   sign = byteToWord(data + (index += 4), 4);
@@ -96,7 +96,7 @@ void storePara(void)
 #ifdef I2C_EEPROM  // IRON_MKS, added I2C_EEPROM suppport for MKS_TFT35_V1_0
   EEPROM_FlashWrite(data, PARA_SIZE);  // IRON, store settings in I2C_EEPROM
 #else
-  STM32_FlashWrite(data, PARA_SIZE);
+  HAL_FlashWrite(data, PARA_SIZE);
 #endif
 }
 

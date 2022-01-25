@@ -21,6 +21,15 @@ volatile uint32_t toggles = 0;
 
 void TIM3_Config(void)
 {
+#ifdef GD32F2XX
+  nvic_irq_enable(TIMER2_IRQn, 1U, 0U);
+
+  rcu_periph_clock_enable(RCU_TIMER2);
+  TIMER_CTL0(TIMER2)     &= ~TIMER_CTL0_CEN;
+  TIMER_DMAINTEN(TIMER2) |= TIMER_DMAINTEN_UPIE;
+  TIMER_INTF(TIMER2)     &= ~TIMER_INTF_UPIF;
+  TIMER_CAR(TIMER2)      = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
+#else
   NVIC_InitTypeDef NVIC_InitStructure;
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
@@ -34,8 +43,27 @@ void TIM3_Config(void)
   TIM3->DIER |= TIM_DIER_UIE;
   TIM3->SR &= ~TIM_SR_UIF;
   TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 20hz to 1Mhz
+#endif
 }
 
+#ifdef GD32F2XX
+void TIMER2_IRQHandler(void)
+{
+  if ((TIMER_INTF(TIMER2) & TIMER_INTF_UPIF) != 0)  // update interrupt flag
+  {
+    if (toggles != 0)
+    {
+      toggles--;
+      GPIO_ToggleLevel(BUZZER_PIN);
+    }
+    else
+    {
+      TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  // stop timer
+    }
+    TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;  // clear interrupt flag
+  }
+}
+#else
 void TIM3_IRQHandler(void)
 {
   if ((TIM3->SR & TIM_SR_UIF) != 0)  // update interrupt flag
@@ -52,6 +80,7 @@ void TIM3_IRQHandler(void)
     TIM3->SR &= ~TIM_SR_UIF;  // clear interrupt flag
   }
 }
+#endif
 
 void Buzzer_Config(void)
 {
@@ -79,7 +108,17 @@ void Buzzer_TurnOn(const uint16_t frequency, const uint16_t duration)
 void tone(const uint16_t frequency, const uint16_t duration)
 {
   if (frequency == 0 || duration == 0) return;
+#ifdef GD32F2XX
+  nvic_irq_disable(TIMER2_IRQn);
+  toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
+  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  //disable timer2
+  TIMER_CNT(TIMER2) = 0;
+  TIMER_PSC(TIMER2) = (1000000 / (2 * frequency)) - 1;
+  TIMER_CTL0(TIMER2) |= TIMER_CTL0_CEN;
+
+  nvic_irq_enable(TIMER2_IRQn, 1, 0);
+#else
   NVIC_DisableIRQ(TIM3_IRQn);
   toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
@@ -88,7 +127,9 @@ void tone(const uint16_t frequency, const uint16_t duration)
   TIM3->PSC = (1000000 / (2 * frequency)) - 1;
   TIM3->CR1 |= TIM_CR1_CEN;
 
+
   NVIC_EnableIRQ(TIM3_IRQn);
+#endif
 }
 
 void loopBuzzer(void)
@@ -107,7 +148,11 @@ void loopBuzzer(void)
   else if (OS_GetTimeMs() > buzzerEndTime && toggles == 0)
   {
     buzzerEndTime = 0;
+  #ifdef GD32F2XX
+    TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;
+  #else
     TIM3->CR1 &= ~TIM_CR1_CEN;  // stop timer (for safety)
+  #endif
     GPIO_SetLevel(BUZZER_PIN, BUZZER_STOP_LEVEL);
   }
 }

@@ -1,4 +1,4 @@
-#include "STM32_Flash.h"
+#include "HAL_Flash.h"
 #include "my_misc.h"
 
 /*
@@ -85,18 +85,18 @@ static uint32_t GetSector(uint32_t Address)
 
 #endif  // MKS_TFT35_V1_0
 
-void STM32_FlashRead(u8 *data, u32 len)
+void HAL_FlashRead(uint8_t *data, uint32_t len)
 {
-  u32 i = 0;
+  uint32_t i = 0;
   for (i = 0; i < len; i++)
   {
-    data[i] = *(vu8*)(SIGN_ADDRESS + i);
+    data[i] = *(volatile uint8_t*)(SIGN_ADDRESS + i);
   }
 }
 
-void STM32_FlashWrite(u8 *data, u32 len)
+void HAL_FlashWrite(uint8_t *data, uint32_t len)
 {
-  u32 i = 0;
+  uint32_t i = 0;
   FLASH_Unlock();
 
 #ifdef MKS_TFT35_V1_0  // IRON_MKS, added for MKS_TFT35_V1_0 support

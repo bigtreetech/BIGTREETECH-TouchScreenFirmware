@@ -1,7 +1,7 @@
-#ifndef _STM32_FLASH_H_
-#define _STM32_FLASH_H_
+#ifndef _HAL_FLASH_H_
+#define _HAL_FLASH_H_
 
-#include "variants.h"  // for u8 etc...
+#include "variants.h"  // for uint8_t etc...
 
 #ifdef MKS_TFT35_V1_0  // IRON_MKS, added for MKS TFT 35 V1.0 support
   #define ADDR_FLASH_SECTOR_0  ((uint32_t)0x08000000)  // Base @ of Sector 0, 16 Kbytes
@@ -30,7 +30,7 @@
   #define ADDR_FLASH_SECTOR_23 ((uint32_t)0x081E0000)  // Base @ of Sector 11, 128 Kbytes
 #endif
 
-void STM32_FlashRead(u8 *data, u32 len);
-void STM32_FlashWrite(u8 *data, u32 len);
+void HAL_FlashRead(uint8_t *data, uint32_t len);
+void HAL_FlashWrite(uint8_t *data, uint32_t len);
 
 #endif

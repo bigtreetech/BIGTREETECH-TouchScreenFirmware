@@ -10,8 +10,8 @@ GPIO_TypeDef* const GPIO_Port[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPI
 
 void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
 {
-  u16 port = GPIO_GET_PORT(io);
-  u16 pin = GPIO_GET_PIN(io);
+  uint16_t port = GPIO_GET_PORT(io);
+  uint16_t pin = GPIO_GET_PIN(io);
 
   RCC->AHB1ENR |= 1 << port;                                               // Enable GPIO Clock
 
@@ -37,8 +37,8 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
 
 void GPIO_SetLevel(uint16_t io, uint8_t level)
 {
-  u16 port = GPIO_GET_PORT(io);
-  u16 pin = GPIO_GET_PIN(io);
+  uint16_t port = GPIO_GET_PORT(io);
+  uint16_t pin = GPIO_GET_PIN(io);
 
   if (level)
     GPIO_Port[port]->BSRRL = 1 << pin;
@@ -48,16 +48,16 @@ void GPIO_SetLevel(uint16_t io, uint8_t level)
 
 void GPIO_ToggleLevel(uint16_t io)
 {
-  u16 port = GPIO_GET_PORT(io);
-  u16 pin = GPIO_GET_PIN(io);
+  uint16_t port = GPIO_GET_PORT(io);
+  uint16_t pin = GPIO_GET_PIN(io);
 
   GPIO_Port[port]->ODR ^= (1 << pin);
 }
 
 uint8_t GPIO_GetLevel(uint16_t io)
 {
-  u16 port = GPIO_GET_PORT(io);
-  u16 pin = GPIO_GET_PIN(io);
+  uint16_t port = GPIO_GET_PORT(io);
+  uint16_t pin = GPIO_GET_PIN(io);
 
   if ((GPIO_Port[port]->IDR & (1 << pin)) != 0)
   {

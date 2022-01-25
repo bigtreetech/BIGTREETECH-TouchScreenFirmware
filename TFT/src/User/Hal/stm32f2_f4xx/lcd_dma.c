@@ -40,8 +40,8 @@ void LCD_DMA_Config(void)
 {
   RCC->AHB1ENR |= W25QXX_SPI_DMA_RCC_AHB;                    // Turn on the DMA clock
   Delay_ms(5);                                               // Wait for the DMA clock to stabilize
-  W25QXX_SPI_DMA_STREAM->PAR = (u32)&W25QXX_SPI_NUM->DR;     // The peripheral address is: SPI-> DR
-  W25QXX_SPI_DMA_STREAM->M0AR = (u32)&LCD->LCD_RAM;          // The target address is LCD_RAM
+  W25QXX_SPI_DMA_STREAM->PAR = (uint32_t)&W25QXX_SPI_NUM->DR;     // The peripheral address is: SPI-> DR
+  W25QXX_SPI_DMA_STREAM->M0AR = (uint32_t)&LCD->LCD_RAM;          // The target address is LCD_RAM
   //W25QXX_SPI_DMA_STREAM->M1AR = 0;                         // (used in case of Double buffer mode)
   //W25QXX_SPI_DMA_CHANNEL->CMAR =
   W25QXX_SPI_DMA_STREAM->NDTR = 0;                           // DMA, the amount of data transferred, temporarily set to 0
@@ -59,15 +59,15 @@ void LCD_DMA_Config(void)
 
 // start DMA transfer from SPI->DR to FSMC
 // the max bytes of one frame is LCD_DMA_MAX_TRANS 65535
-void lcd_frame_segment_display(u16 size, u32 addr)
+void lcd_frame_segment_display(uint16_t size, uint32_t addr)
 {
   W25QXX_SPI_DMA_STREAM->NDTR = size;
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_FAST_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((u8)((addr)>>16));
-  W25Qxx_SPI_Read_Write_Byte((u8)((addr)>>8));
-  W25Qxx_SPI_Read_Write_Byte((u8)addr);
+  W25Qxx_SPI_Read_Write_Byte((uint8_t)((addr)>>16));
+  W25Qxx_SPI_Read_Write_Byte((uint8_t)((addr)>>8));
+  W25Qxx_SPI_Read_Write_Byte((uint8_t)addr);
   W25Qxx_SPI_Read_Write_Byte(0XFF);  // 8 dummy clock
 
   //set SPI to 16bit DMA rx only mode
@@ -80,18 +80,18 @@ void lcd_frame_segment_display(u16 size, u32 addr)
   W25QXX_SPI_NUM->CR1 |= 1<<6;                  // enable SPI
 
   while (W25QXX_SPI_DMA_READING());             // wait for rx complete
-  W25QXX_SPI_DMA_STREAM->CR &= (u32)(~(1<<0));
+  W25QXX_SPI_DMA_STREAM->CR &= (uint32_t)(~(1<<0));
   W25QXX_SPI_DMA_CLEAR_FLAG();                  // clear ISR for rx complete
   W25Qxx_SPI_CS_Set(1);
 
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);  // Reset SPI clock and config again
 }
 
-void lcd_frame_display(u16 sx,u16 sy,u16 w,u16 h, u32 addr)
+void lcd_frame_display(uint16_t sx,uint16_t sy,uint16_t w,uint16_t h, uint32_t addr)
 {
-  u32 cur=0;
-  u32 segmentSize;
-  u32 totalSize = w*h*(2-LCD_DATA_16BIT);
+  uint32_t cur=0;
+  uint32_t segmentSize;
+  uint32_t totalSize = w*h*(2-LCD_DATA_16BIT);
 
   LCD_SetWindow(sx,sy,sx+w-1,sy+h-1);
 
