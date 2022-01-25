@@ -32,7 +32,7 @@ float babystepResetValue(void)
   if (babystep_value == BABYSTEP_DEFAULT_VALUE)  // if already default value, nothing to do
     return babystep_value;
 
-  char * babtStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
+  char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
   int step_count;
   float last_unit;
   float processed_baby_step = 0.0f;
@@ -45,14 +45,14 @@ float babystepResetValue(void)
 
   for (; step_count > 0; step_count--)
   {
-    mustStoreCmd(babtStepCmd, -(BABYSTEP_MAX_STEP * neg));
+    mustStoreCmd(babyStepCmd, -(BABYSTEP_MAX_STEP * neg));
     processed_baby_step += BABYSTEP_MAX_STEP;
   }
 
   last_unit = (babystep_value * neg) - processed_baby_step;
   if (last_unit > 0.0f)
   {
-    mustStoreCmd(babtStepCmd, -(last_unit * neg));
+    mustStoreCmd(babyStepCmd, -(last_unit * neg));
     processed_baby_step += last_unit;
   }
 
@@ -64,7 +64,7 @@ float babystepResetValue(void)
 // Update babystep value
 float babystepUpdateValue(float unit, int8_t direction)
 {
-  char * babtStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
+  char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
   float diff;
 
   if (direction < 0)
@@ -85,7 +85,7 @@ float babystepUpdateValue(float unit, int8_t direction)
   unit = ((diff > unit) ? unit : diff) * direction;
   babystep_value += unit;
 
-  mustStoreCmd(babtStepCmd, unit);
+  mustStoreCmd(babyStepCmd, unit);
 
   return babystep_value;
 }

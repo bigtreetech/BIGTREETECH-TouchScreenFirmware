@@ -318,18 +318,19 @@ const GUI_RECT rect_of_keyPS_end[] = {
   {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+PICON_HEIGHT*1+PICON_SPACE_Y*1,
    START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0+PICON_SM_WIDTH*1, 1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y+PICON_HEIGHT*2+PICON_SPACE_Y*1},
 
-  // 3 bottom icons area
+  // 1st bottom icon
   {0*ICON_WIDTH+0*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  1*ICON_WIDTH+0*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
-  {0, 0, 0, 0},
-  {0, 0, 0, 0},
   // 1 side icon next to layer and speed area
-  {2*ICON_WIDTH+2*SPACE_X+START_X,  1*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+1*SPACE_Y+ICON_START_Y},
+  {0, 0, 0, 0},
+  // 2nd and 3rd icon bottom area
+  {0, 0, 0, 0},
+  {2*ICON_WIDTH+2*SPACE_X+START_X,  2*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y},
 
   // title bar area
   {0, 0, LCD_WIDTH, ICON_START_Y},
 
   // infobox
-  {1*SPACE_X_PER_ICON,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y,  3*ICON_WIDTH+2*SPACE_X+START_X,  3*ICON_HEIGHT+2*SPACE_Y+ICON_START_Y}
+  {0, 0, 0, 0}
 #else  // Landscape Mode
   // hotend area DEFAULT LANDSCAPE GUI
   {START_X+PICON_LG_WIDTH*0+PICON_SPACE_X*0,                  PICON_START_Y+PICON_HEIGHT*0+PICON_SPACE_Y*0,
@@ -1075,9 +1076,9 @@ KEY_VALUES menuKeyGetValue(void)
           {
             tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keySS), rect_of_keySS);
           }
-          else if(MENU_IS(menuPrinting))
+          else if (MENU_IS(menuPrinting))
           {
-            if(isPrinting() || infoHost.printing == true)
+            if (isPrinting() || infoHost.printing == true)
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
