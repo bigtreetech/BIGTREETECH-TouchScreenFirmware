@@ -491,6 +491,8 @@ void printAbort(void)
   if (loopDetected) return;
   if (!infoPrinting.printing) return;
 
+  loopDetected = true;
+
   switch (infoFile.source)
   {
     case REMOTE_HOST:  // nothing to do
