@@ -340,7 +340,7 @@ void sendQueueCmd(void)
                 if (cmd_start_with(cmd_ptr, "M20 SD:"))
                   infoFile.source = TFT_SD;
                 else
-                  infoFile.source = TFT_UDISK;
+                  infoFile.source = TFT_USB_DISK;
 
                 strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
                 // strip out any checksum that might be in the string
@@ -383,7 +383,7 @@ void sendQueueCmd(void)
                 if (cmd_start_with(cmd_ptr, "M23 SD:"))
                   infoFile.source = TFT_SD;
                 else
-                  infoFile.source = TFT_UDISK;
+                  infoFile.source = TFT_USB_DISK;
 
                 resetInfoFile();
                 strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
@@ -429,7 +429,7 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              if ((infoFile.source == TFT_UDISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
+              if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -522,7 +522,7 @@ void sendQueueCmd(void)
                 if (cmd_start_with(cmd_ptr, "M30 SD:"))
                   infoFile.source = TFT_SD;
                 else
-                  infoFile.source = TFT_UDISK;
+                  infoFile.source = TFT_USB_DISK;
                 TCHAR filepath[MAX_PATH_LEN];
                 strncpy(filepath, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
                 // strip out any checksum that might be in the string

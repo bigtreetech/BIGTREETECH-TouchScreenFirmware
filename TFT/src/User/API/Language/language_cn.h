@@ -160,15 +160,16 @@
     #define STRING_PROCESS_COMPLETED      "处理已完成!"
     #define STRING_PROCESS_ABORTED        "处理已被中断!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "读TFT SD卡出错!"
     #define STRING_TFTSD_INSERTED         "SD卡已插入!"
     #define STRING_TFTSD_REMOVED          "SD卡已拔出!"
-    #define STRING_U_DISK                 "U盘"
-    #define STRING_READ_U_DISK_ERROR      "读U盘出错!"
-    #define STRING_U_DISK_INSERTED        "U盘已插入!"
-    #define STRING_U_DISK_REMOVED         "U盘已拔出!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "U盘"
+    #define STRING_READ_USB_DISK_ERROR   "读U盘出错!"
+    #define STRING_USB_DISK_INSERTED      "U盘已插入!"
+    #define STRING_USB_DISK_REMOVED       "U盘已拔出!"
     #define STRING_ONBOARDSD              "板载SD"
     #define STRING_READ_ONBOARDSD_ERROR   "读板载SD卡出错!"
     #define STRING_FILAMENT_RUNOUT        "耗材已用尽,请更换耗材!"

@@ -171,7 +171,7 @@ void menuBeforePrinting(void)
         break;
       }
 
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:  // GCode from file on TFT SD
       {
         FIL file;
