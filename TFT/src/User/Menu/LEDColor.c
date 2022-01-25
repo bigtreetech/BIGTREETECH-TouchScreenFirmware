@@ -153,9 +153,9 @@ uint8_t ledIndex = 0;
 void ledSendValue(const LED_VECT * led)
 {
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M150 R%d U%d B%d W%d P%d I%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
+    storeCmd("M150 R%u U%u B%u W%u P%u I%u\n", (*led)[0], (*led)[1], (*led)[2], (*led)[3], (*led)[4], (*led)[5]);
   else
-    storeCmd("M150 X2 R%d U%d B%d P%d\n", (*led)[0], (*led)[1], (*led)[2], (*led)[4]);
+    storeCmd("M150 X2 R%u U%u B%u P%u\n", (*led)[0], (*led)[1], (*led)[2], (*led)[4]);
 }
 
 void ledGetValue(LED_VECT * led)
@@ -436,12 +436,14 @@ void menuLEDColorCustom(void)
       {
         ledIndex = ledGetControlIndex(key_num);  // get control index
 
+        if (newIndex != ledIndex)  // needed in case the value will be also changed (increased or decreased)
+          newValue = curValue = ledGetComponentValue(ledIndex);
+
         switch (ledGetControlSubIndex(key_num))  // get control sub index
         {
           case 1:
           {
             curValue = ledEditComponentValue(ledIndex);
-            sendingNeeded = true;
 
             ledDrawMenu();
             break;
@@ -473,12 +475,11 @@ void menuLEDColorCustom(void)
       ledDrawControl(ledIndex, true, true, false);   // get focus and draw LED component value
 
       newIndex = ledIndex;
-      newValue = curValue = ledGetComponentValue(newIndex);  // always load the value for the new index
     }
 
     if (newValue != curValue)
     {
-      ledDrawControl(ledIndex, newIndex == ledIndex, false, false);  // draw changed LED component value
+      ledDrawControl(ledIndex, true, false, false);  // draw changed LED component value
       drawStandardValue(&ledColorRect, VALUE_NONE, NULL, FONT_SIZE_LARGE, LC_KB_FONT_COLOR, ledGetRGBColor(&ledValue), 3, true);  // draw RGB color
 
       newValue = curValue;

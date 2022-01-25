@@ -8,13 +8,13 @@
 _SW_SPI xpt2046;
 
 //Chip Select  //Chip Select
-void XPT2046_CS_Set(u8 level)
+void XPT2046_CS_Set(uint8_t level)
 {
   SW_SPI_CS_Set(&xpt2046, level);
 }
 
 //Read and write functions  //Read and write functions
-u8 XPT2046_ReadWriteByte(u8 TxData)
+uint8_t XPT2046_ReadWriteByte(uint8_t TxData)
 {
   return SW_SPI_Read_Write(&xpt2046, TxData);
 }
@@ -35,14 +35,14 @@ void XPT2046_Init(void)
 }
 
 //Reading pen interrupt  //Reading pen interrupt
-u8 XPT2046_Read_Pen(void)
+uint8_t XPT2046_Read_Pen(void)
 {
   return GPIO_GetLevel(XPT2046_TPEN);
 }
 /******************************************************************************************************************/
 
 //Read the converted AD value of XPT2046  //Read the converted AD value of XPT2046
-uint16_t XPT2046_Read_AD(u8 CMD)
+uint16_t XPT2046_Read_AD(uint8_t CMD)
 {
   uint16_t ADNum;
   XPT2046_CS_Set(0);
@@ -59,7 +59,7 @@ uint16_t XPT2046_Read_AD(u8 CMD)
 #define READ_TIMES 5  //Read times  //Read times
 #define LOST_VAL   1  //Drop value  //Drop value
 
-uint16_t XPT2046_Average_AD(u8 CMD)
+uint16_t XPT2046_Average_AD(uint8_t CMD)
 {
   uint16_t i, j;
   uint16_t buf[READ_TIMES];
@@ -86,7 +86,7 @@ uint16_t XPT2046_Average_AD(u8 CMD)
 
 #define ERR_RANGE 50  //Tolerance scope
 
-uint16_t XPT2046_Repeated_Compare_AD(u8 CMD)
+uint16_t XPT2046_Repeated_Compare_AD(uint8_t CMD)
 {
   uint16_t ad1, ad2;
   ad1 = XPT2046_Average_AD(CMD);

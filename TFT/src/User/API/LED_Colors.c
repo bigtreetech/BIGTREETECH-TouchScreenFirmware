@@ -35,9 +35,9 @@ void LED_SetColor(uint8_t r, uint8_t g, uint8_t b, bool skipPrinterLed)
   if (!skipPrinterLed)
   {
     if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      storeCmd("M150 R%i U%i B%i P255\n", r, g, b);
+      storeCmd("M150 R%u U%u B%u P255\n", r, g, b);
     else
-      storeCmd("M150 X2 R%i U%i B%i P255\n", r, g, b);
+      storeCmd("M150 X2 R%u U%u B%u P255\n", r, g, b);
   }
 
   #ifdef LED_COLOR_PIN

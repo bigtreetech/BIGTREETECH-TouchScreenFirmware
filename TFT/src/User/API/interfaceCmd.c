@@ -159,7 +159,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 // This function is used only to restore the printing status after a power failed.
 void mustStoreCacheCmd(const char * format, ...)
 {
-  if (isFullCmdQueue())
+  if (infoCacheCmd.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, STATUS_BUSY);
   }
@@ -171,7 +171,7 @@ void mustStoreCacheCmd(const char * format, ...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(&infoCmd, format, va);
+  commonStoreCmd(&infoCacheCmd, format, va);
   va_end(va);
 }
 

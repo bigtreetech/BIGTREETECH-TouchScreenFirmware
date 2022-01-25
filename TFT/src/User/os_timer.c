@@ -5,6 +5,16 @@ volatile uint32_t os_counter = 0;
 
 void OS_TimerInitMs(void)
 {
+#ifdef GD32F2XX
+  nvic_irq_enable(TIMER6_IRQn, 2U, 0U);
+
+  rcu_periph_clock_enable(RCU_TIMER6);
+  TIMER_CAR(TIMER6) = 1000 - 1;
+  TIMER_PSC(TIMER6) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
+  TIMER_INTF(TIMER6) = (uint16_t)~(1<<0);
+  TIMER_DMAINTEN(TIMER6) |= 1<<0;
+  TIMER_CTL0(TIMER6) |= 0x01;
+#else
   NVIC_InitTypeDef NVIC_InitStructure;
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;
@@ -19,8 +29,29 @@ void OS_TimerInitMs(void)
   TIM7->SR = (uint16_t)~(1<<0);
   TIM7->DIER |= 1<<0;
   TIM7->CR1 |= 0x01;
+#endif
 }
 
+#ifdef GD32F2XX
+void TIMER6_IRQHandler(void)
+{
+  if ((TIMER_INTF(TIMER6) & 0x01) != 0)
+  { // update interrupt flag
+    TIMER_INTF(TIMER6) &= (uint16_t)~(1<<0);  // clear interrupt flag
+
+    os_counter++;
+
+    setPrintTime(os_counter);
+
+    loopTouchScreen();
+
+    if (os_counter == (uint32_t)(~0))
+    {
+      os_counter = 0;
+    }
+  }
+}
+#else
 void TIM7_IRQHandler(void)
 {
   if ((TIM7->SR & 0x01) != 0)
@@ -39,6 +70,7 @@ void TIM7_IRQHandler(void)
     }
   }
 }
+#endif
 
 // 1ms
 uint32_t OS_GetTimeMs(void)

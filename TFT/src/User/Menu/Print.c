@@ -101,8 +101,8 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
   if (index < infoFile.folderCount)  // folder
   {
     item->icon = CHARICON_FOLDER;
-    item->titlelabel.index = LABEL_DYNAMIC;
     item->itemType = LIST_LABEL;
+    item->titlelabel.index = LABEL_DYNAMIC;
     setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file

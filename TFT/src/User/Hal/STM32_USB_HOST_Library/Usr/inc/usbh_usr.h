@@ -75,6 +75,9 @@ void USBH_USR_DeviceNotSupported(void);
 void USBH_USR_UnrecoveredError(void);
 int USBH_USR_MSC_Application(void);
 
+void USB_Init(void);
+void USB_LoopProcess(void);
+uint8_t USB_IsDeviceConnected(void);
 uint8_t USBH_USR_Inserted(void);
 uint8_t USBH_UDISK_Status(void);
 uint8_t USBH_UDISK_Read(uint8_t* buf, uint32_t sector, uint32_t cnt);

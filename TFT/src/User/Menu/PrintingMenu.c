@@ -627,7 +627,7 @@ void menuPrinting(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,              LABEL_BABYSTEP},
+      {ICON_NULL,                    LABEL_BABYSTEP},
       {ICON_MORE,                    LABEL_MORE},
       {ICON_STOP,                    LABEL_STOP},
     }
@@ -673,10 +673,10 @@ void menuPrinting(void)
   menuDrawPage(&printingItems);
   printingDrawPage();
 
-  if (lastPrinting == false)
-  {
+  #ifndef PORTRAIT_MODE
+    if (lastPrinting == false)
       drawPrintInfo();
-  }
+  #endif
 
   while (MENU_IS(menuPrinting))
   {
@@ -801,6 +801,12 @@ void menuPrinting(void)
     if (lastPrinting != isPrinting())
     {
       lastPrinting = isPrinting();
+
+      #ifdef PORTRAIT_MODE
+        if (lastPrinting == false)
+          printInfoPopup();
+      #endif
+
       return;  // It will restart this interface if directly return this function without modify the value of infoMenu
     }
 
@@ -829,7 +835,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_4:
-        layerDisplayType ++;  // trigger cleaning previous values
+        layerDisplayType++;  // trigger cleaning previous values
         if (layerDisplayType != CLEAN_LAYER_HEIGHT)
         {
           reDrawPrintingValue(ICON_POS_Z, PRINT_TOP_ROW);
@@ -849,7 +855,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_6:
-        if (isPrinting())
+        if (lastPrinting == true)  // if printing
         { // Pause button
           if (getHostDialog() || isRemoteHostPrinting())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
@@ -875,7 +881,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_9:
-        if (isPrinting())
+        if (lastPrinting == true)  // if printing
         {
           if (isRemoteHostPrinting())
           {
