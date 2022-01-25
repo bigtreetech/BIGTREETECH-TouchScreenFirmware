@@ -246,18 +246,17 @@ bool inLimit(int val, int min, int max)
 // check if config keyword exits in the buffer line
 bool key_seen(const char * keyStr)
 {
-  uint16_t str_len = strlen(keyStr);
-  char* pStr_tmp;
-  
-  if (str_len > strlen(cur_line))  // if keyStr is longer than current config line, no match can be found
-    return false;
-
-  if ((pStr_tmp = strstr(cur_line, keyStr)) != NULL)
+  uint16_t i;
+  for (c_index = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != 0; c_index++)
   {
-    c_index = pStr_tmp - cur_line + str_len;
-    return true;
+    for (i = 0; (c_index + i) < LINE_MAX_CHAR && keyStr[i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
+    {}
+    if (keyStr[i] == 0)
+    {
+      c_index += i;
+      return true;
+    }
   }
-
   return false;
 }
 

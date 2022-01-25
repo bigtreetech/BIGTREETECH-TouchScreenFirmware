@@ -134,59 +134,42 @@ bool IsRootDir(void)
 // check if filename provides a supported filename extension
 char * isSupportedFile(char * filename)
 {
-  char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
+  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
 
-  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
-  {
-    extPos = NULL;
-  }
+  if (extPos == NULL)
+    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
 
   return extPos;
-}
-/**
-  * @brief  Temporarily remove extension 
-  * @param  filename: targeted filename
-  * @retval pointer to the resulting name
-  */
-char * hideExtension(char * filename)
-{
-  char * extPos = isSupportedFile(filename);
-
-  if (extPos != NULL && filename[strlen(filename) + 1] == 0)  // protect against hiding extension if already hidden (ex. Letter.g.gcode)
-  {
-    filename[extPos - filename] = 0;  // temporarily hide filename extension
-  }
-  
-  return filename;
-}
-
-/**
-  * @brief  Restore the temprarily hidden extension 
-  * @param  filename: targeted filename
-  * @retval pointer to the resulting name
-  */
-char * restoreExtension(char * filename)
-{
-  if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. if 0, no filename extension was previously hidden
-  {
-    filename[strlen(filename)] = '.';       // restore filename extension
-  }
-
-  return filename;
 }
 
 char * hideFileExtension(uint8_t index)
 {
   char * filename = infoFile.file[index];
+  char * extPos;
 
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    hideExtension(filename);
+  {
+    extPos = isSupportedFile(filename);
+
+    // if filename provides a supported filename extension then 
+    // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+    if (extPos != NULL && filename[strlen(filename) + 1] == 0)
+      filename[extPos - filename] = 0;  // temporary hide filename extension
+  }
 
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
   {
     filename = infoFile.longFile[index];
+
     if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-      hideExtension(filename);
+    {
+      extPos = isSupportedFile(filename);
+
+      // if filename provides a supported filename extension then 
+      // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+      if (extPos != NULL && filename[strlen(filename) + 1] == 0)
+        filename[extPos - filename] = 0;  // temporary hide filename extension
+    }
   }
 
   return filename;
@@ -197,13 +180,20 @@ char * restoreFileExtension(uint8_t index)
   char * filename = infoFile.file[index];
 
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    restoreExtension(filename);
+  {
+    if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+      filename[strlen(filename)] = '.';       // restore filename extension
+  }
 
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
   {
     filename = infoFile.longFile[index];
+
     if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-      restoreExtension(filename);
+    {
+      if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+        filename[strlen(filename)] = '.';       // restore filename extension
+    }
   }
 
   return filename;

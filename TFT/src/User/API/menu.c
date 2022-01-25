@@ -3,8 +3,6 @@
 #include "ListItem.h"
 #include "Notification.h"
 
-#define STATUS_BAR_REFRESH_TIME 2000 // refresh time in ms
-
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE
   // exhibitRect is 2 ICON Space in the Lowest Row and 2 Center column.
@@ -667,7 +665,8 @@ void reminderMessage(int16_t inf, SYS_STATUS status)
 
   reminder.inf = inf;
   reminder.status = status;
-  reminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
+  reminder.time = OS_GetTimeMs() + 2000;  // 2 seconds
+
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
     GUI_SetColor(infoSettings.reminder_color);
@@ -685,7 +684,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
   volumeReminder.inf = inf;
   volumeReminder.status = status;
-  volumeReminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
+  volumeReminder.time = OS_GetTimeMs() + 2000;
 
   if (menuType != MENU_TYPE_FULLSCREEN)
   {
@@ -705,7 +704,7 @@ void busyIndicator(SYS_STATUS status)
     GUI_SetColor(infoSettings.font_color);
   }
   busySign.status = status;
-  busySign.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
+  busySign.time = OS_GetTimeMs() + 2000;
 }
 
 void loopReminderClear(void)
@@ -811,16 +810,7 @@ void menuDrawTitle(const uint8_t *content)
   GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    if (MENU_IS(menuPrinting) && infoSettings.filename_extension == 0)
-    { // hide file extension in printing menu title if needed
-      hideExtension((char *)content);
-      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-      restoreExtension((char *)content);
-    }
-    else
-    {
-      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-    }
+    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
     start_x += GUI_StrPixelWidth(content);
     if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
   }
@@ -841,7 +831,8 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
+    if (curListItems->title.index < LABEL_NULL)
+      menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
@@ -893,11 +884,11 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  menuDrawTitle(labelGetAddress(&menuItems->title));
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
-    menuDrawItem(&curMenuItems->items[i], i);
+    menuDrawItem(&menuItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 

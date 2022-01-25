@@ -78,7 +78,6 @@ void menuFan(void)
             fanSetSpeed(fan_index, val);
         }
 
-        lastFan.set = val;  // avoid unnecessary redraw of values
         fanReDraw(fan_index, false);
         break;
       }
@@ -99,25 +98,24 @@ void menuFan(void)
         {
           do
           {
-            fan_index = (fan_index + 1) % MAX_FAN_COUNT;  // switch between fans
+            fan_index = (fan_index + 1) % MAX_FAN_COUNT;
           } while (!fanIsValid(fan_index));
 
-          fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));  // set initial desired speed to actual speed
-          lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};   // avoid unnecessary redraw of values
           fanReDraw(fan_index, false);
         }
         else
         {
-          fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // fan at half speed
+          fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // 50%
+          fanReDraw(fan_index, true);
         }
         break;
 
       case KEY_ICON_5:
-        fanSetSpeed(fan_index, infoSettings.fan_max[fan_index]);  // fan at maximum speed
+        fanSetSpeed(fan_index, infoSettings.fan_max[fan_index]);
         break;
 
       case KEY_ICON_6:
-        fanSetSpeed(fan_index, 0);  // stop fan
+        fanSetSpeed(fan_index, 0);
         break;
 
       case KEY_ICON_7:
@@ -129,7 +127,7 @@ void menuFan(void)
     }
 
     if ((lastFan.cur != fanGetCurSpeed(fan_index)) || (lastFan.set != fanGetSetSpeed(fan_index)))
-    { // refresh displayed values if actual or desired speed has changed
+    {
       lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
       fanReDraw(fan_index, true);

@@ -579,7 +579,7 @@ void stopConfirm(void)
   CLOSE_MENU();
 }
 
-void printSummaryPopup(void)
+void printInfoPopup(void)
 {
   uint8_t hour = infoPrintSummary.time / 3600;
   uint8_t min = infoPrintSummary.time % 3600 / 60;
@@ -655,7 +655,7 @@ void menuPrinting(void)
     if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
       printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
     else
-      printingItems.title.address = (uint8_t *) infoFile.file[infoFile.fileIndex];
+      printingItems.title.address = getPrintName(infoFile.title);
 
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
@@ -895,7 +895,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_INFOBOX:
-        printSummaryPopup();
+        printInfoPopup();
         break;
 
       default:
