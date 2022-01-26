@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variants.h"  // for u8 etc...
+#include "variants.h"  // for uint8_t etc...
 
 #define CMD_WRITE_ENABLE   0x06
 #define CMD_WRITE_DISABLE  0x04
@@ -27,7 +27,7 @@ extern "C" {
 #define MB(x) (x * 1024l * 1024l)
 
 uint8_t W25Qxx_SPI_Read_Write_Byte(uint8_t data);
-void W25Qxx_SPI_CS_Set(u8 level);
+void W25Qxx_SPI_CS_Set(uint8_t level);
 void W25Qxx_Init(void);
 
 void W25Qxx_WriteEnable(void);

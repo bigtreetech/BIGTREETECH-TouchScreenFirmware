@@ -148,13 +148,13 @@ void UART_DeConfig(uint8_t port)
 void UART_Write(uint8_t port, uint8_t d)
 {
   while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
-  uart[port]->DR = ((u16)d & (uint16_t)0x01FF);
+  uart[port]->DR = ((uint16_t)d & (uint16_t)0x01FF);
 }
 void UART_Puts(uint8_t port, uint8_t *str)
 {
   while (*str)
   {
     while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
-    uart[port]->DR = ((u16)*str++ & (uint16_t)0x01FF);
+    uart[port]->DR = ((uint16_t)*str++ & (uint16_t)0x01FF);
   }
 }

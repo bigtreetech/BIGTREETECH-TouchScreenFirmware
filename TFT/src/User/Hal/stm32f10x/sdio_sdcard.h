@@ -1,7 +1,7 @@
 #ifndef __SDIO_SDCARD_H
 #define __SDIO_SDCARD_H
 
-#include "variants.h"  // for u16 etc...
+#include "variants.h"  // for uint16_t etc...
 
 //SDIO��ر�־λ
 #define SDIO_FLAG_CCRCFAIL                  ((uint32_t)0x00000001)
@@ -95,58 +95,58 @@ typedef enum
 //SD card CSD register data
 typedef struct
 {
-  u8  CSDStruct;            /*!< CSD structure */
-  u8  SysSpecVersion;       /*!< System specification version */
-  u8  Reserved1;            /*!< Reserved */
-  u8  TAAC;                 /*!< Data read access-time 1 */
-  u8  NSAC;                 /*!< Data read access-time 2 in CLK cycles */
-  u8  MaxBusClkFrec;        /*!< Max. bus clock frequency */
-  u16 CardComdClasses;      /*!< Card command classes */
-  u8  RdBlockLen;           /*!< Max. read data block length */
-  u8  PartBlockRead;        /*!< Partial blocks for read allowed */
-  u8  WrBlockMisalign;      /*!< Write block misalignment */
-  u8  RdBlockMisalign;      /*!< Read block misalignment */
-  u8  DSRImpl;              /*!< DSR implemented */
-  u8  Reserved2;            /*!< Reserved */
-  u32 DeviceSize;           /*!< Device Size */
-  u8  MaxRdCurrentVDDMin;   /*!< Max. read current @ VDD min */
-  u8  MaxRdCurrentVDDMax;   /*!< Max. read current @ VDD max */
-  u8  MaxWrCurrentVDDMin;   /*!< Max. write current @ VDD min */
-  u8  MaxWrCurrentVDDMax;   /*!< Max. write current @ VDD max */
-  u8  DeviceSizeMul;        /*!< Device size multiplier */
-  u8  EraseGrSize;          /*!< Erase group size */
-  u8  EraseGrMul;           /*!< Erase group size multiplier */
-  u8  WrProtectGrSize;      /*!< Write protect group size */
-  u8  WrProtectGrEnable;    /*!< Write protect group enable */
-  u8  ManDeflECC;           /*!< Manufacturer default ECC */
-  u8  WrSpeedFact;          /*!< Write speed factor */
-  u8  MaxWrBlockLen;        /*!< Max. write data block length */
-  u8  WriteBlockPaPartial;  /*!< Partial blocks for write allowed */
-  u8  Reserved3;            /*!< Reserded */
-  u8  ContentProtectAppli;  /*!< Content protection application */
-  u8  FileFormatGrouop;     /*!< File format group */
-  u8  CopyFlag;             /*!< Copy flag (OTP) */
-  u8  PermWrProtect;        /*!< Permanent write protection */
-  u8  TempWrProtect;        /*!< Temporary write protection */
-  u8  FileFormat;           /*!< File Format */
-  u8  ECC;                  /*!< ECC code */
-  u8  CSD_CRC;              /*!< CSD CRC */
-  u8  Reserved4;            /*!< always 1*/
+  uint8_t  CSDStruct;            /*!< CSD structure */
+  uint8_t  SysSpecVersion;       /*!< System specification version */
+  uint8_t  Reserved1;            /*!< Reserved */
+  uint8_t  TAAC;                 /*!< Data read access-time 1 */
+  uint8_t  NSAC;                 /*!< Data read access-time 2 in CLK cycles */
+  uint8_t  MaxBusClkFrec;        /*!< Max. bus clock frequency */
+  uint16_t CardComdClasses;      /*!< Card command classes */
+  uint8_t  RdBlockLen;           /*!< Max. read data block length */
+  uint8_t  PartBlockRead;        /*!< Partial blocks for read allowed */
+  uint8_t  WrBlockMisalign;      /*!< Write block misalignment */
+  uint8_t  RdBlockMisalign;      /*!< Read block misalignment */
+  uint8_t  DSRImpl;              /*!< DSR implemented */
+  uint8_t  Reserved2;            /*!< Reserved */
+  uint32_t DeviceSize;           /*!< Device Size */
+  uint8_t  MaxRdCurrentVDDMin;   /*!< Max. read current @ VDD min */
+  uint8_t  MaxRdCurrentVDDMax;   /*!< Max. read current @ VDD max */
+  uint8_t  MaxWrCurrentVDDMin;   /*!< Max. write current @ VDD min */
+  uint8_t  MaxWrCurrentVDDMax;   /*!< Max. write current @ VDD max */
+  uint8_t  DeviceSizeMul;        /*!< Device size multiplier */
+  uint8_t  EraseGrSize;          /*!< Erase group size */
+  uint8_t  EraseGrMul;           /*!< Erase group size multiplier */
+  uint8_t  WrProtectGrSize;      /*!< Write protect group size */
+  uint8_t  WrProtectGrEnable;    /*!< Write protect group enable */
+  uint8_t  ManDeflECC;           /*!< Manufacturer default ECC */
+  uint8_t  WrSpeedFact;          /*!< Write speed factor */
+  uint8_t  MaxWrBlockLen;        /*!< Max. write data block length */
+  uint8_t  WriteBlockPaPartial;  /*!< Partial blocks for write allowed */
+  uint8_t  Reserved3;            /*!< Reserded */
+  uint8_t  ContentProtectAppli;  /*!< Content protection application */
+  uint8_t  FileFormatGrouop;     /*!< File format group */
+  uint8_t  CopyFlag;             /*!< Copy flag (OTP) */
+  uint8_t  PermWrProtect;        /*!< Permanent write protection */
+  uint8_t  TempWrProtect;        /*!< Temporary write protection */
+  uint8_t  FileFormat;           /*!< File Format */
+  uint8_t  ECC;                  /*!< ECC code */
+  uint8_t  CSD_CRC;              /*!< CSD CRC */
+  uint8_t  Reserved4;            /*!< always 1*/
 } SD_CSD;
 
 //SD card CID register data
 typedef struct
 {
-  u8  ManufacturerID;       /*!< ManufacturerID */
-  u16 OEM_AppliID;          /*!< OEM/Application ID */
-  u32 ProdName1;            /*!< Product Name part1 */
-  u8  ProdName2;            /*!< Product Name part2*/
-  u8  ProdRev;              /*!< Product Revision */
-  u32 ProdSN;               /*!< Product Serial Number */
-  u8  Reserved1;            /*!< Reserved1 */
-  u16 ManufactDate;         /*!< Manufacturing Date */
-  u8  CID_CRC;              /*!< CID CRC */
-  u8  Reserved2;            /*!< always 1 */
+  uint8_t  ManufacturerID;       /*!< ManufacturerID */
+  uint16_t OEM_AppliID;          /*!< OEM/Application ID */
+  uint32_t ProdName1;            /*!< Product Name part1 */
+  uint8_t  ProdName2;            /*!< Product Name part2*/
+  uint8_t  ProdRev;              /*!< Product Revision */
+  uint32_t ProdSN;               /*!< Product Serial Number */
+  uint8_t  Reserved1;            /*!< Reserved1 */
+  uint16_t ManufactDate;         /*!< Manufacturing Date */
+  uint8_t  CID_CRC;              /*!< CID CRC */
+  uint8_t  Reserved2;            /*!< always 1 */
 } SD_CID;
 //SD card status
 typedef enum
@@ -168,166 +168,166 @@ typedef struct
   SD_CSD SD_csd;
   SD_CID SD_cid;
   long long CardCapacity;   //SD card capacity, unit: byte, supports up to 2 ^ 64 byte card.
-  u32 CardBlockSize;        //SD card block size
-  u16 RCA;                  //Card relative address
-  u8 CardType;              //card type
+  uint32_t CardBlockSize;        //SD card block size
+  uint16_t RCA;                  //Card relative address
+  uint8_t CardType;              //card type
 } SD_CardInfo;
 extern SD_CardInfo SDCardInfo;//SD card information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //SDIO ָ�
-#define SD_CMD_GO_IDLE_STATE                       ((u8)0)
-#define SD_CMD_SEND_OP_COND                        ((u8)1)
-#define SD_CMD_ALL_SEND_CID                        ((u8)2)
-#define SD_CMD_SET_REL_ADDR                        ((u8)3) /*!< SDIO_SEND_REL_ADDR for SD Card */
-#define SD_CMD_SET_DSR                             ((u8)4)
-#define SD_CMD_SDIO_SEN_OP_COND                    ((u8)5)
-#define SD_CMD_HS_SWITCH                           ((u8)6)
-#define SD_CMD_SEL_DESEL_CARD                      ((u8)7)
-#define SD_CMD_HS_SEND_EXT_CSD                     ((u8)8)
-#define SD_CMD_SEND_CSD                            ((u8)9)
-#define SD_CMD_SEND_CID                            ((u8)10)
-#define SD_CMD_READ_DAT_UNTIL_STOP                 ((u8)11) /*!< SD Card doesn't support it */
-#define SD_CMD_STOP_TRANSMISSION                   ((u8)12)
-#define SD_CMD_SEND_STATUS                         ((u8)13)
-#define SD_CMD_HS_BUSTEST_READ                     ((u8)14)
-#define SD_CMD_GO_INACTIVE_STATE                   ((u8)15)
-#define SD_CMD_SET_BLOCKLEN                        ((u8)16)
-#define SD_CMD_READ_SINGLE_BLOCK                   ((u8)17)
-#define SD_CMD_READ_MULT_BLOCK                     ((u8)18)
-#define SD_CMD_HS_BUSTEST_WRITE                    ((u8)19)
-#define SD_CMD_WRITE_DAT_UNTIL_STOP                ((u8)20)
-#define SD_CMD_SET_BLOCK_COUNT                     ((u8)23)
-#define SD_CMD_WRITE_SINGLE_BLOCK                  ((u8)24)
-#define SD_CMD_WRITE_MULT_BLOCK                    ((u8)25)
-#define SD_CMD_PROG_CID                            ((u8)26)
-#define SD_CMD_PROG_CSD                            ((u8)27)
-#define SD_CMD_SET_WRITE_PROT                      ((u8)28)
-#define SD_CMD_CLR_WRITE_PROT                      ((u8)29)
-#define SD_CMD_SEND_WRITE_PROT                     ((u8)30)
-#define SD_CMD_SD_ERASE_GRP_START                  ((u8)32) /*!< To set the address of the first write
+#define SD_CMD_GO_IDLE_STATE                       ((uint8_t)0)
+#define SD_CMD_SEND_OP_COND                        ((uint8_t)1)
+#define SD_CMD_ALL_SEND_CID                        ((uint8_t)2)
+#define SD_CMD_SET_REL_ADDR                        ((uint8_t)3) /*!< SDIO_SEND_REL_ADDR for SD Card */
+#define SD_CMD_SET_DSR                             ((uint8_t)4)
+#define SD_CMD_SDIO_SEN_OP_COND                    ((uint8_t)5)
+#define SD_CMD_HS_SWITCH                           ((uint8_t)6)
+#define SD_CMD_SEL_DESEL_CARD                      ((uint8_t)7)
+#define SD_CMD_HS_SEND_EXT_CSD                     ((uint8_t)8)
+#define SD_CMD_SEND_CSD                            ((uint8_t)9)
+#define SD_CMD_SEND_CID                            ((uint8_t)10)
+#define SD_CMD_READ_DAT_UNTIL_STOP                 ((uint8_t)11) /*!< SD Card doesn't support it */
+#define SD_CMD_STOP_TRANSMISSION                   ((uint8_t)12)
+#define SD_CMD_SEND_STATUS                         ((uint8_t)13)
+#define SD_CMD_HS_BUSTEST_READ                     ((uint8_t)14)
+#define SD_CMD_GO_INACTIVE_STATE                   ((uint8_t)15)
+#define SD_CMD_SET_BLOCKLEN                        ((uint8_t)16)
+#define SD_CMD_READ_SINGLE_BLOCK                   ((uint8_t)17)
+#define SD_CMD_READ_MULT_BLOCK                     ((uint8_t)18)
+#define SD_CMD_HS_BUSTEST_WRITE                    ((uint8_t)19)
+#define SD_CMD_WRITE_DAT_UNTIL_STOP                ((uint8_t)20)
+#define SD_CMD_SET_BLOCK_COUNT                     ((uint8_t)23)
+#define SD_CMD_WRITE_SINGLE_BLOCK                  ((uint8_t)24)
+#define SD_CMD_WRITE_MULT_BLOCK                    ((uint8_t)25)
+#define SD_CMD_PROG_CID                            ((uint8_t)26)
+#define SD_CMD_PROG_CSD                            ((uint8_t)27)
+#define SD_CMD_SET_WRITE_PROT                      ((uint8_t)28)
+#define SD_CMD_CLR_WRITE_PROT                      ((uint8_t)29)
+#define SD_CMD_SEND_WRITE_PROT                     ((uint8_t)30)
+#define SD_CMD_SD_ERASE_GRP_START                  ((uint8_t)32) /*!< To set the address of the first write
                                                                   block to be erased. (For SD card only) */
-#define SD_CMD_SD_ERASE_GRP_END                    ((u8)33) /*!< To set the address of the last write block of the
+#define SD_CMD_SD_ERASE_GRP_END                    ((uint8_t)33) /*!< To set the address of the last write block of the
                                                                   continuous range to be erased. (For SD card only) */
-#define SD_CMD_ERASE_GRP_START                     ((u8)35) /*!< To set the address of the first write block to be erased.
+#define SD_CMD_ERASE_GRP_START                     ((uint8_t)35) /*!< To set the address of the first write block to be erased.
                                                                   (For MMC card only spec 3.31) */
 
-#define SD_CMD_ERASE_GRP_END                       ((u8)36) /*!< To set the address of the last write block of the
+#define SD_CMD_ERASE_GRP_END                       ((uint8_t)36) /*!< To set the address of the last write block of the
                                                                   continuous range to be erased. (For MMC card only spec 3.31) */
 
-#define SD_CMD_ERASE                               ((u8)38)
-#define SD_CMD_FAST_IO                             ((u8)39) /*!< SD Card doesn't support it */
-#define SD_CMD_GO_IRQ_STATE                        ((u8)40) /*!< SD Card doesn't support it */
-#define SD_CMD_LOCK_UNLOCK                         ((u8)42)
-#define SD_CMD_APP_CMD                             ((u8)55)
-#define SD_CMD_GEN_CMD                             ((u8)56)
-#define SD_CMD_NO_CMD                              ((u8)64)
+#define SD_CMD_ERASE                               ((uint8_t)38)
+#define SD_CMD_FAST_IO                             ((uint8_t)39) /*!< SD Card doesn't support it */
+#define SD_CMD_GO_IRQ_STATE                        ((uint8_t)40) /*!< SD Card doesn't support it */
+#define SD_CMD_LOCK_UNLOCK                         ((uint8_t)42)
+#define SD_CMD_APP_CMD                             ((uint8_t)55)
+#define SD_CMD_GEN_CMD                             ((uint8_t)56)
+#define SD_CMD_NO_CMD                              ((uint8_t)64)
 
 /**
   * @brief Following commands are SD Card Specific commands.
   *        SDIO_APP_CMD ��CMD55 should be sent before sending these commands.
   */
-#define SD_CMD_APP_SD_SET_BUSWIDTH                 ((u8)6)  /*!< For SD Card only */
-#define SD_CMD_SD_APP_STAUS                        ((u8)13) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SEND_NUM_WRITE_BLOCKS        ((u8)22) /*!< For SD Card only */
-#define SD_CMD_SD_APP_OP_COND                      ((u8)41) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SET_CLR_CARD_DETECT          ((u8)42) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SEND_SCR                     ((u8)51) /*!< For SD Card only */
-#define SD_CMD_SDIO_RW_DIRECT                      ((u8)52) /*!< For SD I/O Card only */
-#define SD_CMD_SDIO_RW_EXTENDED                    ((u8)53) /*!< For SD I/O Card only */
+#define SD_CMD_APP_SD_SET_BUSWIDTH                 ((uint8_t)6)  /*!< For SD Card only */
+#define SD_CMD_SD_APP_STAUS                        ((uint8_t)13) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SEND_NUM_WRITE_BLOCKS        ((uint8_t)22) /*!< For SD Card only */
+#define SD_CMD_SD_APP_OP_COND                      ((uint8_t)41) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SET_CLR_CARD_DETECT          ((uint8_t)42) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SEND_SCR                     ((uint8_t)51) /*!< For SD Card only */
+#define SD_CMD_SDIO_RW_DIRECT                      ((uint8_t)52) /*!< For SD I/O Card only */
+#define SD_CMD_SDIO_RW_EXTENDED                    ((uint8_t)53) /*!< For SD I/O Card only */
 
 /**
   * @brief Following commands are SD Card Specific security commands.
   *        SDIO_APP_CMD should be sent before sending these commands.
   */
-#define SD_CMD_SD_APP_GET_MKB                      ((u8)43) /*!< For SD Card only */
-#define SD_CMD_SD_APP_GET_MID                      ((u8)44) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SET_CER_RN1                  ((u8)45) /*!< For SD Card only */
-#define SD_CMD_SD_APP_GET_CER_RN2                  ((u8)46) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SET_CER_RES2                 ((u8)47) /*!< For SD Card only */
-#define SD_CMD_SD_APP_GET_CER_RES1                 ((u8)48) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SECURE_READ_MULTIPLE_BLOCK   ((u8)18) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SECURE_WRITE_MULTIPLE_BLOCK  ((u8)25) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SECURE_ERASE                 ((u8)38) /*!< For SD Card only */
-#define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((u8)49) /*!< For SD Card only */
-#define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((u8)48) /*!< For SD Card only */
+#define SD_CMD_SD_APP_GET_MKB                      ((uint8_t)43) /*!< For SD Card only */
+#define SD_CMD_SD_APP_GET_MID                      ((uint8_t)44) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SET_CER_RN1                  ((uint8_t)45) /*!< For SD Card only */
+#define SD_CMD_SD_APP_GET_CER_RN2                  ((uint8_t)46) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SET_CER_RES2                 ((uint8_t)47) /*!< For SD Card only */
+#define SD_CMD_SD_APP_GET_CER_RES1                 ((uint8_t)48) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SECURE_READ_MULTIPLE_BLOCK   ((uint8_t)18) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SECURE_WRITE_MULTIPLE_BLOCK  ((uint8_t)25) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SECURE_ERASE                 ((uint8_t)38) /*!< For SD Card only */
+#define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((uint8_t)49) /*!< For SD Card only */
+#define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((uint8_t)48) /*!< For SD Card only */
 
 //Supported SD card definitions
-#define SDIO_STD_CAPACITY_SD_CARD_V1_1             ((u32)0x00000000)
-#define SDIO_STD_CAPACITY_SD_CARD_V2_0             ((u32)0x00000001)
-#define SDIO_HIGH_CAPACITY_SD_CARD                 ((u32)0x00000002)
-#define SDIO_MULTIMEDIA_CARD                       ((u32)0x00000003)
-#define SDIO_SECURE_DIGITAL_IO_CARD                ((u32)0x00000004)
-#define SDIO_HIGH_SPEED_MULTIMEDIA_CARD            ((u32)0x00000005)
-#define SDIO_SECURE_DIGITAL_IO_COMBO_CARD          ((u32)0x00000006)
-#define SDIO_HIGH_CAPACITY_MMC_CARD                ((u32)0x00000007)
+#define SDIO_STD_CAPACITY_SD_CARD_V1_1             ((uint32_t)0x00000000)
+#define SDIO_STD_CAPACITY_SD_CARD_V2_0             ((uint32_t)0x00000001)
+#define SDIO_HIGH_CAPACITY_SD_CARD                 ((uint32_t)0x00000002)
+#define SDIO_MULTIMEDIA_CARD                       ((uint32_t)0x00000003)
+#define SDIO_SECURE_DIGITAL_IO_CARD                ((uint32_t)0x00000004)
+#define SDIO_HIGH_SPEED_MULTIMEDIA_CARD            ((uint32_t)0x00000005)
+#define SDIO_SECURE_DIGITAL_IO_COMBO_CARD          ((uint32_t)0x00000006)
+#define SDIO_HIGH_CAPACITY_MMC_CARD                ((uint32_t)0x00000007)
 
 //SDIO related parameter definition
 #ifndef NULL
   #define NULL 0
 #endif
-#define SDIO_STATIC_FLAGS               ((u32)0x000005FF)
-#define SDIO_CMD0TIMEOUT                ((u32)0x00010000)
-#define SDIO_DATATIMEOUT                ((u32)0xFFFFFFFF)
-#define SDIO_FIFO_Address               ((u32)0x40018080)
+#define SDIO_STATIC_FLAGS               ((uint32_t)0x000005FF)
+#define SDIO_CMD0TIMEOUT                ((uint32_t)0x00010000)
+#define SDIO_DATATIMEOUT                ((uint32_t)0xFFFFFFFF)
+#define SDIO_FIFO_Address               ((uint32_t)0x40018080)
 
 //Mask for errors Card Status R1 (OCR Register)
-#define SD_OCR_ADDR_OUT_OF_RANGE        ((u32)0x80000000)
-#define SD_OCR_ADDR_MISALIGNED          ((u32)0x40000000)
-#define SD_OCR_BLOCK_LEN_ERR            ((u32)0x20000000)
-#define SD_OCR_ERASE_SEQ_ERR            ((u32)0x10000000)
-#define SD_OCR_BAD_ERASE_PARAM          ((u32)0x08000000)
-#define SD_OCR_WRITE_PROT_VIOLATION     ((u32)0x04000000)
-#define SD_OCR_LOCK_UNLOCK_FAILED       ((u32)0x01000000)
-#define SD_OCR_COM_CRC_FAILED           ((u32)0x00800000)
-#define SD_OCR_ILLEGAL_CMD              ((u32)0x00400000)
-#define SD_OCR_CARD_ECC_FAILED          ((u32)0x00200000)
-#define SD_OCR_CC_ERROR                 ((u32)0x00100000)
-#define SD_OCR_GENERAL_UNKNOWN_ERROR    ((u32)0x00080000)
-#define SD_OCR_STREAM_READ_UNDERRUN     ((u32)0x00040000)
-#define SD_OCR_STREAM_WRITE_OVERRUN     ((u32)0x00020000)
-#define SD_OCR_CID_CSD_OVERWRIETE       ((u32)0x00010000)
-#define SD_OCR_WP_ERASE_SKIP            ((u32)0x00008000)
-#define SD_OCR_CARD_ECC_DISABLED        ((u32)0x00004000)
-#define SD_OCR_ERASE_RESET              ((u32)0x00002000)
-#define SD_OCR_AKE_SEQ_ERROR            ((u32)0x00000008)
-#define SD_OCR_ERRORBITS                ((u32)0xFDFFE008)
+#define SD_OCR_ADDR_OUT_OF_RANGE        ((uint32_t)0x80000000)
+#define SD_OCR_ADDR_MISALIGNED          ((uint32_t)0x40000000)
+#define SD_OCR_BLOCK_LEN_ERR            ((uint32_t)0x20000000)
+#define SD_OCR_ERASE_SEQ_ERR            ((uint32_t)0x10000000)
+#define SD_OCR_BAD_ERASE_PARAM          ((uint32_t)0x08000000)
+#define SD_OCR_WRITE_PROT_VIOLATION     ((uint32_t)0x04000000)
+#define SD_OCR_LOCK_UNLOCK_FAILED       ((uint32_t)0x01000000)
+#define SD_OCR_COM_CRC_FAILED           ((uint32_t)0x00800000)
+#define SD_OCR_ILLEGAL_CMD              ((uint32_t)0x00400000)
+#define SD_OCR_CARD_ECC_FAILED          ((uint32_t)0x00200000)
+#define SD_OCR_CC_ERROR                 ((uint32_t)0x00100000)
+#define SD_OCR_GENERAL_UNKNOWN_ERROR    ((uint32_t)0x00080000)
+#define SD_OCR_STREAM_READ_UNDERRUN     ((uint32_t)0x00040000)
+#define SD_OCR_STREAM_WRITE_OVERRUN     ((uint32_t)0x00020000)
+#define SD_OCR_CID_CSD_OVERWRIETE       ((uint32_t)0x00010000)
+#define SD_OCR_WP_ERASE_SKIP            ((uint32_t)0x00008000)
+#define SD_OCR_CARD_ECC_DISABLED        ((uint32_t)0x00004000)
+#define SD_OCR_ERASE_RESET              ((uint32_t)0x00002000)
+#define SD_OCR_AKE_SEQ_ERROR            ((uint32_t)0x00000008)
+#define SD_OCR_ERRORBITS                ((uint32_t)0xFDFFE008)
 
 //Masks for R6 Response
-#define SD_R6_GENERAL_UNKNOWN_ERROR     ((u32)0x00002000)
-#define SD_R6_ILLEGAL_CMD               ((u32)0x00004000)
-#define SD_R6_COM_CRC_FAILED            ((u32)0x00008000)
+#define SD_R6_GENERAL_UNKNOWN_ERROR     ((uint32_t)0x00002000)
+#define SD_R6_ILLEGAL_CMD               ((uint32_t)0x00004000)
+#define SD_R6_COM_CRC_FAILED            ((uint32_t)0x00008000)
 
-#define SD_VOLTAGE_WINDOW_SD            ((u32)0x80100000)
-#define SD_HIGH_CAPACITY                ((u32)0x40000000)
-#define SD_STD_CAPACITY                 ((u32)0x00000000)
-#define SD_CHECK_PATTERN                ((u32)0x000001AA)
-#define SD_VOLTAGE_WINDOW_MMC           ((u32)0x80FF8000)
+#define SD_VOLTAGE_WINDOW_SD            ((uint32_t)0x80100000)
+#define SD_HIGH_CAPACITY                ((uint32_t)0x40000000)
+#define SD_STD_CAPACITY                 ((uint32_t)0x00000000)
+#define SD_CHECK_PATTERN                ((uint32_t)0x000001AA)
+#define SD_VOLTAGE_WINDOW_MMC           ((uint32_t)0x80FF8000)
 
-#define SD_MAX_VOLT_TRIAL               ((u32)0x0000FFFF)
-#define SD_ALLZERO                      ((u32)0x00000000)
+#define SD_MAX_VOLT_TRIAL               ((uint32_t)0x0000FFFF)
+#define SD_ALLZERO                      ((uint32_t)0x00000000)
 
-#define SD_WIDE_BUS_SUPPORT             ((u32)0x00040000)
-#define SD_SINGLE_BUS_SUPPORT           ((u32)0x00010000)
-#define SD_CARD_LOCKED                  ((u32)0x02000000)
-#define SD_CARD_PROGRAMMING             ((u32)0x00000007)
-#define SD_CARD_RECEIVING               ((u32)0x00000006)
-#define SD_DATATIMEOUT                  ((u32)0xFFFFFFFF)
-#define SD_0TO7BITS                     ((u32)0x000000FF)
-#define SD_8TO15BITS                    ((u32)0x0000FF00)
-#define SD_16TO23BITS                   ((u32)0x00FF0000)
-#define SD_24TO31BITS                   ((u32)0xFF000000)
-#define SD_MAX_DATA_LENGTH              ((u32)0x01FFFFFF)
+#define SD_WIDE_BUS_SUPPORT             ((uint32_t)0x00040000)
+#define SD_SINGLE_BUS_SUPPORT           ((uint32_t)0x00010000)
+#define SD_CARD_LOCKED                  ((uint32_t)0x02000000)
+#define SD_CARD_PROGRAMMING             ((uint32_t)0x00000007)
+#define SD_CARD_RECEIVING               ((uint32_t)0x00000006)
+#define SD_DATATIMEOUT                  ((uint32_t)0xFFFFFFFF)
+#define SD_0TO7BITS                     ((uint32_t)0x000000FF)
+#define SD_8TO15BITS                    ((uint32_t)0x0000FF00)
+#define SD_16TO23BITS                   ((uint32_t)0x00FF0000)
+#define SD_24TO31BITS                   ((uint32_t)0xFF000000)
+#define SD_MAX_DATA_LENGTH              ((uint32_t)0x01FFFFFF)
 
-#define SD_HALFFIFO                     ((u32)0x00000008)
-#define SD_HALFFIFOBYTES                ((u32)0x00000020)
+#define SD_HALFFIFO                     ((uint32_t)0x00000008)
+#define SD_HALFFIFOBYTES                ((uint32_t)0x00000020)
 
 //Command Class Supported
-#define SD_CCCC_LOCK_UNLOCK             ((u32)0x00000080)
-#define SD_CCCC_WRITE_PROT              ((u32)0x00000040)
-#define SD_CCCC_ERASE                   ((u32)0x00000020)
+#define SD_CCCC_LOCK_UNLOCK             ((uint32_t)0x00000080)
+#define SD_CCCC_WRITE_PROT              ((uint32_t)0x00000040)
+#define SD_CCCC_ERASE                   ((uint32_t)0x00000020)
 
 //CMD8 instruction
-#define SDIO_SEND_IF_COND               ((u32)0x00000008)
+#define SDIO_SEND_IF_COND               ((uint32_t)0x00000008)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -340,36 +340,36 @@ extern SD_CardInfo SDCardInfo;//SD card information
 uint8_t SD_CD_Inserted(void);
 SD_Error SD_Init(void);
 void SD_DeInit(void);
-void SDIO_Clock_Set(u8 clkdiv);
-void SDIO_Send_Cmd(u8 cmdindex,u8 waitrsp,u32 arg);
-void SDIO_Send_Data_Cfg(u32 datatimeout,u32 datalen,u8 blksize,u8 dir);
+void SDIO_Clock_Set(uint8_t clkdiv);
+void SDIO_Send_Cmd(uint8_t cmdindex,uint8_t waitrsp,uint32_t arg);
+void SDIO_Send_Data_Cfg(uint32_t datatimeout,uint32_t datalen,uint8_t blksize,uint8_t dir);
 SD_Error SD_PowerON(void);
 SD_Error SD_PowerOFF(void);
 SD_Error SD_InitializeCards(void);
 SD_Error SD_GetCardInfo(SD_CardInfo *cardinfo);
-SD_Error SD_EnableWideBusOperation(u32 wmode);
-SD_Error SD_SetDeviceMode(u32 mode);
-SD_Error SD_SelectDeselect(u32 addr);
+SD_Error SD_EnableWideBusOperation(uint32_t wmode);
+SD_Error SD_SetDeviceMode(uint32_t mode);
+SD_Error SD_SelectDeselect(uint32_t addr);
 SD_Error SD_SendStatus(uint32_t *pcardstatus);
 SDCardState SD_GetState(void);
-SD_Error SD_ReadBlock(u8 *buf,long long addr,u16 blksize);
-SD_Error SD_ReadMultiBlocks(u8 *buf,long long  addr,u16 blksize,u32 nblks);
-SD_Error SD_WriteBlock(u8 *buf,long long addr,  u16 blksize);
-SD_Error SD_WriteMultiBlocks(u8 *buf,long long addr,u16 blksize,u32 nblks);
+SD_Error SD_ReadBlock(uint8_t *buf,long long addr,uint16_t blksize);
+SD_Error SD_ReadMultiBlocks(uint8_t *buf,long long  addr,uint16_t blksize,uint32_t nblks);
+SD_Error SD_WriteBlock(uint8_t *buf,long long addr,  uint16_t blksize);
+SD_Error SD_WriteMultiBlocks(uint8_t *buf,long long addr,uint16_t blksize,uint32_t nblks);
 SD_Error SD_ProcessIRQSrc(void);
 SD_Error CmdError(void);
 SD_Error CmdResp7Error(void);
-SD_Error CmdResp1Error(u8 cmd);
+SD_Error CmdResp1Error(uint8_t cmd);
 SD_Error CmdResp3Error(void);
 SD_Error CmdResp2Error(void);
-SD_Error CmdResp6Error(u8 cmd,u16*prca);
-SD_Error SDEnWideBus(u8 enx);
-SD_Error IsCardProgramming(u8 *pstatus);
-SD_Error FindSCR(u16 rca,u32 *pscr);
-u8 convert_from_bytes_to_power_of_two(u16 NumberOfBytes);
-void SD_DMA_Config(u32*mbuf,u32 bufsize,u8 dir);
+SD_Error CmdResp6Error(uint8_t cmd,uint16_t*prca);
+SD_Error SDEnWideBus(uint8_t enx);
+SD_Error IsCardProgramming(uint8_t *pstatus);
+SD_Error FindSCR(uint16_t rca,uint32_t *pscr);
+uint8_t convert_from_bytes_to_power_of_two(uint16_t NumberOfBytes);
+void SD_DMA_Config(uint32_t*mbuf,uint32_t bufsize,uint8_t dir);
 
-u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt);   //Read SD card, fatfs / usb call
-u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);  //Write SD card, fatfs / usb call
+uint8_t SD_ReadDisk(uint8_t*buf,uint32_t sector,uint8_t cnt);   //Read SD card, fatfs / usb call
+uint8_t SD_WriteDisk(uint8_t*buf,uint32_t sector,uint8_t cnt);  //Write SD card, fatfs / usb call
 
 #endif

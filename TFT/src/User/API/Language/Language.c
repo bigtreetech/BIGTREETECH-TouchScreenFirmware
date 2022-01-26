@@ -44,6 +44,8 @@
   #include "language_tc.h"
 #elif SYSTEM_LANGUAGE == UKRAINIAN
   #include "language_uk.h"
+#elif SYSTEM_LANGUAGE == BRAZIL
+  #include "language_br.h"
 #else
   #error "Error: invalid language defined"
 #endif
@@ -68,7 +70,7 @@ const char *const lang_key_list[LABEL_NUM] =
 
 uint8_t *textSelect(uint16_t sel)
 {
-  switch(infoSettings.language)
+  switch (infoSettings.language)
   {
     case LANG_DEFAULT:
       return (uint8_t *)default_pack[sel];
@@ -88,8 +90,8 @@ uint32_t getLabelFlashAddr(uint16_t index)
 
 bool loadLabelText(uint8_t* buf, uint16_t index)
 {
-  if(index >= LABEL_NUM) return false;
-  if(infoSettings.language == LANG_FLASH)
+  if (index >= LABEL_NUM) return false;
+  if (infoSettings.language == LANG_FLASH)
     W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
   else
     memcpy(buf, textSelect(index), sizeof(tempLabelString));

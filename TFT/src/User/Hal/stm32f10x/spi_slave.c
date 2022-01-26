@@ -23,7 +23,7 @@ CIRCULAR_QUEUE *spi_queue = NULL;
 
 void SPI_Slave_CS_Config(void);        // forward declaration
 
-void SPI_ReEnable(u8 mode)
+void SPI_ReEnable(uint8_t mode)
 {
   ST7920_SPI_NUM->CR1 = (0<<15)        // 0:2-line 1: 1-line
                       | (0<<14)        // in bidirectional mode 0:read only 1: read/write
