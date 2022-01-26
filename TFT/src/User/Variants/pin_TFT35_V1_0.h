@@ -102,7 +102,7 @@
 //#define LCD_BTN_PIN  PB2
 
 // U disk support
-//#define U_DISK_SUPPORT
+//#define USB_FLASH_DRIVE_SUPPORT
 //#define USE_USB_OTG_FS
 
 // Extend function(PS_ON, filament_detect)

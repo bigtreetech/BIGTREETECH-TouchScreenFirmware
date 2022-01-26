@@ -39,7 +39,7 @@
 #include "usbh_core.h"
 #include "usb_log.h"
 
-#ifdef U_DISK_SUPPORT
+#ifdef USB_FLASH_DRIVE_SUPPORT
 /** @addtogroup USBH_LIB
   * @{
   */

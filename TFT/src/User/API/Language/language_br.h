@@ -39,7 +39,7 @@
     #define STRING_KNOB_LED_IDLE          "Knob LED apagado"
     #define STRING_START_GCODE_ENABLED    "Inserir gcode inicial"
     #define STRING_END_GCODE_ENABLED      "Inserir gcode final"
-    #define STRING_CANCEL_GCODE_ENABLED   "Script para cancelar impressão" 
+    #define STRING_CANCEL_GCODE_ENABLED   "Script para cancelar impressão"
 
     // Machine Parameter Settings - Param Title (ordered by gcode)
     #define STRING_STEPS_SETTING          "Passos por mm"
@@ -159,15 +159,16 @@
     #define STRING_PROCESS_COMPLETED      "Processo concluído!"
     #define STRING_PROCESS_ABORTED        "Processo cancelado!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "SD TFT"
     #define STRING_READ_TFTSD_ERROR       "Erro de leitura do SD!"
     #define STRING_TFTSD_INSERTED         "SD inserido"
     #define STRING_TFTSD_REMOVED          "SD removido"
-    #define STRING_U_DISK                 "Pen drive"
-    #define STRING_READ_U_DISK_ERROR      "Erro de leitura do Pen Drive"
-    #define STRING_U_DISK_INSERTED        "Pen Drive inserido!"
-    #define STRING_U_DISK_REMOVED         "Pen Drive removido!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "Pen drive"
+    #define STRING_READ_USB_DISK_ERROR   "Erro de leitura do Pen Drive"
+    #define STRING_USB_DISK_INSERTED      "Pen Drive inserido!"
+    #define STRING_USB_DISK_REMOVED       "Pen Drive removido!"
     #define STRING_ONBOARDSD              "SD ONBOARD"
     #define STRING_READ_ONBOARDSD_ERROR   "Erro de leitura do SD ONBOARD!"
     #define STRING_FILAMENT_RUNOUT        "Filamento acabou!"
@@ -269,7 +270,7 @@
     #define STRING_POINT_5                "Ponto 5"
     #define STRING_BED_LEVELING           "ABL"
     #define STRING_BL_COMPLETE            "Nivelamento automático concluído"
-    #define STRING_BL_SMART_FILL          "Alguns pontos ausentes. Malha reconstruída com função inteligente.\n\nNota:Lembre-se de salvar!"// PONTOS DO ABL AUSENTES ? 
+    #define STRING_BL_SMART_FILL          "Alguns pontos ausentes. Malha reconstruída com função inteligente.\n\nNota:Lembre-se de salvar!"// PONTOS DO ABL AUSENTES ?
     #define STRING_BL_ENABLE              "ABL: On"
     #define STRING_BL_DISABLE             "ABL: Off"
     #define STRING_ABL                    "ABL"
@@ -343,7 +344,7 @@
     #define STRING_CASE_LIGHT             "Luzes Gabinete"
     #define STRING_LOAD_STARTED           "Carregando filamento... \nAguarde até terminar."
     #define STRING_UNLOAD_STARTED         "Descarregando filamento... \nAguarde até terminar."
-    #define STRING_HEATERS_ON             "Alguns aquecedores ainda estão ligados \nDeseja desligá-los?"//TRADUZIR MELHOR O AQUECEDORES , HOTEND, BED? 
+    #define STRING_HEATERS_ON             "Alguns aquecedores ainda estão ligados \nDeseja desligá-los?"//TRADUZIR MELHOR O AQUECEDORES , HOTEND, BED?
     #define STRING_PRINT_FINISHED         "Impressão concluída."
     #define STRING_MAIN_SCREEN            "Menu"
     #define STRING_PREVIOUS_PRINT_DATA    "Última impressão"

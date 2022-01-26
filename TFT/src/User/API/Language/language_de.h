@@ -160,15 +160,17 @@
     #define STRING_PROCESS_COMPLETED      "Prozess fertiggestellt!"
     #define STRING_PROCESS_ABORTED        "Prozess abgebrochen!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "TFT SD Lesefehler!"
     #define STRING_TFTSD_INSERTED         "SD-Karte eingesteckt!"
     #define STRING_TFTSD_REMOVED          "SD-Karte entfernt!"
-    #define STRING_U_DISK                 "USB-Stick"
-    #define STRING_READ_U_DISK_ERROR      "USB-Stick Lesefehler!"
-    #define STRING_U_DISK_INSERTED        "USB-Stick eingesteckt!"
-    #define STRING_U_DISK_REMOVED         "USB-Stick entfernt!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "USB-Stick"
+    #define STRING_READ_USB_DISK_ERROR   "USB-Stick Lesefehler!"
+    #define STRING_USB_DISK_INSERTED      "USB-Stick eingesteckt!"
+    #define STRING_USB_DISK_REMOVED       "USB-Stick entfernt!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "Onboard SD"
     #define STRING_READ_ONBOARDSD_ERROR   "Onboard SD Lesefehler!"
     #define STRING_FILAMENT_RUNOUT        "Filament alle!"
