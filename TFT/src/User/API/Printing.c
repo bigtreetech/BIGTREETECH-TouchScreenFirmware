@@ -375,7 +375,7 @@ void printComplete(void)
       coordinateQuery(0);  // disable auto report position
       break;
 
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:
       f_close(&infoPrinting.file);
       powerFailedClose();   // close Power-loss Recovery file
@@ -443,7 +443,7 @@ void printStart(FIL * file, uint32_t size)
       request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard SD
       break;
 
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:
       infoPrinting.file = *file;
       infoPrinting.cur = infoPrinting.file.fptr;
@@ -463,7 +463,7 @@ void printEnd(void)
       break;
 
     case BOARD_SD:
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
       {
@@ -535,7 +535,7 @@ void printAbort(void)
 
       break;
 
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:
       clearCmdQueue();
       break;
@@ -578,7 +578,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         request_M24(0);  // resume
       break;
 
-    case TFT_UDISK:
+    case TFT_USB_DISK:
     case TFT_SD:
       if (isPause == true && pauseType == PAUSE_M0)
         loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
@@ -832,7 +832,7 @@ void loopPrintFromTFT(void)
   else if (ip_cur > ip_size)  // in case of print abort (ip_cur == ip_size + 1), display an error message and abort the print
   {
     BUZZER_PLAY(SOUND_ERROR);
-    popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == TFT_SD) ? LABEL_READ_TFTSD_ERROR : LABEL_READ_U_DISK_ERROR, LABEL_PROCESS_ABORTED);
+    popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == TFT_SD) ? LABEL_READ_TFTSD_ERROR : LABEL_READ_USB_DISK_ERROR, LABEL_PROCESS_ABORTED);
 
     printAbort();
   }

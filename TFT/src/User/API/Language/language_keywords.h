@@ -167,15 +167,17 @@ extern "C" {
 #define LANG_KEY_PROCESS_COMPLETED            "label_process_completed:"
 #define LANG_KEY_PROCESS_ABORTED              "label_process_aborted:"
 
-// TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+// TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
 #define LANG_KEY_TFTSD                        "label_tftsd:"
 #define LANG_KEY_READ_TFTSD_ERROR             "label_read_tftsd_error:"
 #define LANG_KEY_TFTSD_INSERTED               "label_tftsd_inserted:"
 #define LANG_KEY_TFTSD_REMOVED                "label_tftsd_removed:"
-#define LANG_KEY_U_DISK                       "label_u_disk:"
-#define LANG_KEY_READ_U_DISK_ERROR            "label_read_u_disk_error:"
-#define LANG_KEY_U_DISK_INSERTED              "label_u_disk_inserted:"
-#define LANG_KEY_U_DISK_REMOVED               "label_u_disk_removed:"
+#define LANG_KEY_TFTSD_NOT_DETECTED           "label_tftsd_not_detected:"
+#define LANG_KEY_USB_DISK                     "label_usb_disk:"
+#define LANG_KEY_READ_USB_DISK_ERROR          "label_read_usb_disk_error:"
+#define LANG_KEY_USB_DISK_INSERTED            "label_usb_disk_inserted:"
+#define LANG_KEY_USB_DISK_REMOVED             "label_usb_disk_removed:"
+#define LANG_KEY_USB_DISK_NOT_DETECTED        "label_usb_disk_not_detected:"
 #define LANG_KEY_ONBOARDSD                    "label_onboardsd:"
 #define LANG_KEY_READ_ONBOARDSD_ERROR         "label_read_onboardsd_error:"
 #define LANG_KEY_FILAMENT_RUNOUT              "label_filament_runout:"
