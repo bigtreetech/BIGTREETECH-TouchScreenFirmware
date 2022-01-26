@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD karta odstránená!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB kľúč"
-    #define STRING_READ_USB_DISK_ERROR   "Chyba pri načítaní USB kľúča!"
+    #define STRING_READ_USB_DISK_ERROR    "Chyba pri načítaní USB kľúča!"
     #define STRING_USB_DISK_INSERTED      "USB kľúč vložený!"
     #define STRING_USB_DISK_REMOVED       "USB disk odstránený!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SDカード出しました!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USBメモリー"
-    #define STRING_READ_USB_DISK_ERROR   "USBメモリー読み込みエラー!"
+    #define STRING_READ_USB_DISK_ERROR    "USBメモリー読み込みエラー!"
     #define STRING_USB_DISK_INSERTED      "U Diskカード入りました!"
     #define STRING_USB_DISK_REMOVED       "U Diskカード出しました!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

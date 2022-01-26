@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD-Kártya eltávolítva!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB Tár"
-    #define STRING_READ_USB_DISK_ERROR   "USB olvasási hiba!"
+    #define STRING_READ_USB_DISK_ERROR    "USB olvasási hiba!"
     #define STRING_USB_DISK_INSERTED      "USB behelyezve!"
     #define STRING_USB_DISK_REMOVED       "USB eltávolítva!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD卡已拔出!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "U盘"
-    #define STRING_READ_USB_DISK_ERROR   "读U盘出错!"
+    #define STRING_READ_USB_DISK_ERROR    "读U盘出错!"
     #define STRING_USB_DISK_INSERTED      "U盘已插入!"
     #define STRING_USB_DISK_REMOVED       "U盘已拔出!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
