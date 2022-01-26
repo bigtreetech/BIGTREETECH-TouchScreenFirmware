@@ -170,6 +170,7 @@
     #define STRING_READ_USB_DISK_ERROR   "Read U Disk error!"
     #define STRING_USB_DISK_INSERTED      "U Disk inserted!"
     #define STRING_USB_DISK_REMOVED       "U Disk removed!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "OnboardSD"
     #define STRING_READ_ONBOARDSD_ERROR   "OnboardSD հիշողության սարքը չկա"
     #define STRING_FILAMENT_RUNOUT        "Filament runout!"
