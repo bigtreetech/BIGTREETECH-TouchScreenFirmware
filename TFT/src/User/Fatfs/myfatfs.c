@@ -51,7 +51,7 @@ bool mountSDCard(void)
 }
 
 /*
- mount U disk from Fatfs
+ mount USB disk from Fatfs
 */
 bool mountUDisk(void)
 {

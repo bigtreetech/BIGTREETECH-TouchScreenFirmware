@@ -67,8 +67,8 @@
 
 /**
  * Event LED
- * When printing from TFT SD / TFT U Disk, the TFT periodically sets the printer's (neopixel) LED color
- * and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
+ * When printing from TFT SD card / TFT USB disk, the TFT periodically sets the printer's (neopixel)
+ * LED color and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
  *
  * NOTE: If "EMULATED_M109_M190" is disabled (heating controlled by printer), the TFT cannot control the
  *       printer's (neopixel) LED during heating. It will control only the TFT's knob LED, if any.
@@ -178,7 +178,7 @@
  * Files Sorting
  * Sort files and folders based on the selected option.
  *
- * NOTE: Only applicable for files in TFT SD Card and TFT USB Stick.
+ * NOTE: Only applicable for files in TFT SD card and TFT USB disk.
  *
  *   Options: [Date Newest First: 0, Date Oldest First: 1, Name Ascending: 2, Name Descending: 3]
  */
@@ -767,7 +767,7 @@
 /**
  * Power Loss Recovery Mode
  * Enable power loss recovery.
- * Disable to reduce the loss of SD card or U disk.
+ * Disable to reduce the loss of TFT SD card or TFT USB disk.
  *   Options: [disable: 0, enable: 1]
  */
 #define PL_RECOVERY 1  // Default: 1

@@ -74,3 +74,5 @@ jobs:
         run: platformio run --environment MKS_TFT28_V4_0
       - name: Build MKS TFT28 New Genius
         run: platformio run --environment MKS_TFT28_NEW_GENIUS
+      - name: Build MKS TFT35 V1.0
+        run: platformio run --environment MKS_TFT35_V1_0

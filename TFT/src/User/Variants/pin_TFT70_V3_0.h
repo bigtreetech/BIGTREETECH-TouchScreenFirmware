@@ -18,6 +18,7 @@
   #endif
 #endif
 
+// Root folder for fonts and icons
 #ifndef ROOT_DIR
   #define ROOT_DIR "TFT70"
 #endif
@@ -38,12 +39,13 @@
 #endif
 
 // LCD interface
+// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
 #ifndef TFTLCD_DRIVER
-  #define TFTLCD_DRIVER       SSD1963  // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ST7789, HX8558, SSD1963].
+  #define TFTLCD_DRIVER       SSD1963
   #define TFTLCD_DRIVER_SPEED 0x10     // SSD1963 needs slower speed
 #endif
 
-#ifndef SSD1963_LCD_PARA
+#ifndef SSD1963_LCD_PARA  // only for TFTLCD_DRIVER SSD1963
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY  30   // 30Mhz
 
@@ -56,54 +58,56 @@
   #define SSD_VER_FRONT_PORCH 22
 #endif
 
-#define STM32_HAS_FSMC  // FSMC 8080 interface(high speed), or normal IO interface(low speed)
+#define STM32_HAS_FSMC  // FSMC 8080 interface (high speed) or normal IO interface (low speed)
 #ifndef LCD_DATA_16BIT
   #define LCD_DATA_16BIT 1  // LCD data 16bit or 8bit
 #endif
 
-// Debug disable, free pins for other function
-//#define DISABLE_JTAG   // free JTAG(PB3/PB4) for SPI3
-//#define DISABLE_DEBUG  // free all pins
+// LCD Backlight pins (adjust brightness with LED PWM)
+#ifndef LCD_LED_PIN
+  #define LCD_LED_PIN           PD12
+  #define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
+  #define LCD_LED_PWM_CHANNEL   _TIM4_CH1
+#endif
 
-// LCD Backlight pin (PWM can adjust brightness)
-#define LCD_LED_PIN           PD12
-#define LCD_LED_PIN_ALTERNATE GPIO_AF_TIM4
-#define LCD_LED_PWM_CHANNEL   _TIM4_CH1
-
-// SERIAL_PORT: communicating with host(Marlin, smoothieware, etc...)
-// SERIAL_PORT_X: communicating with other controller(Octoprint, ESP3D, other UART Touch Screen, etc...)
-#define SERIAL_PORT   _USART2  // default usart port
-#define SERIAL_PORT_2 _USART1
-#define SERIAL_PORT_3 _USART3
-#define SERIAL_PORT_4 _UART4
+// SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
+// SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT   _USART2  // default USART port
+  #define SERIAL_PORT_2 _USART1
+  #define SERIAL_PORT_3 _USART3
+  #define SERIAL_PORT_4 _UART4
+#endif
 
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3
 #endif
 
-// XPT2046 Software SPI Pins (touch screen ic)
-// need CS/SCK/MISO/MOSI for Software SPI, and TPEN for pen interrupt
+// XPT2046 Software SPI pins for touch screen
+// It needs CS/SCK/MISO/MOSI for Software SPI and TPEN for pen interrupt
 #define XPT2046_CS   PE6
 #define XPT2046_SCK  PE5
 #define XPT2046_MISO PE4
 #define XPT2046_MOSI PE3
 #define XPT2046_TPEN PC13
 
-// SD Card SPI pins
-#define SD_SPI_SUPPORT
+// SD Card SDIO/SPI pins
 //#define SD_SDIO_SUPPORT
-#ifdef SD_SPI_SUPPORT
-  #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 0      // 2 frequency division
-  #define SD_SPI        _SPI1
-  #define SD_CS_PIN     PA4
+#ifndef SD_SPI_SUPPORT
+  #define SD_SPI_SUPPORT
+  #ifdef SD_SPI_SUPPORT
+    #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
+    #define SD_HIGH_SPEED 0      // 2 frequency division
+    #define SD_SPI        _SPI1
+    #define SD_CS_PIN     PA4
+  #endif
 #endif
 
-// SD Card CD detect pin
+// SD Card CD Detect pin
 #define SD_CD_PIN PC4
 
-// W25Qxx SPI pins
+// W25Qxx SPI Flash Memory pins
 #define W25Qxx_SPEED  0
 #define W25Qxx_SPI    _SPI3
 #define W25Qxx_CS_PIN PB6
@@ -137,31 +141,41 @@
   #define HAS_EMULATOR
 #endif
 
-// Buzzer support
-#define BUZZER_PIN PD13
+// Buzzer PWM pin
+#ifndef BUZZER_PIN
+  #define BUZZER_PIN PD13
+#endif
 
-// LCD Encoder support
+// LCD Encoder pins
 #define LCD_ENCA_PIN   PA8
 #define LCD_ENCB_PIN   PC9
 #define LCD_BTN_PIN    PC8
 #define LCD_ENC_EN_PIN PC6
 
-// U disk support
-#define USB_FLASH_DRIVE_SUPPORT
-#define USE_USB_OTG_FS
-
-// Extend function(PS_ON, filament_detect)
-#ifndef PS_ON_PIN
-  #define PS_ON_PIN PC12  // The string on TFT35 V3.0 board(PA12) is wrong, PC12 is the correct IO
+// USB Disk support
+#ifndef USB_FLASH_DRIVE_SUPPORT
+  #define USB_FLASH_DRIVE_SUPPORT
+  #define USE_USB_OTG_FS
 #endif
 
+// Auto Power Off Detection pin
+#ifndef PS_ON_PIN
+  #define PS_ON_PIN PC12  // the string on TFT35 V3.0 board (PA12) is wrong, PC12 is the correct IO
+#endif
+
+// Filament Runout Detection pin
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN PA15
 #endif
 
-#define LED_COLOR_PIN PC7
-#define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
-#define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
+// Knob LED Color pins
+#ifndef LED_COLOR_PIN
+  #define LED_COLOR_PIN PC7
+  #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1<<7
+  #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1<<7
+#endif
+
+// Neopixel LEDs number
 #ifndef NEOPIXEL_PIXELS
   #define NEOPIXEL_PIXELS 2
 #endif

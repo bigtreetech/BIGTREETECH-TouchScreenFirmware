@@ -1,5 +1,5 @@
-#ifndef _PIN_GD_TFT35_E3_V3_0_H_ // modify to actual filename !!!
-#define _PIN_GD_TFT35_E3_V3_0_H_ // modify to actual filename !!!
+#ifndef _PIN_GD_TFT35_E3_V3_0_H_  // modify to actual filename !!!
+#define _PIN_GD_TFT35_E3_V3_0_H_  // modify to actual filename !!!
 
 // Hardware version config
 #ifndef HARDWARE_VERSION

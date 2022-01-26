@@ -1,6 +1,7 @@
 #ifndef _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
 #define _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
 
+// Root folder for fonts and icons
 #ifndef ROOT_DIR
   #define ROOT_DIR "TFT50"
 #endif
@@ -10,7 +11,7 @@
   #define HARDWARE_VERSION "TFT50_V3.0"
 #endif
 
-#ifndef SSD1963_LCD_PARA
+#ifndef SSD1963_LCD_PARA  // only for TFTLCD_DRIVER SSD1963
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY  9   // 9Mhz
 
