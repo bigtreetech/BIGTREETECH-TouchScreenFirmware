@@ -689,12 +689,6 @@ void sendQueueCmd(void)
             {
               heatSyncUpdateSeconds(cmd_value());
             }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
-              updateCmd(buf);
-            }
           }
           break;
 
@@ -738,12 +732,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(i, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
-              updateCmd(buf);
               heatSetSendWaiting(i, false);
             }
           }
@@ -809,12 +797,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(BED, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
-              updateCmd(buf);
               heatSetSendWaiting(BED, false);
             }
           }
@@ -841,12 +823,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(CHAMBER, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
-              updateCmd(buf);
               heatSetSendWaiting(CHAMBER, false);
             }
           }
