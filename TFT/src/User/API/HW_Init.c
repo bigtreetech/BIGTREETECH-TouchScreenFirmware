@@ -88,7 +88,7 @@ void HW_Init(void)
     FIL_Runout_Init();
   #endif
 
-  #ifdef U_DISK_SUPPORT
+  #ifdef USB_FLASH_DRIVE_SUPPORT
     USB_Init();
   #endif
 

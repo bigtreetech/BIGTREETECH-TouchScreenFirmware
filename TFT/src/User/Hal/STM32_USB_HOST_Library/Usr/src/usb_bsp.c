@@ -28,7 +28,7 @@
 #include "delay.h"
 #include "variants.h"
 
-#ifdef U_DISK_SUPPORT
+#ifdef USB_FLASH_DRIVE_SUPPORT
 /**
   * @brief  USB_OTG_BSP_Init
   *         Initializes BSP configurations

@@ -23,7 +23,7 @@
 #include "usbh_ioreq.h"
 #include "usbh_stdreq.h"
 
-#ifdef U_DISK_SUPPORT
+#ifdef USB_FLASH_DRIVE_SUPPORT
 /** @addtogroup USBH_LIB
 * @{
 */
