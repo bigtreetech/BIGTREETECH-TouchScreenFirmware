@@ -160,15 +160,17 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "TFT SDカードの読み取りがエラー発生しました!"
     #define STRING_TFTSD_INSERTED         "SDカード入りました!"
     #define STRING_TFTSD_REMOVED          "SDカード出しました!"
-    #define STRING_U_DISK                 "USBメモリー"
-    #define STRING_READ_U_DISK_ERROR      "USBメモリー読み込みエラー!"
-    #define STRING_U_DISK_INSERTED        "U Diskカード入りました!"
-    #define STRING_U_DISK_REMOVED         "U Diskカード出しました!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "USBメモリー"
+    #define STRING_READ_USB_DISK_ERROR   "USBメモリー読み込みエラー!"
+    #define STRING_USB_DISK_INSERTED      "U Diskカード入りました!"
+    #define STRING_USB_DISK_REMOVED       "U Diskカード出しました!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "内部 mSDカード"
     #define STRING_READ_ONBOARDSD_ERROR   "内部 mSDカードの読み取りがエラー発生しました!"
     #define STRING_FILAMENT_RUNOUT        "フィラメントランアウト!"

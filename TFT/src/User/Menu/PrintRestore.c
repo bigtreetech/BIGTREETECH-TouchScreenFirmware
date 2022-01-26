@@ -40,7 +40,7 @@ void menuPrintRestore(void)
       }
 
       #ifdef SD_CD_PIN
-        if (isVolumeExist(infoFile.source) != true)
+        if (volumeExists(infoFile.source) != true)
         {
           resetInfoFile();
           powerFailedClear();
