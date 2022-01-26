@@ -160,15 +160,17 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "Chyba pri načítaní SD karty!"
     #define STRING_TFTSD_INSERTED         "SD karta vložená!"
     #define STRING_TFTSD_REMOVED          "SD karta odstránená!"
-    #define STRING_U_DISK                 "USB kľúč"
-    #define STRING_READ_U_DISK_ERROR      "Chyba pri načítaní USB kľúča!"
-    #define STRING_U_DISK_INSERTED        "USB kľúč vložený!"
-    #define STRING_U_DISK_REMOVED         "USB disk odstránený!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "USB kľúč"
+    #define STRING_READ_USB_DISK_ERROR   "Chyba pri načítaní USB kľúča!"
+    #define STRING_USB_DISK_INSERTED      "USB kľúč vložený!"
+    #define STRING_USB_DISK_REMOVED       "USB disk odstránený!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD karta na doske"
     #define STRING_READ_ONBOARDSD_ERROR   "Chyba pri načítaní SD karty na doske!"
     #define STRING_FILAMENT_RUNOUT        "Chýba filament!"

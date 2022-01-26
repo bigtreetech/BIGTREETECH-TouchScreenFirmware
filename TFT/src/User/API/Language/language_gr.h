@@ -160,15 +160,17 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "Σφάλμα ανάγνωσης κάρτας SD οθόνης!"
     #define STRING_TFTSD_INSERTED         "Η κάρτα έχει εισαχθεί!"
     #define STRING_TFTSD_REMOVED          "Η κάρτα αφαιρέθηκε!"
-    #define STRING_U_DISK                 "USB Δίσκος"
-    #define STRING_READ_U_DISK_ERROR      "Σφάλμα ανάγνωσης USB Δίσκου!"
-    #define STRING_U_DISK_INSERTED        "Ο USB Δίσκος έχει εισαχθεί!"
-    #define STRING_U_DISK_REMOVED         "Ο USB Δίσκος αφαιρέθηκε!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "USB Δίσκος"
+    #define STRING_READ_USB_DISK_ERROR   "Σφάλμα ανάγνωσης USB Δίσκου!"
+    #define STRING_USB_DISK_INSERTED      "Ο USB Δίσκος έχει εισαχθεί!"
+    #define STRING_USB_DISK_REMOVED       "Ο USB Δίσκος αφαιρέθηκε!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "Ενσωματωμένη κάρτα SD"
     #define STRING_READ_ONBOARDSD_ERROR   "Σφάλμα ανάγνωσης ενσωματωμένης κάρτας SD!"
     #define STRING_FILAMENT_RUNOUT        "τελείωσε το νημά!"

@@ -160,15 +160,17 @@
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT-SD"
     #define STRING_READ_TFTSD_ERROR       "TFT-SD olvasási hiba!"
     #define STRING_TFTSD_INSERTED         "SD-Kártya behelyezve!"
     #define STRING_TFTSD_REMOVED          "SD-Kártya eltávolítva!"
-    #define STRING_U_DISK                 "USB Tár"
-    #define STRING_READ_U_DISK_ERROR      "USB olvasási hiba!"
-    #define STRING_U_DISK_INSERTED        "USB behelyezve!"
-    #define STRING_U_DISK_REMOVED         "USB eltávolítva!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "USB Tár"
+    #define STRING_READ_USB_DISK_ERROR   "USB olvasási hiba!"
+    #define STRING_USB_DISK_INSERTED      "USB behelyezve!"
+    #define STRING_USB_DISK_REMOVED       "USB eltávolítva!"
+    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "Lap-SD"
     #define STRING_READ_ONBOARDSD_ERROR   "Alaplap-SD olvasási hiba!"
     #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"

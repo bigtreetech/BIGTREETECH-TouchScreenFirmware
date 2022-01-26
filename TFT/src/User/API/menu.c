@@ -1268,7 +1268,7 @@ void loopBackEnd(void)
     loopPrintFromOnboardSD();  // handle a print from (remote) onboard SD, if any
   }
 
-  #ifdef U_DISK_SUPPORT
+  #ifdef USB_FLASH_DRIVE_SUPPORT
     USB_LoopProcess();
   #endif
 

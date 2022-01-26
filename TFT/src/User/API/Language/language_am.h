@@ -160,15 +160,16 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, U_DISK, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT SD"
     #define STRING_READ_TFTSD_ERROR       "TFTSD հիշողության սարքը չկա"
     #define STRING_TFTSD_INSERTED         "Card inserted!"
     #define STRING_TFTSD_REMOVED          "Card removed!"
-    #define STRING_U_DISK                 "U Disk"
-    #define STRING_READ_U_DISK_ERROR      "Read U Disk error!"
-    #define STRING_U_DISK_INSERTED        "U Disk inserted!"
-    #define STRING_U_DISK_REMOVED         "U Disk removed!"
+    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_USB_DISK               "U Disk"
+    #define STRING_READ_USB_DISK_ERROR   "Read U Disk error!"
+    #define STRING_USB_DISK_INSERTED      "U Disk inserted!"
+    #define STRING_USB_DISK_REMOVED       "U Disk removed!"
     #define STRING_ONBOARDSD              "OnboardSD"
     #define STRING_READ_ONBOARDSD_ERROR   "OnboardSD հիշողության սարքը չկա"
     #define STRING_FILAMENT_RUNOUT        "Filament runout!"
