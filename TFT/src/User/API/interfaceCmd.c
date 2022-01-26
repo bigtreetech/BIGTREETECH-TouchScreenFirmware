@@ -196,12 +196,6 @@ static inline bool getCmd(void)
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
-void updateCmd(const char * buf)
-{
-  strcat(cmd_ptr, buf);       // append buf to gcode
-  cmd_len = strlen(cmd_ptr);  // new length of gcode
-}
-
 // Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
