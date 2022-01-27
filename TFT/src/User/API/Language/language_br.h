@@ -4,6 +4,7 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_EMULATED_M600          "M600 emulado"
     #define STRING_EMULATED_M109_M190     "M109 / M190 emulado"
+	#define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "Análise de comentários em arquivos"
     #define STRING_ROTATED_UI             "Girar"
     #define STRING_LANGUAGE               "Português BRASIL"
