@@ -726,7 +726,7 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from TFT (SD card or USB stick)
+// get gcode command from TFT (SD card or USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;

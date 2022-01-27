@@ -8,15 +8,16 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"
-#include "coordinate.h"
+#include "coordinate.h"  // for TOTAL_AXIS
+#include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20211213
+#define CONFIG_SUPPPORT 20220124
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20211213  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20220124  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
 
@@ -264,6 +265,8 @@ typedef struct
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
   uint8_t  lcd_lock_on_idle;
+  uint8_t  led_color[LED_COLOR_COMPONENT_COUNT];
+  uint8_t  led_always_on;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;

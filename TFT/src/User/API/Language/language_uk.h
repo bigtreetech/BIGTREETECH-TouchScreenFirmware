@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Регулювання яскравості LCD"
     #define STRING_LCD_IDLE_TIME          "Час до загасання LCD"
     #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Підсвічування енкодера"
     #define STRING_KNOB_LED_IDLE          "Простій підсвічування енкодера"
     #define STRING_START_GCODE_ENABLED    "Розпочати G-код перед друком"

@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Parlaklık Kısılma Oranı"
     #define STRING_LCD_IDLE_TIME          "Parlaklık Kısılma Süresi"
     #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Döner Düğme LED"
     #define STRING_KNOB_LED_IDLE          "Düğme LED bekleme"
     #define STRING_START_GCODE_ENABLED    "Başlangıç gcodeu kullan"

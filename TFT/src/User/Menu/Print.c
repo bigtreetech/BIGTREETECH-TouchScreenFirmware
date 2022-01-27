@@ -401,7 +401,7 @@ void menuPrint(void)
         case KEY_ICON_1:
           if (volumeExists(TFT_USB_DISK))
           {
-            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
+            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
             infoFile.source = TFT_USB_DISK;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);

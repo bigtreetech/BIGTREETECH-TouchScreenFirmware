@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD睡眠背光亮度"
     #define STRING_LCD_IDLE_TIME          "LCD自动睡眠时间"
     #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "旋钮LED颜色"
     #define STRING_KNOB_LED_IDLE          "旋钮LED自动睡眠"
     #define STRING_START_GCODE_ENABLED    "执行打印前起始Gcode"

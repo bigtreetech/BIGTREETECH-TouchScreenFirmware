@@ -74,7 +74,7 @@ void LCD_Wake(void)
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)
         {
-          Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
+          Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
         }
       #endif
     }
@@ -106,7 +106,7 @@ void LCD_CheckDimming(void)
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)
         {
-          Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
+          Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
         }
       #endif
     }
@@ -127,7 +127,7 @@ void LCD_CheckDimming(void)
       #ifdef LED_COLOR_PIN
         if (infoSettings.knob_led_idle)
         {
-          Knob_LED_SetColor(led_colors[LED_OFF], infoSettings.neopixel_pixels);
+          Knob_LED_SetColor(knob_led_colors[KNOB_LED_OFF], infoSettings.neopixel_pixels);
         }
       #endif
     }
@@ -157,7 +157,7 @@ void LCD_SetKnobLedIdle(bool enabled)
     }
 
     // always restore default knob LED color
-    Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
+    Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
   }
 }
 

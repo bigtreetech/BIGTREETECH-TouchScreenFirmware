@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD-Timeout-Helligkeit"
     #define STRING_LCD_IDLE_TIME          "LCD-Timeout"
     #define STRING_LCD_LOCK_ON_IDLE       "Kein Touch im Standby"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Drehknopf LED Farbe"
     #define STRING_KNOB_LED_IDLE          "Drehknopf LED idle Farbe"
     #define STRING_START_GCODE_ENABLED    "Gcode vor Druck"

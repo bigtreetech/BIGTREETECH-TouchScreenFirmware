@@ -60,7 +60,7 @@ void HW_Init(void)
 
   #ifdef LED_COLOR_PIN
     knob_LED_Init();
-    Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);  // set last saved color after initialization
+    Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);  // set last saved color after initialization
   #endif
 
   #ifdef BUZZER_PIN
@@ -104,6 +104,8 @@ void HW_Init(void)
   }
 
   LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
+
+  LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
 
   Mode_Switch();
 }

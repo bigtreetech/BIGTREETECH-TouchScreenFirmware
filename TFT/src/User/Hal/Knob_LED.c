@@ -18,7 +18,7 @@ uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
   #define NEOPIXEL_TIMER_SR()  TIMER_INTF(TIMER5)
   #define NEOPIXEL_TIMER_CR1() TIMER_CTL0(TIMER5)
 #else
-  #define NEOPIXEL_TIMER_CLOCK_ENABLE() RCC->APB1ENR |= 1 << 4 // TIM6 Clock enable
+  #define NEOPIXEL_TIMER_CLOCK_ENABLE() RCC->APB1ENR |= 1 << 4  // TIM6 Clock enable
   #define NEOPIXEL_TIMER_CNT() TIM6->CNT
   #define NEOPIXEL_TIMER_PSC() TIM6->PSC
   #define NEOPIXEL_TIMER_ARR() TIM6->ARR

@@ -431,13 +431,14 @@ M118 A1 P0 action:pause
 M118 A1 P0 action:resume
   
 **time remaining progress:**
-M118 A1 P0 action:notification Time Left hms (e.g. 02h04m06s)
-  
-M117 Time Left hms
+M118 A1 P0 action:notification Time Left <XX>h<YY>m<ZZ>s (e.g. 02h04m06s)
+or
+M117 Time Left <XX>h<YY>m<ZZ>s
+
 **file data progress:**
-  
-M118 A1 P0 action:notification Data Left / (e.g. 123/12345)
-M117 Data Left /
+M118 A1 P0 action:notification Data Left <XXXX>/<YYYY> (e.g. 123/12345)
+or
+M117 Data Left <XXXX>/<YYYY>
 
 When the trigger "print_start" is received, the TFT switches to Printing menu.
 Once on Printing menu, the "pause", "resume" and "stop" buttons on the menu will be disabled.

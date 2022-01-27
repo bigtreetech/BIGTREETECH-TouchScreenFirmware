@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Luminosità in idle"
     #define STRING_LCD_IDLE_TIME          "Timer luminosità"
     #define STRING_LCD_LOCK_ON_IDLE       "Blocco LCD in idle"
+    #define STRING_LED_ALWAYS_ON          "LED sempre acceso"
     #define STRING_KNOB_LED_COLOR         "LED manopola "
     #define STRING_KNOB_LED_IDLE          "LED manopola spento"
     #define STRING_START_GCODE_ENABLED    "Inserisci start gcode"

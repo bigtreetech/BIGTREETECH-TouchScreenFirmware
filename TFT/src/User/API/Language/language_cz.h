@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "LCD snížení jasu"
     #define STRING_LCD_IDLE_TIME          "LCD snížení jasu po"
     #define STRING_LCD_LOCK_ON_IDLE       "Blok. dotek při zatmavení"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Rotační knob LED"
     #define STRING_KNOB_LED_IDLE          "Rotační knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Spustit Gcode před tiskem"

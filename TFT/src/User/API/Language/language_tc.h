@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "睡眠狀態螢幕亮度"
     #define STRING_LCD_IDLE_TIME          "螢幕進入睡眠時間"
     #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "旋鈕LED顏色"
     #define STRING_KNOB_LED_IDLE          "旋鈕LED自動睡眠"
     #define STRING_START_GCODE_ENABLED    "執行起始G-code"
