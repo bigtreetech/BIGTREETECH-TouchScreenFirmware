@@ -11,13 +11,13 @@ at on you marlin in der configuration.h file this for support
 #define BTT_TFT
 
 #if ENABLED(BTT_TFT)
-  //#define REPRAP_DISPLAY
-  //#define CR10_DISPLAY
+  //#define REPRAP_DISPLAY //not supportet but idea for Marlin mode
+  //#define CR10_DISPLAY  ////not supportet but idea for Marlin mode
   #define EXTENSIBLE_UI
   
 
-  //#define LCD_SERIAL_PORT 3
-  #define BTT_TFT_SERIAL_Port 3
+  //#define LCD_SERIAL_PORT 3 //us for all mcu mainboard
+  #define BTT_TFT_SERIAL_Port 3 //us for Stm32 mcu mainboard
   #define BTT_TFT_BAUDRATE 57600
 
   #ifdef LCD_SERIAL_PORT
