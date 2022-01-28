@@ -1,0 +1,35 @@
+I working on a Display support for Marlin on wifiserial (for stm32) or Lcdserial other controller 
+
+with Gcode and command support at all time (even if the printer is waiting...for example M109,M104 and more) 
+
+at on you marlin in der configuration.h file this for support
+
+
+
+//src/lcd/btt_tft
+
+#define BTT_TFT
+
+#if ENABLED(BTT_TFT)
+  //#define REPRAP_DISPLAY
+  //#define CR10_DISPLAY
+  #define EXTENSIBLE_UI
+  
+
+  //#define LCD_SERIAL_PORT 3
+  #define BTT_TFT_SERIAL_Port 3
+  #define BTT_TFT_BAUDRATE 57600
+
+  #ifdef LCD_SERIAL_PORT
+  #define LCD_BAUDRATE 57600
+  #endif
+
+#endif
+
+
+
+and place them the btt tft folder on marlin/src/lcd/....
+
+
+attention please note it not finish !! Experimal Version 
+ 
