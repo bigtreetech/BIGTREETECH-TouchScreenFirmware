@@ -165,7 +165,7 @@
     #define STRING_READ_TFTSD_ERROR       "Chyba při čtení SD karty!"
     #define STRING_TFTSD_INSERTED         "SD karta vložena!"
     #define STRING_TFTSD_REMOVED          "SD karta vyjmuta!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
+    #define STRING_TFTSD_NOT_DETECTED     "SD karta není detekována."
     #define STRING_USB_DISK               "USB Disk"
     #define STRING_READ_USB_DISK_ERROR   "Chyba při čtení USB disku!"
     #define STRING_USB_DISK_INSERTED      "USB disk  vložen!"
