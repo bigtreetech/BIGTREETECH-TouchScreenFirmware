@@ -2,7 +2,7 @@
 #define _SERIAL_H_
 
 #include <stdint.h>
-#include "variants.h"  // for u32 etc...
+#include "variants.h"  // for uint32_t etc...
 #include "uart.h"
 
 typedef struct

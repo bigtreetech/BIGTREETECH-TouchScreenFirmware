@@ -1242,13 +1242,18 @@ void parseACK(void)
       ack_port_index = PORT_1;  // reset ACK port index to avoid wrong relaying (in case no more commands will
                                 // be sent by interfaceCmd) of any successive spontaneous ACK message
     }
-    #ifdef SERIAL_PORT_2
+    #if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
         for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
         {
-          if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
+          // forward data only if serial port is enabled
+          if (infoSettings.serial_port[i] > 0
+              #ifdef SERIAL_DEBUG_PORT
+                && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+              #endif
+              )
           {
             Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
           }
@@ -1263,13 +1268,18 @@ void parseACK(void)
   }
 }
 
-#ifdef SERIAL_PORT_2
+#if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
 
 void parseRcvGcode(void)
 {
   for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
   {
-    if (infoSettings.serial_port[i] > 0)  // if serial port is enabled
+    // forward data only if serial port is enabled
+    if (infoSettings.serial_port[i] > 0
+        #ifdef SERIAL_DEBUG_PORT
+          && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+        #endif
+        )
     {
       while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
       {

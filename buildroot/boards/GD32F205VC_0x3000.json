@@ -1,0 +1,48 @@
+{
+  "build": {
+    "core": "gd32",
+    "cpu": "cortex-m3",
+    "extra_flags": "-DGD32F2 -DGD32F205 -DGD32F20x -DGD32F20X_CL",
+    "f_cpu": "120000000L",
+    "mcu": "gd32f205vct6",
+    "spl_series": "GD32F20x",
+    "series": "GD32F205",
+    "spl_sub_series": "CL"
+  },
+  "debug": {
+    "jlink_device": "GD32F205VC",
+    "openocd_target": "stm32f2x",
+    "svd_path": "GD32F20x_CL.svd",
+    "default_tools": [
+      "stlink"
+    ],
+    "openocd_extra_pre_target_args": [
+      "-c",
+      "set CPUTAPID 0"
+    ]
+  },
+  "frameworks": [
+    "arduino",
+    "spl"
+  ],
+  "name": "GD32F205VC (128k RAM, 256k - 12K Flash)",
+  "upload": {
+    "disable_flushing": false,
+    "maximum_ram_size": 131072,
+    "maximum_size": 249856,
+    "protocol": "cmsis-dap",
+    "protocols": [
+      "jlink",
+      "cmsis-dap",
+      "stlink",
+      "blackmagic",
+      "sipeed-rv-debugger",
+      "serial"
+    ],
+    "require_upload_port": true,
+    "use_1200bps_touch": false,
+    "wait_for_upload_port": false
+  },
+  "url": "https://www.gigadevice.com/microcontroller/gd32f205vct6/",
+  "vendor": "GigaDevice"
+}

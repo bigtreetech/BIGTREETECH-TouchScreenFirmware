@@ -60,8 +60,12 @@
 #endif
 
 // Debug disable, free pins for other function
-//#define DISABLE_JTAG   // free JTAG(PB3/PB4) for SPI3
-//#define DISABLE_DEBUG  // free all pins
+// free JTAG(PB3/PB4) for SPI3
+// #define DISABLE_JTAG() RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); \
+//                        GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE)
+// free all pins
+//#define DISABLE_DEBUG() RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); \
+                        GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE)
 
 // LCD Backlight pin (PWM can adjust brightness)
 //#define LCD_LED_PIN           PA8
@@ -140,7 +144,7 @@
 //#define LCD_ENC_EN_PIN PB11
 
 // U disk support
-//#define U_DISK_SUPPORT
+//#define USB_FLASH_DRIVE_SUPPORT
 //#define USE_USB_OTG_FS
 
 // Extend function(PS_ON, filament_detect)

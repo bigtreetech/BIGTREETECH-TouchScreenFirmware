@@ -67,7 +67,7 @@ DSTATUS disk_initialize(
       break;
 
     case DEV_USB:
-      if (HCD_IsDeviceConnected(&USB_OTG_Core))
+      if (USB_IsDeviceConnected())
       {
         diskStatus[pdrv] &= ~STA_NOINIT;
       }
@@ -200,33 +200,34 @@ DRESULT disk_ioctl(
       return RES_OK;
 
     case DEV_USB:
-    {
-      DRESULT res = RES_ERROR;
-      switch (cmd)
-      {
-        case CTRL_SYNC:         // Make sure that no pending write process
-          res = RES_OK;
-          break;
+      return RES_OK;
+    // {
+    //   DRESULT res = RES_ERROR;
+    //   switch (cmd)
+    //   {
+    //     case CTRL_SYNC:         // Make sure that no pending write process
+    //       res = RES_OK;
+    //       break;
 
-        case GET_SECTOR_COUNT:  // Get number of sectors on the disk (DWORD)
-          *(DWORD*)buff = (DWORD) USBH_MSC_Param.MSCapacity;
-          res = RES_OK;
-          break;
+    //     case GET_SECTOR_COUNT:  // Get number of sectors on the disk (DWORD)
+    //       *(DWORD*)buff = (DWORD) USBH_MSC_Param.MSCapacity;
+    //       res = RES_OK;
+    //       break;
 
-        case GET_SECTOR_SIZE:   // Get R/W sector size (WORD)
-          *(WORD*)buff = 512;
-          res = RES_OK;
-          break;
+    //     case GET_SECTOR_SIZE:   // Get R/W sector size (WORD)
+    //       *(WORD*)buff = 512;
+    //       res = RES_OK;
+    //       break;
 
-        case GET_BLOCK_SIZE:    // Get erase block size in unit of sector (DWORD)
-          *(DWORD*)buff = 512;
-          break;
+    //     case GET_BLOCK_SIZE:    // Get erase block size in unit of sector (DWORD)
+    //       *(DWORD*)buff = 512;
+    //       break;
 
-        default:
-          res = RES_PARERR;
-      }
-      return res;
-    }
+    //     default:
+    //       res = RES_PARERR;
+    //   }
+    //   return res;
+    // }
   }
 
   return RES_PARERR;

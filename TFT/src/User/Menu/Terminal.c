@@ -6,16 +6,14 @@
 
 typedef struct
 {
-  char *   ptr[MAX_PAGE_COUNT];  // Pointer array to terminal pages within terminal buffer
-  uint8_t  pageHead;             // index of first page
-  uint8_t  pageTail;             // index of last page
-  uint8_t  oldPageHead;          // old index of starting page
-  uint8_t  pageIndex;            // current page index
-  uint8_t  oldPageIndex;         // old page index
-  uint16_t terminalBufTail;      // last copy index for copying data in buffer
-  uint16_t buffSize;             // maximum buffer/cache size
-  uint8_t  maxPageCount;         // maximum page count allowed
-  uint8_t  bufferFull;
+  char *   pageTable[MAX_PAGE_COUNT];  // array to terminal page pointers within terminal buffer
+  uint8_t  maxPageCount;               // maximum page count allowed
+  uint8_t  pageCount;                  // current page count
+  uint8_t  pageHead;                   // index of first page
+  uint8_t  pageTail;                   // index of last page
+  uint8_t  pageIndex;                  // current page index
+  uint16_t bufSize;                    // maximum buffer/cache size
+  uint16_t bufTail;                    // last copy index for copying data in buffer
   uint8_t  lastSrc;
 } TERMINAL_DATA;
 
@@ -306,7 +304,7 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= COUNT(editorKeyRect))
     return;
 
-  // Setup colors and button info
+  // setup colors and button info
   #ifdef KEYBOARD_MATERIAL_THEME
     uint16_t fontcolor = CTRL_FONT_COLOR;
     uint16_t bgcolor = KEY_BG_COLOR;
@@ -472,7 +470,7 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          gcodeBuf[nowIndex++] = '\n';  // End char '\n' for Gcode
+          gcodeBuf[nowIndex++] = '\n';  // end char '\n' for Gcode
           gcodeBuf[nowIndex] = 0;
           storeCmd(gcodeBuf);
           gcodeBuf[nowIndex = 0] = 0;
@@ -525,20 +523,18 @@ static inline void saveGcodeTerminalCache(const char * str, uint16_t strLen)
 {
   uint16_t len = 0;
 
-  if ((terminalData->terminalBufTail + strLen) < terminalData->buffSize)
+  if ((terminalData->bufTail + strLen) < terminalData->bufSize)
   {
-    memcpy(terminalBuf + terminalData->terminalBufTail, str, strLen);
-    terminalData->terminalBufTail += strLen;
+    memcpy(terminalBuf + terminalData->bufTail, str, strLen);
+    terminalData->bufTail += strLen;
   }
   else
   {
-    len = (terminalData->terminalBufTail + strLen) - terminalData->buffSize;
-    memcpy(terminalBuf + terminalData->terminalBufTail, str, (strLen - len));
-    terminalData->terminalBufTail = 0;
-    memcpy(terminalBuf + terminalData->terminalBufTail, str + (strLen - len), len);
-    terminalData->terminalBufTail += len;
-    terminalData->bufferFull = 1;
-    terminalData->pageHead++;
+    len = (terminalData->bufTail + strLen) - terminalData->bufSize;
+    memcpy(terminalBuf + terminalData->bufTail, str, (strLen - len));
+    terminalData->bufTail = 0;
+    memcpy(terminalBuf + terminalData->bufTail, str + (strLen - len), len);
+    terminalData->bufTail += len;
   }
 }
 
@@ -547,12 +543,12 @@ void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX po
   if (MENU_IS_NOT(menuTerminal))
     return;
 
-  char * srcID[SRC_TERMINAL_COUNT] = {"\5", "\6"};
+  char * srcId[SRC_TERMINAL_COUNT] = {"\5", "\6"};
 
   // copy string source identifier
   if (terminalData->lastSrc != src)
   {
-    saveGcodeTerminalCache(srcID[src], 1);
+    saveGcodeTerminalCache(srcId[src], 1);
     terminalData->lastSrc = src;
   }
 
@@ -570,11 +566,11 @@ void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX po
 // reverse lookup for source identifier
 TERMINAL_SRC getLastSrc(char * ptr)
 {
-  TERMINAL_SRC lastSrc = SRC_TERMINAL_GCODE;
+  TERMINAL_SRC lastSrc = SRC_TERMINAL_COUNT;
   char * endPtr = (ptr + 1);
 
-  // Set end of search pointer
-  if (endPtr > (terminalBuf + terminalData->buffSize))
+  // set end of search pointer
+  if (endPtr > (terminalBuf + terminalData->bufSize))
     endPtr = terminalBuf;
 
   while (ptr != endPtr)
@@ -590,7 +586,17 @@ TERMINAL_SRC getLastSrc(char * ptr)
 
     // loop to end if reached starting point of buffer
     if (ptr < terminalBuf)
-      ptr = terminalBuf + terminalData->buffSize;
+      ptr = terminalBuf + terminalData->bufSize;
+  }
+
+  if (lastSrc == SRC_TERMINAL_COUNT)  // if a source identifier is not found
+  {
+    // if terminal has a valid source, use it (it should be always that because
+    // at least a message has been buffered if this function is invoked)
+    if (terminalData->lastSrc != SRC_TERMINAL_COUNT)
+      lastSrc = terminalData->lastSrc;
+    else
+      lastSrc = SRC_TERMINAL_ACK;  // otherwise, use ACK type as default source (it should never happen)
   }
 
   return lastSrc;
@@ -648,12 +654,21 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
+uint8_t terminalUpdatePageCount(void)
+{
+  if (terminalData->pageTail >= terminalData->pageHead)
+    terminalData->pageCount = abs(terminalData->pageTail - terminalData->pageHead);
+  else
+    terminalData->pageCount = abs(terminalData->pageTail + (terminalData->maxPageCount - terminalData->pageHead));
+
+  return terminalData->pageCount;
+}
+
 static inline void terminalDrawPageNumber(void)
 {
   char tempstr[10];
 
-  sprintf(tempstr, "%d/%d", abs(((terminalData->pageTail - terminalData->pageHead) - terminalData->pageIndex) + 1),
-          abs((terminalData->pageTail - terminalData->pageHead) + 1));
+  sprintf(tempstr, "%d/%d", (terminalData->pageCount + 1) - terminalData->pageIndex, terminalData->pageCount + 1);
 
   drawStandardValue(&terminalPageRect, VALUE_STRING, &tempstr, FONT_SIZE_LARGE, BAR_FONT_COLOR, BAR_BG_COLOR, 1, true);
 }
@@ -689,9 +704,11 @@ void menuTerminalWindow(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   CHAR_INFO info;
-  TERMINAL_SRC pageHeadSrc = SRC_TERMINAL_GCODE;
-  uint16_t lastTerminalIndex = 0;
-  uint8_t pageBufIndex = 0;
+  TERMINAL_SRC src = SRC_TERMINAL_ACK;  // default source
+  uint8_t oldPageCount = 0;
+  uint8_t oldPageIndex = 0;
+  uint8_t pageTableIndex = 0;
+  uint16_t bufIndex = 0;
   int16_t cursorX = CURSOR_START_X;
   int16_t cursorY = terminalAreaRect[0].y0;
 
@@ -706,15 +723,8 @@ void menuTerminalWindow(void)
     switch (key_num)
     {
       case TERM_PAGE_UP:  // page up
-        if (terminalData->pageIndex < (terminalData->pageTail - terminalData->pageHead))
-        {
+        if (terminalData->pageIndex < terminalData->pageCount)
           terminalData->pageIndex++;
-        }
-        if ((terminalData->pageTail < terminalData->pageHead)
-            && (terminalData->pageIndex < (terminalData->pageTail + terminalData->maxPageCount - terminalData->pageHead)))
-        {
-          terminalData->pageIndex++;
-        }
         break;
 
       case TERM_PAGE_DOWN:  // page down
@@ -735,17 +745,19 @@ void menuTerminalWindow(void)
         break;
     }
 
-    // Scroll a certain number of pages from the top of the page buffer
-    if (terminalData->oldPageIndex != terminalData->pageIndex)
+    // scroll a certain number of pages from the last page (tail)
+    if (oldPageIndex != terminalData->pageIndex)
     {
-      terminalData->oldPageIndex = terminalData->pageIndex;
+      oldPageIndex = terminalData->pageIndex;
 
       if (terminalData->pageTail >= terminalData->pageIndex)
-        pageBufIndex = terminalData->pageTail - terminalData->pageIndex;
+        pageTableIndex = terminalData->pageTail - terminalData->pageIndex;
       else
-        pageBufIndex = terminalData->pageTail + (terminalData->maxPageCount - terminalData->pageIndex);
+        pageTableIndex = terminalData->pageTail + (terminalData->maxPageCount - terminalData->pageIndex);
 
-      lastTerminalIndex = terminalData->ptr[pageBufIndex] - terminalBuf;
+      bufIndex = terminalData->pageTable[pageTableIndex] - terminalBuf;
+      src = getLastSrc(terminalData->pageTable[pageTableIndex]);
+
       cursorX = CURSOR_START_X;
       cursorY = terminalAreaRect[0].y0;
 
@@ -753,76 +765,113 @@ void menuTerminalWindow(void)
       GUI_ClearPrect(&terminalAreaRect[0]);
 
       terminalDrawPageNumber();
-      pageHeadSrc = getLastSrc(terminalData->ptr[pageBufIndex]);
     }
 
-    while (terminalBuf + lastTerminalIndex && (lastTerminalIndex != terminalData->terminalBufTail))
+    while (bufIndex != terminalData->bufTail)
     {
-      getCharacterInfo((uint8_t *)(terminalBuf + lastTerminalIndex), &info);
+      if (terminalData->pageHead != terminalData->pageTail)  // if more than one page is available
+      {
+        // check if first page (head) is out of page range
+        if (terminalData->pageTable[terminalData->pageTail] - terminalBuf >= terminalData->bufTail ||
+            (terminalData->pageTable[terminalData->pageHead] > terminalData->pageTable[terminalData->pageTail] &&
+             terminalData->pageTable[terminalData->pageHead] - terminalBuf <= terminalData->bufTail))
+        {
+          // move to next first page and move on top of the loop and check again (with this block of code)
+          terminalData->pageHead = (terminalData->pageHead + 1) % terminalData->maxPageCount;
+          terminalUpdatePageCount();  // update page count
+          break;
+        }
+      }
 
-      // read source identifier
+      // check if page index is out of page count (needed when page count is updated)
+      if (terminalData->pageIndex > terminalData->pageCount)
+      {
+        // set index to first page in page range and move on top of the loop to select the new page
+        // to display (with block of code "if (oldPageIndex != terminalData->pageIndex)")
+        terminalData->pageIndex = terminalData->pageCount;
+        break;
+      }
+
+      //
+      // WARNING: In case the buffer contains multi character codes (e.g. requiring 2 or 3 bytes),
+      //          a buffer overflow can occur in both the getCharacterInfo and GUI_DispOne functions in case the codes
+      //          are not contiguous in the buffer (the first part was buffered in the tail and the last part in the head)
+      //
+      getCharacterInfo((uint8_t *)(terminalBuf + bufIndex), &info);
+
+      if (info.bytes == 0)  // if '\0' is found, move to next byte in the buffer (avoiding an infinite loop due to info.bytes set to 0)
+      {
+        bufIndex = (bufIndex + 1) % terminalData->bufSize;
+        break;
+      }
+
+      // check source identifier
       if (info.codePoint == 0x5 || info.codePoint == 0x6)
-        pageHeadSrc = info.codePoint - 0x5;
+        src = info.codePoint - 0x5;
 
-      // Next Line
+      // check next line
       if (cursorX + info.pixelWidth > terminalAreaRect[0].x1 ||
-          (terminalBuf[lastTerminalIndex] == '\n' && cursorX != CURSOR_START_X))
+          (terminalBuf[bufIndex] == '\n' && cursorX != CURSOR_START_X))
       {
         cursorX = CURSOR_START_X;
         cursorY += info.pixelHeight;
       }
 
-      if (terminalBuf[lastTerminalIndex] != '\n')
+      if (terminalBuf[bufIndex] != '\n')
       {
-        if (cursorY + info.pixelHeight > terminalAreaRect[0].y1)  // Save the page pointer and scroll to a new screen
+        // check next page
+        if (cursorY + info.pixelHeight > terminalAreaRect[0].y1)
         {
-          if (terminalData->pageIndex != 0)
+          if (terminalData->pageIndex != 0)  // do not scroll pages if we are not in the last page (tail)
             break;
 
+          // move to next last page (new page) and save the page pointer
           terminalData->pageTail = (terminalData->pageTail + 1) % terminalData->maxPageCount;
-          // Save character buffer index to page buffer
-          terminalData->ptr[terminalData->pageTail] = terminalBuf + lastTerminalIndex;
+          terminalData->pageTable[terminalData->pageTail] = terminalBuf + bufIndex;
 
-          // Update the bottom of the page buffer to limit the page range
-          if ((terminalData->bufferFull == 1) && (terminalData->oldPageHead == terminalData->pageHead))
-            terminalData->pageHead++;
+          // move to next first page if we reached the maximun page count
+          if (terminalData->pageTail == 0 && (terminalData->pageCount + 1) == terminalData->maxPageCount)
+            terminalData->pageHead = (terminalData->pageHead + 1) % terminalData->maxPageCount;
 
-          if (terminalData->pageHead >= terminalData->maxPageCount)
-            terminalData->pageHead = 0;
+          terminalUpdatePageCount();  // update page count
 
-          terminalData->oldPageHead = terminalData->pageHead;
           cursorX = CURSOR_START_X;
           cursorY = terminalAreaRect[0].y0;
 
           GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
           GUI_ClearPrect(&terminalAreaRect[0]);
-
-          terminalDrawPageNumber();
         }
 
-        GUI_SetColor(fontSrcColor[infoSettings.terminal_color_scheme][pageHeadSrc]);
+        GUI_SetColor(fontSrcColor[infoSettings.terminal_color_scheme][src]);
         GUI_SetBkColor(fontSrcColor[infoSettings.terminal_color_scheme][2]);
 
         GUI_DispOne(cursorX, cursorY, &info);
         cursorX += info.pixelWidth;
       }
 
-      lastTerminalIndex += info.bytes;
-      if (lastTerminalIndex >= terminalData->buffSize)
-        lastTerminalIndex = 0;
+      if (oldPageCount != terminalData->pageCount)
+      {
+        oldPageCount = terminalData->pageCount;
+
+        terminalDrawPageNumber();
+      }
+
+      bufIndex += info.bytes;
+
+      if (bufIndex >= terminalData->bufSize)
+        bufIndex = 0;
     }
 
     loopBackEnd();
   }
 
-  terminalData->bufferFull = 0;
-  terminalData->terminalBufTail = 0;
   terminalBuf[0] = 0;
-  terminalData->pageTail = 0;
+  terminalData->pageCount = 0;
   terminalData->pageHead = 0;
+  terminalData->pageTail = 0;
   terminalData->pageIndex = 0;
-  terminalData->oldPageIndex = 0;
-  terminalData->lastSrc = (SRC_TERMINAL_ACK + 1);
+  terminalData->bufTail = 0;
+  terminalData->lastSrc = SRC_TERMINAL_COUNT;
 
   // restore default
   GUI_RestoreColorDefault();
@@ -830,23 +879,23 @@ void menuTerminalWindow(void)
 
 void menuTerminal(void)
 {
-  TERMINAL_DATA termPage = {{terminalBuf}, 0, 0, 0, 0, 0, 0, TERMINAL_MAX_CHAR, MAX_PAGE_COUNT, 0, (SRC_TERMINAL_ACK + 1)};
+  TERMINAL_DATA termPage = {{terminalBuf}, MAX_PAGE_COUNT, 0, 0, 0, 0, TERMINAL_MAX_CHAR, 0, SRC_TERMINAL_COUNT};
 
   if (isPrinting() || infoHost.printing)  // display only 1 page if printing
   {
-    termPage.buffSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
+    termPage.bufSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termPage.maxPageCount = 1;
   }
 
-  char pageBuff[termPage.buffSize];
+  char termBuf[termPage.bufSize];
 
-  terminalBuf = pageBuff;
+  terminalBuf = termBuf;
   terminalData = &termPage;
   curView = 1;
 
   for (uint8_t i = 0; i < termPage.maxPageCount; i++)
   {
-    termPage.ptr[i] = terminalBuf;
+    termPage.pageTable[i] = terminalBuf;
   }
 
   while (MENU_IS(menuTerminal))

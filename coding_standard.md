@@ -1,3 +1,5 @@
+# Pull request Standards
+* We recommend creating different PR for different fixes, And Please don't to modify too many different topics in the same PR, This will make it easier for our to focus on problem points and review.
 
 # Coding Standards
 
