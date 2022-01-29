@@ -1003,7 +1003,7 @@ void parseConfigKey(uint16_t index)
       infoSettings.led_always_on = getOnOff();
       break;
 
-    #ifdef LED_COLOR_PIN
+    #ifdef KNOB_LED_COLOR_PIN
       case C_INDEX_KNOB_LED_COLOR:
         SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, KNOB_LED_COLOR_COUNT - 1);
         break;

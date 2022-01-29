@@ -298,7 +298,7 @@ void menuUISettings(void)
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_TERMINAL_ACK,         LABEL_NULL},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_LED_ALWAYS_ON,        LABEL_NULL},
 
-    #ifdef LED_COLOR_PIN
+    #ifdef KNOB_LED_COLOR_PIN
       {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_KNOB_LED_COLOR,       LABEL_OFF},
 
       #ifdef LCD_LED_PWM_CHANNEL
@@ -319,7 +319,7 @@ void menuUISettings(void)
   uiItems[6].icon = iconToggle[infoSettings.terminal_ack];
   uiItems[7].icon = iconToggle[infoSettings.led_always_on];
 
-  #ifdef LED_COLOR_PIN
+  #ifdef KNOB_LED_COLOR_PIN
     uiItems[8].valueLabel = knob_led_color_names[infoSettings.knob_led_color];
 
     #ifdef LCD_LED_PWM_CHANNEL
@@ -374,7 +374,7 @@ void menuUISettings(void)
         uiItems[curIndex].icon = iconToggle[infoSettings.led_always_on];
         break;
 
-      #ifdef LED_COLOR_PIN
+      #ifdef KNOB_LED_COLOR_PIN
         case 8:
           infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % KNOB_LED_COLOR_COUNT;
           uiItems[curIndex].valueLabel = knob_led_color_names[infoSettings.knob_led_color];

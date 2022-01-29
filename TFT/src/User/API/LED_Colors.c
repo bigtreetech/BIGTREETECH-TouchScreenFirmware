@@ -1,7 +1,7 @@
 #include "LED_Colors.h"
 #include "includes.h"
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
 
 const uint32_t knob_led_colors[KNOB_LED_COLOR_COUNT] = {
   GRB_OFF,
@@ -28,7 +28,7 @@ const LABEL knob_led_color_names[KNOB_LED_COLOR_COUNT] = {
   LABEL_VIOLET,
 };
 
-#endif  // LED_COLOR_PIN
+#endif  // KNOB_LED_COLOR_PIN
 
 const LED_COLOR ledRed =   {0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF};
 const LED_COLOR ledGreen = {0x00, 0xFF, 0x00, 0x00, 0xFF, 0xFF};
@@ -83,7 +83,7 @@ void LED_ChangeColor(const LED_COLOR * led, bool skipPrinterLed)
   if (!skipPrinterLed)
     LED_SendColor(led);
 
-  #ifdef LED_COLOR_PIN
+  #ifdef KNOB_LED_COLOR_PIN
     uint32_t knobLedColor = 0;  // GRB format
 
     knobLedColor |= (uint32_t)(led[1]) << 16;  // g

@@ -6,10 +6,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variants.h"  // for LED_COLOR_PIN
+#include "variants.h"  // for KNOB_LED_COLOR_PIN
 #include "menu.h"
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
 
   // 24bit                            // G R B
   #define GRB_OFF                     0x00000000
@@ -177,7 +177,7 @@ extern "C" {
   extern const uint32_t knob_led_colors[KNOB_LED_COLOR_COUNT];
   extern const LABEL knob_led_color_names[KNOB_LED_COLOR_COUNT];
 
-#endif  // LED_COLOR_PIN
+#endif  // KNOB_LED_COLOR_PIN
 
 // data structures
 #define LED_COLOR_COMPONENT_COUNT 6
