@@ -129,7 +129,7 @@
   //#define USE_USB_OTG_FS
 #endif
 
-// Auto Power Off Detection pin
+// Power Supply Auto Shutdown Detection pin
 #ifndef PS_ON_PIN
   //#define PS_ON_PIN PD12
 #endif

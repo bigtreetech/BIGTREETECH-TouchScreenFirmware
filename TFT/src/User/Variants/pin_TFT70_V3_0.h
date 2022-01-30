@@ -118,7 +118,7 @@
   #define USE_USB_OTG_FS
 #endif
 
-// Auto Power Off Detection pin
+// Power Supply Auto Shutdown Detection pin
 #ifndef PS_ON_PIN
   #define PS_ON_PIN PC12  // the string on TFT35 V3.0 board (PA12) is wrong, PC12 is the correct IO
 #endif
