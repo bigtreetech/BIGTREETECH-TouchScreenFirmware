@@ -82,12 +82,9 @@ void LED_CheckEvent(void)
       heatingDone = false;   // reset flag to "false"
       printingDone = false;  // reset flag to "false"
 
-      if (infoSettings.led_always_on == 1)
-        LED_ChangeColor(&ledColor, false);  // set (neopixel) LED light to current color
-      else
-        LED_ChangeColor(&ledOff, false);    // set (neopixel) LED light to OFF
-
-      LCD_SET_KNOB_LED_IDLE(true);  // restore infoSettings.knob_led_idle and knob LED color to their default values
+      // set (neopixel) LED light to current color or to OFF according to infoSettings.led_always_on and
+      // restore infoSettings.knob_led_idle and knob LED color to their default values
+      LED_SetPostEventColor();
 
       return;
     }
@@ -97,8 +94,8 @@ void LED_CheckEvent(void)
 
     printingDone = true;  // set flag to "true"
 
-    LED_ChangeColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
-    LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
+    LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
+    LCD_SET_KNOB_LED_IDLE(false);         // set infoSettings.knob_led_idle temporary to OFF
   }
   else
   {
@@ -130,8 +127,8 @@ void LED_CheckEvent(void)
       prevLedValue = 255;  // set with a value just in case heating is immediately reached (e.g. nozzle and bed were already heated)
       heatingDone = true;  // set flag to "true"
 
-      LED_ChangeColor(&ledColor, skipPrinterLed);  // set (neopixel) LED light to current color
-      LCD_SET_KNOB_LED_IDLE(true);                 // restore infoSettings.knob_led_idle and knob LED color to their default values
+      LED_SetEventColor(&ledColor, skipPrinterLed);  // set (neopixel) LED light to current color
+      LCD_SET_KNOB_LED_IDLE(true);                   // restore infoSettings.knob_led_idle and knob LED color to their default values
 
       return;
     }
@@ -156,7 +153,7 @@ void LED_CheckEvent(void)
     LED_COLOR led;
 
     LED_SetRGBColor(&led, newLedValue, 0, 255 - newLedValue, 0, 255, 255);  // set (neopixel) LED light custom color
-    LED_ChangeColor(&led, skipPrinterLed);                                  // set (neopixel) LED light to custom color
+    LED_SetEventColor(&led, skipPrinterLed);                                // set (neopixel) LED light to custom color
     LCD_SET_KNOB_LED_IDLE(false);                                           // set infoSettings.knob_led_idle temporary to OFF
   }
 }

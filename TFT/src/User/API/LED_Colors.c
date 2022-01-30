@@ -78,7 +78,7 @@ void LED_SetColor(const LED_COLOR * led, bool skipNeopixel)
     ledColor[i] = (*led)[i];
 }
 
-void LED_ChangeColor(const LED_COLOR * led, bool skipPrinterLed)
+void LED_SetEventColor(const LED_COLOR * led, bool skipPrinterLed)
 {
   if (!skipPrinterLed)
     LED_SendColor(led);
@@ -92,4 +92,14 @@ void LED_ChangeColor(const LED_COLOR * led, bool skipPrinterLed)
 
     KNOB_LED_SET_COLOR(knobLedColor, infoSettings.neopixel_pixels);
   #endif
+}
+
+void LED_SetPostEventColor(void)
+{
+  if (infoSettings.led_always_on == 1)
+    LED_SetEventColor(&ledColor, false);  // set (neopixel) LED light to current color
+  else
+    LED_SetEventColor(&ledOff, false);    // set (neopixel) LED light to OFF
+
+  LCD_SET_KNOB_LED_IDLE(true);            // restore infoSettings.knob_led_idle and knob LED color to their default values
 }

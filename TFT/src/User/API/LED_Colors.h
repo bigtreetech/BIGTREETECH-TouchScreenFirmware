@@ -204,7 +204,8 @@ uint16_t LED_GetRGBColor(LED_COLOR * led);
 void LED_SetRGBColor(LED_COLOR * led, uint8_t r, uint8_t g, uint8_t b, uint8_t w, uint8_t p, uint8_t i);
 void LED_GetColor(LED_COLOR * led);
 void LED_SetColor(const LED_COLOR * led, bool skipNeopixel);
-void LED_ChangeColor(const LED_COLOR * led, bool skipPrinterLed);
+void LED_SetEventColor(const LED_COLOR * led, bool skipPrinterLed);
+void LED_SetPostEventColor(void);
 
 #ifdef __cplusplus
 }
