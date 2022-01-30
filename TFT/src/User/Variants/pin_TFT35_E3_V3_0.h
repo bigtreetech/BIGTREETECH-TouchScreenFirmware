@@ -8,7 +8,7 @@
 
 // Knob LED Color pins
 #ifndef KNOB_LED_COLOR_PIN
-  #define KNOB_LED_COLOR_PIN PC7
+  #define KNOB_LED_COLOR_PIN       PC7
   #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1 << 7
   #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1 << 7
 #endif

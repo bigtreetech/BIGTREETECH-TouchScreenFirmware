@@ -101,10 +101,10 @@
 // SD Card SPI pins
 #ifndef SD_SPI_SUPPORT
   #define SD_SPI_SUPPORT
-  #define SD_LOW_SPEED  7      // 2^(SPEED+1) = 256 frequency division
-  #define SD_HIGH_SPEED 0      // 2 frequency division
-  #define SD_SPI        _SPI1
-  #define SD_CS_PIN     PA4
+  #define SD_LOW_SPEED   7      // 2^(SPEED+1) = 256 frequency division
+  #define SD_HIGH_SPEED  0      // 2 frequency division
+  #define SD_SPI         _SPI1
+  #define SD_CS_PIN      PA4
 #endif
 
 // SD Card CD Detect pin
@@ -142,7 +142,7 @@
 
 // Knob LED Color pins
 #ifndef KNOB_LED_COLOR_PIN
-  #define KNOB_LED_COLOR_PIN PC7
+  #define KNOB_LED_COLOR_PIN       PC7
   #define WS2812_FAST_WRITE_HIGH() GPIOC->BSRRL = 1 << 7
   #define WS2812_FAST_WRITE_LOW()  GPIOC->BSRRH = 1 << 7
 #endif
