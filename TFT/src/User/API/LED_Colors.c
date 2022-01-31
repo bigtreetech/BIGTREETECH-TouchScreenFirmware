@@ -86,9 +86,9 @@ void LED_SetEventColor(const LED_COLOR * led, bool skipPrinterLed)
   #ifdef KNOB_LED_COLOR_PIN
     uint32_t knobLedColor = 0;  // GRB format
 
-    knobLedColor |= (uint32_t)(led[1]) << 16;  // G
-    knobLedColor |= (uint32_t)(led[0]) << 8;   // R
-    knobLedColor |= (uint32_t)(led[2]);        // B
+    knobLedColor |= (uint32_t)((*led)[1]) << 16;  // G
+    knobLedColor |= (uint32_t)((*led)[0]) << 8;   // R
+    knobLedColor |= (uint32_t)((*led)[2]);        // B
 
     KNOB_LED_SET_COLOR(knobLedColor, infoSettings.neopixel_pixels);
   #endif
