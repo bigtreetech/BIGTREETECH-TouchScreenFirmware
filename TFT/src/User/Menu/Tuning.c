@@ -42,9 +42,9 @@ void menuTuning(void)
 
       case KEY_ICON_2:
         #if DELTA_PROBE_TYPE == 0  // if not Delta printer
-        storeCmd("M206\n");
-        zOffsetSetMenu(false);  // use Home Offset menu
-        OPEN_MENU(menuZOffset);
+          storeCmd("M206\n");
+          zOffsetSetMenu(false);  // use Home Offset menu
+          OPEN_MENU(menuZOffset);
         #endif
         break;
 
