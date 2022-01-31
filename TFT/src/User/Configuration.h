@@ -727,6 +727,8 @@
 /**
  * Inverted Filament Runout Sensor Logic
  * The sensor uses an inverted logic.
+ * Disable it in case filament runout is triggered by a LOW signal.
+ * Enable it in case filament runout is triggered by a HIGH signal.
  *   Options: [disable: 0, enable: 1]
  */
 #define FIL_RUNOUT_INVERTED 1  // Default: 1

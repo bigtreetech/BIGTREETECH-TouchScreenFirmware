@@ -93,9 +93,9 @@ bool FIL_NormalRunoutDetect(void)
   if (OS_GetTimeMs() > nextRunoutTime)
   {
     // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-    if (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) == 0)  // if filament runout is triggered by LOW state
+    if (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) == 0)  // if filament runout is triggered by a LOW signal
       runout = lowCount > highCount ? true : false;
-    else  // if filament runout is triggered by HIGH state
+    else  // if filament runout is triggered by a HIGH signal
       runout = highCount > lowCount ? true : false;
 
     highCount = 0;
