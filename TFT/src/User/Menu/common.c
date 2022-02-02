@@ -13,7 +13,7 @@ uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 static uint32_t lastTime = 0;
 
-//Icons list for tool change
+// Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
 {
 // icon                          label

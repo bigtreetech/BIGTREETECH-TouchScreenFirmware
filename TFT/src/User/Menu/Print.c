@@ -267,7 +267,7 @@ void menuPrintFromSource(void)
           break;
       }
     }
-    else // select item from list view
+    else  // select item from list view
     {
       key_num = listViewGetSelectedIndex();
 
@@ -420,9 +420,9 @@ void menuPrint(void)
       #endif
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          list_mode = true;  // force list mode in Onboard sd card
+          list_mode = true;  // force list mode in onboard SD card
           infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
           goto selectEnd;
         }
         break;
