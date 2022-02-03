@@ -119,19 +119,22 @@ void coordinateQuery(uint8_t seconds)
 {
   if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
   {
-    if (infoMachineSettings.autoReportPos == 1 && seconds > 0)  // auto report only accepts delay in seconds
+    if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled
     {
-      if (seconds != curQuerySeconds)  // send M154 only if not already sent
-        coordinateQueryWait = storeCmd("M154 S%d\n", seconds);
-    }
-    else  // send M114 if delay is less than 1 second or auto report is disabled
-    {
-      // turn off auto report if it was turned on
-      char * strQueryOff = (infoMachineSettings.autoReportPos == 1 && curQuerySeconds > 0) ? "M154 S0\n" : "";
-      coordinateQueryWait = storeCmd("%sM114\n", strQueryOff);
-    }
+      if (seconds != curQuerySeconds)  // if query interval is changed
+      {
+        coordinateQueryWait = storeCmd("M154 S%d\n", seconds);  // turn on or off (if query interval is 0) auto report
 
-    if (coordinateQueryWait)
-      curQuerySeconds = seconds;
+        if (coordinateQueryWait)
+          curQuerySeconds = seconds;  // avoid to enable auto report again on next function call if already enabled for that query interval
+      }
+
+      if (seconds == 0)  // if manual querying is requested (if query interval is 0)
+        coordinateQueryWait = storeCmd("M114\n");
+    }
+    else  // if auto report is disabled
+    {
+      coordinateQueryWait = storeCmd("M114\n");
+    }
   }
 }
