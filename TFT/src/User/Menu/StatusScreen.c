@@ -504,6 +504,6 @@ void menuStatus(void)
     toggleTool();
     loopProcess();
   }
-  // disable position auto report
-  coordinateQuery(0);
+
+  coordinateQueryTurnOff();  // disable position auto report, if any
 }
