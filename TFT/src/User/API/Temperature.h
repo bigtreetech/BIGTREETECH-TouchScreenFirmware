@@ -77,17 +77,16 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp);
 int16_t heatGetCurrentTemp(uint8_t index);
 void heatCoolDown(void);
 
-void heatSetCurrentTool(uint8_t tool);
-uint8_t heatGetCurrentTool(void);
-uint8_t heatGetCurrentHotend(void);
-bool heaterDisplayIsValid(uint8_t index);
-
 bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
 void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting);
 void heatClearIsWaiting(void);
 
-void updateNextHeatCheckTime(void);
+void heatSetCurrentTool(uint8_t tool);
+uint8_t heatGetCurrentTool(void);
+uint8_t heatGetCurrentHotend(void);
+bool heaterDisplayIsValid(uint8_t index);
+
 void heatSetUpdateSeconds(uint8_t seconds);
 uint8_t heatGetUpdateSeconds(void);
 void heatSyncUpdateSeconds(uint8_t seconds);
@@ -95,6 +94,7 @@ void heatSetUpdateWaiting(bool isWaiting);
 void heatSetSendWaiting(uint8_t index, bool isWaiting);
 bool heatGetSendWaiting(uint8_t index);
 
+void updateNextHeatCheckTime(void);
 void loopCheckHeater(void);
 
 #ifdef __cplusplus
