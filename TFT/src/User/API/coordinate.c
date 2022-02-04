@@ -121,16 +121,14 @@ void coordinateQuery(uint8_t seconds)
   {
     if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled
     {
-      if (seconds != curQuerySeconds)  // if query interval is changed
-      {
-        coordinateQueryWait = storeCmd("M154 S%d\n", seconds);  // turn on or off (if query interval is 0) auto report
-
-        if (coordinateQueryWait)
-          curQuerySeconds = seconds;  // avoid to enable auto report again on next function call if already enabled for that query interval
-      }
-
       if (seconds == 0)  // if manual querying is requested (if query interval is 0)
         coordinateQueryWait = storeCmd("M114\n");
+
+      if (seconds != curQuerySeconds)  // if query interval is changed
+      {
+        if (storeCmd("M154 S%d\n", seconds))  // turn on or off (if query interval is 0) auto report
+          curQuerySeconds = seconds;          // if gcode will be sent, avoid to enable auto report again on next
+      }                                       // function call if already enabled for that query interval
     }
     else  // if auto report is disabled
     {
