@@ -94,7 +94,7 @@ void menuExtrude(void)
         }
         else
         {
-          heatSetCurrentIndex(currentTool);  // preselect current nozzle for "Heat" menu
+          heatSetCurrentIndex(curExtruder_index);  // preselect current nozzle for "Heat" menu
           OPEN_MENU(menuHeat);
           eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
         }
