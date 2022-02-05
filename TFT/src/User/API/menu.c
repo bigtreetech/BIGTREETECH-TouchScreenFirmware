@@ -1246,7 +1246,7 @@ void loopBackEnd(void)
     parseComment();  // Parse comment from gCode file
   }
 
-  #if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
+  #ifdef SERIAL_PORT_2
     // Parse the received Gcode from other UART, such as: ESP3D, etc...
     parseRcvGcode();
   #endif

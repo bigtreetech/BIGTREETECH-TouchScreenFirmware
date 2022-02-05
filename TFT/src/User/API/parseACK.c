@@ -1249,7 +1249,7 @@ void parseACK(void)
         ack_port_index = PORT_1;  // reset ACK port index to avoid wrong relaying (in case no more commands will
                                   // be sent by interfaceCmd) of any successive spontaneous ACK message
     }
-    #if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
+    #ifdef SERIAL_PORT_2
       else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
       {
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
@@ -1270,7 +1270,7 @@ void parseACK(void)
   }
 }
 
-#if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
+#ifdef SERIAL_PORT_2
 
 void parseRcvGcode(void)
 {

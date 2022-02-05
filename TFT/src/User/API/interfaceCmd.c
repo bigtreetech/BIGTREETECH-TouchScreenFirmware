@@ -24,6 +24,7 @@ char * cmd_ptr;
 uint8_t cmd_len;
 uint8_t cmd_index;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
+uint8_t cmd_port;                  // physical port (e.g. _USART1) related to serial port index
 bool isPolling = true;
 
 bool isFullCmdQueue(void)
@@ -192,6 +193,7 @@ static inline bool getCmd(void)
   cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
   cmd_len = strlen(cmd_ptr);                                   // length of gcode
   cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
+  cmd_port = serialPort[cmd_port_index].port;                  // physical port (e.g. _USART1) related to serial port index
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
@@ -352,22 +354,22 @@ void sendQueueCmd(void)
                     break;
                   }
                 }
-                Serial_Puts(SERIAL_PORT_2, "Begin file list\n");
+                Serial_Puts(cmd_port, "Begin file list\n");
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
-                    Serial_Puts(SERIAL_PORT_2, infoFile.file[i]);
-                    Serial_Puts(SERIAL_PORT_2, "\n");
+                    Serial_Puts(cmd_port, infoFile.file[i]);
+                    Serial_Puts(cmd_port, "\n");
                   }
                   for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
-                    Serial_Puts(SERIAL_PORT_2, "/");
-                    Serial_Puts(SERIAL_PORT_2, infoFile.folder[i]);
-                    Serial_Puts(SERIAL_PORT_2, "/\n");
+                    Serial_Puts(cmd_port, "/");
+                    Serial_Puts(cmd_port, infoFile.folder[i]);
+                    Serial_Puts(cmd_port, "/\n");
                   }
                 }
-                Serial_Puts(SERIAL_PORT_2, "End file list\nok\n");
+                Serial_Puts(cmd_port, "End file list\nok\n");
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -397,29 +399,29 @@ void sendQueueCmd(void)
                   }
                 }
 
-                Serial_Puts(SERIAL_PORT_2, "echo:Now fresh file: ");
-                Serial_Puts(SERIAL_PORT_2, infoFile.title);
-                Serial_Puts(SERIAL_PORT_2, "\n");
+                Serial_Puts(cmd_port, "echo:Now fresh file: ");
+                Serial_Puts(cmd_port, infoFile.title);
+                Serial_Puts(cmd_port, "\n");
 
                 FIL tmp;
                 if (mountFS() && (f_open(&tmp, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK))
                 {
                   char buf[10];
                   sprintf(buf, "%d", f_size(&tmp));
-                  Serial_Puts(SERIAL_PORT_2, "File opened: ");
-                  Serial_Puts(SERIAL_PORT_2, infoFile.title);
-                  Serial_Puts(SERIAL_PORT_2, " Size: ");
-                  Serial_Puts(SERIAL_PORT_2, buf);
-                  Serial_Puts(SERIAL_PORT_2, "\nFile selected\n");
+                  Serial_Puts(cmd_port, "File opened: ");
+                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, " Size: ");
+                  Serial_Puts(cmd_port, buf);
+                  Serial_Puts(cmd_port, "\nFile selected\n");
                   f_close(&tmp);
                 }
                 else
                 {
-                  Serial_Puts(SERIAL_PORT_2, "open failed, File: ");
-                  Serial_Puts(SERIAL_PORT_2, infoFile.title);
-                  Serial_Puts(SERIAL_PORT_2, "\n");
+                  Serial_Puts(cmd_port, "open failed, File: ");
+                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, "\n");
                 }
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -433,7 +435,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())  // if not printing, start a new print
@@ -457,7 +459,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
@@ -477,14 +479,14 @@ void sendQueueCmd(void)
               {
                 if (cmd_seen('C'))
                 {
-                  Serial_Puts(SERIAL_PORT_2, "Current file: ");
-                  Serial_Puts(SERIAL_PORT_2, infoFile.title);
-                  Serial_Puts(SERIAL_PORT_2, ".\n");
+                  Serial_Puts(cmd_port, "Current file: ");
+                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, ".\n");
                 }
                 char buf[55];
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
-                Serial_Puts(SERIAL_PORT_2, buf);
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, buf);
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -536,15 +538,15 @@ void sendQueueCmd(void)
                 }
                 if ((mountFS() == true) && (f_unlink (filepath) == FR_OK))
                 {
-                  Serial_Puts(SERIAL_PORT_2, "File deleted: ");
-                  Serial_Puts(SERIAL_PORT_2, filepath);
-                  Serial_Puts(SERIAL_PORT_2, ".\nok\n");
+                  Serial_Puts(cmd_port, "File deleted: ");
+                  Serial_Puts(cmd_port, filepath);
+                  Serial_Puts(cmd_port, ".\nok\n");
                 }
                 else
                 {
-                  Serial_Puts(SERIAL_PORT_2, "Deletion failed, File: ");
-                  Serial_Puts(SERIAL_PORT_2, filepath);
-                  Serial_Puts(SERIAL_PORT_2, ".\nok\n");
+                  Serial_Puts(cmd_port, "Deletion failed, File: ");
+                  Serial_Puts(cmd_port, filepath);
+                  Serial_Puts(cmd_port, ".\nok\n");
                 }
                 sendCmd(true, avoid_terminal);
                 return;
@@ -560,18 +562,18 @@ void sendQueueCmd(void)
             if (!fromTFT && cmd_start_with(cmd_ptr, "M115 TFT"))
             {
               char buf[50];
-              Serial_Puts(SERIAL_PORT_2,
+              Serial_Puts(cmd_port,
                           "FIRMWARE_NAME: " FIRMWARE_NAME
                           " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
               sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
-              Serial_Puts(SERIAL_PORT_2, buf);
+              Serial_Puts(cmd_port, buf);
               sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
-              Serial_Puts(SERIAL_PORT_2, buf);
+              Serial_Puts(cmd_port, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
-              Serial_Puts(SERIAL_PORT_2, buf);
+              Serial_Puts(cmd_port, buf);
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
-              Serial_Puts(SERIAL_PORT_2, buf);
-              Serial_Puts(SERIAL_PORT_2, "ok\n");
+              Serial_Puts(cmd_port, buf);
+              Serial_Puts(cmd_port, "ok\n");
               sendCmd(true, avoid_terminal);
               return;
             }
@@ -584,7 +586,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 printPause(true, PAUSE_NORMAL);
                 return;
@@ -599,7 +601,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
-                Serial_Puts(SERIAL_PORT_2, "ok\n");
+                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 printAbort();
                 return;
