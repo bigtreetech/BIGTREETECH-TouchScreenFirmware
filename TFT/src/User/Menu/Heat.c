@@ -6,14 +6,14 @@ static uint8_t last_hotend_index = NOZZLE0;
 static uint8_t last_bed_index = BED;
 static uint8_t degreeSteps_index = 1;
 
-void heatSetCurrentIndex(int16_t index)
+void heatSetCurrentIndex(int8_t index)
 {
   if (index >= 0)  // set specific tool
     tool_index = (uint8_t)(index);
   else if (index == -1)  // set last used hotend index
-    tool_index = (uint8_t)(last_hotend_index);
+    tool_index = last_hotend_index;
   else  // set last used bed index
-    tool_index = (uint8_t)(last_bed_index);
+    tool_index = last_bed_index;
 }
 
 void menuHeat(void)
