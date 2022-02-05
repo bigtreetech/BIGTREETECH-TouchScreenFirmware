@@ -443,7 +443,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
     }
 
-    // Onboard sd Gcode command response
+    // Onboard SD Gcode command response
 
     if (requestCommandInfo.inWaitResponse)
     {
@@ -507,7 +507,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
       goto parse_end;
     }
-    // Onboard sd Gcode command response end
+    // Onboard SD Gcode command response end
 
     if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
@@ -529,13 +529,13 @@ void parseACK(void)
       }
       infoHost.wait = false;
     }
-    else if (ack_cmp("ok\n"))
+    else if (ack_cmp("ok\n"))  // if ACK message matches "ok\n" (with no message inline)
     {
       infoHost.wait = false;
     }
     else
     {
-      if (ack_seen("ok"))
+      if (ack_cmp("ok"))  // if ACK message starts with "ok" followed by an inline message (e.g. "ok N10 P15 B3")
         infoHost.wait = false;
 
       //----------------------------------------
@@ -1250,7 +1250,7 @@ void parseACK(void)
                                   // be sent by interfaceCmd) of any successive spontaneous ACK message
     }
     #ifdef SERIAL_PORT_2
-      else if (!ack_seen("ok") || ack_seen("T:") || ack_seen("T0:"))  // if a spontaneous ACK message
+      else if (!ack_cmp("ok"))  // if a spontaneous ACK message not starting with "ok"
       {
         // pass on the spontaneous ACK message to all the supplementary serial ports (since these messages come unrequested)
         for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
