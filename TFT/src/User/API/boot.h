@@ -30,8 +30,8 @@ extern "C" {
 
 // address in spiflash W25Qxx
 #define LOGO_ADDR               0x0
-#define WORD_UNICODE            LOGO_MAX_SIZE                                  // unicode (+0x480000 4.5M)
-#define BYTE_ASCII_ADDR         (WORD_UNICODE + WORD_UNICODE_SIZE)             // ascii (+0x1000 4K)
+#define WORD_UNICODE_ADDR       LOGO_MAX_SIZE                                  // unicode (+0x480000 4.5M)
+#define BYTE_ASCII_ADDR         (WORD_UNICODE_ADDR + WORD_UNICODE_SIZE)        // ascii (+0x1000 4K)
 #define LARGE_FONT_ADDR         (BYTE_ASCII_ADDR + BYTE_ASCII_SIZE)            // Large ascii font
 #define _8X16_FONT_ADDR         (LARGE_FONT_ADDR + LARGE_FONT_SIZE)            // 8 x 16 ascii font
 //#define BYTE_RESERVE_ADDR      0x710000
@@ -54,12 +54,17 @@ extern "C" {
   #define STR_PORTRAIT
 #endif
 
-#define ADMIN_MODE_FILE "admin.txt"
-#define FIRMWARE_NAME STRINGIFY(HARDWARE) "." STRINGIFY(SOFTWARE_VERSION) STR_PORTRAIT
+#define FIRMWARE_NAME       STRINGIFY(HARDWARE) "." STRINGIFY(SOFTWARE_VERSION) STR_PORTRAIT
 #define FIRMWARE_NAME_SHORT STRINGIFY(HARDWARE_SHORT) STRINGIFY(SOFTWARE_VERSION_SHORT)
-#define BMP_ROOT_DIR "0:" ROOT_DIR "/bmp"
-#define FONT_ROOT_DIR "0:" ROOT_DIR "/font"
-#define TFT_RESET_FILE "reset.txt"
+#define BMP_UPDATE_DIR      UPDATE_DIR "/bmp"
+#define FONT_UPDATE_DIR     UPDATE_DIR "/font"
+#define TFT_RESET_FILE      "reset.txt"
+
+#define FILE_ADMIN_MODE       "admin.txt"             // to prevent renaming file/folder with `.CUR` after update
+#define FILE_ASCII_FONT       "byte_ascii.fon"        // basic ascii font
+#define FILE_UNICODE_FONT     "word_unicode.fon"      // unicode font
+#define FILE_LARGE_ASCII_FONT "large_byte_ascii.fon"  // large ascii font for displayig values and info
+#define FILE_8X16_ASCII_FONT  "8x16_byte_ascii.fon"   // 8x16 ascii font for ST7920 Emilator
 
 // This List is Auto-Generated. Please add new icons in icon_list.inc only
 enum

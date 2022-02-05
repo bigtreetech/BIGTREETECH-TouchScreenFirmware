@@ -16,8 +16,8 @@
   #endif
 #endif
 
-#ifndef ROOT_DIR
-  #define ROOT_DIR "TFTxx"
+#ifndef UPDATE_DIR
+  #define UPDATE_DIR "TFTxx"
 #endif
 
 // Hardware manufacturer

@@ -53,6 +53,10 @@ void HW_Init(void)
     Serial_Init(ALL_PORTS);  // Initialize serial ports first if debugging is enabled
   #endif
 
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    USB_Init();
+  #endif
+
   LCD_RefreshDirection(infoSettings.rotated_ui);  // refresh display direction after reading settings
   scanUpdates();                                  // scan icon, fonts and config files
   checkflashSign();                               // check font/icon/config signature in SPI flash for update
@@ -86,10 +90,6 @@ void HW_Init(void)
 
   #ifdef FIL_RUNOUT_PIN
     FIL_Runout_Init();
-  #endif
-
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    USB_Init();
   #endif
 
   if (readIsTSCExist() == false)  // read settings parameter
