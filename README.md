@@ -424,7 +424,7 @@ or<br>
 `M117 Time Left <XX>h<YY>m<ZZ>s`
 
 **file data progress:**<br>
-`M118 A1 P0 action:notification Data Left <XXXX>/<YYYY> (e.g. 123/12345)`
+`M118 A1 P0 action:notification Data Left <XXXX>/<YYYY> (e.g. 123/12345)`<br>
 or<br>
 `M117 Data Left <XXXX>/<YYYY>`
 
