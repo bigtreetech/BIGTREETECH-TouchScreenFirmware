@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD карта витягнута!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected.\nPlease insert an SD Card."
     #define STRING_USB_DISK               "Флеш карта"
-    #define STRING_READ_USB_DISK_ERROR   "Не можу прочитати флеш картку!"
+    #define STRING_READ_USB_DISK_ERROR    "Не можу прочитати флеш картку!"
     #define STRING_USB_DISK_INSERTED      "Флеш карта вставлена!"
     #define STRING_USB_DISK_REMOVED       "Флеш карта витягнута!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

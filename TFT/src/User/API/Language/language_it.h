@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD rimossa"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "Pen drive"
-    #define STRING_READ_USB_DISK_ERROR   "Errore lettura pen drive"
+    #define STRING_READ_USB_DISK_ERROR    "Errore lettura pen drive"
     #define STRING_USB_DISK_INSERTED      "Pen drive inserita!"
     #define STRING_USB_DISK_REMOVED       "Pen drive rimossa!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
