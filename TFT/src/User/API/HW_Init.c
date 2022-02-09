@@ -50,7 +50,11 @@ void HW_Init(void)
   readStoredPara();  // read settings parameter
 
   #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
-    Serial_Init(ALL_PORTS);  // Initialize serial ports first if debugging is enabled
+    Serial_Init(ALL_PORTS);  // initialize serial ports first if debugging is enabled
+  #endif
+
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    USB_Init();
   #endif
 
   LCD_RefreshDirection(infoSettings.rotated_ui);  // refresh display direction after reading settings
@@ -61,10 +65,6 @@ void HW_Init(void)
   #if !defined(MKS_TFT)
     // causes hang if we deinit spi1
     SD_DeInit();
-  #endif
-
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    USB_Init();
   #endif
 
   #ifdef PS_ON_PIN
