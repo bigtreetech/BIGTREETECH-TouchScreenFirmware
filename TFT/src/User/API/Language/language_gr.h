@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "Η κάρτα αφαιρέθηκε!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB Δίσκος"
-    #define STRING_READ_USB_DISK_ERROR   "Σφάλμα ανάγνωσης USB Δίσκου!"
+    #define STRING_READ_USB_DISK_ERROR    "Σφάλμα ανάγνωσης USB Δίσκου!"
     #define STRING_USB_DISK_INSERTED      "Ο USB Δίσκος έχει εισαχθεί!"
     #define STRING_USB_DISK_REMOVED       "Ο USB Δίσκος αφαιρέθηκε!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

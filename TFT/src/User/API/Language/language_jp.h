@@ -152,7 +152,7 @@
     #define STRING_INFO                   "情報"
     #define STRING_INVALID_VALUE          "Invalid value(s)"
     #define STRING_TIMEOUT_REACHED        "Timeout reached!"
-    #define STRING_DISCONNECT_INFO        "SDカード　PC両用"
+    #define STRING_DISCONNECT_INFO        "SDカード PC両用"
     #define STRING_SHUTTING_DOWN          "シャットダウン..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "ホットエンドの温度が%d℃未満になるまで待ちます。" // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "プリントを継続しますか?"
@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SDカード出しました!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USBメモリー"
-    #define STRING_READ_USB_DISK_ERROR   "USBメモリー読み込みエラー!"
+    #define STRING_READ_USB_DISK_ERROR    "USBメモリー読み込みエラー!"
     #define STRING_USB_DISK_INSERTED      "U Diskカード入りました!"
     #define STRING_USB_DISK_REMOVED       "U Diskカード出しました!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

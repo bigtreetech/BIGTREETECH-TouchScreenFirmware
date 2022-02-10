@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "SD Kart Çıkarıldı!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB Disk"
-    #define STRING_READ_USB_DISK_ERROR   "USB disk okunamadı!"
+    #define STRING_READ_USB_DISK_ERROR    "USB disk okunamadı!"
     #define STRING_USB_DISK_INSERTED      "USB Disk Takıldı!"
     #define STRING_USB_DISK_REMOVED       "USB Disk Çıkarıldı!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
