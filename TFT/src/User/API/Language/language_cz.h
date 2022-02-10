@@ -170,7 +170,7 @@
     #define STRING_READ_USB_DISK_ERROR    "Chyba při čtení USB disku!"
     #define STRING_USB_DISK_INSERTED      "USB disk  vložen!"
     #define STRING_USB_DISK_REMOVED       "USB disk vyjmut!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
+    #define STRING_USB_DISK_NOT_DETECTED  "USB není detekován."
     #define STRING_ONBOARDSD              "Onboard SD"
     #define STRING_READ_ONBOARDSD_ERROR   "Chyba při čtení Onboard SD!"
     #define STRING_FILAMENT_RUNOUT        "Došel filament!"
