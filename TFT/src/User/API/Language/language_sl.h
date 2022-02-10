@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "Kartica odstranjena!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB disk"
-    #define STRING_READ_USB_DISK_ERROR   "Napaka branja USB diska!"
+    #define STRING_READ_USB_DISK_ERROR    "Napaka branja USB diska!"
     #define STRING_USB_DISK_INSERTED      "USB disk vstavljen!"
     #define STRING_USB_DISK_REMOVED       "USB disk odstranjen!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
