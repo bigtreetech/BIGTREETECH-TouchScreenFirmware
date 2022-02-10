@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "Kaart verwijdert!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "U Disk"
-    #define STRING_READ_USB_DISK_ERROR   "U Disk Leesfout!"
+    #define STRING_READ_USB_DISK_ERROR    "U Disk Leesfout!"
     #define STRING_USB_DISK_INSERTED      "U Disk geplaatst!"
     #define STRING_USB_DISK_REMOVED       "U Disk verwijdert!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."

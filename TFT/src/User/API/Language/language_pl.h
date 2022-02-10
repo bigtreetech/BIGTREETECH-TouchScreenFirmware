@@ -167,7 +167,7 @@
     #define STRING_TFTSD_REMOVED          "Karta wyjęta!"
     #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
     #define STRING_USB_DISK               "USB TFT"
-    #define STRING_READ_USB_DISK_ERROR   "Błąd odczytu dysku USB!"
+    #define STRING_READ_USB_DISK_ERROR    "Błąd odczytu dysku USB!"
     #define STRING_USB_DISK_INSERTED      "Dysk USB włożony!"
     #define STRING_USB_DISK_REMOVED       "Dysk USB wyjęty!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
