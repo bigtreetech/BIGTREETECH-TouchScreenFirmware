@@ -530,12 +530,15 @@ void parseACK(void)
       }
       infoHost.wait = false;
     }
-    else if (ack_cmp("ok"))  // if ACK message starts with "ok" (e.g. "ok\n" or "ok N10 P15 B3\n" etc...)
+    else if (ack_cmp("ok\n"))
     {
       infoHost.wait = false;
     }
     else
     {
+      if (ack_cmp("ok"))  // if "ok N10 P15 B3\n", "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n" etc...
+        infoHost.wait = false;
+
       //----------------------------------------
       // Pushed / polled / on printing parsed responses
       //----------------------------------------
