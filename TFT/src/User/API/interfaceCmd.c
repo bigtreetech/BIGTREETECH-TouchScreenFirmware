@@ -977,6 +977,11 @@ void sendQueueCmd(void)
           break;
         }
 
+        case 376:  // M376 (Reprap FW)
+          if (infoMachineSettings.firmwareType == FW_REPRAPFW && cmd_seen('H'))
+            setParameter(P_ABL_STATE, 1, cmd_float());
+          break;
+
         case 292:
         case 408:
           // RRF does not send 'ok' while executing M98
@@ -987,11 +992,10 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 420:  // M420
-          // ABL state will be set through parsACK.c after receiving confirmation message from the printer
-          // to prevent wrong state in case of error.
-          if (cmd_seen('Z')) setParameter(P_ABL_STATE, 1, cmd_float());
-          break;
+        // case 420:  // M420
+        //   // ABL state and Z fade height will be set through parsACK.c after receiving confirmation
+        //   // message from the printer to prevent wrong state and/or value in case of error.
+        //   break;
 
         case 569:  // M569 TMC StealthChop
         {
@@ -1164,14 +1168,18 @@ void sendQueueCmd(void)
             {
               if (cmd_seen('S'))
               {
-                uint8_t v = cmd_value();
-                if (v == 1)
+                switch (cmd_value())
                 {
-                  setParameter(P_ABL_STATE, 0, 1);
-                }
-                else if (v == 2)
-                {
-                  setParameter(P_ABL_STATE, 0, 0);
+                  case 1:
+                    setParameter(P_ABL_STATE, 0, 1);
+                    break;
+
+                  case 2:
+                    setParameter(P_ABL_STATE, 0, 0);
+                    break;
+
+                  default:
+                    break;
                 }
               }
             }
