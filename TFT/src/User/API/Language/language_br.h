@@ -190,6 +190,8 @@
     #define STRING_DEPLOY                 "Lança"
     #define STRING_STOW                   "Retrai"
     #define STRING_REPEAT                 "Repete"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Hotend"

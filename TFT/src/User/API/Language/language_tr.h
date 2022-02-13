@@ -190,6 +190,8 @@
     #define STRING_DEPLOY                 "Aç"
     #define STRING_STOW                   "Kapat"
     #define STRING_REPEAT                 "Tekrarla"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Nozül"

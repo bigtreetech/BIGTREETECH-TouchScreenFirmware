@@ -190,6 +190,8 @@
     #define STRING_DEPLOY                 "Επέκταση"
     #define STRING_STOW                   "Aπόσυρση"
     #define STRING_REPEAT                 "Επανάληψη"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Στόμιο"
