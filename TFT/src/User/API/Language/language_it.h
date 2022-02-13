@@ -190,6 +190,8 @@
     #define STRING_DEPLOY                 "Estrai"
     #define STRING_STOW                   "Ritrai"
     #define STRING_REPEAT                 "Ripeti"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Hotend"

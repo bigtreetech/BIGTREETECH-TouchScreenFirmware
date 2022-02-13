@@ -190,6 +190,8 @@
     #define STRING_DEPLOY                 "Rozlokuj"
     #define STRING_STOW                   "Schowaj"
     #define STRING_REPEAT                 "Powtórz"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Dysza"
