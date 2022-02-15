@@ -171,7 +171,7 @@
     #define STRING_READ_USB_DISK_ERROR    "Erro de leitura do Pen Drive"
     #define STRING_USB_DISK_INSERTED      "Pen Drive inserido!"
     #define STRING_USB_DISK_REMOVED       "Pen Drive removido!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
+    #define STRING_USB_DISK_NOT_DETECTED  "USB Disk não detectado"
     #define STRING_ONBOARDSD              "SD ONBOARD"
     #define STRING_READ_ONBOARDSD_ERROR   "Erro de leitura do SD ONBOARD!"
     #define STRING_FILAMENT_RUNOUT        "Filamento acabou!"

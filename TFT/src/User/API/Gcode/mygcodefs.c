@@ -156,7 +156,7 @@ bool scanPrintFilesGcodeFs(void)
     else  // if DIRECTORY
     {
       if (infoFile.folderCount >= FOLDER_NUM)
-        continue;  // floder max number is FOLDER_NUM
+        continue;  // folder max number is FOLDER_NUM
 
       char* rest = pline;
       char* folder = strtok_r(rest, "/", &rest);
