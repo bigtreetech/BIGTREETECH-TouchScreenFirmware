@@ -11,15 +11,9 @@
   #endif
 #endif
 
-<<<<<<< HEAD
 // Update folder for fonts and icons
 #ifndef UPDATE_DIR
   #define UPDATE_DIR "TFT28"
-=======
-// Root folder for fonts and icons
-#ifndef ROOT_DIR
-  #define ROOT_DIR "TFT28"
->>>>>>> upstream/master
 #endif
 
 // Hardware version config

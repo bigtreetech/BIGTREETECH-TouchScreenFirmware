@@ -18,15 +18,9 @@
   #endif
 #endif
 
-<<<<<<< HEAD
 // Update folder for fonts and icons
 #ifndef UPDATE_DIR
   #define UPDATE_DIR "MKS"
-=======
-// Root folder for fonts and icons
-#ifndef ROOT_DIR
-  #define ROOT_DIR "MKS"
->>>>>>> upstream/master
 #endif
 
 // Hardware manufacturer
