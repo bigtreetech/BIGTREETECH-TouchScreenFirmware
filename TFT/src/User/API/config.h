@@ -11,8 +11,8 @@ extern "C" {
 // after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
 
 #define LINE_MAX_CHAR                 200
-#define CONFIG_FILE_PATH              "0:config.ini"
-#define LANG_FILE_PATH                "0:language.ini"
+#define CONFIG_FILE_PATH              "config.ini"
+#define LANG_FILE_PATH                "language.ini"
 
 //-----------------------------General Settings
 #define CONFIG_SERIAL_PORT            "serial_port:"
@@ -219,8 +219,8 @@ typedef enum
   CSTAT_SPI_WRITE_FAIL,
 } CONFIG_STATS;
 
-bool getConfigFromFile(void);
-bool getLangFromFile(void);
+bool getConfigFromFile(char * configPath);
+bool getLangFromFile(char * rootDir);
 
 bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen);
 

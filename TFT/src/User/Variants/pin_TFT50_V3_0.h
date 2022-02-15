@@ -1,9 +1,9 @@
 #ifndef _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
 #define _PIN_TFT50_V3_0_H_  // modify to actual filename !!!
 
-// Root folder for fonts and icons
-#ifndef ROOT_DIR
-  #define ROOT_DIR "TFT50"
+// Update folder for fonts and icons
+#ifndef UPDATE_DIR
+  #define UPDATE_DIR "TFT50"
 #endif
 
 // Hardware version config
