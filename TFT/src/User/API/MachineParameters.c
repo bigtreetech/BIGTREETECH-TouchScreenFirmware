@@ -406,7 +406,7 @@ void sendParameterCmd(PARAMETER_NAME name, uint8_t elementIndex, float Value)
 {
   char tempCmd[30];
   sprintf(tempCmd, "%s %s", parameterCode[name], parameterCmd[name][elementIndex]);
-  storeCmdScript(tempCmd, Value);  // storeCmdScript() used because there are elements in parameterCmd[] with extra command
+  storeScript(tempCmd, Value);  // storeScript() used because there are elements in parameterCmd[] with extra command
 }
 
 void saveEepromSettings(void)

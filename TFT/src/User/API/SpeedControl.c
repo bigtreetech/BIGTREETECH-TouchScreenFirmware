@@ -67,7 +67,7 @@ void speedQuery(void)
   {
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeCmdScript("M220\nM221\n");
+      speedQueryWait = storeScript("M220\nM221\n");
     }
     else
     {
