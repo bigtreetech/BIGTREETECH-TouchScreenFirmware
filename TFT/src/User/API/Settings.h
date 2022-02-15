@@ -8,19 +8,20 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"
-#include "coordinate.h"
+#include "coordinate.h"  // for TOTAL_AXIS
+#include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20211213
+#define CONFIG_SUPPPORT 20220124
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20211213  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define CONFIG_FLASH_SIGN     20220124  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
 
-#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
+#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
                                sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(PREHEAT_STORE) + \
                                sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
@@ -30,7 +31,7 @@ extern "C" {
 #define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
+#define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2)  // hotends + bed + chamber
 #define MAX_COOLING_FAN_COUNT 6
 #define MAX_CRTL_FAN_COUNT    2
 #define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
@@ -211,7 +212,7 @@ typedef struct
   uint8_t  ext_count;
   uint8_t  fan_count;
   uint8_t  ctrl_fan_en;
-  uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
+  uint16_t max_temp[MAX_HEATER_COUNT];  // hotends + bed + chamber
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
   int16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
@@ -264,6 +265,8 @@ typedef struct
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
   uint8_t  lcd_lock_on_idle;
+  uint8_t  led_color[LED_COLOR_COMPONENT_COUNT];
+  uint8_t  led_always_on;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;

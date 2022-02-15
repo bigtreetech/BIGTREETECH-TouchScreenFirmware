@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Dim Lluminositat LCD"
     #define STRING_LCD_IDLE_TIME          "Temporitzador inactiu LCD"
     #define STRING_LCD_LOCK_ON_IDLE       "LCD lock on idle"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Perilla rotativa LED"
     #define STRING_KNOB_LED_IDLE          "Rotary Knob LED idle"
     #define STRING_START_GCODE_ENABLED    "Enviar Gcode inicial"

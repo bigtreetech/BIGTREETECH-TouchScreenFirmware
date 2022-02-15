@@ -40,9 +40,9 @@ uint8_t customcode_index = 0;
 uint8_t customcode_good[CUSTOM_GCODES_COUNT];
 bool scheduleRotate = false;
 
-bool getConfigFromFile(void)
+bool getConfigFromFile(char * configPath)
 {
-  if (f_file_exists(CONFIG_FILE_PATH) == false)
+  if (f_file_exists(configPath) == false)
   {
     PRINTDEBUG("configFile not found\n");
     return false;
@@ -65,7 +65,7 @@ bool getConfigFromFile(void)
 
   drawProgressPage((uint8_t*)"Updating Configuration...");
 
-  if (readConfigFile(CONFIG_FILE_PATH, parseConfigLine, LINE_MAX_CHAR))
+  if (readConfigFile(configPath, parseConfigLine, LINE_MAX_CHAR))
   {
     // store custom codes count
     configCustomGcodes->count = customcode_index;
@@ -89,19 +89,20 @@ bool getConfigFromFile(void)
   }
 }
 
-bool getLangFromFile(void)
+bool getLangFromFile(char * rootDir)
 {
   bool success = false;
   foundkeys = 0;
   DIR d;
   FILINFO f;
-  FRESULT r =  f_findfirst(&d, &f, "0:", "language_*.ini");
+  FRESULT r = f_findfirst(&d, &f, rootDir, "language_*.ini");
+
   f_closedir(&d);
   if (r != FR_OK)
-   return false;
+    return false;
 
   char langpath[256];
-  sprintf(langpath, "0:%s", f.fname);
+  sprintf(langpath, "%s/%s", rootDir, f.fname);
 
   if (!f_file_exists(langpath))
     return false;
@@ -112,19 +113,24 @@ bool getLangFromFile(void)
   drawProgressPage((uint8_t*)f.fname);
 
   // erase part of flash to be rewritten
-  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE);i++)
+  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE); i++)
   {
     W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
   }
+
   success = readConfigFile(langpath, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
+
   if (foundkeys != LABEL_NUM)
+  {
     success = false;
+  }
   else
   {  // rename file if update was successful
-    if (!f_file_exists(ADMIN_MODE_FILE) && f_file_exists(langpath))
+    if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))
     {  // language exists
       char newlangpath[256];
-      sprintf(newlangpath, "0:%s.CUR", f.fname);
+      sprintf(newlangpath, "%s/%s.CUR", rootDir, f.fname);
+
       if (f_file_exists(newlangpath))
       {  // old language also exists
         f_unlink(newlangpath);
@@ -990,14 +996,27 @@ void parseConfigKey(uint16_t index)
         break;
     #endif
 
-    #ifdef LED_COLOR_PIN
+    case C_INDEX_LED_COLOR:
+      if (key_seen("R:")) SET_VALID_INT_VALUE(infoSettings.led_color[0], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      if (key_seen("G:")) SET_VALID_INT_VALUE(infoSettings.led_color[1], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      if (key_seen("B:")) SET_VALID_INT_VALUE(infoSettings.led_color[2], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      if (key_seen("W:")) SET_VALID_INT_VALUE(infoSettings.led_color[3], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      if (key_seen("P:")) SET_VALID_INT_VALUE(infoSettings.led_color[4], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      if (key_seen("I:")) SET_VALID_INT_VALUE(infoSettings.led_color[5], MIN_LED_COLOR_COMP, MAX_LED_COLOR_COMP);
+      break;
+
+    case C_INDEX_LED_ALWAYS_ON:
+      infoSettings.led_always_on = getOnOff();
+      break;
+
+    #ifdef KNOB_LED_COLOR_PIN
       case C_INDEX_KNOB_LED_COLOR:
-        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, LED_COLOR_COUNT - 1);
+        SET_VALID_INT_VALUE(infoSettings.knob_led_color, 0, KNOB_LED_COLOR_COUNT - 1);
         break;
 
       #ifdef LCD_LED_PWM_CHANNEL
         case C_INDEX_KNOB_LED_IDLE:
-          SET_VALID_INT_VALUE(infoSettings.knob_led_idle, 0, 1);
+          infoSettings.knob_led_idle = getOnOff();
           break;
       #endif
 

@@ -516,7 +516,7 @@ void stopConfirm(void)
   CLOSE_MENU();
 }
 
-void printInfoPopup(void)
+void printSummaryPopup(void)
 {
   uint8_t hour = infoPrintSummary.time / 3600;
   uint8_t min = infoPrintSummary.time % 3600 / 60;
@@ -739,7 +739,7 @@ void menuPrinting(void)
 
       #ifdef PORTRAIT_MODE
         if (lastPrinting == false)
-          printInfoPopup();
+          printSummaryPopup();
       #endif
 
       return;  // It will restart this interface if directly return this function without modify the value of infoMenu
@@ -751,12 +751,12 @@ void menuPrinting(void)
     switch (key_num)
     {
       case PS_KEY_0:
-        heatSetCurrentIndex(currentTool);
+        heatSetCurrentIndex(-1);  // set last used hotend index
         OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_1:
-        heatSetCurrentIndex(BED + currentBCIndex);
+        heatSetCurrentIndex(-2);  // set last used bed index
         OPEN_MENU(menuHeat);
         break;
 
@@ -836,7 +836,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_INFOBOX:
-        printInfoPopup();
+        printSummaryPopup();
         break;
 
       default:

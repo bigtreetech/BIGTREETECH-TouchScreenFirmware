@@ -22,7 +22,7 @@ bool mountFS(void)
       return mountSDCard();
 
     case TFT_USB_DISK:
-      return mountUDisk();
+      return mountUSBDisk();
 
     case BOARD_SD:
       if (infoHost.printing)
@@ -62,10 +62,10 @@ TCHAR * getCurFileSource(void)
   switch (infoFile.source)
   {
     case TFT_SD:
-      return "SD:";
+      return SD_ROOT_DIR;
 
     case TFT_USB_DISK:
-      return "U:";
+      return USBDISK_ROOT_DIR;
 
     case BOARD_SD:
     case BOARD_SD_REMOTE:
