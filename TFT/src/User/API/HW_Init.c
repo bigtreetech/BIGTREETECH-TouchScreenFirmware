@@ -50,7 +50,11 @@ void HW_Init(void)
   readStoredPara();  // read settings parameter
 
   #if defined(SERIAL_DEBUG_PORT) && defined(SERIAL_DEBUG_ENABLED)
-    Serial_Init(ALL_PORTS);  // Initialize serial ports first if debugging is enabled
+    Serial_Init(ALL_PORTS);  // initialize serial ports first if debugging is enabled
+  #endif
+
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    USB_Init();
   #endif
 
   LCD_RefreshDirection(infoSettings.rotated_ui);  // refresh display direction after reading settings
@@ -58,26 +62,9 @@ void HW_Init(void)
   checkflashSign();                               // check font/icon/config signature in SPI flash for update
   initMachineSettings();                          // load default machine settings
 
-  #ifdef LED_COLOR_PIN
-    knob_LED_Init();
-    Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);  // set last saved color after initialization
-  #endif
-
-  #ifdef BUZZER_PIN
-    Buzzer_Config();
-  #endif
-
   #if !defined(MKS_TFT)
     // causes hang if we deinit spi1
     SD_DeInit();
-  #endif
-
-  #if LCD_ENCODER_SUPPORT
-    LCD_Enc_Init();
-  #endif
-
-  #if ENC_ACTIVE_SIGNAL
-    LCD_Enc_InitActiveSignal(infoSettings.marlin_type == LCD12864);
   #endif
 
   #ifdef PS_ON_PIN
@@ -88,8 +75,21 @@ void HW_Init(void)
     FIL_Runout_Init();
   #endif
 
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    USB_Init();
+  #ifdef BUZZER_PIN
+    Buzzer_Config();
+  #endif
+
+  #ifdef KNOB_LED_COLOR_PIN
+    knob_LED_Init();
+    Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);  // set last saved color after initialization
+  #endif
+
+  #if LCD_ENCODER_SUPPORT
+    LCD_Enc_Init();
+  #endif
+
+  #if ENC_ACTIVE_SIGNAL
+    LCD_Enc_InitActiveSignal(infoSettings.marlin_type == LCD12864);
   #endif
 
   if (readIsTSCExist() == false)  // read settings parameter
@@ -105,6 +105,8 @@ void HW_Init(void)
 
   LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
 
+  LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
+
   Mode_Switch();
 }
 
@@ -118,7 +120,7 @@ void HW_InitMode(uint8_t mode)
       Buzzer_Config();
     #endif
 
-    #if LED_COLOR_PIN  // enable knob LED only in Touch mode
+    #if KNOB_LED_COLOR_PIN  // enable knob LED only in Touch mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE  // set last saved color after initialization
         knob_LED_Init();
         Knob_LED_SetColor(led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
@@ -136,11 +138,16 @@ void HW_InitMode(uint8_t mode)
     else  // disable serial comm if `serial_always_on` is disabled
       Serial_DeInit(ALL_PORTS);
 
+    #if !defined(MKS_TFT)
+      // causes hang if we deinit spi1
+      SD_DeInit();
+    #endif
+
     #ifdef BUZZER_PIN  // disable buzzer in Marlin mode
       Buzzer_DeConfig();
     #endif
 
-    #if LED_COLOR_PIN  // disable knob LED in Marlin mode
+    #if KNOB_LED_COLOR_PIN  // disable knob LED in Marlin mode
       #ifndef KEEP_KNOB_LED_COLOR_MARLIN_MODE
         knob_LED_DeInit();
       #endif
@@ -148,11 +155,6 @@ void HW_InitMode(uint8_t mode)
 
     #if ENC_ACTIVE_SIGNAL  // set encoder active signal if Marlin mode is active
       LCD_Enc_SetActiveSignal(infoSettings.marlin_type == LCD12864, 1);
-    #endif
-
-    #if !defined(MKS_TFT)
-      // causes hang if we deinit spi1
-      SD_DeInit();
     #endif
   }
 }

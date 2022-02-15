@@ -43,6 +43,7 @@ extern "C" {
 #define LANG_KEY_LCD_IDLE_BRIGHTNESS          "label_lcd_idle_brightness:"
 #define LANG_KEY_LCD_IDLE_TIME                "label_lcd_idle_time:"
 #define LANG_KEY_LCD_LOCK_ON_IDLE             "label_lcd_lock_on_idle:"
+#define LANG_KEY_LED_ALWAYS_ON                "label_led_always_on:"
 #define LANG_KEY_KNOB_LED_COLOR               "label_knob_led_color:"
 #define LANG_KEY_KNOB_LED_IDLE                "label_knob_led_idle:"
 #define LANG_KEY_START_GCODE_ENABLED          "label_start_gcode_enabled:"

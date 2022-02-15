@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Diminution luminosité"
     #define STRING_LCD_IDLE_TIME          "Durée avant diminution"
     #define STRING_LCD_LOCK_ON_IDLE       "Bloquer touches en veille"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "LED du bouton rotatif"
     #define STRING_KNOB_LED_IDLE          "Veille du bouton rotatif"
     #define STRING_START_GCODE_ENABLED    "Gcode avant l'impression"

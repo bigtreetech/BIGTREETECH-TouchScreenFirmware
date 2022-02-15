@@ -47,15 +47,15 @@ bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
 */
 bool mountSDCard(void)
 {
-  return (f_mount(&fatfs[VOLUMES_SD_CARD], "SD:", 1) == FR_OK);
+  return (f_mount(&fatfs[VOLUMES_SD_CARD], SD_ROOT_DIR, 1) == FR_OK);
 }
 
 /*
- mount U disk from Fatfs
+ mount USB disk from Fatfs
 */
-bool mountUDisk(void)
+bool mountUSBDisk(void)
 {
-  return (f_mount(&fatfs[VOLUMES_USB_DISK], "U:", 1) == FR_OK);
+  return (f_mount(&fatfs[VOLUMES_USB_DISK], USBDISK_ROOT_DIR, 1) == FR_OK);
 }
 
 /*

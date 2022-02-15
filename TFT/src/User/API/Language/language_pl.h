@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Jasn. w stanie bezcz."
     #define STRING_LCD_IDLE_TIME          "Czas przej. do bezcz."
     #define STRING_LCD_LOCK_ON_IDLE       "Blok. LCD na bezczynności"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Kolor pokrętła LED"
     #define STRING_KNOB_LED_IDLE          "Dioda LED pokrętła w stanie bezczynności"
     #define STRING_START_GCODE_ENABLED    "Początkowy Gcode"

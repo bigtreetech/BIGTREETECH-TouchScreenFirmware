@@ -23,8 +23,8 @@ enum
 #define KEY_LONG_RELEASE 0x4000  // The second bit is used to identify the release action after a long press
 #define KEY_LONG_CLICK   0x8000  // The first bit is used to identify the long press action
 
-
 extern bool touchSound;
+
 void TSC_Calibration(void);
 uint8_t isPress(void);
 uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT *menuRect);

@@ -8,7 +8,7 @@ extern "C" {
 #include <stdbool.h>
 
 bool mountSDCard(void);
-bool mountUDisk(void);
+bool mountUSBDisk(void);
 bool scanPrintFilesFatFs(void);
 
 bool f_remove_full_dir(const char* path);

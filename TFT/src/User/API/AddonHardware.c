@@ -86,15 +86,20 @@ void FIL_SFS_SetAlive(bool alive)
 bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
-  static uint32_t trueTimes = 0;
-  static uint32_t falseTimes = 0;
+  static uint32_t highCount = 0;
+  static uint32_t lowCount = 0;
   static uint32_t nextRunoutTime = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
-    runout = trueTimes > falseTimes ? true : false;
-    trueTimes = 0;
-    falseTimes = 0;
+    // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
+    if (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) == 0)  // if filament runout is triggered by a LOW signal
+      runout = lowCount > highCount ? true : false;
+    else  // if filament runout is triggered by a HIGH signal
+      runout = highCount > lowCount ? true : false;
+
+    highCount = 0;
+    lowCount = 0;
     nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
@@ -140,16 +145,15 @@ bool FIL_NormalRunoutDetect(void)
 
     if (pinState)
     {
-      trueTimes++;
+      highCount++;
     }
     else
     {
-      falseTimes++;
+      lowCount++;
     }
   }
 
-  // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-  return (runout == GET_BIT(infoSettings.runout, RUNOUT_INVERTED));
+  return runout;
 }
 
 bool FIL_SmartRunoutDetect(void)
@@ -165,7 +169,7 @@ bool FIL_SmartRunoutDetect(void)
   { // Send M114 E to query extrude position continuously
     if (posE_updateWaiting == true)
     {
-      nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+      nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_UPDATE_TIME;
       break;
     }
 
@@ -179,7 +183,7 @@ bool FIL_SmartRunoutDetect(void)
       break;
 
     posE_updateWaiting = true;
-    nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+    nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_UPDATE_TIME;
   } while (0);
 
   if (sfs_alive == false)
@@ -256,7 +260,7 @@ void FIL_FE_CheckRunout(void)
   if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
   {
     BUZZER_PLAY(SOUND_ERROR);
-    nextReminderTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
+    nextReminderTime = OS_GetTimeMs() + FIL_ALARM_REMINDER_TIME;
   }
 }
 
