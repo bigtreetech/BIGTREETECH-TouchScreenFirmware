@@ -125,6 +125,8 @@ extern "C" {
 #define CONFIG_LCD_IDLE_BRIGHTNESS    "lcd_idle_brightness:"
 #define CONFIG_LCD_IDLE_TIME          "lcd_idle_time:"
 #define CONFIG_LCD_LOCK_ON_IDLE       "lcd_lock_on_idle:"
+#define CONFIG_LED_COLOR              "led_color:"
+#define CONFIG_LED_ALWAYS_ON          "led_always_on:"
 #define CONFIG_KNOB_LED_COLOR         "knob_led_color:"
 #define CONFIG_KNOB_LED_IDLE          "knob_led_idle:"
 #define CONFIG_NEOPIXEL_PIXELS        "neopixel_pixels:"
@@ -179,6 +181,7 @@ extern "C" {
 #define MAX_DELAY_SEC           100  // time delay (sec) over this will not be parsed.
 #define MAX_RETRACT_LIMIT        20  // retract length over this will not be parsed.
 #define MAX_FAN_SPEED           255  // fan speed (PWM) over this will not be parsed.
+#define MAX_LED_COLOR_COMP      255  // (neopixel) LED color component over this will not be parsed.
 #define MAX_NEOPIXEL_PIXELS     200  // neopixel pixels over this will not be parsed.
 
 #define MIN_SIZE_LIMIT        -2000  // machine size less than this will not be parsed.
@@ -196,6 +199,7 @@ extern "C" {
 #define MIN_SPEED_LIMIT          10  // speed less than this will not be parsed.
 #define MIN_RETRACT_LIMIT         0  // retract length less than this will not be parsed.
 #define MIN_FAN_SPEED            25  // fan speed (PWM) less than this will not be parsed.
+#define MIN_LED_COLOR_COMP        0  // (neopixel) LED color component less than this will not be parsed.
 
 typedef struct
 {

@@ -89,13 +89,13 @@ bool HD44780_writeData(void)
 #ifdef GD32F2XX
   if ((GPIO_ISTAT(GPIOB) & (1 << 15)) != 0)
   {
-    uint8_t temp = ((GPIO_ISTAT(LCD_D7_PORT) & GPIO_PIN_6) >> 3 ) +         // D7
-                   ((GPIO_ISTAT(LCD_D6_PORT) & GPIO_PIN_7) >> 5 ) +         // D6
-                   ((GPIO_ISTAT(LCD_D5_PORT) & GPIO_PIN_14) >> 13) +         // D5
-                   ((GPIO_ISTAT(LCD_D4_PORT) & GPIO_PIN_13) >> 13) ;         // D4
+    uint8_t temp = ((GPIO_ISTAT(LCD_D7_PORT) & GPIO_PIN_6) >> 3 ) +  // D7
+                   ((GPIO_ISTAT(LCD_D6_PORT) & GPIO_PIN_7) >> 5 ) +  // D6
+                   ((GPIO_ISTAT(LCD_D5_PORT) & GPIO_PIN_14) >> 13) + // D5
+                   ((GPIO_ISTAT(LCD_D4_PORT) & GPIO_PIN_13) >> 13);  // D4
 
     if ((GPIO_ISTAT(GPIOB) & (1 << 12)) == 0)
-    { //Command received
+    { // Command received
       temp |= 0x80;
     }
 

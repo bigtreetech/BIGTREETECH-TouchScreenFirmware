@@ -1,8 +1,8 @@
 #include "Knob_LED.h"
-#include "includes.h"  // for mcuClocks, LED_COLOR_PIN etc...
+#include "includes.h"  // for mcuClocks, KNOB_LED_COLOR_PIN etc...
 #include "GPIO_Init.h"
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
 
 uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
 
@@ -18,7 +18,7 @@ uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
   #define NEOPIXEL_TIMER_SR()  TIMER_INTF(TIMER5)
   #define NEOPIXEL_TIMER_CR1() TIMER_CTL0(TIMER5)
 #else
-  #define NEOPIXEL_TIMER_CLOCK_ENABLE() RCC->APB1ENR |= 1 << 4 // TIM6 Clock enable
+  #define NEOPIXEL_TIMER_CLOCK_ENABLE() RCC->APB1ENR |= 1 << 4  // TIM6 Clock enable
   #define NEOPIXEL_TIMER_CNT() TIM6->CNT
   #define NEOPIXEL_TIMER_PSC() TIM6->PSC
   #define NEOPIXEL_TIMER_ARR() TIM6->ARR
@@ -28,8 +28,8 @@ uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
 
 void knob_LED_Init(void)
 {
-  GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_OUT_PP, 0);
-  GPIO_SetLevel(LED_COLOR_PIN, 0);
+  GPIO_InitSet(KNOB_LED_COLOR_PIN, MGPIO_MODE_OUT_PP, 0);
+  GPIO_SetLevel(KNOB_LED_COLOR_PIN, 0);
 
   NEOPIXEL_TIMER_CLOCK_ENABLE();
   NEOPIXEL_TIMER_CNT() = 0;
@@ -39,7 +39,7 @@ void knob_LED_Init(void)
 
 void knob_LED_DeInit(void)
 {
-  GPIO_InitSet(LED_COLOR_PIN, MGPIO_MODE_IPN, 0);
+  GPIO_InitSet(KNOB_LED_COLOR_PIN, MGPIO_MODE_IPN, 0);
 }
 
 void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
@@ -61,7 +61,7 @@ void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
     for (bit = 23; bit >= 0; bit--)
     {
       NEOPIXEL_TIMER_CNT() = 0;
-      WS2812_FAST_WRITE_HIGH();  // WS2812 required very high speed, so "GPIO_SetLevel(LED_COLOR_PIN, 1)" not applicable
+      WS2812_FAST_WRITE_HIGH();  // WS2812 required very high speed, so "GPIO_SetLevel(KNOB_LED_COLOR_PIN, 1)" not applicable
 
       if (color & (1 << bit))
       {
@@ -86,4 +86,4 @@ void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
   frameTimeStamp = OS_GetTimeMs();
 }
 
-#endif  // LED_COLOR_PIN
+#endif  // KNOB_LED_COLOR_PIN

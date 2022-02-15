@@ -26,11 +26,9 @@ void fanSetCurSpeed(uint8_t i, uint8_t speed);
 uint8_t fanGetCurSpeed(uint8_t i);
 void fanSetCurPercent(uint8_t i, uint8_t percent);
 uint8_t fanGetCurPercent(uint8_t i);
-void fanBuildList(void);
 void loopFan(void);
-void ctrlFanQuery(void);
 void ctrlFanQuerySetWait(bool wait);
-void fanQuery(void);
+void ctrlFanQuery(void);
 
 #ifdef __cplusplus
 }

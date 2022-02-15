@@ -103,7 +103,10 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, infoFile.folder[index]);
+    if (infoFile.longFolder[index] != NULL)
+      setDynamicLabel(itemPos, infoFile.longFolder[index]);
+    else
+      setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
@@ -267,7 +270,7 @@ void menuPrintFromSource(void)
           break;
       }
     }
-    else // select item from list view
+    else  // select item from list view
     {
       key_num = listViewGetSelectedIndex();
 
@@ -312,7 +315,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
@@ -401,7 +404,7 @@ void menuPrint(void)
         case KEY_ICON_1:
           if (volumeExists(TFT_USB_DISK))
           {
-            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
+            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
             infoFile.source = TFT_USB_DISK;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);
@@ -420,16 +423,16 @@ void menuPrint(void)
       #endif
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          list_mode = true;  // force list mode in Onboard sd card
+          list_mode = true;  // force list mode in onboard SD card
           infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
           goto selectEnd;
         }
         break;
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)
-          printInfoPopup();
+          printSummaryPopup();
         break;
 
       case KEY_ICON_7:

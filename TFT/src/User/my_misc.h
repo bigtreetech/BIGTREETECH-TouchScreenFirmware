@@ -11,6 +11,12 @@ extern "C" {
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
 #define REPLACE_MENU(x) infoMenu.menu[infoMenu.cur] = x
 #define CLOSE_MENU()    infoMenu.cur--
+#define REDRAW_MENU()                            \
+  {                                              \
+    infoMenu.menu[++infoMenu.cur] = menuDummy;   \
+    (*infoMenu.menu[infoMenu.cur - 1])();        \
+    infoMenu.cur--;                              \
+  }
 #define MENU_IS(x)      infoMenu.menu[infoMenu.cur] == x
 #define MENU_IS_NOT(x)  infoMenu.menu[infoMenu.cur] != x
 
