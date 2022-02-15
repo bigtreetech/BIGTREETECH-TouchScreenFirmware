@@ -267,7 +267,7 @@ void menuPrintFromSource(void)
           break;
       }
     }
-    else // select item from list view
+    else  // select item from list view
     {
       key_num = listViewGetSelectedIndex();
 
@@ -401,7 +401,7 @@ void menuPrint(void)
         case KEY_ICON_1:
           if (volumeExists(TFT_USB_DISK))
           {
-            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
+            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
             infoFile.source = TFT_USB_DISK;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);
@@ -420,9 +420,9 @@ void menuPrint(void)
       #endif
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          list_mode = true;  // force list mode in Onboard sd card
+          list_mode = true;  // force list mode in onboard SD card
           infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
           goto selectEnd;
         }
         break;

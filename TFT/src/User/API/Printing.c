@@ -372,7 +372,7 @@ void printComplete(void)
     case BOARD_SD:
       infoHost.printing = false;
       request_M27(0);
-      coordinateQuery(0);  // disable auto report position
+      coordinateQueryTurnOff();  // disable position auto report, if any
       break;
 
     case TFT_USB_DISK:
@@ -727,7 +727,7 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from TFT (SD card or USB stick)
+// get gcode command from TFT (SD card or USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;

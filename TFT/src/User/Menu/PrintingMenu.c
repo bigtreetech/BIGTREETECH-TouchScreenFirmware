@@ -753,12 +753,12 @@ void menuPrinting(void)
     switch (key_num)
     {
       case PS_KEY_0:
-        heatSetCurrentIndex(currentTool);
+        heatSetCurrentIndex(-1);  // set last used hotend index
         OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_1:
-        heatSetCurrentIndex(BED + currentBCIndex);
+        heatSetCurrentIndex(-2);  // set last used bed index
         OPEN_MENU(menuHeat);
         break;
 

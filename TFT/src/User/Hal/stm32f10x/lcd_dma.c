@@ -32,20 +32,20 @@
 // 16bits, SPI_RX to LCD_RAM.
 void LCD_DMA_Config(void)
 {
-  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;                    // Turn on the DMA clock
-  Delay_ms(5);                                              // Wait for the DMA clock to stabilize
+  RCC->AHBENR |= W25QXX_SPI_DMA_RCC_AHB;                         // Turn on the DMA clock
+  Delay_ms(5);                                                   // Wait for the DMA clock to stabilize
   W25QXX_SPI_DMA_CHANNEL->CPAR = (uint32_t)&W25QXX_SPI_NUM->DR;  // The peripheral address is: SPI-> DR
   W25QXX_SPI_DMA_CHANNEL->CMAR = (uint32_t)&LCD->LCD_RAM;        // The target address is LCD_RAM
-  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;                        // DMA1, the amount of data transferred, temporarily set to 0
-  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;                 // Reset
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;                      // Read from peripheral
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;                      // Normal mode
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;                      // Peripheral address non-incremental mode
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;                      // Memory non-incremental mode
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;         // Peripheral data width is 16 bits
-  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;        // Memory data width 16 bits
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;                     // Medium priority
-  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;                     // Non-memory to memory mode
+  W25QXX_SPI_DMA_CHANNEL->CNDTR = 0;                             // DMA1, the amount of data transferred, temporarily set to 0
+  W25QXX_SPI_DMA_CHANNEL->CCR = 0X00000000;                      // Reset
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<4;                           // Read from peripheral
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<5;                           // Normal mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<6;                           // Peripheral address non-incremental mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<7;                           // Memory non-incremental mode
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<8;              // Peripheral data width is 16 bits
+  W25QXX_SPI_DMA_CHANNEL->CCR |= LCD_DATA_16BIT<<10;             // Memory data width 16 bits
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 1<<12;                          // Medium priority
+  W25QXX_SPI_DMA_CHANNEL->CCR |= 0<<14;                          // Non-memory to memory mode
 }
 
 #define LCD_DMA_MAX_TRANS 65535  // DMA 65535 bytes one frame
@@ -74,7 +74,7 @@ void lcd_frame_segment_display(uint16_t size, uint32_t addr)
 
   while ((W25QXX_SPI_DMA->ISR & (1<<W25QXX_SPI_DMA_IFCR_BIT)) == 0);  // wait for rx complete
   W25QXX_SPI_DMA_CHANNEL->CCR &= (uint32_t)(~(1<<0));
-  W25QXX_SPI_DMA->IFCR |= (uint32_t)(1<<W25QXX_SPI_DMA_IFCR_BIT);          // clear ISR for rx complete
+  W25QXX_SPI_DMA->IFCR |= (uint32_t)(1<<W25QXX_SPI_DMA_IFCR_BIT);     // clear ISR for rx complete
   W25Qxx_SPI_CS_Set(1);
 
   SPI_Protocol_Init(W25Qxx_SPI, W25Qxx_SPEED);  // Reset SPI clock and config again

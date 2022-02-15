@@ -112,7 +112,7 @@ void tone(const uint16_t frequency, const uint16_t duration)
   nvic_irq_disable(TIMER2_IRQn);
   toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
-  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  //disable timer2
+  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  // disable timer2
   TIMER_CNT(TIMER2) = 0;
   TIMER_PSC(TIMER2) = (1000000 / (2 * frequency)) - 1;
   TIMER_CTL0(TIMER2) |= TIMER_CTL0_CEN;
@@ -126,7 +126,6 @@ void tone(const uint16_t frequency, const uint16_t duration)
   TIM3->CNT =0;
   TIM3->PSC = (1000000 / (2 * frequency)) - 1;
   TIM3->CR1 |= TIM_CR1_CEN;
-
 
   NVIC_EnableIRQ(TIM3_IRQn);
 #endif

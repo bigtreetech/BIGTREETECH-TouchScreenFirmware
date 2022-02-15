@@ -3,7 +3,7 @@
 #include "ListItem.h"
 #include "Notification.h"
 
-#define STATUS_BAR_REFRESH_TIME 2000 // refresh time in ms
+#define STATUS_BAR_REFRESH_TIME 2000  // refresh time in ms
 
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE
@@ -1245,7 +1245,7 @@ void loopBackEnd(void)
     parseComment();  // Parse comment from gCode file
   }
 
-  #if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
+  #ifdef SERIAL_PORT_2
     // Parse the received Gcode from other UART, such as: ESP3D, etc...
     parseRcvGcode();
   #endif
@@ -1316,7 +1316,7 @@ void loopBackEnd(void)
 // UI-related background loop tasks
 void loopFrontEnd(void)
 {
-  // Check if volume source(SD/U disk) insert
+  // Check if volume source (SD/USB) insert
   loopVolumeSource();
   // Loop to check and run toast messages
   loopToast();

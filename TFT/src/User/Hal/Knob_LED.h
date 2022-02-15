@@ -6,9 +6,9 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variants.h"  // for LED_COLOR_PIN etc...
+#include "variants.h"  // for KNOB_LED_COLOR_PIN etc...
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
   void knob_LED_Init(void);
   void knob_LED_DeInit(void);
   void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels);
