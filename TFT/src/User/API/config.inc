@@ -164,4 +164,4 @@ X_CONFIG (CANCEL_GCODE_ENABLED)
 X_CONFIG (START_GCODE)
 X_CONFIG (END_GCODE)
 X_CONFIG (CANCEL_GCODE)
-// After changing/adding/removing a config, change the 'CONFIG_FLASH_SIGN' in 'Settings.h' and 'PARA_SIGN' in 'FlashStore.c'
+// After changing/adding/removing a config, change the CONFIG_FLASH_SIGN in Settings.h and PARA_SIGN in FlashStore.c
