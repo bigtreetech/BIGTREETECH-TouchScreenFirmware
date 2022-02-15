@@ -62,7 +62,7 @@ void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmd(const char * format, ...)
 {
-  if (strlen(format) == 0) return false;
+  if (format[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
@@ -84,7 +84,7 @@ bool storeCmd(const char * format, ...)
 // No partial/incomplete commands (not terminated with '\n') are allowed in the script, they will be ignored.
 bool storeCmdScript(const char * format, ...)
 {
-  if (strlen(format) == 0) return false;
+  if (format[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)  // command queue is full
   {
@@ -140,7 +140,7 @@ bool storeCmdScript(const char * format, ...)
 // and it will for wait the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
-  if (strlen(format) == 0) return;
+  if (format[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
@@ -158,7 +158,7 @@ void mustStoreCmd(const char * format, ...)
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n".
 void mustStoreScript(const char * format, ...)
 {
-  if (strlen(format) == 0) return;
+  if (format[0] == 0) return false;
 
   char script[256];
   va_list va;
@@ -189,7 +189,7 @@ void mustStoreScript(const char * format, ...)
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
-  if (strlen(cmd) == 0) return false;
+  if (cmd[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
