@@ -119,8 +119,6 @@ bool nextScreenUpdate(uint32_t duration)
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
   void invertZAxisIcons(MENUITEMS * menuItems)
- 
-												  
   {
     if (GET_BIT(infoSettings.inverted_axis, Z_AXIS))
     {
@@ -130,7 +128,6 @@ bool nextScreenUpdate(uint32_t duration)
       menuItems->items[KEY_ICON_3].label.index = LABEL_DOWN;
     }
   }
- 
 #endif
 
 void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
