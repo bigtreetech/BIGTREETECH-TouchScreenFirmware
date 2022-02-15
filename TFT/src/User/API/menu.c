@@ -808,16 +808,7 @@ void menuDrawTitle(const uint8_t *content)
   GUI_SetBkColor(infoSettings.title_bg_color);
   if (content)
   {
-    if (MENU_IS(menuPrinting))
-    {
-      hideFileExtension(infoFile.fileIndex);
-      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-      restoreFileExtension(infoFile.fileIndex);
-    }
-    else
-    {
-      GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-    }
+    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
     start_x += GUI_StrPixelWidth(content);
     if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
   }

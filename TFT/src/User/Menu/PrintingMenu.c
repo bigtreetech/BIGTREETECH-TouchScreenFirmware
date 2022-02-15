@@ -600,10 +600,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-    printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
-  else
-    printingItems.title.address = (uint8_t *) infoFile.file[infoFile.fileIndex];
+  printingItems.title.address = hideFileExtension(infoFile.fileIndex);
 
   menuDrawPage(&printingItems);
   printingDrawPage();
