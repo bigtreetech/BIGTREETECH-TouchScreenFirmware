@@ -78,10 +78,66 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
+// Parse and store gcode command script to infoCmd queue.
+// This command script will be sent to the printer by sendQueueCmd().
+// If the infoCmd queue has not enough empty room, a reminder message is displayed and the script is discarded.
+// No partial/incomplete commands (not terminated with '\n') are allowed in the script, they will be ignored.
+bool storeCmdScript(const char * format, ...)
+{
+  if (strlen(format) == 0) return false;
+
+  if (infoCmd.count >= CMD_QUEUE_SIZE)  // command queue is full
+  {
+    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    return false;
+  }
+
+  char script[256];
+  va_list va;
+  va_start(va, format);
+  vsnprintf(script, 256, format, va);
+  va_end(va);  
+
+  // commented for speed increase, not needed for the moment
+  // if (script[strlen(script) - 1] != '\n')  // partial command detected
+  //   return false;
+
+  uint8_t index = 0;  // used as index and flag
+  uint8_t initialCmd_count = infoCmd.count;
+  char * pChr_tmp = script;
+
+  while (pChr_tmp[0] != '\0')  // try to fill the command queue with individual commands
+  {
+    infoCmd.queue[infoCmd.index_w].gcode[index] = pChr_tmp[0];
+
+    if (pChr_tmp[0] == '\n')
+    {
+      infoCmd.queue[infoCmd.index_w].gcode[++index] = '\0';
+      infoCmd.queue[infoCmd.index_w].port_index = PORT_1;  // port index for SERIAL_PORT
+      infoCmd.index_w = (infoCmd.index_w + 1) % CMD_QUEUE_SIZE;
+      infoCmd.count++;
+      if ((infoCmd.count == CMD_QUEUE_SIZE) && (pChr_tmp[1] != '\0'))  // command queue is full and there are commands left
+      { // roll back changes and exit with "false"
+        reminderMessage(LABEL_BUSY, STATUS_BUSY);
+        infoCmd.index_w = (CMD_QUEUE_SIZE + infoCmd.index_w + infoCmd.count - initialCmd_count) % CMD_QUEUE_SIZE;
+        infoCmd.count = initialCmd_count;
+        return false;
+      }
+      index = 0;
+    }
+    else
+      index += (index == CMD_MAX_SIZE - 2) ? 0 : 1;  // "- 2" space for "\n" and "\0"
+
+    pChr_tmp++;
+  }
+  
+  return true;
+}
+
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
-// is available to store the command.
+// If the infoCmd queue is full, a reminder message is displayed
+// and it will for wait the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
   if (strlen(format) == 0) return;
