@@ -15,9 +15,9 @@ float babystepReset(void)
 }
 
 // Set current babystep value
-void babystepSetValue(float babystep)
+void babystepSetValue(float value)
 {
-  babystep_value = babystep;
+  babystep_value = value;
 }
 
 // Get current babystep value

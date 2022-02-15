@@ -4,7 +4,7 @@
 // File list number per page
 #define NUM_PER_PAGE 5
 // error labels for files/Volume errors
-const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_U_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
+const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_USB_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
 static bool list_mode = true;
 
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
@@ -103,7 +103,10 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, infoFile.folder[index]);
+    if (infoFile.longFolder[index] != NULL)
+      setDynamicLabel(itemPos, infoFile.longFolder[index]);
+    else
+      setDynamicLabel(itemPos, infoFile.folder[index]);
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
@@ -267,7 +270,7 @@ void menuPrintFromSource(void)
           break;
       }
     }
-    else // select item from list view
+    else  // select item from list view
     {
       key_num = listViewGetSelectedIndex();
 
@@ -312,7 +315,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
@@ -326,7 +329,7 @@ void menuPrintFromSource(void)
     GUI_SetBkColor(infoSettings.bg_color);
 
     #ifdef SD_CD_PIN
-      if (isVolumeExist(infoFile.source) != true)
+      if (volumeExists(infoFile.source) != true)
       {
         resetInfoFile();
         CLOSE_MENU();
@@ -353,8 +356,8 @@ void menuPrint(void)
     // icon                          label
     {
       {ICON_ONTFT_SD,                LABEL_TFTSD},
-      #ifdef U_DISK_SUPPORT
-        {ICON_U_DISK,                  LABEL_U_DISK},
+      #ifdef USB_FLASH_DRIVE_SUPPORT
+        {ICON_USB_DISK,                LABEL_USB_DISK},
         #define ONBOARD_SD_INDEX 2
       #else
         {ICON_NULL,                    LABEL_NULL},
@@ -382,35 +385,54 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
-        infoFile.source = TFT_SD;
-        OPEN_MENU(menuPrintFromSource);
-        OPEN_MENU(menuPrintRestore);
-        goto selectEnd;
-
-      #ifdef U_DISK_SUPPORT
-        case KEY_ICON_1:
-          list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
-          infoFile.source = TFT_UDISK;
+        if (volumeExists(TFT_SD))
+        {
+          list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
+          infoFile.source = TFT_SD;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
           goto selectEnd;
+        }
+        else
+        {
+          setDialogText(LABEL_WARNING, LABEL_TFTSD_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
+          showDialog(DIALOG_TYPE_ALERT,NULL, NULL, NULL);
+        }
+        break;
+
+      #ifdef USB_FLASH_DRIVE_SUPPORT
+        case KEY_ICON_1:
+          if (volumeExists(TFT_USB_DISK))
+          {
+            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
+            infoFile.source = TFT_USB_DISK;
+            OPEN_MENU(menuPrintFromSource);
+            OPEN_MENU(menuPrintRestore);
+            goto selectEnd;
+          }
+          else
+          {
+            setDialogText(LABEL_WARNING, LABEL_USB_DISK_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
+            showDialog(DIALOG_TYPE_ALERT,NULL, NULL, NULL);
+          }
+          break;
+
         case KEY_ICON_2:
       #else
         case KEY_ICON_1:
       #endif
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          list_mode = true;  // force list mode in Onboard sd card
+          list_mode = true;  // force list mode in onboard SD card
           infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
           goto selectEnd;
         }
         break;
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)
-          printInfoPopup();
+          printSummaryPopup();
         break;
 
       case KEY_ICON_7:

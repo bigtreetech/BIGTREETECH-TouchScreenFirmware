@@ -21,8 +21,8 @@ bool mountFS(void)
     case TFT_SD:
       return mountSDCard();
 
-    case TFT_UDISK:
-      return mountUDisk();
+    case TFT_USB_DISK:
+      return mountUSBDisk();
 
     case BOARD_SD:
       if (infoHost.printing)
@@ -62,10 +62,10 @@ TCHAR * getCurFileSource(void)
   switch (infoFile.source)
   {
     case TFT_SD:
-      return "SD:";
+      return SD_ROOT_DIR;
 
-    case TFT_UDISK:
-      return "U:";
+    case TFT_USB_DISK:
+      return USBDISK_ROOT_DIR;
 
     case BOARD_SD:
     case BOARD_SD_REMOTE:
@@ -94,7 +94,7 @@ bool scanPrintFiles(void)
   switch (infoFile.source)
   {
     case TFT_SD:
-    case TFT_UDISK:
+    case TFT_USB_DISK:
       return scanPrintFilesFatFs();
 
     case BOARD_SD:
@@ -151,7 +151,7 @@ char * hideFileExtension(uint8_t index)
   {
     extPos = isSupportedFile(filename);
 
-    // if filename provides a supported filename extension then 
+    // if filename provides a supported filename extension then
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
     if (extPos != NULL && filename[strlen(filename) + 1] == 0)
       filename[extPos - filename] = 0;  // temporary hide filename extension
@@ -165,7 +165,7 @@ char * hideFileExtension(uint8_t index)
     {
       extPos = isSupportedFile(filename);
 
-      // if filename provides a supported filename extension then 
+      // if filename provides a supported filename extension then
       // check extra byte for filename extension check. If 0, no filename extension was previously hidden
       if (extPos != NULL && filename[strlen(filename) + 1] == 0)
         filename[extPos - filename] = 0;  // temporary hide filename extension
@@ -202,10 +202,11 @@ char * restoreFileExtension(uint8_t index)
 // Volume exist detect
 static bool volumeSrcStatus[FF_VOLUMES] = {false, false};
 
-bool isVolumeExist(uint8_t src)
+bool volumeExists(uint8_t src)
 {
   if (src >= FF_VOLUMES)
     return true;
+
   return volumeSrcStatus[src];
 }
 
@@ -218,7 +219,7 @@ void loopVolumeSource(void)
     if (volumeSrcStatus[i] != (*volumeInserted[i])())
     {
       const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED, LABEL_TFTSD_INSERTED},
-                                                    {LABEL_U_DISK_REMOVED, LABEL_U_DISK_INSERTED}};
+                                                    {LABEL_USB_DISK_REMOVED, LABEL_USB_DISK_INSERTED}};
       volumeSrcStatus[i] = (*volumeInserted[i])();
       volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
     }

@@ -17,8 +17,8 @@ extern "C" {
 
 // Filament runout detection
 #ifdef FIL_RUNOUT_PIN
-  #define POS_E_UPDATE_TIME    2000
-  #define ALARM_REMINDER_TIME 10000
+  #define FIL_POS_E_UPDATE_TIME    2000
+  #define FIL_ALARM_REMINDER_TIME 10000
 
   void FIL_Runout_Init(void);
   void FIL_PosE_SetUpdateWaiting(bool waiting);
