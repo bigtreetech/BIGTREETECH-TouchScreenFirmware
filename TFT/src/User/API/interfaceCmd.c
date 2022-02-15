@@ -62,7 +62,7 @@ void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmd(const char * format, ...)
 {
-  if (strlen(format) == 0) return false;
+  if (format[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
@@ -78,13 +78,48 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
+// Parse and store gcode command script to infoCmd queue.
+// This command script will be sent to the printer by sendQueueCmd().
+// If the infoCmd queue has not enough empty room, a reminder message is displayed and the script is discarded.
+// No partial/incomplete commands (not terminated with '\n') are allowed in the script, they will be ignored.
+bool storeScript(const char * format, ...)
+{
+  if (format[0] == 0) return false;
+
+  char script[256];
+  va_list va;
+  va_start(va, format);
+  vsnprintf(script, 256, format, va);
+  va_end(va);
+
+  char * p = script;
+  uint16_t i = 0;
+  CMD cmd;
+  for (;;)
+  {
+    char c = *p++;
+    if (!c) break;
+    cmd[i++] = c;
+
+    if (c == '\n')
+    {
+      cmd[i] = 0;
+      if (storeCmd("%s", cmd) == false)
+        return false;
+      i = 0;
+    }
+  }
+
+  return true;
+}
+
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue is full, a reminder message is displayed and it will wait the queue
-// is available to store the command.
+// If the infoCmd queue is full, a reminder message is displayed
+// and it will for wait the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
-  if (strlen(format) == 0) return;
+  if (format[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
@@ -102,7 +137,7 @@ void mustStoreCmd(const char * format, ...)
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n".
 void mustStoreScript(const char * format, ...)
 {
-  if (strlen(format) == 0) return;
+  if (format[0] == 0) return false;
 
   char script[256];
   va_list va;
@@ -133,7 +168,7 @@ void mustStoreScript(const char * format, ...)
 // If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
-  if (strlen(cmd) == 0) return false;
+  if (cmd[0] == 0) return false;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
