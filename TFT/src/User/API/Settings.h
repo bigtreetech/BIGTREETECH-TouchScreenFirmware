@@ -8,7 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"
-#include "coordinate.h" // for TOTAL_AXIS
+#include "coordinate.h"  // for TOTAL_AXIS
 #include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
 // Config version support
@@ -31,7 +31,7 @@ extern "C" {
 #define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2) // hotends + bed + chamber
+#define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2)  // hotends + bed + chamber
 #define MAX_COOLING_FAN_COUNT 6
 #define MAX_CRTL_FAN_COUNT    2
 #define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
@@ -215,7 +215,7 @@ typedef struct
   uint8_t  ext_count;
   uint8_t  fan_count;
   uint8_t  ctrl_fan_en;
-  uint16_t max_temp[MAX_HEATER_COUNT]; // hotends + bed + chamber
+  uint16_t max_temp[MAX_HEATER_COUNT];  // hotends + bed + chamber
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
   int16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
@@ -268,8 +268,8 @@ typedef struct
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
   uint8_t  lcd_lock_on_idle;
-  uint8_t led_color[LED_COLOR_COMPONENT_COUNT];
-  uint8_t led_always_on;
+  uint8_t  led_color[LED_COLOR_COMPONENT_COUNT];
+  uint8_t  led_always_on;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
