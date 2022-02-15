@@ -273,15 +273,12 @@ void initPrintSummary(void)
   last_E_pos = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
   infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0};
   hasFilamentData = false;
+
+  sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getFilename(infoFile.fileIndex));  // get short or long filename
 }
 
 void preparePrintSummary(void)
 {
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.longFile[infoFile.fileIndex]);
-  else
-    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));
-
   infoPrintSummary.time = infoPrinting.time;
 
   if (speedGetCurPercent(1) != 100)
@@ -334,19 +331,6 @@ void updatePrintUsedFilament(void)
 
   infoPrintSummary.length += (E_pos - last_E_pos) / 1000;
   last_E_pos = E_pos;
-}
-
-// only return gcode file name except path
-// for example:"SD:/test/123.gcode"
-// only return "123.gcode"
-uint8_t * getPrintName(char * path)
-{
-  char * name = strrchr(path, '/');
-
-  if (name != NULL)
-    return (uint8_t *)(name + 1);
-  else
-    return (uint8_t *)path;
 }
 
 void clearInfoPrint(void)
@@ -800,6 +784,7 @@ void loopPrintFromTFT(void)
           gCodeCommentLine[comment_count++] = '\n';
           gCodeCommentLine[comment_count] = 0;  // terminate string
         }
+
         break;  // line was parsed so always exit from loop
       }
       else if (comment_parsing)

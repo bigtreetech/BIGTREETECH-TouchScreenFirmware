@@ -116,8 +116,8 @@ bool scanPrintFilesFatFs(void)
       fileDate[infoFile.fileCount] = ((uint32_t)(finfo.fdate) << 16) | finfo.ftime;
       // copy file name
       strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
-      infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
-      infoFile.longFile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
+      infoFile.file[infoFile.fileCount][len] = 0;    // set to 0 the extra byte for filename extension check
+      infoFile.longFile[infoFile.fileCount] = NULL;  // long filename is not supported, so always set it to NULL
       infoFile.fileCount++;
     }
   }
