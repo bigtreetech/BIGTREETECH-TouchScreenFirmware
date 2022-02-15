@@ -33,7 +33,7 @@ void Mode_Switch(void)
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
           
-            if (CONFIG_SHOW_BOOTSCREEN == 1)
+            if ( strcmp(CONFIG_SHOW_BOOTSCREEN, "1") == 0)
                   {
                     LOGO_ReadDisplay();
                     updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup

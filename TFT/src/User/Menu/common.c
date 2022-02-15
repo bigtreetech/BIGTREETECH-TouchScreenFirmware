@@ -354,7 +354,7 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
 // user choice for disabling all heaters/hotends
 void cooldownTemperature(void)
 {
-  if (CONFIG_ALERT_HEATERS_ON == 1)
+  if ( strcmp(CONFIG_ALERT_HEATERS_ON, "1") == 0)
   {
     if (!isPrinting())
     {
