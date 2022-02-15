@@ -11,7 +11,7 @@ extern "C" {
 float babystepReset(void);
 
 // Set current babystep value
-void babystepSetValue(float babystep);
+void babystepSetValue(float value);
 
 // Get current babystep value
 float babystepGetValue(void);

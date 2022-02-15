@@ -7,8 +7,13 @@ extern "C" {
 
 #include <stdint.h>
 
+/**
+ * index >= 0 to set the specific index
+ * index == -1 to set the last used hotend index
+ * index == -2 to set the last used bed index
+ */
+void heatSetCurrentIndex(int8_t index);
 void menuHeat(void);
-void heatSetCurrentIndex(uint8_t index);
 
 #ifdef __cplusplus
 }

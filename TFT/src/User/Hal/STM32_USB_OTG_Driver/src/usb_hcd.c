@@ -25,7 +25,7 @@
 #include "usb_conf.h"
 #include "usb_bsp.h"
 
-#ifdef U_DISK_SUPPORT
+#ifdef USB_FLASH_DRIVE_SUPPORT
 
 /** @addtogroup USB_OTG_DRIVER
   * @{
