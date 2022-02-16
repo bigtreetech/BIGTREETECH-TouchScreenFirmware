@@ -20,7 +20,7 @@
 
 // Update folder for fonts and icons
 #ifndef UPDATE_DIR
-  #define UPDATE_DIR "TFT35"
+  #define UPDATE_DIR "MKS"
 #endif
 
 // Hardware manufacturer
