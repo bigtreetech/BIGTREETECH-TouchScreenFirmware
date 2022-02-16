@@ -91,7 +91,6 @@ bool getPrintRunout(void);
 
 void printSetUpdateWaiting(bool isWaiting);           // called in interfaceCmd.c
 void updatePrintUsedFilament(void);                   // called in PrintingMenu.c
-uint8_t * getPrintName(char * path);                  // called in PrintingMenu.c
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
 void printComplete(void);                             // print complete

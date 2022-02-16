@@ -280,7 +280,7 @@ void preparePrintSummary(void)
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.longFile[infoFile.fileIndex]);
   else
-    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));
+    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.file[infoFile.fileIndex]);
 
   infoPrintSummary.time = infoPrinting.time;
 
@@ -334,19 +334,6 @@ void updatePrintUsedFilament(void)
 
   infoPrintSummary.length += (E_pos - last_E_pos) / 1000;
   last_E_pos = E_pos;
-}
-
-// only return gcode file name except path
-// for example:"SD:/test/123.gcode"
-// only return "123.gcode"
-uint8_t * getPrintName(char * path)
-{
-  char * name = strrchr(path, '/');
-
-  if (name != NULL)
-    return (uint8_t *)(name + 1);
-  else
-    return (uint8_t *)path;
 }
 
 void clearInfoPrint(void)
