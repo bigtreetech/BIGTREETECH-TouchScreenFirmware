@@ -134,10 +134,12 @@ bool IsRootDir(void)
 // check if filename provides a supported filename extension
 char * isSupportedFile(char * filename)
 {
-  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
+  char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos == NULL)
-    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
+  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
+  {
+    extPos = NULL;
+  }
 
   return extPos;
 }
@@ -187,20 +189,24 @@ char * restoreExtension(char * filename)
 
 char * hideFilenameExtension(uint8_t index)
 {
-  char * filename = hideExtension(infoFile.file[index]);
+  char * filename = NULL;
 
   if (infoFile.longFile[index] != NULL)
     filename = hideExtension(infoFile.longFile[index]);
+  else
+    filename = hideExtension(infoFile.file[index]);
 
   return filename;
 }
 
 char * restoreFilenameExtension(uint8_t index)
 {
-  char * filename = restoreExtension(infoFile.file[index]);
+  char * filename = NULL;
 
   if (infoFile.longFile[index] != NULL)
     filename = restoreExtension(infoFile.longFile[index]);
+  else
+    filename = restoreExtension(infoFile.file[index]);
 
   return filename;
 }

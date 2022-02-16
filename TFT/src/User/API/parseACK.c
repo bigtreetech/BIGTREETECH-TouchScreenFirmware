@@ -809,11 +809,13 @@ void parseACK(void)
       // parse and store M420 V1 T1 or M420 Sxx or M503, ABL state (e.g. from Bed Leveling menu)
       else if (ack_seen("echo:Bed Leveling"))
       {
-        if (ack_seen("ON"))
+        if (ack_continue_seen("ON"))
           setParameter(P_ABL_STATE, 0, ENABLED);
         else
           setParameter(P_ABL_STATE, 0, DISABLED);
       }
+      else if (ack_seen("echo:Fade Height"))
+        setParameter(P_ABL_STATE, 1, ack_value());
       // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
       else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
       {
