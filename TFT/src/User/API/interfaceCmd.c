@@ -119,7 +119,7 @@ bool storeScript(const char * format, ...)
 // and it will for wait the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
-  if (format[0] == 0) return false;
+  if (format[0] == 0) return;
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
@@ -137,7 +137,7 @@ void mustStoreCmd(const char * format, ...)
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n".
 void mustStoreScript(const char * format, ...)
 {
-  if (format[0] == 0) return false;
+  if (format[0] == 0) return;
 
   char script[256];
   va_list va;

@@ -127,7 +127,7 @@ bool scanPrintFilesGcodeFs(void)
           break;
         }
         // copy file name and set the flag for filename extension check
-        strncpy(infoFile.longFile[infoFile.fileCount], longFilename, str_len + 2);  // "+2": space for terminating null character and the flag for filename extension check
+        strncpy(infoFile.longFile[infoFile.fileCount], longFilename, str_len + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
         clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
@@ -139,7 +139,7 @@ bool scanPrintFilesGcodeFs(void)
       // so leave the following block commented
 /*      if (IsSupportedFile(file) == NULL)  // if filename doesn't provide a supported filename extension
       {
-        if (infoFile.Longfile[infoFile.fileCount] != 0)
+        if (infoFile.Longfile[infoFile.fileCount] != NULL)
           free(infoFile.Longfile[infoFile.fileCount]);
 
         continue;
@@ -153,10 +153,11 @@ bool scanPrintFilesGcodeFs(void)
       {
         if (infoFile.longFile[infoFile.fileCount] != NULL)
           free(infoFile.longFile[infoFile.fileCount]);
+
         break;
       }
       // copy file name and set the flag for filename extension check
-      strncpy(infoFile.file[infoFile.fileCount], pline, str_len + 2);  // "+2": space for terminating null character and the flag for filename extension check
+      strncpy(infoFile.file[infoFile.fileCount], pline, str_len + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
       infoFile.fileCount++;
     }
     else  // if FOLDER

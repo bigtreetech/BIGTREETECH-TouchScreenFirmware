@@ -374,7 +374,9 @@ void scanUpdates(void)
   if (mountSDCard())
     rootDir = SD_ROOT_DIR;
 
+#ifdef USB_FLASH_DRIVE_SUPPORT
 checkupdate:
+#endif
   if (rootDir != NULL)
   {
     char curfilePath[100];
