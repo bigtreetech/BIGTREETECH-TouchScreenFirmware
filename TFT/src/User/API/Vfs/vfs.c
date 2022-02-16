@@ -137,9 +137,7 @@ char * isSupportedFile(char * filename)
   char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
   if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
-  {
     extPos = NULL;
-  }
 
   return extPos;
 }
@@ -189,24 +187,20 @@ char * restoreExtension(char * filename)
 
 char * hideFilenameExtension(uint8_t index)
 {
-  char * filename = NULL;
+  char * filename = hideExtension(infoFile.file[index]);
 
   if (infoFile.longFile[index] != NULL)
     filename = hideExtension(infoFile.longFile[index]);
-  else
-    filename = hideExtension(infoFile.file[index]);
 
   return filename;
 }
 
 char * restoreFilenameExtension(uint8_t index)
 {
-  char * filename = NULL;
+  char * filename = restoreExtension(infoFile.file[index]);
 
   if (infoFile.longFile[index] != NULL)
     filename = restoreExtension(infoFile.longFile[index]);
-  else
-    filename = restoreExtension(infoFile.file[index]);
 
   return filename;
 }

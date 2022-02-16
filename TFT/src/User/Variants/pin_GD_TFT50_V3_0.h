@@ -11,6 +11,7 @@
   #define HARDWARE_VERSION "GD_TFT50_V3.0"
 #endif
 
+// Only for TFTLCD_DRIVER SSD1963
 #ifndef SSD1963_LCD_PARA
   #define SSD1963_LCD_PARA
   #define SSD_DCLK_FREQUENCY  9   // 9Mhz

@@ -1030,10 +1030,10 @@ void sendQueueCmd(void)
           }
           break;
 
-        // case 420:  // M420
-        //   // ABL state and Z fade height will be set through parsACK.c after receiving confirmation
-        //   // message from the printer to prevent wrong state and/or value in case of error.
-        //   break;
+        //case 420:  // M420
+        //  // ABL state and Z fade height will be set through parsACK.c after receiving confirmation
+        //  // message from the printer to prevent wrong state and/or value in case of error
+        //  break;
 
         case 569:  // M569 TMC stepping mode
         {
@@ -1206,18 +1206,10 @@ void sendQueueCmd(void)
             {
               if (cmd_seen('S'))
               {
-                switch (cmd_value())
+                uint8_t v = cmd_value();
+                if (v == 1 || v == 2)
                 {
-                  case 1:
-                    setParameter(P_ABL_STATE, 0, 1);
-                    break;
-
-                  case 2:
-                    setParameter(P_ABL_STATE, 0, 0);
-                    break;
-
-                  default:
-                    break;
+                  setParameter(P_ABL_STATE, 0, v % 2);  // value will be 1 if v == 1, 0 if v == 2
                 }
               }
             }

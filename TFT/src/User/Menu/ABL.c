@@ -17,18 +17,16 @@ void ablUpdateStatus(bool succeeded)
   switch (infoMachineSettings.leveling)
   {
     case BL_BBL:
-    {
       tempTitle.index = LABEL_ABL_SETTINGS_BBL;
       break;
-    }
+
     case BL_UBL:
-    {
       savingEnabled = false;
       tempTitle.index = LABEL_ABL_SETTINGS_UBL;
 
       sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BL_SMART_FILL));
       break;
-    }
+
     default:
       break;
   }
@@ -121,6 +119,7 @@ void menuUBLSaveLoad(void)
   if (!ublIsSaving)
   {
     UBLSaveLoadItems.title.index = LABEL_ABL_SETTINGS_UBL_LOAD;
+
     for (int i = 0; i < 4; i++)
     {
       UBLSaveLoadItems.items[i].icon = ICON_EEPROM_RESTORE;
