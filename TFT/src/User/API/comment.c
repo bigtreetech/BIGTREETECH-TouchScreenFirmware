@@ -5,7 +5,7 @@
 #define TOKEN_DELIMITERS " :=_"
 #define HIGH_TO_LOW_CASE     32  // 'a' - 'A'
 
-COMMENT gCode_comment = {0, true};
+char gCodeCommentLine[COMMENT_MAX_CHAR] = {0};
 bool M73R_presence = false;
 
 void setM73R_presence(bool present)
@@ -17,26 +17,27 @@ void parseComment(void)
 {
   char * temp_char;
   uint32_t temp_value = 0;
-  if (gCode_comment.handled == true)
-    return;
 
   // check for words starting with "l" or "L"
-  if (gCode_comment.content[0] == 'l' || gCode_comment.content[0] == 'L')
+  if (gCodeCommentLine[0] == 'l' || gCodeCommentLine[0] == 'L')
   {
-    temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
+    temp_char = strtok(gCodeCommentLine, TOKEN_DELIMITERS);
     strlwr(temp_char);
+
     if (strcmp(temp_char, "layer") == 0)
     { // check for "layer" keyword in comment (layer number or layer count)
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
       strlwr(temp_char);
+
       if (strcmp(temp_char, "count") == 0)  // check if next word is "count"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         temp_value = strtoul(temp_char, NULL, 0);
+
         if (temp_value != 0)
           setPrintLayerCount(temp_value);
       }
-      else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
+      else if (temp_char[0] - '0'  && temp_char[0] <= '9')  // check if a number is found
       {
         temp_value = strtoul(temp_char, NULL, 0);
         // "temp_value == 0" for object by object printing, when print goes to the next object
@@ -48,15 +49,17 @@ void parseComment(void)
   }
 
   // check for words starting with "t" or "T"
-  else if (gCode_comment.content[0] == 't' || gCode_comment.content[0] == 'T')
+  else if (gCodeCommentLine[0] == 't' || gCodeCommentLine[0] == 'T')
   {
-    temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
+    temp_char = strtok(gCodeCommentLine, TOKEN_DELIMITERS);
     strlwr(temp_char);
+
     // check for "time" keyword in comment to retrieve total or elapsed time, Cura specific
     if (strcmp(temp_char, "time") == 0 && M73R_presence == false)  // check if first word is "time"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
       strlwr(temp_char);
+
       if (strcmp(temp_char, "elapsed") == 0 && getPrintExpectedTime() > 0)  // check if next word is "elapsed"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
@@ -73,15 +76,17 @@ void parseComment(void)
   }
 
   // check for words starting with "r" or "R"
-  else if (gCode_comment.content[0] == 'r' || gCode_comment.content[0] == 'R')
+  else if (gCodeCommentLine[0] == 'r' || gCodeCommentLine[0] == 'R')
   {
-    temp_char = strtok(gCode_comment.content, TOKEN_DELIMITERS);
+    temp_char = strtok(gCodeCommentLine, TOKEN_DELIMITERS);
     strlwr(temp_char);
+
     // check for "remaining" keyword in comment to retrieve remaining time, IdeaMaker specific
     if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
       strlwr(temp_char);
+
       if (strcmp(temp_char, "time") == 0)  // check if next word is "time"
       {
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
@@ -92,5 +97,5 @@ void parseComment(void)
     // continue here with "else if" for another token that starts with "r" or "R"
   }
 
-  gCode_comment.handled = true;
+  gCodeCommentLine[0] = 0;
 }

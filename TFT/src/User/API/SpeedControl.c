@@ -12,16 +12,6 @@ static uint8_t  needSetPercent = 0;
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
 
-void speedSetCurPercent(uint8_t tool, uint16_t per)
-{
-  curPercent[tool] = per;
-}
-
-uint16_t speedGetCurPercent(uint8_t tool)
-{
-  return curPercent[tool];
-}
-
 void speedSetPercent(uint8_t tool, uint16_t per)
 {
   uint16_t value = NOBEYOND(SPEED_MIN, per, SPEED_MAX);
@@ -32,6 +22,16 @@ void speedSetPercent(uint8_t tool, uint16_t per)
 uint16_t speedGetSetPercent(uint8_t tool)
 {
   return setPercent[tool];
+}
+
+void speedSetCurPercent(uint8_t tool, uint16_t per)
+{
+  curPercent[tool] = per;
+}
+
+uint16_t speedGetCurPercent(uint8_t tool)
+{
+  return curPercent[tool];
 }
 
 void loopSpeed(void)
@@ -67,7 +67,8 @@ void speedQuery(void)
   {
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeCmd("M220\nM221\n");
+      speedQueryWait = storeCmd("M220\n");
+      speedQueryWait |= storeCmd("M221\n");  // speedQueryWait set to "true" if at least one command will be sent
     }
     else
     {

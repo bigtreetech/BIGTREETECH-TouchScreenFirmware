@@ -56,24 +56,24 @@ void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 // update files menu in icon mode
 void gocdeIconDraw(void)
 {
-  uint8_t i = 0;
-  uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
   ITEM curItem = {ICON_NULL, LABEL_NULL};
+  uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
+  uint8_t i = 0;
 
   // draw folders
-  for (i = 0; (i + baseIndex < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
+  for (i = 0; (baseIndex + i < infoFile.folderCount) && (i < NUM_PER_PAGE); i++)
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[i + baseIndex]);
+    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[baseIndex + i]);
   }
 
   // draw gcode files
-  for (; (i + baseIndex < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
+  for (; (baseIndex + i < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
   {
-    restoreFileExtension(i + baseIndex - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
+    restoreFilenameExtension(baseIndex + i - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
 
-    if (EnterDir(infoFile.file[i + baseIndex - infoFile.folderCount]) == false)  // always use short filename for file path
+    if (EnterDir(infoFile.file[baseIndex + i - infoFile.folderCount]) == false)  // always use short filename for file path
       break;
     // if model preview bmp exists, display bmp directly without writing to flash
     if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.title))
@@ -83,12 +83,12 @@ void gocdeIconDraw(void)
     }
     ExitDir();
 
-    hideFileExtension(i + baseIndex - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[i + baseIndex - infoFile.folderCount]);  // always use short filename
+    hideFilenameExtension(baseIndex + i - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
+    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[baseIndex + i - infoFile.folderCount]);  // always use short filename
   }
 
   // clear blank icons
-  for (; (i < NUM_PER_PAGE); i++)
+  for (; i < NUM_PER_PAGE; i++)
   {
     curItem.icon = ICON_NULL;
     menuDrawItem(&curItem, i);
@@ -103,14 +103,14 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, infoFile.folder[index]);
+    setDynamicLabel(itemPos, getFoldername(index));  // display short or long folder name
   }
   else if (index < (infoFile.folderCount + infoFile.fileCount))  // gcode file
   {
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFileExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+    setDynamicLabel(itemPos, hideFilenameExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
   }
 }
 
@@ -140,7 +140,7 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFileExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
+    char * filename = restoreFilenameExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
     if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
@@ -267,7 +267,7 @@ void menuPrintFromSource(void)
           break;
       }
     }
-    else // select item from list view
+    else  // select item from list view
     {
       key_num = listViewGetSelectedIndex();
 
@@ -312,7 +312,7 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
@@ -401,7 +401,7 @@ void menuPrint(void)
         case KEY_ICON_1:
           if (volumeExists(TFT_USB_DISK))
           {
-            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB stick
+            list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
             infoFile.source = TFT_USB_DISK;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);
@@ -420,16 +420,16 @@ void menuPrint(void)
       #endif
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          list_mode = true;  // force list mode in Onboard sd card
+          list_mode = true;  // force list mode in onboard SD card
           infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here,  onboard sd card PLR feature
+          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
           goto selectEnd;
         }
         break;
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)
-          printInfoPopup();
+          printSummaryPopup();
         break;
 
       case KEY_ICON_7:

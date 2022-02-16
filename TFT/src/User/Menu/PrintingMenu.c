@@ -516,7 +516,7 @@ void stopConfirm(void)
   CLOSE_MENU();
 }
 
-void printInfoPopup(void)
+void printSummaryPopup(void)
 {
   uint8_t hour = infoPrintSummary.time / 3600;
   uint8_t min = infoPrintSummary.time % 3600 / 60;
@@ -589,23 +589,18 @@ void menuPrinting(void)
 
   if (lastPrinting == true)
   {
-    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-      printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
-    else
-      printingItems.title.address = getPrintName(infoFile.title);
-
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after a print was done (ex: after a popup)
   {
-    printingItems.title.address = (uint8_t *)infoPrintSummary.name;
-
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // MainScreen
     printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // BackGround
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
+
+  printingItems.title.address = hideFilenameExtension(infoFile.fileIndex);
 
   menuDrawPage(&printingItems);
   printingDrawPage();
@@ -741,7 +736,7 @@ void menuPrinting(void)
 
       #ifdef PORTRAIT_MODE
         if (lastPrinting == false)
-          printInfoPopup();
+          printSummaryPopup();
       #endif
 
       return;  // It will restart this interface if directly return this function without modify the value of infoMenu
@@ -753,12 +748,12 @@ void menuPrinting(void)
     switch (key_num)
     {
       case PS_KEY_0:
-        heatSetCurrentIndex(currentTool);
+        heatSetCurrentIndex(-1);  // set last used hotend index
         OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_1:
-        heatSetCurrentIndex(BED + currentBCIndex);
+        heatSetCurrentIndex(-2);  // set last used bed index
         OPEN_MENU(menuHeat);
         break;
 
@@ -838,7 +833,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_INFOBOX:
-        printInfoPopup();
+        printSummaryPopup();
         break;
 
       default:

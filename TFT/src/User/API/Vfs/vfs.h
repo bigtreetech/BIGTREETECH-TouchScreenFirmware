@@ -9,9 +9,12 @@ extern "C" {
 #include <stdint.h>
 #include "ff.h"
 
-#define FOLDER_NUM   255
-#define FILE_NUM     255
+#define FOLDER_NUM    255
+#define FILE_NUM      255
 #define MAX_PATH_LEN 1024
+
+#define SD_ROOT_DIR      "SD:"
+#define USBDISK_ROOT_DIR "U:"
 
 typedef enum
 {
@@ -24,16 +27,17 @@ typedef enum
 
 typedef struct
 {
-  TCHAR title[MAX_PATH_LEN];   // selected file path
-  TCHAR * folder[FOLDER_NUM];  // folder list buffer
-  TCHAR * file[FILE_NUM];      // file list buffer
-  uint16_t folderCount;        // current folder count
-  uint16_t fileCount;          // current gcode file count
-  uint16_t curPage;            // current display page index (5 files per page)
-  uint16_t fileIndex;          // selected file index
-  FS_SOURCE source;            // source of the file. TFT SD or ONBOARD SD.
-  TCHAR * longFile[FILE_NUM];  // long file name buffer from ONBOARD SD only
-  bool modelIcon;              // 1: model preview icon exist, 0: not exist
+  TCHAR title[MAX_PATH_LEN];       // selected file path
+  TCHAR * folder[FOLDER_NUM];      // folder list buffer
+  TCHAR * file[FILE_NUM];          // file list buffer
+  uint16_t folderCount;            // current folder count
+  uint16_t fileCount;              // current gcode file count
+  uint16_t curPage;                // current display page index (5 files per page)
+  uint16_t fileIndex;              // selected file index
+  FS_SOURCE source;                // source of the file. TFT SD or ONBOARD SD.
+  TCHAR * longFile[FILE_NUM];      // long file name buffer from ONBOARD SD only
+  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from ONBOARD SD only
+  bool modelIcon;                  // 1: model preview icon exist, 0: not exist
 } MYFILE;
 
 extern MYFILE infoFile;
@@ -51,8 +55,10 @@ bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
 char * isSupportedFile(char * filename);
-char * hideFileExtension(uint8_t index);
-char * restoreFileExtension(uint8_t index);
+char * getFoldername(uint8_t index);
+char * getFilename(uint8_t index);
+char * hideFilenameExtension(uint8_t index);
+char * restoreFilenameExtension(uint8_t index);
 
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);

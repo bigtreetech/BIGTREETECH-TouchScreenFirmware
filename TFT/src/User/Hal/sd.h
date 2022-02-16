@@ -50,16 +50,16 @@ extern "C" {
 #define SD_RESPONSE_FAILURE     0xFF
 
 uint8_t SD_CD_Inserted(void);
-uint8_t SD_Init(void);                               //initialization
+uint8_t SD_Init(void);                                              //initialization
 void SD_DeInit(void);
 uint8_t SD_ReadDisk(uint8_t * buf, uint32_t sector, uint8_t cnt);   //Read SD card, fatfs / usb call
 uint8_t SD_WriteDisk(uint8_t * buf, uint32_t sector, uint8_t cnt);  //Write SD card, fatfs / usb call
 
-uint8_t SD_Wait_Ready(void);                         //Waiting for SD card preparation
-uint8_t SD_Get_Ack(uint8_t Response);                     //Get the answer
-uint32_t SD_Get_Sector_Count(void);                  //Number of sectors read
-uint8_t SD_GetCID(uint8_t * cid_data);                    //Read SD card CID
-uint8_t SD_GetCSD(uint8_t * csd_data);                    //Read SD card CSD
+uint8_t SD_Wait_Ready(void);                                        //Waiting for SD card preparation
+uint8_t SD_Get_Ack(uint8_t Response);                               //Get the answer
+uint32_t SD_Get_Sector_Count(void);                                 //Number of sectors read
+uint8_t SD_GetCID(uint8_t * cid_data);                              //Read SD card CID
+uint8_t SD_GetCSD(uint8_t * csd_data);                              //Read SD card CSD
 
 #ifdef __cplusplus
 }

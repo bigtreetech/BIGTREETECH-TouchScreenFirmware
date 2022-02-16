@@ -81,7 +81,7 @@ extern "C" {
   #error "FIL_RUNOUT cannot be less than 0 or greater than 3"
 #endif
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
   #ifdef KNOB_LED_COLOR
     #if KNOB_LED_COLOR < 0
       #error "KNOB_LED_COLOR cannot be less than 1"
