@@ -36,6 +36,7 @@
     #define STRING_LCD_IDLE_BRIGHTNESS    "Brilho em descanso"
     #define STRING_LCD_IDLE_TIME          "Timer do brilho"
     #define STRING_LCD_LOCK_ON_IDLE       "Bloq. LCD em IDLE"
+    #define STRING_LED_ALWAYS_ON          "LED always ON"
     #define STRING_KNOB_LED_COLOR         "Knob LED"
     #define STRING_KNOB_LED_IDLE          "Knob LED IDLE"
     #define STRING_START_GCODE_ENABLED    "Gcode antes imp."

@@ -22,7 +22,7 @@ bool mountFS(void)
       return mountSDCard();
 
     case TFT_USB_DISK:
-      return mountUDisk();
+      return mountUSBDisk();
 
     case BOARD_SD:
       if (infoHost.printing)
@@ -62,10 +62,10 @@ TCHAR * getCurFileSource(void)
   switch (infoFile.source)
   {
     case TFT_SD:
-      return "SD:";
+      return SD_ROOT_DIR;
 
     case TFT_USB_DISK:
-      return "U:";
+      return USBDISK_ROOT_DIR;
 
     case BOARD_SD:
     case BOARD_SD_REMOTE:
@@ -134,10 +134,12 @@ bool IsRootDir(void)
 // check if filename provides a supported filename extension
 char * isSupportedFile(char * filename)
 {
-  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
+  char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos == NULL)
-    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
+  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
+  {
+    extPos = NULL;
+  }
 
   return extPos;
 }

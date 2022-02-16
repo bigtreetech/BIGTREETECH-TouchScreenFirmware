@@ -47,15 +47,15 @@ bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
 */
 bool mountSDCard(void)
 {
-  return (f_mount(&fatfs[VOLUMES_SD_CARD], "SD:", 1) == FR_OK);
+  return (f_mount(&fatfs[VOLUMES_SD_CARD], SD_ROOT_DIR, 1) == FR_OK);
 }
 
 /*
- mount U disk from Fatfs
+ mount USB disk from Fatfs
 */
-bool mountUDisk(void)
+bool mountUSBDisk(void)
 {
-  return (f_mount(&fatfs[VOLUMES_USB_DISK], "U:", 1) == FR_OK);
+  return (f_mount(&fatfs[VOLUMES_USB_DISK], USBDISK_ROOT_DIR, 1) == FR_OK);
 }
 
 /*
@@ -114,10 +114,9 @@ bool scanPrintFilesFatFs(void)
 
       // copy date/time modified
       fileDate[infoFile.fileCount] = ((uint32_t)(finfo.fdate) << 16) | finfo.ftime;
-      // copy file name
-      strcpy(infoFile.file[infoFile.fileCount], finfo.fname);
-      infoFile.file[infoFile.fileCount][len] = 0;  // set to 0 the extra byte for filename extension check
-      infoFile.longFile[infoFile.fileCount] = 0;   // long filename is not supported, so always set it to 0
+      // copy file name and set the flag for filename extension check
+      strncpy(infoFile.file[infoFile.fileCount], finfo.fname, len + 1);  // "+ 1": the flag for filename extension check
+      infoFile.longFile[infoFile.fileCount] = NULL;   // long filename is not supported, so always set it to NULL
       infoFile.fileCount++;
     }
   }

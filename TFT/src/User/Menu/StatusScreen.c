@@ -462,12 +462,12 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentIndex(currentTool);
+        heatSetCurrentIndex(-1);  // set last used hotend index
         OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_1:
-        heatSetCurrentIndex(BED + currentBCIndex);
+        heatSetCurrentIndex(-2);  // set last used bed index
         OPEN_MENU(menuHeat);
         break;
 
@@ -504,6 +504,6 @@ void menuStatus(void)
     toggleTool();
     loopProcess();
   }
-  // disable position auto report
-  coordinateQuery(0);
+
+  coordinateQueryTurnOff();  // disable position auto report, if any
 }

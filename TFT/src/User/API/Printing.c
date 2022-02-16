@@ -280,7 +280,7 @@ void preparePrintSummary(void)
   if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
     sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.longFile[infoFile.fileIndex]);
   else
-    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintName(infoFile.title));
+    sprintf(infoPrintSummary.name,"%." STRINGIFY(SUMMARY_NAME_LEN) "s", infoFile.file[infoFile.fileIndex]);
 
   infoPrintSummary.time = infoPrinting.time;
 
@@ -336,19 +336,6 @@ void updatePrintUsedFilament(void)
   last_E_pos = E_pos;
 }
 
-// only return gcode file name except path
-// for example:"SD:/test/123.gcode"
-// only return "123.gcode"
-uint8_t * getPrintName(char * path)
-{
-  char * name = strrchr(path, '/');
-
-  if (name != NULL)
-    return (uint8_t *)(name + 1);
-  else
-    return (uint8_t *)path;
-}
-
 void clearInfoPrint(void)
 {
   memset(&infoPrinting, 0, sizeof(PRINTING));
@@ -372,7 +359,7 @@ void printComplete(void)
     case BOARD_SD:
       infoHost.printing = false;
       request_M27(0);
-      coordinateQuery(0);  // disable auto report position
+      coordinateQueryTurnOff();  // disable position auto report, if any
       break;
 
     case TFT_USB_DISK:
@@ -526,6 +513,7 @@ void printAbort(void)
 
       if (infoHost.printing)
       {
+        REDRAW_MENU();
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
@@ -726,7 +714,7 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from TFT (SD card or USB stick)
+// get gcode command from TFT (SD card or USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
@@ -796,11 +784,9 @@ void loopPrintFromTFT(void)
       {
         if (comment_parsing && comment_count != 0)  // if a comment was found, finalize the comment data structure
         {
-          gCode_comment.content[comment_count++] = '\n';
-          gCode_comment.content[comment_count] = 0;  // terminate string
-          gCode_comment.handled = false;
+          gCodeCommentLine[comment_count++] = '\n';
+          gCodeCommentLine[comment_count] = 0;  // terminate string
         }
-
         break;  // line was parsed so always exit from loop
       }
       else if (comment_parsing)
@@ -814,7 +800,7 @@ void loopPrintFromTFT(void)
         else if (read_char != '\r')
         {
           if (comment_count < COMMENT_MAX_CHAR - 2)
-            gCode_comment.content[comment_count++] = read_char;
+            gCodeCommentLine[comment_count++] = read_char;
           else  // if comment length is beyond the maximum, skip comment but continue to parse the line until command end flag
             comment_parsing = false;
         }
