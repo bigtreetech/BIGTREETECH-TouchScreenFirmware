@@ -782,7 +782,7 @@ void loopPrintFromTFT(void)
         if (comment_parsing && comment_count != 0)  // if a comment was found, finalize the comment data structure
         {
           gCodeCommentLine[comment_count++] = '\n';
-          gCodeCommentLine[comment_count] = 0;  // terminate string
+          gCodeCommentLine[comment_count] = '\0';  // terminate string
         }
 
         break;  // line was parsed so always exit from loop
@@ -791,7 +791,7 @@ void loopPrintFromTFT(void)
       {
         if (read_char == ';')  // ';' is command comment flag
         {
-          comment_count = 0;  // there might be a comment in a commented line. We always consider the last comment
+          comment_count = 0;  // there might be a comment in a commented line, always consider the last comment
         }
         else if (read_char == ' ' && comment_count == 0)  // ignore initial ' ' space bytes
         {}
