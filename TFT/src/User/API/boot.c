@@ -345,7 +345,7 @@ static inline void scanRenameUpdate(char * rootDir)
   GET_FULL_PATH(renamedPath, rootDir, renamedFirmwareFile);
   replaceOldFile(curPath, renamedPath);
 
-  //rename firmware file from short to full name
+  // rename firmware file from short to full name
   GET_FULL_PATH(curPath, rootDir, firmwareFileShort);
   GET_FULL_PATH(renamedPath, rootDir, firmwareFile);
   replaceOldFile(curPath, renamedPath);
