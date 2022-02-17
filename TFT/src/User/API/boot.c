@@ -303,8 +303,12 @@ static inline void scanResetDir(char * rootDir)
 
 static inline void replaceOldFile(char * curPath, char * newPath)
 {
+  if (!f_file_exists(curPath))  // if source file does not exist, nothing to do
+    return;
+
   if (f_file_exists(newPath))
     f_unlink(newPath);  // remove already existing file first
+
   f_rename(curPath, newPath);
 }
 
