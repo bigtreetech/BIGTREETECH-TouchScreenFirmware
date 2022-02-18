@@ -151,6 +151,7 @@ char * isSupportedFile(char * filename)
   return extPos;
 }
 
+// returns the long folder name if exists, otherwise the short one
 char * getFoldername(uint8_t index)
 {
   if (infoFile.longFolder[index] != NULL)
@@ -159,6 +160,7 @@ char * getFoldername(uint8_t index)
     return infoFile.folder[index];
 }
 
+// returns the long file name if exists, otherwise the short one
 char * getFilename(uint8_t index)
 {
   if (infoFile.longFile[index] != NULL)
@@ -167,8 +169,13 @@ char * getFilename(uint8_t index)
     return infoFile.file[index];
 }
 
-char * hideExtension(char * filename)
+// Hides the extension of the file name and returns a pointer
+// to that file name (the long one if exists, otherwise the short one).
+// The hide of the extension is not temporary so do not forget to restore it afterwards!
+char * hideFilenameExtension(uint8_t index)
 {
+  char * filename = getFilename(index);
+
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
     char * extPos = isSupportedFile(filename);
@@ -182,34 +189,18 @@ char * hideExtension(char * filename)
   return filename;
 }
 
-char * restoreExtension(char * filename)
+// Restores the extension of the file name and returns a pointer
+// to that file name (the long one if exists, otherwise the short one).
+char * restoreFilenameExtension(uint8_t index)
 {
+  char * filename = getFilename(index);
+
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
     if (filename[strlen(filename) + 1] != 0)
       filename[strlen(filename)] = '.';  // restore filename extension
   }
-
-  return filename;
-}
-
-char * hideFilenameExtension(uint8_t index)
-{
-  char * filename = hideExtension(infoFile.file[index]);
-
-  if (infoFile.longFile[index] != NULL)
-    filename = hideExtension(infoFile.longFile[index]);
-
-  return filename;
-}
-
-char * restoreFilenameExtension(uint8_t index)
-{
-  char * filename = restoreExtension(infoFile.file[index]);
-
-  if (infoFile.longFile[index] != NULL)
-    filename = restoreExtension(infoFile.longFile[index]);
 
   return filename;
 }
