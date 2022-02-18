@@ -80,7 +80,7 @@
     #define STRING_RECOVER_FEEDRATE       "Előtolás javítás"
     #define STRING_SWAP_RECOVER_FEEDRATE  "Csere előtolás jav."
 
-    // Mentés / Betöltés
+    // Save / Load
     #define STRING_SAVE                   "Mentés"
     #define STRING_RESTORE                "Visszaállítás"
     #define STRING_RESET                  "Alapállítás"
@@ -101,7 +101,7 @@
     #define STRING_NEXT                   "Tovább"
     #define STRING_BACK                   "Vissza"
 
-    // Érték gombok
+    // Value Buttons
     #define STRING_INC                    "Növel"
     #define STRING_DEC                    "Csökkent"
     #define STRING_LOAD                   "Betöltés"
@@ -120,7 +120,7 @@
     #define STRING_CLEAR                  "Törlés"
     #define STRING_DEFAULT                "Alapért."
 
-    // Művelet gombok
+    // Action Buttons
     #define STRING_START                  "Kezdés"
     #define STRING_STOP                   "Állj"
     #define STRING_PAUSE                  "Szünet"
@@ -134,14 +134,14 @@
     #define STRING_PREHEAT_BOTH           "Mindkettő"
     #define STRING_COOLDOWN               "Hűtés"
 
-    // Párbeszédgombok
+    // Dialog Buttons
     #define STRING_CONFIRM                "\u088E Oké"
     #define STRING_CANCEL                 "\u088F Mégse"
     #define STRING_WARNING                "Figyelem!"
     #define STRING_CONTINUE               "Folytatás"
     #define STRING_CONFIRMATION           "Biztos vagy benne?"
 
-    // Folyamat állapota
+    // Process Status
     #define STRING_STATUS                 "Státusz"
     #define STRING_READY                  "Kész"
     #define STRING_BUSY                   "Feldolgozás alatt, kérlek várj..."
@@ -149,7 +149,7 @@
     #define STRING_UNCONNECTED            "Nincs nyomtató csatlakoztatva!"
     #define STRING_LISTENING              "TFT Hallgatási módban!"
 
-    // Folyamat infó
+    // Process Info
     #define STRING_INFO                   "Infó"
     #define STRING_INVALID_VALUE          "Nincs érvényes érték megadva"
     #define STRING_TIMEOUT_REACHED        "Időkorlát elérve!"
@@ -176,7 +176,7 @@
     #define STRING_READ_ONBOARDSD_ERROR   "Alaplap-SD olvasási hiba!"
     #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"
 
-    // Léptetők, Nyomtatás, Szonda folyamat parancsai / Státusz / Infó
+    // Steppers, Print, Probe Process Commands / Status / Info
     #define STRING_DISABLE_STEPPERS       "Mot.tilt"
     #define STRING_XY_UNLOCK              "X-Y Felold"
 
@@ -190,7 +190,7 @@
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
 
-    // Nyomtatóeszközök
+    // Printer Tools
     #define STRING_NOZZLE                 "Fej"
     #define STRING_BED                    "Ágy"
     #define STRING_CHAMBER                "Kamra"
@@ -199,7 +199,7 @@
     #define STRING_BLTOUCH                "BLTouch"
     #define STRING_TOUCHMI                "TouchMi"
 
-    // Értékek
+    // Values
     #define STRING_1_DEGREE               "1℃"
     #define STRING_5_DEGREE               "5℃"
     #define STRING_10_DEGREE              "10℃"
@@ -224,7 +224,7 @@
     #define STRING_120_SECONDS            "2 Perc."
     #define STRING_300_SECONDS            "5 Perc."
 
-    // Színek
+    // Colors
     #define STRING_WHITE                  "Fehér"
     #define STRING_BLACK                  "Fekete"
     #define STRING_BLUE                   "Kék"
@@ -244,7 +244,7 @@
     #define STRING_DARKGREEN              "Sötétzöld"
     #define STRING_DARKGRAY               "Sötétszürke"
 
-    // Menük
+    // Menus
     #define STRING_HEAT                   "Fűtés"
     #define STRING_MOVE                   "Mozgás"
     #define STRING_HOME                   "Végállás"

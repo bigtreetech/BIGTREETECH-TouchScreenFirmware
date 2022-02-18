@@ -105,37 +105,9 @@ void menuBedLeveling(void)
 
       case KEY_ICON_3:
         if (getParameter(P_ABL_STATE, 0) == ENABLED)
-        {
-          switch (infoMachineSettings.firmwareType)
-          {
-            case FW_MARLIN:
-              storeCmd("M420 S0\n");
-              break;
-
-            case FW_REPRAPFW:
-              storeCmd("G29 S2\n");
-              break;
-
-            default:
-              break;
-          }
-        }
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
         else
-        {
-          switch (infoMachineSettings.firmwareType)
-          {
-            case FW_MARLIN:
-              storeCmd("M420 S1\n");
-              break;
-
-            case FW_REPRAPFW:
-              storeCmd("G29 S1\n");
-              break;
-
-            default:
-              break;
-          }
-        }
+          storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
         break;
 
       case KEY_ICON_4:
@@ -143,22 +115,8 @@ void menuBedLeveling(void)
         float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
 
         if (val != getParameter(P_ABL_STATE, 1))
-        {
-          switch (infoMachineSettings.firmwareType)
-          {
-            case FW_MARLIN:
-              storeCmd("M420 Z%.2f\n", val);
-              break;
+          storeCmd("M420 Z%.2f\n", val);
 
-            case FW_REPRAPFW:
-              storeCmd("M376 H%.2f\n", val);
-              break;
-
-            default:
-              break;
-          }
-        }
-          
         menuDrawPage(&bedLevelingItems);
         break;
       }

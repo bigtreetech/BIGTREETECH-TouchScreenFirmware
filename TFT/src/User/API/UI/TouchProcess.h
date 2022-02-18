@@ -9,15 +9,8 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
-#ifdef MKS_TFT35_V1_0
-  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0
-  // Defined in MKS TFT35 Touch Screen source code: user\others\mks_touch_screen.c CHX=0x90, CHY=0xD0
-  #define CMD_RDX 0x90
-  #define CMD_RDY 0xD0
-#else
-  #define CMD_RDX 0xD0
-  #define CMD_RDY 0x90
-#endif
+#define CMD_RDX 0xD0
+#define CMD_RDY 0x90
 
 enum
 {
