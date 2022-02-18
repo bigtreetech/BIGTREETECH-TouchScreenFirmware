@@ -207,12 +207,6 @@ static inline bool getCmd(void)
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
-void updateCmd(const char * buf)
-{
-  strcat(cmd_ptr, buf);       // append buf to gcode
-  cmd_len = strlen(cmd_ptr);  // new length of gcode
-}
-
 // Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
@@ -703,12 +697,6 @@ void sendQueueCmd(void)
             {
               heatSyncUpdateSeconds(cmd_value());
             }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
-              updateCmd(buf);
-            }
           }
           break;
 
@@ -752,12 +740,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(i, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
-              updateCmd(buf);
               heatSetSendWaiting(i, false);
             }
           }
@@ -823,12 +805,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(BED, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
-              updateCmd(buf);
               heatSetSendWaiting(BED, false);
             }
           }
@@ -855,12 +831,6 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               heatSyncTargetTemp(CHAMBER, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
-              updateCmd(buf);
               heatSetSendWaiting(CHAMBER, false);
             }
           }
