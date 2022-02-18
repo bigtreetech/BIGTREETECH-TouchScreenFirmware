@@ -398,7 +398,7 @@ void printRemoteStart(const char * filename)
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
 
-  infoMenu.cur = 1;    // clear menu buffer when printing menu is active by remote
+  infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
   REPLACE_MENU(menuPrinting);
 }
 
@@ -445,7 +445,7 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:  // nothing to do
+    case REMOTE_HOST:      // nothing to do
     case BOARD_SD_REMOTE:
       break;
 
