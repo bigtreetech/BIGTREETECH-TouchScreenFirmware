@@ -67,9 +67,9 @@ static void resetRequestCommandInfo(
 */
 bool request_M21(void)
 {
-  resetRequestCommandInfo("SD card ",               // The magic to identify the start
+  resetRequestCommandInfo("SD card ",             // The magic to identify the start
                           "ok",                   // The magic to identify the stop
-                          "No SD card",             // The first magic to identify the error response
+                          "No SD card",           // The first magic to identify the error response
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 

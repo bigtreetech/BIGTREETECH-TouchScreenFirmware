@@ -589,23 +589,18 @@ void menuPrinting(void)
 
   if (lastPrinting == true)
   {
-    if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-      printingItems.title.address = (uint8_t *) infoFile.longFile[infoFile.fileIndex];
-    else
-      printingItems.title.address = getPrintName(infoFile.title);
-
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after a print was done (ex: after a popup)
   {
-    printingItems.title.address = (uint8_t *)infoPrintSummary.name;
-
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // MainScreen
     printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // BackGround
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // BackGround
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
+
+  printingItems.title.address = hideFilenameExtension(infoFile.fileIndex);
 
   menuDrawPage(&printingItems);
   printingDrawPage();

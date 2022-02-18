@@ -134,22 +134,37 @@ bool IsRootDir(void)
 // check if filename provides a supported filename extension
 char * isSupportedFile(char * filename)
 {
-  char * extPos = strstr(filename, ".g");  // support "*.g","*.gco" and "*.gcode"
+  char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos == NULL)
-    extPos = strstr(filename, ".G");  // support "*.g","*.gco" and "*.gcode"
+  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
+  {
+    extPos = NULL;
+  }
 
   return extPos;
 }
 
-char * hideFileExtension(uint8_t index)
+char * getFoldername(uint8_t index)
 {
-  char * filename = infoFile.file[index];
-  char * extPos;
+  if (infoFile.longFolder[index] != NULL)
+    return infoFile.longFolder[index];
+  else
+    return infoFile.folder[index];
+}
 
+char * getFilename(uint8_t index)
+{
+  if (infoFile.longFile[index] != NULL)
+    return infoFile.longFile[index];
+  else
+    return infoFile.file[index];
+}
+
+char * hideExtension(char * filename)
+{
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
-    extPos = isSupportedFile(filename);
+    char * extPos = isSupportedFile(filename);
 
     // if filename provides a supported filename extension then
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
@@ -157,44 +172,41 @@ char * hideFileExtension(uint8_t index)
       filename[extPos - filename] = 0;  // temporary hide filename extension
   }
 
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
+  return filename;
+}
+
+char * restoreExtension(char * filename)
+{
+  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
-    filename = infoFile.longFile[index];
-
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    {
-      extPos = isSupportedFile(filename);
-
-      // if filename provides a supported filename extension then
-      // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-      if (extPos != NULL && filename[strlen(filename) + 1] == 0)
-        filename[extPos - filename] = 0;  // temporary hide filename extension
-    }
+    // check extra byte for filename extension check. If 0, no filename extension was previously hidden
+    if (filename[strlen(filename) + 1] != 0)
+      filename[strlen(filename)] = '.';  // restore filename extension
   }
 
   return filename;
 }
 
-char * restoreFileExtension(uint8_t index)
+char * hideFilenameExtension(uint8_t index)
 {
-  char * filename = infoFile.file[index];
+  char * filename = NULL;
 
-  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-  {
-    if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-      filename[strlen(filename)] = '.';       // restore filename extension
-  }
+  if (infoFile.longFile[index] != NULL)
+    filename = hideExtension(infoFile.longFile[index]);
+  else
+    filename = hideExtension(infoFile.file[index]);
 
-  if (infoMachineSettings.longFilename == ENABLED && infoFile.source == BOARD_SD)
-  {
-    filename = infoFile.longFile[index];
+  return filename;
+}
 
-    if (infoSettings.filename_extension == 0)  // if filename extension is disabled
-    {
-      if (filename[strlen(filename) + 1] != 0)  // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-        filename[strlen(filename)] = '.';       // restore filename extension
-    }
-  }
+char * restoreFilenameExtension(uint8_t index)
+{
+  char * filename = NULL;
+
+  if (infoFile.longFile[index] != NULL)
+    filename = restoreExtension(infoFile.longFile[index]);
+  else
+    filename = restoreExtension(infoFile.file[index]);
 
   return filename;
 }
