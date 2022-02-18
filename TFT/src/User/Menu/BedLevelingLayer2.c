@@ -37,6 +37,7 @@ void menuBedLevelingLayer2(void)
 
     case BL_MBL:
       bedLevelingLayer2Items.title.index = LABEL_MBL_SETTINGS;
+      break;
 
     default:
       break;

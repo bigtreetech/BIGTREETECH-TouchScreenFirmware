@@ -600,6 +600,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
+  // hide filename extension if filename extension feature is disabled
   printingItems.title.address = hideFilenameExtension(infoFile.fileIndex);
 
   menuDrawPage(&printingItems);

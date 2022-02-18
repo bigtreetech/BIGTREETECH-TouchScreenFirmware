@@ -815,7 +815,9 @@ void parseACK(void)
           setParameter(P_ABL_STATE, 0, DISABLED);
       }
       else if (ack_seen("echo:Fade Height"))
+      {
         setParameter(P_ABL_STATE, 1, ack_value());
+      }
       // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
       else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
       {

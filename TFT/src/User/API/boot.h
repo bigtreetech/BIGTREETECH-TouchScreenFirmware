@@ -34,7 +34,7 @@ extern "C" {
 #define BYTE_ASCII_ADDR         (WORD_UNICODE_ADDR + WORD_UNICODE_SIZE)        // ascii (+0x1000 4K)
 #define LARGE_FONT_ADDR         (BYTE_ASCII_ADDR + BYTE_ASCII_SIZE)            // Large ascii font
 #define _8X16_FONT_ADDR         (LARGE_FONT_ADDR + LARGE_FONT_SIZE)            // 8 x 16 ascii font
-//#define BYTE_RESERVE_ADDR      0x710000
+//#define BYTE_RESERVE_ADDR       0x710000
 #define FLASH_SIGN_ADDR         (_8X16_FONT_ADDR + _8X16_FONT_SIZE)            // for language label strings from language file
 #define LANGUAGE_ADDR           (FLASH_SIGN_ADDR + FLASH_SIGN_SIZE)            // for label strings from config file
 #define STRINGS_STORE_ADDR      (LANGUAGE_ADDR + LANGUAGE_SIZE)                // for label strings from config file
@@ -112,8 +112,8 @@ typedef union
 } GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState);
-BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr);
+void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState);
+BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr);
 
 #ifdef __cplusplus
 }

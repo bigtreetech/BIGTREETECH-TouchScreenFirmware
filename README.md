@@ -237,15 +237,12 @@ So, make sure to use the firmware matching your TFT screen.
 
 Themes are available on [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder.
 
-For **BTT TFTs**, the root folder for fonts and icons is `TFT*`, where `*` is the size of the TFT (e.g. `TFT24`, `TFT35`, `TFT50` etc). Fonts and icons folder structure:
+The root folder for fonts and icons is `TFT*`, where `*` is the size of the TFT (e.g. `TFT24`, `TFT35`, `TFT50` etc). Fonts and icons folder structure:
 
 - `TFT*/font`: Includes the fonts in .fon format and a readme.md
 - `TFT*/bmp`: Includes the icons in .bmp format and a readme.md
 
-For **MKS TFTs**, the root folder for fonts and icons **MUST** be renamed to `MKS` in order it can be recognized and installed by the TFT. Fonts and icons folder structure:
-
-- `MKS/font`: Includes the fonts in .fon format and a readme.md
-- `MKS/bmp`: Includes the icons in .bmp format and a readme.md
+For **MKS TFT32**, the `TFT28` folder has to be used and **MUST** be renamed to `TFT32` in order it can be recognized and installed by the TFT.
 
 #### Configuration File
 

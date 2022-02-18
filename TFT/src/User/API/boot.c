@@ -17,7 +17,7 @@ const uint32_t fontAddrList[] = {
   _8X16_FONT_ADDR
 };
 
-const char *fontPathList[] = {
+const char * fontPathList[] = {
   FONT_UPDATE_DIR "/" FILE_ASCII_FONT,
   FONT_UPDATE_DIR "/" FILE_UNICODE_FONT,
   FONT_UPDATE_DIR "/" FILE_LARGE_ASCII_FONT,
@@ -27,7 +27,7 @@ const char *fontPathList[] = {
 GUI_POINT bmp_size;
 
 // This List is Auto-Generated. Please add new icons in icon_list.inc only
-const char * const  iconBmpName[] = {
+const char * const iconBmpName[] = {
   #define X_ICON(NAME) #NAME ,
     #include "icon_list.inc"
   #undef X_ICON
@@ -35,14 +35,14 @@ const char * const  iconBmpName[] = {
 };
 
 // This List is Auto-Generated. Please add new icons in small_icon_list.inc only
-const char * const  smallIconBmpName[] = {
+const char * const smallIconBmpName[] = {
   #define X_SMALLICON(NAME) #NAME ,
     #include "small_icon_list.inc"
   #undef X_SMALLICON
   // add new icons in small_icon_list.inc only
 };
 
-BMPUPDATE_STAT bmpDecode(char *bmp, uint32_t addr)
+BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 {
   FIL bmpFile;
   char magic[2];
@@ -208,7 +208,7 @@ static inline bool updateIcon(char * rootDir)
     return false;
 }
 
-void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
+void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
 {
   char * stat_txt;
   char error_txt[30];
@@ -232,12 +232,12 @@ void dispIconFail(uint8_t *lbl, BMPUPDATE_STAT bmpState)
   }
 
   sprintf(error_txt, "Error: %s", stat_txt);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t*)error_txt);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)error_txt);
   GUI_RestoreColorDefault();
   Delay_ms(1000);  // give some time to the user to read failed icon name.
 }
 
-bool updateFont(char *font, uint32_t addr)
+bool updateFont(char * font, uint32_t addr)
 {
   uint8_t progress = 0;
   UINT rnum = 0;
@@ -256,8 +256,8 @@ bool updateFont(char *font, uint32_t addr)
 
   GUI_Clear(infoSettings.bg_color);
   sprintf((void *)buffer,"%s Size: %dKB",font, (uint32_t)f_size(&myfp) >> 10);
-  GUI_DispString(0, 100, (uint8_t*)buffer);
-  GUI_DispString(0, 140, (uint8_t*)"Updating:   %");
+  GUI_DispString(0, 100, (uint8_t *)buffer);
+  GUI_DispString(0, 140, (uint8_t *)"Updating:   %");
 
   while (!f_eof(&myfp))
   {
@@ -303,8 +303,12 @@ static inline void scanResetDir(char * rootDir)
 
 static inline void replaceOldFile(char * curPath, char * newPath)
 {
+  if (!f_file_exists(curPath))  // if source file does not exist, nothing to do
+    return;
+
   if (f_file_exists(newPath))
     f_unlink(newPath);  // remove already existing file first
+
   f_rename(curPath, newPath);
 }
 
@@ -345,7 +349,7 @@ static inline void scanRenameUpdate(char * rootDir)
   GET_FULL_PATH(renamedPath, rootDir, renamedFirmwareFile);
   replaceOldFile(curPath, renamedPath);
 
-  //rename firmware file from short to full name
+  // rename firmware file from short to full name
   GET_FULL_PATH(curPath, rootDir, firmwareFileShort);
   GET_FULL_PATH(renamedPath, rootDir, firmwareFile);
   replaceOldFile(curPath, renamedPath);
@@ -356,7 +360,7 @@ static inline void scanRenameUpdate(char * rootDir)
   replaceOldFile(curPath, renamedPath);
 }
 
-static inline void saveflashSign(uint8_t* buf, uint32_t size)
+static inline void saveflashSign(uint8_t * buf, uint32_t size)
 {
   W25Qxx_EraseSector(FLASH_SIGN_ADDR);
   Delay_ms(100);  // give time for spi flash to settle
@@ -383,7 +387,7 @@ checkupdate:
     bool flash_sign_updated = false;
     uint32_t saved_flash_sign[sign_count];
 
-    W25Qxx_ReadBuffer((uint8_t*)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
+    W25Qxx_ReadBuffer((uint8_t *)&saved_flash_sign, FLASH_SIGN_ADDR, sizeof(saved_flash_sign));
 
     // check for font update
     GET_FULL_PATH(curfilePath, rootDir, FONT_UPDATE_DIR);
@@ -394,7 +398,7 @@ checkupdate:
       {
         GET_FULL_PATH(curfilePath, rootDir, fontPathList[i]);
         if (!updateFont(curfilePath, fontAddrList[i]))
-          updateOk = false; // set update to false if any font fails to update
+          updateOk = false;  // set update to false if any font fails to update
       }
 
       if (updateOk && saved_flash_sign[font_sign] != FONT_CHECK_SIGN)
@@ -433,19 +437,19 @@ checkupdate:
     // rename files
     scanRenameUpdate(rootDir);
 
-    // chet for reset file
+    // check for reset file
     scanResetDir(rootDir);
 
-    //update flash sign
+    // update flash sign
     if (flash_sign_updated)
     {
-      saveflashSign((uint8_t*)saved_flash_sign, sizeof(saved_flash_sign));
+      saveflashSign((uint8_t *)saved_flash_sign, sizeof(saved_flash_sign));
     }
   }
 
   #ifdef USB_FLASH_DRIVE_SUPPORT
     // check USB flash drive for update file
-    else if(checkUSBDisk && mountUSBDisk())
+    else if (checkUSBDisk && mountUSBDisk())
     {
       rootDir = USBDISK_ROOT_DIR;
       checkUSBDisk = false;
