@@ -56,9 +56,9 @@ void ExitDir(void);
 bool IsRootDir(void);
 char * isSupportedFile(char * filename);
 char * getFoldername(uint8_t index);
-char * getFilename(uint8_t index);
 char * hideFilenameExtension(uint8_t index);
 char * restoreFilenameExtension(uint8_t index);
+char * getPrintFilename(void);
 
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);

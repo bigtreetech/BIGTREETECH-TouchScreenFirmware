@@ -274,7 +274,8 @@ void initPrintSummary(void)
   infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0};
   hasFilamentData = false;
 
-  sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getFilename(infoFile.fileIndex));  // get short or long filename
+  // save print filename (short or long filename)
+  sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintFilename());
 }
 
 void preparePrintSummary(void)
@@ -344,7 +345,7 @@ void printComplete(void)
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.printing = infoPrinting.pause = false;
   setPrintRemainingTime(0);
-  preparePrintSummary();  // update print summary. infoPrinting are used
+  preparePrintSummary();  // update print summary. infoPrinting is used
 
   switch (infoFile.source)
   {
@@ -374,7 +375,7 @@ void printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard SD)
 
-  if (infoPrinting.printing && infoFile.source <= BOARD_SD) return;  // if printing from TFT or onboard SD
+  if (infoPrinting.printing && infoFile.source <= BOARD_SD) return;  // if printing from TFT or onboard SD (printStart was called)
 
   // always clean infoPrinting first and then set the needed attributes
   memset(&infoPrinting, 0, sizeof(PRINTING));
@@ -382,7 +383,6 @@ void printRemoteStart(const char * filename)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = 1;  // .size must be different than .cur to avoid 100% progress on TFT
   infoPrinting.printing = true;
-  initPrintSummary();  // init print summary
 
   if (filename != NULL)
   {
@@ -396,7 +396,9 @@ void printRemoteStart(const char * filename)
     infoFile.source = REMOTE_HOST;
   }
 
-  infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
+  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+
+  infoMenu.cur = 1;    // clear menu buffer when printing menu is active by remote
   REPLACE_MENU(menuPrinting);
 }
 
@@ -408,7 +410,6 @@ void printStart(FIL * file, uint32_t size)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = size;
   infoPrinting.printing = true;
-  initPrintSummary();  // init print summary
 
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))
   {
@@ -434,6 +435,8 @@ void printStart(FIL * file, uint32_t size)
       setExtrusionDuringPause(false);
       break;
   }
+
+  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
 }
 
 void printEnd(void)

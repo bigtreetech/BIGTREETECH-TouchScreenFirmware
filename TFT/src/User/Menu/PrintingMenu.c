@@ -198,6 +198,7 @@ void menuBeforePrinting(void)
   }
 
   // initialize things before the print starts
+  hideFilenameExtension(infoFile.fileIndex);  // hide filename extension if filename extension feature is disabled
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
@@ -600,8 +601,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
-  // hide filename extension if filename extension feature is disabled
-  printingItems.title.address = hideFilenameExtension(infoFile.fileIndex);
+  printingItems.title.address = getPrintFilename();  // get print filename (short or long filename with or without extension)
 
   menuDrawPage(&printingItems);
   printingDrawPage();

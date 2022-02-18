@@ -150,14 +150,6 @@ char * getFoldername(uint8_t index)
     return infoFile.folder[index];
 }
 
-char * getFilename(uint8_t index)
-{
-  if (infoFile.longFile[index] != NULL)
-    return infoFile.longFile[index];
-  else
-    return infoFile.file[index];
-}
-
 char * hideExtension(char * filename)
 {
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
@@ -203,6 +195,21 @@ char * restoreFilenameExtension(uint8_t index)
     filename = restoreExtension(infoFile.longFile[index]);
 
   return filename;
+}
+
+char * getPrintFilename(void)
+{
+  if (infoFile.source <= BOARD_SD)  // if printing from TFT or onboard SD
+  {
+    if (infoFile.longFile[infoFile.fileIndex] != NULL)
+      return infoFile.longFile[infoFile.fileIndex];
+    else
+      return infoFile.file[infoFile.fileIndex];
+  }
+  else  // if printing from remote onboard SD or remote host
+  {
+    return infoFile.title;
+  }
 }
 
 // Volume exist detect
