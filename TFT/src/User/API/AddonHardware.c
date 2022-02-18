@@ -86,13 +86,13 @@ void FIL_SFS_SetAlive(bool alive)
 bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
-  static int32_t trig_balance = 0;
+  static int32_t trigBalance = 0;
   static uint32_t nextRunoutTime = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
-    runout = (trig_balance > 0);
-    trig_balance = 0;
+    runout = (trigBalance > 0);
+    trigBalance = 0;
     nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
@@ -136,7 +136,7 @@ bool FIL_NormalRunoutDetect(void)
         break;
     }
 
-    trig_balance += (pinState == GET_BIT(infoSettings.runout, RUNOUT_INVERTED)) ? 1: -1;  // if triggered add 1 else substract 1
+    trigBalance += (pinState == GET_BIT(infoSettings.runout, RUNOUT_INVERTED)) ? 1: -1;  // if triggered add 1 else substract 1
   }
 
   return runout;
