@@ -455,7 +455,7 @@ In case the TFT needs to be placed with a vertical orientation (e.g. 90°), the 
 - The binary file named `BIGTREE_TFT*_V*.*.*.x_portrait.bin` is created (see the presence of the **_portrait** suffix)
 - Rename the binary file to the standard name `BIGTREE_TFT*_V*.*.*.x.bin`
 - Copy `BIGTREE_TFT*_V*.*.*.x.bin`, the `TFT*` folder, `config.ini` and also `reset.txt` (needed to force the screen calibration) into the SD card
-- Update the firmware following the usual procedure
+- Proceed with the firmware update (following the usual procedure)
 
 ## Troubleshooting
 
