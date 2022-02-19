@@ -27,9 +27,9 @@ typedef enum
   SKEY_EMULATED_M109_M190,
   SKEY_EVENT_LED,
   SKEY_FILE_COMMENT_PARSING,
-  SKEY_SHOW_BOOTSCREEN,
-  SKEY_ALERT_HEATERS_ON,
   SKEY_SERIAL_ALWAYS_ON,
+  SKEY_SHOW_BOOTSCREEN,
+  SKEY_ALERT_HEATERS_ON,  
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
   SKEY_PROBING_Z_OFFSET,
@@ -65,6 +65,10 @@ void updateFeatureSettings(uint8_t item_index)
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600));
       break;
 
+    case SKEY_SERIAL_ALWAYS_ON:
+      infoSettings.serial_always_on = (infoSettings.serial_always_on + 1) % ITEM_TOGGLE_NUM;
+      break;
+
     case SKEY_SHOW_BOOTSCREEN:
       infoSettings.show_bootscreen = (infoSettings.show_bootscreen + 1) % ITEM_TOGGLE_NUM;
       break;
@@ -72,11 +76,7 @@ void updateFeatureSettings(uint8_t item_index)
     case SKEY_ALERT_HEATERS_ON:
       infoSettings.alert_heaters_on = (infoSettings.alert_heaters_on + 1) % ITEM_TOGGLE_NUM;
       break;
-
-    case SKEY_SERIAL_ALWAYS_ON:
-      infoSettings.serial_always_on = (infoSettings.serial_always_on + 1) % ITEM_TOGGLE_NUM;
-      break;
-
+	  
     case SKEY_SPEED:
       infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
       break;
@@ -147,18 +147,18 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600))];
         break;
 
-      case SKEY_SHOW_BOOTSCREEN:
-        item->icon = iconToggle[infoSettings.show_bootscreen];
-        break;
-		
-	  case SKEY_ALERT_HEATERS_ON:
-        item->icon = iconToggle[infoSettings.alert_heaters_on];
-        break;
-
       case SKEY_SERIAL_ALWAYS_ON:
         item->icon = iconToggle[infoSettings.serial_always_on];
         break;
 
+      case SKEY_SHOW_BOOTSCREEN:
+        item->icon = iconToggle[infoSettings.show_bootscreen];
+        break;
+
+	  case SKEY_ALERT_HEATERS_ON:
+        item->icon = iconToggle[infoSettings.alert_heaters_on];
+        break;
+		
       case SKEY_SPEED:
         item->valueLabel = itemSpeed[infoSettings.move_speed].label;
         break;
@@ -235,6 +235,8 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_COMMENT_PARSING,   LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SERIAL_ALWAYS_ON,       LABEL_NULL},
+	{CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_SHOW_BOOTSCREEN,        LABEL_NULL},
+	{CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ALERT_HEATERS_ON,       LABEL_NULL},	
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_MOVE_SPEED,             LABEL_NORMAL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_AUTO_LOAD_LEVELING,     LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PROBING_Z_OFFSET,       LABEL_NULL},
