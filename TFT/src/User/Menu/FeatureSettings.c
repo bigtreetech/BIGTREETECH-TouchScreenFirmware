@@ -27,6 +27,8 @@ typedef enum
   SKEY_EMULATED_M109_M190,
   SKEY_EVENT_LED,
   SKEY_FILE_COMMENT_PARSING,
+  SKEY_SHOW_BOOTSCREEN,
+  SKEY_ALERT_HEATERS_ON,
   SKEY_SERIAL_ALWAYS_ON,
   SKEY_SPEED,
   SKEY_AUTO_LOAD_LEVELING,
@@ -61,6 +63,14 @@ void updateFeatureSettings(uint8_t item_index)
     case SKEY_EVENT_LED:
     case SKEY_FILE_COMMENT_PARSING:
       TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600));
+      break;
+
+    case SKEY_SHOW_BOOTSCREEN:
+      infoSettings.show_bootscreen = (infoSettings.show_bootscreen + 1) % ITEM_TOGGLE_NUM;
+      break;
+
+    case SKEY_ALERT_HEATERS_ON:
+      infoSettings.alert_heaters_on = (infoSettings.alert_heaters_on + 1) % ITEM_TOGGLE_NUM;
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
@@ -135,6 +145,14 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       case SKEY_EVENT_LED:
       case SKEY_FILE_COMMENT_PARSING:
         item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_EMULATED_M600) + INDEX_EMULATED_M600))];
+        break;
+
+      case SKEY_SHOW_BOOTSCREEN:
+        item->icon = iconToggle[infoSettings.show_bootscreen];
+        break;
+		
+	  case SKEY_ALERT_HEATERS_ON:
+        item->icon = iconToggle[infoSettings.alert_heaters_on];
         break;
 
       case SKEY_SERIAL_ALWAYS_ON:

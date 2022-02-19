@@ -670,11 +670,11 @@ void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_SHOW_BOOTSCREEN:
-    infoSettings.show_bootscreen = getOnOff();
+      infoSettings.show_bootscreen = getOnOff();
       break;
 
     case C_INDEX_ALERT_HEATERS_ON:
-    infoSettings.alert_heaters_on = getOnOff();
+      infoSettings.alert_heaters_on = getOnOff();
       break;
 
 
