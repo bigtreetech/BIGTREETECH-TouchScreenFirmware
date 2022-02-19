@@ -67,7 +67,8 @@ void speedQuery(void)
   {
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeScript("M220\nM221\n");
+      speedQueryWait = storeCmd("M220\n");
+      speedQueryWait |= storeCmd("M221\n");  // speedQueryWait set to "true" if at least one command will be sent
     }
     else
     {

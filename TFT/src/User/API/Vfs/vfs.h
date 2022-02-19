@@ -55,8 +55,10 @@ bool EnterDir(char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
 char * isSupportedFile(char * filename);
-char * hideFileExtension(uint8_t index);
-char * restoreFileExtension(uint8_t index);
+char * getFoldername(uint8_t index);
+char * getFilename(uint8_t index);
+char * hideFilenameExtension(uint8_t index);
+char * restoreFilenameExtension(uint8_t index);
 
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);

@@ -80,6 +80,7 @@ void parseComment(void)
   {
     temp_char = strtok(gCodeCommentLine, TOKEN_DELIMITERS);
     strlwr(temp_char);
+
     // check for "remaining" keyword in comment to retrieve remaining time, IdeaMaker specific
     if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
     {
