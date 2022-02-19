@@ -16,6 +16,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 ## Table of Contents
 
 - [Supported Screens](#supported-screens)
+- [Software Repository](#software-repository)
 - [Marlin Dependencies](#marlin-dependencies)
 - [Connecting the TFT to the Mainboard](#connecting-the-tft-to-the-mainboard)
   - [Touch Mode Setup](#touch-mode-setup)
@@ -80,15 +81,28 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
 
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
+## Software Repository
+
+Firmware source: https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware
+
+Main branch: **Master**
+
+</br>In the **Master** branch you will find:
+
+- The most recent source code updates
+- The most recent resources such as precompiled firmwares, themes, configuration and language files
+
+**IMPORTANT NOTE:** The **Master** branch is currently the **ONLY** branch in the project to be used. The other currently existing branches **develop** and **release-xx.27** are outdated and **MUST NOT** be used.
+
 ## Marlin Dependencies
 
 Firmware source: https://github.com/MarlinFirmware/Marlin/releases
 
-Minimum Marlin firmware version: 2.0.8.1
+Minimum Marlin firmware version: **2.0.8.1**
 
-Distribution date: 2021-05-15
+Distribution date: **2021-05-15**
 
-In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
+</br>In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
 **General options which MUST be activated:**
 
@@ -168,7 +182,7 @@ In order to use the Marlin Mode (emulation mode) on your screen:
 |                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 0** | In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 1** |
+| If **status_screen:0** is not defined in **config.ini**, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen:0** | If **status_screen:1** is not defined in **config.ini**, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen:1** |
 
 ## Themes
 
