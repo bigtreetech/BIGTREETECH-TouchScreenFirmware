@@ -101,9 +101,8 @@ void menuCaseLight(void)
     }
 
     currentCaseLightState = caseLightGetState();
-    if (previousCaseLightState != currentCaseLightState)
+    if (previousCaseLightState != currentCaseLightState)  // dynamically change the light on/off icon based on the current state
     {
-      // dynamically change the light on/off icon based on the current state
       previousCaseLightState = currentCaseLightState;
 
       updateCaseLightIcon(&caseLightItems, currentCaseLightState);
