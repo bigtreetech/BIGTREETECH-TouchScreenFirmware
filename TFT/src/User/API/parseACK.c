@@ -807,10 +807,7 @@ void parseACK(void)
       // parse and store M420 V1 T1 or M420 Sxx or M503, ABL state (e.g. from Bed Leveling menu)
       else if (ack_seen("echo:Bed Leveling"))
       {
-        if (ack_continue_seen("ON"))
-          setParameter(P_ABL_STATE, 0, ENABLED);
-        else
-          setParameter(P_ABL_STATE, 0, DISABLED);
+        setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
       }
       else if (ack_seen("echo:Fade Height"))
       {
@@ -875,10 +872,8 @@ void parseACK(void)
 
         if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
         {
-          if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f)
-            setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
-          else
-            setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
+          // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+          setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
         }
       }
       // parse and store max acceleration (units/s2)
@@ -1217,7 +1212,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command
         {
           ackPopupInfo("ZProbe triggered before move.\nAborting Print!");
         }
@@ -1225,16 +1220,14 @@ void parseACK(void)
         else if (ack_seen("Volumetric extrusion is disabled"))
         {
           setParameter(P_FILAMENT_DIAMETER, 0, 0);
-          setParameter(P_FILAMENT_DIAMETER, 1, 0.0F);
+          setParameter(P_FILAMENT_DIAMETER, 1, 0.0f);
         }
         // parse and store volumetric extrusion M200 response of Smoothieware
         else if (ack_seen("Filament Diameter:"))
         {
           setParameter(P_FILAMENT_DIAMETER, 1, ack_value());
-          if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01F)
-            setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter > 0.01 to enable  volumetric extrusion
-          else
-            setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter <= 0.01 to disable volumetric extrusion
+          // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+          setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
         }
       }
     }
