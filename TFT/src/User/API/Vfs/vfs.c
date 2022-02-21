@@ -27,10 +27,7 @@ TCHAR * getCurFileSource(void)
     case BOARD_SD_REMOTE:
       return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
 
-    case REMOTE_HOST:
-      return "Remote printing...";
-
-    default:
+    default:  // also for REMOTE_HOST
       return "";
   }
 }
@@ -136,7 +133,7 @@ void ExitDir(void)
   {
   }
 
-  infoFile.title[i] = 0;
+  infoFile.title[i] = '\0';
 }
 
 // check if current folder is root
