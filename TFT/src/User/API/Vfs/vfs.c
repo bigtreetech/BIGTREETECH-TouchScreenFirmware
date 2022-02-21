@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}, {0}, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -13,9 +13,27 @@ bool isPrintModelIcon(void)
   return infoFile.modelIcon;
 }
 
+TCHAR * getCurFileSource(void)
+{
+  switch (infoFile.source)
+  {
+    case TFT_SD:
+      return SD_ROOT_DIR;
+
+    case TFT_USB_DISK:
+      return USBDISK_ROOT_DIR;
+
+    case BOARD_SD:
+    case BOARD_SD_REMOTE:
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
+
+    default:
+      return NULL;
+  }
+}
+
 bool mountFS(void)
 {
-  //resetInfoFile();  // needn't this
   switch (infoFile.source)
   {
     case TFT_SD:
@@ -35,62 +53,9 @@ bool mountFS(void)
   }
 }
 
-// clear and free memory from file list
-void clearInfoFile(void)
-{
-  uint8_t i = 0;
-  for (i = 0; i < infoFile.folderCount; i++)
-  {
-    free(infoFile.folder[i]);
-    infoFile.folder[i] = 0;
-  }
-  for (i = 0; i < infoFile.fileCount; i++)
-  {
-    free(infoFile.file[i]);
-    infoFile.file[i] = 0;
-
-    if (infoFile.longFile[i] != 0)  // long filename is optional so we need to check its presence
-      free(infoFile.longFile[i]);
-    infoFile.longFile[i] = 0;
-  }
-  infoFile.folderCount = 0;
-  infoFile.fileCount = 0;
-}
-
-TCHAR * getCurFileSource(void)
-{
-  switch (infoFile.source)
-  {
-    case TFT_SD:
-      return SD_ROOT_DIR;
-
-    case TFT_USB_DISK:
-      return USBDISK_ROOT_DIR;
-
-    case BOARD_SD:
-    case BOARD_SD_REMOTE:
-      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
-
-    default:
-      break;
-  }
-  return NULL;
-}
-
-// reset file list
-void resetInfoFile(void)
-{
-  FS_SOURCE source = infoFile.source;
-  clearInfoFile();
-  memset(&infoFile, 0, sizeof(infoFile));
-  infoFile.source = source;
-  strcpy(infoFile.title, getCurFileSource());
-}
-
 // scan files in source
 bool scanPrintFiles(void)
 {
-  clearInfoFile();
   switch (infoFile.source)
   {
     case TFT_SD:
@@ -105,13 +70,57 @@ bool scanPrintFiles(void)
   }
 }
 
+// clear and free memory from file list
+void clearInfoFile(void)
+{
+  uint8_t i = 0;
+
+  for (i = 0; i < infoFile.folderCount; i++)
+  {
+    free(infoFile.folder[i]);
+    infoFile.folder[i] = NULL;
+
+    if (infoFile.longFolder[i] != NULL)  // long folder name is optional so we need to check its presence
+      free(infoFile.longFolder[i]);
+
+    infoFile.longFolder[i] = NULL;
+  }
+
+  for (i = 0; i < infoFile.fileCount; i++)
+  {
+    free(infoFile.file[i]);
+    infoFile.file[i] = NULL;
+
+    if (infoFile.longFile[i] != NULL)  // long filename is optional so we need to check its presence
+      free(infoFile.longFile[i]);
+
+    infoFile.longFile[i] = NULL;
+  }
+
+  infoFile.folderCount = 0;
+  infoFile.fileCount = 0;
+}
+
+// reset file list
+void resetInfoFile(void)
+{
+  FS_SOURCE source = infoFile.source;
+
+  clearInfoFile();
+  memset(&infoFile, 0, sizeof(infoFile));
+  infoFile.source = source;
+  strcpy(infoFile.title, getCurFileSource());
+}
+
 // check and open folder
 bool EnterDir(char * nextdir)
 {
   if (strlen(infoFile.title) + strlen(nextdir) + 2 >= MAX_PATH_LEN)
     return 0;
+
   strcat(infoFile.title, "/");
   strcat(infoFile.title, nextdir);
+
   return 1;
 }
 
@@ -119,9 +128,11 @@ bool EnterDir(char * nextdir)
 void ExitDir(void)
 {
   int i = strlen(infoFile.title);
+
   for (; i > 0 && infoFile.title[i] != '/'; i--)
   {
   }
+
   infoFile.title[i] = 0;
 }
 
@@ -212,7 +223,7 @@ char * getPrintFilename(void)
   }
 }
 
-// Volume exist detect
+// volume exist detect
 static bool volumeSrcStatus[FF_VOLUMES] = {false, false};
 
 bool volumeExists(uint8_t src)
@@ -233,6 +244,7 @@ void loopVolumeSource(void)
     {
       const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED, LABEL_TFTSD_INSERTED},
                                                     {LABEL_USB_DISK_REMOVED, LABEL_USB_DISK_INSERTED}};
+
       volumeSrcStatus[i] = (*volumeInserted[i])();
       volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
     }

@@ -45,10 +45,10 @@ extern MYFILE infoFile;
 void setPrintModelIcon(bool exist);
 bool isPrintModelIcon(void);
 
+TCHAR * getCurFileSource(void);
 bool mountFS(void);
 bool scanPrintFiles(void);
 
-TCHAR * getCurFileSource(void);
 void clearInfoFile(void);
 void resetInfoFile(void);
 bool EnterDir(char * nextdir);
