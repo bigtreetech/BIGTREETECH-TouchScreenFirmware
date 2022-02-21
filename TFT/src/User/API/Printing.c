@@ -386,14 +386,16 @@ void printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    strcpy(infoFile.title, filename);
     infoFile.source = BOARD_SD_REMOTE;
+    resetInfoFile();
+    EnterDir(filename);
+
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard SD
   }
   else
   {
-    strcpy(infoFile.title, "Remote printing...");
     infoFile.source = REMOTE_HOST;
+    resetInfoFile();
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)

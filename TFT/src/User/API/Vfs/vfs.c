@@ -27,8 +27,11 @@ TCHAR * getCurFileSource(void)
     case BOARD_SD_REMOTE:
       return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
 
+    case REMOTE_HOST:
+      return "Remote printing...";
+
     default:
-      return NULL;
+      return "";
   }
 }
 
@@ -113,15 +116,15 @@ void resetInfoFile(void)
 }
 
 // check and open folder
-bool EnterDir(char * nextdir)
+bool EnterDir(const char * nextdir)
 {
   if (strlen(infoFile.title) + strlen(nextdir) + 2 >= MAX_PATH_LEN)
-    return 0;
+    return false;
 
   strcat(infoFile.title, "/");
   strcat(infoFile.title, nextdir);
 
-  return 1;
+  return true;
 }
 
 // close folder
@@ -143,7 +146,7 @@ bool IsRootDir(void)
 }
 
 // check if filename provides a supported filename extension
-char * isSupportedFile(char * filename)
+char * isSupportedFile(const char * filename)
 {
   char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 

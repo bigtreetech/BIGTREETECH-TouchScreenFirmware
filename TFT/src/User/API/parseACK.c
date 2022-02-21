@@ -655,23 +655,22 @@ void parseACK(void)
         }
         hasFilamentData = true;
       }
-      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
+      // parse and store M23, select SD file
+      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened: "))
       {
-        char * fileEndString;
-
-        // Marlin
-        fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
+        char file_name[MAX_PATH_LEN];
+        char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 
         uint16_t start_index = ack_index;
-        uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
-        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        char file_name[MAX_PATH_LEN];
-        sprintf(file_name, "%s/", getCurFileSource());
-        strncat(file_name, dmaL2Cache + start_index, path_len);
-        file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
+        uint16_t end_index = ack_continue_seen(end_string) ? (ack_index - strlen(end_string)) : start_index;
+        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - 1);
+
+        memcpy(file_name, dmaL2Cache + start_index, path_len);
+        file_name[path_len] = '\0';
 
         printRemoteStart(file_name);
       }
+      // parse and store M27
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
                ack_seen("Not SD printing"))  // if printing from (remote) onboard SD
@@ -689,6 +688,7 @@ void parseACK(void)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
+      // parse and store M24, printing from (remote) onboard SD completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
                ack_seen("Done printing file"))  // if printing from (remote) onboard SD

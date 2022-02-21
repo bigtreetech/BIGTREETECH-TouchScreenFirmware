@@ -467,6 +467,9 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
+              // NOTE: If the file was selected (with M23) from onboard SD, infoFile.source will be set to BOARD_SD_REMOTE
+              //       by the printRemoteStart function called in parseAck.c during M23 ACK parsing
+
               if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
