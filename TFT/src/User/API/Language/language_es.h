@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "¡Pendrive extraido!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD Placa"
-    #define STRING_READ_ONBOARDSD_ERROR   "¡Error en la tarjeta SD de la placa!"
+    #define STRING_ONBOARDUSB             "SD Placa"
+    #define STRING_READ_ONBOARDSD_ERROR   "¡Error en la tarjeta media de la placa!"
     #define STRING_FILAMENT_RUNOUT        "¡Filamento agotado!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

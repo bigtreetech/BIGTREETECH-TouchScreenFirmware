@@ -20,10 +20,16 @@ typedef enum
 {
   TFT_SD,
   TFT_USB_DISK,
-  BOARD_SD,
-  BOARD_SD_REMOTE,
+  BOARD_MEDIA,
+  BOARD_MEDIA_REMOTE,
   REMOTE_HOST
 } FS_SOURCE;
+
+typedef enum
+{
+  BOARD_SD,
+  BOARD_USB
+} ONBOARD_SOURCE;
 
 typedef struct
 {
@@ -34,9 +40,10 @@ typedef struct
   uint16_t fileCount;              // current gcode file count
   uint16_t curPage;                // current display page index (5 files per page)
   uint16_t fileIndex;              // selected file index
-  FS_SOURCE source;                // source of the file. TFT SD or ONBOARD SD.
-  TCHAR * longFile[FILE_NUM];      // long file name buffer from ONBOARD SD only
-  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from ONBOARD SD only
+  FS_SOURCE source;                // source of the file. TFT media or onboard media.
+  ONBOARD_SOURCE boardSource;      // SD or USB for onboard media only
+  TCHAR * longFile[FILE_NUM];      // long file name buffer from onboard media only
+  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard media only
   bool modelIcon;                  // 1: model preview icon exist, 0: not exist
 } MYFILE;
 

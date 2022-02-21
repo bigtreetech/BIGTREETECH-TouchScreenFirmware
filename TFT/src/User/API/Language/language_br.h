@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "Pen Drive removido!"
     #define STRING_USB_DISK_NOT_DETECTED  "USB Disk não detectado"
     #define STRING_ONBOARDSD              "SD ONBOARD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Erro de leitura do SD ONBOARD!"
+    #define STRING_ONBOARDUSB             "USB ONBOARD"
+    #define STRING_READ_ONBOARDSD_ERROR   "Erro de leitura do onboard media!"
     #define STRING_FILAMENT_RUNOUT        "Filamento acabou!"
 
     // Steppers, Print, Probe Process Commands / Status / Info
