@@ -36,8 +36,6 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
-  {ECHO_NOTIFY_TOAST, "echo:No SD card"},         // onboard SD card
-  {ECHO_NOTIFY_TOAST, "echo:SD card"},            // onboard SD card
 };
 
 const char magic_error[] = "Error:";
