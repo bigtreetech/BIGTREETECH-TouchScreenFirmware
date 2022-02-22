@@ -467,6 +467,9 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
+              // NOTE: If the file was selected (with M23) from onboard SD, infoFile.source will be set to BOARD_SD_REMOTE
+              //       by the printRemoteStart function called in parseAck.c during M23 ACK parsing
+
               if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
@@ -896,12 +899,11 @@ void sendQueueCmd(void)
 
           uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
           if (cmd_seen('D')) setParameter(P_FILAMENT_DIAMETER, 1 + i, cmd_float());
+
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
-            if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01F)  // common extruder param
-              setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter > 0.01 to enable  volumetric extrusion
-            else
-              setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter <= 0.01 to disable volumetric extrusion
+            // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+            setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
           }
           break;
         }
@@ -1011,7 +1013,6 @@ void sendQueueCmd(void)
           {
             caseLightSetBrightness(cmd_value());
           }
-          caseLightApplied(true);
           break;
         }
 

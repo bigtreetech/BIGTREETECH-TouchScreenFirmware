@@ -16,6 +16,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 ## Table of Contents
 
 - [Supported Screens](#supported-screens)
+- [Software Repository](#software-repository)
 - [Marlin Dependencies](#marlin-dependencies)
 - [Connecting the TFT to the Mainboard](#connecting-the-tft-to-the-mainboard)
   - [Touch Mode Setup](#touch-mode-setup)
@@ -40,6 +41,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 - [Customization](#customization)
   - [Bootscreen and Icons](#bootscreen-and-icons)
   - [Firmware](#firmware)
+  - [Vertical Screen Orientation - Portrait Mode](#vertical-screen-orientation---portrait-mode)
 - [Troubleshooting](#troubleshooting)
   - [Firmware Update Failed](#firmware-update-failed)
   - [Worst Case Scenario](#worst-case-scenario)
@@ -79,15 +81,28 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
 
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
+## Software Repository
+
+Firmware source: https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware
+
+Main branch: **Master**
+
+</br>In the **Master** branch you will find:
+
+- The most recent source code updates
+- The most recent resources such as precompiled firmwares, themes, configuration and language files
+
+**IMPORTANT NOTE:** The **Master** branch is currently the **ONLY** branch in the project to be used. The other currently existing branches **develop** and **release-xx.27** are outdated and **MUST NOT** be used.
+
 ## Marlin Dependencies
 
 Firmware source: https://github.com/MarlinFirmware/Marlin/releases
 
-Minimum Marlin firmware version: 2.0.8.1
+Minimum Marlin firmware version: **2.0.8.1**
 
-Distribution date: 2021-05-15
+Distribution date: **2021-05-15**
 
-In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
+</br>In order for the TFT's firmware to be able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
 **General options which MUST be activated:**
 
@@ -167,7 +182,7 @@ In order to use the Marlin Mode (emulation mode) on your screen:
 |                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 0** | In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 1** |
+| If **status_screen:0** is not defined in **config.ini**, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen:0** | If **status_screen:1** is not defined in **config.ini**, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen:1** |
 
 ## Themes
 
@@ -284,7 +299,7 @@ The following steps are needed in order to install the firmware:
 
    ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
-3. Place the SD card with `BIGTREE_TFT*_V*.*.*.bin`, `TFT*` folder, `config.ini` and the optional `language_*.ini` file(s) into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process:
+3. Place the SD card with `BIGTREE_TFT*_V*.*.*.bin`, the `TFT*` folder, `config.ini` and the optional `language_*.ini` file(s) into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process:
 
    <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
@@ -440,6 +455,22 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 
 **TIP:** In case there is a problem compiling the TFT firmware try to restart VSC. If this does not help and you are using macOS, delete the **packages** and **platforms** folders usually present under the folder `/Users/***username***/.platformio/`.
 
+### Vertical Screen Orientation - Portrait Mode
+
+All the precompiled firmwares available on [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder are compiled to support the standard (horizontal) screen orientation.
+
+In case the TFT needs to be placed with a vertical orientation (e.g. 90°), the firmware needs to be compiled with the portrait mode support and installed following the procedure below:
+
+- Start VSC
+- Open `platformio.ini`
+- Uncomment (remove the leading `;` character) the following line:</br>
+  `;  -DPORTRAIT_MODE="_portrait"  ; uncomment here to enable Portrait Mode .bin firmware generation`
+- Compile the firmware
+- The binary file named `BIGTREE_TFT*_V*.*.*.x_portrait.bin` is created (see the presence of the **_portrait** suffix)
+- Rename the binary file to the standard name `BIGTREE_TFT*_V*.*.*.x.bin`
+- Copy `BIGTREE_TFT*_V*.*.*.x.bin`, the `TFT*` folder, `config.ini` and also `reset.txt` (needed to force the screen calibration) into the SD card
+- Proceed with the firmware update (following the usual procedure)
+
 ## Troubleshooting
 
 ### Firmware Update Failed
@@ -447,7 +478,7 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 In case the firmware update process failed:
 
 1. Verify that you have been using the firmware matching your TFT
-2. Try to upload the firmware, the config.ini and the TFT* folder again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted
+2. Try to upload the **firmware**, the `TFT*` folder and `config.ini` again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted
 
 **NOTE:** Some uploads worked fine after executing a low level format of the SD card and not a quick format.
 
