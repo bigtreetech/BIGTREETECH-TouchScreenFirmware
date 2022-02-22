@@ -27,6 +27,8 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
   {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh Slot"},   // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can hold"},    // M503
   {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
   {ECHO_NOTIFY_NONE, "Config:"},                  // M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
@@ -1027,6 +1029,10 @@ void parseACK(void)
       {
         uint8_t i = (ack_seen("T")) ? ack_value() : 0;
         if (ack_seen("K")) setParameter(P_LIN_ADV, i, ack_value());
+      }
+      else if (ack_seen("Advance K="))  // newest Marlin (e.g. 2.0.9.3) returns this ACK for M900 command
+      {
+        setParameter(P_LIN_ADV, heatGetCurrentTool(), ack_value());
       }
       // parse and store stepper motor current
       else if (ack_seen("M906"))
