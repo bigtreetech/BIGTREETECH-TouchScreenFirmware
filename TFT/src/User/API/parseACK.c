@@ -27,8 +27,8 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
   {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
-  {ECHO_NOTIFY_TOAST, "echo:Active Mesh Slot"},   // M503
-  {ECHO_NOTIFY_TOAST, "echo:EEPROM can hold"},    // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},        // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},         // M503
   {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
   {ECHO_NOTIFY_NONE, "Config:"},                  // M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
@@ -36,6 +36,8 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
   {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
+  {ECHO_NOTIFY_TOAST, "echo:No SD card"},         // onboard SD card
+  {ECHO_NOTIFY_TOAST, "echo:SD card"},            // onboard SD card
 };
 
 const char magic_error[] = "Error:";
