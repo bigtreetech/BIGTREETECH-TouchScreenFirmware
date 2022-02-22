@@ -45,20 +45,20 @@ extern MYFILE infoFile;
 void setPrintModelIcon(bool exist);
 bool isPrintModelIcon(void);
 
+TCHAR * getCurFileSource(void);
 bool mountFS(void);
 bool scanPrintFiles(void);
 
-TCHAR * getCurFileSource(void);
 void clearInfoFile(void);
 void resetInfoFile(void);
-bool EnterDir(char * nextdir);
+bool EnterDir(const char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
-char * isSupportedFile(char * filename);
+char * isSupportedFile(const char * filename);
 char * getFoldername(uint8_t index);
-char * getFilename(uint8_t index);
 char * hideFilenameExtension(uint8_t index);
 char * restoreFilenameExtension(uint8_t index);
+char * getPrintFilename(void);
 
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);
