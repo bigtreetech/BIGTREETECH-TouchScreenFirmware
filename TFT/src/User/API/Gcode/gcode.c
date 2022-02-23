@@ -23,11 +23,11 @@ void clearRequestCommandInfo(void)
 }
 
 static void resetRequestCommandInfo(
-  const char *string_start,   // The magic to identify the start
-  const char *string_stop,    // The magic to identify the stop
-  const char *string_error0,  // The first magic to identify the error response
-  const char *string_error1,  // The second error magic
-  const char *string_error2   // The third error magic
+  const char * string_start,   // The magic to identify the start
+  const char * string_stop,    // The magic to identify the stop
+  const char * string_error0,  // The first magic to identify the error response
+  const char * string_error1,  // The second error magic
+  const char * string_error2   // The third error magic
 )
 {
   clearRequestCommandInfo();  // release requestCommandInfo.cmd_rev_buf before allocating a new one
@@ -57,14 +57,13 @@ static void resetRequestCommandInfo(
   requestCommandInfo.inError = false;
 }
 
-/*
-    Send M21 command and wait for response
-
-    >>> M21
-    SENDING:M21
-    echo:SD card ok
-    echo:No SD card
-*/
+/**
+ * Send M21 command and wait for response
+ *
+ * SENDING: M21
+ * echo:SD card ok
+ * echo:No SD card
+ */
 bool request_M21(void)
 {
   resetRequestCommandInfo("SD card ",             // The magic to identify the start
@@ -83,7 +82,7 @@ bool request_M21(void)
   return !requestCommandInfo.inError;
 }
 
-char *request_M20(void)
+char * request_M20(void)
 {
   resetRequestCommandInfo("Begin file list",  // The magic to identify the start
                           "End file list",    // The magic to identify the stop
@@ -96,17 +95,17 @@ char *request_M20(void)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
+  //clearRequestCommandInfo();  // shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
 
-/*
- * M33 retrieve long filename from short file name
- *   M33 miscel~1/armchair/armcha~1.gco
- * Output:
- *   /Miscellaneous/Armchair/Armchair.gcode
+/**
+ * M33 retrieve long filename from short filename
+ *
+ * SENDING: M33 miscel~1/armchair/armcha~1.gco
+ * /Miscellaneous/Armchair/Armchair.gcode
  */
-char *request_M33(char *filename)
+char * request_M33(const char * filename)
 {
   resetRequestCommandInfo("/",                   // The magic to identify the start
                           "ok",                  // The magic to identify the stop
@@ -122,27 +121,27 @@ char *request_M33(char *filename)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
+  //clearRequestCommandInfo();  // shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
 
 /**
  * Select the file to print
  *
- * >>> m23 YEST~1/TEST2/PI3MK2~5.GCO
- * SENDING:M23 YEST~1/TEST2/PI3MK2~5.GCO
+ * SENDING: M23 YEST~1/TEST2/PI3MK2~5.GCO
  * echo:Now fresh file: YEST~1/TEST2/PI3MK2~5.GCO
  * File opened: PI3MK2~5.GCO Size: 11081207
  * File selected
  *
- * file information in RepRapFirmware
- * SENDING:M36 3DBenchy.gcode
+ * File information in RepRapFirmware
+ *
+ * SENDING: M36 3DBenchy.gcode
  * echo: {"err":0,"size":2758088,"lastModified":"2020-10-20T17:12:18","height":49.00,"firstLayerHeight":0.20,"layerHeight":0.20,"printTime":6173,"filament":[4065.3],"generatedBy":"SuperSlicer 2.2.53 on 2020-10-20 at 15:12:18 UTC"}
- **/
-long request_M23_M36(char *filename)
+ */
+long request_M23_M36(const char * filename)
 {
   uint8_t offset = 5;
-  const char *sizeTag;
+  const char * sizeTag;
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)  // all other firmwares except reprap firmware
   {
     resetRequestCommandInfo("File opened",    // The magic to identify the start
@@ -176,9 +175,9 @@ long request_M23_M36(char *filename)
     return 0;
   }
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-    mustStoreCmd("M23 /%s\n", filename);  //send M23 for reprap firmware
+    mustStoreCmd("M23 /%s\n", filename);  // send M23 for reprap firmware
   // Find file size and report its.
-  char *ptr;
+  char * ptr;
   long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, sizeTag) + offset, &ptr, 10);
   clearRequestCommandInfo();
   return size;
@@ -186,7 +185,7 @@ long request_M23_M36(char *filename)
 
 /**
  * Start or resume print
- **/
+ */
 void request_M24(int pos)
 {
   if (pos == 0)
@@ -197,7 +196,7 @@ void request_M24(int pos)
 
 /**
  * Abort print
- **/
+ */
 void request_M524(void)
 {
   mustStoreCmd("M524\n");
@@ -205,7 +204,7 @@ void request_M524(void)
 
 /**
  * Pause print
- **/
+ */
 void request_M25(void)
 {
   mustStoreCmd("M25 P1\n");
@@ -227,7 +226,7 @@ void request_M27(uint8_t seconds)
 
 /**
  * Park Head / Pause Print
- **/
+ */
 void request_M125(void)
 {
   mustStoreCmd("M125 P1\n");
@@ -235,13 +234,13 @@ void request_M125(void)
 
 /**
  * Stop or Unconditional stop in reprap firmware
- **/
+ */
 void request_M0(void)
 {
   mustStoreCmd("M0\n");
 }
 
-void request_M98(char *filename)
+void request_M98(const char * filename)
 {
   CMD command;
   snprintf(command, CMD_MAX_SIZE, "M98 P/%s\n", filename);
@@ -260,7 +259,7 @@ void request_M98(char *filename)
 }
 
 // nextdir path must start with "macros" or "gcodes"
-void request_M20_rrf(char *nextdir, bool with_ts, FP_STREAM_HANDLER handler)
+void request_M20_rrf(const char * nextdir, bool with_ts, FP_STREAM_HANDLER handler)
 {
   resetRequestCommandInfo("{", "}", "Error:", NULL, NULL);
   requestCommandInfo.stream_handler = handler;
