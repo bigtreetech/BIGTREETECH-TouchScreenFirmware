@@ -55,11 +55,17 @@ bool EnterDir(const char * nextdir);
 void ExitDir(void);
 bool IsRootDir(void);
 char * isSupportedFile(const char * filename);
+
+// usable by Print menu
 char * getFoldername(uint8_t index);
 char * hideFilenameExtension(uint8_t index);
 char * restoreFilenameExtension(uint8_t index);
+
+// usable by Printing menu
+void hidePrintFilename(void);
 char * getPrintFilename(void);
 
+// usable by "menu"
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);
 

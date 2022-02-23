@@ -208,19 +208,27 @@ char * restoreFilenameExtension(uint8_t index)
   return filename;
 }
 
+void hidePrintFilename(void)
+{
+  // if printing from remote onboard SD, remote host or also remote TFT (with M23 - M24),
+  // no file is available in infoFile. Only infoFile.title was set by M23 in interfaceCmd.c
+  if (infoFile.fileCount == 0)
+    return;
+
+  hideFilenameExtension(infoFile.fileIndex);  // hide filename extension if filename extension feature is disabled
+}
+
 char * getPrintFilename(void)
 {
-  if (infoFile.source <= BOARD_SD)  // if printing from TFT or onboard SD
-  {
-    if (infoFile.longFile[infoFile.fileIndex] != NULL)
-      return infoFile.longFile[infoFile.fileIndex];
-    else
-      return infoFile.file[infoFile.fileIndex];
-  }
-  else  // if printing from remote onboard SD or remote host
-  {
+  // if printing from remote onboard SD, remote host or also remote TFT (with M23 - M24),
+  // no file is available in infoFile. Only infoFile.title was set by M23 in interfaceCmd.c
+  if (infoFile.fileCount == 0)
     return infoFile.title;
-  }
+
+  if (infoFile.longFile[infoFile.fileIndex] != NULL)
+    return infoFile.longFile[infoFile.fileIndex];
+  else
+    return infoFile.file[infoFile.fileIndex];
 }
 
 // volume exist detect

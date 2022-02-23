@@ -150,55 +150,15 @@ static void setLayerNumberTxt(char * layer_number_txt)
 
 void menuBeforePrinting(void)
 {
-  // load stat/end/cancel gcodes from spi flash
-
-  switch (infoFile.source)
+  if (!printStart())
   {
-    case BOARD_SD:  // GCode from file on ONBOARD SD
-      {
-        uint32_t size;
-
-        size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
-
-        if (size == 0)
-        {
-          ExitDir();
-          CLOSE_MENU();
-          return;
-        }
-
-        printStart(NULL, size);
-        break;
-      }
-
-    case TFT_USB_DISK:
-    case TFT_SD:  // GCode from file on TFT SD
-      {
-        FIL file;
-
-        if (f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-        {
-          ExitDir();
-          CLOSE_MENU();
-          return;
-        }
-
-        if (powerFailedCreate(infoFile.title) == false)  // open Power-loss Recovery file
-        {}
-        powerFailedlSeek(&file);  // seek on Power-loss Recovery file
-
-        printStart(&file, f_size(&file));
-        break;
-      }
-
-    default:
-      ExitDir();
-      CLOSE_MENU();
-      return;
+    ExitDir();
+    CLOSE_MENU();
+    return;
   }
 
   // initialize things before the print starts
-  hideFilenameExtension(infoFile.fileIndex);  // hide filename extension if filename extension feature is disabled
+  hidePrintFilename();  // if printing from TFT or onboard SD, hide filename extension if filename extension feature is disabled
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);

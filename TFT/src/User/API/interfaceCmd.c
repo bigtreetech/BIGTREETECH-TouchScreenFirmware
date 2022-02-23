@@ -375,23 +375,27 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M20 SD:") ||
                   cmd_start_with(cmd_ptr, "M20 U:"))
               {
-                if (cmd_start_with(cmd_ptr, "M20 SD:"))
-                  infoFile.source = TFT_SD;
-                else
-                  infoFile.source = TFT_USB_DISK;
+                // example: M20 SD:/test
 
-                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
-                // strip out any checksum that might be in the string
-                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0; i++)
+                if (cmd_start_with(cmd_ptr, "M20 SD:"))
+                  infoFile.source = TFT_SD;        // set source first
+                else
+                  infoFile.source = TFT_USB_DISK;  // set source first
+
+                strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // then set title (used as base path by scanPrintFiles)
+
+                // strip out any trailing checksum that might be in the string
+                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != '\0' ; i++)
                 {
                   if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') || (infoFile.title[i] == '\r'))
                   {
-                    infoFile.title[i] = 0;
+                    infoFile.title[i] = '\0';
                     break;
                   }
                 }
+
                 Serial_Puts(cmd_port, "Begin file list\n");
-                if (mountFS() == true && scanPrintFiles() == true)
+                if (mountFS() == true && scanPrintFiles() == true)  // then mount FS and scan for files (source and title are used)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
@@ -418,19 +422,22 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M23 SD:") ||
                   cmd_start_with(cmd_ptr, "M23 U:"))
               {
-                if (cmd_start_with(cmd_ptr, "M23 SD:"))
-                  infoFile.source = TFT_SD;
-                else
-                  infoFile.source = TFT_USB_DISK;
+                // example: M23 SD:/test/cap.gcode
 
-                resetInfoFile();
-                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
-                // strip out any checksum that might be in the string
-                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0 ; i++)
+                if (cmd_start_with(cmd_ptr, "M23 SD:"))
+                  infoFile.source = TFT_SD;        // set source first
+                else
+                  infoFile.source = TFT_USB_DISK;  // set source first
+
+                resetInfoFile();                                     // then reset infoFile (source is restored)
+                strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // set title as last
+
+                // strip out any trailing checksum that might be in the string
+                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != '\0' ; i++)
                 {
-                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') ||(infoFile.title[i] == '\r'))
+                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') || (infoFile.title[i] == '\r'))
                   {
-                    infoFile.title[i] = 0;
+                    infoFile.title[i] = '\0';
                     break;
                   }
                 }
@@ -467,6 +474,9 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
+              // NOTE: If the file was selected (with M23) from onboard SD, infoFile.source will be set to BOARD_SD_REMOTE
+              //       by the printRemoteStart function called in parseAck.c during M23 ACK parsing
+
               if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in

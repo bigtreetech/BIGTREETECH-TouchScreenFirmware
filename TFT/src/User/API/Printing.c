@@ -386,17 +386,17 @@ void printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    infoFile.source = BOARD_SD_REMOTE;  // set source first
-    resetInfoFile();                    // then reset infoFile (source is restored)
-    strcpy(infoFile.title, filename);   // set title as last
+    infoFile.source = BOARD_SD_REMOTE;                 // set source first
+    resetInfoFile();                                   // then reset infoFile (source is restored)
+    strncpy(infoFile.title, filename, MAX_PATH_LEN);   // set title as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard SD
   }
   else
   {
-    infoFile.source = REMOTE_HOST;                 // set source first
-    resetInfoFile();                               // then reset infoFile (source is restored)
-    strcpy(infoFile.title, "Remote printing...");  // set title as last
+    infoFile.source = REMOTE_HOST;                                // set source first
+    resetInfoFile();                                              // then reset infoFile (source is restored)
+    strncpy(infoFile.title, "Remote printing...", MAX_PATH_LEN);  // set title as last
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
@@ -405,13 +405,48 @@ void printRemoteStart(const char * filename)
   REPLACE_MENU(menuPrinting);
 }
 
-void printStart(FIL * file, uint32_t size)
+bool printStart(void)
 {
   // always clean infoPrinting first and then set the needed attributes
   memset(&infoPrinting, 0, sizeof(PRINTING));
 
+  switch (infoFile.source)
+  {
+    case REMOTE_HOST:      // present just to make the code robust. It should never be executed
+    case BOARD_SD_REMOTE:
+      break;
+
+    case BOARD_SD:
+      infoPrinting.size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
+      break;
+
+    case TFT_USB_DISK:
+    case TFT_SD:
+      if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+      {
+        infoPrinting.size = f_size(&infoPrinting.file);
+
+        if (infoPrinting.size == 0)
+        {
+          f_close(&infoPrinting.file);
+          break;
+        }
+
+        infoPrinting.cur = infoPrinting.file.fptr;
+        setExtrusionDuringPause(false);
+
+        if (powerFailedCreate(infoFile.title) == false)  // open Power-loss Recovery file
+        {}
+        powerFailedlSeek(&infoPrinting.file);  // seek on Power-loss Recovery file
+      }
+
+      break;
+  }
+
+  if (infoPrinting.size == 0)
+    return false;
+
   // we assume infoPrinting is clean, so we need to set only the needed attributes
-  infoPrinting.size = size;
   infoPrinting.printing = true;
 
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))
@@ -419,27 +454,16 @@ void printStart(FIL * file, uint32_t size)
     sendPrintCodes(0);
   }
 
-  switch (infoFile.source)
+  if (infoFile.source == BOARD_SD)
   {
-    case REMOTE_HOST:      // present just to make the code robust. It should never be executed
-    case BOARD_SD_REMOTE:
-      return;
-
-    case BOARD_SD:
-      //infoHost.printing = true;                  // Not so fast! Let Marlin tell that he started printing!
-      request_M24(0);                              // start print from onboard SD
-      request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard SD
-      break;
-
-    case TFT_USB_DISK:
-    case TFT_SD:
-      infoPrinting.file = *file;
-      infoPrinting.cur = infoPrinting.file.fptr;
-      setExtrusionDuringPause(false);
-      break;
+    //infoHost.printing = true;                  // Not so fast! Let Marlin tell that it started printing!
+    request_M24(0);                              // start print from onboard SD
+    request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard SD
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+
+  return true;
 }
 
 void printEnd(void)

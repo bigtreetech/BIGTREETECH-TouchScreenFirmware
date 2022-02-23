@@ -95,7 +95,7 @@ void clearInfoPrint(void);                            // called in PrintingMenu.
 
 void printComplete(void);                             // print complete
 void printRemoteStart(const char * filename);         // print started from remote onboard SD or remote host
-void printStart(FIL * file, uint32_t size);           // it also sends start gcode
+bool printStart(void);                                // it also sends start gcode
 void printEnd(void);                                  // it also sends end gcode
 void printAbort(void);                                // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);
