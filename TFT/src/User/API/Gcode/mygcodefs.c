@@ -98,7 +98,6 @@ bool scanPrintFilesGcodeFs(void)
       if (infoMachineSettings.longFilename == ENABLED)
       { // get long filename
         char *longFilename = request_M33(line);  // retrieve long filename (if exists)
-        clearRequestCommandInfo();
 
         /*
           When AUTO_REPORT_TEMPERATURES is enabled by M155, The response of M33 may become the following
@@ -123,10 +122,13 @@ bool scanPrintFilesGcodeFs(void)
         str_len = strlen(longFilename);
         infoFile.longFile[infoFile.fileCount] = malloc(str_len + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
         if (infoFile.longFile[infoFile.fileCount] == NULL)
+        {
+          clearRequestCommandInfo();
           break;
-
+        }
         // copy file name and set the flag for filename extension check
         strncpy(infoFile.longFile[infoFile.fileCount], longFilename, str_len + 2);  // "+ 2": space for terminating null character and the flag for filename extension check
+        clearRequestCommandInfo();  // finally free the buffer allocated by M33, if any
       }
       else  // if long filename is not supported
       {
@@ -178,7 +180,6 @@ bool scanPrintFilesGcodeFs(void)
         strncat(Pstr_tmp, line, pline - line + str_len);  // construct full path to folder
         longFolder = request_M33(Pstr_tmp);  // retrieve long folder names (if exist)
         free(Pstr_tmp);
-        clearRequestCommandInfo();
 
         Pstr_tmp = strstr(longFolder, "\nok");
         if (Pstr_tmp != NULL)
