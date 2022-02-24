@@ -375,13 +375,14 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M20 SD:") ||
                   cmd_start_with(cmd_ptr, "M20 U:"))
               {
-                // example: M20 SD:/test
+                // example: "M20 SD:/test"
 
                 if (cmd_start_with(cmd_ptr, "M20 SD:"))
                   infoFile.source = TFT_SD;        // set source first
                 else
                   infoFile.source = TFT_USB_DISK;  // set source first
 
+                // example: "SD:/test"
                 strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // then set title (used as base path by scanPrintFiles)
 
                 // strip out any trailing checksum that might be in the string
@@ -422,13 +423,14 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M23 SD:") ||
                   cmd_start_with(cmd_ptr, "M23 U:"))
               {
-                // example: M23 SD:/test/cap.gcode
+                // example: "M23 SD:/test/cap.gcode"
 
                 if (cmd_start_with(cmd_ptr, "M23 SD:"))
                   infoFile.source = TFT_SD;        // set source first
                 else
                   infoFile.source = TFT_USB_DISK;  // set source first
 
+                // example: "SD:/test/cap.gcode"
                 resetInfoFile();                                     // then reset infoFile (source is restored)
                 strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // set title as last
 

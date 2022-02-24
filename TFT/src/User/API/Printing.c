@@ -363,8 +363,8 @@ void printComplete(void)
     case TFT_USB_DISK:
     case TFT_SD:
       f_close(&infoPrinting.file);
-      powerFailedClose();   // close Power-loss Recovery file
-      powerFailedDelete();  // delete Power-loss Recovery file
+      powerFailedClose();   // close PLR file
+      powerFailedDelete();  // delete PLR file
       break;
   }
 
@@ -429,15 +429,25 @@ bool printStart(void)
         if (infoPrinting.size == 0)
         {
           f_close(&infoPrinting.file);
+
+          // disable print restore flag (one shot flag) for the next print.
+          // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+          powerFailedSetRestore(false);
           break;
         }
 
         infoPrinting.cur = infoPrinting.file.fptr;
         setExtrusionDuringPause(false);
 
-        if (powerFailedCreate(infoFile.title) == false)  // open Power-loss Recovery file
-        {}
-        powerFailedlSeek(&infoPrinting.file);  // seek on Power-loss Recovery file
+        // initialize PLR info.
+        // If print restore flag was enabled (e.g. by powerFailedSetRestore function called in PrintRestore.c),
+        // try to load PLR info from file in order to restore the print from the failed point.
+        // It finally disables print restore flag (one shot flag) for the next print.
+        // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+        powerFailedInitData();
+
+        if (powerFailedCreate(infoFile.title))   // if PLR feature is enabled, open a new PLR file
+          powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
       }
 
       break;

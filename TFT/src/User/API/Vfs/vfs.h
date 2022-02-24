@@ -56,16 +56,16 @@ void ExitDir(void);
 bool IsRootDir(void);
 char * isSupportedFile(const char * filename);
 
-// usable by Print menu
+// called in Print.c
 char * getFoldername(uint8_t index);
 char * hideFilenameExtension(uint8_t index);
 char * restoreFilenameExtension(uint8_t index);
 
-// usable by Printing menu
+// called in PrintingMenu.c
 void hidePrintFilename(void);
 char * getPrintFilename(void);
 
-// usable by "menu"
+// called in menu.c
 bool volumeExists(uint8_t src);
 void loopVolumeSource(void);
 

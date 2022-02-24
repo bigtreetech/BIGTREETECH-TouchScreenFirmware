@@ -5,7 +5,6 @@ void menuPrintRestore(void)
 {
   uint16_t key_num = IDLE_TOUCH;
 
-  powerFailedClear();
   GUI_Clear(infoSettings.bg_color);
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
@@ -26,14 +25,15 @@ void menuPrintRestore(void)
       switch (key_num)
       {
         case KEY_POPUP_CONFIRM:
-          powerFailedGetData();
+          powerFailedSetRestore(true);
           infoMenu.menu[1] = menuPrintFromSource;
           infoMenu.menu[2] = menuBeforePrinting;
           infoMenu.cur = 2;
           break;
 
         case KEY_POPUP_CANCEL:
-          powerFailedDelete();
+          powerFailedSetRestore(false);
+          powerFailedDelete();  // powerFailedExist function must be called first, otherwise powerFailedDelete will fail
           ExitDir();
           CLOSE_MENU();
           break;
@@ -43,7 +43,6 @@ void menuPrintRestore(void)
         if (volumeExists(infoFile.source) != true)
         {
           resetInfoFile();
-          powerFailedClear();
           CLOSE_MENU();
         }
       #endif
