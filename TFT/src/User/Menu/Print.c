@@ -189,8 +189,8 @@ void menuPrintFromSource(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
-  uint8_t update = 1;  // 0: no update, 1: update with title bar, 2: update without title bar
+  uint8_t update = 1;     // 0: no update, 1: update with title bar, 2: update without title bar
+  uint8_t pageCount;      // it will be used and handled in the icon view loop
 
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
@@ -221,6 +221,7 @@ void menuPrintFromSource(void)
   {
     if (list_mode != true)  // select item from icon view
     {
+      pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
       key_num = menuKeyGetValue();
 
       switch (key_num)
