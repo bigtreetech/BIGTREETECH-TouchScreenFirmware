@@ -47,6 +47,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
   - [Worst Case Scenario](#worst-case-scenario)
 - [Version History](#version-history)
 - [Appendix](#appendix)
+  - [Remote Host Printing](#remote-host-printing)
   - [Integration with Octoprint](#integration-with-octoprint)
   - [Adding Gcode Thumbnails](#adding-gcode-thumbnails)
   - [TFT Screen Configuration and Support for RRF](#tft-screen-configuration-and-support-for-rrf)
@@ -503,6 +504,54 @@ and the reset described above did not help, try the following:
 Please, see [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/releases) section for a complete version history.
 
 ## Appendix
+
+### Remote Host Printing
+
+Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both the TFT's and mainboard's media devices and start a print that will be controlled by the remote host (TFT or mainboard). The following actions and the related triggering gcodes are currently supported by the TFT fw:
+
+**init media device:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M21`
+
+**release media device:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M22`
+
+**list files:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M20`
+
+&emsp;**TFT SD:**<br>
+&emsp;`M20 SD:<folder path> (e.g. "M20 SD:", "M20 SD:/test")`
+
+&emsp;**TFT USB:**<br>
+&emsp;`M20 U:<folder path>`
+
+**select file:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M23 <file path>`
+
+&emsp;**TFT SD:**<br>
+&emsp;`M23 SD:<file path> (e.g. "M23 SD:cap.gcode", "M23 SD:/test/cap2.gcode")`
+
+&emsp;**TFT USB:**<br>
+&emsp;`M23 U:<file path>`
+
+**start/resume print:**
+
+&emsp;**onboard SD, TFT SD and TFT USB:**<br>
+&emsp;`M24`
+
+**pause print:**
+
+&emsp;**onboard SD, TFT SD and TFT USB:**<br>
+&emsp;`M25`
+
+**NOTE:** TFT's media devices (SD card and USB disk, if any) does not need to be initialized/released.
 
 ### Integration with Octoprint
 
