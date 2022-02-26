@@ -383,7 +383,7 @@ void sendQueueCmd(void)
                   infoFile.source = TFT_USB_DISK;  // set source first
 
                 // example: "SD:/test"
-                strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // then set title (used as base path by scanPrintFiles)
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);  // then set title (used as base path by scanPrintFiles)
 
                 // strip out any trailing checksum that might be in the string
                 for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != '\0' ; i++)
@@ -431,8 +431,8 @@ void sendQueueCmd(void)
                   infoFile.source = TFT_USB_DISK;  // set source first
 
                 // example: "SD:/test/cap.gcode"
-                resetInfoFile();                                     // then reset infoFile (source is restored)
-                strncpy(infoFile.title, &cmd_ptr[4], MAX_PATH_LEN);  // set title as last
+                resetInfoFile();                                                 // then reset infoFile (source is restored)
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);  // set title as last
 
                 // strip out any trailing checksum that might be in the string
                 for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != '\0' ; i++)
