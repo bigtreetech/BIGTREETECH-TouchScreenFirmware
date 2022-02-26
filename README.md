@@ -509,17 +509,17 @@ Please, see [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtre
 
 Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both the TFT's and mainboard's media devices and start a print that will be controlled by the remote host (TFT or mainboard). The following actions and the related triggering gcodes are currently supported by the TFT fw:
 
-**init media device:**
+**Init media device:**
 
 &emsp;**onboard SD:**<br>
 &emsp;`M21`
 
-**release media device:**
+**Release media device:**
 
 &emsp;**onboard SD:**<br>
 &emsp;`M22`
 
-**list files:**
+**List files:**
 
 &emsp;**onboard SD:**<br>
 &emsp;`M20`
@@ -530,7 +530,7 @@ Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both th
 &emsp;**TFT USB:**<br>
 &emsp;`M20 U:<folder path>`
 
-**select file:**
+**Select file:**
 
 &emsp;**onboard SD:**<br>
 &emsp;`M23 <file path>`
@@ -541,17 +541,66 @@ Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both th
 &emsp;**TFT USB:**<br>
 &emsp;`M23 U:<file path>`
 
-**start/resume print:**
+**Start/resume print:**
 
 &emsp;**onboard SD, TFT SD and TFT USB:**<br>
 &emsp;`M24`
 
-**pause print:**
+**Pause print:**
 
 &emsp;**onboard SD, TFT SD and TFT USB:**<br>
 &emsp;`M25`
 
-**NOTE:** TFT's media devices (SD card and USB disk, if any) does not need to be initialized/released.
+**Pause print and park head:**
+
+&emsp;**onboard SD, TFT SD and TFT USB:**<br>
+&emsp;`M125`
+
+**Abort print:**
+
+&emsp;**onboard SD, TFT SD and TFT USB:**<br>
+&emsp;`M524`
+
+**Report print status:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M27 [C] [S<seconds>]`
+
+&emsp;**TFT SD and TFT USB:**<br>
+&emsp;`M27 [C]`
+
+**Start file write:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M28 [B1] <file path>`
+
+**Stop file write:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M29`
+
+**Delete file:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M30 <file path>`
+
+&emsp;**TFT SD:**<br>
+&emsp;`M30 SD:<file path> (e.g. "M30 SD:cap.gcode", "M30 SD:/test/cap2.gcode")`
+
+&emsp;**TFT USB:**<br>
+&emsp;`M30 U:<file path>`
+
+**Firmware info:**
+
+&emsp;**onboard SD:**<br>
+&emsp;`M115`
+
+&emsp;**TFT SD and TFT USB:**<br>
+&emsp;`M115 TFT`
+
+**NOTES:**
+- TFT's media devices, if any, does not need to be initialized/released
+- When present, the gcode's options (e.g. "M27 C") have the same meaning like in Marlin fw
 
 ### Integration with Octoprint
 
