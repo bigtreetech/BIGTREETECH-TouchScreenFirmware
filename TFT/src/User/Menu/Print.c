@@ -397,7 +397,7 @@ void menuPrint(void)
         else
         {
           setDialogText(LABEL_WARNING, LABEL_TFTSD_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
-          showDialog(DIALOG_TYPE_ALERT,NULL, NULL, NULL);
+          showDialog(DIALOG_TYPE_ALERT, NULL, NULL, NULL);
         }
         break;
 
@@ -414,7 +414,7 @@ void menuPrint(void)
           else
           {
             setDialogText(LABEL_WARNING, LABEL_USB_DISK_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
-            showDialog(DIALOG_TYPE_ALERT,NULL, NULL, NULL);
+            showDialog(DIALOG_TYPE_ALERT, NULL, NULL, NULL);
           }
           break;
 
