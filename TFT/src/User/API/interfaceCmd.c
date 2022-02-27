@@ -311,26 +311,21 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
-void setInfoFile(bool sdCard, const char * path)
+void setInfoFile(const char * sdCardKeyword)
 {
-  if (sdCard)
+  // example:
+  // "cmd_ptr + cmd_index" = "M23 SD:/test/cap2.gcode*36"
+  // "sdCardKeyword" = "M23 SD:"
+
+  if (cmd_start_with(cmd_ptr, sdCardKeyword))
     infoFile.source = TFT_SD;        // set source first
   else
     infoFile.source = TFT_USB_DISK;  // set source first
 
-  // example: "SD:/test/cap2.gcode"
-  resetInfoFile();                              // then reset infoFile (source is restored)
-  strncpy(infoFile.title, path, MAX_PATH_LEN);  // set title as last
-
-  // strip out any trailing checksum that might be in the string
-  for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != '\0' ; i++)
-  {
-    if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') || (infoFile.title[i] == '\r'))
-    {
-      infoFile.title[i] = '\0';
-      break;
-    }
-  }
+  // "M23 SD:/test/cap2.gcode*36" -> "SD:/test/cap2.gcode"
+  resetInfoFile();                                                 // then reset infoFile (source is restored)
+  strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);  // set title as last
+  stripChecksum(infoFile.title);
 }
 
 // Parse and send gcode cmd in infoCmd queue.
@@ -398,7 +393,7 @@ void sendQueueCmd(void)
                   cmd_start_with(cmd_ptr, "M20 U:"))
               {
                 // example: "M20 SD:/test"
-                setInfoFile(cmd_start_with(cmd_ptr, "M20 SD:"), &cmd_ptr[cmd_index + 4]);
+                setInfoFile("M20 SD:");
 
                 Serial_Puts(cmd_port, "Begin file list\n");
                 // then mount FS and scan for files (infoFile.source and infoFile.title are used)
@@ -430,7 +425,7 @@ void sendQueueCmd(void)
                   cmd_start_with(cmd_ptr, "M23 U:"))
               {
                 // example: "M23 SD:/test/cap2.gcode"
-                setInfoFile(cmd_start_with(cmd_ptr, "M23 SD:"), &cmd_ptr[cmd_index + 4]);
+                setInfoFile("M23 SD:");
 
                 Serial_Puts(cmd_port, "echo:Now fresh file: ");
                 Serial_Puts(cmd_port, infoFile.title);
@@ -477,8 +472,8 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  infoMenu.cur = 1;
-                  menuBeforePrinting();
+                  infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
+                  REPLACE_MENU(menuBeforePrinting);
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
@@ -492,7 +487,7 @@ void sendQueueCmd(void)
           case 25:  // M25
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -512,7 +507,7 @@ void sendQueueCmd(void)
             }
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT
               {
                 if (cmd_seen('C'))
                 {
@@ -559,7 +554,7 @@ void sendQueueCmd(void)
                   cmd_start_with(cmd_ptr, "M30 U:"))
               {
                 // example: "M30 SD:/test/cap2.gcode"
-                setInfoFile(cmd_start_with(cmd_ptr, "M30 SD:"), &cmd_ptr[cmd_index + 4]);
+                setInfoFile("M30 SD:");
 
                 // then mount FS and delete the file (infoFile.source and infoFile.title are used)
                 if (mountFS() == true && f_unlink(infoFile.title) == FR_OK)
@@ -608,7 +603,7 @@ void sendQueueCmd(void)
           case 125:  // M125
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -623,7 +618,7 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
@@ -794,16 +789,7 @@ void sendQueueCmd(void)
             CMD message;
 
             strncpy(message, &cmd_ptr[cmd_index + 4], CMD_MAX_SIZE);
-
-            // strip out any trailing checksum that might be in the string
-            for (int i = 0; i < CMD_MAX_SIZE && message[i] != '\0'; i++)
-            {
-              if (message[i] == '*')
-              {
-                message[i] = '\0';
-                break;
-              }
-            }
+            stripChecksum(message);
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 

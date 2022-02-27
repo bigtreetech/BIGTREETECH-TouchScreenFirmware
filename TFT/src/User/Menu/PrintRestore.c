@@ -9,7 +9,7 @@ void menuPrintRestore(void)
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
 
-  if (mountFS() == true && powerFailedExist())
+  if (mountFS() == true && powerFailedExist())  // powerFailedExist function sets both infoFile.title and PLR filename
   {
     char okTxt[MAX_LANG_LABEL_LENGTH];
     char cancelTxt[MAX_LANG_LABEL_LENGTH];
@@ -33,8 +33,8 @@ void menuPrintRestore(void)
 
         case KEY_POPUP_CANCEL:
           powerFailedSetRestore(false);
-          powerFailedDelete();  // powerFailedExist function must be called first, otherwise powerFailedDelete will fail
-          ExitDir();
+          powerFailedDelete();  // note: powerFailedExist function must be called first, otherwise powerFailedDelete will fail
+          ExitDir();            // remove filename from path so the next called menuPrintFromSource function will scan files from its folder
           CLOSE_MENU();
           break;
       }
