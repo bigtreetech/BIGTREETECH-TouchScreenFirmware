@@ -217,7 +217,7 @@ void setPrintFilename(void)
   // if restoring a print after a power failure or printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (infoFile.fileCount == 0)
+  if (infoFile.fileCount == 0)  // remove path information when printing menu is activated by remote
   {
     // example: "SD:/test/cap2.gcode" -> "cap2.gcode"
 
