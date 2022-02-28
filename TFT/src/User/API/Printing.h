@@ -94,8 +94,15 @@ void updatePrintUsedFilament(void);                   // called in PrintingMenu.
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
 void printComplete(void);                             // print complete
-void printRemoteStart(const char * filename);         // print started from remote onboard SD or remote host
+
+// start print originated or handled by remote host
+// (e.g. print started from remote onboard SD or hosted by remote host)
+bool printRemoteStart(const char * filename);
+
+// start print originated or handled by TFT
+// (e.g. print started from TFT's GUI or hosted by TFT)
 bool printStart(void);                                // it also sends start gcode
+
 void printEnd(void);                                  // it also sends end gcode
 void printAbort(void);                                // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);

@@ -26,15 +26,16 @@ void menuPrintRestore(void)
       {
         case KEY_POPUP_CONFIRM:
           powerFailedSetRestore(true);
-          infoMenu.menu[1] = menuPrintFromSource;
-          infoMenu.menu[2] = menuBeforePrinting;
-          infoMenu.cur = 2;
+          REPLACE_MENU(startPrint);  // replace menu to start print and open Printing menu
           break;
 
         case KEY_POPUP_CANCEL:
           powerFailedSetRestore(false);
-          powerFailedDelete();  // note: powerFailedExist function must be called first, otherwise powerFailedDelete will fail
-          ExitDir();            // remove filename from path so the next called menuPrintFromSource function will scan files from its folder
+          // note: powerFailedExist function must be called first, otherwise powerFailedDelete will fail
+          powerFailedDelete();
+          // in case the calling function is menuPrintFromSource,
+          // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
+          ExitDir();
           CLOSE_MENU();
           break;
       }

@@ -371,11 +371,12 @@ void printComplete(void)
   heatClearIsWaiting();
 }
 
-void printRemoteStart(const char * filename)
+bool printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard SD)
 
-  if (infoPrinting.printing && infoFile.source <= BOARD_SD) return;  // if printing from TFT or onboard SD (printStart was called)
+  // if printing from TFT or onboard SD (printStart function was called before)
+  if (infoPrinting.printing && infoFile.source <= BOARD_SD) return false;
 
   // always clean infoPrinting first and then set the needed attributes
   memset(&infoPrinting, 0, sizeof(PRINTING));
@@ -400,10 +401,7 @@ void printRemoteStart(const char * filename)
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
 
-  initMenuPrinting();  // initialize things before opening menuPrinting
-
-  infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
-  REPLACE_MENU(menuPrinting);
+  return true;
 }
 
 bool printStart(void)

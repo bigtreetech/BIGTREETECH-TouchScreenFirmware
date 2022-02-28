@@ -214,8 +214,9 @@ char * restoreFilenameExtension(uint8_t index)
 // set print filename according to print originator (remote or local to TFT)
 void setPrintFilename(void)
 {
-  // if printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
+  // if restoring a print after a power failure or printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
+  //
   if (infoFile.fileCount == 0)
   {
     // example: "SD:/test/cap2.gcode" -> "cap2.gcode"

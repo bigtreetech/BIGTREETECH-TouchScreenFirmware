@@ -148,22 +148,7 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
-// start print of file selected by TFT's GUI
-void menuBeforePrinting(void)
-{
-  if (!printStart())
-  {
-    ExitDir();
-    CLOSE_MENU();
-    return;
-  }
-
-  initMenuPrinting();  // initialize things before opening menuPrinting
-
-  REPLACE_MENU(menuPrinting);
-}
-
-// initialize things before opening menuPrinting
+// initialize printing info before opening Printing menu
 void initMenuPrinting(void)
 {
   setPrintFilename();  // set print filename according to print originator (remote or local to TFT)
@@ -172,6 +157,42 @@ void initMenuPrinting(void)
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
   setM73R_presence(false);
+}
+
+// start print originated or handled by remote host
+// (e.g. print started from remote onboard SD or hosted by remote host) and open Printing menu
+void startRemotePrint(const char * filename)
+{
+  if (!printRemoteStart(filename))
+    return;
+
+  initMenuPrinting();  // initialize printing info before opening Printing menu
+
+  infoMenu.cur = 1;  // clear menu buffer when printing menu is activated by remote
+  REPLACE_MENU(menuPrinting);
+}
+
+// start print originated or handled by TFT
+// (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
+void startPrint(void)
+{
+  if (!printStart())
+  {
+    // in case the calling function is menuPrintFromSource,
+    // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
+    ExitDir();
+    return;
+  }
+
+  initMenuPrinting();  // initialize printing info before opening Printing menu
+
+  // if restoring a print after a power failure or printing from remote TFT (with M23 - M24),
+  // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
+  //
+  if (infoFile.fileCount == 0)  // clear menu buffer when printing menu is activated by remote
+    infoMenu.cur = 0;
+
+  OPEN_MENU(menuPrinting);
 }
 
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)

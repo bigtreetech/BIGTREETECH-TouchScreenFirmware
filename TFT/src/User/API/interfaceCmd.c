@@ -463,7 +463,7 @@ void sendQueueCmd(void)
             if (!fromTFT)
             {
               // NOTE: If the file was selected (with M23) from onboard SD, infoFile.source will be set to BOARD_SD_REMOTE
-              //       by the printRemoteStart function called in parseAck.c during M23 ACK parsing
+              //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
 
               if (infoFile.source < BOARD_SD)  // if a file was selected from TFT with M23
               {
@@ -474,8 +474,7 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
-                  REPLACE_MENU(menuBeforePrinting);
+                  startPrint();  // start print and open Printing menu
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
