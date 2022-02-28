@@ -7,7 +7,8 @@ extern "C" {
 
 #include <stdbool.h>
 
-void menuBeforePrinting(void);
+void menuBeforePrinting(void);  // start print of file selected by TFT's GUI
+void initMenuPrinting(void);    // initialize things before opening menuPrinting
 void menuPrinting(void);
 void printSummaryPopup(void);
 

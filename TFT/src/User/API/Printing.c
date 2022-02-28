@@ -386,20 +386,21 @@ void printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    infoFile.source = BOARD_SD_REMOTE;                 // set source first
-    resetInfoFile();                                   // then reset infoFile (source is restored)
-    strncpy(infoFile.title, filename, MAX_PATH_LEN);   // set title as last
+    infoFile.source = BOARD_SD_REMOTE;  // set source first
+    resetInfoFile();                    // then reset infoFile (source is restored)
+    EnterDir(filename);                 // set title as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard SD
   }
   else
   {
-    infoFile.source = REMOTE_HOST;                                // set source first
-    resetInfoFile();                                              // then reset infoFile (source is restored)
-    strncpy(infoFile.title, "Remote printing...", MAX_PATH_LEN);  // set title as last
+    infoFile.source = REMOTE_HOST;  // set source first
+    resetInfoFile();                // then reset infoFile (source is restored)
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+
+  initMenuPrinting();  // initialize things before opening menuPrinting
 
   infoMenu.cur = 1;  // clear menu buffer when printing menu is active by remote
   REPLACE_MENU(menuPrinting);

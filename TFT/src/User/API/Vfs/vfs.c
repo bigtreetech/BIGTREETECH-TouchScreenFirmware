@@ -27,7 +27,10 @@ TCHAR * getCurFileSource(void)
     case BOARD_SD_REMOTE:
       return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
 
-    default:  // also for REMOTE_HOST
+    case REMOTE_HOST:
+      return "Remote printing...";
+
+    default:
       return "";
   }
 }
@@ -208,20 +211,31 @@ char * restoreFilenameExtension(uint8_t index)
   return filename;
 }
 
-void hidePrintFilename(void)
+// set print filename according to print originator (remote or local to TFT)
+void setPrintFilename(void)
 {
-  // if printing from remote onboard SD, remote host or also remote TFT (with M23 - M24),
-  // no file is available in infoFile. Only infoFile.title was set by M23 in interfaceCmd.c
+  // if printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
+  // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   if (infoFile.fileCount == 0)
+  {
+    // example: "SD:/test/cap2.gcode" -> "cap2.gcode"
+
+    char * strPtr = strrchr(infoFile.title, '/');  // remove path information, if any
+
+    if (strPtr != NULL)
+      strncpy(infoFile.title, strPtr + 1, MAX_PATH_LEN);
+
     return;
+  }
 
   hideFilenameExtension(infoFile.fileIndex);  // hide filename extension if filename extension feature is disabled
 }
 
+// get print filename according to print originator (remote or local to TFT)
 char * getPrintFilename(void)
 {
-  // if printing from remote onboard SD, remote host or also remote TFT (with M23 - M24),
-  // no file is available in infoFile. Only infoFile.title was set by M23 in interfaceCmd.c
+  // if printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
+  // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   if (infoFile.fileCount == 0)
     return infoFile.title;
 

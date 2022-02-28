@@ -62,8 +62,8 @@ char * hideFilenameExtension(uint8_t index);
 char * restoreFilenameExtension(uint8_t index);
 
 // called in PrintingMenu.c
-void hidePrintFilename(void);
-char * getPrintFilename(void);
+void setPrintFilename(void);    // set print filename according to print originator (remote or local to TFT)
+char * getPrintFilename(void);  // get print filename according to print originator (remote or local to TFT)
 
 // called in menu.c
 bool volumeExists(uint8_t src);

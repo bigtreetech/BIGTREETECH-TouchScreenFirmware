@@ -148,6 +148,7 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
+// start print of file selected by TFT's GUI
 void menuBeforePrinting(void)
 {
   if (!printStart())
@@ -157,15 +158,20 @@ void menuBeforePrinting(void)
     return;
   }
 
-  // initialize things before the print starts
-  hidePrintFilename();  // if printing from TFT or onboard SD, hide filename extension if filename extension feature is disabled
+  initMenuPrinting();  // initialize things before opening menuPrinting
+
+  REPLACE_MENU(menuPrinting);
+}
+
+// initialize things before opening menuPrinting
+void initMenuPrinting(void)
+{
+  setPrintFilename();  // set print filename according to print originator (remote or local to TFT)
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
   setM73R_presence(false);
-
-  REPLACE_MENU(menuPrinting);
 }
 
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)

@@ -314,15 +314,17 @@ static float cmd_float(void)
 void setInfoFile(const char * sdCardKeyword)
 {
   // example:
+  //
   // "cmd_ptr + cmd_index" = "M23 SD:/test/cap2.gcode*36"
   // "sdCardKeyword" = "M23 SD:"
+  //
+  // "infoFile.title" = "SD:/test/cap2.gcode"
 
   if (cmd_start_with(cmd_ptr, sdCardKeyword))
     infoFile.source = TFT_SD;        // set source first
   else
     infoFile.source = TFT_USB_DISK;  // set source first
 
-  // "M23 SD:/test/cap2.gcode*36" -> "SD:/test/cap2.gcode"
   resetInfoFile();                                                 // then reset infoFile (source is restored)
   strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);  // set title as last
   stripChecksum(infoFile.title);
