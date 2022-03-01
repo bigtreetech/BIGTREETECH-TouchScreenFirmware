@@ -236,7 +236,7 @@ bool scanPrintFilesGcodeFs(void)
       // "sub_dir_2/cap2.gcode" -> "sub_dir_2"
       // "sub_dir_2/sub_dir_3/cap3.gcode" -> "sub_dir_2"
       //
-      strPtr = strstr(relativePath, "/");  // remove file and sub folders path (retrieve only root folder), if any
+      strPtr = strchr(relativePath, '/');  // remove file and sub folders path (retrieve only root folder), if any
       if (strPtr != NULL)
         *strPtr = '\0';
 
