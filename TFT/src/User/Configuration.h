@@ -479,7 +479,7 @@
 #define AUTO_LOAD_LEVELING 1  // Default: 1
 
 /**
- * Onboard / Printer SD
+ * Onboard / Printer SD Card
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
  * onboard SD card and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
