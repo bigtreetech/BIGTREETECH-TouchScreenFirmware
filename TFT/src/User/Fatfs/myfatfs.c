@@ -41,7 +41,7 @@ bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
 }
 
 /**
- * mount SD Card from Fatfs
+ * mount SD card from Fatfs
  * true: mount ok
  * false: mount failed
  */
