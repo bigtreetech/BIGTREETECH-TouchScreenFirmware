@@ -507,7 +507,7 @@ Please, see [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtre
 
 ### Printing from Host
 
-Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both the TFT's and mainboard's media devices and start a print that will be handled by the host (TFT or mainboard). The following actions and the related triggering G-codes are currently supported by the TFT fw:
+OctoPrint, ESP3D, Pronterface etc, connected to a TFT's serial port, can browse both the TFT's and mainboard's media devices and start a print that will be handled by the host (TFT or mainboard). The following actions and the related triggering G-codes are currently supported by the TFT fw:
 
 |                               | **TFT SD CARD**                                                                              | **TFT USB DISK**      | **onboard SD**         |
 | :---------------------------- | :------------------------------------------------------------------------------------------- | :-------------------- | :--------------------- |
@@ -532,7 +532,7 @@ Octoprint, Pronterface etc, connected to a TFT's serial port, can browse both th
 
 ### Printing from Remote Host
 
-Octoprint, Pronterface etc, connected to a TFT's or mainboard's serial port, can host a print (print handled by the host) and optionally can trigger some actions to the TFT sending specific G-codes. The following actions and the related triggering G-codes are currently supported by the TFT fw:
+OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial port, can host a print (print handled by the host) and optionally can trigger some actions to the TFT sending specific G-codes. The following actions and the related triggering G-codes are currently supported by the TFT fw:
 
 | **ACTION**                  | **G-CODE**                                                                                                                                                                                                              |
 | :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -549,7 +549,7 @@ Once on Printing menu, the **pause**, **resume** and **stop** buttons on the men
 That means, only the remote host will control the print.
 Only on print end or cancel (with triggers `print_end` or `cancel`) the TFT Printing menu is finalized (statistics available etc.) and unlocked (the menu can be closed).
 
-**NOTE:** A new plugin on Octoprint implementing the above protocol should be the preferable way (available to everyone).
+**NOTE:** A new plugin on OctoPrint implementing the above protocol should be the preferable way (available to everyone).
 
 ### Adding Gcode Thumbnails
 

@@ -68,7 +68,7 @@
 #endif
 
 // SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
-// SERIAL_PORT_X: communicating with other controllers (Octoprint, ESP3D, other UART Touch Screen etc...)
+// SERIAL_PORT_X: communicating with other controllers (OctoPrint, ESP3D, other UART Touch Screen etc...)
 #ifndef SERIAL_PORT
   #define SERIAL_PORT   _USART2  // default USART port
   #define SERIAL_PORT_2 _USART1
