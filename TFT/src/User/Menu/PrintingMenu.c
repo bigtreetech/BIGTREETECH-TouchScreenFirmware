@@ -168,7 +168,7 @@ void startRemotePrint(const char * filename)
 
   initMenuPrinting();  // initialize printing info before opening Printing menu
 
-  infoMenu.cur = 1;  // clear menu buffer when printing menu is activated by remote
+  infoMenu.cur = 1;  // clear menu buffer when Printing menu is activated by remote
   REPLACE_MENU(menuPrinting);
 }
 
@@ -189,7 +189,7 @@ void startPrint(void)
   // if restoring a print after a power failure or printing from remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (infoFile.fileCount == 0)  // clear menu buffer when printing menu is activated by remote
+  if (infoFile.fileCount == 0)  // clear menu buffer when Printing menu is activated by remote
     infoMenu.cur = 0;
 
   OPEN_MENU(menuPrinting);
