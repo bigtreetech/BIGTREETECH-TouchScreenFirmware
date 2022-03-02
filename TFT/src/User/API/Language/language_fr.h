@@ -161,7 +161,7 @@
     #define STRING_PROCESS_COMPLETED      "Processus terminé !"
     #define STRING_PROCESS_ABORTED        "Processus annulé !"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "SD TFT"
     #define STRING_READ_TFTSD_ERROR       "Erreur de lecture de la carte SD TFT !"
     #define STRING_TFTSD_INSERTED         "Carte insérée !"

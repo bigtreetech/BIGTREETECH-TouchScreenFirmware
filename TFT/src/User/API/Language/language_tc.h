@@ -161,7 +161,7 @@
     #define STRING_PROCESS_COMPLETED      "處理已完成!"
     #define STRING_PROCESS_ABORTED        "處理已被中斷!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "SD卡"
     #define STRING_READ_TFTSD_ERROR       "SD卡讀取失敗"
     #define STRING_TFTSD_INSERTED         "偵測到SD卡"
