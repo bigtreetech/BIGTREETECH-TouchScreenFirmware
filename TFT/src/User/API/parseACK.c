@@ -305,11 +305,11 @@ void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":print_start"))  // print started from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
     startRemotePrint(NULL);  // start print and open Printing menu
   }
-  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
     printEnd();
   }

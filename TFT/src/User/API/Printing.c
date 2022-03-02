@@ -717,8 +717,8 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
 {
   // pass value "false" for updateHost to let Marlin report (in case of printing from (remote) onboard SD)
   // when the host is not printing (when notification ack "Not SD printing" is caught).
-  // In case of printing from remote host (e.g. USB) or infoSettings.m27_active set to "false", the host
-  // printing status is always forced to "false" due to no other notification will be received
+  // In case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
+  // the host printing status is always forced to "false" due to no other notification will be received
 
   if (infoPrinting.printing)
   {
@@ -735,8 +735,8 @@ void setPrintResume(bool updateHost)
 {
   // pass value "true" for updateHost to report (in case of printing from (remote) onboard SD) the host is
   // printing without waiting from Marlin (when notification ack "SD printing byte" is caught).
-  // In case of printing from remote host (e.g. USB) or infoSettings.m27_active set to "false", the host
-  // printing status is always forced to "true" due to no other notification will be received
+  // In case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
+  // the host printing status is always forced to "true" due to no other notification will be received
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
