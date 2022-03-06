@@ -69,26 +69,29 @@ const GUI_RECT printinfo_val_rect[6] = {
                                 PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 #endif
 
-enum
-{
-  PRINT_ICON = (1 << 0),
-  PRINT_TOP_ROW = (1 << 1),
-  PRINT_BOTTOM_ROW = (1 << 2),
-};
-
 const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
                                 ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
 
 const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
 
 const char *const speedId[2] = {"Speed", "Flow "};
+
+#define TOGGLE_TIME    2000  // 1 seconds is 1000
+#define LAYER_DELTA    0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
+#define LAYER_TITLE    "Layer"
+#define MAX_TITLE_LEN  70
+
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
 LAYER_TYPE layerDisplayType;
+char title[MAX_TITLE_LEN] = "";
 
-#define TOGGLE_TIME  2000  // 1 seconds is 1000
-#define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
-#define LAYER_TITLE  "Layer"
+enum
+{
+  PRINT_ICON = (1 << 0),
+  PRINT_TOP_ROW = (1 << 1),
+  PRINT_BOTTOM_ROW = (1 << 2),
+};
 
 enum
 {
@@ -151,7 +154,9 @@ static void setLayerNumberTxt(char * layer_number_txt)
 // initialize printing info before opening Printing menu
 void initMenuPrinting(void)
 {
-  setPrintFilename();  // set print filename according to print originator (remote or local to TFT)
+  getPrintTitle(title, MAX_TITLE_LEN);  // get print title according to print originator (remote or local to TFT)
+  clearInfoFile();                      // as last, clear and free memory for file list
+
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
@@ -166,7 +171,9 @@ void startRemotePrint(const char * filename)
   if (!printRemoteStart(filename))
     return;
 
-  initMenuPrinting();  // initialize printing info before opening Printing menu
+  // NOTE: call just before opening Printing menu because initMenuPrinting function will
+  //       call clearInfoFile function that will clear and free memory for file list
+  initMenuPrinting();
 
   infoMenu.cur = 1;  // clear menu buffer when Printing menu is activated by remote
   REPLACE_MENU(menuPrinting);
@@ -184,13 +191,15 @@ void startPrint(void)
     return;
   }
 
-  initMenuPrinting();  // initialize printing info before opening Printing menu
-
   // if restoring a print after a power failure or printing from remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (infoFile.fileCount == 0)  // clear menu buffer when Printing menu is activated by remote
-    infoMenu.cur = 0;
+  if (!powerFailedGetRestore() && infoFile.fileCount == 0)  // if printing from remote TFT
+    infoMenu.cur = 0;                                       // clear menu buffer
+
+  // NOTE: call just before opening Printing menu because initMenuPrinting function will
+  //       call clearInfoFile function that will clear and free memory for file list
+  initMenuPrinting();
 
   OPEN_MENU(menuPrinting);
 }
@@ -588,7 +597,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
-  printingItems.title.address = getPrintFilename();  // get print filename (short or long filename with or without extension)
+  printingItems.title.address = title;
 
   menuDrawPage(&printingItems);
   printingDrawPage();

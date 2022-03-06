@@ -191,7 +191,7 @@ void menuPrintFromSource(void)
 
   if (mountFS() == true && scanPrintFiles() == true)
   {
-    if (MENU_IS_NOT(menuPrintFromSource))  // menu index has to be modified when "scanPrintFiles" (echo,error,warning popup windows)
+    if (MENU_IS_NOT(menuPrintFromSource))  // menu index has to be modified when "scanPrintFilesGcodeFs" (echo,error,warning popup windows)
       return;
 
     if (list_mode != true)
@@ -426,7 +426,7 @@ void menuPrint(void)
         break;
 
       case KEY_ICON_4:
-        if (infoPrintSummary.name[0] != 0)
+        if (infoPrintSummary.name[0] != '\0')
           printSummaryPopup();
         break;
 

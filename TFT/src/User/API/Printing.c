@@ -375,7 +375,7 @@ bool printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard SD)
 
-  // if printing from TFT or onboard SD (printStart function was called before)
+  // if printing from TFT or onboard SD, exit (printStart function was called just before)
   if (infoPrinting.printing && infoFile.source <= BOARD_SD) return false;
 
   // always clean infoPrinting first and then set the needed attributes
@@ -416,7 +416,7 @@ bool printStart(void)
       break;
 
     case BOARD_SD:
-      infoPrinting.size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
+      infoPrinting.size = request_M23_M36(infoFile.title);
       break;
 
     case TFT_USB_DISK:
@@ -750,7 +750,7 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from TFT (SD card or USB disk)
+// get gcode command from TFT (e.g. TFT SD card or TFT USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;

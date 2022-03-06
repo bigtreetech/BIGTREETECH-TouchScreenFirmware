@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}, {0}, false};
+MYFILE infoFile = {TFT_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -13,6 +13,7 @@ bool isPrintModelIcon(void)
   return infoFile.modelIcon;
 }
 
+// get FS's ID of current source
 TCHAR * getCurFileSource(void)
 {
   switch (infoFile.source)
@@ -35,6 +36,7 @@ TCHAR * getCurFileSource(void)
   }
 }
 
+// mount FS of current source
 bool mountFS(void)
 {
   switch (infoFile.source)
@@ -56,7 +58,7 @@ bool mountFS(void)
   }
 }
 
-// scan files in source
+// scan files in current source and create a file list
 bool scanPrintFiles(void)
 {
   switch (infoFile.source)
@@ -73,7 +75,7 @@ bool scanPrintFiles(void)
   }
 }
 
-// clear and free memory from file list
+// clear and free memory for file list
 void clearInfoFile(void)
 {
   uint8_t i = 0;
@@ -104,21 +106,44 @@ void clearInfoFile(void)
   infoFile.fileCount = 0;
 }
 
-// reset file list
+// clear file list and path
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
 
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
+
   infoFile.source = source;
   strcpy(infoFile.title, getCurFileSource());
+}
+
+// skip path information, if any
+char * getPathTail(void)
+{
+  // examples:
+  //
+  // "SD:/test/cap2.gcode" -> "cap2.gcode"
+  // "SD:cap.gcode" -> "cap.gcode"
+  // "Remote printing..." -> ""
+
+  char * strPtr = strrchr(infoFile.title, '/');  // remove path information, if any
+
+  if (strPtr == NULL)  // if "/" not found, it can be a filename on the root folder
+  {
+    strPtr = strchr(infoFile.title, ':');  // remove source FS information, if any
+
+    if (strPtr == NULL)  // if ":" not found, a remote host is handling a print
+      return (infoFile.title + strlen(infoFile.title));  // return an empty string
+  }
+
+  return ++strPtr;  // return path after "/" or ":"
 }
 
 // check and open folder
 bool EnterDir(const char * nextdir)
 {
-  if (strlen(infoFile.title) + strlen(nextdir) + 2 >= MAX_PATH_LEN)
+  if (strlen(infoFile.title) + strlen(nextdir) + 2 > MAX_PATH_LEN)  // "+ 2": space for "/" and terminating null character
     return false;
 
   strcat(infoFile.title, "/");
@@ -162,6 +187,14 @@ char * getFoldername(uint8_t index)
     return infoFile.longFolder[index];
   else
     return infoFile.folder[index];
+}
+
+char * getFilename(uint8_t index)
+{
+  if (infoFile.longFile[index] != NULL)
+    return infoFile.longFile[index];
+  else
+    return infoFile.file[index];
 }
 
 char * hideExtension(char * filename)
@@ -211,39 +244,38 @@ char * restoreFilenameExtension(uint8_t index)
   return filename;
 }
 
-// set print filename according to print originator (remote or local to TFT)
-void setPrintFilename(void)
+// get print filename according to print originator (remote or local to TFT)
+char * getPrintFilename(void)
 {
   // if restoring a print after a power failure or printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (infoFile.fileCount == 0)  // remove path information when Printing menu is activated by remote
-  {
-    // example: "SD:/test/cap2.gcode" -> "cap2.gcode"
+  if (infoFile.fileCount == 0)  // if no filename is available in infoFile
+    return getPathTail();       // skip path information
 
-    char * strPtr = strrchr(infoFile.title, '/');  // remove path information, if any
-
-    if (strPtr != NULL)
-      strncpy(infoFile.title, strPtr + 1, MAX_PATH_LEN);
-
-    return;
-  }
-
-  hideFilenameExtension(infoFile.fileIndex);  // hide filename extension if filename extension feature is disabled
+  return getFilename(infoFile.fileIndex);
 }
 
-// get print filename according to print originator (remote or local to TFT)
-char * getPrintFilename(void)
+// get print title according to print originator (remote or local to TFT)
+bool getPrintTitle(char * buf, uint8_t len)
 {
-  // if printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
-  // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
-  if (infoFile.fileCount == 0)
-    return infoFile.title;
+  // example: "SD:/test/cap2.gcode" -> "SD:cap2.gcode"
 
-  if (infoFile.longFile[infoFile.fileIndex] != NULL)
-    return infoFile.longFile[infoFile.fileIndex];
-  else
-    return infoFile.file[infoFile.fileIndex];
+  char * strPtr = getPrintFilename();
+
+  // "+ 2": space for terminating null character and the flag for filename extension check
+  if (strlen(getCurFileSource()) + strlen(strPtr) + 2 > len)
+  {
+    *buf = '\0';  // set buffer to empty string
+
+    return false;
+  }
+
+  strncpy(buf, getCurFileSource(), len);  // set source and set the flag for filename extension check
+  strcat(buf, strPtr);                    // append filename
+  hideExtension(buf);                     // hide filename extension if filename extension feature is disabled
+
+  return true;
 }
 
 // volume exist detect
@@ -257,7 +289,7 @@ bool volumeExists(uint8_t src)
   return volumeSrcStatus[src];
 }
 
-uint8_t (*volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
+uint8_t (* volumeInserted[FF_VOLUMES])(void) = {SD_CD_Inserted, USBH_USR_Inserted};
 
 void loopVolumeSource(void)
 {
