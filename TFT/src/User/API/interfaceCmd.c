@@ -588,8 +588,8 @@ void sendQueueCmd(void)
             sendCmd(false, avoid_terminal);
             return;
 
-          case 115:  // M115 TFT
-            if (!fromTFT && cmd_starts_with(cmd_base_index, "M115 TFT"))
+          case 115:  // M115
+            if (!fromTFT && cmd_starts_with(cmd_base_index + 5, "TFT"))  // "M115 TFT"
             {
               char buf[50];
               Serial_Puts(cmd_port,
@@ -976,7 +976,7 @@ void sendQueueCmd(void)
               {
                 uint16_t ms = cmd_value();
                 Buzzer_TurnOn(hz, ms);
-                if (!fromTFT && cmd_starts_with(cmd_base_index, "M300 TFT"))
+                if (!fromTFT && cmd_starts_with(cmd_base_index + 5, "TFT"))  // "M300 TFT"
                 {
                   sendCmd(true, avoid_terminal);
                   return;

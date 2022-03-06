@@ -656,7 +656,7 @@ void parseACK(void)
         hasFilamentData = true;
       }
       // parse and store M23, select SD file
-      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened: "))
+      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
         char file_name[MAX_PATH_LEN];
         char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
