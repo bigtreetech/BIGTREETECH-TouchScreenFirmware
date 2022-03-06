@@ -5,10 +5,10 @@
 
 #ifdef HAS_EMULATOR
 
-typedef void (*CB_INIT)(CIRCULAR_QUEUE *);
-typedef void (*CB_DEINIT)(void);
-typedef bool (*CB_DATA)(uint8_t *);
-typedef void (*CB_PARSE)(uint8_t);
+typedef void (* CB_INIT)(CIRCULAR_QUEUE *);
+typedef void (* CB_DEINIT)(void);
+typedef bool (* CB_DATA)(uint8_t *);
+typedef void (* CB_PARSE)(uint8_t);
 
 void menuMarlinMode(void)
 {

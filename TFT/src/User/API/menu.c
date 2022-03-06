@@ -642,7 +642,7 @@ MENU_TYPE getMenuType(void)
 }
 
 void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void(*action_redraw)(uint8_t position, uint8_t is_press),
+             void (*action_redraw)(uint8_t position, uint8_t is_press),
              void (*menu_redraw)(void))
 {
   menuType = menu_type;
@@ -1233,20 +1233,22 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
-  // Get Gcode command from the file to be printed
+  // Get gcode command from the file to be printed
   loopPrintFromTFT();  // handle a print from TFT, if any
-  // Parse and send Gcode commands in the queue
+
+  // Parse and send gcode commands in the queue
   sendQueueCmd();
+
   // Parse the received slave response information
   parseACK();
 
   if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
   {
-    parseComment();  // Parse comment from gCode file
+    parseComment();  // Parse comment from gcode file
   }
 
   #ifdef SERIAL_PORT_2
-    // Parse the received Gcode from other UART, such as: ESP3D, etc...
+    // Parse the received gcode from other UART, such as ESP3D etc...
     parseRcvGcode();
   #endif
 
@@ -1311,7 +1313,7 @@ void loopBackEnd(void)
 
   // Query RRF status
   rrfStatusQuery();
-}  // loopBackEnd
+}
 
 // UI-related background loop tasks
 void loopFrontEnd(void)

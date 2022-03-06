@@ -373,8 +373,9 @@
  *   Value range: [min: 0, max: 6]
  */
 #define EXTRUDER_COUNT  1  // Default: 1
-#define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
-                           // of the number of extruders)
+
+// For mixing extruder set to 1 (this option turns off auto detection of the number of extruders)
+#define MIXING_EXTRUDER 0  // Default: 0
 
 /**
  * Fan Count
@@ -479,9 +480,9 @@
 #define AUTO_LOAD_LEVELING 1  // Default: 1
 
 /**
- * Onboard / Printer SD
+ * Onboard / Printer SD Card
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
- * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
+ * onboard SD card and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
 
@@ -1149,7 +1150,7 @@
 #define NOZZLE_PAUSE_M601  // Default: uncommented (enabled)
 
 /**
- * M701, M702: Marlin Filament Load / Unload Gcodes Support
+ * M701, M702: Marlin Filament Load / Unload G-codes Support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
@@ -1213,7 +1214,7 @@
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for Touch Mode and if BUZZER_PIN is set or available.
  *
- * NOTE: Test audio output with the G-Code:
+ * NOTE: Test audio output with the G-code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
@@ -1373,7 +1374,7 @@
 #define LIVE_TEXT_BG_COLOR_STATUS 0  // Default: 0 (disabled)
 
 /**
- * Show Embedded Thumbnails Of Gcode Files
+ * Show Embedded Thumbnails Of G-code Files
  *
  * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
  *       allocated RAM. Therefore this option is only suitable for devices >96KB RAM.
