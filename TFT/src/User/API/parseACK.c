@@ -655,23 +655,22 @@ void parseACK(void)
         }
         hasFilamentData = true;
       }
-      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
+      // parse and store M23, select SD file
+      else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened: "))
       {
-        char * fileEndString;
-
-        // Marlin
-        fileEndString = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
+        char file_name[MAX_PATH_LEN];
+        char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 
         uint16_t start_index = ack_index;
-        uint16_t end_index = ack_continue_seen(fileEndString) ? (ack_index - strlen(fileEndString)) : start_index;
-        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - strlen(getCurFileSource()) - 1);
-        char file_name[MAX_PATH_LEN];
-        sprintf(file_name, "%s/", getCurFileSource());
-        strncat(file_name, dmaL2Cache + start_index, path_len);
-        file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
+        uint16_t end_index = ack_continue_seen(end_string) ? (ack_index - strlen(end_string)) : start_index;
+        uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - 1);
+
+        memcpy(file_name, dmaL2Cache + start_index, path_len);
+        file_name[path_len] = '\0';
 
         printRemoteStart(file_name);
       }
+      // parse and store M27
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
                ack_seen("Not SD printing"))  // if printing from (remote) onboard SD
@@ -689,6 +688,7 @@ void parseACK(void)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
+      // parse and store M24, printing from (remote) onboard SD completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
                ack_seen("Done printing file"))  // if printing from (remote) onboard SD
@@ -809,10 +809,7 @@ void parseACK(void)
       // parse and store M420 V1 T1 or M420 Sxx or M503, ABL state (e.g. from Bed Leveling menu)
       else if (ack_seen("echo:Bed Leveling"))
       {
-        if (ack_continue_seen("ON"))
-          setParameter(P_ABL_STATE, 0, ENABLED);
-        else
-          setParameter(P_ABL_STATE, 0, DISABLED);
+        setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
       }
       else if (ack_seen("echo:Fade Height"))
       {
@@ -877,10 +874,8 @@ void parseACK(void)
 
         if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
         {
-          if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f)
-            setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter>0.01 to enable  volumetric extrusion
-          else
-            setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter<=0.01 to disable volumetric extrusion
+          // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+          setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
         }
       }
       // parse and store max acceleration (units/s2)
@@ -1034,6 +1029,10 @@ void parseACK(void)
       {
         uint8_t i = (ack_seen("T")) ? ack_value() : 0;
         if (ack_seen("K")) setParameter(P_LIN_ADV, i, ack_value());
+      }
+      else if (ack_seen("Advance K="))  // newest Marlin (e.g. 2.0.9.3) returns this ACK for M900 command
+      {
+        setParameter(P_LIN_ADV, heatGetCurrentTool(), ack_value());
       }
       // parse and store stepper motor current
       else if (ack_seen("M906"))
@@ -1219,7 +1218,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command
         {
           ackPopupInfo("ZProbe triggered before move.\nAborting Print!");
         }
@@ -1227,16 +1226,14 @@ void parseACK(void)
         else if (ack_seen("Volumetric extrusion is disabled"))
         {
           setParameter(P_FILAMENT_DIAMETER, 0, 0);
-          setParameter(P_FILAMENT_DIAMETER, 1, 0.0F);
+          setParameter(P_FILAMENT_DIAMETER, 1, 0.0f);
         }
         // parse and store volumetric extrusion M200 response of Smoothieware
         else if (ack_seen("Filament Diameter:"))
         {
           setParameter(P_FILAMENT_DIAMETER, 1, ack_value());
-          if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01F)
-            setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter > 0.01 to enable  volumetric extrusion
-          else
-            setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter <= 0.01 to disable volumetric extrusion
+          // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+          setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
         }
       }
     }
