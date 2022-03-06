@@ -168,7 +168,7 @@ extern "C" {
 #define LANG_KEY_PROCESS_COMPLETED            "label_process_completed:"
 #define LANG_KEY_PROCESS_ABORTED              "label_process_aborted:"
 
-// TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+// TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
 #define LANG_KEY_TFTSD                        "label_tftsd:"
 #define LANG_KEY_READ_TFTSD_ERROR             "label_read_tftsd_error:"
 #define LANG_KEY_TFTSD_INSERTED               "label_tftsd_inserted:"

@@ -168,7 +168,7 @@ X_WORD (PROCESS_RUNNING)
 X_WORD (PROCESS_COMPLETED)
 X_WORD (PROCESS_ABORTED)
 
-// TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+// TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
 X_WORD (TFTSD)
 X_WORD (READ_TFTSD_ERROR)
 X_WORD (TFTSD_INSERTED)

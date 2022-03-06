@@ -96,7 +96,7 @@ char *request_M20(void)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  //clearRequestCommandInfo();  // shall be call after copying the buffer ...
+  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
 
@@ -122,7 +122,7 @@ char *request_M33(char *filename)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  //clearRequestCommandInfo();  // shall be call after copying the buffer ...
+  //clearRequestCommandInfo();  //shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
 }
 
@@ -176,7 +176,7 @@ long request_M23_M36(char *filename)
     return 0;
   }
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-    mustStoreCmd("M23 /%s\n", filename);  // send M23 for reprap firmware
+    mustStoreCmd("M23 /%s\n", filename);  //send M23 for reprap firmware
   // Find file size and report its.
   char *ptr;
   long size = strtol(strstr(requestCommandInfo.cmd_rev_buf, sizeTag) + offset, &ptr, 10);

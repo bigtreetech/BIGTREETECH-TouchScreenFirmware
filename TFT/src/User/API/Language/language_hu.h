@@ -161,7 +161,7 @@
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
-    // TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "TFT-SD"
     #define STRING_READ_TFTSD_ERROR       "TFT-SD olvasási hiba!"
     #define STRING_TFTSD_INSERTED         "SD-Kártya behelyezve!"

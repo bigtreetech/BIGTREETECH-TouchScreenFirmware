@@ -161,7 +161,7 @@
     #define STRING_PROCESS_COMPLETED      "Процес завершений!"
     #define STRING_PROCESS_ABORTED        "Процес перерваний!"
 
-    // TFT SD Card, TFT USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
+    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
     #define STRING_TFTSD                  "SD екрану"
     #define STRING_READ_TFTSD_ERROR       "Не можу прочитати SD картку!"
     #define STRING_TFTSD_INSERTED         "SD карта вставлена!"

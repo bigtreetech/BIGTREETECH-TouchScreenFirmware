@@ -1306,7 +1306,7 @@ void loopBackEnd(void)
 
   // Query RRF status
   rrfStatusQuery();
-}
+}  // loopBackEnd
 
 // UI-related background loop tasks
 void loopFrontEnd(void)
