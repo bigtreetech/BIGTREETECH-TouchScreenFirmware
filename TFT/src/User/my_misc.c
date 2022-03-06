@@ -137,20 +137,3 @@ double stringToDouble(char *str, char **endptr)
 
   return val * sign;
 }
-
-// strip out any trailing checksum that might be in the string
-void stripChecksum(char *str)
-{
-  // example:
-  // "str" = "SD:/test/cap2.gcode*36"
-
-  // "SD:/test/cap2.gcode*36" -> "SD:/test/cap2.gcode"
-  for (; *str != '\0'; str++)
-  {
-    if (*str == '*' || *str == '\n' || *str == '\r')
-    {
-      *str = '\0';
-      break;
-    }
-  }
-}

@@ -311,25 +311,6 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
-void setInfoFile(const char * sdCardKeyword)
-{
-  // example:
-  //
-  // "cmd_ptr + cmd_index" = "M23 SD:/test/cap2.gcode*36"
-  // "sdCardKeyword" = "M23 SD:"
-  //
-  // "infoFile.title" = "SD:/test/cap2.gcode"
-
-  if (cmd_start_with(cmd_ptr, sdCardKeyword))
-    infoFile.source = TFT_SD;        // set source first
-  else
-    infoFile.source = TFT_USB_DISK;  // set source first
-
-  resetInfoFile();                                                 // then reset infoFile (source is restored)
-  strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);  // set title as last
-  stripChecksum(infoFile.title);
-}
-
 // Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
 {
@@ -394,11 +375,22 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M20 SD:") ||
                   cmd_start_with(cmd_ptr, "M20 U:"))
               {
-                // example: "M20 SD:/test"
-                setInfoFile("M20 SD:");
+                if (cmd_start_with(cmd_ptr, "M20 SD:"))
+                  infoFile.source = TFT_SD;
+                else
+                  infoFile.source = TFT_USB_DISK;
 
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
+                // strip out any checksum that might be in the string
+                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0; i++)
+                {
+                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') || (infoFile.title[i] == '\r'))
+                  {
+                    infoFile.title[i] = 0;
+                    break;
+                  }
+                }
                 Serial_Puts(cmd_port, "Begin file list\n");
-                // then mount FS and scan for files (infoFile.source and infoFile.title are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
@@ -426,16 +418,29 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M23 SD:") ||
                   cmd_start_with(cmd_ptr, "M23 U:"))
               {
-                // example: "M23 SD:/test/cap2.gcode"
-                setInfoFile("M23 SD:");
+                if (cmd_start_with(cmd_ptr, "M23 SD:"))
+                  infoFile.source = TFT_SD;
+                else
+                  infoFile.source = TFT_USB_DISK;
+
+                resetInfoFile();
+                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
+                // strip out any checksum that might be in the string
+                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0 ; i++)
+                {
+                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') ||(infoFile.title[i] == '\r'))
+                  {
+                    infoFile.title[i] = 0;
+                    break;
+                  }
+                }
 
                 Serial_Puts(cmd_port, "echo:Now fresh file: ");
                 Serial_Puts(cmd_port, infoFile.title);
                 Serial_Puts(cmd_port, "\n");
 
                 FIL tmp;
-                // then mount FS and open the file (infoFile.source and infoFile.title are used)
-                if (mountFS() == true && f_open(&tmp, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+                if (mountFS() && (f_open(&tmp, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK))
                 {
                   char buf[10];
                   sprintf(buf, "%d", f_size(&tmp));
@@ -488,7 +493,7 @@ void sendQueueCmd(void)
           case 25:  // M25
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -508,7 +513,7 @@ void sendQueueCmd(void)
             }
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
               {
                 if (cmd_seen('C'))
                 {
@@ -554,20 +559,31 @@ void sendQueueCmd(void)
               if (cmd_start_with(cmd_ptr, "M30 SD:") ||
                   cmd_start_with(cmd_ptr, "M30 U:"))
               {
-                // example: "M30 SD:/test/cap2.gcode"
-                setInfoFile("M30 SD:");
-
-                // then mount FS and delete the file (infoFile.source and infoFile.title are used)
-                if (mountFS() == true && f_unlink(infoFile.title) == FR_OK)
+                if (cmd_start_with(cmd_ptr, "M30 SD:"))
+                  infoFile.source = TFT_SD;
+                else
+                  infoFile.source = TFT_USB_DISK;
+                TCHAR filepath[MAX_PATH_LEN];
+                strncpy(filepath, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
+                // strip out any checksum that might be in the string
+                for (int i = 0; i < MAX_PATH_LEN && filepath[i] != 0 ; i++)
+                {
+                  if ((filepath[i] == '*') || (filepath[i] == '\n') || (filepath[i] == '\r'))
+                  {
+                    filepath[i] = 0;
+                    break;
+                  }
+                }
+                if ((mountFS() == true) && (f_unlink (filepath) == FR_OK))
                 {
                   Serial_Puts(cmd_port, "File deleted: ");
-                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, filepath);
                   Serial_Puts(cmd_port, ".\nok\n");
                 }
                 else
                 {
                   Serial_Puts(cmd_port, "Deletion failed, File: ");
-                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, filepath);
                   Serial_Puts(cmd_port, ".\nok\n");
                 }
                 sendCmd(true, avoid_terminal);
@@ -604,7 +620,7 @@ void sendQueueCmd(void)
           case 125:  // M125
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -619,7 +635,7 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
@@ -790,7 +806,15 @@ void sendQueueCmd(void)
             CMD message;
 
             strncpy(message, &cmd_ptr[cmd_index + 4], CMD_MAX_SIZE);
-            stripChecksum(message);
+            // strip out any checksum that might be in the string
+            for (int i = 0; i < CMD_MAX_SIZE && message[i] != 0; i++)
+            {
+              if (message[i] == '*')
+              {
+                message[i] = 0;
+                break;
+              }
+            }
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
