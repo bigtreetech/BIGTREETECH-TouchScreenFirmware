@@ -172,8 +172,8 @@
     #define STRING_USB_DISK_INSERTED      "Pen drive inserita"
     #define STRING_USB_DISK_REMOVED       "Pen drive rimossa"
     #define STRING_USB_DISK_NOT_DETECTED  "Pen drive non rilevata!"
-    #define STRING_ONBOARDSD              "SD su SKR"
-    #define STRING_READ_ONBOARDSD_ERROR   "Errore lettura SD su SKR!"
+    #define STRING_ONBOARDSD              "SD scheda"
+    #define STRING_READ_ONBOARDSD_ERROR   "Errore lettura media su scheda!"
     #define STRING_FILAMENT_RUNOUT        "Filamento finito!"
 
     // Steppers, Print, Probe Process Commands / Status / Info
