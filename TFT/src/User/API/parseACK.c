@@ -670,7 +670,7 @@ void parseACK(void)
         strncat(file_name, dmaL2Cache + start_index, path_len);
         file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        printRemoteStart(file_name);
+        startRemotePrint(file_name);  // start print and open Printing menu
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
