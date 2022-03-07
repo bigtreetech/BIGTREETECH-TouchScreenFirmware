@@ -525,6 +525,7 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's serial port, can browse 
 | **stop file write**           |                                                                                                                                                   |                                                      | `M29`                  |
 | **delete file**               | `M30 SD:<file path>`<br>or<br>`M30 S <file path>`<br><br>Examples:<br>`M30 SD:cap.gcode`<br>`M30 SD:/test/cap2.gcode`<br>`M30 S /test/cap2.gcode` | `M30 U:<file path>`<br>or<br>`M30 U <file path>`     | `M30 <file path>`      |
 | **firmware info**             | `M115 TFT`                                                                                                                                        | `M115 TFT`                                           | `M115`                 |
+| **play tone**                 | `M300 TFT [P<ms>] [S<Hz>]`                                                                                                                        | `M300 TFT [P<ms>] [S<Hz>]`                           | `M300 [P<ms>] [S<Hz>]` |
 
 **NOTES:**
 - TFT's media devices, if any, does not need to be initialized/released
