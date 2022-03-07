@@ -1241,7 +1241,7 @@
 
 /**
  * Smart Home
- * If enabled, long press "Back" button triggers Home screen
+ * If enabled, long press "Back" button triggers Home screen.
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
  * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode".
  */
