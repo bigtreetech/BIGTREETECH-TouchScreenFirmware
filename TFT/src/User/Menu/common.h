@@ -95,7 +95,13 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
 
 NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void));
 
-void cooldownTemperature(void);
+#ifdef SAFETY_ALERT
+  void cooldownTemperature(void);
+
+  #define COOLDOWN_TEMPERATURE() cooldownTemperature()
+#else
+  #define COOLDOWN_TEMPERATURE()
+#endif
 
 #ifdef __cplusplus
 }

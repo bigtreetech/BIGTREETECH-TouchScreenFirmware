@@ -154,7 +154,7 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_7:
-        cooldownTemperature();
+        COOLDOWN_TEMPERATURE();
         CLOSE_MENU();
         break;
 

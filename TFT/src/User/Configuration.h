@@ -1234,10 +1234,16 @@
 #define BTT_BOOTSCREEN_TIME 3000  // Default: 3000
 
 /**
+ * Safety Alert
+ * If enabled, safety alert popup messages are shown by some menus (e.g. heaters still on when leaving some menus).
+ */
+#define SAFETY_ALERT  // Default: uncommented (enabled)
+
+/**
  * Smart Home
  * If enabled, long press "Back" button triggers Home screen
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
- * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode".
  */
 #define SMART_HOME  // Default: uncommented (enabled)
 
