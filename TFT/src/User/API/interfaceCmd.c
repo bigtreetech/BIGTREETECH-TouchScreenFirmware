@@ -337,12 +337,12 @@ bool initRemoteTFT()
 {
   // examples:
   //
-  // "cmd_ptr + cmd_base_index" = "M23 SD:/test/cap2.gcode*36"
-  // "cmd_ptr + cmd_base_index" = "M23 S /test/cap2.gcode*36"
+  // "cmd_ptr" = "N1 M23 SD:/test/cap2.gcode*36\n"
+  // "cmd_ptr" = "N1 M23 S /test/cap2.gcode*36\n"
   //
   // "infoFile.path" = "SD:/test/cap2.gcode"
 
-  uint8_t i = cmd_base_index + 4;
+  uint8_t i = cmd_base_index + 4;  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
 
   if (cmd_starts_with(i, "SD:") || cmd_starts_with(i, "S"))
     infoFile.source = TFT_SD;        // set source first
@@ -353,8 +353,9 @@ bool initRemoteTFT()
 
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
-  strcpy(path, &cmd_ptr[cmd_index]);  // cmd_index was set by cmd_starts_with function
-  stripChecksum(path);
+  // cmd_index was set by cmd_starts_with function
+  strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
+  stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
 
   resetInfoFile();            // then reset infoFile (source is restored)
   EnterDir(stripHead(path));  // set title as last
@@ -418,11 +419,12 @@ void writeRemoteTFT()
 {
   // examples:
   //
-  // "cmd_ptr + cmd_base_index" = "N0 M28*36"
-  // "cmd_ptr + cmd_base_index" = "N1 G28*46"
-  // "cmd_ptr + cmd_base_index" = "N2 M29*56"
+  // "cmd_ptr" = "N1 G28*46\n"
+  // "cmd_ptr" = "N2 G29*56\n"
+  // "cmd_ptr" = "N3 M29*66\n"
 
-  if (cmd_starts_with(cmd_base_index, "M29"))
+  // if M29, stop writing mode
+  if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*66\n" -> "M29*66\n"
   {
     f_close(&file);
 
@@ -433,20 +435,17 @@ void writeRemoteTFT()
   else
   {
     UINT br;
-    CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
-    const char * strPtr;
-    uint32_t strLen;
+    CMD cmd;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
+    uint32_t cmdLen;
 
-    strcpy(path, &cmd_ptr[cmd_base_index]);
-    stripChecksum(path);
-    strPtr = stripHead(path);
-    strLen = strlen(strPtr);
+    strcpy(cmd, &cmd_ptr[cmd_base_index]);  // e.g. "N1 G28*46\n" -> "G28*46\n"
+    stripChecksum(cmd);                     // e.g. "G28*46\n" -> "G28"
+    cmdLen = strlen(cmd);
 
-    f_write(&file, strPtr, strLen, &br);
+    f_write(&file, cmd, cmdLen, &br);
 
-    if (strLen == 0 || strPtr[strLen - 1] != '\n')  // it happens in case the command had checksum (that we removed before)
-      f_write(&file, "\n", 1, &br);
-
+    // "\n" is always removed by stripChecksum function even if there is no checksum, so we need to write it on file separately
+    f_write(&file, "\n", 1, &br);
     f_sync(&file);
   }
 
@@ -462,13 +461,16 @@ void sendQueueCmd(void)
   bool avoid_terminal = false;
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
 
-  // skip line number from stored gcode for internal parsing purpose
-  if (cmd_ptr[0] == 'N')
-  {
-    cmd_base_index = strcspn(cmd_ptr, " ") + 1;
-  }
+  // skip initial spaces
+  cmd_base_index = stripHead(cmd_ptr) - cmd_ptr;                   // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
 
-  cmd_index = cmd_base_index + 1;  // index to read the gcode value (e.g. "M20" -> "20")
+  // skip line number from stored gcode for internal parsing purpose
+  if (cmd_ptr[cmd_base_index] == 'N')                              // e.g. "N1   G28*46\n"
+    cmd_base_index = strcspn(&cmd_ptr[cmd_base_index], " ") + 1;   // e.g. "N1   G28*46\n" -> "  G28*46\n"
+
+  // set index to gcode character and gcode value
+  cmd_base_index = stripHead(cmd_ptr + cmd_base_index) - cmd_ptr;  // e.g. "  G28*46\n" -> "G28*46\n"
+  cmd_index = cmd_base_index + 1;                                  // e.g. "G28*46\n" -> "28*46\n"
 
   if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
   {
@@ -484,7 +486,7 @@ void sendQueueCmd(void)
     }
     else  // otherwise, if the command is from remote to onboard media
     {
-      if (cmd_value() == 29)  // if M29, stop writing mode
+      if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
         writing_mode = NO_WRITING;
 
       if (sendCmd(false, avoid_terminal) == true)  // if command was sent
@@ -530,7 +532,7 @@ void sendQueueCmd(void)
           case 20:  // M20
             if (!fromTFT)
             {
-              if (initRemoteTFT())  // examples: "M20 SD:/test", "M20 S /test"
+              if (initRemoteTFT())  // examples: "M20 SD:/test\n", "M20 S /test\n"
               {
                 Serial_Puts(cmd_port, "Begin file list\n");
 
@@ -562,7 +564,7 @@ void sendQueueCmd(void)
           case 23:  // M23
             if (!fromTFT)
             {
-              if (initRemoteTFT())  // examples: "M23 SD:/test/cap2.gcode", "M23 S /test/cap2.gcode"
+              if (initRemoteTFT())  // examples: "M23 SD:/test/cap2.gcode\n", "M23 S /test/cap2.gcode\n"
               {
                 openRemoteTFT(false);
 
@@ -650,7 +652,7 @@ void sendQueueCmd(void)
           case 28:  // M28
             if (!fromTFT)
             {
-              if (initRemoteTFT())  // examples: "M28 SD:/test/cap2.gcode", "M28 S /test/cap2.gcode"
+              if (initRemoteTFT())  // examples: "M28 SD:/test/cap2.gcode\n", "M28 S /test/cap2.gcode\n"
               {
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
                   writing_mode = TFT_WRITING;
@@ -680,7 +682,7 @@ void sendQueueCmd(void)
           case 30:  // M30
             if (!fromTFT)
             {
-              if (initRemoteTFT())  // examples: "M30 SD:/test/cap2.gcode", "M30 S /test/cap2.gcode"
+              if (initRemoteTFT())  // examples: "M30 SD:/test/cap2.gcode\n", "M30 S /test/cap2.gcode\n"
               {
                 // then mount FS and delete the file (infoFile.source and infoFile.title are used)
                 if (mountFS() == true && f_unlink(infoFile.title) == FR_OK)
