@@ -141,7 +141,7 @@ double stringToDouble(char *str, char **endptr)
 // strip out any leading " ", ":" or "/" character that might be in the string
 const char *stripHead(const char *str)
 {
-  // example: " :/test/cap2.gcode" -> "test/cap2.gcode"
+  // example: " :/test/cap2.gcode\n" -> "test/cap2.gcode\n"
 
   for (; *str != '\0'; str++)
   {
@@ -155,7 +155,7 @@ const char *stripHead(const char *str)
 // strip out any trailing checksum that might be in the string
 void stripChecksum(char *str)
 {
-  // example: "/test/cap2.gcode*36" -> "/test/cap2.gcode"
+  // example: "/test/cap2.gcode*36\n" -> "/test/cap2.gcode"
 
   for (; *str != '\0'; str++)
   {
