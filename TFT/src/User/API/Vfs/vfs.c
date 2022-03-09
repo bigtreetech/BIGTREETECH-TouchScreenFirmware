@@ -24,9 +24,9 @@ TCHAR * getCurFileSource(void)
     case TFT_USB_DISK:
       return USBDISK_ROOT_DIR;
 
-    case BOARD_SD:
-    case BOARD_SD_REMOTE:
-      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
+    case BOARD_MEDIA:
+    case BOARD_MEDIA_REMOTE:
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
 
     case REMOTE_HOST:
       return "Remote printing...";
@@ -67,7 +67,7 @@ bool scanPrintFiles(void)
     case TFT_USB_DISK:
       return scanPrintFilesFatFs();
 
-    case BOARD_SD:
+    case BOARD_MEDIA:
       return scanPrintFilesGcodeFs();
 
     default:
