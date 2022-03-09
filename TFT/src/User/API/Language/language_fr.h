@@ -174,8 +174,8 @@
     #define STRING_USB_DISK_REMOVED       "Clé USB retirée !"
     #define STRING_USB_DISK_NOT_DETECTED  "Aucune clé USB détectée."
     #define STRING_ONBOARDSD              "SD CM"
-    #define STRING_ONBOARDUSB             "USB CM"
-    #define STRING_READ_ONBOARDSD_ERROR   "Erreur de lecture du port de la carte mère !"
+    #define STRING_ONBOARDUSB             "USB interne"
+    #define STRING_READ_ONBOARDSD_ERROR   "Erreur de lecture de la media interne !"
     #define STRING_FILAMENT_RUNOUT        "Fin de Filament !"
 
     // Steppers, Print, Probe Process Commands / Status / Info
