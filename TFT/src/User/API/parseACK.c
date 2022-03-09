@@ -305,11 +305,11 @@ void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":print_start"))  // print started from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
     printRemoteStart(NULL);
   }
-  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
     printEnd();
   }
@@ -444,7 +444,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
     }
 
-    // onboard media Gcode command response
+    // onboard media gcode command response
 
     if (requestCommandInfo.inWaitResponse)
     {
@@ -508,7 +508,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
       goto parse_end;
     }
-    // onboard media Gcode command response end
+    // onboard media gcode command response end
 
     if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
@@ -688,7 +688,7 @@ void parseACK(void)
         setPrintProgress(ack_value(), ack_second_value());
         //powerFailedCache(position);
       }
-      // parse and store M24, printing from (remote) onboard SD completed
+      // parse and store M24, printing from (remote) onboard media completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
                ack_seen("Done printing file"))  // if printing from (remote) onboard media
