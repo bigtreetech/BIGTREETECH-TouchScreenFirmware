@@ -222,7 +222,7 @@ typedef enum
 bool getConfigFromFile(char * configPath);
 bool getLangFromFile(char * rootDir);
 
-bool readConfigFile(const char * path, void (*lineParser)(), uint16_t maxLineLen);
+bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen);
 
 void parseConfigLine(void);
 void parseLangLine(void);
