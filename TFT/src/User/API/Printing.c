@@ -375,7 +375,7 @@ bool printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard media)
 
-  // if printing from TFT media or onboard media, exit (printStart function was called just before)
+  // if printing from TFT or onboard media, exit (printStart function was called just before)
   if (infoPrinting.printing && infoFile.source <= BOARD_MEDIA) return false;
 
   // always clean infoPrinting first and then set the needed attributes
@@ -391,7 +391,7 @@ bool printRemoteStart(const char * filename)
     resetInfoFile();                       // then reset infoFile (source is restored)
     EnterDir(filename);                    // set title as last
 
-    request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard SD
+    request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
   else
   {
@@ -411,7 +411,7 @@ bool printStart(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:      // present just to make the code robust. It should never be executed
+    case REMOTE_HOST:         // present just to make the code robust. It should never be executed
     case BOARD_MEDIA_REMOTE:
       break;
 
@@ -463,7 +463,7 @@ bool printStart(void)
     sendPrintCodes(0);
   }
 
-  if (infoFile.source == BOARD_SD)
+  if (infoFile.source == BOARD_MEDIA)
   {
     //infoHost.printing = true;                  // Not so fast! Let Marlin tell that it started printing!
     request_M24(0);                              // start print from onboard SD
@@ -481,7 +481,7 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:      // nothing to do
+    case REMOTE_HOST:         // nothing to do
     case BOARD_MEDIA_REMOTE:
       break;
 
@@ -744,7 +744,7 @@ void setPrintResume(bool updateHost)
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "true"
   if (updateHost || infoFile.source == REMOTE_HOST || !infoSettings.m27_active)
   {
-    // if printing from (remote) media or remote host
+    // if printing from (remote) onboard media or remote host
     if (infoPrinting.printing && infoFile.source >= BOARD_MEDIA)
       infoHost.printing = true;
   }
