@@ -254,7 +254,7 @@ bool scanPrintFilesGcodeFs(void)
       //
       // examples:
       //
-      // "infoFile.title" = "bSD:/sub_dir"
+      // "infoFile.title" = "bMD:/sub_dir"
       // "relativePath" = "sub_dir_2/cap2.gcode"
       // "relativePath" = "sub_dir_2/sub_dir_3/cap3.gcode"
 
