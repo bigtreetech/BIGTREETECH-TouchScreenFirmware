@@ -421,10 +421,10 @@ void printStart(FIL * file, uint32_t size)
     case BOARD_MEDIA_REMOTE:
       return;
 
-    case BOARD_SD:
-      //infoHost.printing = true;                  // Not so fast! Let Marlin tell that it started printing!
-      request_M24(0);                              // start print from onboard SD
-      request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard SD
+    case BOARD_MEDIA:
+      //infoHost.printing = true;                  // Not so fast! Let Marlin tell that he started printing!
+      request_M24(0);                              // start print from onboard media
+      request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
       break;
 
     case TFT_USB_DISK:
