@@ -341,6 +341,7 @@ typedef struct
   uint8_t emergencyParser;
   uint8_t promptSupport;
   uint8_t onboardSD;
+  uint8_t multiVolume;
   uint8_t autoReportSDStatus;
   uint8_t longFilename;
   uint8_t babyStepping;
