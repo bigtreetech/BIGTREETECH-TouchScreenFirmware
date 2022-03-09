@@ -180,6 +180,7 @@ extern "C" {
 #define LANG_KEY_USB_DISK_REMOVED             "label_usb_disk_removed:"
 #define LANG_KEY_USB_DISK_NOT_DETECTED        "label_usb_disk_not_detected:"
 #define LANG_KEY_ONBOARDSD                    "label_onboardsd:"
+#define LANG_KEY_ONBOARDUSB                   "label_onboardusb"
 #define LANG_KEY_READ_ONBOARDSD_ERROR         "label_read_onboardsd_error:"
 #define LANG_KEY_FILAMENT_RUNOUT              "label_filament_runout:"
 

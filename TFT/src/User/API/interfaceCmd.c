@@ -507,7 +507,7 @@ void sendQueueCmd(void)
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT and purge M0/M1 command
-            if (infoFile.source < BOARD_SD)
+            if (infoFile.source < BOARD_MEDIA )
             {
               sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_M0);

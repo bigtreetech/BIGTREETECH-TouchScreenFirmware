@@ -99,7 +99,7 @@ In order the TFT firmware is able to provide all of its functionalities/features
 `M114_DETAIL` (in Configuration_adv.h)<br>
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)<br>
 
-**Options to support printing from onboard SD:**
+**Options to support printing from onboard media:**
 
 `SDSUPPORT` (in Configuration.h)<br>
 `LONG_FILENAME_HOST_SUPPORT` (in Configuration_adv.h)<br>
@@ -628,4 +628,4 @@ The inclusion of the filament data into the gCode can be automated. In Cura all 
 
 In case the gCode file has been generated using the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
 
-In case filament data is not present in the gCode, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard SD. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore. TFT SD or the onboard SD. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.
+In case filament data is not present in the gCode, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard media. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.

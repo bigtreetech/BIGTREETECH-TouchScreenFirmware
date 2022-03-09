@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "USB disk odstranjen!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SKR SD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Napaka branja SKR SD kartice!"
+    #define STRING_ONBOARDUSB             "SKR USB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Napaka branja SKR media!"
     #define STRING_FILAMENT_RUNOUT        "Ni več filamenta!"
 
     // Steppers, Print, Probe Process Commands / Status / Info
