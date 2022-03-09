@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "U Disk removido!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "OnboardSD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Erro a ler Onboard SD card!"
+    #define STRING_ONBOARDUSB             "OnboardUSB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Erro a ler Onboard media!"
     #define STRING_FILAMENT_RUNOUT        "Filamento runout!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

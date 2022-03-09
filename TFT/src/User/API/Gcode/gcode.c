@@ -73,7 +73,7 @@ bool request_M21(void)
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 
-  mustStoreCmd("M21\n");
+  mustStoreCmd((infoMachineSettings.multiVolume == ENABLED) ? ((infoFile.boardSource == BOARD_SD) ? "M21 S\n" : "M21 U\n") : "M21\n");
 
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);

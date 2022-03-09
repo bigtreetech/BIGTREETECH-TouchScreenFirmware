@@ -117,7 +117,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
 void setPrintResume(bool updateHost);
 
 void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT, if any
-void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard SD, if any
+void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
 
 #ifdef __cplusplus
 }

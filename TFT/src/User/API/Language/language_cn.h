@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "U盘已拔出!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "板载SD"
-    #define STRING_READ_ONBOARDSD_ERROR   "读板载SD卡出错!"
+    #define STRING_ONBOARDUSB             "板载USB"
+    #define STRING_READ_ONBOARDSD_ERROR   "主機板的存儲介質讀取失敗!"
     #define STRING_FILAMENT_RUNOUT        "耗材已用尽,请更换耗材!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

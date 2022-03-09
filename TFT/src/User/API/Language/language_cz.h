@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "USB disk vyjmut!"
     #define STRING_USB_DISK_NOT_DETECTED  "USB není detekován."
     #define STRING_ONBOARDSD              "Onboard SD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Chyba při čtení Onboard SD!"
+    #define STRING_ONBOARDUSB             "Onboard USB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Chyba při čtení Onboard media!"
     #define STRING_FILAMENT_RUNOUT        "Došel filament!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

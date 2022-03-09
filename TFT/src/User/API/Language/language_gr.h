@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "Ο USB Δίσκος αφαιρέθηκε!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "Ενσωματωμένη κάρτα SD"
+    #define STRING_ONBOARDUSB             "Ενσωματωμένη κάρτα USB"
     #define STRING_READ_ONBOARDSD_ERROR   "Σφάλμα ανάγνωσης ενσωματωμένης κάρτας SD!"
     #define STRING_FILAMENT_RUNOUT        "τελείωσε το νημά!"
 

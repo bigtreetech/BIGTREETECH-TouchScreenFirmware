@@ -20,14 +20,21 @@ typedef enum
 {
   TFT_SD,
   TFT_USB_DISK,
-  BOARD_SD,
-  BOARD_SD_REMOTE,
+  BOARD_MEDIA,
+  BOARD_MEDIA_REMOTE,
   REMOTE_HOST
 } FS_SOURCE;
+
+typedef enum
+{
+  BOARD_SD,
+  BOARD_USB
+} ONBOARD_SOURCE;
 
 typedef struct
 {
   FS_SOURCE source;                // selected file source. TFT or onboard SD
+  ONBOARD_SOURCE boardSource;      // SD or USB for onboard media only
   TCHAR title[MAX_PATH_LEN];       // selected file path
   TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard SD only
   TCHAR * folder[FOLDER_NUM];      // folder list buffer

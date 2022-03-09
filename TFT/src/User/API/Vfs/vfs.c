@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {TFT_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
+MYFILE infoFile = {TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -47,7 +47,7 @@ bool mountFS(void)
     case TFT_USB_DISK:
       return mountUSBDisk();
 
-    case BOARD_SD:
+    case BOARD_MEDIA:
       if (infoHost.printing)
         return true;  // no mount while printing
       else
@@ -110,11 +110,13 @@ void clearInfoFile(void)
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
+  ONBOARD_SOURCE onboardSource = infoFile.boardSource;
 
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
 
   infoFile.source = source;
+  infoFile.boardSource =  onboardSource;
   strcpy(infoFile.title, getCurFileSource());
 }
 

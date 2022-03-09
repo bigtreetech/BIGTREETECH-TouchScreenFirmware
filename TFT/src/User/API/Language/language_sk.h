@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "USB disk odstránený!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD karta na doske"
-    #define STRING_READ_ONBOARDSD_ERROR   "Chyba pri načítaní SD karty na doske!"
+    #define STRING_ONBOARDUSB             "USB na doske"
+    #define STRING_READ_ONBOARDSD_ERROR   "Chyba pri načítaní media na doske!"
     #define STRING_FILAMENT_RUNOUT        "Chýba filament!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

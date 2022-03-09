@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "Флеш карта витягнута!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD на платі"
+    #define STRING_ONBOARDUSB             "USB на платі"
     #define STRING_READ_ONBOARDSD_ERROR   "Не можу прочитати SD картку!"
     #define STRING_FILAMENT_RUNOUT        "Філамент закінчився"
 

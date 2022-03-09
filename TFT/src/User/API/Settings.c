@@ -198,6 +198,7 @@ void initMachineSettings(void)
   infoMachineSettings.emergencyParser         = DISABLED;
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboardSD               = DISABLED;
+  infoMachineSettings.multiVolume             = DISABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.longFilename            = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;

@@ -119,7 +119,7 @@ const ITEM itemIsPrinting[3] = {
 static void setLayerHeightText(char * layer_height_txt)
 {
   float layer_height;
-  layer_height = (infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+  layer_height = (infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
   if (layer_height > 0)
   {
     sprintf(layer_height_txt, "%6.2fmm", layer_height);
@@ -419,7 +419,7 @@ static inline void toggleInfo(void)
 
     speedQuery();
 
-    if (infoFile.source >= BOARD_SD)
+    if (infoFile.source >= BOARD_MEDIA)
       coordinateQuery(TOGGLE_TIME / 1000);
 
     if (!hasFilamentData && isPrinting())
@@ -587,7 +587,7 @@ void menuPrinting(void)
   if (lastPrinting == true)
   {
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
-    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_SD && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after a print was done (ex: after a popup)
   {
@@ -678,7 +678,7 @@ void menuPrinting(void)
     // Z_AXIS coordinate
     if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_HEIGHT)
     {
-      curLayerHeight = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+      curLayerHeight = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
       if (prevLayerHeight != curLayerHeight)
       {
         if (ABS(curLayerHeight - usedLayerHeight) >= LAYER_DELTA)

@@ -73,13 +73,13 @@ bool scanPrintFilesGcodeFs(void)
 
     str_len = strlen(infoFile.title);
     // "line" never has "/" at the beginning of a path (e.g. "sub_dir/cap.gcode") while "infoFile.title" has it
-    // (e.g. "bSD:/sub_dir"), so we skip it during the check of current folder match (index 5 used instead of 4)
+    // (e.g. "bMD:/sub_dir"), so we skip it during the check of current folder match (index 5 used instead of 4)
     if (str_len > 5)  // we're in a subfolder
     {
-      Pstr_tmp = strstr(line, infoFile.title + 5);  // "+ 5" skips the 5 bytes related to prefix "bSD:/" in infoFile.title
+      Pstr_tmp = strstr(line, infoFile.title + 5);  // "+ 5" skips the 5 bytes related to prefix "bMD:/" in infoFile.title
       if (Pstr_tmp == NULL)  // if "line" doesn't include current folder
         continue;
-      else if (Pstr_tmp[str_len - 5] != '/')  // "- 5" skips the prefix "bSD:/" in infoFile.title
+      else if (Pstr_tmp[str_len - 5] != '/')  // "- 5" skips the prefix "bMD:/" in infoFile.title
         continue;  // because it's a file, not a folder
     }
 
@@ -88,7 +88,7 @@ bool scanPrintFilesGcodeFs(void)
       *Pstr_tmp = '\0';
 
     // e.g. "sub_dir/cap.gcode" -> "cap.gcode", "sub_dir/sub_dir_2/cap2.gcode" -> "sub_dir_2/cap.gcode"
-    char* pline = line + (str_len - 4);  // "- 4" represents the 4 bytes related to prefix "bSD:" in infoFile.title
+    char* pline = line + (str_len - 4);  // "- 4" represents the 4 bytes related to prefix "bMD:" in infoFile.title
 
     if (strchr(pline, '/') == NULL)  // if FILE
     {
