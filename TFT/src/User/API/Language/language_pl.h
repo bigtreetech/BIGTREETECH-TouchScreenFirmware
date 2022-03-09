@@ -172,8 +172,9 @@
     #define STRING_USB_DISK_INSERTED      "Dysk USB włożony!"
     #define STRING_USB_DISK_REMOVED       "Dysk USB wyjęty!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Błąd odczytu karty SD!"
+    #define STRING_ONBOARDSD              "OnboardSD"
+    #define STRING_ONBOARDUSB             "OnboardUSB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Błąd odczytu karta!"
     #define STRING_FILAMENT_RUNOUT        "Skończył się filament!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

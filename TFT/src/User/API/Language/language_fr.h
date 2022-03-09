@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "Clé USB retirée !"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD interne"
-    #define STRING_READ_ONBOARDSD_ERROR   "Erreur de lecture de la carte SD interne !"
+    #define STRING_ONBOARDUSB             "USB interne"
+    #define STRING_READ_ONBOARDSD_ERROR   "Erreur de lecture de la media interne !"
     #define STRING_FILAMENT_RUNOUT        "Fin de Filament !"
 
     // Steppers, Print, Probe Process Commands / Status / Info

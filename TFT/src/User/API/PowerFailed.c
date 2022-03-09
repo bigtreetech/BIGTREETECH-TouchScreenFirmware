@@ -52,7 +52,7 @@ bool powerFailedCreate(char *path)
 
   create_ok = false;
   if (!infoSettings.plr) return false;            // if disabled plr
-  if (infoFile.source >= BOARD_SD) return false;  // on board SD not supported now
+  if (infoFile.source >= BOARD_MEDIA) return false;  // onboard media not supported now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
 

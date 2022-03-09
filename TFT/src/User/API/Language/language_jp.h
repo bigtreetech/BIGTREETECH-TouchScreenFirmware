@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "U Diskカード出しました!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "内部 mSDカード"
+    #define STRING_ONBOARDUSB             "OnboardUSB"
     #define STRING_READ_ONBOARDSD_ERROR   "内部 mSDカードの読み取りがエラー発生しました!"
     #define STRING_FILAMENT_RUNOUT        "フィラメントランアウト!"
 

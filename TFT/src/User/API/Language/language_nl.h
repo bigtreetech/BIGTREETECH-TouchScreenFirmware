@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "U Disk verwijdert!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "OnboardSD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Onboard SD-kaart leesfout!"
+    #define STRING_ONBOARDUSB             "OnboardUSB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Onboard media leesfout!"
     #define STRING_FILAMENT_RUNOUT        "filament op!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

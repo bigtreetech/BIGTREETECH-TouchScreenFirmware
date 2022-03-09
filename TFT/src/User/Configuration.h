@@ -486,8 +486,8 @@
  */
 
 /**
- * Onboard / Printer SD Card Support
- * On Marlin firmware, the TFT will auto-detect Onboard SD Card.
+ * Onboard / Printer Media Support
+ * On Marlin firmware, the TFT will auto-detect onboard media.
  * Auto-detect is not available for other firmwares like Smoothieware.
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */

@@ -149,7 +149,7 @@ bool printPageItemSelected(uint16_t index)
     else
     {
       // load model preview in flash if icon exists
-      setPrintModelIcon(infoFile.source < BOARD_SD && model_DecodeToFlash(infoFile.title));
+      setPrintModelIcon(infoFile.source < BOARD_MEDIA && model_DecodeToFlash(infoFile.title));
 
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
@@ -204,7 +204,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if (infoFile.source == BOARD_SD)  // error when the filesystem selected from TFT not available
+    if (infoFile.source == BOARD_MEDIA)  // error when the filesystem selected from TFT not available
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
@@ -342,7 +342,7 @@ void menuPrint(void)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     list_mode = infoSettings.files_list_mode;
-    infoFile.source = BOARD_SD;
+    infoFile.source = BOARD_MEDIA;
     REPLACE_MENU(menuPrintFromSource);
     goto selectEnd;
   }
@@ -356,9 +356,11 @@ void menuPrint(void)
       #ifdef USB_FLASH_DRIVE_SUPPORT
         {ICON_USB_DISK,                LABEL_USB_DISK},
         #define ONBOARD_SD_INDEX 2
+        #define ONBOARD_USB_INDEX 3
       #else
         {ICON_NULL,                    LABEL_NULL},
         #define ONBOARD_SD_INDEX 1
+        #define ONBOARD_USB_INDEX 2
       #endif
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
@@ -371,8 +373,17 @@ void menuPrint(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  sourceSelItems.items[ONBOARD_SD_INDEX].icon = (infoMachineSettings.onboardSD == ENABLED) ? ICON_ONBOARD_SD : ICON_NULL;
-  sourceSelItems.items[ONBOARD_SD_INDEX].label.index = (infoMachineSettings.onboardSD == ENABLED) ? LABEL_ONBOARDSD : LABEL_NULL;
+  if (infoMachineSettings.onboardSD == ENABLED)
+  {
+    sourceSelItems.items[ONBOARD_SD_INDEX].icon = ICON_ONBOARD_SD;
+    sourceSelItems.items[ONBOARD_SD_INDEX].label.index = LABEL_ONBOARDSD;
+    
+    if (infoMachineSettings.multiVolume == ENABLED)
+    {
+      sourceSelItems.items[ONBOARD_USB_INDEX].icon = ICON_USB_DISK;
+      sourceSelItems.items[ONBOARD_USB_INDEX].label.index = LABEL_ONBOARDUSB;
+    }
+  }
 
   menuDrawPage(&sourceSelItems);
 
@@ -415,17 +426,33 @@ void menuPrint(void)
           break;
 
         case KEY_ICON_2:
+        case KEY_ICON_3:
+          if (infoMachineSettings.onboardSD == ENABLED)
+          {
+            if (key_num == KEY_ICON_2)
+              infoFile.boardSource = BOARD_SD;
+            else if (infoMachineSettings.multiVolume == ENABLED)
+              infoFile.boardSource = BOARD_USB;
+            if (key_num == KEY_ICON_2 || (key_num == KEY_ICON_3 && infoMachineSettings.multiVolume == ENABLED))
       #else
         case KEY_ICON_1:
+        case KEY_ICON_2:
+          if (infoMachineSettings.onboardSD == ENABLED)
+          {
+            if (key_num == KEY_ICON_1)
+              infoFile.boardSource = BOARD_SD;
+            else if (infoMachineSettings.multiVolume == ENABLED)
+              infoFile.boardSource = BOARD_USB;
+            if ((key_num == KEY_ICON_1) || (key_num == KEY_ICON_2 && infoMachineSettings.multiVolume == ENABLED))
       #endif
-        if (infoMachineSettings.onboardSD == ENABLED)
-        {
-          list_mode = true;  // force list mode in onboard SD card
-          infoFile.source = BOARD_SD;
-          OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard SD card PLR feature
-          goto selectEnd;
-        }
-        break;
+            {
+              list_mode = true;  // force list mode in onboard media
+              infoFile.source = BOARD_MEDIA;
+              OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
+              goto selectEnd;
+            }
+          }
+          break;
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != 0)

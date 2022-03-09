@@ -173,7 +173,8 @@
     #define STRING_USB_DISK_REMOVED       "USB eltávolítva!"
     #define STRING_USB_DISK_NOT_DETECTED  "Nem észlelhető USB-lemez."
     #define STRING_ONBOARDSD              "Lap-SD"
-    #define STRING_READ_ONBOARDSD_ERROR   "Alaplap-SD olvasási hiba!"
+    #define STRING_ONBOARDUSB             "Lap-USB"
+    #define STRING_READ_ONBOARDSD_ERROR   "Alaplap média olvasási hiba!"
     #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

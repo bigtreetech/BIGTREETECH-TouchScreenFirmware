@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "¡Pendrive extret!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD Placa"
+    #define STRING_ONBOARDUSB             "USB Placa"
     #define STRING_READ_ONBOARDSD_ERROR   "Error a la targeta SD de la placa!"
     #define STRING_FILAMENT_RUNOUT        "¡Filament esgotat!"
 

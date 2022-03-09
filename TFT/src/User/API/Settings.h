@@ -18,7 +18,7 @@ extern "C" {
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20220124  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define LANGUAGE_FLASH_SIGN   20220222  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
@@ -341,6 +341,7 @@ typedef struct
   uint8_t emergencyParser;
   uint8_t promptSupport;
   uint8_t onboardSD;
+  uint8_t multiVolume;
   uint8_t autoReportSDStatus;
   uint8_t longFilename;
   uint8_t babyStepping;
