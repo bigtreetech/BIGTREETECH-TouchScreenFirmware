@@ -96,7 +96,7 @@ void clearInfoPrint(void);                            // called in PrintingMenu.
 void printComplete(void);                             // print complete
 
 // start print originated or handled by remote host
-// (e.g. print started from remote onboard SD or hosted by remote host)
+// (e.g. print started from remote onboard media or hosted by remote host)
 bool printRemoteStart(const char * filename);
 
 // start print originated or handled by TFT

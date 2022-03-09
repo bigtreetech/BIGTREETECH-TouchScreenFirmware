@@ -249,7 +249,7 @@ char * restoreFilenameExtension(uint8_t index)
 // get print filename according to print originator (remote or local to TFT)
 char * getPrintFilename(void)
 {
-  // if restoring a print after a power failure or printing from remote host, remote onboard SD or remote TFT (with M23 - M24),
+  // if restoring a print after a power failure or printing from remote host, remote onboard media or remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
   if (infoFile.fileCount == 0)  // if no filename is available in infoFile

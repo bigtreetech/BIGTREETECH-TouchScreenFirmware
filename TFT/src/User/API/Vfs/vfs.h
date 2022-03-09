@@ -33,12 +33,12 @@ typedef enum
 
 typedef struct
 {
-  FS_SOURCE source;                // selected file source. TFT or onboard SD
+  FS_SOURCE source;                // selected file source. TFT media or onboard media
   ONBOARD_SOURCE boardSource;      // SD or USB for onboard media only
   TCHAR title[MAX_PATH_LEN];       // selected file path
-  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard SD only
+  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard media only
   TCHAR * folder[FOLDER_NUM];      // folder list buffer
-  TCHAR * longFile[FILE_NUM];      // long file name buffer from onboard SD only
+  TCHAR * longFile[FILE_NUM];      // long file name buffer from onboard media only
   TCHAR * file[FILE_NUM];          // file list buffer
   uint16_t folderCount;            // current folder count
   uint16_t fileCount;              // current gcode file count

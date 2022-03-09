@@ -8,7 +8,7 @@ extern "C" {
 #include <stdbool.h>
 
 // start print originated or handled by remote host
-// (e.g. print started from remote onboard SD or hosted by remote host) and open Printing menu
+// (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
 void startRemotePrint(const char * filename);
 
 // start print originated or handled by TFT

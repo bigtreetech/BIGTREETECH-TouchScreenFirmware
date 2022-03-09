@@ -385,6 +385,9 @@ bool printRemoteStart(const char * filename)
   infoPrinting.size = 1;  // .size must be different than .cur to avoid 100% progress on TFT
   infoPrinting.printing = true;
 
+  // present just to make the code robust. It should never be used printing from remote onboard media
+  infoFile.boardSource = BOARD_SD;
+
   if (filename != NULL)
   {
     infoFile.source = BOARD_MEDIA_REMOTE;  // set source first
@@ -466,8 +469,8 @@ bool printStart(void)
   if (infoFile.source == BOARD_MEDIA)
   {
     //infoHost.printing = true;                  // Not so fast! Let Marlin tell that it started printing!
-    request_M24(0);                              // start print from onboard SD
-    request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard SD
+    request_M24(0);                              // start print from onboard media
+    request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
