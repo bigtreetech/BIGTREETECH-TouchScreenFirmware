@@ -351,6 +351,9 @@ bool initRemoteTFT()
   else
     return false;
 
+  // present just to make the code robust. It should never be used printing from remote TFT media
+  infoFile.boardSource = BOARD_SD;
+
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
   // cmd_index was set by cmd_starts_with function
@@ -423,7 +426,7 @@ void writeRemoteTFT()
   // "cmd_ptr" = "N2 G29*56\n"
   // "cmd_ptr" = "N3 M29*66\n"
 
-  // if M29, stop writing mode
+  // if M29, stop writing mode. cmd_index (used by cmd_value function) was set by sendQueueCmd function
   if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*66\n" -> "M29*66\n"
   {
     f_close(&file);
@@ -460,17 +463,24 @@ void sendQueueCmd(void)
 
   bool avoid_terminal = false;
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
+  char * strPtr = cmd_ptr;  // cmd_ptr was set by getCmd function
 
-  // skip initial spaces
-  cmd_base_index = stripHead(cmd_ptr) - cmd_ptr;                   // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
+  // skip leading spaces
+  while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
 
-  // skip line number from stored gcode for internal parsing purpose
-  if (cmd_ptr[cmd_base_index] == 'N')                              // e.g. "N1   G28*46\n"
-    cmd_base_index = strcspn(&cmd_ptr[cmd_base_index], " ") + 1;   // e.g. "N1   G28*46\n" -> "  G28*46\n"
+  // skip N[-0-9] (line number) if included in the command line
+  if (*strPtr == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28*46\n" -> "G28*46\n"
+  {
+    strPtr += 2;                             // skip N[-0-9]
+    while (NUMERIC(*strPtr)) ++strPtr;       // skip [0-9]*
+    while (*strPtr == ' ')   ++strPtr;       // skip [ ]*
+  }
 
-  // set index to gcode character and gcode value
-  cmd_base_index = stripHead(cmd_ptr + cmd_base_index) - cmd_ptr;  // e.g. "  G28*46\n" -> "G28*46\n"
-  cmd_index = cmd_base_index + 1;                                  // e.g. "G28*46\n" -> "28*46\n"
+  // set cmd_base_index with index of gcode command
+  cmd_base_index = strPtr - cmd_ptr;         // e.g. "  N1   G28*46\n" -> "G28*46\n"
+
+  // set cmd_index with index of gcode value
+  cmd_index = cmd_base_index + 1;            // e.g. "G28*46\n" -> "28*46\n"
 
   if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
   {
@@ -577,7 +587,8 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              if (infoFile.source < BOARD_SD)  // if a file was selected from TFT with M23
+
+              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
