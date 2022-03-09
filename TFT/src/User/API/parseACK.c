@@ -352,7 +352,7 @@ void hostActionCommands(void)
     {
       setPrintPause(false, PAUSE_EXTERNAL);
     }
-    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard SD
+    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard media
     {
       setPrintResume(true);
 
@@ -446,7 +446,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
     }
 
-    // onboard SD gcode command response
+    // onboard media gcode command response
 
     if (requestCommandInfo.inWaitResponse)
     {
@@ -458,7 +458,7 @@ void parseACK(void)
       else if ((requestCommandInfo.error_num > 0 && ack_seen(requestCommandInfo.errorMagic[0]))
             || (requestCommandInfo.error_num > 1 && ack_seen(requestCommandInfo.errorMagic[1]))
             || (requestCommandInfo.error_num > 2 && ack_seen(requestCommandInfo.errorMagic[2])))
-      { // parse onboard SD error
+      { // parse onboard media error
         requestCommandInfo.done = true;
         requestCommandInfo.inResponse = false;
         requestCommandInfo.inError = true;
@@ -510,7 +510,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
       goto parse_end;
     }
-    // onboard SD gcode command response end
+    // onboard media gcode command response end
 
     if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
@@ -675,14 +675,14 @@ void parseACK(void)
         printRemoteStart(file_name);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
-               ack_seen("Not SD printing"))  // if printing from (remote) onboard SD
+               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               ack_seen("Not SD printing"))  // if printing from (remote) onboard media
       {
         setPrintPause(true, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
-               ack_seen("SD printing byte"))  // if printing from (remote) onboard SD
+               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               ack_seen("SD printing byte"))  // if printing from (remote) onboard media
       {
         setPrintResume(false);
 
@@ -692,8 +692,8 @@ void parseACK(void)
         //powerFailedCache(position);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_SD && infoFile.source <= BOARD_SD_REMOTE &&
-               ack_seen("Done printing file"))  // if printing from (remote) onboard SD
+               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               ack_seen("Done printing file"))  // if printing from (remote) onboard media
       {
         printEnd();
       }
@@ -1180,6 +1180,10 @@ void parseACK(void)
       else if (ack_seen("Cap:SDCARD:") && infoSettings.onboard_sd == AUTO)
       {
         infoMachineSettings.onboardSD = ack_value();
+      }
+      else if (ack_seen("Cap:MULTI_VOLUME:"))
+      {
+        infoMachineSettings.multiVolume = ack_value();
       }
       else if (ack_seen("Cap:AUTOREPORT_SD_STATUS:"))
       {
