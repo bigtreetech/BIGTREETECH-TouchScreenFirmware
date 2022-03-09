@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "Флеш карта извлечена!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "SD платы"
+    #define STRING_ONBOARDUSB             "USB платы"
     #define STRING_READ_ONBOARDSD_ERROR   "Ошибка чтения SD карты!"
     #define STRING_FILAMENT_RUNOUT        "Пруток закончился"
 

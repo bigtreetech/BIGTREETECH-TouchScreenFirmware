@@ -94,7 +94,7 @@ void updatePrintUsedFilament(void);                   // called in PrintingMenu.
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
 void printComplete(void);                             // print complete
-void printRemoteStart(const char * filename);         // print started from remote onboard SD or remote host
+void printRemoteStart(const char * filename);         // print started from remote onboard media or remote host
 void printStart(FIL * file, uint32_t size);           // it also sends start gcode
 void printEnd(void);                                  // it also sends end gcode
 void printAbort(void);                                // it also sends cancel gcode
@@ -110,7 +110,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
 void setPrintResume(bool updateHost);
 
 void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT, if any
-void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard SD, if any
+void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
 
 #ifdef __cplusplus
 }

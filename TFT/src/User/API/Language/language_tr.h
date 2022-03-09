@@ -173,6 +173,7 @@
     #define STRING_USB_DISK_REMOVED       "USB Disk Çıkarıldı!"
     #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
     #define STRING_ONBOARDSD              "Dahili SD"
+    #define STRING_ONBOARDUSB             "Dahili USB"
     #define STRING_READ_ONBOARDSD_ERROR   "Dahili SD Okunamadı!"
     #define STRING_FILAMENT_RUNOUT        "Filaman Bitti!"
 
