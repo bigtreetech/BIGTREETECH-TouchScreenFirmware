@@ -1,6 +1,7 @@
 #include "my_misc.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -155,15 +156,31 @@ const char *stripHead(const char *str)
 // strip out any trailing checksum that might be in the string
 void stripChecksum(char *str)
 {
-  // example: "/test/cap2.gcode*36\n" -> "/test/cap2.gcode"
+  // examples:
+  //
+  // "/test/cap2.gcode  *36\n\0" -> "/test/cap2.gcode"
+  // "/test/cap2.gcode  \n\0" -> "/test/cap2.gcode"
 
-  for (; *str != '\0'; str++)
+  char * strPtr = strrchr(str, '*');  // e.g. "/test/cap2.gcode  *36\n\0" -> "*36\n\0"
+
+  if (strPtr == NULL)
+    strPtr = str + strlen(str);       // e.g. "/test/cap2.gcode  \n\0" -> "\0"
+
+  // e.g. "*36\n\0" -> " *36\n\0"
+  // e.g. "\0" -> "\n\0"
+  //
+  --strPtr;
+
+  for (; strPtr >= str; strPtr--)
   {
-    if (*str == '*' || *str == '\n' || *str == '\r')
+    if (*strPtr != ' ' && *strPtr != '\n' && *strPtr != '\r')
     {
-      *str = '\0';
-
       break;
     }
   }
+
+  // e.g. "  *36\n\0" -> "\0 *36\n\0"
+  // e.g. "  \n\0" -> "\0 \n\0"
+  //
+  strPtr[1] = '\0';
 }

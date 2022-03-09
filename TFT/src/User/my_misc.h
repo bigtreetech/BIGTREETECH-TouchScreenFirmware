@@ -31,6 +31,9 @@ extern "C" {
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define NOBEYOND(min, v, max) MAX(min, MIN(v, max))
 
+#define WITHIN(N, L, H) ((N) >= (L) && (N) <= (H))
+#define NUMERIC(a)      WITHIN(a, '0', '9')
+
 // Bitwise macros
 
 // Get bit status at selected index
