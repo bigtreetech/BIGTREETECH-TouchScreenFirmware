@@ -193,10 +193,10 @@ void startPrint(void)
     return;
   }
 
-  // if restoring a print after a power failure or printing from remote TFT (with M23 - M24),
+  // if restoring a print after a power failure or printing from remote TFT media (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (!printRestore && infoFile.fileCount == 0)  // if printing from remote TFT
+  if (!printRestore && infoFile.fileCount == 0)  // if printing from remote TFT media
     infoMenu.cur = 0;                            // clear menu buffer
 
   // NOTE: call just before opening Printing menu because initMenuPrinting function will

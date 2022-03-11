@@ -375,7 +375,7 @@ bool printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard media)
 
-  // if printing from TFT or onboard media, exit (printStart function was called just before)
+  // if printing from TFT media or onboard media, exit (printStart function was called just before)
   if (infoPrinting.printing && infoFile.source <= BOARD_MEDIA) return false;
 
   // always clean infoPrinting first and then set the needed attributes
@@ -753,11 +753,11 @@ void setPrintResume(bool updateHost)
   }
 }
 
-// get gcode command from TFT (e.g. TFT SD card or TFT USB disk)
+// get gcode command from TFT media (e.g. TFT SD card or TFT USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
-  if (infoFile.source >= BOARD_MEDIA) return;  // if not printing from TFT
+  if (infoFile.source >= BOARD_MEDIA) return;  // if not printing from TFT media
   if (heatHasWaiting() || isNotEmptyCmdQueue() || infoPrinting.pause) return;
   if (moveCacheToCmd() == true) return;
 
