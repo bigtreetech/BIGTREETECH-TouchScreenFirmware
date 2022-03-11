@@ -392,7 +392,7 @@ bool printRemoteStart(const char * filename)
   {
     infoFile.source = BOARD_MEDIA_REMOTE;  // set source first
     resetInfoFile();                       // then reset infoFile (source is restored)
-    EnterDir(filename);                    // set title as last
+    EnterDir(stripHead(filename));         // set title as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }

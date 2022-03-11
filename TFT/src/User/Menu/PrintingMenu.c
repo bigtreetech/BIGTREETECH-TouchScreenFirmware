@@ -183,6 +183,8 @@ void startRemotePrint(const char * filename)
 // (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
 void startPrint(void)
 {
+  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by printStart function
+
   if (!printStart())
   {
     // in case the calling function is menuPrintFromSource,
@@ -194,8 +196,8 @@ void startPrint(void)
   // if restoring a print after a power failure or printing from remote TFT (with M23 - M24),
   // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
   //
-  if (infoFile.fileCount == 0)  // if printing from remote TFT
-    infoMenu.cur = 0;           // clear menu buffer
+  if (!printRestore && infoFile.fileCount == 0)  // if printing from remote TFT
+    infoMenu.cur = 0;                            // clear menu buffer
 
   // NOTE: call just before opening Printing menu because initMenuPrinting function will
   //       call clearInfoFile function that will clear and free memory for file list
