@@ -1,6 +1,5 @@
 #include "my_misc.h"
 #include <stddef.h>
-#include <stdint.h>
 #include <string.h>
 
 uint8_t inRange(int cur, int tag , int range)
@@ -161,10 +160,10 @@ void stripChecksum(char *str)
   // "/test/cap2.gcode  *36\n\0" -> "/test/cap2.gcode"
   // "/test/cap2.gcode  \n\0" -> "/test/cap2.gcode"
 
-  char * strPtr = strrchr(str, '*');  // e.g. "/test/cap2.gcode  *36\n\0" -> "*36\n\0"
+  char *strPtr = strrchr(str, '*');  // e.g. "/test/cap2.gcode  *36\n\0" -> "*36\n\0"
 
   if (strPtr == NULL)
-    strPtr = str + strlen(str);       // e.g. "/test/cap2.gcode  \n\0" -> "\0"
+    strPtr = str + strlen(str);      // e.g. "/test/cap2.gcode  \n\0" -> "\0"
 
   // e.g. "*36\n\0" -> " *36\n\0"
   // e.g. "\0" -> "\n\0"

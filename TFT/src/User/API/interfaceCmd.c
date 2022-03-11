@@ -439,13 +439,11 @@ void writeRemoteTFT()
   {
     UINT br;
     CMD cmd;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
-    uint32_t cmdLen;
 
     strcpy(cmd, &cmd_ptr[cmd_base_index]);  // e.g. "N1 G28*46\n" -> "G28*46\n"
     stripChecksum(cmd);                     // e.g. "G28*46\n" -> "G28"
-    cmdLen = strlen(cmd);
 
-    f_write(&file, cmd, cmdLen, &br);
+    f_write(&file, cmd, strlen(cmd), &br);
 
     // "\n" is always removed by stripChecksum function even if there is no checksum, so we need to write it on file separately
     f_write(&file, "\n", 1, &br);
@@ -473,7 +471,7 @@ void sendQueueCmd(void)
   {
     strPtr += 2;                             // skip N[-0-9]
     while (NUMERIC(*strPtr)) ++strPtr;       // skip [0-9]*
-    while (*strPtr == ' ')   ++strPtr;       // skip [ ]*
+    while (*strPtr == ' ') ++strPtr;         // skip [ ]*
   }
 
   // set cmd_base_index with index of gcode command
