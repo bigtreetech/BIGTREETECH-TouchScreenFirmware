@@ -352,7 +352,7 @@ void hostActionCommands(void)
     {
       setPrintPause(false, PAUSE_EXTERNAL);
     }
-    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard media
+    else if (ack_seen("Resuming"))  // resuming from TFT media or (remote) onboard media
     {
       setPrintResume(true);
 

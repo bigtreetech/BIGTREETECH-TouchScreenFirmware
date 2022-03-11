@@ -1234,7 +1234,7 @@ void loopCheckBackPress(void)
 void loopBackEnd(void)
 {
   // Get gcode command from the file to be printed
-  loopPrintFromTFT();  // handle a print from TFT, if any
+  loopPrintFromTFT();  // handle a print from TFT media, if any
 
   // Parse and send gcode commands in the queue
   sendQueueCmd();
