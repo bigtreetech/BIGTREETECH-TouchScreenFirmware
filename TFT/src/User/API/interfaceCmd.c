@@ -344,9 +344,9 @@ bool initRemoteTFT()
 
   uint8_t i = cmd_base_index + 4;  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
 
-  if (cmd_starts_with(i, "SD:") || cmd_starts_with(i, "S"))
+  if (cmd_starts_with(i, "SD:") || cmd_starts_with(i, "S "))
     infoFile.source = TFT_SD;        // set source first
-  else if (cmd_starts_with(i, "U:") || cmd_starts_with(i, "U"))
+  else if (cmd_starts_with(i, "U:") || cmd_starts_with(i, "U "))
     infoFile.source = TFT_USB_DISK;  // set source first
   else
     return false;
