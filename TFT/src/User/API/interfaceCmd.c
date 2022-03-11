@@ -497,7 +497,7 @@ void sendQueueCmd(void)
       if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
         writing_mode = NO_WRITING;
 
-      if (sendCmd(false, avoid_terminal) == true)  // if command was sent
+      if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
         infoHost.wait = infoHost.connected;
     }
 
@@ -514,7 +514,7 @@ void sendQueueCmd(void)
         case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
-            // pause if printing from TFT and purge M0/M1 command
+            // pause if printing from TFT media and purge M0/M1 command
             if (infoFile.source < BOARD_MEDIA )
             {
               sendCmd(true, avoid_terminal);
@@ -586,7 +586,7 @@ void sendQueueCmd(void)
             if (!fromTFT)
             {
 
-              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT with M23
+              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT media with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -611,7 +611,7 @@ void sendQueueCmd(void)
           case 25:  // M25
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -633,7 +633,7 @@ void sendQueueCmd(void)
 
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 char buf[55];
 
@@ -738,7 +738,7 @@ void sendQueueCmd(void)
           case 125:  // M125
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -754,7 +754,7 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
@@ -872,7 +872,7 @@ void sendQueueCmd(void)
           break;
         }
 
-        case 109: // M109
+        case 109:  // M109
           if (fromTFT)
           {
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
@@ -891,7 +891,7 @@ void sendQueueCmd(void)
             }
           }
         // no break here. The data processing of M109 is the same as that of M104 below
-        case 104: // M104
+        case 104:  // M104
           if (fromTFT)
           {
             uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
