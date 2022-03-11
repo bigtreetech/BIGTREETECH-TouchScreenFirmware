@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}, {0}, false};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, BOARD_SD, {0}, {0}, false};
 
 void setPrintModelIcon(bool exist)
 {
