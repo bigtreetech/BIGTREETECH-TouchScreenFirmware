@@ -1,3 +1,5 @@
+#include <stdlib.h>  // first to avoid conflicts with strtod function
+
 #include "my_misc.h"
 #include <stddef.h>
 #include <string.h>
@@ -165,15 +167,16 @@ void stripChecksum(char *str)
   if (strPtr == NULL)
     strPtr = str + strlen(str);      // e.g. "/test/cap2.gcode  \n\0" -> "\0"
 
-  // e.g. "*36\n\0" -> " *36\n\0"
-  // e.g. "\0" -> "\n\0"
-  //
-  --strPtr;
-
-  for (; strPtr >= str; strPtr--)
+  while (strPtr != str)
   {
-    if (*strPtr != ' ' && *strPtr != '\n' && *strPtr != '\r')
+    // e.g. "*36\n\0" -> " *36\n\0"
+    // e.g. "\0" -> "\n\0"
+    //
+    --strPtr;
+
+    if (*strPtr != ' ' && *strPtr != '\t' && *strPtr != '\n' && *strPtr != '\r')
     {
+      strPtr++;  // next char has to be set to "\0"
       break;
     }
   }
@@ -181,5 +184,35 @@ void stripChecksum(char *str)
   // e.g. "  *36\n\0" -> "\0 *36\n\0"
   // e.g. "  \n\0" -> "\0 \n\0"
   //
-  strPtr[1] = '\0';
+  *strPtr = '\0';
+}
+
+uint8_t getChecksum(char *str)
+{
+  uint8_t checksum = 0;
+
+  while (*str != '\0')
+  {
+    checksum ^= *(str++);
+  }
+
+  return checksum;
+}
+
+bool validateChecksum(char *str)
+{
+  char *strPtr = strrchr(str, '*');  // e.g. "N1 G28*18\n\0" -> "*18\n\0"
+
+  if (strPtr == NULL)
+    return false;
+
+  uint8_t checksum = 0;
+  uint8_t value = strtol(&strPtr[1], NULL, 10);
+
+  while (strPtr != str)
+  {
+    checksum ^= *(--strPtr);
+  }
+
+  return (checksum == value ? true : false);
 }

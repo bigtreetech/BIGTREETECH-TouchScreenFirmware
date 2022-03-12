@@ -56,6 +56,11 @@ bool isEnqueued(const CMD cmd)
   return found;
 }
 
+bool isWritingMode(void)
+{
+  return (writing_mode != NO_WRITING);
+}
+
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
@@ -289,18 +294,18 @@ bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return true if command was sent. Otherwise, return false
 }
 
-// Check if the current gcode command starts with "keyword" string at index "index".
-static bool cmd_starts_with(uint8_t index, const char * keyword)
+// Check the presence of the specified "keyword" string in the current gcode command
+// starting the search from index "index".
+static bool cmd_seen_from(uint8_t index, const char * keyword)
 {
   if (index >= cmd_len)
     return false;
 
   char * strPtr = strstr(cmd_ptr + index, keyword);
 
-  if (strPtr != NULL && (strPtr - cmd_ptr == index))
+  if (strPtr != NULL)
   {
-    cmd_index = index + strlen(keyword);
-
+    cmd_index = (strPtr - cmd_ptr) + strlen(keyword);
     return true;
   }
 
@@ -342,11 +347,11 @@ bool initRemoteTFT()
   //
   // "infoFile.path" = "SD:/test/cap2.gcode"
 
-  uint8_t i = cmd_base_index + 4;  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
-
-  if (cmd_starts_with(i, "SD:") || cmd_starts_with(i, "S "))
+  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
+  //
+  if (cmd_seen_from(cmd_base_index, "SD:") || cmd_seen_from(cmd_base_index, "S "))
     infoFile.source = TFT_SD;        // set source first
-  else if (cmd_starts_with(i, "U:") || cmd_starts_with(i, "U "))
+  else if (cmd_seen_from(cmd_base_index, "U:") || cmd_seen_from(cmd_base_index, "U "))
     infoFile.source = TFT_USB_DISK;  // set source first
   else
     return false;
@@ -356,7 +361,7 @@ bool initRemoteTFT()
 
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
-  // cmd_index was set by cmd_starts_with function
+  // cmd_index was set by cmd_seen_from function
   strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
   stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
 
@@ -664,7 +669,10 @@ void sendQueueCmd(void)
               if (initRemoteTFT())  // examples: "M28 SD:/test/cap2.gcode\n", "M28 S /test/cap2.gcode\n"
               {
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
+                {
                   writing_mode = TFT_WRITING;
+                  reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                }
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -672,6 +680,7 @@ void sendQueueCmd(void)
               else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
               {
                 writing_mode = ONBOARD_WRITING;
+                reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
               }
             }
             break;
@@ -713,7 +722,7 @@ void sendQueueCmd(void)
             return;
 
           case 115:  // M115
-            if (!fromTFT && cmd_starts_with(cmd_base_index + 5, "TFT"))  // "M115 TFT"
+            if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M115 TFT"
             {
               char buf[50];
 
@@ -917,9 +926,9 @@ void sendQueueCmd(void)
           break;
 
         case 117:  // M117
-          if (cmd_starts_with(cmd_base_index + 5, "Time Left"))
+          if (cmd_seen_from(cmd_base_index, "Time Left"))
           {
-            parsePrintRemainingTime(&cmd_ptr[cmd_base_index + 14]);
+            parsePrintRemainingTime(&cmd_ptr[cmd_index]);  // cmd_index was set by cmd_seen_from function
           }
           else
           {
@@ -1104,7 +1113,7 @@ void sendQueueCmd(void)
               {
                 uint16_t ms = cmd_value();
                 Buzzer_TurnOn(hz, ms);
-                if (!fromTFT && cmd_starts_with(cmd_base_index + 5, "TFT"))  // "M300 TFT"
+                if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
                 {
                   sendCmd(true, avoid_terminal);
                   return;
