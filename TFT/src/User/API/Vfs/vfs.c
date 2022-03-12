@@ -86,9 +86,10 @@ void clearInfoFile(void)
     infoFile.folder[i] = NULL;
 
     if (infoFile.longFolder[i] != NULL)  // long folder name is optional so we need to check its presence
+    {
       free(infoFile.longFolder[i]);
-
-    infoFile.longFolder[i] = NULL;
+      infoFile.longFolder[i] = NULL;
+    }
   }
 
   for (i = 0; i < infoFile.fileCount; i++)
@@ -97,9 +98,10 @@ void clearInfoFile(void)
     infoFile.file[i] = NULL;
 
     if (infoFile.longFile[i] != NULL)  // long filename is optional so we need to check its presence
+    {
       free(infoFile.longFile[i]);
-
-    infoFile.longFile[i] = NULL;
+      infoFile.longFile[i] = NULL;
+    }
   }
 
   infoFile.folderCount = 0;

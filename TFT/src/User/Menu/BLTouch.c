@@ -3,6 +3,13 @@
 
 #define SERVO_GCODE "M280 P0 S%d\n"
 
+static BLT_HS_MODE bltHSmode = HS_DISABLED;
+
+void setHSmode(BLT_HS_MODE hsMode)
+{
+  bltHSmode = hsMode;
+}
+
 MENUITEMS BLTouchItems = {
   // title
   LABEL_BLTOUCH,
@@ -22,14 +29,7 @@ MENUITEMS BLTouchItems = {
 void menuBLTouch(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-
-  if (infoMachineSettings.firmwareType == FW_MARLIN)
-  {
-    BLTouchItems.items[5].icon = ICON_SLOW_SPEED;
-    BLTouchItems.items[5].label.index = LABEL_HS_OFF;
-    BLTouchItems.items[6].icon = ICON_FAST_SPEED;
-    BLTouchItems.items[6].label.index = LABEL_HS_ON;
-  }
+  uint8_t hsModeOld = HS_DISABLED;
 
   menuDrawPage(&BLTouchItems);
 
@@ -60,13 +60,11 @@ void menuBLTouch(void)
         break;
 
       case KEY_ICON_5:
-        if (infoMachineSettings.firmwareType == FW_MARLIN)
-          storeCmd("M401 S0\n");
-        break;
-
-      case KEY_ICON_6:
-        if (infoMachineSettings.firmwareType == FW_MARLIN)
-          storeCmd("M401 S1\n");
+        if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != HS_DISABLED)
+        {
+          bltHSmode = HS_ON - bltHSmode; 
+          storeCmd("M401 S%u\n", bltHSmode);
+        }
         break;
 
       case KEY_ICON_7:
@@ -75,6 +73,14 @@ void menuBLTouch(void)
 
       default:
         break;
+    }
+
+    if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != hsModeOld)
+    {
+      hsModeOld = bltHSmode;
+      BLTouchItems.items[5].icon = (bltHSmode == HS_ON) ? ICON_FAST_SPEED : ICON_SLOW_SPEED;
+      BLTouchItems.items[5].label.index = (bltHSmode == HS_ON) ? LABEL_HS_ON : LABEL_HS_OFF;
+      menuDrawItem(&BLTouchItems.items[5], 5);
     }
 
     loopProcess();
