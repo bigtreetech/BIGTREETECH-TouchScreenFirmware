@@ -57,13 +57,6 @@ struct HOST_ACTION
   uint8_t button;           // number of buttons
 } hostAction;
 
-//void setIgnoreEcho(ECHO_ID msgId, bool state)
-//{
-//  static uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
-//
-//  forceIgnore[msgId] = state;
-//}
-
 void setHostDialog(bool isHostDialog)
 {
   hostDialog = isHostDialog;
