@@ -1206,7 +1206,7 @@ void parseACK(void)
       else if (ack_seen(magic_echo))
       {
         // parse and store M401 H, BLTouch HighSpeed mode
-        if (ack_seen("echo:BLTouch HS mode"))
+        if (ack_continue_seen("BLTouch HS mode"))
         {
           setHSmode(ack_continue_seen("ON") ? HS_ON : HS_OFF);
         }
