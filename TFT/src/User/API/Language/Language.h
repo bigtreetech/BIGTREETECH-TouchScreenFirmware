@@ -24,14 +24,13 @@ extern "C" {
 #define POLISH        11
 #define SLOVAK        12
 #define DUTCH         13
-#define HUNGARIAN     14
-#define TURKISH       15
-#define GREEK         16
-#define SLOVENIAN     17
-#define CATALAN       18
-#define TRAD_CHINESE  19
-#define UKRAINIAN     20
-#define BRAZIL        21
+#define TURKISH       14
+#define GREEK         15
+#define SLOVENIAN     16
+#define CATALAN       17
+#define TRAD_CHINESE  18
+#define UKRAINIAN     19
+#define BRAZIL        20
 
 enum
 {

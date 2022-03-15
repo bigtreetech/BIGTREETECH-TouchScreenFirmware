@@ -30,8 +30,6 @@
   #include "language_sk.h"
 #elif SYSTEM_LANGUAGE == DUTCH
   #include "language_nl.h"
-#elif SYSTEM_LANGUAGE == HUNGARIAN
-  #include "language_hu.h"
 #elif SYSTEM_LANGUAGE == TURKISH
   #include "language_tr.h"
 #elif SYSTEM_LANGUAGE == GREEK
