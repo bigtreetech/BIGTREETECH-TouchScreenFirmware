@@ -682,7 +682,7 @@ void parseACK(void)
                infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
                ack_seen("SD printing byte"))  // if printing from (remote) onboard media
       {
-        setPrintResume(false);
+        setPrintResume(true);
 
         // parsing printing data
         // format: SD printing byte <XXXX>/<YYYY> (e.g. SD printing byte 123/12345)

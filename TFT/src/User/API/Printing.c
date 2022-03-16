@@ -341,6 +341,13 @@ void clearInfoPrint(void)
 
 void printComplete(void)
 {
+  // do not process any printing info if marlin mode is active
+  if (MENU_IS(menuMarlinMode))
+  {
+    infoHost.printing = false;
+    return;
+  }
+
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.printing = infoPrinting.pause = false;
   setPrintRemainingTime(0);
@@ -373,6 +380,9 @@ void printComplete(void)
 void printRemoteStart(const char * filename)
 {
   infoHost.printing = true;  // always set (even if printing from onboard media)
+
+  if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
+    return;
 
   if (infoPrinting.printing && infoFile.source <= BOARD_MEDIA) return;  // if printing from TFT or onboard media
 
@@ -646,7 +656,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
   loopDetected = false;
 
   return true;
-}
+}  // printPause
 
 bool isPrinting(void)
 {
@@ -679,7 +689,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
   // pass value "false" for updateHost to let Marlin report (in case of printing from (remote) onboard media)
   // when the host is not printing (when notification ack "Not SD printing" is caught).
   // In case of printing from remote host (e.g. USB) or infoSettings.m27_active set to "false", the host
-  // printing status is always forced to "false" due to no other notification will be received
+  // printing status is always forced to "false" because no other notification will be received
 
   if (infoPrinting.printing)
   {
@@ -697,7 +707,7 @@ void setPrintResume(bool updateHost)
   // pass value "true" for updateHost to report (in case of printing from (remote) onboard media) the host is
   // printing without waiting from Marlin (when notification ack "SD printing byte" is caught).
   // In case of printing from remote host (e.g. USB) or infoSettings.m27_active set to "false", the host
-  // printing status is always forced to "true" due to no other notification will be received
+  // printing status is always forced to "true" because no other notification will be received
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
