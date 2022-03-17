@@ -20,7 +20,7 @@ typedef struct
   PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
-PRINTING infoPrinting;
+PRINTING infoPrinting = {0};
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0};
 
 static bool updateM27_waiting = false;
@@ -712,6 +712,8 @@ bool isRemoteHostPrinting(void)
 
 void setPrintAbort(void)
 {
+  if (!infoPrinting.printing) return;
+
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
 }
@@ -721,7 +723,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
   // pass value "false" for updateHost to let Marlin report (in case of printing from (remote) onboard media)
   // when the host is not printing (when notification ack "Not SD printing" is caught).
   // In case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // the host printing status is always forced to "false" due to no other notification will be received
+  // the host printing status is always forced to "false" because no other notification will be received
 
   if (infoPrinting.printing)
   {
@@ -730,7 +732,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
   }
 
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "false"
-  if (updateHost || infoFile.source == REMOTE_HOST || !infoSettings.m27_active)
+  if (updateHost || ((infoPrinting.printing && infoFile.source == REMOTE_HOST) || !infoSettings.m27_active))
     infoHost.printing = false;
 }
 
@@ -739,18 +741,14 @@ void setPrintResume(bool updateHost)
   // pass value "true" for updateHost to report (in case of printing from (remote) onboard media) the host is
   // printing without waiting from Marlin (when notification ack "SD printing byte" is caught).
   // In case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // the host printing status is always forced to "true" due to no other notification will be received
+  // the host printing status is always forced to "true" because no other notification will be received
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
 
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "true"
-  if (updateHost || infoFile.source == REMOTE_HOST || !infoSettings.m27_active)
-  {
-    // if printing from (remote) onboard media or remote host
-    if (infoPrinting.printing && infoFile.source >= BOARD_MEDIA)
-      infoHost.printing = true;
-  }
+  if (updateHost || ((infoPrinting.printing && infoFile.source == REMOTE_HOST) || !infoSettings.m27_active))
+    infoHost.printing = true;
 }
 
 // get gcode command from TFT media (e.g. TFT SD card or TFT USB disk)
