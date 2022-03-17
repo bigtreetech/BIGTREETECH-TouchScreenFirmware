@@ -712,7 +712,12 @@ bool isRemoteHostPrinting(void)
 
 void setPrintAbort(void)
 {
-  if (!infoPrinting.printing) return;
+  // in case of printing from Marlin Mode (infoPrinting.printing set to "false"), always force to "false"
+  if (!infoPrinting.printing)
+  {
+    infoHost.printing = false;
+    return;
+  }
 
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
@@ -731,8 +736,9 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
     infoPrinting.pauseType = pauseType;
   }
 
+  // in case of forcing update or printing from Marlin Mode (infoPrinting.printing set to "false") or
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "false"
-  if (updateHost || ((infoPrinting.printing && infoFile.source == REMOTE_HOST) || !infoSettings.m27_active))
+  if ((updateHost || !infoPrinting.printing) || (infoFile.source == REMOTE_HOST || !infoSettings.m27_active))
     infoHost.printing = false;
 }
 
@@ -746,8 +752,9 @@ void setPrintResume(bool updateHost)
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
 
-  // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "true"
-  if (updateHost || ((infoPrinting.printing && infoFile.source == REMOTE_HOST) || !infoSettings.m27_active))
+  // in case of forcing update or printing from Marlin Mode (infoPrinting.printing set to "false") or
+  // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "false"
+  if ((updateHost || !infoPrinting.printing) || (infoFile.source == REMOTE_HOST || !infoSettings.m27_active))
     infoHost.printing = true;
 }
 
