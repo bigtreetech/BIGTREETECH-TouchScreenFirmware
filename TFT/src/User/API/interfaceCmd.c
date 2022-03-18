@@ -66,7 +66,7 @@ bool storeCmd(const char * format, ...)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -123,7 +123,7 @@ void mustStoreCmd(const char * format, ...)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -172,7 +172,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -192,7 +192,7 @@ void mustStoreCacheCmd(const char * format, ...)
 {
   if (infoCacheCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 

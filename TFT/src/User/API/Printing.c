@@ -35,7 +35,7 @@ void setExtrusionDuringPause(bool extruded)
 
 bool isHostPrinting(void)
 {
-  return infoHost.printing;
+  return (infoHost.status == HOST_STATUS_PRINTING);
 }
 
 void setRunoutAlarmTrue(void)
@@ -344,7 +344,7 @@ void printComplete(void)
   // do not process any printing info if marlin mode is active
   if (MENU_IS(menuMarlinMode))
   {
-    infoHost.printing = false;
+    infoHost.status = HOST_STATUS_IDLE;
     return;
   }
 
@@ -356,12 +356,12 @@ void printComplete(void)
   switch (infoFile.source)
   {
     case REMOTE_HOST:
-      infoHost.printing = false;
+      infoHost.status = HOST_STATUS_IDLE;
       break;
 
     case BOARD_MEDIA_REMOTE:
     case BOARD_MEDIA:
-      infoHost.printing = false;
+      infoHost.status = HOST_STATUS_IDLE;
       request_M27(0);
       coordinateQueryTurnOff();  // disable position auto report, if any
       break;
@@ -379,7 +379,7 @@ void printComplete(void)
 
 void printRemoteStart(const char * filename)
 {
-  infoHost.printing = true;  // always set (even if printing from onboard media)
+  infoHost.status = HOST_STATUS_PRINTING;  // always set (even if printing from onboard media)
 
   if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
     return;
@@ -427,12 +427,12 @@ void printStart(FIL * file, uint32_t size)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:      // present just to make the code robust. It should never be executed
+    case REMOTE_HOST:  // present just to make the code robust. It should never be executed
     case BOARD_MEDIA_REMOTE:
       return;
 
     case BOARD_MEDIA:
-      //infoHost.printing = true;                  // Not so fast! Let Marlin tell that he started printing!
+      //infoHost.status = HOST_STATUS_PRINTING;    // Not so fast! Let Marlin tell that he started printing!
       request_M24(0);                              // start print from onboard media
       request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
       break;
@@ -495,7 +495,7 @@ void printAbort(void)
 
     case BOARD_MEDIA_REMOTE:
     case BOARD_MEDIA:
-      //infoHost.printing = false;  // Not so fast! Let Marlin tell that he's done!
+      //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that he's done!
 
       // several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
@@ -518,7 +518,7 @@ void printAbort(void)
         request_M0();  // M524 is not supportet in RepRap firmware
       }
 
-      if (infoHost.printing)
+      if (infoHost.status == HOST_STATUS_PRINTING)
       {
         REDRAW_MENU();
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
@@ -684,7 +684,7 @@ void setPrintAbort(void)
   printComplete();
 }
 
-void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
+void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 {
   // pass value "false" for updateHost to let Marlin report (in case of printing from (remote) onboard media)
   // when the host is not printing (when notification ack "Not SD printing" is caught).
@@ -698,11 +698,13 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
   }
 
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "false"
-  if (updateHost || infoFile.source == REMOTE_HOST || !infoSettings.m27_active)
-    infoHost.printing = false;
+  if (infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
+    infoHost.status = hostStatus;
+  else
+    infoHost.status = HOST_STATUS_PAUSED;
 }
 
-void setPrintResume(bool updateHost)
+void setPrintResume(HOST_STATUS hostStatus)
 {
   // pass value "true" for updateHost to report (in case of printing from (remote) onboard media) the host is
   // printing without waiting from Marlin (when notification ack "SD printing byte" is caught).
@@ -713,12 +715,10 @@ void setPrintResume(bool updateHost)
   infoPrinting.pause = false;
 
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "true"
-  if (updateHost || infoFile.source == REMOTE_HOST || !infoSettings.m27_active)
-  {
-    // if printing from (remote) media or remote host
-    if (infoPrinting.printing && infoFile.source >= BOARD_MEDIA)
-      infoHost.printing = true;
-  }
+  if (infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
+      infoHost.status = hostStatus;  // if printing from (remote) media or remote host
+  else
+    infoHost.status = HOST_STATUS_PRINTING;
 }
 
 // get gcode command from TFT (SD card or USB disk)

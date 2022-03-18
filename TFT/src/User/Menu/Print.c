@@ -377,7 +377,7 @@ void menuPrint(void)
   {
     sourceSelItems.items[ONBOARD_SD_INDEX].icon = ICON_ONBOARD_SD;
     sourceSelItems.items[ONBOARD_SD_INDEX].label.index = LABEL_ONBOARDSD;
-    
+
     if (infoMachineSettings.multiVolume == ENABLED)
     {
       sourceSelItems.items[ONBOARD_USB_INDEX].icon = ICON_USB_DISK;
@@ -470,7 +470,7 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!infoHost.printing)  // prevent reset if printing from other source
+  if (!infoHost.status)  // prevent reset if printing from other source
   {
     resetInfoFile();
     powerFailedSetDriverSource(getCurFileSource());
