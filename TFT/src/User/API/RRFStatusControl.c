@@ -57,7 +57,7 @@ void rrfStatusSet(char status)
       case 'D':
       case 'A':
         if (rrf_status == 'P')
-          setPrintPause(false, PAUSE_EXTERNAL);
+          setPrintPause(HOST_STATUS_PAUSING, PAUSE_EXTERNAL);
         break;
 
       case 'B':

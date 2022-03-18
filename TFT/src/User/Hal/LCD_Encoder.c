@@ -4,21 +4,19 @@
 
 #if ENC_ACTIVE_SIGNAL
 
-void LCD_Enc_InitActiveSignal(bool marlinType_LCD12864)
+void LCD_Enc_InitActiveSignal(void)
 {
-  if (!marlinType_LCD12864)
-    return;
-
-  GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);
-  LCD_Enc_SetActiveSignal(true, 0);
+  if (infoSettings.marlin_type == LCD12864)
+  {
+    GPIO_InitSet(LCD_ENC_EN_PIN, MGPIO_MODE_OUT_PP, 0);
+    LCD_Enc_SetActiveSignal(0);
+  }
 }
 
-void LCD_Enc_SetActiveSignal(bool marlinType_LCD12864, uint8_t status)
+void LCD_Enc_SetActiveSignal(uint8_t status)
 {
-  if (!marlinType_LCD12864)
-    return;
-
-  GPIO_SetLevel(LCD_ENC_EN_PIN, status);
+  if (infoSettings.marlin_type == LCD12864)
+    GPIO_SetLevel(LCD_ENC_EN_PIN, status);
 }
 
 #endif  // ENC_ACTIVE_SIGNAL

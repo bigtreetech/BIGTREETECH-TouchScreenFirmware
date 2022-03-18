@@ -8,7 +8,7 @@ void updateListeningMode(MENUITEMS * menu)
   if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
   {
     menu->items[4].label.index = LABEL_OFF;
-    reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+    reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
   }
   else
   {

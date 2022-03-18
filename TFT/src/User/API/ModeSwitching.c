@@ -60,11 +60,9 @@ void Mode_Switch(void)
 void Mode_CheckSwitching(void)
 {
 //  #ifndef SERIAL_ALWAYS_ON
-  // IDEALLY I would like to be able to swap even when the TFT is in printing mode
-  // but before I can allow that I need a way to make sure that we swap back into
-  // the right mode (and correct screen) and I really want a reliable way to DETECT
-  // that the TFT should be in printing mode even when the print was started externally.
-  if (isPrinting() || infoHost.printing || modeSwitching)
+
+  // do not change mode if printing from any source or is already waiting mode selection
+  if (isPrinting() || infoHost.status != HOST_STATUS_IDLE || modeSwitching)
     return;
 
   if (MENU_IS(menuMode))

@@ -25,7 +25,7 @@ bool mountFS(void)
       return mountUSBDisk();
 
     case BOARD_MEDIA:
-      if (infoHost.printing)
+      if (infoHost.status)
         return true;  // no mount while printing
       else
         return mountGcodeSDCard();
@@ -236,7 +236,7 @@ void loopVolumeSource(void)
       const int16_t labelSDStates[FF_VOLUMES][2] = {{LABEL_TFTSD_REMOVED, LABEL_TFTSD_INSERTED},
                                                     {LABEL_USB_DISK_REMOVED, LABEL_USB_DISK_INSERTED}};
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
+      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
     }
   }
 }
