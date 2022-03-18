@@ -475,7 +475,12 @@ bool printStart(void)
 
 void printEnd(void)
 {
-  if (!infoPrinting.printing) return;
+  // in case of printing from Marlin Mode (infoPrinting.printing set to "false"), always force to "false"
+  if (!infoPrinting.printing)
+  {
+    infoHost.printing = false;
+    return;
+  }
 
   switch (infoFile.source)
   {
