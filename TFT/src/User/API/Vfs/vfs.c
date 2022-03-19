@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, {0}};
+MYFILE infoFile = {"?:", {0}, {0}, 0, 0, 0, 0, TFT_SD, BOARD_SD, {0}, {0}, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -24,7 +24,7 @@ bool mountFS(void)
     case TFT_USB_DISK:
       return mountUSBDisk();
 
-    case BOARD_SD:
+    case BOARD_MEDIA:
       if (infoHost.printing)
         return true;  // no mount while printing
       else
@@ -39,20 +39,27 @@ bool mountFS(void)
 void clearInfoFile(void)
 {
   uint8_t i = 0;
+
   for (i = 0; i < infoFile.folderCount; i++)
   {
     free(infoFile.folder[i]);
-    infoFile.folder[i] = 0;
+    infoFile.folder[i] = NULL;
+
+    if (infoFile.longFolder[i] != NULL)  // long folder name is optional so we need to check its presence
+      free(infoFile.longFolder[i]);
+    infoFile.longFolder[i] = NULL;
   }
+
   for (i = 0; i < infoFile.fileCount; i++)
   {
     free(infoFile.file[i]);
-    infoFile.file[i] = 0;
+    infoFile.file[i] = NULL;
 
-    if (infoFile.longFile[i] != 0)  // long filename is optional so we need to check its presence
+    if (infoFile.longFile[i] != NULL)  // long filename is optional so we need to check its presence
       free(infoFile.longFile[i]);
-    infoFile.longFile[i] = 0;
+    infoFile.longFile[i] = NULL;
   }
+
   infoFile.folderCount = 0;
   infoFile.fileCount = 0;
 }
@@ -67,9 +74,9 @@ TCHAR * getCurFileSource(void)
     case TFT_USB_DISK:
       return USBDISK_ROOT_DIR;
 
-    case BOARD_SD:
-    case BOARD_SD_REMOTE:
-      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bSD:";
+    case BOARD_MEDIA:
+    case BOARD_MEDIA_REMOTE:
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
 
     default:
       break;
@@ -81,9 +88,11 @@ TCHAR * getCurFileSource(void)
 void resetInfoFile(void)
 {
   FS_SOURCE source = infoFile.source;
+  ONBOARD_SOURCE onboardSource = infoFile.boardSource;
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
   infoFile.source = source;
+  infoFile.boardSource =  onboardSource;
   strcpy(infoFile.title, getCurFileSource());
 }
 
@@ -97,7 +106,7 @@ bool scanPrintFiles(void)
     case TFT_USB_DISK:
       return scanPrintFilesFatFs();
 
-    case BOARD_SD:
+    case BOARD_MEDIA:
       return scanPrintFilesGcodeFs();
 
     default:

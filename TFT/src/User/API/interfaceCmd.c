@@ -347,7 +347,7 @@ void sendQueueCmd(void)
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT and purge M0/M1 command
-            if (infoFile.source < BOARD_SD )
+            if (infoFile.source < BOARD_MEDIA )
             {
               sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_M0);
@@ -491,7 +491,7 @@ void sendQueueCmd(void)
           case 25:  // M25
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -511,7 +511,7 @@ void sendQueueCmd(void)
             }
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
               {
                 if (cmd_seen('C'))
                 {
@@ -618,7 +618,7 @@ void sendQueueCmd(void)
           case 125:  // M125
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -633,7 +633,7 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_SD)  // if printing from TFT
+              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
