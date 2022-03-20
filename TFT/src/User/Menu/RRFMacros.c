@@ -25,11 +25,9 @@ void runMacro(const char *display_name)
 {
   running_macro_name = display_name;
   rrfShowRunningMacro();
-
   request_M98(infoFile.title);
 
   ExitDir();
-  OPEN_MENU(menuDummy);  // force a redraw
 }
 
 // Draw Macro file list
@@ -118,6 +116,7 @@ void menuCallMacro(void)
               break;
 
             runMacro(infoFile.file[key_num - infoFile.folderCount]);
+            update = 1;
           }
         }
         break;
