@@ -198,8 +198,8 @@ void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawIconText(const ITEM *item, uint8_t position);
 void menuDrawListItem(const LISTITEM *item, uint8_t position);
 void menuRefreshListPage(void);
-void menuDrawTitle(const uint8_t *content);  //(const MENUITEMS * menuItems);
-void menuReDrawCurTitle(void);
+void menuSetTitle(const LABEL *title);
+void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 

@@ -92,7 +92,7 @@ void menuSpeed(void)
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
-        menuDrawTitle(textSelect(percentageItems.title.index));
+        menuDrawTitle();
         menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageReDraw(item_index, false);
         break;

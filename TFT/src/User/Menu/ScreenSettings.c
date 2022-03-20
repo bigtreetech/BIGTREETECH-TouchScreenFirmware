@@ -270,7 +270,6 @@ void menuLanguage(void)
         listViewRefreshItem(curItem);  // refresh checked status
 
         infoSettings.language = curItem;
-        menuDrawTitle(textSelect(LABEL_LANGUAGE));
       }
     }
 
