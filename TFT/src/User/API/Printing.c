@@ -510,7 +510,6 @@ void printAbort(void)
 
       if (infoHost.printing)
       {
-        REDRAW_MENU();
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
