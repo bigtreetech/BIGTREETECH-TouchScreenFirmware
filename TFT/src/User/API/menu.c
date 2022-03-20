@@ -925,64 +925,68 @@ void menuDrawListPage(const LISTITEMS *listItems)
 }
 
 // Show live info text on icons
-void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item)
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
 {
-  if (item != NULL)
-    ICON_PrepareRead(curRect[index].x0, curRect[index].y0, item->icon);
+  GUI_RECT *iconRect = MENU_IS(menuPrinting) ? rect_of_keyPS : curRect;
+  GUI_POINT iconPt = {iconRect[index].x0, iconRect[index].y0};
+
+  if (redrawIcon)
+    ICON_ReadDisplay(iconPt.x, iconPt.y, liveicon->iconIndex);
 
   for (uint8_t i = 0; i < LIVEICON_LINES; i++)
   {
     if (liveicon->enabled[i] == true)
     {
       GUI_POINT loc;
-      loc.x = liveicon->lines[i].pos.x + curRect[index].x0;
 
-      if (liveicon->lines[i].v_align == BOTTOM)
+      switch (liveicon->lines[i].h_align)
       {
-        loc.y = liveicon->lines[i].pos.y + curRect[index].y0 - BYTE_HEIGHT;
-      }
-      else if (liveicon->lines[i].v_align == CENTER)
-      {
-        loc.y = liveicon->lines[i].pos.y + curRect[index].y0 - BYTE_HEIGHT / 2;
-      }
-      else
-      {
-        loc.y = liveicon->lines[i].pos.y + curRect[index].y0;
+        case CENTER:
+          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth(liveicon->lines[i].text) / 2;
+          break;
+
+        case RIGHT:
+          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth(liveicon->lines[i].text);
+          break;
+
+        default:
+          loc.x = liveicon->lines[i].pos.x;
+          break;
       }
 
-      if (item == NULL)  // if no icon used as background, set own bg color and text mode
+      // set vertical text align
+      switch (liveicon->lines[i].v_align)
       {
-        GUI_SetTextMode(liveicon->lines[i].text_mode);
-        GUI_SetBkColor(liveicon->lines[i].bk_color);
+        case CENTER:
+          loc.y = liveicon->lines[i].pos.y  - BYTE_HEIGHT / 2;
+          break;
+
+        case BOTTOM:
+          loc.y = liveicon->lines[i].pos.y - BYTE_HEIGHT;
+          break;
+
+        default:
+          loc.y = liveicon->lines[i].pos.y;
+          break;
       }
 
       GUI_SetColor(liveicon->lines[i].fn_color);
       setFontSize(liveicon->lines[i].font);
 
-      switch (liveicon->lines[i].h_align)
+      if (redrawIcon || liveicon->iconIndex == ICON_NULL)  // if icon is not set, set bg color and text mode from line values
       {
-        case LEFT:
-          GUI_DispString(loc.x, loc.y, liveicon->lines[i].text);
-          break;
-
-        case CENTER:
-          GUI_DispStringCenter(loc.x, loc.y, liveicon->lines[i].text);
-          break;
-
-        case RIGHT:
-          GUI_DispStringRight(loc.x, loc.y, liveicon->lines[i].text);
-          break;
-
-        default:
-          break;
+        GUI_SetTextMode(liveicon->lines[i].text_mode);
+        GUI_SetBkColor(liveicon->lines[i].bk_color);
       }
+
+      if (redrawIcon || liveicon->iconIndex == ICON_NULL)
+        GUI_DispString(iconPt.x + loc.x, iconPt.y + loc.y, liveicon->lines[i].text);
+      else
+        GUI_DispStringOnIcon(liveicon->iconIndex, iconPt, loc, liveicon->lines[i].text);
     }
   }
 
   GUI_RestoreColorDefault();
-
-  if (item != NULL)
-    ICON_PrepareReadEnd();
 }  // showLiveInfo
 
 void displayExhibitHeader(const char * titleStr, const char * unitStr)

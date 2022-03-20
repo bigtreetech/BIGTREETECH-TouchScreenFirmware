@@ -85,6 +85,7 @@ void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const
 void _GUI_DispStringInPrect(const GUI_RECT *rect, const uint8_t *p);
 void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p);
 void _GUI_DispStringInPrectEOL(const GUI_RECT *rect, const uint8_t *p);
+void _GUI_DispStringOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT textPos, const uint8_t *p);
 
 // display string from label index
 void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index);
@@ -95,6 +96,7 @@ void _GUI_DispLabelInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16
 void _GUI_DispLabelInPrect(const GUI_RECT *rect, uint16_t index);
 void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index);
 void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index);
+void _GUI_DispLabelOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT textPos, uint16_t index);
 
 // macros for selecting right function based on variable type
 #define GUI_DispString(x, y, c)                       _Generic(((c+0)), const uint8_t*: _GUI_DispString, uint8_t*: _GUI_DispString, default: _GUI_DispLabel)(x,y,c)
@@ -105,6 +107,7 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT *rect, uint16_t index);
 #define GUI_DispStringInPrect(rect, c)                _Generic(((c+0)), const uint8_t*: _GUI_DispStringInPrect, uint8_t*: _GUI_DispStringInPrect, default: _GUI_DispLabelInPrect)(rect,c)
 #define GUI_DispStringInRectEOL(sx, sy, ex, ey, c)    _Generic(((c+0)), const uint8_t*: _GUI_DispStringInRectEOL, uint8_t*: _GUI_DispStringInRectEOL, default: _GUI_DispLabelInRectEOL)(sx,sy,ex,ey,c)
 #define GUI_DispStringInPrectEOL(rect, c)             _Generic(((c+0)), const uint8_t*: _GUI_DispStringInPrectEOL, uint8_t*: _GUI_DispStringInPrectEOL, default: _GUI_DispLabelInPrectEOL)(rect,c)
+#define GUI_DispStringOnIcon(icon, iconPt, txtPos, c) _Generic(((c+0)), const uint8_t*: _GUI_DispStringOnIcon,     uint8_t*: _GUI_DispStringOnIcon,     default: _GUI_DispLabelOnIcon)(icon,iconPt,txtPos,c)
 
 void GUI_DispDec(int16_t x, int16_t y,int32_t num, uint8_t len, uint8_t leftOrRight);
 void GUI_DispFloat(int16_t x, int16_t y, float num, uint8_t llen, uint8_t rlen, uint8_t leftOrRight);

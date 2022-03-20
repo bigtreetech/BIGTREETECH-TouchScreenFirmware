@@ -1331,48 +1331,6 @@
 //#define LIVE_TEXT_COMMON_COLOR  // Default: commented (disabled)
 
 /**
- * Live Text Background Color Rendering Technique (Printing menu and Status Screen menu)
- * When enabled, it allows to eliminate the flickering on alternating icons avoiding to
- * draw the icon background under the live text area.
- * Furthermore, it allows to use the icon background colors or a sampled icon background
- * uniform color for each live text.
- * When disabled (set to 0), alternating icons are always fully drawn causing some
- * flickering when live text is drawn on top of them.
- * Furthermore, a standard rendering based on the sampling and use, in a pixel by pixel
- * basis, of the underlying icon background colors is used.
- *
- * NOTES:
- *   - Enable it only in case the icons maintain always the same background colors under
- *     the live text areas (e.g. applicable to Unified, Round Miracle etc... menu themes).
- *   - If enabled, it speeds up the rendering of the live text and the responsiveness of
- *     the TFT, so it can improve the print quality.
- *     Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
- *   - If enabled, it allows to eliminate the flickering on alternating icons.
- */
-
-/**
- * Live Text Background Color Rendering Technique (Printing menu)
- *   Value range: [min: 0, max: 2]
- *     0: disabled
- *     1: apply icon background colors to live text
- *     2: apply sampled icon background uniform color to live text
- */
-#define LIVE_TEXT_BG_COLOR_PRINTING 0  // Default: 0 (disabled)
-
-/**
- * Live Text Background Color Rendering Technique (Status Screen menu)
- *   Value range: [min: 0, max: 6]
- *     0: disabled
- *     1: apply icon background colors to live text 1 (name)
- *     2: apply sampled icon background uniform color to live text 1 (name)
- *     3: apply icon background colors to live text 2 (value)
- *     4: apply sampled icon background uniform color to live text 2 (value)
- *     5: apply icon background colors to both live text 1 and live text 2
- *     6: apply sampled icon background uniform color to both live text 1 and live text 2
- */
-#define LIVE_TEXT_BG_COLOR_STATUS 0  // Default: 0 (disabled)
-
-/**
  * Show Embedded Thumbnails Of Gcode Files
  *
  * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
