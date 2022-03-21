@@ -147,3 +147,11 @@ void coordinateQueryTurnOff(void)
     curQuerySeconds = 0;
   }
 }
+
+float coordinateGetAxis(AXIS axis)
+{
+  if (infoFile.source >= ONBOARD_MEDIA)
+    return coordinateGetAxisActual(axis);
+  else
+    return coordinateGetAxisTarget(axis);
+}

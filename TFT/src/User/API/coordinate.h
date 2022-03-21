@@ -52,6 +52,7 @@ void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateQuerySetWait(bool wait);
 void coordinateQuery(uint8_t delay);
 void coordinateQueryTurnOff(void);
+float coordinateGetAxis(AXIS axis);
 
 #ifdef __cplusplus
 }

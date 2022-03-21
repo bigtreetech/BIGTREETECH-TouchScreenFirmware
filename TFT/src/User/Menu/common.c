@@ -356,18 +356,15 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
 // User choice for disabling all heaters/hotends
 void cooldownTemperature(void)
 {
-    if (infoSettings.alert_heaters_on == 1)
+  if (!isPrinting())
   {
-    if (!isPrinting())
+    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
     {
-      for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+      if (heatGetTargetTemp(i) > 0)
       {
-        if (heatGetTargetTemp(i) > 0)
-        {
-          setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-          break;
-        }
+        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+        break;
       }
     }
   }

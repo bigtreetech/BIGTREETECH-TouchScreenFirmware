@@ -1079,7 +1079,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if (MENU_IS(menuPrinting))
           {
-            if (isPrinting() || infoHost.printing == true)
+            if (isPrinting() || isHostPrinting())
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
@@ -1266,7 +1266,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    loopPrintFromOnboardSD();  // handle a print from (remote) onboard media, if any
+    loopPrintFromOnboard();  // handle a print from (remote) onboard media, if any
   }
 
   #ifdef USB_FLASH_DRIVE_SUPPORT
