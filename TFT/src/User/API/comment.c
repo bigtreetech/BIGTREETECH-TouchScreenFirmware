@@ -15,6 +15,9 @@ void setM73R_presence(bool present)
 
 void parseComment(void)
 {
+  if (gCodeCommentLine[0] == '\0')
+    return;
+
   char * temp_char;
   uint32_t temp_value = 0;
 
@@ -37,7 +40,7 @@ void parseComment(void)
         if (temp_value != 0)
           setPrintLayerCount(temp_value);
       }
-      else if (temp_char[0] - '0'  && temp_char[0] <= '9')  // check if a number is found
+      else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
       {
         temp_value = strtoul(temp_char, NULL, 0);
         // "temp_value == 0" for object by object printing, when print goes to the next object
@@ -97,5 +100,5 @@ void parseComment(void)
     // continue here with "else if" for another token that starts with "r" or "R"
   }
 
-  gCodeCommentLine[0] = 0;
+  gCodeCommentLine[0] = '\0';
 }

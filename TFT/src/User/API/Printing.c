@@ -6,6 +6,7 @@ typedef struct
   FIL        file;
   uint32_t   size;                // gcode file total size
   uint32_t   cur;                 // gcode file printed size
+  uint32_t   offset;              // size of non-printing gcodes (calculated dynamically)
   uint32_t   expectedTime;        // expected print duration in sec
   uint32_t   time;                // current elapsed time in sec
   uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
@@ -195,7 +196,7 @@ bool updatePrintProgress(void)
     if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
       infoPrinting.progress = 100;
     else
-      infoPrinting.progress = MIN((uint64_t)infoPrinting.cur * 100 / infoPrinting.size, 100);
+      infoPrinting.progress = MIN((uint64_t)((infoPrinting.cur - infoPrinting.offset) * 100 / (infoPrinting.size - infoPrinting.offset)), 100);
   }
 
   if (infoPrinting.progress != prevProgress)
@@ -764,7 +765,7 @@ void loopPrintFromTFT(void)
   CMD      gcode;
   uint8_t  gcode_count = 0;
   uint8_t  comment_count = 0;
-  char     read_char = '0';
+  char     read_char = '\0';
   UINT     br = 0;
   FIL *    ip_file = &infoPrinting.file;
   uint32_t ip_cur = infoPrinting.cur;
@@ -783,7 +784,7 @@ void loopPrintFromTFT(void)
       if (gcode_count != 0)  // if a gcode was found, finalize and enqueue the gcode and exit from loop
       {
         gcode[gcode_count++] = '\n';
-        gcode[gcode_count] = 0;  // terminate string
+        gcode[gcode_count] = '\0';  // terminate string
         storeCmdFromUART(PORT_1, gcode);
 
         break;
@@ -817,12 +818,14 @@ void loopPrintFromTFT(void)
         continue;  // "continue" will force also to execute "ip_cur++" in the "for" statement
       }
 
+      infoPrinting.offset++;  // count non-gcode size
+
       if (read_char == '\n')  // '\n' is command end flag
       {
         if (comment_parsing && comment_count != 0)  // if a comment was found, finalize the comment data structure
         {
           gCodeCommentLine[comment_count++] = '\n';
-          gCodeCommentLine[comment_count] = 0;  // terminate string
+          gCodeCommentLine[comment_count] = '\0';  // terminate string
         }
 
         break;  // line was parsed so always exit from loop
@@ -831,7 +834,7 @@ void loopPrintFromTFT(void)
       {
         if (read_char == ';')  // ';' is command comment flag
         {
-          comment_count = 0;  // there might be a comment in a commented line. We always consider the last comment
+          comment_count = 0;  // there might be a comment in a commented line, always consider the last comment
         }
         else if (read_char == ' ' && comment_count == 0)  // ignore initial ' ' space bytes
         {}

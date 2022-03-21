@@ -136,8 +136,12 @@ static void setLayerNumberTxt(char * layer_number_txt)
   uint16_t layerCount = getPrintLayerCount();
   if (layerNumber > 0)
   {
-    if (layerCount > 0 && layerCount < 1000)
-    { // there's no space to display layer number & count if the layer count is above 999
+    if (layerCount > 0
+        #ifndef TFT70_V3_0
+          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
+        #endif
+        )
+    {
       sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }
     else
@@ -456,12 +460,9 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  if (nextProgress != prevProgress)
-  { // we need speed, do not draw anything if progress isn't changed
-    if (nextProgress > prevProgress)
-      reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
-    else  // if regress, swap indexes and colors
-      reDrawProgressBar(nextProgress, prevProgress, PB_BCKG, PB_STRIPE_REMAINING);
+  if (nextProgress > prevProgress)
+  { // we need speed, do not draw anything if progress isn't increased (it cannot decrease)
+    reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
     if (progDisplayType != ELAPSED_REMAINING)
     {
       reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
