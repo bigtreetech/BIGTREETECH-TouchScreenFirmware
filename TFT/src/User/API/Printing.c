@@ -819,8 +819,6 @@ void loopPrintFromTFT(void)
         continue;  // "continue" will force also to execute "ip_cur++" in the "for" statement
       }
 
-      infoPrinting.offset++;  // count non-gcode size
-
       if (read_char == '\n')  // '\n' is command end flag
       {
         if (comment_parsing && comment_count != 0)  // if a comment was found, finalize the comment data structure
@@ -847,6 +845,8 @@ void loopPrintFromTFT(void)
             comment_parsing = false;
         }
       }
+
+      infoPrinting.offset++;  // count non-gcode size
     }
   }
 
