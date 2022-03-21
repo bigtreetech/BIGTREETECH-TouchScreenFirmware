@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Vysunout"
     #define STRING_STOW                   "Zasunout"
     #define STRING_REPEAT                 "Přesnost"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Tryska"

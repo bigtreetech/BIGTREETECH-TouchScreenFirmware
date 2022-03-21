@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Gebruiken"
     #define STRING_STOW                   "Inzetten"
     #define STRING_REPEAT                 "Herhaal"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Spuitneus"

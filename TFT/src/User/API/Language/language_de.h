@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "ausfahren"
     #define STRING_STOW                   "einziehen"
     #define STRING_REPEAT                 "Präzision"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Düse"

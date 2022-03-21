@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Vystrčiť"
     #define STRING_STOW                   "Stiahnuť"
     #define STRING_REPEAT                 "Opakovať"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Tryska"

@@ -426,11 +426,12 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
-        storeCmd("M503\n");  // query detailed printer capabilities
-        storeCmd("M92\n");   // steps/mm of extruder is an important parameter for Smart filament runout
-                             // avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M211\n");  // retrieve the software endstops state
-        storeCmd("M115\n");  // as last command to identify the FW type!
+        storeCmd("M503\n");    // query detailed printer capabilities
+        storeCmd("M92\n");     // steps/mm of extruder is an important parameter for Smart filament runout
+                               // avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M211\n");    // retrieve the software endstops state
+        storeCmd("M115\n");    // as last command to identify the FW type!
+        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode 
       }
 
       infoHost.connected = true;
@@ -796,15 +797,6 @@ void parseACK(void)
       else if (meshIsWaitingData())
       {
         meshUpdateData(dmaL2Cache);  // update mesh data
-      }
-      // parse and store M420 V1 T1 or M420 Sxx or M503, ABL state (e.g. from Bed Leveling menu)
-      else if (ack_seen("echo:Bed Leveling"))
-      {
-        setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
-      }
-      else if (ack_seen("echo:Fade Height"))
-      {
-        setParameter(P_ABL_STATE, 1, ack_value());
       }
       // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
       else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
@@ -1209,7 +1201,21 @@ void parseACK(void)
       // parse echo messages
       else if (ack_seen(magic_echo))
       {
-        if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
+        // parse and store M401 H, BLTouch HighSpeed mode
+        if (ack_continue_seen("BLTouch HS mode"))
+        {
+          setHSmode(ack_continue_seen("ON") ? HS_ON : HS_OFF);
+        }
+        // parse and store M420 V1 T1 or M420 Sxx or M503, ABL state (e.g. from Bed Leveling menu)
+        else if (ack_continue_seen("Bed Leveling"))
+        {
+          setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
+        }
+        else if (ack_continue_seen("Fade Height"))
+        {
+          setParameter(P_ABL_STATE, 1, ack_value());
+        }
+        else if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
         {
           ackPopupInfo(magic_echo);
         }

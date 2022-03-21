@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "BLT вниз"
     #define STRING_STOW                   "BLT вгору"
     #define STRING_REPEAT                 "Точність Z"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Сопло"

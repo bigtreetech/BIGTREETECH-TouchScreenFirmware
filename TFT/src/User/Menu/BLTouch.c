@@ -3,7 +3,14 @@
 
 #define SERVO_GCODE "M280 P0 S%d\n"
 
-const MENUITEMS BLTouchItems = {
+static BLT_HS_MODE bltHSmode = HS_DISABLED;
+
+void setHSmode(BLT_HS_MODE hsMode)
+{
+  bltHSmode = hsMode;
+}
+
+MENUITEMS BLTouchItems = {
   // title
   LABEL_BLTOUCH,
   // icon                          label
@@ -22,6 +29,7 @@ const MENUITEMS BLTouchItems = {
 void menuBLTouch(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
+  uint8_t hsModeOld = HS_DISABLED;
 
   menuDrawPage(&BLTouchItems);
 
@@ -51,12 +59,28 @@ void menuBLTouch(void)
         storeCmd("M48\n");
         break;
 
+      case KEY_ICON_5:
+        if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != HS_DISABLED)
+        {
+          bltHSmode = HS_ON - bltHSmode; 
+          storeCmd("M401 S%u\n", bltHSmode);
+        }
+        break;
+
       case KEY_ICON_7:
         CLOSE_MENU();
         break;
 
       default:
         break;
+    }
+
+    if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != hsModeOld)
+    {
+      hsModeOld = bltHSmode;
+      BLTouchItems.items[5].icon = (bltHSmode == HS_ON) ? ICON_FAST_SPEED : ICON_SLOW_SPEED;
+      BLTouchItems.items[5].label.index = (bltHSmode == HS_ON) ? LABEL_HS_ON : LABEL_HS_OFF;
+      menuDrawItem(&BLTouchItems.items[5], 5);
     }
 
     loopProcess();

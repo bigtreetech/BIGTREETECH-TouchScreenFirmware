@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Abrir"
     #define STRING_STOW                   "Encolher"
     #define STRING_REPEAT                 "Repetir"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Nozzle"
