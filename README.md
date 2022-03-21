@@ -140,7 +140,7 @@ Distribution date: **2021-05-15**
 **Options to fully support Bed Leveling menu:**
 
 `Z_MIN_PROBE_REPEATABILITY_TEST` (in Configuration.h)<br>
-`G26_MESH_VALIDATION (in Configuration.h)` (in Configuration.h)<br>
+`G26_MESH_VALIDATION` (in Configuration.h)<br>
 `Z_STEPPER_AUTO_ALIGN` (in Configuration_adv.h)<br>
 
 ## Connecting the TFT to the Mainboard
