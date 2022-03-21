@@ -3,7 +3,7 @@
 #include "ListItem.h"
 #include "Notification.h"
 
-#define STATUS_BAR_REFRESH_TIME 2000 // refresh time in ms
+#define STATUS_BAR_REFRESH_TIME 2000  // refresh time in ms
 
 const GUI_RECT exhibitRect = {
 #ifdef PORTRAIT_MODE
@@ -647,7 +647,7 @@ MENU_TYPE getMenuType(void)
 }
 
 void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void(*action_redraw)(uint8_t position, uint8_t is_press),
+             void (*action_redraw)(uint8_t position, uint8_t is_press),
              void (*menu_redraw)(void))
 {
   menuType = menu_type;
@@ -834,8 +834,7 @@ void menuReDrawCurTitle(void)
   {
     if (curListItems == NULL)
       return;
-    if (curListItems->title.index < LABEL_NULL)
-      menuDrawTitle(labelGetAddress(&curListItems->title));
+    menuDrawTitle(labelGetAddress(&curListItems->title));
   }
   else if (menuType == MENU_TYPE_ICON)
   {
@@ -887,11 +886,11 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&menuItems->title));
+  menuDrawTitle(labelGetAddress(&curMenuItems->title));
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
-    menuDrawItem(&menuItems->items[i], i);
+    menuDrawItem(&curMenuItems->items[i], i);
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 
@@ -1239,20 +1238,22 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
-  // Get Gcode command from the file to be printed
-  loopPrintFromTFT();  // handle a print from TFT, if any
-  // Parse and send Gcode commands in the queue
+  // Get gcode command from the file to be printed
+  loopPrintFromTFT();  // handle a print from TFT media, if any
+
+  // Parse and send gcode commands in the queue
   sendQueueCmd();
+
   // Parse the received slave response information
   parseACK();
 
   if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
   {
-    parseComment();  // Parse comment from gCode file
+    parseComment();  // Parse comment from gcode file
   }
 
-  #if defined(SERIAL_PORT_2) || defined(SERIAL_PORT_3) || defined(SERIAL_PORT_4)
-    // Parse the received Gcode from other UART, such as: ESP3D, etc...
+  #ifdef SERIAL_PORT_2
+    // Parse the received gcode from other UART, such as ESP3D etc...
     parseRcvGcode();
   #endif
 
@@ -1270,7 +1271,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    loopPrintFromOnboardSD();  // handle a print from (remote) onboard SD, if any
+    loopPrintFromOnboardSD();  // handle a print from (remote) onboard media, if any
   }
 
   #ifdef USB_FLASH_DRIVE_SUPPORT
@@ -1310,19 +1311,14 @@ void loopBackEnd(void)
   if (GET_BIT(infoSettings.general_settings, INDEX_EVENT_LED) == 1)
     LED_CheckEvent();
 
-  if (infoMachineSettings.caseLightsBrightness == ENABLED)
-  {
-    loopCaseLight();
-  }
-
   // Query RRF status
   rrfStatusQuery();
-}  // loopBackEnd
+}
 
 // UI-related background loop tasks
 void loopFrontEnd(void)
 {
-  // Check if volume source(SD/U disk) insert
+  // Check if volume source (SD/USB) insert
   loopVolumeSource();
   // Loop to check and run toast messages
   loopToast();

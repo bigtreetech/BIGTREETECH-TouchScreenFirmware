@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20211213
+#define CONFIG_VERSION 20220124
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -67,8 +67,8 @@
 
 /**
  * Event LED
- * When printing from TFT SD / TFT U Disk, the TFT periodically sets the printer's (neopixel) LED color
- * and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
+ * When printing from TFT SD card / TFT USB disk, the TFT periodically sets the printer's (neopixel)
+ * LED color and TFT's knob LED color, if any, according to the current nozzle and bed temperatures.
  *
  * NOTE: If "EMULATED_M109_M190" is disabled (heating controlled by printer), the TFT cannot control the
  *       printer's (neopixel) LED during heating. It will control only the TFT's knob LED, if any.
@@ -178,7 +178,7 @@
  * Files Sorting
  * Sort files and folders based on the selected option.
  *
- * NOTE: Only applicable for files in TFT SD Card and TFT USB Stick.
+ * NOTE: Only applicable for files in TFT SD card and TFT USB disk.
  *
  *   Options: [Date Newest First: 0, Date Oldest First: 1, Name Ascending: 2, Name Descending: 3]
  */
@@ -275,6 +275,22 @@
  *   Options: [Layer height: 0, Layer number: 1, Both - height & number: 2]
  */
 #define LAYER_DISP_TYPE 0  // Default: 0
+
+/**
+ * Show Bootscreen at Power On - Setting in Config.ini
+ *This setting allows to show (or not) the BigTreeTech Bootscreen Logo at Power On
+ *
+ *   Options: [No: 0, Yes: 1]
+ */
+#define SHOW_BOOTSCREEN 1  // Default: 1
+
+/**
+ * Alerts that Heaters are still on - Setting in Config.ini
+ * This setting allows to show (or not) the alerts that heaters are still on when leaving some menus
+ *
+ *  Options: [No: 0, Yes: 1]
+ */
+#define ALERT_HEATERS_ON 1  // Default: 1
 
 //================================================================================
 //============================= Marlin Mode Settings =============================
@@ -373,8 +389,9 @@
  *   Value range: [min: 0, max: 6]
  */
 #define EXTRUDER_COUNT  1  // Default: 1
-#define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
-                           // of the number of extruders)
+
+// For mixing extruder set to 1 (this option turns off auto detection of the number of extruders)
+#define MIXING_EXTRUDER 0  // Default: 0
 
 /**
  * Fan Count
@@ -479,15 +496,15 @@
 #define AUTO_LOAD_LEVELING 1  // Default: 1
 
 /**
- * Onboard / Printer SD
+ * Onboard / Printer Media
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
- * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
+ * onboard media and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
 
 /**
- * Onboard / Printer SD Card Support
- * On Marlin firmware, the TFT will auto-detect Onboard SD Card.
+ * Onboard / Printer Media Support
+ * On Marlin firmware, the TFT will auto-detect onboard media.
  * Auto-detect is not available for other firmwares like Smoothieware.
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
@@ -727,6 +744,8 @@
 /**
  * Inverted Filament Runout Sensor Logic
  * The sensor uses an inverted logic.
+ * Disable it in case filament runout is triggered by a LOW signal.
+ * Enable it in case filament runout is triggered by a HIGH signal.
  *   Options: [disable: 0, enable: 1]
  */
 #define FIL_RUNOUT_INVERTED 1  // Default: 1
@@ -767,7 +786,7 @@
 /**
  * Power Loss Recovery Mode
  * Enable power loss recovery.
- * Disable to reduce the loss of SD card or U disk.
+ * Disable to reduce the loss of TFT SD card or TFT USB disk.
  *   Options: [disable: 0, enable: 1]
  */
 #define PL_RECOVERY 1  // Default: 1
@@ -850,6 +869,33 @@
  *   Options: [disable: 0, enable: 1]
  */
 #define LCD_LOCK_ON_IDLE 0  // Default: 0
+
+/**
+ * LED Color
+ * Printer's LED color used by some features such as Event LED and PID processes.
+ *   Format: [led_color: R:<component> G:<component> B:<component> W:<component> P:<component> I:<component>
+ *   Target component: R: Red
+ *                     G: Green
+ *                     B: Blue
+ *                     W: White;     NEOPIXEL or RGB(W)
+ *                     P: Intensity; NEOPIXEL
+ *                     I: Index;     NEOPIXEL
+ *   Value range: [min: 0, max: 255]
+ */
+#define LED_R 255  // R: Red (Default: 0)
+#define LED_G 255  // G: Green (Default: 0)
+#define LED_B 255  // B: Blue (Default: 0)
+#define LED_W 255  // W: White;     NEOPIXEL or RGB(W) (Default: 0)
+#define LED_P 255  // P: Intensity; NEOPIXEL (Default: 0)
+#define LED_I 255  // I: Index;     NEOPIXEL (Default: 0)
+
+/**
+ * LED Always ON
+ * Keep printers's LED on at startup and after Event LED and PID processes terminate.
+ * The printer's LED color is configured in "LED_COLOR".
+ *   Options: [disable: 0, enable: 1]
+ */
+#define LED_ALWAYS_ON 1  // Default: 1
 
 /**
  * Knob LED Color (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
@@ -1023,7 +1069,7 @@
 //================================================================================
 
 // PID autotune
-#define PID_CMD_MARLIN      {"M303 U1 C8 E0", "M303 U1 C8 E1", "M303 U1 C8 E2", "M303 U1 C8 E3", "M303 U1 C8 E4", "M303 U1 C8 E5", "M303 U1 C8 E-1", ""}
+#define PID_CMD_MARLIN      {"M303 E0 C8 U1", "M303 E1 C8 U1", "M303 E2 C8 U1", "M303 E3 C8 U1", "M303 E4 C8 U1", "M303 E5 C8 U1", "M303 E-1 C8 U1", ""}
 #define PID_CMD_RRF         {"M303 T0",       "M303 T1",       "M303 T2",       "M303 T3",       "M303 T4",       "M303 T5",       "M303 H0",        ""}
 #define PID_PROCESS_TIMEOUT (15 * 60000)  // Timeout in MilliSeconds (1 minute = 60000 MilliSeconds). Default: 15 * 60000
 
@@ -1120,7 +1166,7 @@
 #define NOZZLE_PAUSE_M601  // Default: uncommented (enabled)
 
 /**
- * M701, M702: Marlin Filament Load / Unload Gcodes Support
+ * M701, M702: Marlin Filament Load / Unload G-codes Support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
@@ -1184,7 +1230,7 @@
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for Touch Mode and if BUZZER_PIN is set or available.
  *
- * NOTE: Test audio output with the G-Code:
+ * NOTE: Test audio output with the G-code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
@@ -1204,10 +1250,16 @@
 #define BTT_BOOTSCREEN_TIME 3000  // Default: 3000
 
 /**
+ * Safety Alert
+ * If enabled, safety alert popup messages are shown by some menus (e.g. heaters still on when leaving some menus).
+ */
+#define SAFETY_ALERT  // Default: uncommented (enabled)
+
+/**
  * Smart Home
- * If enabled, long press "Back" button triggers Home screen
+ * If enabled, long press "Back" button triggers Home screen.
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
- * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode".
  */
 #define SMART_HOME  // Default: uncommented (enabled)
 
@@ -1344,7 +1396,7 @@
 #define LIVE_TEXT_BG_COLOR_STATUS 2  // Default: 0 (disabled)
 
 /**
- * Show Embedded Thumbnails Of Gcode Files
+ * Show Embedded Thumbnails Of G-code Files
  *
  * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
  *       allocated RAM. Therefore this option is only suitable for devices >96KB RAM.

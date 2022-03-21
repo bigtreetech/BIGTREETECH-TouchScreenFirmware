@@ -80,7 +80,12 @@ void menuUnifiedMove(void)
 
       case KEY_ICON_6:
         if (infoMachineSettings.leveling != BL_DISABLED)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            storeCmd("M420\n");  // refresh ABL_STATE
+
           OPEN_MENU(menuBedLeveling);
+        }
         break;
 
       case KEY_ICON_7:

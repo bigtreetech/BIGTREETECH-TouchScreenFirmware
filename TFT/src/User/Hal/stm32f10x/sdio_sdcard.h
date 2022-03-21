@@ -167,10 +167,10 @@ typedef struct
 {
   SD_CSD SD_csd;
   SD_CID SD_cid;
-  long long CardCapacity;   //SD card capacity, unit: byte, supports up to 2 ^ 64 byte card.
-  uint32_t CardBlockSize;        //SD card block size
-  uint16_t RCA;                  //Card relative address
-  uint8_t CardType;              //card type
+  long long CardCapacity;  //SD card capacity, unit: byte, supports up to 2 ^ 64 byte card.
+  uint32_t CardBlockSize;  //SD card block size
+  uint16_t RCA;            //Card relative address
+  uint8_t CardType;        //card type
 } SD_CardInfo;
 extern SD_CardInfo SDCardInfo;//SD card information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,14 +205,14 @@ extern SD_CardInfo SDCardInfo;//SD card information
 #define SD_CMD_CLR_WRITE_PROT                      ((uint8_t)29)
 #define SD_CMD_SEND_WRITE_PROT                     ((uint8_t)30)
 #define SD_CMD_SD_ERASE_GRP_START                  ((uint8_t)32) /*!< To set the address of the first write
-                                                                  block to be erased. (For SD card only) */
+                                                                      block to be erased. (For SD card only) */
 #define SD_CMD_SD_ERASE_GRP_END                    ((uint8_t)33) /*!< To set the address of the last write block of the
-                                                                  continuous range to be erased. (For SD card only) */
+                                                                      continuous range to be erased. (For SD card only) */
 #define SD_CMD_ERASE_GRP_START                     ((uint8_t)35) /*!< To set the address of the first write block to be erased.
-                                                                  (For MMC card only spec 3.31) */
+                                                                      (For MMC card only spec 3.31) */
 
 #define SD_CMD_ERASE_GRP_END                       ((uint8_t)36) /*!< To set the address of the last write block of the
-                                                                  continuous range to be erased. (For MMC card only spec 3.31) */
+                                                                      continuous range to be erased. (For MMC card only spec 3.31) */
 
 #define SD_CMD_ERASE                               ((uint8_t)38)
 #define SD_CMD_FAST_IO                             ((uint8_t)39) /*!< SD Card doesn't support it */

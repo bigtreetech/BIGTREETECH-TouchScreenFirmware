@@ -49,7 +49,7 @@ void menuLoadUnload(void)
     {
       loopProcess();
     }
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.coordinate = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.handled = true;
   }
 
@@ -108,7 +108,7 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_5:  // heat menu
-          heatSetCurrentIndex(currentTool);  // preselect current nozzle for "Heat" menu
+          heatSetCurrentIndex(tool_index);  // preselect current nozzle for "Heat" menu
           OPEN_MENU(menuHeat);
           eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
@@ -120,7 +120,7 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_7:  // back
-          cooldownTemperature();
+          COOLDOWN_TEMPERATURE();
           lastCmd = NONE;
           CLOSE_MENU();
           eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)

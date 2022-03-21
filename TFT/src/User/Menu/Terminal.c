@@ -470,7 +470,7 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          gcodeBuf[nowIndex++] = '\n';  // end char '\n' for Gcode
+          gcodeBuf[nowIndex++] = '\n';  // end char '\n' for gcode
           gcodeBuf[nowIndex] = 0;
           storeCmd(gcodeBuf);
           gcodeBuf[nowIndex = 0] = 0;
@@ -830,7 +830,7 @@ void menuTerminalWindow(void)
           terminalData->pageTable[terminalData->pageTail] = terminalBuf + bufIndex;
 
           // move to next first page if we reached the maximun page count
-          if (terminalData->pageTail == 0 && (terminalData->pageCount + 1) == terminalData->maxPageCount)
+          if (terminalData->pageTail == terminalData->pageHead && (terminalData->pageCount + 1) == terminalData->maxPageCount)
             terminalData->pageHead = (terminalData->pageHead + 1) % terminalData->maxPageCount;
 
           terminalUpdatePageCount();  // update page count

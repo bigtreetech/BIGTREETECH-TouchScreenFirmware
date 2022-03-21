@@ -62,7 +62,7 @@ void pidUpdateStatus(bool succeeded)
   {
     pidRunning = false;
 
-    LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+    LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
 
     if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
     {
@@ -101,7 +101,7 @@ static inline void pidCheckTimeout(void)
       //pidCounter = 0;        // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
       //pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
 
-      LED_SetColor(0, 255, 0, false);  // set (neopixel) LED light to GREEN
+      LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
 
       LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
@@ -163,8 +163,8 @@ static inline void pidStart(void)
   pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
   pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
 
-  LED_SetColor(255, 0, 0, false);  // set (neopixel) LED light to RED
-  LCD_SET_KNOB_LED_IDLE(false);    // set infoSettings.knob_led_idle temporary to OFF
+  LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
+  LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
     mustStoreCmd("M106 S255\n");  // set fan speed to max
@@ -300,8 +300,9 @@ void menuPid(void)
         break;
 
       case KEY_ICON_7:
-        LED_SetColor(0, 0, 0, false);  // set (neopixel) LED light to OFF
-        LCD_SET_KNOB_LED_IDLE(true);   // restore infoSettings.knob_led_idle and knob LED color to their default values
+        // set (neopixel) LED light to current color or to OFF according to infoSettings.led_always_on and
+        // restore infoSettings.knob_led_idle and knob LED color to their default values
+        LED_SetPostEventColor();
 
         CLOSE_MENU();
         break;

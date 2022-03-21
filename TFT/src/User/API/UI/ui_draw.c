@@ -280,6 +280,9 @@ uint32_t modelFileSeekToThumbnailBase64PNG(FIL *fp, uint16_t width, uint16_t hei
   snprintf(buf, sizeof(buf), "; thumbnail begin %hux%hu ", width, height);
   dbg_print("Start search\n");
 
+  // Seek to the beginning of the file as the file pointer was moved during the RGB565 thumbnail search
+  f_lseek(fp, 0);
+
   if (!modelFileFind(fp, buf))
     return 0;
 

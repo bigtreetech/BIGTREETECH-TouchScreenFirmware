@@ -26,6 +26,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -U platformio
+      - name: Build TFT24 V1.1
+        run: platformio run --environment BIGTREE_TFT24_V1_1
+      - name: Build TFT28 V1.0
+        run: platformio run --environment BIGTREE_TFT28_V1_0
+      - name: Build TFT28 V3.0
+        run: platformio run --environment BIGTREE_TFT28_V3_0
       - name: Build TFT35 V1.0
         run: platformio run --environment BIGTREE_TFT35_V1_0
       - name: Build TFT35 V1.1
@@ -34,16 +40,10 @@ jobs:
         run: platformio run --environment BIGTREE_TFT35_V1_2
       - name: Build TFT35 V2.0
         run: platformio run --environment BIGTREE_TFT35_V2_0
-      - name: Build GD_TFT35 V2.0
-        run: platformio run --environment BIGTREE_GD_TFT35_V2_0
       - name: Build TFT35 V3.0
         run: platformio run --environment BIGTREE_TFT35_V3_0
-      - name: Build GD TFT35 V3.0
-        run: platformio run --environment BIGTREE_GD_TFT35_V3_0
       - name: Build TFT35 E3 V3.0
         run: platformio run --environment BIGTREE_TFT35_E3_V3_0
-      - name: Build GD TFT35 E3 V3.0
-        run: platformio run --environment BIGTREE_GD_TFT35_E3_V3_0
       - name: Build TFT35 B1 V3.0
         run: platformio run --environment BIGTREE_TFT35_B1_V3_0
       - name: Build TFT43 V3.0
@@ -52,26 +52,36 @@ jobs:
         run: platformio run --environment BIGTREE_TFT50_V3_0
       - name: Build TFT70 V3.0
         run: platformio run --environment BIGTREE_TFT70_V3_0
-      - name: Build TFT28 V1.0
-        run: platformio run --environment BIGTREE_TFT28_V1_0
-      - name: Build TFT28 V3.0
-        run: platformio run --environment BIGTREE_TFT28_V3_0
-      - name: Build TFT24 V1.1
-        run: platformio run --environment BIGTREE_TFT24_V1_1
-      - name: Build GD_TFT24 V1.1   
+      - name: Build GD_TFT24 V1.1
         run: platformio run --environment BIGTREE_GD_TFT24_V1_1
-      - name: Build MKS TFT32 V1.3
-        run: platformio run --environment MKS_TFT32_V1_3
-      - name: Build MKS TFT32 V1.4
-        run: platformio run --environment MKS_TFT32_V1_4
-      - name: Build MKS TFT32 V1.4 No Bootloader
-        run: platformio run --environment MKS_TFT32_V1_4_NOBL
+      - name: Build GD_TFT35 V2.0
+        run: platformio run --environment BIGTREE_GD_TFT35_V2_0
+      - name: Build GD TFT35 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT35_V3_0
+      - name: Build GD TFT35 E3 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT35_E3_V3_0
+      - name: Build GD TFT35 B1 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT35_B1_V3_0
+      - name: Build GD TFT43 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT43_V3_0
+      - name: Build GD TFT50 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT50_V3_0
+      - name: Build GD TFT70 V3.0
+        run: platformio run --environment BIGTREE_GD_TFT70_V3_0
       - name: Build MKS TFT28 V3.0
         run: platformio run --environment MKS_TFT28_V3_0
       - name: Build MKS TFT28 V4.0
         run: platformio run --environment MKS_TFT28_V4_0
       - name: Build MKS TFT28 New Genius
         run: platformio run --environment MKS_TFT28_NEW_GENIUS
+      - name: Build MKS TFT32 V1.3
+        run: platformio run --environment MKS_TFT32_V1_3
+      - name: Build MKS TFT32 V1.4
+        run: platformio run --environment MKS_TFT32_V1_4
+      - name: Build MKS TFT32 V1.4 No Bootloader
+        run: platformio run --environment MKS_TFT32_V1_4_NOBL
+      - name: Build MKS TFT35 V1.0
+        run: platformio run --environment MKS_TFT35_V1_0
       - name: Remove Old Binaries
         run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
       - name: Remove Old Config

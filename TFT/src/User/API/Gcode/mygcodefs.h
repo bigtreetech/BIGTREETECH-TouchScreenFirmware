@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "gcode.h"
 
 bool mountGcodeSDCard(void);
 bool scanPrintFilesGcodeFs(void);

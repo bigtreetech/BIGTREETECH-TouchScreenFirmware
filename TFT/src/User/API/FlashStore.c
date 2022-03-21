@@ -2,8 +2,12 @@
 #include "HAL_Flash.h"
 #include <string.h>
 
+#ifdef I2C_EEPROM  // added I2C_EEPROM suppport for MKS_TFT35_V1_0
+  #include "i2c_eeprom.h"
+#endif
+
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20211213  // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20220124  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
                               // in the "initSettings()" function
 enum
@@ -47,7 +51,11 @@ void readStoredPara(void)
   uint32_t index = 0;
   uint32_t sign = 0;
 
+#ifdef I2C_EEPROM  // added I2C_EEPROM suppport for MKS_TFT35_V1_0
+  EEPROM_FlashRead(data, PARA_SIZE);
+#else
   HAL_FlashRead(data, PARA_SIZE);
+#endif
 
   sign = byteToWord(data + (index += 4), 4);
   if (sign == TSC_SIGN)
@@ -85,7 +93,11 @@ void storePara(void)
   wordToByte(PARA_SIGN, data + (index += 4));
   memcpy(data + (index += 4), &infoSettings, sizeof(SETTINGS));
 
+#ifdef I2C_EEPROM                      // added I2C_EEPROM suppport for MKS_TFT35_V1_0
+  EEPROM_FlashWrite(data, PARA_SIZE);  // store settings in I2C_EEPROM
+#else
   HAL_FlashWrite(data, PARA_SIZE);
+#endif
 }
 
 bool readIsTSCExist(void)

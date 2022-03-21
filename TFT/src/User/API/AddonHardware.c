@@ -86,15 +86,13 @@ void FIL_SFS_SetAlive(bool alive)
 bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
-  static uint32_t trueTimes = 0;
-  static uint32_t falseTimes = 0;
+  static int32_t trigBalance = 0;
   static uint32_t nextRunoutTime = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
-    runout = trueTimes > falseTimes ? true : false;
-    trueTimes = 0;
-    falseTimes = 0;
+    runout = (trigBalance > 0);
+    trigBalance = 0;
     nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
@@ -138,18 +136,10 @@ bool FIL_NormalRunoutDetect(void)
         break;
     }
 
-    if (pinState)
-    {
-      trueTimes++;
-    }
-    else
-    {
-      falseTimes++;
-    }
+    trigBalance += (pinState == GET_BIT(infoSettings.runout, RUNOUT_INVERTED)) ? 1: -1;  // if triggered add 1 else substract 1
   }
 
-  // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-  return (runout == GET_BIT(infoSettings.runout, RUNOUT_INVERTED));
+  return runout;
 }
 
 bool FIL_SmartRunoutDetect(void)
@@ -165,21 +155,21 @@ bool FIL_SmartRunoutDetect(void)
   { // Send M114 E to query extrude position continuously
     if (posE_updateWaiting == true)
     {
-      nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+      nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_UPDATE_TIME;
       break;
     }
 
     if (OS_GetTimeMs() < nextUpdateTime)
       break;
 
-    if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
+    if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
       break;
 
     if (storeCmd("M114 E\n") == false)
       break;
 
     posE_updateWaiting = true;
-    nextUpdateTime = OS_GetTimeMs() + POS_E_UPDATE_TIME;
+    nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_UPDATE_TIME;
   } while (0);
 
   if (sfs_alive == false)
@@ -256,7 +246,7 @@ void FIL_FE_CheckRunout(void)
   if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
   {
     BUZZER_PLAY(SOUND_ERROR);
-    nextReminderTime = OS_GetTimeMs() + ALARM_REMINDER_TIME;
+    nextReminderTime = OS_GetTimeMs() + FIL_ALARM_REMINDER_TIME;
   }
 }
 

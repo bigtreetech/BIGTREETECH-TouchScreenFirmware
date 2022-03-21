@@ -13,7 +13,7 @@ uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 static uint32_t lastTime = 0;
 
-//Icons list for tool change
+// Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
 {
 // icon                          label
@@ -351,19 +351,26 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
   return HEATED;
 }
 
-// user choice for disabling all heaters/hotends
+#ifdef SAFETY_ALERT
+
+// User choice for disabling all heaters/hotends
 void cooldownTemperature(void)
 {
-  if (!isPrinting())
+    if (infoSettings.alert_heaters_on == 1)
   {
-    for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+    if (!isPrinting())
     {
-      if (heatGetTargetTemp(i) > 0)
+      for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
       {
-        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
-        break;
+        if (heatGetTargetTemp(i) > 0)
+        {
+          setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
+          showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+          break;
+        }
       }
     }
   }
 }
+
+#endif  // SAFETY_ALERT

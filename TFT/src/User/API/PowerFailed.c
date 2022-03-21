@@ -1,6 +1,8 @@
 #include "PowerFailed.h"
 #include "includes.h"
 
+#define BREAK_POINT_FILE "Printing.sys"
+
 typedef struct
 {
   float    axis[TOTAL_AXIS];
@@ -20,123 +22,43 @@ BREAK_POINT  infoBreakPoint;
 char powerFailedFileName[256];
 FIL fpPowerFailed;
 
+static bool restore = false;  // print restore flag disabled by default
 static bool create_ok = false;
 
-void powerFailedClear(void)
+void powerFailedSetRestore(bool allowed)
 {
-  memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
+  restore = allowed;
 }
 
-bool powerFailedExist(void)
+bool powerFailedGetRestore(void)
 {
-  FIL fp;
-  UINT br;
-
-  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
-  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br)               != FR_OK) return false;
-  if (f_close(&fp)                                                 != FR_OK) return false;
-
-  create_ok = true;
-  return true;
+  return restore;
 }
 
-void powerFailedSetDriverSource(char *src)
+void powerFailedSetDriverSource(void)
 {
-  strcpy(powerFailedFileName, src);
+  strcpy(powerFailedFileName, getCurFileSource());
   strcat(powerFailedFileName, BREAK_POINT_FILE);
 }
 
-bool powerFailedCreate(char *path)
+bool powerFailedInitData(void)
 {
-  UINT br;
+  memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
 
-  create_ok = false;
-  if (!infoSettings.plr) return false;            // if disabled plr
-  if (infoFile.source >= BOARD_SD) return false;  // on board SD not supported now
+  if (!restore)  // if print restore flag is disabled, nothing more to do
+    return true;
 
-  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
+  // disable print restore flag (one shot flag) for the next print.
+  // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+  restore = false;
 
-  f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
-  uint8_t model_icon = isPrintModelIcon();
-  f_write(&fpPowerFailed, &model_icon, 1, &br);
-  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
-  f_sync(&fpPowerFailed);
+  // try to load PLR info from file in order to restore the print from the failed point
 
-  create_ok = true;
-  return true;
-}
-
-void powerFailedCache(uint32_t offset)
-{
-  UINT br;
-
-  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis no changed.
-  if (create_ok == false) return;
-  if (isNotEmptyCmdQueue()) return;
-  if (!isPaused())
-  { // not paused, update printing progress status.
-    infoBreakPoint.offset = offset;
-    for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
-    {
-      infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
-    }
-    infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
-    infoBreakPoint.flow = speedGetCurPercent(1);  // Flow percent
-
-    for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // Tool nozzle
-    {
-      infoBreakPoint.target[i] = heatGetTargetTemp(i);
-    }
-    for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // Bed & Chamber
-    {
-      infoBreakPoint.target[i] = heatGetTargetTemp(i);
-    }
-    infoBreakPoint.tool = heatGetCurrentTool();
-
-    for (uint8_t i = 0; i < infoSettings.fan_count; i++)
-    {
-      infoBreakPoint.fan[i] = fanGetCurSpeed(i);
-    }
-    infoBreakPoint.relative = coorGetRelative();
-    infoBreakPoint.relative_e = eGetRelative();
-  }
-  else if (infoBreakPoint.pause) return;  // paused and the pause state has been saved
-
-  infoBreakPoint.pause = isPaused();
-
-  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.title + infoPrinting.model_icon
-  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
-  f_sync(&fpPowerFailed);
-}
-
-void powerFailedClose(void)
-{
-  if (create_ok == false) return;
-
-  f_close(&fpPowerFailed);
-}
-
-void powerFailedDelete(void)
-{
-  if (create_ok == false) return;
-
-  f_unlink(powerFailedFileName);
-  powerFailedClear();
-}
-
-bool powerFailedlSeek(FIL *fp)
-{
-  if (f_lseek(fp,infoBreakPoint.offset) != FR_OK) return false;
-
-  return true;
-}
-
-bool powerFailedGetData(void)
-{
   FIL     fp;
   UINT    br;
   uint8_t model_icon;
+
+  powerFailedSetDriverSource();
 
   if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
   if (f_lseek(&fp, MAX_PATH_LEN)                                   != FR_OK) return false;
@@ -214,5 +136,107 @@ bool powerFailedGetData(void)
   }
 
   f_close(&fp);
+  return true;
+}
+
+bool powerFailedExist(void)
+{
+  FIL fp;
+  UINT br;
+
+  powerFailedSetDriverSource();
+
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
+  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br)               != FR_OK) return false;
+  if (f_close(&fp)                                                 != FR_OK) return false;
+
+  create_ok = true;
+  return true;
+}
+
+bool powerFailedCreate(char *path)
+{
+  UINT br;
+
+  powerFailedSetDriverSource();
+
+  create_ok = false;
+  if (!infoSettings.plr) return false;               // if PLR is disabled
+  if (infoFile.source >= BOARD_MEDIA) return false;  // onboard media not supported now
+
+  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
+
+  f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
+  uint8_t model_icon = isPrintModelIcon();
+  f_write(&fpPowerFailed, &model_icon, 1, &br);
+  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
+  f_sync(&fpPowerFailed);
+
+  create_ok = true;
+  return true;
+}
+
+void powerFailedCache(uint32_t offset)
+{
+  UINT br;
+
+  if (create_ok == false) return;
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis not changed
+  if (isNotEmptyCmdQueue()) return;
+  if (!isPaused())
+  { // not paused, update printing progress status.
+    infoBreakPoint.offset = offset;
+    for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
+    {
+      infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
+    }
+    infoBreakPoint.feedrate = coordinateGetFeedRate();
+    infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
+    infoBreakPoint.flow = speedGetCurPercent(1);   // Flow percent
+
+    for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // Tool nozzle
+    {
+      infoBreakPoint.target[i] = heatGetTargetTemp(i);
+    }
+    for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // Bed & Chamber
+    {
+      infoBreakPoint.target[i] = heatGetTargetTemp(i);
+    }
+    infoBreakPoint.tool = heatGetCurrentTool();
+
+    for (uint8_t i = 0; i < infoSettings.fan_count; i++)
+    {
+      infoBreakPoint.fan[i] = fanGetCurSpeed(i);
+    }
+    infoBreakPoint.relative = coorGetRelative();
+    infoBreakPoint.relative_e = eGetRelative();
+  }
+  else if (infoBreakPoint.pause) return;  // paused and the pause state has been saved
+
+  infoBreakPoint.pause = isPaused();
+
+  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.title + infoPrinting.model_icon
+  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
+  f_sync(&fpPowerFailed);
+}
+
+void powerFailedClose(void)
+{
+  if (create_ok == false) return;
+
+  f_close(&fpPowerFailed);
+}
+
+void powerFailedDelete(void)
+{
+  if (create_ok == false) return;
+
+  f_unlink(powerFailedFileName);
+}
+
+bool powerFailedlSeek(FIL *fp)
+{
+  if (f_lseek(fp, infoBreakPoint.offset) != FR_OK) return false;
+
   return true;
 }

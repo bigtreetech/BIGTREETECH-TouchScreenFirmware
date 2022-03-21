@@ -9,8 +9,15 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
-#define CMD_RDX 0xD0
-#define CMD_RDY 0x90
+#ifdef MKS_TFT35_V1_0
+  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0
+  // Defined in MKS TFT35 Touch Screen source code: user\others\mks_touch_screen.c CHX=0x90, CHY=0xD0
+  #define CMD_RDX 0x90
+  #define CMD_RDY 0xD0
+#else
+  #define CMD_RDX 0xD0
+  #define CMD_RDY 0x90
+#endif
 
 enum
 {
@@ -23,8 +30,8 @@ enum
 #define KEY_LONG_RELEASE 0x4000  // The second bit is used to identify the release action after a long press
 #define KEY_LONG_CLICK   0x8000  // The first bit is used to identify the long press action
 
-
 extern bool touchSound;
+
 void TSC_Calibration(void);
 uint8_t isPress(void);
 uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT *menuRect);

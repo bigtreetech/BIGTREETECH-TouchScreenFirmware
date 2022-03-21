@@ -247,7 +247,7 @@ void loopCheckHeater(void)
       }
       if (OS_GetTimeMs() < nextHeatCheckTime)
         break;
-      if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
+      if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
         break;
       if ((infoMachineSettings.firmwareType != FW_REPRAPFW) && !storeCmd("M105\n"))
         break;
@@ -313,7 +313,7 @@ void loopCheckHeater(void)
     }
   }
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a Gcode to set the motherboard
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a gcode to set the motherboard
   {
     if (lastTarget[i] != heater.T[i].target)
     {

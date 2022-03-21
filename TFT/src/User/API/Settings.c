@@ -16,6 +16,7 @@ const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE
 const uint16_t default_level_speed[]   = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
 const uint16_t default_preheat_ext[]   = PREHEAT_HOTEND;
 const uint16_t default_preheat_bed[]   = PREHEAT_BED;
+const uint8_t default_led_color[]      = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
 const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 
 // Init settings data with default values
@@ -53,6 +54,8 @@ void initSettings(void)
   infoSettings.notification_m117      = NOTIFICATION_M117;
   infoSettings.prog_disp_type         = PROG_DISP_TYPE;
   infoSettings.layer_disp_type        = LAYER_DISP_TYPE;
+  infoSettings.show_bootscreen        = SHOW_BOOTSCREEN;
+  infoSettings.alert_heaters_on       = ALERT_HEATERS_ON;
 
 // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   infoSettings.mode                   = DEFAULT_MODE;
@@ -121,6 +124,7 @@ void initSettings(void)
   infoSettings.lcd_idle_brightness    = LCD_IDLE_BRIGHTNESS;
   infoSettings.lcd_idle_time          = LCD_IDLE_TIME;
   infoSettings.lcd_lock_on_idle       = LCD_LOCK_ON_IDLE;
+  infoSettings.led_always_on          = LED_ALWAYS_ON;
   infoSettings.knob_led_color         = KNOB_LED_COLOR;
   infoSettings.knob_led_idle          = KNOB_LED_IDLE;
   #ifdef NEOPIXEL_PIXELS
@@ -172,6 +176,11 @@ void initSettings(void)
     infoSettings.level_feedrate[i]    = default_level_speed[i];
   }
 
+  for (int i = 0; i < LED_COLOR_COMPONENT_COUNT - 1 ; i++)
+  {
+    infoSettings.led_color[i]         = default_led_color[i];
+  }
+
   resetConfig();
 }
 
@@ -191,6 +200,7 @@ void initMachineSettings(void)
   infoMachineSettings.emergencyParser         = DISABLED;
   infoMachineSettings.promptSupport           = DISABLED;
   infoMachineSettings.onboardSD               = DISABLED;
+  infoMachineSettings.multiVolume             = DISABLED;
   infoMachineSettings.autoReportSDStatus      = DISABLED;
   infoMachineSettings.longFilename            = DISABLED;
   infoMachineSettings.babyStepping            = DISABLED;
@@ -255,6 +265,9 @@ void setupMachine(FW_TYPE fwType)
   }
 
   mustStoreCmd("G90\n");  // Set to Absolute Positioning
+
+  if (infoSettings.led_always_on == 1)
+    LED_SendColor(&ledColor);  // set (neopixel) LED light to current color (initialized in HW_Init function)
 }
 
 float flashUsedPercentage(void)
