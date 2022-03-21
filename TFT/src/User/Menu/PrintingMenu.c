@@ -2,12 +2,12 @@
 #include "includes.h"
 
 const GUI_RECT printinfo_val_rect[6] = {
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_LG_EX, PICON_VAL_Y + BYTE_HEIGHT},
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_LG_EX, PICON_VAL_Y + BYTE_HEIGHT},
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_SM_EX, PICON_VAL_Y + BYTE_HEIGHT},
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_LG_EX, PICON_VAL_Y + BYTE_HEIGHT},
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_LG_EX, PICON_VAL_Y + BYTE_HEIGHT},
-  {PICON_VAL_X, PICON_VAL_Y, PICON_VAL_SM_EX, PICON_VAL_Y + BYTE_HEIGHT}
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT}
 };
 
 #define PROGRESS_BAR_RAW_X0   (START_X)                             // X0 aligned to first icon
@@ -32,10 +32,10 @@ const GUI_RECT printinfo_val_rect[6] = {
 
 #ifdef PORTRAIT_MODE
   const GUI_RECT progressBar = {PROGRESS_BAR_X0, TITLE_END_Y + 1,
-                                PROGRESS_BAR_X1, PICON_START_Y - PICON_SPACE_Y - 1};
+                                PROGRESS_BAR_X1, PS_ICON_START_Y - PS_ICON_SPACE_Y - 1};
 #else
-  const GUI_RECT progressBar = {PROGRESS_BAR_X0, PICON_START_Y + PICON_HEIGHT * 2 + PICON_SPACE_Y * 2 + 1,
-                                PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
+  const GUI_RECT progressBar = {PROGRESS_BAR_X0, PS_ICON_START_Y + PS_ICON_HEIGHT * 2 + PS_ICON_SPACE_Y * 2 + 1,
+                                PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PS_ICON_SPACE_Y - 1};
 #endif
 
 enum
@@ -206,7 +206,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     lvIcon.enabled[0] = true;
     lvIcon.lines[0].h_align = LEFT;
     lvIcon.lines[0].v_align = TOP;
-    lvIcon.lines[0].pos = (GUI_POINT){.x = PICON_TITLE_X, .y = PICON_TITLE_Y};
+    lvIcon.lines[0].pos = (GUI_POINT){.x = PS_ICON_TITLE_X, .y = PS_ICON_TITLE_Y};
     lvIcon.lines[0].font = FONT_SIZE_NORMAL;
     lvIcon.lines[0].fn_color = infoSettings.font_color;
     lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;

@@ -54,10 +54,10 @@ static char msgbody[MAX_MSG_LENGTH];
 const char *const SpeedID[2] = SPEED_ID;
 
 // text position rectangles for Live icons
-const GUI_POINT ss_title_point = {SSICON_WIDTH - BYTE_WIDTH / 2, SSICON_NAME_Y0};
-const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
+const GUI_POINT ss_title_point = {SS_ICON_WIDTH - BYTE_WIDTH / 2, SS_ICON_NAME_Y0};
+const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 #ifdef TFT70_V3_0
-  const GUI_POINT ss_val_point_2 = {SSICON_WIDTH / 2, SSICON_VAL_Y0_2};
+  const GUI_POINT ss_val_point_2 = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0_2};
 #endif
 
 // info box msg area
@@ -65,13 +65,13 @@ const GUI_POINT ss_val_point   = {SSICON_WIDTH / 2, SSICON_VAL_Y0};
   const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                              START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y +  1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT RecGantry = {START_X-2,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+  const GUI_RECT RecGantry = {START_X-2,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X+2 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #else
   const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                              START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT RecGantry = {START_X,                                SSICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+  const GUI_RECT RecGantry = {START_X,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
@@ -85,7 +85,7 @@ void drawStatus(void)
   lvIcon.lines[0].h_align = RIGHT;
   lvIcon.lines[0].v_align = TOP;
   lvIcon.lines[0].pos = ss_title_point;
-  lvIcon.lines[0].font = SSICON_TITLE_FONT_SIZE;
+  lvIcon.lines[0].font = SS_ICON_TITLE_FONT_SIZE;
   lvIcon.lines[0].fn_color = SS_NAME_COLOR;
   lvIcon.lines[0].text_mode = GUI_TEXTMODE_TRANS;  // default value
 
@@ -93,7 +93,7 @@ void drawStatus(void)
   lvIcon.lines[1].h_align = CENTER;
   lvIcon.lines[1].v_align = CENTER;
   lvIcon.lines[1].pos = ss_val_point;
-  lvIcon.lines[1].font = SSICON_VAL_FONT_SIZE;
+  lvIcon.lines[1].font = SS_ICON_VAL_FONT_SIZE;
   lvIcon.lines[1].fn_color = SS_VAL_COLOR;
   lvIcon.lines[1].text_mode = GUI_TEXTMODE_TRANS;  // default value
 
@@ -104,7 +104,7 @@ void drawStatus(void)
     lvIcon.lines[2].h_align = CENTER;
     lvIcon.lines[2].v_align = CENTER;
     lvIcon.lines[2].pos = ss_val_point_2;
-    lvIcon.lines[2].font = SSICON_VAL_FONT_SIZE_2;
+    lvIcon.lines[2].font = SS_ICON_VAL_FONT_SIZE_2;
     lvIcon.lines[2].fn_color = SS_VAL_COLOR_2;
     lvIcon.lines[2].text_mode = GUI_TEXTMODE_TRANS;  // default value
   #endif
