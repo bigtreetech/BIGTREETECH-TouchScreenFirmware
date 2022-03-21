@@ -7,17 +7,14 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-void caseLightValueQuery(void);
-void caseLightSetState(bool state);
-void caseLightSetBrightness(uint8_t brightness);
-void caseLightQuerySetWait(bool wait);
-uint8_t caseLightGetBrightness(void);
-uint8_t caseLightGetBrightnessPercent(void);
 bool caseLightGetState(void);
-void loopCaseLight(void);
-void caseLightApplied(bool applied);
-void caseLightChangeBrightness(int8_t brightness_delta);
-void caseLightChangeBrightnessPrecent(int8_t brightness_delta_percent);
+void caseLightSetState(bool state);
+
+uint8_t caseLightGetBrightness(void);
+void caseLightSetBrightness(uint8_t brightness);
+
+uint8_t caseLightGetBrightnessPercent(void);
+void caseLightSetBrightnessPercent(int8_t unit);
 
 #ifdef __cplusplus
 }

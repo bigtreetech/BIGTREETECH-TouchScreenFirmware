@@ -78,41 +78,6 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
-// Parse and store gcode command script to infoCmd queue.
-// This command script will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue has not enough empty room, a reminder message is displayed and the script is discarded.
-// No partial/incomplete commands (not terminated with '\n') are allowed in the script, they will be ignored.
-bool storeScript(const char * format, ...)
-{
-  if (format[0] == 0) return false;
-
-  char script[256];
-  va_list va;
-  va_start(va, format);
-  vsnprintf(script, 256, format, va);
-  va_end(va);
-
-  char * p = script;
-  uint16_t i = 0;
-  CMD cmd;
-  for (;;)
-  {
-    char c = *p++;
-    if (!c) break;
-    cmd[i++] = c;
-
-    if (c == '\n')
-    {
-      cmd[i] = 0;
-      if (storeCmd("%s", cmd) == false)
-        return false;
-      i = 0;
-    }
-  }
-
-  return true;
-}
-
 // Store gcode cmd to infoCmd queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the infoCmd queue is full, a reminder message is displayed
@@ -467,7 +432,10 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
+              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to BOARD_MEDIA_REMOTE
+              //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
+
+              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -476,8 +444,7 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  infoMenu.cur = 1;
-                  menuBeforePrinting();
+                  startPrint();  // start print and open Printing menu
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
@@ -1011,7 +978,6 @@ void sendQueueCmd(void)
           {
             caseLightSetBrightness(cmd_value());
           }
-          caseLightApplied(true);
           break;
         }
 
@@ -1084,6 +1050,9 @@ void sendQueueCmd(void)
           if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
           if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
           if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
+          if (cmd_seen('A')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('B')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('C')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, cmd_float());
           if (cmd_seen('X')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, cmd_float());
           if (cmd_seen('Z')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, cmd_float());

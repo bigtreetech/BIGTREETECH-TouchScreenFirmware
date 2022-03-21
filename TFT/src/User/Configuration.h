@@ -276,6 +276,22 @@
  */
 #define LAYER_DISP_TYPE 0  // Default: 0
 
+/**
+ * Show Bootscreen at Power On - Setting in Config.ini
+ *This setting allows to show (or not) the BigTreeTech Bootscreen Logo at Power On
+ *
+ *   Options: [No: 0, Yes: 1]
+ */
+#define SHOW_BOOTSCREEN 1  // Default: 1
+
+/**
+ * Alerts that Heaters are still on - Setting in Config.ini
+ * This setting allows to show (or not) the alerts that heaters are still on when leaving some menus
+ *
+ *  Options: [No: 0, Yes: 1]
+ */
+#define ALERT_HEATERS_ON 1  // Default: 1
+
 //================================================================================
 //============================= Marlin Mode Settings =============================
 //========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========

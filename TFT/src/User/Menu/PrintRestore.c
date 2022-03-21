@@ -5,19 +5,18 @@ void menuPrintRestore(void)
 {
   uint16_t key_num = IDLE_TOUCH;
 
-  powerFailedClear();
   GUI_Clear(infoSettings.bg_color);
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
 
-  if (mountFS() == true && powerFailedExist())
+  if (mountFS() == true && powerFailedExist())  // powerFailedExist function sets both infoFile.title and PLR filename
   {
     char okTxt[MAX_LANG_LABEL_LENGTH];
     char cancelTxt[MAX_LANG_LABEL_LENGTH];
     loadLabelText((uint8_t*)okTxt, LABEL_CONFIRM);
     loadLabelText((uint8_t*)cancelTxt, LABEL_CANCEL);
 
-    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t* )infoFile.title,
+    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t*)infoFile.title,
                   (uint8_t*)okTxt, (uint8_t*)cancelTxt);
 
     while (MENU_IS(menuPrintRestore))
@@ -26,14 +25,17 @@ void menuPrintRestore(void)
       switch (key_num)
       {
         case KEY_POPUP_CONFIRM:
-          powerFailedGetData();
-          infoMenu.menu[1] = menuPrintFromSource;
-          infoMenu.menu[2] = menuBeforePrinting;
-          infoMenu.cur = 2;
+          powerFailedSetRestore(true);
+          CLOSE_MENU();  // close the menu first
+          startPrint();  // start print and open Printing menu
           break;
 
         case KEY_POPUP_CANCEL:
+          powerFailedSetRestore(false);
+          // note: powerFailedExist function must be called first, otherwise powerFailedDelete will fail
           powerFailedDelete();
+          // in case the calling function is menuPrintFromSource,
+          // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
           ExitDir();
           CLOSE_MENU();
           break;
@@ -43,7 +45,6 @@ void menuPrintRestore(void)
         if (volumeExists(infoFile.source) != true)
         {
           resetInfoFile();
-          powerFailedClear();
           CLOSE_MENU();
         }
       #endif

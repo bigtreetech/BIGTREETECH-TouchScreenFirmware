@@ -59,13 +59,6 @@ struct HOST_ACTION
   uint8_t button;           // number of buttons
 } hostAction;
 
-//void setIgnoreEcho(ECHO_ID msgId, bool state)
-//{
-//  static uint8_t forceIgnore[ECHO_ID_COUNT] = {0};
-//
-//  forceIgnore[msgId] = state;
-//}
-
 void setHostDialog(bool isHostDialog)
 {
   hostDialog = isHostDialog;
@@ -309,7 +302,7 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
-    printRemoteStart(NULL);
+    startRemotePrint(NULL);  // start print and open Printing menu
   }
   else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
@@ -672,7 +665,7 @@ void parseACK(void)
         strncat(file_name, dmaL2Cache + start_index, path_len);
         file_name[path_len + strlen(getCurFileSource()) + 1] = '\0';
 
-        printRemoteStart(file_name);
+        startRemotePrint(file_name);  // start print and open Printing menu
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
                infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
@@ -795,8 +788,6 @@ void parseACK(void)
           caseLightSetState(true);
           caseLightSetBrightness(ack_value());
         }
-        caseLightQuerySetWait(false);
-        caseLightApplied(true);
       }
       // parse and store M420 V1 T1, mesh data (e.g. from Mesh Editor menu)
       //
@@ -973,6 +964,9 @@ void parseACK(void)
         if (ack_seen("S")) setParameter(P_DELTA_CONFIGURATION, 1, ack_value());
         if (ack_seen("R")) setParameter(P_DELTA_CONFIGURATION, 2, ack_value());
         if (ack_seen("L")) setParameter(P_DELTA_CONFIGURATION, 3, ack_value());
+        if (ack_seen("A")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, ack_value());
+        if (ack_seen("B")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("C")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, ack_value());
         if (ack_seen("X")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, ack_value());
         if (ack_seen("Y")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, ack_value());

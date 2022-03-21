@@ -22,6 +22,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_STEALTH_CHOP,
   LABEL_DELTA_CONFIGURATION,
   LABEL_DELTA_TOWER_ANGLE,
+  LABEL_DELTA_DIAGONAL_ROD,
   LABEL_DELTA_ENDSTOP,
   LABEL_PROBE_OFFSET,
   LABEL_LIN_ADVANCE,
@@ -99,6 +100,10 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 
         case P_DELTA_TOWER_ANGLE:
           parameterMainItem->titlelabel.address = deltaTowerAngleDisplayID[elementIndex];
+          break;
+          
+        case P_DELTA_DIAGONAL_ROD:
+          parameterMainItem->titlelabel.address = deltaDiagonalRodDisplayID[elementIndex];
           break;
 
         case P_DELTA_ENDSTOP:
