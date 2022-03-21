@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_TERMINAL_ACK           "Mostra ACK in console"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
     #define STRING_MARLIN_TYPE            "Modalità Marlin"

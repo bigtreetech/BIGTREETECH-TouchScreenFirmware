@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
     #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
     #define STRING_SERIAL_ALWAYS_ON       "Sériový port vždy ON"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen režim Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
     #define STRING_MARLIN_TYPE            "Typ Marlin Modu"

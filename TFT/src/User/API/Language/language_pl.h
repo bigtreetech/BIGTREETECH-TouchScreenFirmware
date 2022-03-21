@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Trwałe informac. o stanie"
     #define STRING_TERMINAL_ACK           "Pokaż ACK w terminalu"
     #define STRING_SERIAL_ALWAYS_ON       "Szeregowy zawsze włączony"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Pełnoekranowy tryb Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Wyśw. tytułu trybu Marlin"
     #define STRING_MARLIN_TYPE            "Typ trybu Marlin"

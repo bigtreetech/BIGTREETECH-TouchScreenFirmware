@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "顶部温度信息"
     #define STRING_TERMINAL_ACK           "在G-code终端中显示温度信息"
     #define STRING_SERIAL_ALWAYS_ON       "串口常开"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "全屏显示Marlin模式"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin模式显示标题"
     #define STRING_MARLIN_TYPE            "Marlin模式类型"

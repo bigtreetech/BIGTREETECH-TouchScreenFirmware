@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
     #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
     #define STRING_SERIAL_ALWAYS_ON       "Seri Bağ. Sürekli Açık"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Tam Ekran Marlin Modu"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
