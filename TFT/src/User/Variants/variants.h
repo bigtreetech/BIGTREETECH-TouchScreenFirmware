@@ -19,6 +19,7 @@
 #define SSD1963 (1 << 5)
 #define ILI9325 (1 << 6)
 #define NT35310 (1 << 7)
+#define ST7796S (1 << 8)
 
 #if defined(TFT24_V1_1)
   #include "pin_TFT24_V1_1.h"

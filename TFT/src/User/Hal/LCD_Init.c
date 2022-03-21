@@ -27,6 +27,9 @@
 #if LCD_DRIVER_HAS(NT35310)
   #include "LCD_Driver/NT35310.h"
 #endif
+#if LCD_DRIVER_HAS(ST7796S)
+  #include "LCD_Driver/ST7796S.h"
+#endif
 
 void (*pLCD_SetDirection)(uint8_t rotate);
 void (*pLCD_SetWindow)(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey);
@@ -133,6 +136,13 @@ void LCD_Init_Sequential(void)
     #ifdef SCREEN_SHOT_TO_SD
       pLCD_ReadPixel_24Bit = NT35310_ReadPixel_24Bit;
     #endif
+  #elif LCD_DRIVER_IS(ST7796S)
+    ST7796S_Init_Sequential();
+    pLCD_SetDirection = ST7796S_SetDirection;
+    pLCD_SetWindow = ST7796S_SetWindow;
+    #ifdef SCREEN_SHOT_TO_SD
+      pLCD_ReadPixel_24Bit = ST7796S_ReadPixel_24Bit;
+    #endif
   #else
       if (0)
       {}
@@ -221,6 +231,17 @@ void LCD_Init_Sequential(void)
         pLCD_SetWindow = NT35310_SetWindow;
         #ifdef SCREEN_SHOT_TO_SD
           pLCD_ReadPixel_24Bit = NT35310_ReadPixel_24Bit;
+        #endif
+      }
+    #endif
+    #if LCD_DRIVER_HAS(ST7796S)
+      else if (LCD_DriveIsST7796S())
+      {
+        ST7796S_Init_Sequential();
+        pLCD_SetDirection = ST7796S_SetDirection;
+        pLCD_SetWindow = ST7796S_SetWindow;
+        #ifdef SCREEN_SHOT_TO_SD
+          pLCD_ReadPixel_24Bit = ST7796S_ReadPixel_24Bit;
         #endif
       }
     #endif

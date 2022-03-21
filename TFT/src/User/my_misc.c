@@ -1,6 +1,6 @@
 #include "my_misc.h"
 #include <stddef.h>
-#include <stdint.h>
+#include <string.h>
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -136,4 +136,18 @@ double stringToDouble(char *str, char **endptr)
     *endptr = p;  // asign pointer to remaining string
 
   return val * sign;
+}
+
+// strip out any leading " ", ":" or "/" character that might be in the string
+const char *stripHead(const char *str)
+{
+  // example: " :/test/cap2.gcode\n" -> "test/cap2.gcode\n"
+
+  for (; *str != '\0'; str++)
+  {
+    if (*str != ' ' && *str != ':' && *str != '/')
+      break;
+  }
+
+  return str;
 }
