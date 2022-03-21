@@ -351,7 +351,9 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
   return HEATED;
 }
 
-// user choice for disabling all heaters/hotends
+#ifdef SAFETY_ALERT
+
+// User choice for disabling all heaters/hotends
 void cooldownTemperature(void)
 {
     if (infoSettings.alert_heaters_on == 1)
@@ -370,3 +372,5 @@ void cooldownTemperature(void)
     }
   }
 }
+
+#endif  // SAFETY_ALERT

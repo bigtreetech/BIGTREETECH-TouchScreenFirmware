@@ -162,7 +162,7 @@ bool FIL_SmartRunoutDetect(void)
     if (OS_GetTimeMs() < nextUpdateTime)
       break;
 
-    if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
+    if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
       break;
 
     if (storeCmd("M114 E\n") == false)

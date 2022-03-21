@@ -118,7 +118,7 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_7:  // back
-          cooldownTemperature();
+          COOLDOWN_TEMPERATURE();
           lastCmd = NONE;
           CLOSE_MENU();
           eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)

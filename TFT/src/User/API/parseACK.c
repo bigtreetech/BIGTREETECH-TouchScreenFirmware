@@ -27,6 +27,8 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
   {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
   {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},        // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},         // M503
   {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
   {ECHO_NOTIFY_NONE, "Config:"},                  // M360
   {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
@@ -298,11 +300,11 @@ void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":print_start"))  // print started from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
     startRemotePrint(NULL);  // start print and open Printing menu
   }
-  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. USB, Octoprint etc...)
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
     printEnd();
   }
@@ -343,7 +345,7 @@ void hostActionCommands(void)
     {
       setPrintPause(false, PAUSE_EXTERNAL);
     }
-    else if (ack_seen("Resuming"))  // resuming from TFT or (remote) onboard media
+    else if (ack_seen("Resuming"))  // resuming from TFT media or (remote) onboard media
     {
       setPrintResume(true);
 
@@ -438,7 +440,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
     }
 
-    // onboard media Gcode command response
+    // onboard media gcode command response
 
     if (requestCommandInfo.inWaitResponse)
     {
@@ -502,7 +504,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
       goto parse_end;
     }
-    // onboard media Gcode command response end
+    // onboard media gcode command response end
 
     if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
@@ -1223,7 +1225,7 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
-        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command.
+        if (ack_seen("ZProbe triggered before move"))  // smoothieboard ZProbe triggered before move, aborting command
         {
           ackPopupInfo("ZProbe triggered before move.\nAborting Print!");
         }
