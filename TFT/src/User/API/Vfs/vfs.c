@@ -58,7 +58,72 @@ bool mountFS(void)
   }
 }
 
-// scan files in current source and create a file list
+// clear and free memory from file list
+void clearInfoFile(void)
+{
+  uint8_t i = 0;
+
+  for (i = 0; i < infoFile.folderCount; i++)
+  {
+    free(infoFile.folder[i]);
+    infoFile.folder[i] = NULL;
+
+    if (infoFile.longFolder[i] != NULL)  // long folder name is optional so we need to check its presence
+    {
+      free(infoFile.longFolder[i]);
+      infoFile.longFolder[i] = NULL;
+    }
+  }
+
+  for (i = 0; i < infoFile.fileCount; i++)
+  {
+    free(infoFile.file[i]);
+    infoFile.file[i] = NULL;
+
+    if (infoFile.longFile[i] != NULL)  // long filename is optional so we need to check its presence
+    {
+      free(infoFile.longFile[i]);
+      infoFile.longFile[i] = NULL;
+    }
+  }
+
+  infoFile.folderCount = 0;
+  infoFile.fileCount = 0;
+}
+
+TCHAR * getCurFileSource(void)
+{
+  switch (infoFile.source)
+  {
+    case TFT_SD:
+      return SD_ROOT_DIR;
+
+    case TFT_USB_DISK:
+      return USBDISK_ROOT_DIR;
+
+    case BOARD_MEDIA:
+    case BOARD_MEDIA_REMOTE:
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
+
+    default:
+      break;
+  }
+  return NULL;
+}
+
+// reset file list
+void resetInfoFile(void)
+{
+  FS_SOURCE source = infoFile.source;
+  ONBOARD_SOURCE onboardSource = infoFile.boardSource;
+  clearInfoFile();
+  memset(&infoFile, 0, sizeof(infoFile));
+  infoFile.source = source;
+  infoFile.boardSource =  onboardSource;
+  strcpy(infoFile.title, getCurFileSource());
+}
+
+// scan files in source
 bool scanPrintFiles(void)
 {
   switch (infoFile.source)
