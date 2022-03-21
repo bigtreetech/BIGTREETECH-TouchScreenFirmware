@@ -5,6 +5,14 @@
 extern "C" {
 #endif
 
+typedef enum
+{
+  HS_OFF,
+  HS_ON,
+  HS_DISABLED
+} BLT_HS_MODE;
+
+void setHSmode(BLT_HS_MODE hsMode);
 void menuBLTouch(void);
 
 #ifdef __cplusplus

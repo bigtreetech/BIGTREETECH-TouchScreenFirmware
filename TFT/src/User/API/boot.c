@@ -255,7 +255,7 @@ bool updateFont(char * font, uint32_t addr)
     return false;
 
   GUI_Clear(infoSettings.bg_color);
-  sprintf((void *)buffer,"%s Size: %dKB",font, (uint32_t)f_size(&myfp) >> 10);
+  sprintf((void *)buffer, "%s Size: %dKB", font, (uint32_t)f_size(&myfp) >> 10);
   GUI_DispString(0, 100, (uint8_t *)buffer);
   GUI_DispString(0, 140, (uint8_t *)"Updating:   %");
 
@@ -267,9 +267,9 @@ bool updateFont(char * font, uint32_t addr)
     W25Qxx_WriteBuffer(tempbuf, addr + offset, W25QXX_SECTOR_SIZE);
     offset += rnum;
 
-    if (progress != offset * 100 / f_size(&myfp))
+    if (progress != (offset * 100) / f_size(&myfp))
     {
-      progress = offset * 100 / f_size(&myfp);
+      progress = (offset * 100) / f_size(&myfp);
       GUI_DispDec(0 + BYTE_WIDTH * 9, 140, progress, 3, RIGHT);
     }
 

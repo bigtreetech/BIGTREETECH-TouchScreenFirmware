@@ -18,7 +18,7 @@ extern "C" {
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20220124  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20220222  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define LANGUAGE_FLASH_SIGN   20220313  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
@@ -195,6 +195,8 @@ typedef struct
   uint8_t  notification_m117;
   uint8_t  prog_disp_type;
   uint8_t  layer_disp_type;
+  uint8_t  show_bootscreen;
+  uint8_t  alert_heaters_on;
 
   // Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
   uint8_t  mode;
