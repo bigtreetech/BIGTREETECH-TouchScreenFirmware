@@ -637,7 +637,7 @@ void sendQueueCmd(void)
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
                 {
                   writing_mode = TFT_WRITING;
-                  reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                  reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
                 }
 
                 sendCmd(true, avoid_terminal);
@@ -646,7 +646,7 @@ void sendQueueCmd(void)
               else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
               {
                 writing_mode = ONBOARD_WRITING;
-                reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
               }
             }
             break;

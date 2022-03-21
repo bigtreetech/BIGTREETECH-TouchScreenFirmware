@@ -380,7 +380,7 @@ bool printRemoteStart(const char * filename)
   infoHost.status = HOST_STATUS_PRINTING;  // always set (even if printing from onboard media)
 
   if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
-    return;
+    return false;
 
   // if printing from TFT media or onboard media, exit (printStart function was called just before)
   if (infoPrinting.printing && infoFile.source <= BOARD_MEDIA)
@@ -489,7 +489,7 @@ void printEnd(void)
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"), always force to "false"
   if (!infoPrinting.printing)
   {
-    infoHost.printing = false;
+    infoHost.status = HOST_STATUS_IDLE;
     return;
   }
 
@@ -719,7 +719,7 @@ void setPrintAbort(void)
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"), always force to "false"
   if (!infoPrinting.printing)
   {
-    infoHost.printing = false;
+    infoHost.status = HOST_STATUS_IDLE;
     return;
   }
 

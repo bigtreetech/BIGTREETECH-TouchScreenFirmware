@@ -722,7 +722,7 @@ void loopReminderClear(void)
         return;
       break;
 
-    case STATUS_LISTENING:
+    case SYS_STATUS_LISTENING:
       if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
         return;
       break;
