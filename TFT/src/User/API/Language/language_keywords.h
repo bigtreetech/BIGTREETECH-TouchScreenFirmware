@@ -68,6 +68,7 @@ extern "C" {
 #define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
 #define LANG_KEY_DELTA_CONFIGURATION          "label_delta_configuration:"
 #define LANG_KEY_DELTA_TOWER_ANGLE            "label_delta_tower_angle:"
+#define LANG_KEY_DELTA_DIAGONAL_ROD           "label_delta_diagonal_rod:"
 #define LANG_KEY_DELTA_ENDSTOP                "label_delta_endstop:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"

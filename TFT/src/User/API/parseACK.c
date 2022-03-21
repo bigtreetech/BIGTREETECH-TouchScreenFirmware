@@ -962,6 +962,9 @@ void parseACK(void)
         if (ack_seen("S")) setParameter(P_DELTA_CONFIGURATION, 1, ack_value());
         if (ack_seen("R")) setParameter(P_DELTA_CONFIGURATION, 2, ack_value());
         if (ack_seen("L")) setParameter(P_DELTA_CONFIGURATION, 3, ack_value());
+        if (ack_seen("A")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, ack_value());
+        if (ack_seen("B")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("C")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, ack_value());
         if (ack_seen("X")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, ack_value());
         if (ack_seen("Y")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, ack_value());

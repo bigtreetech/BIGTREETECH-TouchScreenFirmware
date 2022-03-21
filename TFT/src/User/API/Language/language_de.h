@@ -61,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Konfiguration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Endstop Einstellungen"
     #define STRING_PROBE_OFFSET           "Sensor Versatz"
     #define STRING_LIN_ADVANCE            "Linear Advance"
