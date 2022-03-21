@@ -115,7 +115,7 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_7:
-        cooldownTemperature();
+        COOLDOWN_TEMPERATURE();
         CLOSE_MENU();
         eAxisBackup.handled = false;  // exiting from Extrude menu, no need for it anymore
         break;

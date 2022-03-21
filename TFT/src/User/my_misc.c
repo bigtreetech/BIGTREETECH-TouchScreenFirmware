@@ -1,6 +1,8 @@
+#include <stdlib.h>  // first to avoid conflicts with strtod function
+
 #include "my_misc.h"
 #include <stddef.h>
-#include <stdint.h>
+#include <string.h>
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -136,4 +138,81 @@ double stringToDouble(char *str, char **endptr)
     *endptr = p;  // asign pointer to remaining string
 
   return val * sign;
+}
+
+// strip out any leading " ", ":" or "/" character that might be in the string
+const char *stripHead(const char *str)
+{
+  // example: " :/test/cap2.gcode\n" -> "test/cap2.gcode\n"
+
+  for (; *str != '\0'; str++)
+  {
+    if (*str != ' ' && *str != ':' && *str != '/')
+      break;
+  }
+
+  return str;
+}
+
+// strip out any trailing checksum that might be in the string
+void stripChecksum(char *str)
+{
+  // examples:
+  //
+  // "/test/cap2.gcode  *36\n\0" -> "/test/cap2.gcode"
+  // "/test/cap2.gcode  \n\0" -> "/test/cap2.gcode"
+
+  char *strPtr = strrchr(str, '*');  // e.g. "/test/cap2.gcode  *36\n\0" -> "*36\n\0"
+
+  if (strPtr == NULL)
+    strPtr = str + strlen(str);      // e.g. "/test/cap2.gcode  \n\0" -> "\0"
+
+  while (strPtr != str)
+  {
+    // e.g. "*36\n\0" -> " *36\n\0"
+    // e.g. "\0" -> "\n\0"
+    //
+    --strPtr;
+
+    if (*strPtr != ' ' && *strPtr != '\t' && *strPtr != '\n' && *strPtr != '\r')
+    {
+      strPtr++;  // next char has to be set to "\0"
+      break;
+    }
+  }
+
+  // e.g. "  *36\n\0" -> "\0 *36\n\0"
+  // e.g. "  \n\0" -> "\0 \n\0"
+  //
+  *strPtr = '\0';
+}
+
+uint8_t getChecksum(char *str)
+{
+  uint8_t checksum = 0;
+
+  while (*str != '\0')
+  {
+    checksum ^= *(str++);
+  }
+
+  return checksum;
+}
+
+bool validateChecksum(char *str)
+{
+  char *strPtr = strrchr(str, '*');  // e.g. "N1 G28*18\n\0" -> "*18\n\0"
+
+  if (strPtr == NULL)
+    return false;
+
+  uint8_t checksum = 0;
+  uint8_t value = strtol(&strPtr[1], NULL, 10);
+
+  while (strPtr != str)
+  {
+    checksum ^= *(--strPtr);
+  }
+
+  return (checksum == value ? true : false);
 }

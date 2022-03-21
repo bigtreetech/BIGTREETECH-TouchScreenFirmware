@@ -65,14 +65,10 @@ void speedQuery(void)
 {
   if (infoHost.connected && !infoHost.wait && !speedQueryWait && infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
+    speedQueryWait = storeCmd("M220\n");
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeCmd("M220\n");
       speedQueryWait |= storeCmd("M221\n");  // speedQueryWait set to "true" if at least one command will be sent
-    }
-    else
-    {
-      speedQueryWait = storeCmd("M220\n");
     }
   }
 }

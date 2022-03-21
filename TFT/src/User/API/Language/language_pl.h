@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Trwałe informac. o stanie"
     #define STRING_TERMINAL_ACK           "Pokaż ACK w terminalu"
     #define STRING_SERIAL_ALWAYS_ON       "Szeregowy zawsze włączony"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Pełnoekranowy tryb Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Wyśw. tytułu trybu Marlin"
     #define STRING_MARLIN_TYPE            "Typ trybu Marlin"
@@ -59,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Konfiguracja delta"
     #define STRING_DELTA_TOWER_ANGLE      "Trymowanie kąta wieży"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Regulacje krańców"
     #define STRING_PROBE_OFFSET           "Przesunięcie sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -190,6 +193,8 @@
     #define STRING_DEPLOY                 "Rozlokuj"
     #define STRING_STOW                   "Schowaj"
     #define STRING_REPEAT                 "Powtórz"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Dysza"

@@ -18,14 +18,23 @@ typedef struct
   uint8_t count;    // count of commands in the queue
 } GCODE_QUEUE;
 
+typedef enum
+{
+  NO_WRITING = 0,
+  TFT_WRITING,
+  ONBOARD_WRITING
+} WRITING_MODE;
+
 GCODE_QUEUE infoCmd;
 GCODE_QUEUE infoCacheCmd;  // only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue
 char * cmd_ptr;
 uint8_t cmd_len;
-uint8_t cmd_index;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
 uint8_t cmd_port;                  // physical port (e.g. _USART1) related to serial port index
-bool isPolling = true;
+uint8_t cmd_base_index;            // base index in case the gcode has checksum ("Nxxx " is present at the beginning of gcode)
+uint8_t cmd_index;
+WRITING_MODE writing_mode = NO_WRITING;
+FIL file;
 
 bool isFullCmdQueue(void)
 {
@@ -45,6 +54,11 @@ bool isEnqueued(const CMD cmd)
     found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
   }
   return found;
+}
+
+bool isWritingMode(void)
+{
+  return (writing_mode != NO_WRITING);
 }
 
 // Common store cmd.
@@ -74,41 +88,6 @@ bool storeCmd(const char * format, ...)
   va_start(va, format);
   commonStoreCmd(&infoCmd, format, va);
   va_end(va);
-
-  return true;
-}
-
-// Parse and store gcode command script to infoCmd queue.
-// This command script will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue has not enough empty room, a reminder message is displayed and the script is discarded.
-// No partial/incomplete commands (not terminated with '\n') are allowed in the script, they will be ignored.
-bool storeScript(const char * format, ...)
-{
-  if (format[0] == 0) return false;
-
-  char script[256];
-  va_list va;
-  va_start(va, format);
-  vsnprintf(script, 256, format, va);
-  va_end(va);
-
-  char * p = script;
-  uint16_t i = 0;
-  CMD cmd;
-  for (;;)
-  {
-    char c = *p++;
-    if (!c) break;
-    cmd[i++] = c;
-
-    if (c == '\n')
-    {
-      cmd[i] = 0;
-      if (storeCmd("%s", cmd) == false)
-        return false;
-      i = 0;
-    }
-  }
 
   return true;
 }
@@ -229,6 +208,7 @@ static inline bool getCmd(void)
   cmd_len = strlen(cmd_ptr);                                   // length of gcode
   cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
   cmd_port = serialPort[cmd_port_index].port;                  // physical port (e.g. _USART1) related to serial port index
+  cmd_base_index = cmd_index = 0;
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
@@ -279,16 +259,28 @@ bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return true if command was sent. Otherwise, return false
 }
 
-// Check if "cmd" starts with "key".
-static bool cmd_start_with(const CMD cmd, const char * key)
+// Check the presence of the specified "keyword" string in the current gcode command
+// starting the search from index "index".
+static bool cmd_seen_from(uint8_t index, const char * keyword)
 {
-  return (strstr(cmd, key) - cmd == cmd_index) ? true : false;
+  if (index >= cmd_len)
+    return false;
+
+  char * strPtr = strstr(cmd_ptr + index, keyword);
+
+  if (strPtr != NULL)
+  {
+    cmd_index = (strPtr - cmd_ptr) + strlen(keyword);
+    return true;
+  }
+
+  return false;
 }
 
 // Check the presence of the specified "code" character in the current gcode command.
 static bool cmd_seen(char code)
 {
-  for (cmd_index = 0; cmd_index < cmd_len; cmd_index++)
+  for (cmd_index = cmd_base_index; cmd_index < cmd_len; cmd_index++)
   {
     if (cmd_ptr[cmd_index] == code)
     {
@@ -311,6 +303,126 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
+bool initRemoteTFT()
+{
+  // examples:
+  //
+  // "cmd_ptr" = "N1 M23 SD:/test/cap2.gcode*36\n"
+  // "cmd_ptr" = "N1 M23 S /test/cap2.gcode*36\n"
+  //
+  // "infoFile.path" = "SD:/test/cap2.gcode"
+
+  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
+  //
+  if (cmd_seen_from(cmd_base_index, "SD:") || cmd_seen_from(cmd_base_index, "S "))
+    infoFile.source = TFT_SD;        // set source first
+  else if (cmd_seen_from(cmd_base_index, "U:") || cmd_seen_from(cmd_base_index, "U "))
+    infoFile.source = TFT_USB_DISK;  // set source first
+  else
+    return false;
+
+  // present just to make the code robust. It should never be used printing from remote TFT media
+  infoFile.boardSource = BOARD_SD;
+
+  CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
+
+  // cmd_index was set by cmd_seen_from function
+  strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
+  stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
+
+  resetInfoFile();            // then reset infoFile (source is restored)
+  EnterDir(stripHead(path));  // set title as last
+
+  return true;
+}
+
+bool openRemoteTFT(bool writingMode)
+{
+  bool open = false;
+
+  Serial_Puts(cmd_port, "echo:Now fresh file: ");
+  Serial_Puts(cmd_port, infoFile.title);
+  Serial_Puts(cmd_port, "\n");
+
+  if (!writingMode)  // if reading mode
+  {
+    // mount FS and open the file (infoFile.source and infoFile.path are used)
+    if (mountFS() == true && f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+    {
+      char buf[10];
+
+      sprintf(buf, "%d", f_size(&file));
+      f_close(&file);
+
+      Serial_Puts(cmd_port, "File opened: ");
+      Serial_Puts(cmd_port, infoFile.title);
+      Serial_Puts(cmd_port, " Size: ");
+      Serial_Puts(cmd_port, buf);
+      Serial_Puts(cmd_port, "\nFile selected\n");
+
+      open = true;
+    }
+  }
+  else  // if writing mode
+  {
+    // mount FS and open the file (infoFile.source and infoFile.path are used)
+    if (mountFS() == true && f_open(&file, infoFile.title, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
+    {
+      Serial_Puts(cmd_port, "Writing to file: ");
+      Serial_Puts(cmd_port, infoFile.title);
+      Serial_Puts(cmd_port, "\n");
+
+      open = true;
+    }
+  }
+
+  if (!open)
+  {
+    Serial_Puts(cmd_port, "open failed, File: ");
+    Serial_Puts(cmd_port, infoFile.title);
+    Serial_Puts(cmd_port, "\n");
+  }
+
+  Serial_Puts(cmd_port, "ok\n");
+
+  return open;
+}
+
+void writeRemoteTFT()
+{
+  // examples:
+  //
+  // "cmd_ptr" = "N1 G28*46\n"
+  // "cmd_ptr" = "N2 G29*56\n"
+  // "cmd_ptr" = "N3 M29*66\n"
+
+  // if M29, stop writing mode. cmd_index (used by cmd_value function) was set by sendQueueCmd function
+  if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*66\n" -> "M29*66\n"
+  {
+    f_close(&file);
+
+    Serial_Puts(cmd_port, "Done saving file.\n");
+
+    writing_mode = NO_WRITING;
+  }
+  else
+  {
+    UINT br;
+    CMD cmd;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
+
+    strcpy(cmd, &cmd_ptr[cmd_base_index]);  // e.g. "N1 G28*46\n" -> "G28*46\n"
+    stripChecksum(cmd);                     // e.g. "G28*46\n" -> "G28"
+
+    f_write(&file, cmd, strlen(cmd), &br);
+
+    // "\n" is always removed by stripChecksum function even if there is no checksum, so we need to write it on file separately
+    f_write(&file, "\n", 1, &br);
+    f_sync(&file);
+  }
+
+  Serial_Puts(cmd_port, "ok\n");
+}
+
 // Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
 {
@@ -318,35 +430,61 @@ void sendQueueCmd(void)
   if (infoCmd.count == 0) return;
 
   bool avoid_terminal = false;
-  uint16_t cmd = 0;
-  cmd_index = 0;
-  // check if cmd is from TFT or other host
-  bool fromTFT = getCmd();  // retrieve leading gcode in the queue
+  bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
+  char * strPtr = cmd_ptr;  // cmd_ptr was set by getCmd function
 
-  if (!isPolling && fromTFT)
-  { // ignore any query from TFT
-    sendCmd(true, avoid_terminal);
+  // skip leading spaces
+  while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
+
+  // skip N[-0-9] (line number) if included in the command line
+  if (*strPtr == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28*46\n" -> "G28*46\n"
+  {
+    strPtr += 2;                             // skip N[-0-9]
+    while (NUMERIC(*strPtr)) ++strPtr;       // skip [0-9]*
+    while (*strPtr == ' ') ++strPtr;         // skip [ ]*
+  }
+
+  // set cmd_base_index with index of gcode command
+  cmd_base_index = strPtr - cmd_ptr;         // e.g. "  N1   G28*46\n" -> "G28*46\n"
+
+  // set cmd_index with index of gcode value
+  cmd_index = cmd_base_index + 1;            // e.g. "G28*46\n" -> "28*46\n"
+
+  if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
+  {
+    if (fromTFT)  // ignore any command from TFT media
+    {
+      sendCmd(true, avoid_terminal);
+    }
+    else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
+    {
+      writeRemoteTFT();
+
+      sendCmd(true, avoid_terminal);
+    }
+    else  // otherwise, if the command is from remote to onboard media
+    {
+      if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
+        writing_mode = NO_WRITING;
+
+      if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
+        infoHost.wait = infoHost.connected;
+    }
+
     return;
   }
 
-  // skip line number from stored gcode for internal parsing purpose
-  if (cmd_ptr[0] == 'N')
-  {
-    cmd_index = strcspn(cmd_ptr, " ") + 1;
-  }
-
-  switch (cmd_ptr[cmd_index])
+  switch (cmd_ptr[cmd_base_index])
   {
     // parse M-codes
     case 'M':
-      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
-      switch (cmd)
+      switch (cmd_value())
       {
         case 0:
         case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
-            // pause if printing from TFT and purge M0/M1 command
+            // pause if printing from TFT media and purge M0/M1 command
             if (infoFile.source < BOARD_MEDIA )
             {
               sendCmd(true, avoid_terminal);
@@ -372,25 +510,11 @@ void sendQueueCmd(void)
           case 20:  // M20
             if (!fromTFT)
             {
-              if (cmd_start_with(cmd_ptr, "M20 SD:") ||
-                  cmd_start_with(cmd_ptr, "M20 U:"))
+              if (initRemoteTFT())  // examples: "M20 SD:/test\n", "M20 S /test\n"
               {
-                if (cmd_start_with(cmd_ptr, "M20 SD:"))
-                  infoFile.source = TFT_SD;
-                else
-                  infoFile.source = TFT_USB_DISK;
-
-                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
-                // strip out any checksum that might be in the string
-                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0; i++)
-                {
-                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') || (infoFile.title[i] == '\r'))
-                  {
-                    infoFile.title[i] = 0;
-                    break;
-                  }
-                }
                 Serial_Puts(cmd_port, "Begin file list\n");
+
+                // then mount FS and scan for files (infoFile.source and infoFile.title are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
@@ -398,6 +522,7 @@ void sendQueueCmd(void)
                     Serial_Puts(cmd_port, infoFile.file[i]);
                     Serial_Puts(cmd_port, "\n");
                   }
+
                   for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
                     Serial_Puts(cmd_port, "/");
@@ -405,7 +530,9 @@ void sendQueueCmd(void)
                     Serial_Puts(cmd_port, "/\n");
                   }
                 }
+
                 Serial_Puts(cmd_port, "End file list\nok\n");
+
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -415,49 +542,10 @@ void sendQueueCmd(void)
           case 23:  // M23
             if (!fromTFT)
             {
-              if (cmd_start_with(cmd_ptr, "M23 SD:") ||
-                  cmd_start_with(cmd_ptr, "M23 U:"))
+              if (initRemoteTFT())  // examples: "M23 SD:/test/cap2.gcode\n", "M23 S /test/cap2.gcode\n"
               {
-                if (cmd_start_with(cmd_ptr, "M23 SD:"))
-                  infoFile.source = TFT_SD;
-                else
-                  infoFile.source = TFT_USB_DISK;
+                openRemoteTFT(false);
 
-                resetInfoFile();
-                strncpy(infoFile.title, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
-                // strip out any checksum that might be in the string
-                for (int i = 0; i < MAX_PATH_LEN && infoFile.title[i] != 0 ; i++)
-                {
-                  if ((infoFile.title[i] == '*') || (infoFile.title[i] == '\n') ||(infoFile.title[i] == '\r'))
-                  {
-                    infoFile.title[i] = 0;
-                    break;
-                  }
-                }
-
-                Serial_Puts(cmd_port, "echo:Now fresh file: ");
-                Serial_Puts(cmd_port, infoFile.title);
-                Serial_Puts(cmd_port, "\n");
-
-                FIL tmp;
-                if (mountFS() && (f_open(&tmp, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK))
-                {
-                  char buf[10];
-                  sprintf(buf, "%d", f_size(&tmp));
-                  Serial_Puts(cmd_port, "File opened: ");
-                  Serial_Puts(cmd_port, infoFile.title);
-                  Serial_Puts(cmd_port, " Size: ");
-                  Serial_Puts(cmd_port, buf);
-                  Serial_Puts(cmd_port, "\nFile selected\n");
-                  f_close(&tmp);
-                }
-                else
-                {
-                  Serial_Puts(cmd_port, "open failed, File: ");
-                  Serial_Puts(cmd_port, infoFile.title);
-                  Serial_Puts(cmd_port, "\n");
-                }
-                Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -467,7 +555,10 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
+              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to BOARD_MEDIA_REMOTE
+              //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
+
+              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT media with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -476,13 +567,13 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  infoMenu.cur = 1;
-                  menuBeforePrinting();
+                  startPrint();  // start print and open Printing menu
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
                   printPause(false, PAUSE_NORMAL);
                 }
+
                 return;
               }
             }
@@ -491,12 +582,13 @@ void sendQueueCmd(void)
           case 25:  // M25
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
+
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -509,20 +601,24 @@ void sendQueueCmd(void)
               sendCmd(true, avoid_terminal);
               return;
             }
+
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
+                char buf[55];
+
                 if (cmd_seen('C'))
                 {
                   Serial_Puts(cmd_port, "Current file: ");
                   Serial_Puts(cmd_port, infoFile.title);
                   Serial_Puts(cmd_port, ".\n");
                 }
-                char buf[55];
+
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
                 Serial_Puts(cmd_port, buf);
                 Serial_Puts(cmd_port, "ok\n");
+
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -535,18 +631,34 @@ void sendQueueCmd(void)
 
           case 28:  // M28
             if (!fromTFT)
-              isPolling = false;
+            {
+              if (initRemoteTFT())  // examples: "M28 SD:/test/cap2.gcode\n", "M28 S /test/cap2.gcode\n"
+              {
+                if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
+                {
+                  writing_mode = TFT_WRITING;
+                  reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                }
+
+                sendCmd(true, avoid_terminal);
+                return;
+              }
+              else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
+              {
+                writing_mode = ONBOARD_WRITING;
+                reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+              }
+            }
             break;
 
           case 29:  // M29
             if (!fromTFT)
             {
-              // force send M29 directly and purge to avoid any loopback
-              sendCmd(false, avoid_terminal);
+              // NOTE: this scenario is reachable only if not already in writing mode (no M28 was previously received).
+              //       So, we only need to send back and ACK message
 
-              mustStoreScript("M105\nM114\nM220\n");
-              storeCmd("M221 D%d\n", heatGetCurrentTool());
-              isPolling = true;
+              Serial_Puts(cmd_port, "ok\n");
+              sendCmd(true, avoid_terminal);
               return;
             }
             break;
@@ -554,36 +666,17 @@ void sendQueueCmd(void)
           case 30:  // M30
             if (!fromTFT)
             {
-              if (cmd_start_with(cmd_ptr, "M30 SD:") ||
-                  cmd_start_with(cmd_ptr, "M30 U:"))
+              if (initRemoteTFT())  // examples: "M30 SD:/test/cap2.gcode\n", "M30 S /test/cap2.gcode\n"
               {
-                if (cmd_start_with(cmd_ptr, "M30 SD:"))
-                  infoFile.source = TFT_SD;
-                else
-                  infoFile.source = TFT_USB_DISK;
-                TCHAR filepath[MAX_PATH_LEN];
-                strncpy(filepath, &cmd_ptr[cmd_index + 4], MAX_PATH_LEN);
-                // strip out any checksum that might be in the string
-                for (int i = 0; i < MAX_PATH_LEN && filepath[i] != 0 ; i++)
-                {
-                  if ((filepath[i] == '*') || (filepath[i] == '\n') || (filepath[i] == '\r'))
-                  {
-                    filepath[i] = 0;
-                    break;
-                  }
-                }
-                if ((mountFS() == true) && (f_unlink (filepath) == FR_OK))
-                {
+                // then mount FS and delete the file (infoFile.source and infoFile.title are used)
+                if (mountFS() == true && f_unlink(infoFile.title) == FR_OK)
                   Serial_Puts(cmd_port, "File deleted: ");
-                  Serial_Puts(cmd_port, filepath);
-                  Serial_Puts(cmd_port, ".\nok\n");
-                }
                 else
-                {
                   Serial_Puts(cmd_port, "Deletion failed, File: ");
-                  Serial_Puts(cmd_port, filepath);
-                  Serial_Puts(cmd_port, ".\nok\n");
-                }
+
+                Serial_Puts(cmd_port, infoFile.title);
+                Serial_Puts(cmd_port, ".\nok\n");
+
                 sendCmd(true, avoid_terminal);
                 return;
               }
@@ -594,10 +687,11 @@ void sendQueueCmd(void)
             sendCmd(false, avoid_terminal);
             return;
 
-          case 115:  // M115 TFT
-            if (!fromTFT && cmd_start_with(cmd_ptr, "M115 TFT"))
+          case 115:  // M115
+            if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M115 TFT"
             {
               char buf[50];
+
               Serial_Puts(cmd_port,
                           "FIRMWARE_NAME: " FIRMWARE_NAME
                           " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
@@ -610,6 +704,7 @@ void sendQueueCmd(void)
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
               Serial_Puts(cmd_port, buf);
               Serial_Puts(cmd_port, "ok\n");
+
               sendCmd(true, avoid_terminal);
               return;
             }
@@ -618,12 +713,13 @@ void sendQueueCmd(void)
           case 125:  // M125
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
+
                 printPause(true, PAUSE_NORMAL);
                 return;
               }
@@ -633,12 +729,13 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isPrinting() && infoFile.source < BOARD_MEDIA)  // if printing from TFT
+              if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printAbort()
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
+
                 printAbort();
                 return;
               }
@@ -660,7 +757,7 @@ void sendQueueCmd(void)
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
-            setM73R_presence(true);  // disable parsing remaning time from gCode comments
+            setM73R_presence(true);  // disable parsing remaning time from gcode comments
           }
 
           if (!infoMachineSettings.buildPercent)  // if M73 is not supported by Marlin, skip it
@@ -750,13 +847,13 @@ void sendQueueCmd(void)
           break;
         }
 
-        case 109: // M109
+        case 109:  // M109
           if (fromTFT)
           {
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
-            cmd_ptr[cmd_index + 3] = '4';  // avoid to send M109 to Marlin
+            cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin
             uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
             if (cmd_seen('R'))
             {
@@ -769,7 +866,7 @@ void sendQueueCmd(void)
             }
           }
         // no break here. The data processing of M109 is the same as that of M104 below
-        case 104: // M104
+        case 104:  // M104
           if (fromTFT)
           {
             uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
@@ -795,24 +892,16 @@ void sendQueueCmd(void)
           break;
 
         case 117:  // M117
-          if (cmd_start_with(&cmd_ptr[cmd_index + 5], "Time Left"))
+          if (cmd_seen_from(cmd_base_index, "Time Left"))
           {
-            parsePrintRemainingTime(&cmd_ptr[cmd_index + 14]);
+            parsePrintRemainingTime(&cmd_ptr[cmd_index]);  // cmd_index was set by cmd_seen_from function
           }
           else
           {
             CMD message;
 
-            strncpy(message, &cmd_ptr[cmd_index + 4], CMD_MAX_SIZE);
-            // strip out any checksum that might be in the string
-            for (int i = 0; i < CMD_MAX_SIZE && message[i] != 0; i++)
-            {
-              if (message[i] == '*')
-              {
-                message[i] = 0;
-                break;
-              }
-            }
+            strncpy(message, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+            stripChecksum(message);
 
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
@@ -829,7 +918,7 @@ void sendQueueCmd(void)
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
-            cmd_ptr[cmd_index + 2] = '4';  // avoid to send M190 to Marlin
+            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin
             if (cmd_seen('R'))
             {
               cmd_ptr[cmd_index - 1] = 'S';
@@ -861,7 +950,7 @@ void sendQueueCmd(void)
         case 191:  // M191
           if (fromTFT)
           {
-            cmd_ptr[cmd_index + 2] = '4';  // avoid to send M191 to Marlin
+            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin
             if (cmd_seen('R'))
             {
               cmd_ptr[cmd_index - 1] = 'S';
@@ -896,12 +985,11 @@ void sendQueueCmd(void)
 
           uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
           if (cmd_seen('D')) setParameter(P_FILAMENT_DIAMETER, 1 + i, cmd_float());
+
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
-            if (getParameter(P_FILAMENT_DIAMETER, 1) > 0.01F)  // common extruder param
-              setParameter(P_FILAMENT_DIAMETER, 0, 1);  // filament_diameter > 0.01 to enable  volumetric extrusion
-            else
-              setParameter(P_FILAMENT_DIAMETER, 0, 0);  // filament_diameter <= 0.01 to disable volumetric extrusion
+            // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
+            setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
           }
           break;
         }
@@ -991,7 +1079,7 @@ void sendQueueCmd(void)
               {
                 uint16_t ms = cmd_value();
                 Buzzer_TurnOn(hz, ms);
-                if (!fromTFT && cmd_start_with(cmd_ptr, "M300 TFT"))
+                if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
                 {
                   sendCmd(true, avoid_terminal);
                   return;
@@ -1011,7 +1099,6 @@ void sendQueueCmd(void)
           {
             caseLightSetBrightness(cmd_value());
           }
-          caseLightApplied(true);
           break;
         }
 
@@ -1084,6 +1171,9 @@ void sendQueueCmd(void)
           if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
           if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
           if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
+          if (cmd_seen('A')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('B')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('C')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, cmd_float());
           if (cmd_seen('X')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, cmd_float());
           if (cmd_seen('Z')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, cmd_float());
@@ -1157,8 +1247,7 @@ void sendQueueCmd(void)
       break;  // end parsing M-codes
 
     case 'G':
-      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
-      switch (cmd)
+      switch (cmd_value())
       {
         case 0:  // G0
         case 1:  // G1
@@ -1255,8 +1344,7 @@ void sendQueueCmd(void)
       break;  // end parsing G-codes
 
     case 'T':
-      cmd = strtol(&cmd_ptr[cmd_index + 1], NULL, 10);
-      heatSetCurrentTool(cmd);
+      heatSetCurrentTool(cmd_value());
       break;
   }  // end parsing cmd
 

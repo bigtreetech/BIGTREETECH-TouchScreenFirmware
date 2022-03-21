@@ -470,7 +470,7 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          gcodeBuf[nowIndex++] = '\n';  // end char '\n' for Gcode
+          gcodeBuf[nowIndex++] = '\n';  // end char '\n' for gcode
           gcodeBuf[nowIndex] = 0;
           storeCmd(gcodeBuf);
           gcodeBuf[nowIndex = 0] = 0;

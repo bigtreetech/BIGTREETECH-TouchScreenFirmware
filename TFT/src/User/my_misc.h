@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // Menu Macros
@@ -30,6 +31,9 @@ extern "C" {
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define NOBEYOND(min, v, max) MAX(min, MIN(v, max))
+
+#define WITHIN(N, L, H) ((N) >= (L) && (N) <= (H))
+#define NUMERIC(a)      WITHIN(a, '0', '9')
 
 // Bitwise macros
 
@@ -61,6 +65,10 @@ uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
 double stringToDouble(char *str, char **endptr);
+const char *stripHead(const char *str);  // strip out any leading " ", ":" or "/" character that might be in the string
+void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
+uint8_t getChecksum(char *str);
+bool validateChecksum(char *str);
 
 #ifdef __cplusplus
 }

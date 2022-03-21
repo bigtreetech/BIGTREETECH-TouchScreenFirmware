@@ -86,20 +86,13 @@ void FIL_SFS_SetAlive(bool alive)
 bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
-  static uint32_t highCount = 0;
-  static uint32_t lowCount = 0;
+  static int32_t trigBalance = 0;
   static uint32_t nextRunoutTime = 0;
 
   if (OS_GetTimeMs() > nextRunoutTime)
   {
-    // Detect HIGH/LOW level, Suitable for general mechanical / photoelectric switches
-    if (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) == 0)  // if filament runout is triggered by a LOW signal
-      runout = lowCount > highCount ? true : false;
-    else  // if filament runout is triggered by a HIGH signal
-      runout = highCount > lowCount ? true : false;
-
-    highCount = 0;
-    lowCount = 0;
+    runout = (trigBalance > 0);
+    trigBalance = 0;
     nextRunoutTime = OS_GetTimeMs() + infoSettings.runout_noise;
   }
   else
@@ -143,14 +136,7 @@ bool FIL_NormalRunoutDetect(void)
         break;
     }
 
-    if (pinState)
-    {
-      highCount++;
-    }
-    else
-    {
-      lowCount++;
-    }
+    trigBalance += (pinState == GET_BIT(infoSettings.runout, RUNOUT_INVERTED)) ? 1: -1;  // if triggered add 1 else substract 1
   }
 
   return runout;
@@ -176,7 +162,7 @@ bool FIL_SmartRunoutDetect(void)
     if (OS_GetTimeMs() < nextUpdateTime)
       break;
 
-    if (requestCommandInfoIsRunning())  // To avoid colision in Gcode response processing
+    if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
       break;
 
     if (storeCmd("M114 E\n") == false)

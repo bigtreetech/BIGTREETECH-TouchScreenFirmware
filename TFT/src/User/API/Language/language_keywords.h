@@ -23,6 +23,8 @@ extern "C" {
 #define LANG_KEY_PERSISTENT_INFO              "label_persistent_info:"
 #define LANG_KEY_TERMINAL_ACK                 "label_terminal_ack:"
 #define LANG_KEY_SERIAL_ALWAYS_ON             "label_serial_always_on:"
+#define LANG_KEY_SHOW_BOOTSCREEN              "label_show_bootscreen:"
+#define LANG_KEY_ALERT_HEATERS_ON             "label_alert_heaters_on:"
 #define LANG_KEY_MARLIN_FULLSCREEN            "label_marlin_fullscreen:"
 #define LANG_KEY_MARLIN_SHOW_TITLE            "label_marlin_show_title:"
 #define LANG_KEY_MARLIN_TYPE                  "label_marlin_type:"
@@ -66,6 +68,7 @@ extern "C" {
 #define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
 #define LANG_KEY_DELTA_CONFIGURATION          "label_delta_configuration:"
 #define LANG_KEY_DELTA_TOWER_ANGLE            "label_delta_tower_angle:"
+#define LANG_KEY_DELTA_DIAGONAL_ROD           "label_delta_diagonal_rod:"
 #define LANG_KEY_DELTA_ENDSTOP                "label_delta_endstop:"
 #define LANG_KEY_PROBE_OFFSET                 "label_probe_offset:"
 #define LANG_KEY_LIN_ADVANCE                  "label_lin_advance:"
@@ -197,6 +200,8 @@ extern "C" {
 #define LANG_KEY_DEPLOY                       "label_deploy:"
 #define LANG_KEY_STOW                         "label_stow:"
 #define LANG_KEY_REPEAT                       "label_repeat:"
+#define LANG_KEY_HS_ON                        "label_hs_on:"
+#define LANG_KEY_HS_OFF                       "label_hs_off:"
 
 // Printer Tools
 #define LANG_KEY_NOZZLE                       "label_nozzle:"
