@@ -28,6 +28,7 @@ const MENUITEMS loadUnloadItems = {
 };
 
 static uint8_t tool_index = NOZZLE0;
+static CMD_TYPE lastCmd = NONE;
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
@@ -38,7 +39,6 @@ void loadMinTemp_OK(void)
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  static CMD_TYPE lastCmd = NONE;
 
   menuDrawPage(&loadUnloadItems);
   temperatureReDraw(tool_index, NULL, false);
