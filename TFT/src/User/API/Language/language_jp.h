@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "展開"
     #define STRING_STOW                   "収納"
     #define STRING_REPEAT                 "繰り返す"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "ノズル"

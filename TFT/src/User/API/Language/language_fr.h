@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Déployer"
     #define STRING_STOW                   "Rentrer"
     #define STRING_REPEAT                 "Répéter"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Buse"

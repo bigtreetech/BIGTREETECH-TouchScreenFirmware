@@ -200,6 +200,8 @@ extern "C" {
 #define LANG_KEY_DEPLOY                       "label_deploy:"
 #define LANG_KEY_STOW                         "label_stow:"
 #define LANG_KEY_REPEAT                       "label_repeat:"
+#define LANG_KEY_HS_ON                        "label_hs_on:"
+#define LANG_KEY_HS_OFF                       "label_hs_off:"
 
 // Printer Tools
 #define LANG_KEY_NOZZLE                       "label_nozzle:"

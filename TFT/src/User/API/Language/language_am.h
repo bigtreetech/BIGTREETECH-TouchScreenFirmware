@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Deploy"
     #define STRING_STOW                   "Stow"
     #define STRING_REPEAT                 "Repeat"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Գլխիկ"

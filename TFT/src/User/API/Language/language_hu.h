@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Bevetés"
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
+    #define STRING_HS_ON                  "HS: Be"
+    #define STRING_HS_OFF                 "HS: Ki"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Fej"

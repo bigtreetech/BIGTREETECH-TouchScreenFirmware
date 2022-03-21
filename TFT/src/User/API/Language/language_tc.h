@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "探針彈出"
     #define STRING_STOW                   "探針收回"
     #define STRING_REPEAT                 "精度測試"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "噴頭"

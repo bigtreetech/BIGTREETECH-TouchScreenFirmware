@@ -193,6 +193,8 @@
     #define STRING_DEPLOY                 "Postavi"
     #define STRING_STOW                   "Skrij"
     #define STRING_REPEAT                 "Ponovi"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Šoba"
