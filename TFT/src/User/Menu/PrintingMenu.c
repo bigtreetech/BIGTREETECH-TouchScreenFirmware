@@ -69,26 +69,29 @@ const GUI_RECT printinfo_val_rect[6] = {
                                 PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PICON_SPACE_Y - 1};
 #endif
 
-enum
-{
-  PRINT_ICON = (1 << 0),
-  PRINT_TOP_ROW = (1 << 1),
-  PRINT_BOTTOM_ROW = (1 << 2),
-};
-
 const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
                                 ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
 
 const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
 
 const char *const speedId[2] = {"Speed", "Flow "};
+
+#define TOGGLE_TIME    2000  // 1 seconds is 1000
+#define LAYER_DELTA    0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
+#define LAYER_TITLE    "Layer"
+#define MAX_TITLE_LEN  70
+
 bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
 LAYER_TYPE layerDisplayType;
+char title[MAX_TITLE_LEN] = "";
 
-#define TOGGLE_TIME  2000  // 1 seconds is 1000
-#define LAYER_DELTA  0.1   // minimal layer height change to update the layer display (avoid congestion in vase mode)
-#define LAYER_TITLE  "Layer"
+enum
+{
+  PRINT_ICON = (1 << 0),
+  PRINT_TOP_ROW = (1 << 1),
+  PRINT_BOTTOM_ROW = (1 << 2),
+};
 
 enum
 {
@@ -133,8 +136,12 @@ static void setLayerNumberTxt(char * layer_number_txt)
   uint16_t layerCount = getPrintLayerCount();
   if (layerNumber > 0)
   {
-    if (layerCount > 0 && layerCount < 1000)
-    { // there's no space to display layer number & count if the layer count is above 999
+    if (layerCount > 0
+        #ifndef TFT70_V3_0
+          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
+        #endif
+        )
+    {
       sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }
     else
@@ -148,63 +155,59 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
-void menuBeforePrinting(void)
+// initialize printing info before opening Printing menu
+void initMenuPrinting(void)
 {
-  // load stat/end/cancel gcodes from spi flash
+  getPrintTitle(title, MAX_TITLE_LEN);  // get print title according to print originator (remote or local to TFT)
+  clearInfoFile();                      // as last, clear and free memory for file list
 
-  switch (infoFile.source)
-  {
-    case BOARD_MEDIA:  // GCode from file on onboard media
-      {
-        uint32_t size;
-
-        size = request_M23_M36(infoFile.title + (infoMachineSettings.firmwareType == FW_REPRAPFW ? 0 : 5));
-
-        if (size == 0)
-        {
-          ExitDir();
-          CLOSE_MENU();
-          return;
-        }
-
-        printStart(NULL, size);
-        break;
-      }
-
-    case TFT_USB_DISK:
-    case TFT_SD:  // GCode from file on TFT SD
-      {
-        FIL file;
-
-        if (f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-        {
-          ExitDir();
-          CLOSE_MENU();
-          return;
-        }
-
-        if (powerFailedCreate(infoFile.title) == false)  // open Power-loss Recovery file
-        {}
-        powerFailedlSeek(&file);  // seek on Power-loss Recovery file
-
-        printStart(&file, f_size(&file));
-        break;
-      }
-
-    default:
-      ExitDir();
-      CLOSE_MENU();
-      return;
-  }
-
-  // initialize things before the print starts
   progDisplayType = infoSettings.prog_disp_type;
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
   setM73R_presence(false);
+}
 
+// start print originated or handled by remote host
+// (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
+void startRemotePrint(const char * filename)
+{
+  if (!printRemoteStart(filename))
+    return;
+
+  // NOTE: call just before opening Printing menu because initMenuPrinting function will
+  //       call clearInfoFile function that will clear and free memory for file list
+  initMenuPrinting();
+
+  infoMenu.cur = 1;  // clear menu buffer when Printing menu is activated by remote
   REPLACE_MENU(menuPrinting);
+}
+
+// start print originated or handled by TFT
+// (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
+void startPrint(void)
+{
+  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by printStart function
+
+  if (!printStart())
+  {
+    // in case the calling function is menuPrintFromSource,
+    // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
+    ExitDir();
+    return;
+  }
+
+  // if restoring a print after a power failure or printing from remote TFT media (with M23 - M24),
+  // no filename is available in infoFile. Only infoFile.source and infoFile.title have been set
+  //
+  if (!printRestore && infoFile.fileCount == 0)  // if printing from remote TFT media
+    infoMenu.cur = 0;                            // clear menu buffer
+
+  // NOTE: call just before opening Printing menu because initMenuPrinting function will
+  //       call clearInfoFile function that will clear and free memory for file list
+  initMenuPrinting();
+
+  OPEN_MENU(menuPrinting);
 }
 
 static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
@@ -457,12 +460,9 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  if (nextProgress != prevProgress)
-  { // we need speed, do not draw anything if progress isn't changed
-    if (nextProgress > prevProgress)
-      reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
-    else  // if regress, swap indexes and colors
-      reDrawProgressBar(nextProgress, prevProgress, PB_BCKG, PB_STRIPE_REMAINING);
+  if (nextProgress > prevProgress)
+  { // we need speed, do not draw anything if progress isn't increased (it cannot decrease)
+    reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
     if (progDisplayType != ELAPSED_REMAINING)
     {
       reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
@@ -600,8 +600,7 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
   }
 
-  // hide filename extension if filename extension feature is disabled
-  printingItems.title.address = hideFilenameExtension(infoFile.fileIndex);
+  printingItems.title.address = title;
 
   menuDrawPage(&printingItems);
   printingDrawPage();

@@ -20,6 +20,7 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   STEPPER_INDEX_COUNT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
   4,                       // Delta Configuration
   3,                       // Delta Tower Angle
+  3,                       // Delta Diagonal Rod Trim
   3,                       // Delta Endstop Adjustments
   (AXIS_INDEX_COUNT - 2),  // Probe offset (X, Y, Z)
   2,                       // Linear Advance (E0, E1)
@@ -46,6 +47,7 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M569",  // TMC StealthChop
   "M665",  // Delta Configuration
   "M665",  // Delta Tower Angle
+  "M665",  // Delta Diagonal Rod Trim
   "M666",  // Delta Endstop Adjustments
   "M851",  // Probe offset
   "M900",  // Linear Advance
@@ -72,6 +74,7 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, E0, E1)
   {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",      NULL,         NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
+  {"A%.2f\n",            "B%.2f\n",       "C%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
   {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,         NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
@@ -99,6 +102,7 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Tower Angle (Tx, Ty, Tz)
+  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Diagonal Rod Trim (Dx, Dy, Dz)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Endstop Adjustments (Ex, Ey, Ez)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             // Linear Advance (E0, E1)
@@ -126,8 +130,9 @@ char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", 
 char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID};
-char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal"};
+char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
 char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
+char * const deltaDiagonalRodDisplayID[] = {"Dx", "Dy", "Dz"};
 char * const deltaEndstopDisplayID[] = {"Ex", "Ey", "Ez"};
 char * const linAdvDisplayID[] = {"K-Factor E0", "K-Factor E1"};
 
@@ -258,6 +263,9 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
 
     case P_DELTA_TOWER_ANGLE:
       return infoParameters.DeltaTowerAngle[index];
+      
+    case P_DELTA_DIAGONAL_ROD:
+      return infoParameters.DeltaDiagonalRod[index];
 
     case P_DELTA_ENDSTOP:
       return infoParameters.DeltaEndstop[index];
@@ -357,6 +365,10 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_DELTA_TOWER_ANGLE:
       infoParameters.DeltaTowerAngle[index] = val;
+      break;
+      
+    case P_DELTA_DIAGONAL_ROD:
+      infoParameters.DeltaDiagonalRod[index] = val;
       break;
 
     case P_DELTA_ENDSTOP:

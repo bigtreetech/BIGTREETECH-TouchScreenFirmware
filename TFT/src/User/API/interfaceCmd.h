@@ -19,7 +19,6 @@ bool isEnqueued(const CMD cmd);
 bool isWritingMode(void);
 
 bool storeCmd(const char * format, ...);
-bool storeScript(const char * format, ...);
 void mustStoreCmd(const char * format, ...);
 void mustStoreScript(const char * format, ...);
 bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd);

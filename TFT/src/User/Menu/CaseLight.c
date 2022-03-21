@@ -1,15 +1,20 @@
 #include "CaseLight.h"
 #include "includes.h"
 
+#define CASE_LIGHT_UPDATE_TIME 1000  // 1 seconds is 1000
+
+// Icons list for Case Light
 const ITEM itemCaseLight[2] = {
   // icon                        label
   {ICON_RGB_OFF,                 LABEL_OFF},
   {ICON_RGB_WHITE,               LABEL_ON},
 };
 
+static uint8_t curUnit_index = 1;
+
 static inline void updateCaseLightIcon(MENUITEMS * curmenu, bool state)
 {
-  curmenu->items[KEY_ICON_4] = itemCaseLight[state ? 1 : 0];
+  curmenu->items[KEY_ICON_5] = itemCaseLight[state ? 1 : 0];
 }
 
 void caseLightBrightnessReDraw()
@@ -34,24 +39,25 @@ void menuCaseLight(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
+      {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
       {ICON_RGB_WHITE,               LABEL_ON},
-      {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-
-  // Initiate query. Value will be compared in while loop
-  caseLightValueQuery();
-
   bool currentCaseLightState = caseLightGetState();
   bool previousCaseLightState = currentCaseLightState;
   uint8_t currentCaseLightBrightness = caseLightGetBrightness();
   uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
+  bool sendingNeeded = false;
 
+  storeCmd("M355\n");  // retrieve the case light's state and brightness. Value will be compared in while loop
+
+  caseLightItems.items[KEY_ICON_4] = itemPercent[curUnit_index];
   updateCaseLightIcon(&caseLightItems, currentCaseLightState);
+
   menuDrawPage(&caseLightItems);
   caseLightBrightnessReDraw();
 
@@ -61,19 +67,29 @@ void menuCaseLight(void)
 
     switch (key_num)
     {
+      // decrease case light
       case KEY_ICON_0:
-        caseLightChangeBrightnessPrecent(-10);
-        caseLightBrightnessReDraw();
+      case KEY_DECREASE:
+        caseLightSetBrightnessPercent(- percentSteps[curUnit_index]);
         break;
 
+      // increase case light
       case KEY_ICON_3:
-        caseLightChangeBrightnessPrecent(10);
-        caseLightBrightnessReDraw();
+      case KEY_INCREASE:
+        caseLightSetBrightnessPercent(+ percentSteps[curUnit_index]);
         break;
 
+      // change unit
       case KEY_ICON_4:
+        curUnit_index = (curUnit_index + 1) % ITEM_PERCENT_STEPS_NUM;
+
+        caseLightItems.items[key_num] = itemPercent[curUnit_index];
+        menuDrawItem(&caseLightItems.items[key_num], key_num);
+        break;
+
+      // switch on/off case light
+      case KEY_ICON_5:
         caseLightSetState(!currentCaseLightState);
-        caseLightBrightnessReDraw();
         break;
 
       case KEY_ICON_7:
@@ -81,32 +97,35 @@ void menuCaseLight(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            caseLightChangeBrightnessPrecent(encoderPosition);
-            caseLightBrightnessReDraw();
-            encoderPosition = 0;
-          }
-        #endif
         break;
     }
 
     currentCaseLightState = caseLightGetState();
-    if (previousCaseLightState != currentCaseLightState)
+    if (previousCaseLightState != currentCaseLightState)  // dynamically change the light on/off icon based on the current state
     {
-      // Dynamically change the light on/off icon based on the current state
       previousCaseLightState = currentCaseLightState;
+
       updateCaseLightIcon(&caseLightItems, currentCaseLightState);
-      menuDrawItem(&caseLightItems.items[KEY_ICON_4], KEY_ICON_4);
-      caseLightBrightnessReDraw();
+      menuDrawItem(&caseLightItems.items[KEY_ICON_5], KEY_ICON_5);
+
+      sendingNeeded = true;
     }
 
     currentCaseLightBrightness = caseLightGetBrightness();
     if (previousCaseLightBrightness != currentCaseLightBrightness)
     {
       previousCaseLightBrightness = currentCaseLightBrightness;
+
       caseLightBrightnessReDraw();
+
+      sendingNeeded = true;
+    }
+
+    if (sendingNeeded && nextScreenUpdate(CASE_LIGHT_UPDATE_TIME))
+    {
+      storeCmd("M355 S%d P%d\n", currentCaseLightState ? 1 : 0, currentCaseLightBrightness);
+
+      sendingNeeded = false;
     }
 
     loopProcess();

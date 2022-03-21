@@ -1304,11 +1304,6 @@ void loopBackEnd(void)
   if (GET_BIT(infoSettings.general_settings, INDEX_EVENT_LED) == 1)
     LED_CheckEvent();
 
-  if (infoMachineSettings.caseLightsBrightness == ENABLED)
-  {
-    loopCaseLight();
-  }
-
   // Query RRF status
   rrfStatusQuery();
 }  // loopBackEnd

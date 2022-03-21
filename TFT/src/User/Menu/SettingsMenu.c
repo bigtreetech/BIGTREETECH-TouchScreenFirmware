@@ -85,7 +85,6 @@ void menuInfo(void)
   char buf[128];
 
   const char *const hardware = HARDWARE_MANUFACTURER HARDWARE_VERSION;
-  const char *const firmware = SOFTWARE_MANUFACTURER STRINGIFY(SOFTWARE_VERSION) " " __DATE__;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(GRAY);
@@ -109,10 +108,6 @@ void menuInfo(void)
   // GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
 
   // GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
-
-  // spi flash info
-  float usedMB = (float)FLASH_USED/1048576;
-  sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity() / 1048576));
 
   const uint16_t top_y = 0; //(LCD_HEIGHT - (7 * BYTE_HEIGHT)) / 2;  // 8 firmware info lines + 1 SPI flash info line
   const uint16_t start_x = strlen("Firmware:") * BYTE_WIDTH;
@@ -143,7 +138,11 @@ void menuInfo(void)
   GUI_DispStringInPrectEOL(&version[0], firmare_name);
   GUI_DispStringInPrectEOL(&version[1], machine_type);
   GUI_DispStringInPrectEOL(&version[2], (uint8_t *)hardware);
-  GUI_DispStringInPrectEOL(&version[3], (uint8_t *)firmware);
+  sprintf(buf, "V"STRINGIFY(SOFTWARE_VERSION) " " __DATE__ " in %dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
+  GUI_DispStringInPrectEOL(&version[3], (uint8_t *)buf);
+  // spi flash info
+  float usedMB = (float)FLASH_USED/1048576;
+  sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity() / 1048576));
   GUI_DispStringInPrectEOL(&version[4], (uint8_t *)buf);
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
