@@ -235,7 +235,7 @@ void ParseACKJsonParser::value(const char *value)
     case result:
         if (starting_print)
         {
-          printRemoteStart(value);
+          startRemotePrint(value);  // start print and open Printing menu
           starting_print = false;
         }
       break;

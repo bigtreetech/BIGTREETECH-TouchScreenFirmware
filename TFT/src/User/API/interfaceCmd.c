@@ -467,7 +467,10 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              if ((infoFile.source == TFT_USB_DISK) || (infoFile.source == TFT_SD))  // if a file was selected from TFT with M23
+              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to BOARD_MEDIA_REMOTE
+              //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
+
+              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -476,8 +479,7 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  infoMenu.cur = 1;
-                  menuBeforePrinting();
+                  startPrint();  // start print and open Printing menu
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {
