@@ -181,7 +181,7 @@ extern "C" {
 #define LANG_KEY_TFT_USB_REMOVED              "label_tft_usb_removed:"
 #define LANG_KEY_TFT_USB_NOT_DETECTED         "label_tft_usb_not_detected:"
 #define LANG_KEY_ONBOARD_SD                   "label_onboard_sd:"
-#define LANG_KEY_ONBOARD_USB                  "label_onboard_usb"
+#define LANG_KEY_ONBOARD_USB                  "label_onboard_usb:"
 #define LANG_KEY_ONBOARD_SD_READ_ERROR        "label_onboard_sd_read_error:"
 #define LANG_KEY_FILAMENT_RUNOUT              "label_filament_runout:"
 
