@@ -480,7 +480,7 @@ bool printStart(void)
 void printEnd(void)
 {
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"),
-  // always force infoHost.status to "HOST_STATUS_IDLE"
+  // always force infoHost.printing to "false"
   if (!infoPrinting.printing)
   {
     infoHost.printing = false;
@@ -711,7 +711,7 @@ bool isRemoteHostPrinting(void)
 void setPrintAbort(void)
 {
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"),
-  // always force infoHost.status to "HOST_STATUS_IDLE"
+  // always force infoHost.printing to "false"
   if (!infoPrinting.printing)
   {
     infoHost.printing = false;
@@ -725,7 +725,7 @@ void setPrintAbort(void)
 void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
 {
   // in case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // infoHost.status is always forced to "HOST_STATUS_PAUSED" because no other notification will be received
+  // infoHost.printing is always forced to "false" because no other notification will be received
 
   if (infoPrinting.printing)
   {
@@ -734,7 +734,7 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
   }
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host or
-  // infoSettings.m27_active set to "false", always force infoHost.status to "HOST_STATUS_PAUSED"
+  // infoSettings.m27_active set to "false", always force infoHost.printing to "false"
   if ((updateHost || !infoPrinting.printing) || (infoFile.source == REMOTE_HOST || !infoSettings.m27_active))
     infoHost.printing = false;
 }
@@ -742,13 +742,13 @@ void setPrintPause(bool updateHost, PAUSE_TYPE pauseType)
 void setPrintResume(bool updateHost)
 {
   // in case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // infoHost.status is always forced to "HOST_STATUS_PRINTING" because no other notification will be received
+  // infoHost.printing is always forced to "true" because no other notification will be received
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host or
-  // infoSettings.m27_active set to "false", always force infoHost.status to "HOST_STATUS_PRINTING"
+  // infoSettings.m27_active set to "false", always force infoHost.printing to "true"
   if ((updateHost || !infoPrinting.printing) || (infoFile.source == REMOTE_HOST || !infoSettings.m27_active))
     infoHost.printing = true;
 }
