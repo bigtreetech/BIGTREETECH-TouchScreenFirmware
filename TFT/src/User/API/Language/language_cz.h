@@ -17,7 +17,7 @@
     #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
     #define STRING_SERIAL_ALWAYS_ON       "Sériový port vždy ON"
     #define STRING_SHOW_BOOTSCREEN        "Zobrazit logo"
-    #define STRING_ALERT_HEATERS_ON       "Upozornit na zapnuté vytápění" 
+    #define STRING_ALERT_HEATERS_ON       "Upozorni na zapnutý ohřev" 
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen režim Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
     #define STRING_MARLIN_TYPE            "Typ Marlin Modu"
