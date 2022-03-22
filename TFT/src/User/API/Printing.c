@@ -36,7 +36,7 @@ void setExtrusionDuringPause(bool extruded)
 
 bool isHostPrinting(void)
 {
-  return (infoHost.status == HOST_STATUS_PRINTING);
+  return (infoHost.status != HOST_STATUS_IDLE);
 }
 
 void setRunoutAlarmTrue(void)
@@ -555,7 +555,7 @@ void printAbort(void)
         request_M0();  // M524 is not supportet in RepRap firmware
       }
 
-      if (infoHost.status == HOST_STATUS_PRINTING)
+      if (isHostPrinting())
       {
         REDRAW_MENU();
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);

@@ -83,7 +83,7 @@ void Mode_CheckSwitching(void)
     return;
 
   // do not change mode if printing from any source or is already waiting mode selection
-  if (isPrinting() || infoHost.status != HOST_STATUS_IDLE || modeSwitching)
+  if (isPrinting() || isHostPrinting() || modeSwitching)
     return;
 
   if (MENU_IS(menuMode))

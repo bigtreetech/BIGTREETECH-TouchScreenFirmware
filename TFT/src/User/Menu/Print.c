@@ -469,6 +469,6 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!infoHost.status)  // prevent reset if printing from other source
+  if (!isHostPrinting())  // prevent reset if printing from other source
     resetInfoFile();
 }
