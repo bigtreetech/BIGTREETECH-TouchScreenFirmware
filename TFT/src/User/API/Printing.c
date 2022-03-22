@@ -339,13 +339,6 @@ void clearInfoPrint(void)
 
 void printComplete(void)
 {
-  // do not process any printing info if marlin mode is active
-  if (MENU_IS(menuMarlinMode))
-  {
-    infoHost.status = HOST_STATUS_IDLE;
-    return;
-  }
-
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.printing = infoPrinting.pause = false;
   setPrintRemainingTime(0);
@@ -495,7 +488,7 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:         // nothing to do
+    case REMOTE_HOST:  // nothing to do
     case BOARD_MEDIA_REMOTE:
       break;
 
@@ -602,7 +595,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
     case BOARD_MEDIA_REMOTE:
     case BOARD_MEDIA:
       if (isPause)
-        request_M25();   // pause
+        request_M25();  // pause
       else
         request_M24(0);  // resume
 
@@ -742,7 +735,7 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 
   // in case of forcing update or printing from Marlin Mode (infoPrinting.printing set to "false") or
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "false"
-  if (infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
+  if (!infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
     infoHost.status = hostStatus;
   else
     infoHost.status = HOST_STATUS_PAUSED;
@@ -759,7 +752,7 @@ void setPrintResume(HOST_STATUS hostStatus)
   infoPrinting.pause = false;
 
   // in case of printing from remote host or infoSettings.m27_active set to "false", always force to "true"
-  if (infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
+  if (!infoPrinting.printing && (infoFile.source >= BOARD_MEDIA_REMOTE || !infoSettings.m27_active))
       infoHost.status = hostStatus;  // if printing from (remote) media or remote host
   else
     infoHost.status = HOST_STATUS_PRINTING;
