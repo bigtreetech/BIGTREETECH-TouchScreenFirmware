@@ -103,7 +103,7 @@ Minimum Marlin firmware version: **2.0.8.1**
 
 Distribution date: **2021-05-15**
 
-</br>In order for the TFT's firmware to be able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
+</br>To use all the features and functionalities supported by the TFT, the following options must be enabled in Marlin firmware.
 
 **General options which MUST be activated:**
 
