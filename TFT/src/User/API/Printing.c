@@ -346,22 +346,22 @@ void printComplete(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:
-      infoHost.printing = false;
+    case TFT_SD:
+    case TFT_USB:
+      f_close(&infoPrinting.file);
+      powerFailedClose();   // close PLR file
+      powerFailedDelete();  // delete PLR file
       break;
 
-    case ONBOARD_MEDIA_REMOTE:
     case ONBOARD_MEDIA:
+    case ONBOARD_MEDIA_REMOTE:
       infoHost.printing = false;
       request_M27(0);
       coordinateQueryTurnOff();  // disable position auto report, if any
       break;
 
-    case TFT_USB:
-    case TFT_SD:
-      f_close(&infoPrinting.file);
-      powerFailedClose();   // close PLR file
-      powerFailedDelete();  // delete PLR file
+    case REMOTE_HOST:
+      infoHost.printing = false;
       break;
   }
 
@@ -415,16 +415,8 @@ bool printStart(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:           // present just to make the code robust. It should never be executed
-    case ONBOARD_MEDIA_REMOTE:
-      break;
-
-    case ONBOARD_MEDIA:
-      infoPrinting.size = request_M23_M36(infoFile.path);
-      break;
-
-    case TFT_USB:
     case TFT_SD:
+    case TFT_USB:
       if (f_open(&infoPrinting.file, infoFile.path, FA_OPEN_EXISTING | FA_READ) == FR_OK)
       {
         infoPrinting.size = f_size(&infoPrinting.file);
@@ -453,6 +445,14 @@ bool printStart(void)
           powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
       }
 
+      break;
+
+    case ONBOARD_MEDIA:
+      infoPrinting.size = request_M23_M36(infoFile.path);
+      break;
+
+    case ONBOARD_MEDIA_REMOTE:  // present just to make the code robust. It should never be executed
+    case REMOTE_HOST:
       break;
   }
 
@@ -489,16 +489,16 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:           // nothing to do
-    case ONBOARD_MEDIA_REMOTE:
-      break;
-
-    case ONBOARD_MEDIA:
-    case TFT_USB:
     case TFT_SD:
+    case TFT_USB:
+    case ONBOARD_MEDIA:
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
         sendPrintCodes(1);
 
+      break;
+
+    case ONBOARD_MEDIA_REMOTE:  // nothing to do
+    case REMOTE_HOST:
       break;
   }
 
@@ -522,12 +522,13 @@ void printAbort(void)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return;
+    case TFT_SD:
+    case TFT_USB:
+      clearCmdQueue();
+      break;
 
-    case ONBOARD_MEDIA_REMOTE:
     case ONBOARD_MEDIA:
+    case ONBOARD_MEDIA_REMOTE:
       //infoHost.printing = false;  // Not so fast! Let Marlin tell that it's done!
 
       // several M108 are sent to Marlin because consecutive blocking operations
@@ -549,7 +550,7 @@ void printAbort(void)
         request_M0();  // M524 is not supportet in RepRap firmware
       }
 
-      if (infoHost.printing)
+      if (isHostPrinting())
       {
         REDRAW_MENU();
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
@@ -560,10 +561,9 @@ void printAbort(void)
 
       break;
 
-    case TFT_USB:
-    case TFT_SD:
-      clearCmdQueue();
-      break;
+    case REMOTE_HOST:  // nothing to do
+      loopDetected = false;
+      return;
   }
 
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
@@ -589,21 +589,8 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
   switch (infoFile.source)
   {
-    case REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return true;
-
-    case ONBOARD_MEDIA_REMOTE:
-    case ONBOARD_MEDIA:
-      if (isPause)
-        request_M25();   // pause
-      else
-        request_M24(0);  // resume
-
-      break;
-
-    case TFT_USB:
     case TFT_SD:
+    case TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
         loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
@@ -680,6 +667,19 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       }
 
       break;
+
+    case ONBOARD_MEDIA:
+    case ONBOARD_MEDIA_REMOTE:
+      if (isPause)
+        request_M25();   // pause
+      else
+        request_M24(0);  // resume
+
+      break;
+
+    case REMOTE_HOST:  // nothing to do
+      loopDetected = false;
+      return true;
   }
 
   infoPrinting.pause = isPause;  // update pause status after pause/resume procedure
@@ -823,8 +823,6 @@ void loopPrintFromTFT(void)
         continue;  // "continue" will force also to execute "ip_cur++" in the "for" statement
       }
 
-      infoPrinting.offset++;  // count non-gcode size
-
       if (read_char == '\n')  // '\n' is command end flag
       {
         if (comment_parsing && comment_count != 0)  // if a comment was found, finalize the comment data structure
@@ -851,6 +849,8 @@ void loopPrintFromTFT(void)
             comment_parsing = false;
         }
       }
+
+      infoPrinting.offset++;  // count non-gcode size
     }
   }
 
