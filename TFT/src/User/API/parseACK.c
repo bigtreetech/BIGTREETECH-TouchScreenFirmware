@@ -433,7 +433,7 @@ void parseACK(void)
                                // avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M211\n");    // retrieve the software endstops state
         storeCmd("M115\n");    // as last command to identify the FW type!
-        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode 
+        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
       }
 
       infoHost.connected = true;
@@ -668,13 +668,13 @@ void parseACK(void)
       }
       // parse and store M27
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("Not SD printing"))  // if printing from (remote) onboard media
       {
         setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("SD printing byte"))  // if printing from (remote) onboard media
       {
         setPrintResume(HOST_STATUS_RESUMING);
@@ -686,7 +686,7 @@ void parseACK(void)
       }
       // parse and store M24, printing from (remote) onboard media completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("Done printing file"))  // if printing from (remote) onboard media
       {
         printEnd();
