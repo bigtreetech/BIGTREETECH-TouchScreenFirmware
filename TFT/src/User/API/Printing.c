@@ -528,7 +528,7 @@ void printAbort(void)
 
     case FS_BOARD_MEDIA:
     case FS_BOARD_MEDIA_REMOTE:
-      //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that he's done!
+      //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that it's done!
 
       // several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
