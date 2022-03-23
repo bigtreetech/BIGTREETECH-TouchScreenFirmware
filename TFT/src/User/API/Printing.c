@@ -346,22 +346,22 @@ void printComplete(void)
 
   switch (infoFile.source)
   {
-    case FS_REMOTE_HOST:
-      infoHost.status = HOST_STATUS_IDLE;
+    case FS_TFT_SD:
+    case FS_TFT_USB:
+      f_close(&infoPrinting.file);
+      powerFailedClose();   // close PLR file
+      powerFailedDelete();  // delete PLR file
       break;
 
-    case FS_BOARD_MEDIA_REMOTE:
     case FS_BOARD_MEDIA:
+    case FS_BOARD_MEDIA_REMOTE:
       infoHost.status = HOST_STATUS_IDLE;
       request_M27(0);
       coordinateQueryTurnOff();  // disable position auto report, if any
       break;
 
-    case FS_TFT_USB:
-    case FS_TFT_SD:
-      f_close(&infoPrinting.file);
-      powerFailedClose();   // close PLR file
-      powerFailedDelete();  // delete PLR file
+    case FS_REMOTE_HOST:
+      infoHost.status = HOST_STATUS_IDLE;
       break;
   }
 
@@ -392,8 +392,8 @@ bool printRemoteStart(const char * filename)
   if (filename != NULL)
   {
     infoFile.source = FS_BOARD_MEDIA_REMOTE;  // set source first
-    resetInfoFile();                       // then reset infoFile (source is restored)
-    EnterDir(stripHead(filename));         // set title as last
+    resetInfoFile();                          // then reset infoFile (source is restored)
+    EnterDir(stripHead(filename));            // set title as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
@@ -415,16 +415,8 @@ bool printStart(void)
 
   switch (infoFile.source)
   {
-    case FS_REMOTE_HOST:  // present just to make the code robust. It should never be executed
-    case FS_BOARD_MEDIA_REMOTE:
-      break;
-
-    case FS_BOARD_MEDIA:
-      infoPrinting.size = request_M23_M36(infoFile.title);
-      break;
-
-    case FS_TFT_USB:
     case FS_TFT_SD:
+    case FS_TFT_USB:
       if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
       {
         infoPrinting.size = f_size(&infoPrinting.file);
@@ -453,6 +445,14 @@ bool printStart(void)
           powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
       }
 
+      break;
+
+    case FS_BOARD_MEDIA:
+      infoPrinting.size = request_M23_M36(infoFile.title);
+      break;
+
+    case FS_BOARD_MEDIA_REMOTE:
+    case FS_REMOTE_HOST:
       break;
   }
 
@@ -488,16 +488,16 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case FS_REMOTE_HOST:  // nothing to do
-    case FS_BOARD_MEDIA_REMOTE:
-      break;
 
     case FS_BOARD_MEDIA:
     case FS_TFT_USB:
     case FS_TFT_SD:
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
         sendPrintCodes(1);
+      break;
 
+    case FS_REMOTE_HOST:  // nothing to do
+    case FS_BOARD_MEDIA_REMOTE:
       break;
   }
 
@@ -521,12 +521,13 @@ void printAbort(void)
 
   switch (infoFile.source)
   {
-    case FS_REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return;
+    case FS_TFT_SD:
+    case FS_TFT_USB:
+      clearCmdQueue();
+      break;
 
-    case FS_BOARD_MEDIA_REMOTE:
     case FS_BOARD_MEDIA:
+    case FS_BOARD_MEDIA_REMOTE:
       //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that he's done!
 
       // several M108 are sent to Marlin because consecutive blocking operations
@@ -559,10 +560,10 @@ void printAbort(void)
 
       break;
 
-    case FS_TFT_USB:
-    case FS_TFT_SD:
-      clearCmdQueue();
-      break;
+    case FS_REMOTE_HOST:  // nothing to do
+      loopDetected = false;
+      return;
+
   }
 
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
@@ -588,21 +589,8 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
   switch (infoFile.source)
   {
-    case FS_REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return true;
-
-    case FS_BOARD_MEDIA_REMOTE:
-    case FS_BOARD_MEDIA:
-      if (isPause)
-        request_M25();  // pause
-      else
-        request_M24(0);  // resume
-
-      break;
-
-    case FS_TFT_USB:
     case FS_TFT_SD:
+    case FS_TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
         loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
@@ -679,6 +667,19 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       }
 
       break;
+
+    case FS_BOARD_MEDIA:
+    case FS_BOARD_MEDIA_REMOTE:
+      if (isPause)
+        request_M25();  // pause
+      else
+        request_M24(0);  // resume
+
+      break;
+
+    case FS_REMOTE_HOST:  // nothing to do
+      loopDetected = false;
+      return true;
   }
 
   infoPrinting.pause = isPause;  // update pause status after pause/resume procedure

@@ -315,7 +315,7 @@ bool initRemoteTFT()
   // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
   //
   if (cmd_seen_from(cmd_base_index, "SD:") || cmd_seen_from(cmd_base_index, "S "))
-    infoFile.source = FS_TFT_SD;        // set source first
+    infoFile.source = FS_TFT_SD;   // set source first
   else if (cmd_seen_from(cmd_base_index, "U:") || cmd_seen_from(cmd_base_index, "U "))
     infoFile.source = FS_TFT_USB;  // set source first
   else

@@ -391,7 +391,7 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (volumeExists(TFT_SD))
+        if (volumeExists(FS_TFT_SD))
         {
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
           infoFile.source = FS_TFT_SD;
