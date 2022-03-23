@@ -570,7 +570,7 @@ void printAbort(void)
     sendPrintCodes(2);
 
   printComplete();
-  clearInfoPrint();  // finally clear infoPrinting and exit from dir
+  clearInfoPrint();  // finally clear infoPrinting and move to current folder (instead of file)
 
   loopDetected = false;
 }
