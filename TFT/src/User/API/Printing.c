@@ -28,15 +28,17 @@ static bool updateM27_waiting = false;
 static bool extrusionDuringPause = false;  // flag for extrusion during Print -> Pause
 static float last_E_pos;
 bool filamentRunoutAlarm;
+bool hostActive = false;
 
 void setExtrusionDuringPause(bool extruded)
 {
   extrusionDuringPause = extruded;
 }
 
-bool isHostNotPaused(void)
+// condition callback for loopProcessToCondition()
+bool isHostActive(void)
 {
-  return (infoHost.status != HOST_STATUS_PAUSED);
+  return hostActive;
 }
 
 void setRunoutAlarmTrue(void)
@@ -550,14 +552,12 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      if (isHostPrinting())
-      {
-        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
+      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-        loopProcessToCondition(&isHostNotPaused);  // wait for the printer to settle down
-      }
+      hostActive = true;
 
+      loopProcessToCondition(&isHostActive);  // wait for the printer to settle down
       break;
 
     case FS_REMOTE_HOST:  // nothing to do
@@ -728,8 +728,11 @@ void setPrintAbort(void)
 
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 {
-  // in case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // infoHost.status is always forced to "HOST_STATUS_PAUSED" because no other notification will be received
+  if (infoHost.status == HOST_STATUS_IDLE)  // in case print was aborted or completed, nothing to do
+  {
+    hostActive = false;  // wakeup printAbort() if waiting for print completion
+    return;
+  }
 
   if (infoPrinting.printing)
   {
@@ -737,8 +740,9 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
     infoPrinting.pauseType = pauseType;
   }
 
-  // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host or
-  // infoSettings.m27_active set to "false", always force infoHost.status to "HOST_STATUS_PAUSED"
+  // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
+  // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to
+  // "HOST_STATUS_PAUSED" because no other notification will be received
   if (!infoPrinting.printing || (infoFile.source == FS_REMOTE_HOST || !infoSettings.m27_active))
     infoHost.status = HOST_STATUS_PAUSED;
   else
@@ -747,14 +751,15 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 
 void setPrintResume(HOST_STATUS hostStatus)
 {
-  // in case of printing from remote host (e.g. OctoPrint) or infoSettings.m27_active set to "false",
-  // infoHost.status is always forced to "HOST_STATUS_PRINTING" because no other notification will be received
+  if (infoHost.status == HOST_STATUS_IDLE)  // in case print was aborted or completed, nothing to do
+    return;
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
 
-  // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host or
-  // infoSettings.m27_active set to "false", always force infoHost.status to "HOST_STATUS_PRINTING"
+  // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
+  // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to
+  // "HOST_STATUS_PRINTING" because no other notification will be received
   if (!infoPrinting.printing || (infoFile.source == FS_REMOTE_HOST || !infoSettings.m27_active))
     infoHost.status = HOST_STATUS_PRINTING;
   else

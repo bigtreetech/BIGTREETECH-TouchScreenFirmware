@@ -41,8 +41,6 @@ extern PRINT_SUMMARY infoPrintSummary;
 
 void setExtrusionDuringPause(bool extruded);
 
-bool isHostNotPaused(void);  // condition callback for loopProcessToCondition()
-
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
 bool getRunoutAlarm(void);
