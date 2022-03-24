@@ -59,7 +59,7 @@ uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
 double stringToDouble(char *str, char **endptr);
-const char *stripHead(const char *str);  // strip out any leading " ", ":" or "/" character that might be in the string
+const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
 uint8_t getChecksum(char *str);
 bool validateChecksum(char *str);
