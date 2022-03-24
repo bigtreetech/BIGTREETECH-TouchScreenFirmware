@@ -30,15 +30,15 @@ static float last_E_pos;
 bool filamentRunoutAlarm;
 bool hostActive = false;
 
-void setExtrusionDuringPause(bool extruded)
-{
-  extrusionDuringPause = extruded;
-}
-
 // condition callback for loopProcessToCondition()
 bool isHostActive(void)
 {
   return hostActive;
+}
+
+void setExtrusionDuringPause(bool extruded)
+{
+  extrusionDuringPause = extruded;
 }
 
 void setRunoutAlarmTrue(void)
