@@ -1206,8 +1206,8 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   // uint16_t action_height = window->actionBarHeight;
   uint16_t title_txt_y0 = w_rect.y0 + (title_height - BYTE_HEIGHT) / 2;
   uint16_t title_y1 = window->rect.y0 + window->titleHeight;
-  uint16_t action_y0 = window->rect.y1 - window->actionBarHeight;
-  uint8_t margin = BYTE_WIDTH/2;
+  uint16_t action_y0 = (actionBar) ? window->rect.y1 - window->actionBarHeight : w_rect.y1;
+  uint8_t margin = BYTE_WIDTH / 2;
 
   // draw title background
   GUI_SetColor(window->title.backColor);
@@ -1262,14 +1262,11 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_DrawRect(w_rect.x0, title_y1 - 1, w_rect.x1, title_y1 + 1);
 
   if (actionBar)
-  { // draw actionbar accent line
+  {  // draw actionbar accent line
     GUI_SetColor(GRAY);
     GUI_DrawRect(w_rect.x0, action_y0 - 1, w_rect.x1, action_y0 + 1);
   }
-  else
-  {
-    w_rect.y1 -= window->actionBarHeight;
-  }
+
   // draw window border
   GUI_SetColor(window->lineColor);
 

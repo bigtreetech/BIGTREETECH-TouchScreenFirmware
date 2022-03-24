@@ -18,12 +18,12 @@ extern "C" {
 
 typedef enum
 {
-  TFT_SD,
-  TFT_USB,
-  ONBOARD_MEDIA,
-  ONBOARD_MEDIA_REMOTE,
-  REMOTE_HOST
-} FS_SOURCE;
+  FS_TFT_SD,
+  FS_TFT_USB,
+  FS_ONBOARD_MEDIA,
+  FS_ONBOARD_MEDIA_REMOTE,
+  FS_REMOTE_HOST
+} FILE_SOURCE;
 
 typedef enum
 {
@@ -33,7 +33,7 @@ typedef enum
 
 typedef struct
 {
-  FS_SOURCE source;                // selected file source. TFT media or onboard media
+  FILE_SOURCE source;              // selected file source. TFT media or onboard media
   ONBOARD_SOURCE onboardSource;    // SD or USB for onboard media only
   TCHAR path[MAX_PATH_LEN];        // selected file path
   TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard media only
@@ -52,7 +52,7 @@ extern MYFILE infoFile;
 void setPrintModelIcon(bool exist);
 bool isPrintModelIcon(void);
 
-TCHAR * getSourceFS(void);                      // get FS's ID of current source
+TCHAR * getFS(void);                            // get FS's ID of current source
 bool mountFS(void);                             // mount FS of current source
 bool scanPrintFiles(void);                      // scan files in current source and create a file list
 void clearInfoFile(void);                       // clear and free memory for file list

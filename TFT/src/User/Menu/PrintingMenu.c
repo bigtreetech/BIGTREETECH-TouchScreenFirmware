@@ -426,7 +426,7 @@ static inline void toggleInfo(void)
 
     speedQuery();
 
-    if (infoFile.source >= ONBOARD_MEDIA)
+    if (infoFile.source >= FS_ONBOARD_MEDIA)
       coordinateQuery(TOGGLE_TIME / 1000);
 
     if (!hasFilamentData && isPrinting())
@@ -592,7 +592,7 @@ void menuPrinting(void)
   if (lastPrinting == true)
   {
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
-    printingItems.items[KEY_ICON_5].icon = (infoFile.source < ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after a print was done (ex: after a popup)
   {

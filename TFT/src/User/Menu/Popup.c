@@ -208,6 +208,7 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 
 void loopPopup(void)
 {
+  // display the last received popup message, overriding previous popup messages, if any
   if (popup_redraw == false)
     return;
 
@@ -215,13 +216,12 @@ void loopPopup(void)
 
   LCD_WAKE();
 
-  // display the last received popup message, overriding previous popup messages, if any
   if (popup_cancel[0])
   {
     popupDrawPage(popup_type, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
     cur_btn_rect = doubleBtnRect;
   }
-  else if (popup_ok[0])
+  else if (popup_ok[0])  // show only ok button
   {
     popupDrawPage(popup_type, &bottomSingleBtn, popup_title, popup_msg, popup_ok, NULL);
     cur_btn_rect = &singleBtnRect;

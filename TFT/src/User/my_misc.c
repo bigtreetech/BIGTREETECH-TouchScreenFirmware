@@ -145,10 +145,9 @@ const char *stripHead(const char *str)
 {
   // example: " :/test/cap2.gcode\n" -> "test/cap2.gcode\n"
 
-  for (; *str != '\0'; str++)
+  while (*str == ':' || *str == '/' || *str == ' ')
   {
-    if (*str != ' ' && *str != ':' && *str != '/')
-      break;
+    str++;
   }
 
   return str;

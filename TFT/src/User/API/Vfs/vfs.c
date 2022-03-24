@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
+MYFILE infoFile = {FS_TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -14,21 +14,21 @@ bool isPrintModelIcon(void)
 }
 
 // get FS's ID of current source
-TCHAR * getSourceFS(void)
+TCHAR * getFS(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
+    case FS_TFT_SD:
       return SD_ROOT_DIR;
 
-    case TFT_USB:
+    case FS_TFT_USB:
       return USB_ROOT_DIR;
 
-    case ONBOARD_MEDIA:
-    case ONBOARD_MEDIA_REMOTE:
+    case FS_ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA_REMOTE:
       return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "oMD:";
 
-    case REMOTE_HOST:
+    case FS_REMOTE_HOST:
       return "Remote printing...";
 
     default:
@@ -41,13 +41,13 @@ bool mountFS(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
+    case FS_TFT_SD:
       return mountSDCard();
 
-    case TFT_USB:
+    case FS_TFT_USB:
       return mountUSBDisk();
 
-    case ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA:
       if (isHostPrinting())
         return true;  // no mount while printing
       else
@@ -63,11 +63,11 @@ bool scanPrintFiles(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
-    case TFT_USB:
+    case FS_TFT_SD:
+    case FS_TFT_USB:
       return scanPrintFilesFatFs();
 
-    case ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA:
       return scanPrintFilesGcodeFs();
 
     default:
@@ -111,7 +111,7 @@ void clearInfoFile(void)
 // clear file list and path
 void resetInfoFile(void)
 {
-  FS_SOURCE source = infoFile.source;
+  FILE_SOURCE source = infoFile.source;
   ONBOARD_SOURCE onboardSource = infoFile.onboardSource;
 
   clearInfoFile();
@@ -119,7 +119,7 @@ void resetInfoFile(void)
 
   infoFile.source = source;
   infoFile.onboardSource = onboardSource;
-  strcpy(infoFile.path, getSourceFS());
+  strcpy(infoFile.path, getFS());
 }
 
 // skip path information, if any
@@ -275,16 +275,16 @@ bool getPrintTitle(char * buf, uint8_t len)
   char * strPtr = getPrintFilename();
 
   // "+ 2": space for terminating null character and the flag for filename extension check
-  if (strlen(getSourceFS()) + strlen(strPtr) + 2 > len)
+  if (strlen(getFS()) + strlen(strPtr) + 2 > len)
   {
     *buf = '\0';  // set buffer to empty string
 
     return false;
   }
 
-  strncpy(buf, getSourceFS(), len);  // set source and set the flag for filename extension check
-  strcat(buf, strPtr);               // append filename
-  hideExtension(buf);                // hide filename extension if filename extension feature is disabled
+  strncpy(buf, getFS(), len);  // set source and set the flag for filename extension check
+  strcat(buf, strPtr);         // append filename
+  hideExtension(buf);          // hide filename extension if filename extension feature is disabled
 
   return true;
 }
@@ -312,7 +312,7 @@ void loopVolumeSource(void)
                                                     {LABEL_TFT_USB_REMOVED, LABEL_TFT_USB_INSERTED}};
 
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
+      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
     }
   }
 }

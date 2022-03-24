@@ -107,11 +107,11 @@ typedef struct
 
 typedef enum
 {
-  STATUS_IDLE = 0,
-  STATUS_BUSY,
-  STATUS_DISCONNECTED,
-  STATUS_LISTENING,
-  STATUS_NORMAL
+  SYS_STATUS_IDLE = 0,
+  SYS_STATUS_BUSY,
+  SYS_STATUS_DISCONNECTED,
+  SYS_STATUS_LISTENING,
+  SYS_STATUS_NORMAL
 } SYS_STATUS;
 
 typedef struct
@@ -198,8 +198,8 @@ void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawIconText(const ITEM *item, uint8_t position);
 void menuDrawListItem(const LISTITEM *item, uint8_t position);
 void menuRefreshListPage(void);
-void menuDrawTitle(const uint8_t *content);  //(const MENUITEMS * menuItems);
-void menuReDrawCurTitle(void);
+void menuSetTitle(const LABEL *title);
+void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 
