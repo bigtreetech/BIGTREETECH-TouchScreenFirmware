@@ -32,7 +32,7 @@ void Mode_Switch(void)
           uint32_t startUpTime = OS_GetTimeMs();
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-          
+
             if ( infoSettings.show_bootscreen == 1)
                   {
                     LOGO_ReadDisplay();
@@ -45,7 +45,7 @@ void Mode_Switch(void)
                   } else {
                     updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
                   }
-                  
+
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
           modeFreshBoot = false;
@@ -67,10 +67,6 @@ void Mode_Switch(void)
 void Mode_CheckSwitching(void)
 {
 //  #ifndef SERIAL_ALWAYS_ON
-  // IDEALLY I would like to be able to swap even when the TFT is in printing mode
-  // but before I can allow that I need a way to make sure that we swap back into
-  // the right mode (and correct screen) and I really want a reliable way to DETECT
-  // that the TFT should be in printing mode even when the print was started externally.
 
   // we must always call Touch_Enc_ReadPen() and LCD_Enc_ReadBtn() first just to always update their internal timers
   // when an encoder/touch button is pressed or released (avoiding the Mode menu is displayed by mistake when aborting
@@ -86,7 +82,8 @@ void Mode_CheckSwitching(void)
   if (infoSettings.mode >= MODE_COUNT)  // if blocked mode, then exit
     return;
 
-  if (isPrinting() || infoHost.printing || modeSwitching)
+  // do not change mode if printing from any source or is already waiting mode selection
+  if (isPrinting() || isHostPrinting() || modeSwitching)
     return;
 
   if (MENU_IS(menuMode))

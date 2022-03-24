@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "includes.h"
 #include "variants.h"
 #include "ff.h"
 
@@ -113,8 +114,8 @@ bool isTFTPrinting(void);
 bool isRemoteHostPrinting(void);
 
 void setPrintAbort(void);
-void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
-void setPrintResume(bool updateHost);
+void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
+void setPrintResume(HOST_STATUS hostStatus);
 
 void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT media, if any
 void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any

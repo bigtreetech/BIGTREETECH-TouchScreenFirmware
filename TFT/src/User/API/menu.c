@@ -554,9 +554,9 @@ static LABEL * curTitle = NULL;
 static const GUI_RECT *curRect = NULL;  // current menu layout grid
 static uint16_t curRectCount = 0;       // current menu layout rect count
 
-static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_DISCONNECTED, LABEL_UNCONNECTED};
-static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_NULL};
-static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
+static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_DISCONNECTED, LABEL_UNCONNECTED};
+static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_IDLE, LABEL_NULL};
+static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, SYS_STATUS_BUSY, LABEL_BUSY};
 
 MENUITEMS *getCurMenuItems(void)
 {
@@ -695,7 +695,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
 void busyIndicator(SYS_STATUS status)
 {
-  if (status == STATUS_BUSY)
+  if (status == SYS_STATUS_BUSY)
   {
     GUI_SetColor(MENU_BUSY_DOT_COLOR);
     GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0) / 2);
@@ -709,25 +709,25 @@ void loopReminderClear(void)
 {
   switch (reminder.status)
   {
-    case STATUS_IDLE:
+    case SYS_STATUS_IDLE:
       return;
 
-    case STATUS_BUSY:
+    case SYS_STATUS_BUSY:
       if (isFullCmdQueue())
         return;
       break;
 
-    case STATUS_DISCONNECTED:
+    case SYS_STATUS_DISCONNECTED:
       if (infoHost.connected == false)
         return;
       break;
 
-    case STATUS_LISTENING:
+    case SYS_STATUS_LISTENING:
       if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
         return;
       break;
 
-    case STATUS_NORMAL:
+    case SYS_STATUS_NORMAL:
       if (OS_GetTimeMs() < reminder.time)
         return;
       break;
@@ -736,13 +736,13 @@ void loopReminderClear(void)
       return;
   }
 
-  reminder.status = STATUS_IDLE;  // Clear status message
+  reminder.status = SYS_STATUS_IDLE;  // Clear status message
   menuReDrawCurTitle();
 }
 
 void loopVolumeReminderClear(void)
 {
-  if (volumeReminder.status != STATUS_NORMAL)
+  if (volumeReminder.status != SYS_STATUS_NORMAL)
   {
     return;
   }
@@ -751,7 +751,7 @@ void loopVolumeReminderClear(void)
     return;
   }
 
-  volumeReminder.status = STATUS_IDLE;  // Clear status message
+  volumeReminder.status = SYS_STATUS_IDLE;  // Clear status message
   menuReDrawCurTitle();
 }
 
@@ -759,16 +759,16 @@ void loopBusySignClear(void)
 {
   switch (busySign.status)
   {
-    case STATUS_IDLE:
+    case SYS_STATUS_IDLE:
       return;
 
-    case STATUS_BUSY:
+    case SYS_STATUS_BUSY:
      if (OS_GetTimeMs() < busySign.time)
         return;
      break;
   }
 
-  busySign.status = STATUS_IDLE;  // clear busy signal status
+  busySign.status = SYS_STATUS_IDLE;  // clear busy signal status
 
   if (menuType == MENU_TYPE_FULLSCREEN)
     curMenuRedrawHandle();
@@ -816,7 +816,7 @@ void menuDrawTitle(const uint8_t *content)
 
   notificationDot();
   GUI_SetBkColor(infoSettings.bg_color);
-  if (reminder.status == STATUS_IDLE) return;
+  if (reminder.status == SYS_STATUS_IDLE) return;
   GUI_SetColor(infoSettings.reminder_color);
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_DispStringInPrect(&reminder.rect, reminder.inf);
@@ -1079,7 +1079,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if (MENU_IS(menuPrinting))
           {
-            if (isPrinting() || infoHost.printing == true)
+            if (isPrinting() || isHostPrinting())
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);

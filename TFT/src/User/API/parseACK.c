@@ -250,7 +250,7 @@ bool processKnownEcho(void)
   }
 
   // display the busy indicator
-  busyIndicator(STATUS_BUSY);
+  busyIndicator(SYS_STATUS_BUSY);
 
   if (isKnown)
   {
@@ -318,7 +318,7 @@ void hostActionCommands(void)
       //  hostDialog = false;     // enable Resume/Pause button in the Printing menu
     }
 
-    setPrintPause(false, PAUSE_EXTERNAL);
+    setPrintPause(HOST_STATUS_PAUSING, PAUSE_EXTERNAL);
 
     if (ack_seen("filament_runout"))
     {
@@ -329,7 +329,7 @@ void hostActionCommands(void)
   {
     hostDialog = false;  // enable Resume/Pause button in the Printing menu
 
-    setPrintResume(true);
+    setPrintResume(HOST_STATUS_PRINTING);
   }
   else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
@@ -343,11 +343,11 @@ void hostActionCommands(void)
 
     if (ack_seen("Nozzle Parked"))
     {
-      setPrintPause(false, PAUSE_EXTERNAL);
+      setPrintPause(HOST_STATUS_PAUSING, PAUSE_EXTERNAL);
     }
     else if (ack_seen("Resuming"))  // resuming from TFT media or (remote) onboard media
     {
-      setPrintResume(true);
+      setPrintResume(HOST_STATUS_PRINTING);
 
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
@@ -433,7 +433,7 @@ void parseACK(void)
                                // avoid can't getting this parameter due to disabled M503 in Marlin
         storeCmd("M211\n");    // retrieve the software endstops state
         storeCmd("M115\n");    // as last command to identify the FW type!
-        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode 
+        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
       }
 
       infoHost.connected = true;
@@ -668,16 +668,16 @@ void parseACK(void)
       }
       // parse and store M27
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("Not SD printing"))  // if printing from (remote) onboard media
       {
-        setPrintPause(true, PAUSE_EXTERNAL);
+        setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
       }
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("SD printing byte"))  // if printing from (remote) onboard media
       {
-        setPrintResume(false);
+        setPrintResume(HOST_STATUS_RESUMING);
 
         // parsing printing data
         // format: SD printing byte <XXXX>/<YYYY> (e.g. SD printing byte 123/12345)
@@ -686,7 +686,7 @@ void parseACK(void)
       }
       // parse and store M24, printing from (remote) onboard media completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= BOARD_MEDIA && infoFile.source <= BOARD_MEDIA_REMOTE &&
+               infoFile.source >= FS_BOARD_MEDIA && infoFile.source <= FS_BOARD_MEDIA_REMOTE &&
                ack_seen("Done printing file"))  // if printing from (remote) onboard media
       {
         printEnd();

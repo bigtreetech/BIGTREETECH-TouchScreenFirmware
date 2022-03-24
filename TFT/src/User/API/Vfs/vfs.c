@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
+MYFILE infoFile = {FS_TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -18,14 +18,14 @@ bool mountFS(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
+    case FS_TFT_SD:
       return mountSDCard();
 
-    case TFT_USB_DISK:
+    case FS_TFT_USB:
       return mountUSBDisk();
 
-    case BOARD_MEDIA:
-      if (infoHost.printing)
+    case FS_BOARD_MEDIA:
+      if (isHostPrinting())
         return true;  // no mount while printing
       else
         return mountGcodeSDCard();
@@ -39,14 +39,14 @@ TCHAR * getCurFileSource(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
+    case FS_TFT_SD:
       return SD_ROOT_DIR;
 
-    case TFT_USB_DISK:
+    case FS_TFT_USB:
       return USBDISK_ROOT_DIR;
 
-    case BOARD_MEDIA:
-    case BOARD_MEDIA_REMOTE:
+    case FS_BOARD_MEDIA:
+    case FS_BOARD_MEDIA_REMOTE:
       return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
 
     default:
@@ -58,7 +58,7 @@ TCHAR * getCurFileSource(void)
 // reset file list
 void resetInfoFile(void)
 {
-  FS_SOURCE source = infoFile.source;
+  FILE_SOURCE source = infoFile.source;
   ONBOARD_SOURCE onboardSource = infoFile.boardSource;
   clearInfoFile();
   memset(&infoFile, 0, sizeof(infoFile));
@@ -72,11 +72,11 @@ bool scanPrintFiles(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
-    case TFT_USB_DISK:
+    case FS_TFT_SD:
+    case FS_TFT_USB:
       return scanPrintFilesFatFs();
 
-    case BOARD_MEDIA:
+    case FS_BOARD_MEDIA:
       return scanPrintFilesGcodeFs();
 
     default:
@@ -301,7 +301,7 @@ void loopVolumeSource(void)
                                                     {LABEL_USB_DISK_REMOVED, LABEL_USB_DISK_INSERTED}};
 
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
+      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
     }
   }
 }

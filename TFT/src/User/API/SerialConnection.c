@@ -24,8 +24,9 @@ const char * const baudrateNames[BAUDRATE_COUNT] = {"OFF", "2400", "9600", "1920
 
 static inline void Serial_InitPrimary(void)
 {
-  infoHost.connected = infoHost.wait = infoHost.printing = false;
-  reminderMessage(LABEL_UNCONNECTED, STATUS_DISCONNECTED);
+  infoHost.connected = infoHost.wait = false;
+  infoHost.status = HOST_STATUS_IDLE;
+  reminderMessage(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
 
   Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
