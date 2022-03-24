@@ -840,7 +840,7 @@ void menuDrawTitle(void)
   GUI_SetBkColor(infoSettings.bg_color);
 
   // draw reminder/storage status
-  if (reminder.status != STATUS_IDLE)
+  if (reminder.status != SYS_STATUS_IDLE)
   {
     GUI_SetColor(infoSettings.reminder_color);
     GUI_SetBkColor(infoSettings.title_bg_color);
