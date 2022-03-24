@@ -41,7 +41,7 @@ extern PRINT_SUMMARY infoPrintSummary;
 
 void setExtrusionDuringPause(bool extruded);
 
-bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
+bool isHostNotPaused(void);  // condition callback for loopProcessToCondition()
 
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
@@ -114,6 +114,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType);
 bool isPrinting(void);
 bool isPaused(void);
 bool isTFTPrinting(void);
+bool isHostPrinting(void);
 bool isRemoteHostPrinting(void);
 
 //

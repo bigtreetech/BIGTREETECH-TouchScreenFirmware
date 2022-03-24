@@ -34,9 +34,9 @@ void setExtrusionDuringPause(bool extruded)
   extrusionDuringPause = extruded;
 }
 
-bool isHostPrinting(void)
+bool isHostNotPaused(void)
 {
-  return (infoHost.status != HOST_STATUS_IDLE);
+  return (infoHost.status != HOST_STATUS_PAUSED);
 }
 
 void setRunoutAlarmTrue(void)
@@ -547,7 +547,7 @@ void printAbort(void)
         if (!infoPrinting.pause)
           request_M25();  // must pause the print before cancel it
 
-        request_M0();  // M524 is not supportet in RepRap firmware
+        request_M0();  // M524 is not supported in RepRap firmware
       }
 
       if (isHostPrinting())
@@ -555,7 +555,7 @@ void printAbort(void)
         setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
         showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-        loopProcessToCondition(&isHostPrinting);  // wait for the printer to settle down
+        loopProcessToCondition(&isHostNotPaused);  // wait for the printer to settle down
       }
 
       break;
@@ -700,6 +700,11 @@ bool isPaused(void)
 bool isTFTPrinting(void)
 {
   return (infoPrinting.printing && infoFile.source < FS_ONBOARD_MEDIA) ? true : false;
+}
+
+bool isHostPrinting(void)
+{
+  return (infoHost.status != HOST_STATUS_IDLE);
 }
 
 bool isRemoteHostPrinting(void)
