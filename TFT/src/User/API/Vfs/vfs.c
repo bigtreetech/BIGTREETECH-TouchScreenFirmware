@@ -1,7 +1,7 @@
 #include "vfs.h"
 #include "includes.h"
 
-MYFILE infoFile = {TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
+MYFILE infoFile = {FS_TFT_SD, BOARD_SD, "?:", {0}, {0}, {0}, {0}, 0, 0, 0, 0, false};
 
 void setPrintModelIcon(bool exist)
 {
@@ -13,42 +13,19 @@ bool isPrintModelIcon(void)
   return infoFile.modelIcon;
 }
 
-// get FS's ID of current source
-TCHAR * getCurFileSource(void)
-{
-  switch (infoFile.source)
-  {
-    case TFT_SD:
-      return SD_ROOT_DIR;
-
-    case TFT_USB_DISK:
-      return USBDISK_ROOT_DIR;
-
-    case BOARD_MEDIA:
-    case BOARD_MEDIA_REMOTE:
-      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
-
-    case REMOTE_HOST:
-      return "Remote printing...";
-
-    default:
-      return "";
-  }
-}
-
 // mount FS of current source
 bool mountFS(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
+    case FS_TFT_SD:
       return mountSDCard();
 
-    case TFT_USB_DISK:
+    case FS_TFT_USB:
       return mountUSBDisk();
 
-    case BOARD_MEDIA:
-      if (infoHost.printing)
+    case FS_BOARD_MEDIA:
+      if (isHostPrinting())
         return true;  // no mount while printing
       else
         return mountGcodeSDCard();
@@ -58,16 +35,48 @@ bool mountFS(void)
   }
 }
 
-// scan files in current source and create a file list
+TCHAR * getCurFileSource(void)
+{
+  switch (infoFile.source)
+  {
+    case FS_TFT_SD:
+      return SD_ROOT_DIR;
+
+    case FS_TFT_USB:
+      return USBDISK_ROOT_DIR;
+
+    case FS_BOARD_MEDIA:
+    case FS_BOARD_MEDIA_REMOTE:
+      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "bMD:";
+
+    default:
+      break;
+  }
+  return NULL;
+}
+
+// reset file list
+void resetInfoFile(void)
+{
+  FILE_SOURCE source = infoFile.source;
+  ONBOARD_SOURCE onboardSource = infoFile.boardSource;
+  clearInfoFile();
+  memset(&infoFile, 0, sizeof(infoFile));
+  infoFile.source = source;
+  infoFile.boardSource =  onboardSource;
+  strcpy(infoFile.title, getCurFileSource());
+}
+
+// scan files in source
 bool scanPrintFiles(void)
 {
   switch (infoFile.source)
   {
-    case TFT_SD:
-    case TFT_USB_DISK:
+    case FS_TFT_SD:
+    case FS_TFT_USB:
       return scanPrintFilesFatFs();
 
-    case BOARD_MEDIA:
+    case FS_BOARD_MEDIA:
       return scanPrintFilesGcodeFs();
 
     default:
@@ -86,9 +95,10 @@ void clearInfoFile(void)
     infoFile.folder[i] = NULL;
 
     if (infoFile.longFolder[i] != NULL)  // long folder name is optional so we need to check its presence
+    {
       free(infoFile.longFolder[i]);
-
-    infoFile.longFolder[i] = NULL;
+      infoFile.longFolder[i] = NULL;
+    }
   }
 
   for (i = 0; i < infoFile.fileCount; i++)
@@ -97,28 +107,16 @@ void clearInfoFile(void)
     infoFile.file[i] = NULL;
 
     if (infoFile.longFile[i] != NULL)  // long filename is optional so we need to check its presence
+    {
       free(infoFile.longFile[i]);
-
-    infoFile.longFile[i] = NULL;
+      infoFile.longFile[i] = NULL;
+    }
   }
 
   infoFile.folderCount = 0;
   infoFile.fileCount = 0;
 }
 
-// clear file list and path
-void resetInfoFile(void)
-{
-  FS_SOURCE source = infoFile.source;
-  ONBOARD_SOURCE onboardSource = infoFile.boardSource;
-
-  clearInfoFile();
-  memset(&infoFile, 0, sizeof(infoFile));
-
-  infoFile.source = source;
-  infoFile.boardSource =  onboardSource;
-  strcpy(infoFile.title, getCurFileSource());
-}
 
 // skip path information, if any
 char * getPathTail(void)
@@ -303,7 +301,7 @@ void loopVolumeSource(void)
                                                     {LABEL_USB_DISK_REMOVED, LABEL_USB_DISK_INSERTED}};
 
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], STATUS_NORMAL);
+      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
     }
   }
 }

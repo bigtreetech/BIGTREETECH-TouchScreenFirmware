@@ -13,7 +13,7 @@ const int16_t itemPercentTypeTitle[SPEED_NUM] = {
 };
 
 static uint8_t item_index = 0;
-static uint8_t percentSteps_index = 0;
+static uint8_t percentSteps_index = 1;
 
 void setSpeedItemIndex(uint8_t index)
 {
@@ -92,7 +92,7 @@ void menuSpeed(void)
         percentageItems.title.index = itemPercentTypeTitle[item_index];
         percentageItems.items[key_num] = itemPercentType[item_index];
 
-        menuDrawTitle(textSelect(percentageItems.title.index));
+        menuDrawTitle();
         menuDrawItem(&percentageItems.items[key_num], key_num);
         percentageReDraw(item_index, false);
         break;

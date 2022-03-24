@@ -550,13 +550,13 @@ static const LISTITEMS *curListItems = NULL;  // current listmenu
 static const void (* curMenuRedrawHandle)(void) = NULL;  // current custom menu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
-static LABEL * curTitle = NULL;
+static const LABEL *curTitle = NULL;
 static const GUI_RECT *curRect = NULL;  // current menu layout grid
 static uint16_t curRectCount = 0;       // current menu layout rect count
 
-static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_DISCONNECTED, LABEL_UNCONNECTED};
-static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, STATUS_IDLE, LABEL_NULL};
-static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, STATUS_BUSY, LABEL_BUSY};
+static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_DISCONNECTED, LABEL_UNCONNECTED};
+static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_IDLE, LABEL_NULL};
+static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, SYS_STATUS_BUSY, LABEL_BUSY};
 
 MENUITEMS *getCurMenuItems(void)
 {
@@ -642,7 +642,7 @@ MENU_TYPE getMenuType(void)
 }
 
 void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void(*action_redraw)(uint8_t position, uint8_t is_press),
+             void (*action_redraw)(uint8_t position, uint8_t is_press),
              void (*menu_redraw)(void))
 {
   menuType = menu_type;
@@ -695,7 +695,7 @@ void volumeReminderMessage(int16_t inf, SYS_STATUS status)
 
 void busyIndicator(SYS_STATUS status)
 {
-  if (status == STATUS_BUSY)
+  if (status == SYS_STATUS_BUSY)
   {
     GUI_SetColor(MENU_BUSY_DOT_COLOR);
     GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0) / 2);
@@ -709,25 +709,25 @@ void loopReminderClear(void)
 {
   switch (reminder.status)
   {
-    case STATUS_IDLE:
+    case SYS_STATUS_IDLE:
       return;
 
-    case STATUS_BUSY:
+    case SYS_STATUS_BUSY:
       if (isFullCmdQueue())
         return;
       break;
 
-    case STATUS_DISCONNECTED:
+    case SYS_STATUS_DISCONNECTED:
       if (infoHost.connected == false)
         return;
       break;
 
-    case STATUS_LISTENING:
-      if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
+    case SYS_STATUS_LISTENING:
+      if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
         return;
       break;
 
-    case STATUS_NORMAL:
+    case SYS_STATUS_NORMAL:
       if (OS_GetTimeMs() < reminder.time)
         return;
       break;
@@ -736,13 +736,13 @@ void loopReminderClear(void)
       return;
   }
 
-  reminder.status = STATUS_IDLE;  // Clear status message
-  menuReDrawCurTitle();
+  reminder.status = SYS_STATUS_IDLE;  // Clear status message
+  menuDrawTitle();
 }
 
 void loopVolumeReminderClear(void)
 {
-  if (volumeReminder.status != STATUS_NORMAL)
+  if (volumeReminder.status != SYS_STATUS_NORMAL)
   {
     return;
   }
@@ -751,24 +751,24 @@ void loopVolumeReminderClear(void)
     return;
   }
 
-  volumeReminder.status = STATUS_IDLE;  // Clear status message
-  menuReDrawCurTitle();
+  volumeReminder.status = SYS_STATUS_IDLE;  // Clear status message
+  menuDrawTitle();
 }
 
 void loopBusySignClear(void)
 {
   switch (busySign.status)
   {
-    case STATUS_IDLE:
+    case SYS_STATUS_IDLE:
       return;
 
-    case STATUS_BUSY:
+    case SYS_STATUS_BUSY:
      if (OS_GetTimeMs() < busySign.time)
         return;
      break;
   }
 
-  busySign.status = STATUS_IDLE;  // clear busy signal status
+  busySign.status = SYS_STATUS_IDLE;  // clear busy signal status
 
   if (menuType == MENU_TYPE_FULLSCREEN)
     curMenuRedrawHandle();
@@ -794,57 +794,58 @@ void notificationDot(void)
   GUI_RestoreColorDefault();
 }
 
-void menuDrawTitle(const uint8_t *content)
+void menuSetTitle(const LABEL *title)
 {
-  if (menuType == MENU_TYPE_FULLSCREEN) return;
+  curTitle = title;
+  menuDrawTitle();
+}
+
+void menuDrawTitle(void)
+{
+  if (menuType == MENU_TYPE_FULLSCREEN)
+  {
+    if (curMenuRedrawHandle != NULL)
+      curMenuRedrawHandle();
+    return;
+  }
+
   if (toastRunning())
   {
     drawToast(true);
     return;
   }
+
+  // draw title
+  uint8_t *titleString = labelGetAddress(curTitle);
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   uint16_t start_x = 10;
   uint16_t end_x = drawTemperatureStatus();
-  GUI_SetBkColor(infoSettings.title_bg_color);
-  if (content)
-  {
-    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-    start_x += GUI_StrPixelWidth(content);
-    if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
-  }
-  GUI_ClearRect(start_x, start_y, end_x, start_y+BYTE_HEIGHT);
 
+  GUI_SetBkColor(infoSettings.title_bg_color);
+
+  if (titleString)
+  {
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_DispLenString(10, start_y, titleString, LCD_WIDTH - 20, true);
+    start_x += GUI_StrPixelWidth(titleString);
+
+    if (start_x > LCD_WIDTH - 20)
+      start_x = LCD_WIDTH - 20;
+  }
+
+  GUI_ClearRect(start_x, start_y, end_x, start_y + BYTE_HEIGHT);
+
+  // show notification dot
   notificationDot();
   GUI_SetBkColor(infoSettings.bg_color);
-  if (reminder.status == STATUS_IDLE) return;
-  GUI_SetColor(infoSettings.reminder_color);
-  GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
-  GUI_RestoreColorDefault();
-}
 
-void menuReDrawCurTitle(void)
-{
-  if (menuType == MENU_TYPE_LISTVIEW)
+  // draw reminder/storage status
+  if (reminder.status != SYS_STATUS_IDLE)
   {
-    if (curListItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if (menuType == MENU_TYPE_ICON)
-  {
-    if (curMenuItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
-  else if (menuType == MENU_TYPE_FULLSCREEN)
-  {
-    if (curMenuRedrawHandle != NULL)
-      curMenuRedrawHandle();
-  }
-  else if (menuType == MENU_TYPE_OTHER)
-  {
-    menuDrawTitle(labelGetAddress(curTitle));
+    GUI_SetColor(infoSettings.reminder_color);
+    GUI_SetBkColor(infoSettings.title_bg_color);
+    GUI_DispStringInPrect(&reminder.rect, reminder.inf);
+    GUI_RestoreColorDefault();
   }
 }
 
@@ -881,7 +882,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  menuSetTitle(&curMenuItems->title);
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
@@ -909,7 +910,7 @@ void menuDrawListPage(const LISTITEMS *listItems)
   GUI_ClearRect(0, TITLE_END_Y, LCD_WIDTH, LCD_HEIGHT);
 
   //menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&listItems->title));
+  menuSetTitle(&listItems->title);
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
@@ -1079,7 +1080,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if (MENU_IS(menuPrinting))
           {
-            if (isPrinting() || infoHost.printing == true)
+            if (isPrinting() || isHostPrinting())
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
@@ -1233,20 +1234,22 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
-  // Get Gcode command from the file to be printed
-  loopPrintFromTFT();  // handle a print from TFT, if any
-  // Parse and send Gcode commands in the queue
+  // Get gcode command from the file to be printed
+  loopPrintFromTFT();  // handle a print from TFT media, if any
+
+  // Parse and send gcode commands in the queue
   sendQueueCmd();
+
   // Parse the received slave response information
   parseACK();
 
   if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
   {
-    parseComment();  // Parse comment from gCode file
+    parseComment();  // Parse comment from gcode file
   }
 
   #ifdef SERIAL_PORT_2
-    // Parse the received Gcode from other UART, such as: ESP3D, etc...
+    // Parse the received gcode from other UART, such as ESP3D etc...
     parseRcvGcode();
   #endif
 
@@ -1304,14 +1307,9 @@ void loopBackEnd(void)
   if (GET_BIT(infoSettings.general_settings, INDEX_EVENT_LED) == 1)
     LED_CheckEvent();
 
-  if (infoMachineSettings.caseLightsBrightness == ENABLED)
-  {
-    loopCaseLight();
-  }
-
   // Query RRF status
   rrfStatusQuery();
-}  // loopBackEnd
+}
 
 // UI-related background loop tasks
 void loopFrontEnd(void)

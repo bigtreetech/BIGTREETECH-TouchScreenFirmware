@@ -276,6 +276,22 @@
  */
 #define LAYER_DISP_TYPE 0  // Default: 0
 
+/**
+ * Show Bootscreen at Power On - Setting in Config.ini
+ *This setting allows to show (or not) the BigTreeTech Bootscreen Logo at Power On
+ *
+ *   Options: [No: 0, Yes: 1]
+ */
+#define SHOW_BOOTSCREEN 1  // Default: 1
+
+/**
+ * Alerts that Heaters are still on - Setting in Config.ini
+ * This setting allows to show (or not) the alerts that heaters are still on when leaving some menus
+ *
+ *  Options: [No: 0, Yes: 1]
+ */
+#define ALERT_HEATERS_ON 1  // Default: 1
+
 //================================================================================
 //============================= Marlin Mode Settings =============================
 //========== (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0) ==========
@@ -373,8 +389,9 @@
  *   Value range: [min: 0, max: 6]
  */
 #define EXTRUDER_COUNT  1  // Default: 1
-#define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
-                           // of the number of extruders)
+
+// For mixing extruder set to 1 (this option turns off auto detection of the number of extruders)
+#define MIXING_EXTRUDER 0  // Default: 0
 
 /**
  * Fan Count
@@ -479,9 +496,9 @@
 #define AUTO_LOAD_LEVELING 1  // Default: 1
 
 /**
- * Onboard / Printer SD
+ * Onboard / Printer Media
  * Starting from Marlin Bugfix 2.0.x Distribution Date: 2020-04-27 & above, the TFT will auto detect
- * On-Board SD Card and auto-configure M27 AutoReport with M115 command.
+ * onboard media and auto-configure M27 AutoReport with M115 command.
  * Set the time interval to poll SD Printing status if Marlin reports M27 AutoReport as disabled.
  */
 
@@ -1149,7 +1166,7 @@
 #define NOZZLE_PAUSE_M601  // Default: uncommented (enabled)
 
 /**
- * M701, M702: Marlin Filament Load / Unload Gcodes Support
+ * M701, M702: Marlin Filament Load / Unload G-codes Support
  * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
@@ -1213,7 +1230,7 @@
  * Set these to 0 to disable audio feedback in the LCD menus.
  * Only valid for Touch Mode and if BUZZER_PIN is set or available.
  *
- * NOTE: Test audio output with the G-Code:
+ * NOTE: Test audio output with the G-code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
@@ -1233,10 +1250,16 @@
 #define BTT_BOOTSCREEN_TIME 3000  // Default: 3000
 
 /**
+ * Safety Alert
+ * If enabled, safety alert popup messages are shown by some menus (e.g. heaters still on when leaving some menus).
+ */
+#define SAFETY_ALERT  // Default: uncommented (enabled)
+
+/**
  * Smart Home
- * If enabled, long press "Back" button triggers Home screen
+ * If enabled, long press "Back" button triggers Home screen.
  * It doesn't interfere with the "Screenshot" and "Marlin/Touch Mode" other than if
- * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode"
+ * enabled, long press "Back" will not trigger "Screenshot" or "Marlin/Touch Mode".
  */
 #define SMART_HOME  // Default: uncommented (enabled)
 
@@ -1373,7 +1396,7 @@
 #define LIVE_TEXT_BG_COLOR_STATUS 0  // Default: 0 (disabled)
 
 /**
- * Show Embedded Thumbnails Of Gcode Files
+ * Show Embedded Thumbnails Of G-code Files
  *
  * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
  *       allocated RAM. Therefore this option is only suitable for devices >96KB RAM.

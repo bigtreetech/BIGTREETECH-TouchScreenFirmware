@@ -119,7 +119,7 @@ const ITEM itemIsPrinting[3] = {
 static void setLayerHeightText(char * layer_height_txt)
 {
   float layer_height;
-  layer_height = (infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
+  layer_height = (infoFile.source >= FS_BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS);
   if (layer_height > 0)
   {
     sprintf(layer_height_txt, "%6.2fmm", layer_height);
@@ -136,8 +136,12 @@ static void setLayerNumberTxt(char * layer_number_txt)
   uint16_t layerCount = getPrintLayerCount();
   if (layerNumber > 0)
   {
-    if (layerCount > 0 && layerCount < 1000)
-    { // there's no space to display layer number & count if the layer count is above 999
+    if (layerCount > 0
+        #ifndef TFT70_V3_0
+          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
+        #endif
+        )
+    {
       sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }
     else
@@ -421,7 +425,7 @@ static inline void toggleInfo(void)
 
     speedQuery();
 
-    if (infoFile.source >= BOARD_MEDIA)
+    if (infoFile.source >= FS_BOARD_MEDIA)
       coordinateQuery(TOGGLE_TIME / 1000);
 
     if (!hasFilamentData && isPrinting())
@@ -456,12 +460,9 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  if (nextProgress != prevProgress)
-  { // we need speed, do not draw anything if progress isn't changed
-    if (nextProgress > prevProgress)
-      reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
-    else  // if regress, swap indexes and colors
-      reDrawProgressBar(nextProgress, prevProgress, PB_BCKG, PB_STRIPE_REMAINING);
+  if (nextProgress > prevProgress)
+  { // we need speed, do not draw anything if progress isn't increased (it cannot decrease)
+    reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
     if (progDisplayType != ELAPSED_REMAINING)
     {
       reDrawPrintingValue(ICON_POS_TIM, PRINT_TOP_ROW);
@@ -589,7 +590,7 @@ void menuPrinting(void)
   if (lastPrinting == true)
   {
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
-    printingItems.items[KEY_ICON_5].icon = (infoFile.source < BOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
+    printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_BOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after a print was done (ex: after a popup)
   {
@@ -680,7 +681,7 @@ void menuPrinting(void)
     // Z_AXIS coordinate
     if (layerDisplayType == SHOW_LAYER_BOTH || layerDisplayType == SHOW_LAYER_HEIGHT)
     {
-      curLayerHeight = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
+      curLayerHeight = ((infoFile.source >= FS_BOARD_MEDIA) ? coordinateGetAxisActual(Z_AXIS) : coordinateGetAxisTarget(Z_AXIS));
       if (prevLayerHeight != curLayerHeight)
       {
         if (ABS(curLayerHeight - usedLayerHeight) >= LAYER_DELTA)

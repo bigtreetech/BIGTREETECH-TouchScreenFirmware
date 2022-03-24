@@ -148,7 +148,7 @@ bool printPageItemSelected(uint16_t index)
     else
     {
       // load model preview in flash if icon exists
-      setPrintModelIcon(infoFile.source < BOARD_MEDIA && model_DecodeToFlash(infoFile.title));
+      setPrintModelIcon(infoFile.source < FS_BOARD_MEDIA && model_DecodeToFlash(infoFile.title));
 
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
@@ -202,7 +202,7 @@ void menuPrintFromSource(void)
   }
   else
   {
-    if (infoFile.source == BOARD_MEDIA)  // error when the filesystem selected from TFT media not available
+    if (infoFile.source == FS_BOARD_MEDIA)  // error when the filesystem selected from TFT media not available
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
@@ -305,11 +305,11 @@ void menuPrintFromSource(void)
         gocdeIconDraw();
 
         if (update != 2)  // update title only when entering/exiting to/from directory
-          menuDrawTitle((uint8_t *)infoFile.title);
+          menuDrawTitle();
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
@@ -339,7 +339,7 @@ void menuPrint(void)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     list_mode = infoSettings.files_list_mode;
-    infoFile.source = BOARD_MEDIA;
+    infoFile.source = FS_BOARD_MEDIA;
     REPLACE_MENU(menuPrintFromSource);
     goto selectEnd;
   }
@@ -391,10 +391,10 @@ void menuPrint(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (volumeExists(TFT_SD))
+        if (volumeExists(FS_TFT_SD))
         {
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
-          infoFile.source = TFT_SD;
+          infoFile.source = FS_TFT_SD;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
           goto selectEnd;
@@ -408,10 +408,10 @@ void menuPrint(void)
 
       #ifdef USB_FLASH_DRIVE_SUPPORT
         case KEY_ICON_1:
-          if (volumeExists(TFT_USB_DISK))
+          if (volumeExists(FS_TFT_USB))
           {
             list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
-            infoFile.source = TFT_USB_DISK;
+            infoFile.source = FS_TFT_USB;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);
             goto selectEnd;
@@ -445,7 +445,7 @@ void menuPrint(void)
       #endif
             {
               list_mode = true;  // force list mode in onboard media
-              infoFile.source = BOARD_MEDIA;
+              infoFile.source = FS_BOARD_MEDIA;
               OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
               goto selectEnd;
             }
@@ -469,6 +469,6 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!infoHost.printing)  // prevent reset if printing from other source
+  if (!isHostPrinting())  // prevent reset if printing from other source
     resetInfoFile();
 }

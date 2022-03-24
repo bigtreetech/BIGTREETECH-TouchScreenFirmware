@@ -40,13 +40,13 @@ void menuExtrude(void)
   {
     loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.coordinate = ((infoFile.source >= FS_BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.feedrate = coordinateGetFeedRate();
     eAxisBackup.relative = eGetRelative();
     eAxisBackup.handled = true;
   }
 
-  extrKnownCoord = extrNewCoord = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+  extrKnownCoord = extrNewCoord = ((infoFile.source >= FS_BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
 
   if (eAxisBackup.relative) // Set extruder to absolute
     mustStoreCmd("M82\n");
@@ -115,7 +115,7 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_7:
-        cooldownTemperature();
+        COOLDOWN_TEMPERATURE();
         CLOSE_MENU();
         eAxisBackup.handled = false;  // exiting from Extrude menu, no need for it anymore
         break;

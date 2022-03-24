@@ -44,7 +44,7 @@ void menuLoadUnload(void)
   {
     loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
 
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.coordinate = ((infoFile.source >= FS_BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
     eAxisBackup.handled = true;
   }
 
@@ -118,7 +118,7 @@ void menuLoadUnload(void)
           break;
 
         case KEY_ICON_7:  // back
-          cooldownTemperature();
+          COOLDOWN_TEMPERATURE();
           lastCmd = NONE;
           CLOSE_MENU();
           eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)

@@ -5,18 +5,13 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // Menu Macros
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
 #define REPLACE_MENU(x) infoMenu.menu[infoMenu.cur] = x
 #define CLOSE_MENU()    infoMenu.cur--
-#define REDRAW_MENU()                            \
-  {                                              \
-    infoMenu.menu[++infoMenu.cur] = menuDummy;   \
-    (*infoMenu.menu[infoMenu.cur - 1])();        \
-    infoMenu.cur--;                              \
-  }
 #define MENU_IS(x)      infoMenu.menu[infoMenu.cur] == x
 #define MENU_IS_NOT(x)  infoMenu.menu[infoMenu.cur] != x
 
@@ -30,6 +25,9 @@ extern "C" {
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 #define NOBEYOND(min, v, max) MAX(min, MIN(v, max))
+
+#define WITHIN(N, L, H) ((N) >= (L) && (N) <= (H))
+#define NUMERIC(a)      WITHIN(a, '0', '9')
 
 // Bitwise macros
 
@@ -62,6 +60,9 @@ uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
 double stringToDouble(char *str, char **endptr);
 const char *stripHead(const char *str);  // strip out any leading " ", ":" or "/" character that might be in the string
+void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
+uint8_t getChecksum(char *str);
+bool validateChecksum(char *str);
 
 #ifdef __cplusplus
 }

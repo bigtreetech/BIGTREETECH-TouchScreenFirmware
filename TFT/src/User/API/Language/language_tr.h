@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
     #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
     #define STRING_SERIAL_ALWAYS_ON       "Seri Bağ. Sürekli Açık"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Tam Ekran Marlin Modu"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -59,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Prob Offseti"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -190,6 +193,8 @@
     #define STRING_DEPLOY                 "Aç"
     #define STRING_STOW                   "Kapat"
     #define STRING_REPEAT                 "Tekrarla"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Nozül"
