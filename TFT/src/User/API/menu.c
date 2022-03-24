@@ -550,7 +550,7 @@ static const LISTITEMS *curListItems = NULL;  // current listmenu
 static const void (* curMenuRedrawHandle)(void) = NULL;  // current custom menu
 
 static MENU_TYPE menuType = MENU_TYPE_ICON;
-static LABEL * curTitle = NULL;
+static const LABEL *curTitle = NULL;
 static const GUI_RECT *curRect = NULL;  // current menu layout grid
 static uint16_t curRectCount = 0;       // current menu layout rect count
 
@@ -737,7 +737,7 @@ void loopReminderClear(void)
   }
 
   reminder.status = SYS_STATUS_IDLE;  // Clear status message
-  menuReDrawCurTitle();
+  menuDrawTitle();
 }
 
 void loopVolumeReminderClear(void)
@@ -752,7 +752,7 @@ void loopVolumeReminderClear(void)
   }
 
   volumeReminder.status = SYS_STATUS_IDLE;  // Clear status message
-  menuReDrawCurTitle();
+  menuDrawTitle();
 }
 
 void loopBusySignClear(void)
@@ -794,57 +794,58 @@ void notificationDot(void)
   GUI_RestoreColorDefault();
 }
 
-void menuDrawTitle(const uint8_t *content)
+void menuSetTitle(const LABEL *title)
 {
-  if (menuType == MENU_TYPE_FULLSCREEN) return;
+  curTitle = title;
+  menuDrawTitle();
+}
+
+void menuDrawTitle(void)
+{
+  if (menuType == MENU_TYPE_FULLSCREEN)
+  {
+    if (curMenuRedrawHandle != NULL)
+      curMenuRedrawHandle();
+    return;
+  }
+
   if (toastRunning())
   {
     drawToast(true);
     return;
   }
+
+  // draw title
+  uint8_t *titleString = labelGetAddress(curTitle);
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   uint16_t start_x = 10;
   uint16_t end_x = drawTemperatureStatus();
-  GUI_SetBkColor(infoSettings.title_bg_color);
-  if (content)
-  {
-    GUI_DispLenString(10, start_y, content, LCD_WIDTH - 20, true);
-    start_x += GUI_StrPixelWidth(content);
-    if (start_x > LCD_WIDTH-20) start_x = LCD_WIDTH - 20;
-  }
-  GUI_ClearRect(start_x, start_y, end_x, start_y+BYTE_HEIGHT);
 
+  GUI_SetBkColor(infoSettings.title_bg_color);
+
+  if (titleString)
+  {
+    GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
+    GUI_DispLenString(10, start_y, titleString, LCD_WIDTH - 20, true);
+    start_x += GUI_StrPixelWidth(titleString);
+
+    if (start_x > LCD_WIDTH - 20)
+      start_x = LCD_WIDTH - 20;
+  }
+
+  GUI_ClearRect(start_x, start_y, end_x, start_y + BYTE_HEIGHT);
+
+  // show notification dot
   notificationDot();
   GUI_SetBkColor(infoSettings.bg_color);
-  if (reminder.status == SYS_STATUS_IDLE) return;
-  GUI_SetColor(infoSettings.reminder_color);
-  GUI_SetBkColor(infoSettings.title_bg_color);
-  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
-  GUI_RestoreColorDefault();
-}
 
-void menuReDrawCurTitle(void)
-{
-  if (menuType == MENU_TYPE_LISTVIEW)
+  // draw reminder/storage status
+  if (reminder.status != SYS_STATUS_IDLE)
   {
-    if (curListItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curListItems->title));
-  }
-  else if (menuType == MENU_TYPE_ICON)
-  {
-    if (curMenuItems == NULL)
-      return;
-    menuDrawTitle(labelGetAddress(&curMenuItems->title));
-  }
-  else if (menuType == MENU_TYPE_FULLSCREEN)
-  {
-    if (curMenuRedrawHandle != NULL)
-      curMenuRedrawHandle();
-  }
-  else if (menuType == MENU_TYPE_OTHER)
-  {
-    menuDrawTitle(labelGetAddress(curTitle));
+    GUI_SetColor(infoSettings.reminder_color);
+    GUI_SetBkColor(infoSettings.title_bg_color);
+    GUI_DispStringInPrect(&reminder.rect, reminder.inf);
+    GUI_RestoreColorDefault();
   }
 }
 
@@ -881,7 +882,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
   #endif
 
   menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&curMenuItems->title));
+  menuSetTitle(&curMenuItems->title);
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
@@ -909,7 +910,7 @@ void menuDrawListPage(const LISTITEMS *listItems)
   GUI_ClearRect(0, TITLE_END_Y, LCD_WIDTH, LCD_HEIGHT);
 
   //menuClearGaps();  // Use this function instead of GUI_Clear to eliminate the splash screen when clearing the screen.
-  menuDrawTitle(labelGetAddress(&listItems->title));
+  menuSetTitle(&listItems->title);
 
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {

@@ -52,7 +52,7 @@ void loopTemperatureStatus(void)
     }
   }
 
-  if (update) menuReDrawCurTitle();
+  if (update) menuDrawTitle();
 }
 
 // draw temperature status on title bar

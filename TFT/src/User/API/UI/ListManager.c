@@ -54,7 +54,7 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
 void listViewSetTitle(LABEL title)
 {
   listItems.title = title;
-  menuDrawTitle(labelGetAddress(&listItems.title));
+  menuSetTitle(&listItems.title);
 }
 
 // Get current displayed pade index
