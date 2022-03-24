@@ -347,7 +347,7 @@ void hostActionCommands(void)
     }
     else if (ack_seen("Resuming"))  // resuming from TFT media or (remote) onboard media
     {
-    setPrintResume(HOST_STATUS_RESUMING);
+      setPrintResume(HOST_STATUS_RESUMING);
 
       hostAction.prompt_show = false;
       Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
