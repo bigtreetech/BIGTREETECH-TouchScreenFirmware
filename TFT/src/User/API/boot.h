@@ -21,7 +21,7 @@ extern "C" {
   #define LANGUAGE_SIZE            0x15000  // Language pack size
   #define STRINGS_STORE_MAX_SIZE    0x1000  // label strings max size
   #define PREHEAT_STORE_MAX_SIZE    0x1000  // preheat setting max size
-  #define PRINT_GCODES_MAX_SIZE     0x5000  // start/end/cancel gcodes  max size
+  #define PRINT_GCODES_MAX_SIZE     0x5000  // start/end/cancel gcodes max size
   #define CUSTOM_GCODE_MAX_SIZE     0x5000  // custom gocdes max size
   #define ICON_MAX_SIZE             0x5000
   #define INFOBOX_MAX_SIZE          0xB000

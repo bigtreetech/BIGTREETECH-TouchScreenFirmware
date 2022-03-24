@@ -142,5 +142,8 @@ void coordinateQueryTurnOff(void)
   coordinateQueryWait = false;
 
   if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled, turn it off
+  {
     storeCmd("M154 S0\n");
+    curQuerySeconds = 0;
+  }
 }

@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Persistent Status Info"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin mode in fullscreen"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -59,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Endstop Adjustments"
     #define STRING_PROBE_OFFSET           "Sonda Compensar"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -190,6 +193,8 @@
     #define STRING_DEPLOY                 "Desplegar"
     #define STRING_STOW                   "Plegar"
     #define STRING_REPEAT                 "Repetir"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Punta"

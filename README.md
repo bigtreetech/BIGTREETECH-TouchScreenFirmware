@@ -16,6 +16,7 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 ## Table of Contents
 
 - [Supported Screens](#supported-screens)
+- [Software Repository](#software-repository)
 - [Marlin Dependencies](#marlin-dependencies)
 - [Connecting the TFT to the Mainboard](#connecting-the-tft-to-the-mainboard)
   - [Touch Mode Setup](#touch-mode-setup)
@@ -40,12 +41,14 @@ Important information related to BigTreeTech's TFT touchscreen 3D printer contro
 - [Customization](#customization)
   - [Bootscreen and Icons](#bootscreen-and-icons)
   - [Firmware](#firmware)
+  - [Vertical Screen Orientation - Portrait Mode](#vertical-screen-orientation---portrait-mode)
 - [Troubleshooting](#troubleshooting)
   - [Firmware Update Failed](#firmware-update-failed)
   - [Worst Case Scenario](#worst-case-scenario)
 - [Version History](#version-history)
 - [Appendix](#appendix)
-  - [Integration with Octoprint](#integration-with-octoprint)
+  - [Printing from Host](#printing-from-host)
+  - [Printing from Remote Host](#printing-from-remote-host)
   - [Adding Gcode Thumbnails](#adding-gcode-thumbnails)
   - [TFT Screen Configuration and Support for RRF](#tft-screen-configuration-and-support-for-rrf)
     - [Overview](#overview)
@@ -79,15 +82,28 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
 
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
+## Software Repository
+
+Firmware source: https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware
+
+Main branch: **Master**
+
+</br>In the **Master** branch you will find:
+
+- The most recent source code updates
+- The most recent resources such as precompiled firmwares, themes, configuration and language files
+
+**IMPORTANT NOTE:** The **Master** branch is currently the **ONLY** branch in the project to be used. The other currently existing branches **develop** and **release-xx.27** are outdated and **MUST NOT** be used.
+
 ## Marlin Dependencies
 
 Firmware source: https://github.com/MarlinFirmware/Marlin/releases
 
-Minimum Marlin firmware version: 2.0.8.1
+Minimum Marlin firmware version: **2.0.8.1**
 
-Distribution date: 2021-05-15
+Distribution date: **2021-05-15**
 
-In order the TFT firmware is able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
+</br>In order for the TFT's firmware to be able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
 
 **General options which MUST be activated:**
 
@@ -167,7 +183,7 @@ In order to use the Marlin Mode (emulation mode) on your screen:
 |                    Status Screen DISABLED                    |                    Status Screen ENABLED                     |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![status screen 0](https://user-images.githubusercontent.com/54359396/103319145-09035b80-4a31-11eb-91d0-dd761a48b6f5.png) | ![Unified Material Main Screen](https://user-images.githubusercontent.com/54359396/98742038-03cd4d00-23ae-11eb-9552-36dc02fe66f4.png) |
-| In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 0** | In config.ini, define:<br/># UI Settings<br/># Status Screen<br/># Select the Main Screen flavour<br/># Options: [disable: 0, enable: 1]<br/>**status_screen: 1** |
+| If **status_screen:0** is not defined in **config.ini**, define:<br># UI Settings<br># Status Screen<br># Select the Main Screen flavour<br># Options: [disable: 0, enable: 1]<br>**status_screen:0** | If **status_screen:1** is not defined in **config.ini**, define:<br># UI Settings<br># Status Screen<br># Select the Main Screen flavour<br># Options: [disable: 0, enable: 1]<br>**status_screen:1** |
 
 ## Themes
 
@@ -284,7 +300,7 @@ The following steps are needed in order to install the firmware:
 
    ![Language Pack](https://user-images.githubusercontent.com/54359396/100600564-b9caed80-3301-11eb-8997-d376f05323f6.jpg)
 
-3. Place the SD card with `BIGTREE_TFT*_V*.*.*.bin`, `TFT*` folder, `config.ini` and the optional `language_*.ini` file(s) into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process:
+3. Place the SD card with `BIGTREE_TFT*_V*.*.*.bin`, the `TFT*` folder, `config.ini` and the optional `language_*.ini` file(s) into the TFT's SD card reader and reset your TFT (or optionally - power cycle your printer) to start the update process:
 
    <p align=center> ⚠️ Failing to update your icons &amp; fonts will result in missing icons and/or unreadable text ⚠️ </p>
 
@@ -440,6 +456,22 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 
 **TIP:** In case there is a problem compiling the TFT firmware try to restart VSC. If this does not help and you are using macOS, delete the **packages** and **platforms** folders usually present under the folder `/Users/***username***/.platformio/`.
 
+### Vertical Screen Orientation - Portrait Mode
+
+All the precompiled firmwares available on [`Copy to SD Card root directory to update`](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/tree/master/Copy%20to%20SD%20Card%20root%20directory%20to%20update) folder are compiled to support the standard (horizontal) screen orientation.
+
+In case the TFT needs to be placed with a vertical orientation (e.g. 90°), the firmware needs to be compiled with the portrait mode support and installed following the procedure below:
+
+- Start VSC
+- Open `platformio.ini`
+- Uncomment (remove the leading `;` character) the following line:</br>
+  `;  -DPORTRAIT_MODE="_portrait"  ; uncomment here to enable Portrait Mode .bin firmware generation`
+- Compile the firmware
+- The binary file named `BIGTREE_TFT*_V*.*.*.x_portrait.bin` is created (see the presence of the **_portrait** suffix)
+- Rename the binary file to the standard name `BIGTREE_TFT*_V*.*.*.x.bin`
+- Copy `BIGTREE_TFT*_V*.*.*.x.bin`, the `TFT*` folder, `config.ini` and also `reset.txt` (needed to force the screen calibration) into the SD card
+- Proceed with the firmware update (following the usual procedure)
+
 ## Troubleshooting
 
 ### Firmware Update Failed
@@ -447,7 +479,7 @@ default_envs = BIGTREE_TFT35_V3_0</pre></li>
 In case the firmware update process failed:
 
 1. Verify that you have been using the firmware matching your TFT
-2. Try to upload the firmware, the config.ini and the TFT* folder again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted
+2. Try to upload the **firmware**, the `TFT*` folder and `config.ini` again (like described above) using a **new** SD card - 8GB or smaller, FAT32 formatted
 
 **NOTE:** Some uploads worked fine after executing a low level format of the SD card and not a quick format.
 
@@ -473,52 +505,63 @@ Please, see [BIGTREETECH-TouchScreenFirmware/releases](https://github.com/bigtre
 
 ## Appendix
 
-### Integration with Octoprint
+### Printing from Host
 
-Octoprint can optionally trigger some actions to the TFT sending specific gcodes. The following actions and the related triggering gcodes are currently supported by the TFT fw:
+OctoPrint, ESP3D, Pronterface etc, connected to a TFT's serial port, can browse files on both the TFT's and mainboard's media devices and start a print that will be handled by the host (TFT or mainboard). The following actions and the related triggering G-codes are currently supported by the TFT fw:
 
-**start:**<br>
-`M118 A1 P0 action:print_start`
+|                               | **TFT SD**                                                                                                                                        | **TFT USB**                                          | **onboard media**      |
+| :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------- | :--------------------- |
+| **ACTION**                    | **G-CODE**                                                                                                                                        | **G-CODE**                                           | **G-CODE**             |
+| **init media device**         |                                                                                                                                                   |                                                      | `M21 <S> <U>`          |
+| **release media device**      |                                                                                                                                                   |                                                      | `M22`                  |
+| **list files**                | `M20 SD:<folder path>`<br>or<br>`M20 S <folder path>`<br><br>Examples:<br>`M20 SD:`<br>`M20 SD:/test`<br>`M20 S /test`                            | `M20 U:<folder path>`<br>or<br>`M20 U <folder path>` | `M20`                  |
+| **select file**               | `M23 SD:<file path>`<br>or<br>`M23 S <file path>`<br><br>Examples:<br>`M23 SD:cap.gcode`<br>`M23 SD:/test/cap2.gcode`<br>`M23 S /test/cap2.gcode` | `M23 U:<file path>`<br>or<br>`M23 U <file path>`     | `M23 <file path>`      |
+| **start/resume print**        | `M24`                                                                                                                                             | `M24`                                                | `M24`                  |
+| **pause print**               | `M25`                                                                                                                                             | `M25`                                                | `M25`                  |
+| **pause print and park head** | `M125`                                                                                                                                            | `M125`                                               | `M125`                 |
+| **abort print**               | `M524`                                                                                                                                            | `M524`                                               | `M524`                 |
+| **report print status**       | `M27 [C]`                                                                                                                                         | `M27 [C]`                                            | `M27 [C] [S<seconds>]` |
+| **start file write**          | `M28 SD:<file path>`<br>or<br>`M28 S <file path>`<br><br>Examples:<br>`M28 SD:cap.gcode`<br>`M28 SD:/test/cap2.gcode`<br>`M28 S /test/cap2.gcode` | `M28 U:<file path>`<br>or<br>`M28 U <file path>`     | `M28 [B1] <file path>` |
+| **stop file write**           | `M29`                                                                                                                                             | `M29`                                                | `M29`                  |
+| **delete file**               | `M30 SD:<file path>`<br>or<br>`M30 S <file path>`<br><br>Examples:<br>`M30 SD:cap.gcode`<br>`M30 SD:/test/cap2.gcode`<br>`M30 S /test/cap2.gcode` | `M30 U:<file path>`<br>or<br>`M30 U <file path>`     | `M30 <file path>`      |
+| **firmware info**             | `M115 TFT`                                                                                                                                        | `M115 TFT`                                           | `M115`                 |
+| **play tone**                 | `M300 TFT [P<ms>] [S<Hz>]`                                                                                                                        | `M300 TFT [P<ms>] [S<Hz>]`                           | `M300 [P<ms>] [S<Hz>]` |
 
-**end:**<br>
-`M118 A1 P0 action:print_end`
+**NOTES:**
+- TFT's media devices, if any, does not need to be initialized/released
+- When present, the G-code's options (e.g. `M27 C`) have the same meaning like in Marlin fw
 
-**cancel:**<br>
-`M118 A1 P0 action:cancel`
+### Printing from Remote Host
 
-**pause:**<br>
-`M118 A1 P0 action:pause`
+OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial port, can host a print (print handled by the host) and optionally can trigger some actions to the TFT sending specific G-codes. The following actions and the related triggering G-codes are currently supported by the TFT fw:
 
-**resume:**<br>
-`M118 A1 P0 action:resume`
-
-**time remaining progress:**<br>
-`M118 A1 P0 action:notification Time Left <XX>h<YY>m<ZZ>s (e.g. 02h04m06s)`<br>
-or<br>
-`M117 Time Left <XX>h<YY>m<ZZ>s`
-
-**file data progress:**<br>
-`M118 A1 P0 action:notification Data Left <XXXX>/<YYYY> (e.g. 123/12345)`<br>
-or<br>
-`M117 Data Left <XXXX>/<YYYY>`
+| **ACTION**                  | **G-CODE**                                                                                                                                                                                                  |
+| :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **start**                   | `M118 A1 P0 action:print_start`                                                                                                                                                                             |
+| **end**                     | `M118 A1 P0 action:print_end`                                                                                                                                                                               |
+| **cancel**                  | `M118 A1 P0 action:cancel`                                                                                                                                                                                  |
+| **pause**                   | `M118 A1 P0 action:pause`                                                                                                                                                                                   |
+| **resume**                  | `M118 A1 P0 action:resume`                                                                                                                                                                                  |
+| **time remaining progress** | `M118 A1 P0 action:notification Time Left <XX>h<YY>m<ZZ>s`<br>or<br>`M117 Time Left <XX>h<YY>m<ZZ>s`<br><br>Examples:<br>`M118 A1 P0 action:notification Time Left 02h04m06s`<br>`M117 Time Left 02h04m06s` |
+| **file data progress**      | `M118 A1 P0 action:notification Data Left <XXXX>/<YYYY>`<br>or<br>`M117 Data Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Data Left 123/12345`<br>`M117 Data Left 123/12345`     |
 
 When the trigger `print_start` is received, the TFT switches to **Printing** menu.
 Once on Printing menu, the **pause**, **resume** and **stop** buttons on the menu will be disabled.
-That means only Octoprint will control the print.
+That means, only the remote host will control the print.
 Only on print end or cancel (with triggers `print_end` or `cancel`) the TFT Printing menu is finalized (statistics available etc.) and unlocked (the menu can be closed).
 
-**NOTE:** A new plugin on Octoprint implementing the above protocol should be the preferable way (available to everyone).
+**NOTE:** A new plugin on OctoPrint implementing the above protocol should be the preferable way (available to everyone).
 
 ### Adding Gcode Thumbnails
 
-The TFT can display embedded gcode thumbnails in the file viewer using two different flavors:
+The TFT can display embedded G-code thumbnails in the file viewer using two different flavors:
 
 - Bigtreetech-style
 - PrusaSlicer-style
 
 ![ps-thumbnail](https://user-images.githubusercontent.com/54359396/121322884-a4b5c380-c90f-11eb-9380-09757d57d84e.png)
 
-The first type is to store the thumbnails at a specific location in the gcode file using a dedicated Cura plugin or external post-processing script.
+The first type is to store the thumbnails at a specific location in the G-code file using a dedicated Cura plugin or external post-processing script.
 The thumbnail's image data is raw encoded in a format which can be displayed on the TFT without any complex image transformation.
 Displaying these embedded thumbnails at the TFT is the fastest approach and suitable for all different BigTreeTech's TFT variants.
 Downside is that you either need a dedicated plugin, for example the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), or you have to use the post-processing script.
@@ -570,7 +613,7 @@ Add the following line to your `config.g` to enable the screen: `M575 P1 S2 B576
 
 #### Menu System for Macros
 
-- Thumbnail and menu system support for onboard gcodes
+- Thumbnail and menu system support for onboard G-codes
 - Load/unload menu
 - PID tune menu
 
@@ -603,8 +646,8 @@ Edit the `Configuration.h` file and enable (uncomment) `REPRAP_DISCOUNT_FULL_GRA
 
 ### Show more statistics at the end of the print
 
-Statistics as filament length, filament weight and filament cost can be embedded into the gCode. After the print is finished there will be an infobox that you can click and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost. In the case of multi-filament usage the statistics will show the sum of all individual data (sum of length, sum of weight, sum of cost).
-The statistic data in the gCode must have the following format (a good practice would be to include this at the beginning of the gCode):
+Statistics as filament length, filament weight and filament cost can be embedded into the G-code. After the print is finished there will be an infobox that you can click and a popup will present you the printed filename (limited to the first 25 characters), the time needed for the print, the filament length used, the filament weight and its cost. In the case of multi-filament usage the statistics will show the sum of all individual data (sum of length, sum of weight, sum of cost).
+The statistic data in the G-code must have the following format (a good practice would be to include this at the beginning of the G-code):
 
 - `M118 P0 filament_data L:{12.3456}m`  L: represents the length in meters
 - `M118 P0 filemant_data W:{1.23456}g`  W: represents the weight in grams
@@ -620,12 +663,12 @@ Examples for multi-filament:
 - `M118 P0 filament_data W: 24.87652 15.568264 gramm`
 - `M118 P0 filament_data C:[1.3456], [0.56024]`
 
-The inclusion of the filament data into the gCode can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
+The inclusion of the filament data into the G-code can be automated. In Cura all you have to do is to insert the following into the Start G-Code:
 
 - `M118 P0 filament_data L:{filament_amount}m`
 - `M118 P0 filament_data W:{filament_weight}g`
 - `M118 P0 filament_data C:{filament_cost}`
 
-In case the gCode file has been generated using the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
+In case the G-code file has been generated using the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
 
-In case filament data is not present in the gCode, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard media. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.
+In case filament data is not present in the G-code, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard media. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.

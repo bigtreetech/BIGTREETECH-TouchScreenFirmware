@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Zobrazení stavových ikon"
     #define STRING_TERMINAL_ACK           "zobrazit ACK Terminálu"
     #define STRING_SERIAL_ALWAYS_ON       "Sériový port vždy ON"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Fullscreen režim Marlin"
     #define STRING_MARLIN_SHOW_TITLE      "Zobrazit tytulek Marlin"
     #define STRING_MARLIN_TYPE            "Typ Marlin Modu"
@@ -59,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC Tichý režim"
     #define STRING_DELTA_CONFIGURATION    "Delta konfigurace"
     #define STRING_DELTA_TOWER_ANGLE      "Úhel věže"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Nastavení dorazu"
     #define STRING_PROBE_OFFSET           "Offset sondy"
     #define STRING_LIN_ADVANCE            "Linear Advance"
@@ -190,6 +193,8 @@
     #define STRING_DEPLOY                 "Vysunout"
     #define STRING_STOW                   "Zasunout"
     #define STRING_REPEAT                 "Přesnost"
+    #define STRING_HS_ON                  "HS: On"
+    #define STRING_HS_OFF                 "HS: Off"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Tryska"

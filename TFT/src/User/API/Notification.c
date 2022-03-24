@@ -27,6 +27,7 @@ void addToast(DIALOG_TYPE style, char * text)
   TOAST t;
   strncpy(t.text, text, TOAST_MSG_LENGTH);
   t.text[TOAST_MSG_LENGTH - 1] = 0;  // ensure string ends with null terminator
+  t.style = style;
   t.isNew = true;
   toastlist[nextToastIndex] = t;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;

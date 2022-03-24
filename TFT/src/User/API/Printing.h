@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "includes.h"
 #include "variants.h"
 #include "ff.h"
 
@@ -94,8 +95,15 @@ void updatePrintUsedFilament(void);                   // called in PrintingMenu.
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
 void printComplete(void);                             // print complete
-void printRemoteStart(const char * filename);         // print started from remote onboard media or remote host
-void printStart(FIL * file, uint32_t size);           // it also sends start gcode
+
+// start print originated or handled by remote host
+// (e.g. print started from remote onboard media or hosted by remote host)
+bool printRemoteStart(const char * filename);
+
+// start print originated or handled by TFT
+// (e.g. print started from TFT's GUI or hosted by TFT)
+bool printStart(void);                                // it also sends start gcode
+
 void printEnd(void);                                  // it also sends end gcode
 void printAbort(void);                                // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);
@@ -106,10 +114,10 @@ bool isTFTPrinting(void);
 bool isRemoteHostPrinting(void);
 
 void setPrintAbort(void);
-void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
-void setPrintResume(bool updateHost);
+void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
+void setPrintResume(HOST_STATUS hostStatus);
 
-void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT, if any
+void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT media, if any
 void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
 
 #ifdef __cplusplus

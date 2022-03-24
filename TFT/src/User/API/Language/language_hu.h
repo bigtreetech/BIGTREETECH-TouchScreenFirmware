@@ -16,6 +16,8 @@
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port mindig"
+    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
+    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_TYPE            "Marlin mód típusa"
@@ -59,6 +61,7 @@
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta konfiguráció"
     #define STRING_DELTA_TOWER_ANGLE      "Torony szögvágás"
+    #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"
     #define STRING_DELTA_ENDSTOP          "Végállás beállítások"
     #define STRING_PROBE_OFFSET           "Szonda eltolás"
     #define STRING_LIN_ADVANCE            "Lineáris haladás"
@@ -190,6 +193,8 @@
     #define STRING_DEPLOY                 "Bevetés"
     #define STRING_STOW                   "Elhelyezés"
     #define STRING_REPEAT                 "Ismétlés"
+    #define STRING_HS_ON                  "HS: Be"
+    #define STRING_HS_OFF                 "HS: Ki"
 
     // Printer Tools
     #define STRING_NOZZLE                 "Fej"
