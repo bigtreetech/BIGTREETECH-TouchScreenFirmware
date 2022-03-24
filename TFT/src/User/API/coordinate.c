@@ -150,7 +150,7 @@ void coordinateQueryTurnOff(void)
 
 float coordinateGetAxis(AXIS axis)
 {
-  if (infoFile.source >= ONBOARD_MEDIA)
+  if (infoFile.source >= FS_ONBOARD_MEDIA)
     return coordinateGetAxisActual(axis);
   else
     return coordinateGetAxisTarget(axis);

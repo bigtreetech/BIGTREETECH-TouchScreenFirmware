@@ -353,8 +353,8 @@ void printComplete(void)
       powerFailedDelete();  // delete PLR file
       break;
 
-    case FS_BOARD_MEDIA:
-    case FS_BOARD_MEDIA_REMOTE:
+    case FS_ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA_REMOTE:
       infoHost.status = HOST_STATUS_IDLE;
       request_M27(0);
       coordinateQueryTurnOff();  // disable position auto report, if any
@@ -375,11 +375,8 @@ bool printRemoteStart(const char * filename)
   if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
     return false;
 
-  if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
-    return false;
-
   // if printing from TFT media or onboard media, exit (printStart function was called just before)
-  if (infoPrinting.printing && infoFile.source <= FS_BOARD_MEDIA)
+  if (infoPrinting.printing && infoFile.source <= FS_ONBOARD_MEDIA)
     return false;
 
   // always clean infoPrinting first and then set the needed attributes
@@ -394,16 +391,16 @@ bool printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    infoFile.source = FS_BOARD_MEDIA_REMOTE;  // set source first
-    resetInfoFile();                          // then reset infoFile (source is restored)
-    EnterDir(stripHead(filename));            // set title as last
+    infoFile.source = FS_ONBOARD_MEDIA_REMOTE;  // set source first
+    resetInfoFile();                            // then reset infoFile (source is restored)
+    enterFolder(stripHead(filename));           // set path as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
   else
   {
     infoFile.source = FS_REMOTE_HOST;  // set source first
-    resetInfoFile();                // then reset infoFile (source is restored)
+    resetInfoFile();                   // then reset infoFile (source is restored)
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
@@ -420,7 +417,7 @@ bool printStart(void)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      if (f_open(&infoPrinting.file, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+      if (f_open(&infoPrinting.file, infoFile.path, FA_OPEN_EXISTING | FA_READ) == FR_OK)
       {
         infoPrinting.size = f_size(&infoPrinting.file);
 
@@ -450,11 +447,11 @@ bool printStart(void)
 
       break;
 
-    case FS_BOARD_MEDIA:
-      infoPrinting.size = request_M23_M36(infoFile.title);
+    case FS_ONBOARD_MEDIA:
+      infoPrinting.size = request_M23_M36(infoFile.path);
       break;
 
-    case FS_BOARD_MEDIA_REMOTE:
+    case FS_ONBOARD_MEDIA_REMOTE:  // present just to make the code robust. It should never be executed
     case FS_REMOTE_HOST:
       break;
   }
@@ -468,9 +465,9 @@ bool printStart(void)
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))
     sendPrintCodes(0);
 
-  if (infoFile.source == FS_BOARD_MEDIA)
+  if (infoFile.source == FS_ONBOARD_MEDIA)
   {
-    //infoHost.printing = true;                  // Not so fast! Let Marlin tell that it started printing!
+    //infoHost.status = HOST_STATUS_PRINTING;    // Not so fast! Let Marlin tell that it started printing!
     request_M24(0);                              // start print from onboard media
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
   }
@@ -492,19 +489,16 @@ void printEnd(void)
 
   switch (infoFile.source)
   {
-    case FS_BOARD_MEDIA:
-    case FS_TFT_USB:
     case FS_TFT_SD:
+    case FS_TFT_USB:
+    case FS_ONBOARD_MEDIA:
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
         sendPrintCodes(1);
+
       break;
 
-    case FS_REMOTE_HOST:  // nothing to do
-    case FS_BOARD_MEDIA_REMOTE:
-      break;
-
-    case ONBOARD_MEDIA_REMOTE:  // nothing to do
-    case REMOTE_HOST:
+    case FS_ONBOARD_MEDIA_REMOTE:  // nothing to do
+    case FS_REMOTE_HOST:
       break;
   }
 
@@ -533,8 +527,8 @@ void printAbort(void)
       clearCmdQueue();
       break;
 
-    case FS_BOARD_MEDIA:
-    case FS_BOARD_MEDIA_REMOTE:
+    case FS_ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA_REMOTE:
       //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that it's done!
 
       // several M108 are sent to Marlin because consecutive blocking operations
@@ -673,8 +667,8 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
 
       break;
 
-    case FS_BOARD_MEDIA:
-    case FS_BOARD_MEDIA_REMOTE:
+    case FS_ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA_REMOTE:
       if (isPause)
         request_M25();   // pause
       else
@@ -691,7 +685,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
   loopDetected = false;
 
   return true;
-}  // printPause
+}
 
 bool isPrinting(void)
 {
@@ -705,7 +699,7 @@ bool isPaused(void)
 
 bool isTFTPrinting(void)
 {
-  return (infoPrinting.printing && infoFile.source < FS_BOARD_MEDIA) ? true : false;
+  return (infoPrinting.printing && infoFile.source < FS_ONBOARD_MEDIA) ? true : false;
 }
 
 bool isRemoteHostPrinting(void)
@@ -766,7 +760,7 @@ void setPrintResume(HOST_STATUS hostStatus)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
-  if (infoFile.source >= FS_BOARD_MEDIA) return;  // if not printing from TFT media
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // if not printing from TFT media
   if (heatHasWaiting() || isNotEmptyCmdQueue() || infoPrinting.pause) return;
   if (moveCacheToCmd() == true) return;
 
@@ -868,7 +862,7 @@ void loopPrintFromTFT(void)
   else if (ip_cur > ip_size)  // in case of print abort (ip_cur == ip_size + 1), display an error message and abort the print
   {
     BUZZER_PLAY(SOUND_ERROR);
-    popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == FS_TFT_SD) ? LABEL_READ_TFTSD_ERROR : LABEL_READ_USB_DISK_ERROR, LABEL_PROCESS_ABORTED);
+    popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == FS_TFT_SD) ? LABEL_TFT_SD_READ_ERROR : LABEL_TFT_USB_READ_ERROR, LABEL_PROCESS_ABORTED);
 
     printAbort();
   }
@@ -881,7 +875,7 @@ void loopPrintFromOnboard(void)
   #endif
 
   if (!infoPrinting.printing) return;
-  if (infoFile.source < FS_BOARD_MEDIA || infoFile.source > FS_BOARD_MEDIA_REMOTE) return;  // if not printing from (remote) onboard media
+  if (infoFile.source < FS_ONBOARD_MEDIA || infoFile.source > FS_ONBOARD_MEDIA_REMOTE) return;  // if not printing from (remote) onboard media
   if (infoMachineSettings.autoReportSDStatus == ENABLED) return;
   if (!infoSettings.m27_active) return;
   if (MENU_IS(menuTerminal)) return;

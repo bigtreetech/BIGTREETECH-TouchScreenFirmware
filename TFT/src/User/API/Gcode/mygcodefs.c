@@ -162,7 +162,7 @@ bool scanPrintFilesGcodeFs(void)
   char * relativePath;
   char * strPtr;
   uint8_t strLen;
-  uint8_t sourceLenExtra = strlen(getSourceFS()) + 1;  // "+ 1" for "/" character (e.g. "oMD:/sub_dir" -> "oMD:/")
+  uint8_t sourceLenExtra = strlen(getFS()) + 1;  // "+ 1" for "/" character (e.g. "oMD:/sub_dir" -> "oMD:/")
 
   for (; line != NULL; line = strtok(NULL, s))
   {

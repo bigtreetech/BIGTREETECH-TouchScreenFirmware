@@ -74,6 +74,14 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
     BTT_TFT50_V3.0
     BTT_TFT70_V3.0
 
+**BTT GD TFT**
+
+    BTT_GD_TFT24_V1.1
+    BTT_GD_TFT35_V2.0, V3.0, E3_V3.0 and B1_V3.0
+    BTT_GD_TFT43_V3.0
+    BTT_GD_TFT50_V3.0
+    BTT_GD_TFT70_V3.0
+
 **MKS TFT**
 
     MKS_TFT28_V3.0 and V4.0
