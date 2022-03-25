@@ -33,14 +33,11 @@
 #define SMALLICON_HEIGHT 55
 
 // Status Screen menu
-#define SS_ICON_COUNT            4
 #define SS_ICON_WIDTH            ICON_WIDTH
 #define SS_ICON_HEIGHT           ICON_HEIGHT
+#define SS_ICON_COUNT            4
 #define SS_ICON_NAME_Y0          7
 #define SS_ICON_VAL_Y0           75
-#define SS_ICON_TITLE_FONT_SIZE   FONT_SIZE_NORMAL
-#define SS_ICON_VAL_FONT_SIZE     FONT_SIZE_NORMAL
-
 #define STATUS_MSG_ICON_XOFFSET  5
 #define STATUS_MSG_ICON_YOFFSET  5
 #define STATUS_MSG_TITLE_XOFFSET 5
@@ -49,6 +46,8 @@
 #define STATUS_MSG_BODY_BOTTOM   6
 #define STATUS_GANTRY_YOFFSET    6
 
+#define SS_ICON_TITLE_FONT_SIZE FONT_SIZE_NORMAL
+#define SS_ICON_VAL_FONT_SIZE   FONT_SIZE_NORMAL
 
 // Preheat menu
 #define PREHEAT_TITLE_Y 4
