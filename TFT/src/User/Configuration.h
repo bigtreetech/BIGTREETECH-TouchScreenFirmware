@@ -13,7 +13,7 @@
 
 /**
  * Serial Ports (Primary and Supplementary)
- * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, other TFTs etc.
+ * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, and other Controllers.
  * In order to successfully establish a communication through a serial port, set a baudrate
  * matching the baudrate configured on the connected device.
  * Disable the serial port when it is not in use and/or not connected to a device (floating) to
@@ -21,7 +21,7 @@
  *
  * NOTES:
  *   - Serial port P1 is the primary serial connection to the printer and cannot be disabled.
- *   - A baudrate of 250000 works in most cases, but you might try a lower speed if you
+ *   - A baudrate of 250000 works in most cases, but you can try a lower speed if you
  *     commonly experience drop-outs during host printing.
  *     You may try up to 1000000 to speed up SD file transfer.
  *
@@ -55,7 +55,7 @@
 /**
  * Emulated M109 And M190
  * The TFT intercepts the blocking M109 and M190 G-codes (set target hotend and bed temperatures)
- * and converts them to the non blocking M104 and M140 G-codes respectively.
+ * and converts them to the non-blocking M104 and M140 G-codes respectively.
  *
  * NOTE: Enable it so the TFT can still communicate with Marlin firmware even if the target
  *       temperature is not reached yet. Otherwise the communication (TFT<->Marlin) will be
@@ -764,7 +764,7 @@
 
 /**
  * Most suitable for Delta printers since most printers will
- * crash into printed model when homing after powerloss.
+ * crash into printed model when homing after power loss.
  */
 
 /**
@@ -980,7 +980,7 @@
  * Start, End and Cancel G-code
  * START_GCODE will run before starting a print if "START_GCODE_ENABLED" is enabled.
  * END_GCODE will run after a print is completed if "END_GCODE_ENABLED" is enabled.
- * CANCEL_GCODE will run when a print is canceled if "CANCEL_GCODE_ENABLED" is enabled.
+ * CANCEL_GCODE will run when a print is cancelled if "CANCEL_GCODE_ENABLED" is enabled.
  *   Value range: [min: 3, max: 75 characters]
  */
 #define START_GCODE  "G28 XY R20\n"
@@ -1185,7 +1185,7 @@
 
 /**
  * Rapid Serial Communication
- * More frequent Serial communicaiton while printing.
+ * More frequent Serial communication while printing.
  * Send and parse G-codes more frequently while drawing on screen to
  * prevent printer idling and stuttering due to empty printer buffer.
  *

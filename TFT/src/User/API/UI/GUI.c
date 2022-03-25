@@ -1218,7 +1218,7 @@ void GUI_DrawWindow(const WINDOW *window, const uint8_t *title, const uint8_t *i
   GUI_FillRect(w_rect.x0, title_y1, w_rect.x1, action_y0);
 
   if (actionBar)
-  { // draw action bar backgorund
+  { // draw action bar background
     GUI_SetColor(window->actionBar.backColor);
     GUI_FillRect(w_rect.x0, action_y0, w_rect.x1, w_rect.y1);
   }
