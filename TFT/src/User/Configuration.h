@@ -1338,7 +1338,7 @@
 //#define LIVE_TEXT_COMMON_COLOR  // Default: commented (disabled)
 
 /**
- * Show Embedded Thumbnails Of Gcode Files
+ * Show Embedded Thumbnails Of G-code Files
  *
  * NOTE: "Base64 PNG" option utilizes about 43kb statically allocated RAM and about 1kb dynamically
  *       allocated RAM. Therefore this option is only suitable for devices >96KB RAM.
