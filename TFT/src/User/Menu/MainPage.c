@@ -74,7 +74,7 @@ void menuMain(void)
       case KEY_ICON_5:
         if (infoMachineSettings.firmwareType == FW_REPRAPFW)
         {
-          strcpy(infoFile.title, "Macros");
+          strcpy(infoFile.path, "Macros");
           OPEN_MENU(menuCallMacro);
         }
         else

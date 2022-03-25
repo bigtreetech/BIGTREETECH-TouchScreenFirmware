@@ -33,6 +33,9 @@ bool pidInitialized = false;
 // called by parseAck() to notify PID process status
 void pidUpdateStatus(bool succeeded)
 {
+  if (!pidRunning && pidCounter == 0)  // if PID process was not started from PID menu, nothing to do
+    return;
+
   if (pidCounter > 0)
     pidCounter--;
 

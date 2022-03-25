@@ -32,20 +32,13 @@ void Mode_Switch(void)
           uint32_t startUpTime = OS_GetTimeMs();
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
+          LOGO_ReadDisplay();
+          updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
-            if ( infoSettings.show_bootscreen == 1)
-                  {
-                    LOGO_ReadDisplay();
-                    updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
-
-                    while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // display logo BTT_BOOTSCREEN_TIME ms
-                    {
-                      loopProcess();
-                    }
-                  } else {
-                    updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
-                  }
-
+          while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // display logo BTT_BOOTSCREEN_TIME ms
+          {
+            loopProcess();
+          }
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
           modeFreshBoot = false;
@@ -66,8 +59,6 @@ void Mode_Switch(void)
 
 void Mode_CheckSwitching(void)
 {
-//  #ifndef SERIAL_ALWAYS_ON
-
   // we must always call Touch_Enc_ReadPen() and LCD_Enc_ReadBtn() first just to always update their internal timers
   // when an encoder/touch button is pressed or released (avoiding the Mode menu is displayed by mistake when aborting
   // a print in Marlin mode with infoSettings.serial_always_on enabled)
@@ -88,7 +79,6 @@ void Mode_CheckSwitching(void)
 
   if (MENU_IS(menuMode))
     return;
-//  #endif
 
   if (btnPressed)
     OPEN_MENU(menuMode);

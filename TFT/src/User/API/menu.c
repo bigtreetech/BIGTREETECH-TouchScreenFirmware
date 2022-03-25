@@ -1267,7 +1267,7 @@ void loopBackEnd(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    loopPrintFromOnboardSD();  // handle a print from (remote) onboard media, if any
+    loopPrintFromOnboard();  // handle a print from (remote) onboard media, if any
   }
 
   #ifdef USB_FLASH_DRIVE_SUPPORT
