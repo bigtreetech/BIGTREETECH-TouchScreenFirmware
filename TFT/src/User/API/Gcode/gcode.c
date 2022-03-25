@@ -75,7 +75,7 @@ bool request_M21(void)
                           "SD init fail",         // The second error magic
                           "volume.init failed");  // The third error magic
 
-  mustStoreCmd((infoMachineSettings.multiVolume == ENABLED) ? ((infoFile.boardSource == BOARD_SD) ? "M21 S\n" : "M21 U\n") : "M21\n");
+  mustStoreCmd((infoMachineSettings.multiVolume == ENABLED) ? ((infoFile.onboardSource == BOARD_SD) ? "M21 S\n" : "M21 U\n") : "M21\n");
 
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
@@ -159,8 +159,8 @@ long request_M23_M36(const char * filename)
                             NULL,             // The second error magic
                             NULL);            // The third error magic
 
-    // skip source and first "/" character (e.g. "bMD:/sub_dir/cap2.gcode" -> "sub_dir/cap2.gcode")
-    mustStoreCmd("M23 %s\n", filename + strlen(getCurFileSource()) + 1);
+    // skip source and first "/" character (e.g. "oMD:/sub_dir/cap2.gcode" -> "sub_dir/cap2.gcode")
+    mustStoreCmd("M23 %s\n", filename + strlen(getFS()) + 1);
 
     sizeTag = "Size:";
   }

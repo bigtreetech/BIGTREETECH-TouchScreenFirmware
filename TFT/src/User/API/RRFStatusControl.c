@@ -27,7 +27,7 @@ void rrfStatusSet(char status)
           case 'D':
           case 'A':
             setHostDialog(false);
-            setPrintResume(true);
+            setPrintResume(HOST_STATUS_RESUMING);
             break;
           case 'I':
             // RRFParseACK will take care of going to the print screen

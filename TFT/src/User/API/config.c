@@ -669,15 +669,6 @@ void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.layer_disp_type, 0, 2);
       break;
 
-    case C_INDEX_SHOW_BOOTSCREEN:
-      infoSettings.show_bootscreen = getOnOff();
-      break;
-
-    case C_INDEX_ALERT_HEATERS_ON:
-      infoSettings.alert_heaters_on = getOnOff();
-      break;
-
-
     //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 
     #ifdef HAS_EMULATOR

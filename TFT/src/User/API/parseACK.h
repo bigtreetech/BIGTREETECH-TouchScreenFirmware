@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include <stdint.h>
 #include "SerialConnection.h"
 
 void setHostDialog(bool isHostDialog);
