@@ -10,7 +10,6 @@ typedef enum
   UNLOAD_STARTED,
 } CMD_TYPE;
 
-// 1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS loadUnloadItems = {
   // title
   LABEL_LOAD_UNLOAD,
