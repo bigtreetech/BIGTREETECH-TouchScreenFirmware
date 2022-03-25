@@ -430,12 +430,11 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
-        storeCmd("M503\n");    // query detailed printer capabilities
-        storeCmd("M92\n");     // steps/mm of extruder is an important parameter for Smart filament runout
-                               // avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M211\n");    // retrieve the software endstops state
-        storeCmd("M115\n");    // as last command to identify the FW type!
-        storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
+        storeCmd("M503\n");  // query detailed printer capabilities
+        storeCmd("M92\n");   // steps/mm of extruder is an important parameter for Smart filament runout
+                             // avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M211\n");  // retrieve the software endstops state
+        storeCmd("M115\n");  // as last command to identify the FW type!
       }
 
       infoHost.connected = true;

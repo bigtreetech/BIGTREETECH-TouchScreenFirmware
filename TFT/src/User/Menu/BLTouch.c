@@ -29,7 +29,10 @@ MENUITEMS BLTouchItems = {
 void menuBLTouch(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  uint8_t hsModeOld = HS_DISABLED;
+  BLT_HS_MODE hsModeOld = bltHSmode;
+
+  if (infoMachineSettings.firmwareType == FW_MARLIN)
+    storeCmd("M401 H\n");  // get the BLTouch HS Mode state (bltHSmode will be updated in parseACK())
 
   menuDrawPage(&BLTouchItems);
 
@@ -60,11 +63,8 @@ void menuBLTouch(void)
         break;
 
       case KEY_ICON_5:
-        if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != HS_DISABLED)
-        {
-          bltHSmode = HS_ON - bltHSmode;
-          storeCmd("M401 S%u\n", bltHSmode);
-        }
+        if (bltHSmode != HS_DISABLED)
+          storeCmd("M401 S%u\n", HS_ON - bltHSmode);  // set the BLTouch HS Mode state (bltHSmode will be updated in parseACK())
         break;
 
       case KEY_ICON_7:
@@ -75,7 +75,7 @@ void menuBLTouch(void)
         break;
     }
 
-    if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != hsModeOld)
+    if (bltHSmode != hsModeOld)
     {
       hsModeOld = bltHSmode;
       BLTouchItems.items[5].icon = (bltHSmode == HS_ON) ? ICON_FAST_SPEED : ICON_SLOW_SPEED;
