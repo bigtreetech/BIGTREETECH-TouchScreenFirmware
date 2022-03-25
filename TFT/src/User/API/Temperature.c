@@ -14,6 +14,7 @@ static bool    heat_update_waiting = false;
 static uint8_t heat_send_waiting = 0;
 
 uint32_t nextHeatCheckTime = 0;
+
 #define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
 
 // Verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
@@ -21,14 +22,15 @@ static uint8_t heaterIndexFix(uint8_t index)
 {
   if (index == BED && infoSettings.bed_en)  // Bed
     return index;
+
   if (index == CHAMBER && infoSettings.chamber_en)  // Chamber
     return index;
+
   if (index < infoSettings.hotend_count)  // Vaild tool nozzle
     return index;
+
   if (index < infoSettings.ext_count && infoSettings.hotend_count == 1)  // "multi-extruder" that shares a single nozzle.
-  {
     return NOZZLE0;
-  }
 
   return INVALID_HEATER;  // Invalid heater
 }
@@ -37,28 +39,27 @@ static uint8_t heaterIndexFix(uint8_t index)
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return;
 
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
+
   if (heater.T[index].target + TEMPERATURE_RANGE > heater.T[index].current)
-  {
     heater.T[index].status = HEATING;
-  }
+
   if (heater.T[index].target < heater.T[index].current + TEMPERATURE_RANGE)
-  {
     heater.T[index].status = COOLING;
-  }
+
   if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
-  {
     heater.T[index].status = SETTLED;
-  }
 }
 
 // Sync target temperature
 void heatSyncTargetTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return;
 
@@ -69,6 +70,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temp)
 uint16_t heatGetTargetTemp(uint8_t index)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return 0;
 
@@ -79,6 +81,7 @@ uint16_t heatGetTargetTemp(uint8_t index)
 void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return;
 
@@ -92,6 +95,7 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp)
 int16_t heatGetCurrentTemp(uint8_t index)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return 0;
 
@@ -121,6 +125,7 @@ bool heatHasWaiting(void)
     if (heater.T[i].waiting != WAIT_NONE)
       return true;
   }
+
   return false;
 }
 
@@ -128,19 +133,16 @@ bool heatHasWaiting(void)
 void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting)
 {
   index = heaterIndexFix(index);
+
   if (index == INVALID_HEATER)
     return;
 
   heater.T[index].waiting = isWaiting;
 
   if (isWaiting != WAIT_NONE)  // wait heating now, query more frequently
-  {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-  }
   else if (heatHasWaiting() == false)
-  {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
-  }
 }
 
 void heatClearIsWaiting(void)
@@ -149,6 +151,7 @@ void heatClearIsWaiting(void)
   {
     heater.T[i].waiting = WAIT_NONE;
   }
+
   heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 
@@ -157,6 +160,7 @@ void heatSetCurrentTool(uint8_t tool)
 {
   if (tool >= infoSettings.ext_count)
     return;
+
   heater.toolIndex = tool;
 }
 
@@ -177,23 +181,26 @@ bool heaterDisplayIsValid(uint8_t index)
 {
   if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
     return false;
+
   if (!infoSettings.bed_en && index == BED)
     return false;
+
   if (!infoSettings.chamber_en && index == CHAMBER)
     return false;
+
   return true;
 }
 
 // Set temperature update time interval
 void heatSetUpdateSeconds(uint8_t seconds)
 {
-  if (heat_update_seconds == seconds) return;
+  if (heat_update_seconds == seconds)
+    return;
 
   heat_update_seconds = seconds;
+
   if (infoMachineSettings.autoReportTemp && !heat_update_waiting)
-  {
     heat_update_waiting = storeCmd("M155 ");
-  }
 }
 
 // Get query temperature seconds
@@ -245,12 +252,16 @@ void loopCheckHeater(void)
         updateNextHeatCheckTime();
         break;
       }
+
       if (OS_GetTimeMs() < nextHeatCheckTime)
         break;
+
       if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
         break;
+
       if ((infoMachineSettings.firmwareType != FW_REPRAPFW) && !storeCmd("M105\n"))
         break;
+
       updateNextHeatCheckTime();
       heat_update_waiting = true;
     } while (0);
@@ -260,7 +271,9 @@ void loopCheckHeater(void)
     if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
     {
       heat_update_waiting = storeCmd("M155 ");
-      if (heat_update_waiting) updateNextHeatCheckTime();  // set next timeout for temperature auto-report
+
+      if (heat_update_waiting)
+        updateNextHeatCheckTime();  // set next timeout for temperature auto-report
     }
   }
 
@@ -283,11 +296,13 @@ void loopCheckHeater(void)
     }
 
     heater.T[i].waiting = WAIT_NONE;
+
     if (heatHasWaiting())
       continue;
 
     if (MENU_IS(menuHeat))
       break;
+
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
 
@@ -309,6 +324,7 @@ void loopCheckHeater(void)
         default:
           break;
       }
+
       heater.T[i].status = SETTLED;
     }
   }
@@ -318,10 +334,9 @@ void loopCheckHeater(void)
     if (lastTarget[i] != heater.T[i].target)
     {
       lastTarget[i] = heater.T[i].target;
+
       if ( GET_BIT(heat_send_waiting, i) != true)
-      {
         SET_BIT_VALUE(heat_send_waiting, i, storeCmd("%s ", heatCmd[i]));
-      }
     }
   }
 }

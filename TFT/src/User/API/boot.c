@@ -451,7 +451,7 @@ checkupdate:
     // check USB flash drive for update file
     else if (checkUSBDisk && mountUSBDisk())
     {
-      rootDir = USBDISK_ROOT_DIR;
+      rootDir = USB_ROOT_DIR;
       checkUSBDisk = false;
       goto checkupdate;
     }

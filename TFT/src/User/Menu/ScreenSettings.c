@@ -262,7 +262,7 @@ void menuLanguage(void)
       {
         totalItems[curItem].icon = CHARICON_UNCHECKED;
         listViewRefreshItem(curItem);  // refresh unchecked status
-        curItem = curIndex; // update selected index
+        curItem = curIndex;  // update selected index
         totalItems[curItem].icon = CHARICON_CHECKED;
         listViewRefreshItem(curItem);  // refresh checked status
 

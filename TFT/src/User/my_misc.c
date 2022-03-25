@@ -140,12 +140,12 @@ double stringToDouble(char *str, char **endptr)
   return val * sign;
 }
 
-// strip out any leading " ", ":" or "/" character that might be in the string
+// strip out any leading " ", "/" or ":" character that might be in the string
 const char *stripHead(const char *str)
 {
-  // example: " :/test/cap2.gcode\n" -> "test/cap2.gcode\n"
+  // example: ":    /test/cap2.gcode\n" -> "test/cap2.gcode\n"
 
-  while (*str == ':' || *str == '/' || *str == ' ')
+  while (*str == ' ' || *str == '/' || *str == ':')
   {
     str++;
   }
