@@ -80,7 +80,7 @@ bool storeCmd(const char * format, ...)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -102,7 +102,7 @@ void mustStoreCmd(const char * format, ...)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -151,7 +151,7 @@ bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 
   if (infoCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -171,7 +171,7 @@ void mustStoreCacheCmd(const char * format, ...)
 {
   if (infoCacheCmd.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, STATUS_BUSY);
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -315,14 +315,14 @@ bool initRemoteTFT()
   // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
   //
   if (cmd_seen_from(cmd_base_index, "SD:") || cmd_seen_from(cmd_base_index, "S "))
-    infoFile.source = TFT_SD;        // set source first
+    infoFile.source = FS_TFT_SD;   // set source first
   else if (cmd_seen_from(cmd_base_index, "U:") || cmd_seen_from(cmd_base_index, "U "))
-    infoFile.source = TFT_USB_DISK;  // set source first
+    infoFile.source = FS_TFT_USB;  // set source first
   else
     return false;
 
   // present just to make the code robust. It should never be used printing from remote TFT media
-  infoFile.boardSource = BOARD_SD;
+  infoFile.onboardSource = BOARD_SD;
 
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
@@ -330,8 +330,8 @@ bool initRemoteTFT()
   strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
   stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
 
-  resetInfoFile();            // then reset infoFile (source is restored)
-  EnterDir(stripHead(path));  // set title as last
+  resetInfoFile();               // then reset infoFile (source is restored)
+  enterFolder(stripHead(path));  // set path as last
 
   return true;
 }
@@ -341,13 +341,13 @@ bool openRemoteTFT(bool writingMode)
   bool open = false;
 
   Serial_Puts(cmd_port, "echo:Now fresh file: ");
-  Serial_Puts(cmd_port, infoFile.title);
+  Serial_Puts(cmd_port, infoFile.path);
   Serial_Puts(cmd_port, "\n");
 
   if (!writingMode)  // if reading mode
   {
     // mount FS and open the file (infoFile.source and infoFile.path are used)
-    if (mountFS() == true && f_open(&file, infoFile.title, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+    if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_EXISTING | FA_READ) == FR_OK)
     {
       char buf[10];
 
@@ -355,7 +355,7 @@ bool openRemoteTFT(bool writingMode)
       f_close(&file);
 
       Serial_Puts(cmd_port, "File opened: ");
-      Serial_Puts(cmd_port, infoFile.title);
+      Serial_Puts(cmd_port, infoFile.path);
       Serial_Puts(cmd_port, " Size: ");
       Serial_Puts(cmd_port, buf);
       Serial_Puts(cmd_port, "\nFile selected\n");
@@ -366,10 +366,10 @@ bool openRemoteTFT(bool writingMode)
   else  // if writing mode
   {
     // mount FS and open the file (infoFile.source and infoFile.path are used)
-    if (mountFS() == true && f_open(&file, infoFile.title, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
+    if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
     {
       Serial_Puts(cmd_port, "Writing to file: ");
-      Serial_Puts(cmd_port, infoFile.title);
+      Serial_Puts(cmd_port, infoFile.path);
       Serial_Puts(cmd_port, "\n");
 
       open = true;
@@ -379,7 +379,7 @@ bool openRemoteTFT(bool writingMode)
   if (!open)
   {
     Serial_Puts(cmd_port, "open failed, File: ");
-    Serial_Puts(cmd_port, infoFile.title);
+    Serial_Puts(cmd_port, infoFile.path);
     Serial_Puts(cmd_port, "\n");
   }
 
@@ -421,6 +421,34 @@ void writeRemoteTFT()
   }
 
   Serial_Puts(cmd_port, "ok\n");
+}
+
+void setNoWaitHeating(uint8_t index)
+{
+  if (cmd_seen('R'))
+  {
+    cmd_ptr[cmd_index - 1] = 'S';
+    heatSetIsWaiting(index, WAIT_COOLING_HEATING);
+  }
+  else
+  {
+    heatSetIsWaiting(index, WAIT_HEATING);
+  }
+}
+
+void synchNoWaitHeating(uint8_t index)
+{
+  if (cmd_seen('S'))
+  {
+    heatSyncTargetTemp(index, cmd_value());
+  }
+  else if (!cmd_seen('\n'))
+  {
+    char buf[12];
+    sprintf(buf, "S%u\n", heatGetTargetTemp(index));
+    updateCmd(buf);
+    heatSetSendWaiting(index, false);
+  }
 }
 
 // Parse and send gcode cmd in infoCmd queue.
@@ -485,7 +513,7 @@ void sendQueueCmd(void)
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT media and purge M0/M1 command
-            if (infoFile.source < BOARD_MEDIA )
+            if (infoFile.source < FS_ONBOARD_MEDIA)
             {
               sendCmd(true, avoid_terminal);
               printPause(true, PAUSE_M0);
@@ -514,7 +542,7 @@ void sendQueueCmd(void)
               {
                 Serial_Puts(cmd_port, "Begin file list\n");
 
-                // then mount FS and scan for files (infoFile.source and infoFile.title are used)
+                // then mount FS and scan for files (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
@@ -555,10 +583,10 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to BOARD_MEDIA_REMOTE
+              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to FS_ONBOARD_MEDIA_REMOTE
               //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
 
-              if (infoFile.source < BOARD_MEDIA)  // if a file was selected from TFT media with M23
+              if (infoFile.source < FS_ONBOARD_MEDIA)  // if a file was selected from TFT media with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
@@ -611,11 +639,11 @@ void sendQueueCmd(void)
                 if (cmd_seen('C'))
                 {
                   Serial_Puts(cmd_port, "Current file: ");
-                  Serial_Puts(cmd_port, infoFile.title);
+                  Serial_Puts(cmd_port, infoFile.path);
                   Serial_Puts(cmd_port, ".\n");
                 }
 
-                sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
+                sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == FS_TFT_SD) ? "TFT SD" : "TFT USB", getPrintCur(), getPrintSize());
                 Serial_Puts(cmd_port, buf);
                 Serial_Puts(cmd_port, "ok\n");
 
@@ -637,7 +665,7 @@ void sendQueueCmd(void)
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
                 {
                   writing_mode = TFT_WRITING;
-                  reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                  reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
                 }
 
                 sendCmd(true, avoid_terminal);
@@ -646,7 +674,7 @@ void sendQueueCmd(void)
               else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
               {
                 writing_mode = ONBOARD_WRITING;
-                reminderMessage(LABEL_LISTENING, STATUS_LISTENING);
+                reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
               }
             }
             break;
@@ -668,13 +696,13 @@ void sendQueueCmd(void)
             {
               if (initRemoteTFT())  // examples: "M30 SD:/test/cap2.gcode\n", "M30 S /test/cap2.gcode\n"
               {
-                // then mount FS and delete the file (infoFile.source and infoFile.title are used)
-                if (mountFS() == true && f_unlink(infoFile.title) == FR_OK)
+                // then mount FS and delete the file (infoFile.source and infoFile.path are used)
+                if (mountFS() == true && f_unlink(infoFile.path) == FR_OK)
                   Serial_Puts(cmd_port, "File deleted: ");
                 else
                   Serial_Puts(cmd_port, "Deletion failed, File: ");
 
-                Serial_Puts(cmd_port, infoFile.title);
+                Serial_Puts(cmd_port, infoFile.path);
                 Serial_Puts(cmd_port, ".\nok\n");
 
                 sendCmd(true, avoid_terminal);
@@ -750,9 +778,7 @@ void sendQueueCmd(void)
 
         case 73:
           if (cmd_seen('P'))
-          {
             setPrintProgressPercentage(cmd_value());
-          }
 
           if (cmd_seen('R'))
           {
@@ -787,23 +813,13 @@ void sendQueueCmd(void)
           eSetRelative(true);
           break;
 
-        case 92:  // M92 axis steps-per-unit (steps/mm)
-        {
-          if (cmd_seen('X')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z, cmd_float());
-
-          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
-          if (cmd_seen('E')) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0 + i, cmd_float());
-          break;
-        }
-
         case 105:  // M105
           if (rrfStatusIsMacroBusy())
           {
             sendCmd(true, avoid_terminal);
             return;
           }
+
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
@@ -817,9 +833,11 @@ void sendQueueCmd(void)
             sendCmd(true, avoid_terminal);
             return;
           }
+
           if (fromTFT)
           {
             heatSetUpdateWaiting(false);
+
             if (cmd_seen('S'))
             {
               heatSyncUpdateSeconds(cmd_value());
@@ -827,6 +845,7 @@ void sendQueueCmd(void)
             else if (!cmd_seen('\n'))
             {
               char buf[12];
+
               sprintf(buf, "S%u\n", heatGetUpdateSeconds());
               updateCmd(buf);
             }
@@ -836,6 +855,7 @@ void sendQueueCmd(void)
         case 106:  // M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+
           if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
           break;
         }
@@ -843,6 +863,7 @@ void sendQueueCmd(void)
         case 107:  // M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+
           fanSetCurSpeed(i, 0);
           break;
         }
@@ -854,33 +875,13 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin
-            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
-            if (cmd_seen('R'))
-            {
-              cmd_ptr[cmd_index - 1] = 'S';
-              heatSetIsWaiting(i, WAIT_COOLING_HEATING);
-            }
-            else
-            {
-              heatSetIsWaiting(i, WAIT_HEATING);
-            }
+            setNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
         // no break here. The data processing of M109 is the same as that of M104 below
         case 104:  // M104
           if (fromTFT)
           {
-            uint8_t i = cmd_seen('T') ? cmd_value() : heatGetCurrentHotend();
-            if (cmd_seen('S'))
-            {
-              heatSyncTargetTemp(i, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(i));
-              updateCmd(buf);
-              heatSetSendWaiting(i, false);
-            }
+            synchNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
           break;
 
@@ -906,9 +907,7 @@ void sendQueueCmd(void)
             statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
 
             if (MENU_IS_NOT(menuStatus))
-            {
               addToast(DIALOG_TYPE_INFO, message);
-            }
           }
           break;
 
@@ -919,31 +918,13 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin
-            if (cmd_seen('R'))
-            {
-              cmd_ptr[cmd_index - 1] = 'S';
-              heatSetIsWaiting(BED, WAIT_COOLING_HEATING);
-            }
-            else
-            {
-              heatSetIsWaiting(BED, WAIT_HEATING);
-            }
+            setNoWaitHeating(BED);
           }
         // no break here. The data processing of M190 is the same as that of M140 below
         case 140:  // M140
           if (fromTFT)
           {
-            if (cmd_seen('S'))
-            {
-              heatSyncTargetTemp(BED, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(BED));
-              updateCmd(buf);
-              heatSetSendWaiting(BED, false);
-            }
+            synchNoWaitHeating(BED);
           }
           break;
 
@@ -951,31 +932,13 @@ void sendQueueCmd(void)
           if (fromTFT)
           {
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin
-            if (cmd_seen('R'))
-            {
-              cmd_ptr[cmd_index - 1] = 'S';
-              heatSetIsWaiting(CHAMBER, WAIT_COOLING_HEATING);
-            }
-            else
-            {
-              heatSetIsWaiting(CHAMBER, WAIT_HEATING);
-            }
+            setNoWaitHeating(CHAMBER);
           }
         // no break here. The data processing of M191 is the same as that of M141 below
         case 141:  // M141
           if (fromTFT)
           {
-            if (cmd_seen('S'))
-            {
-              heatSyncTargetTemp(CHAMBER, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", heatGetTargetTemp(CHAMBER));
-              updateCmd(buf);
-              heatSetSendWaiting(CHAMBER, false);
-            }
+            synchNoWaitHeating(CHAMBER);
           }
           break;
 
@@ -984,6 +947,7 @@ void sendQueueCmd(void)
           if (cmd_seen('S')) setParameter(P_FILAMENT_DIAMETER, 0, cmd_float());
 
           uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
+
           if (cmd_seen('D')) setParameter(P_FILAMENT_DIAMETER, 1 + i, cmd_float());
 
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
@@ -994,25 +958,22 @@ void sendQueueCmd(void)
           break;
         }
 
+        case 92:   // M92 axis steps-per-unit (steps/mm)
         case 201:  // M201 max acceleration (units/s2)
-        {
-          if (cmd_seen('X')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_Z, cmd_float());
-
-          uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
-          if (cmd_seen('E')) setParameter(P_MAX_ACCELERATION, AXIS_INDEX_E0 + i, cmd_float());
-          break;
-        }
-
         case 203:  // M203 max feedrate (units/s)
         {
-          if (cmd_seen('X')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_Z, cmd_float());
+          uint8_t param = P_STEPS_PER_MM;
+
+          if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
+          if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
+
+          if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(param, AXIS_INDEX_Z, cmd_float());
 
           uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
-          if (cmd_seen('E')) setParameter(P_MAX_FEED_RATE, AXIS_INDEX_E0 + i, cmd_float());
+
+          if (cmd_seen('E')) setParameter(param, AXIS_INDEX_E0 + i, cmd_float());
           break;
         }
 
@@ -1031,33 +992,44 @@ void sendQueueCmd(void)
           break;
 
         case 206:  // M206 home offset
-          if (cmd_seen('X')) setParameter(P_HOME_OFFSET, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_HOME_OFFSET, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_HOME_OFFSET, AXIS_INDEX_Z, cmd_float());
+        case 218:  // M218 hotend offset
+        case 851:  // M851 probe offset
+        {
+          uint8_t param = P_HOME_OFFSET;
+
+          if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
+          if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
+
+          if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(param, AXIS_INDEX_Z, cmd_float());
           break;
+        }
 
         case 207:  // M207 FW retraction
-          if (cmd_seen('S')) setParameter(P_FWRETRACT, 0, cmd_float());
-          if (cmd_seen('W')) setParameter(P_FWRETRACT, 1, cmd_float());
-          if (cmd_seen('F')) setParameter(P_FWRETRACT, 2, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_FWRETRACT, 3, cmd_float());
-          break;
-
         case 208:  // M208 FW recover
-          if (cmd_seen('S')) setParameter(P_FWRECOVER, 0, cmd_float());
-          if (cmd_seen('W')) setParameter(P_FWRECOVER, 1, cmd_float());
-          if (cmd_seen('F')) setParameter(P_FWRECOVER, 2, cmd_float());
-          if (cmd_seen('R')) setParameter(P_FWRECOVER, 3, cmd_float());
+        {
+          uint8_t param = P_FWRETRACT;
+
+          if (cmd_value() == 208) param = P_FWRECOVER;  // P_FWRECOVER
+
+          if (cmd_seen('S')) setParameter(param, 0, cmd_float());
+          if (cmd_seen('W')) setParameter(param, 1, cmd_float());
+          if (cmd_seen('F')) setParameter(param, 2, cmd_float());
+
+          if (param == P_FWRETRACT)
+          {
+            if (cmd_seen('Z')) setParameter(param, 3, cmd_float());
+          }
+          else  // P_FWRECOVER
+          {
+            if (cmd_seen('R')) setParameter(param, 3, cmd_float());
+          }
           break;
+        }
 
         case 209:  // M209 auto retract
           if (cmd_seen('S')) setParameter(P_AUTO_RETRACT, 0, cmd_float());
-          break;
-
-        case 218:  // M218 hotend offset
-          if (cmd_seen('X')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_HOTEND_OFFSET, AXIS_INDEX_Z, cmd_float());
           break;
 
         case 220:  // M220
@@ -1075,10 +1047,13 @@ void sendQueueCmd(void)
             if (cmd_seen('S'))
             {
               uint16_t hz = cmd_value();
+
               if (cmd_seen('P'))
               {
                 uint16_t ms = cmd_value();
+
                 Buzzer_TurnOn(hz, ms);
+
                 if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
                 {
                   sendCmd(true, avoid_terminal);
@@ -1090,17 +1065,12 @@ void sendQueueCmd(void)
         #endif
 
         case 355:  // M355
-        {
           if (cmd_seen('S'))
-          {
             caseLightSetState(cmd_value() > 0);
-          }
+
           if (cmd_seen('P'))
-          {
             caseLightSetBrightness(cmd_value());
-          }
           break;
-        }
 
         case 376:  // M376 (Reprap FW)
           if (infoMachineSettings.firmwareType == FW_REPRAPFW && cmd_seen('H'))
@@ -1126,16 +1096,21 @@ void sendQueueCmd(void)
         {
           uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
           uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+
           if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
           if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
           if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
 
           i = (cmd_seen('T')) ? cmd_value() : 0;
+
           if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
           break;
         }
 
         case 600:  // M600 filament change
+        #ifdef NOZZLE_PAUSE_M601
+          case 601:  // M601 print pause (PrusaSlicer)
+        #endif
           if (isPrinting())
           {
             // purge and pause only if emulated M600 is enabled.
@@ -1149,98 +1124,65 @@ void sendQueueCmd(void)
           }
           break;
 
-        #ifdef NOZZLE_PAUSE_M601
-          case 601:  // M601 print pause (PrusaSlicer)
-            if (isPrinting())
-            {
-              // purge and pause only if emulated M600 is enabled.
-              // if emulated M600 is disabled then let the printer pause the print to avoid premature pause
-              if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M600) == 1)
-              {
-                sendCmd(true, avoid_terminal);
-                printPause(true, PAUSE_NORMAL);
-                return;
-              }
-            }
-            break;
-        #endif
-
         case 665:  // Delta configuration / Delta tower angle
-        {
-          if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());
-          if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
-          if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
-          if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
-          if (cmd_seen('A')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('B')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('C')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, cmd_float());
-          if (cmd_seen('X')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_DELTA_TOWER_ANGLE, AXIS_INDEX_Z, cmd_float());
-          break;
-        }
-
         case 666:  // Delta endstop adjustments
         {
-          if (cmd_seen('X')) setParameter(P_DELTA_ENDSTOP, 0, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_DELTA_ENDSTOP, 1, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_DELTA_ENDSTOP, 2, cmd_float());
+          uint8_t param = P_DELTA_TOWER_ANGLE;
+
+          if (cmd_value() == 666) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
+
+          if (param < P_DELTA_ENDSTOP)  // options not supported by M666
+          {
+            if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());
+            if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
+            if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
+            if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
+            if (cmd_seen('A')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, cmd_float());
+            if (cmd_seen('B')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, cmd_float());
+            if (cmd_seen('C')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, cmd_float());
+          }
+
+          if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
+          if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
+          if (cmd_seen('Z')) setParameter(param, AXIS_INDEX_Z, cmd_float());
           break;
         }
 
         case 710:  // M710 controller fan
-        {
           if (cmd_seen('S')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
           if (cmd_seen('I')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
           break;
-        }
-
-        case 851:  // M851 probe offset
-        {
-          if (cmd_seen('X')) setParameter(P_PROBE_OFFSET, X_AXIS, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_PROBE_OFFSET, Y_AXIS, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_PROBE_OFFSET, Z_AXIS, cmd_float());
-          break;
-        }
 
         case 900:  // M900 linear advance factor
         {
           uint8_t i = 0;
+
           if (cmd_seen('T')) i = cmd_value();
           if (cmd_seen('K')) setParameter(P_LIN_ADV, i, cmd_float());
           break;
         }
 
         case 906:  // M906 stepper motor current
-        {
-          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
-          if (cmd_seen('X')) setParameter(P_CURRENT, STEPPER_INDEX_X + i, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_CURRENT, STEPPER_INDEX_Y + i, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_CURRENT, STEPPER_INDEX_Z + i, cmd_value());
-
-          i = (cmd_seen('T')) ? cmd_value() : 0;
-          if (cmd_seen('E')) setParameter(P_CURRENT, STEPPER_INDEX_E0 + i, cmd_value());
-          break;
-        }
-
         case 913:  // M913 TMC hybrid threshold speed
+        case 914:  // M914 TMC bump sensitivity
         {
-          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
-          if (cmd_seen('X')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_X + i, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_Y + i, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_Z + i, cmd_value());
+          uint8_t param = P_CURRENT;
 
-          i = (cmd_seen('T')) ? cmd_value() : 0;
-          if (cmd_seen('E')) setParameter(P_HYBRID_THRESHOLD, STEPPER_INDEX_E0 + i, cmd_value());
-          break;
-        }
+          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
+          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
 
-        case 914:  // parse and store TMC bump sensitivity
-        {
           uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
-          if (cmd_seen('X')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_X + i, cmd_value());
-          if (cmd_seen('Y')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Y + i, cmd_value());
-          if (cmd_seen('Z')) setParameter(P_BUMPSENSITIVITY, STEPPER_INDEX_Z + i, cmd_value());
+
+          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + i, cmd_value());
+          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + i, cmd_value());
+
+          if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
+          {
+            i = (cmd_seen('T')) ? cmd_value() : 0;
+
+            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + i, cmd_value());
+          }
           break;
         }
       }
@@ -1254,18 +1196,14 @@ void sendQueueCmd(void)
         case 2:  // G2
         case 3:  // G3
         {
-          AXIS i;
-          for (i = X_AXIS; i < TOTAL_AXIS; i++)
+          for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
-            {
               coordinateSetAxisTarget(i, cmd_float());
-            }
           }
+
           if (cmd_seen('F'))
-          {
             coordinateSetFeedRate(cmd_value());
-          }
           break;
         }
 
@@ -1285,6 +1223,7 @@ void sendQueueCmd(void)
                 setParameter(P_ABL_STATE, 0, 1);
                 storeCmd("M117 UBL active\n");
               }
+
               if (cmd_seen('D'))
               {
                 setParameter(P_ABL_STATE, 0, 0);
@@ -1296,10 +1235,9 @@ void sendQueueCmd(void)
               if (cmd_seen('S'))
               {
                 uint8_t v = cmd_value();
+
                 if (v == 1 || v == 2)
-                {
                   setParameter(P_ABL_STATE, 0, v % 2);  // value will be 1 if v == 1, 0 if v == 2
-                }
               }
             }
           }
@@ -1318,23 +1256,24 @@ void sendQueueCmd(void)
         {
           bool coorRelative = coorGetRelative();
           bool eRelative = eGetRelative();
+
           // set to absolute mode
           coorSetRelative(false);
           eSetRelative(false);
+
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
             if (cmd_seen(axis_id[i]))
             {
               coordinateSetAxisTarget(i, cmd_float());
+
               #ifdef FIL_RUNOUT_PIN
-                if (i == E_AXIS)
-                {
-                  // reset SFS status. Avoid false Filament runout caused by G92 resetting E-axis position
+                if (i == E_AXIS)  // reset SFS status. Avoid false Filament runout caused by G92 resetting E-axis position
                   FIL_SFS_SetAlive(true);
-                }
               #endif
             }
           }
+
           // restore mode
           coorSetRelative(coorRelative);
           eSetRelative(eRelative);

@@ -12,12 +12,6 @@ extern "C" {
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
 #define REPLACE_MENU(x) infoMenu.menu[infoMenu.cur] = x
 #define CLOSE_MENU()    infoMenu.cur--
-#define REDRAW_MENU()                            \
-  {                                              \
-    infoMenu.menu[++infoMenu.cur] = menuDummy;   \
-    (*infoMenu.menu[infoMenu.cur - 1])();        \
-    infoMenu.cur--;                              \
-  }
 #define MENU_IS(x)      infoMenu.menu[infoMenu.cur] == x
 #define MENU_IS_NOT(x)  infoMenu.menu[infoMenu.cur] != x
 
@@ -65,7 +59,7 @@ uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
 double stringToDouble(char *str, char **endptr);
-const char *stripHead(const char *str);  // strip out any leading " ", ":" or "/" character that might be in the string
+const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
 uint8_t getChecksum(char *str);
 bool validateChecksum(char *str);

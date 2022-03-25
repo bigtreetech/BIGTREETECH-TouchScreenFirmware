@@ -27,7 +27,7 @@ void rrfStatusSet(char status)
           case 'D':
           case 'A':
             setHostDialog(false);
-            setPrintResume(true);
+            setPrintResume(HOST_STATUS_RESUMING);
             break;
           case 'I':
             // RRFParseACK will take care of going to the print screen
@@ -57,7 +57,7 @@ void rrfStatusSet(char status)
       case 'D':
       case 'A':
         if (rrf_status == 'P')
-          setPrintPause(false, PAUSE_EXTERNAL);
+          setPrintPause(HOST_STATUS_PAUSING, PAUSE_EXTERNAL);
         break;
 
       case 'B':

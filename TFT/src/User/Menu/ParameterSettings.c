@@ -101,7 +101,7 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
         case P_DELTA_TOWER_ANGLE:
           parameterMainItem->titlelabel.address = deltaTowerAngleDisplayID[elementIndex];
           break;
-          
+
         case P_DELTA_DIAGONAL_ROD:
           parameterMainItem->titlelabel.address = deltaDiagonalRodDisplayID[elementIndex];
           break;

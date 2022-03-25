@@ -13,17 +13,17 @@ extern "C" {
 #define FILE_NUM     255
 #define MAX_PATH_LEN 420
 
-#define SD_ROOT_DIR      "SD:"
-#define USBDISK_ROOT_DIR "U:"
+#define SD_ROOT_DIR  "SD:"
+#define USB_ROOT_DIR "U:"
 
 typedef enum
 {
-  TFT_SD,
-  TFT_USB_DISK,
-  BOARD_MEDIA,
-  BOARD_MEDIA_REMOTE,
-  REMOTE_HOST
-} FS_SOURCE;
+  FS_TFT_SD,
+  FS_TFT_USB,
+  FS_ONBOARD_MEDIA,
+  FS_ONBOARD_MEDIA_REMOTE,
+  FS_REMOTE_HOST
+} FILE_SOURCE;
 
 typedef enum
 {
@@ -33,9 +33,9 @@ typedef enum
 
 typedef struct
 {
-  FS_SOURCE source;                // selected file source. TFT media or onboard media
-  ONBOARD_SOURCE boardSource;      // SD or USB for onboard media only
-  TCHAR title[MAX_PATH_LEN];       // selected file path
+  FILE_SOURCE source;              // selected file source. TFT media or onboard media
+  ONBOARD_SOURCE onboardSource;    // SD or USB for onboard media only
+  TCHAR path[MAX_PATH_LEN];        // selected file path
   TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard media only
   TCHAR * folder[FOLDER_NUM];      // folder list buffer
   TCHAR * longFile[FILE_NUM];      // long file name buffer from onboard media only
@@ -52,23 +52,23 @@ extern MYFILE infoFile;
 void setPrintModelIcon(bool exist);
 bool isPrintModelIcon(void);
 
-TCHAR * getCurFileSource(void);                 // get FS's ID of current source
+TCHAR * getFS(void);                            // get FS's ID of current source
 bool mountFS(void);                             // mount FS of current source
 bool scanPrintFiles(void);                      // scan files in current source and create a file list
 void clearInfoFile(void);                       // clear and free memory for file list
 
 void resetInfoFile(void);                       // clear file list and path
 char * getPathTail(void);                       // skip path information, if any
-bool EnterDir(const char * nextdir);            // check and open folder
-void ExitDir(void);                             // close folder
-bool IsRootDir(void);                           // check if current folder is root
+bool enterFolder(const char * path);            // check and open folder
+void exitFolder(void);                          // close folder
+bool isRootFolder(void);                        // check if current folder is root
 char * isSupportedFile(const char * filename);  // check if filename provides a supported filename extension
 
 // called in Print.c
-char * getFoldername(uint8_t index);
-char * getFilename(uint8_t index);
-char * hideFilenameExtension(uint8_t index);
-char * restoreFilenameExtension(uint8_t index);
+char * getFoldername(uint8_t index);             // return the long folder name if exists, otherwise the short one
+char * getFilename(uint8_t index);               // return the long file name if exists, otherwise the short one
+char * hideFilenameExtension(uint8_t index);     // hide the extension of the file name and return a pointer to that file name
+char * restoreFilenameExtension(uint8_t index);  // restore the extension of the file name and return a pointer to that file name
 
 // called in PrintingMenu.c
 char * getPrintFilename(void);                // get print filename according to print originator (remote or local to TFT)

@@ -47,8 +47,6 @@ extern "C" {
 #define CONFIG_NOTIFICATION_M117      "notification_m117:"
 #define CONFIG_PROG_DISP_TYPE         "prog_disp_type:"
 #define CONFIG_LAYER_DISP_TYPE        "layer_disp_type:"
-#define CONFIG_SHOW_BOOTSCREEN        "show_bootscreen:"
-#define CONFIG_ALERT_HEATERS_ON	      "alert_heaters_on:"
 //-----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
 #define CONFIG_MODE                   "default_mode:"
 #define CONFIG_SERIAL_ALWAYS_ON       "serial_always_on:"

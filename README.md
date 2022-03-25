@@ -74,6 +74,14 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
     BTT_TFT50_V3.0
     BTT_TFT70_V3.0
 
+**BTT GD TFT**
+
+    BTT_GD_TFT24_V1.1
+    BTT_GD_TFT35_V2.0, V3.0, E3_V3.0 and B1_V3.0
+    BTT_GD_TFT43_V3.0
+    BTT_GD_TFT50_V3.0
+    BTT_GD_TFT70_V3.0
+
 **MKS TFT**
 
     MKS_TFT28_V3.0 and V4.0
@@ -103,7 +111,7 @@ Minimum Marlin firmware version: **2.0.8.1**
 
 Distribution date: **2021-05-15**
 
-</br>In order for the TFT's firmware to be able to provide all of its functionalities/features, the following options must be enabled in Marlin firmware.
+</br>To use all the features and functionalities supported by the TFT, the following options must be enabled in Marlin firmware.
 
 **General options which MUST be activated:**
 
@@ -140,7 +148,7 @@ Distribution date: **2021-05-15**
 **Options to fully support Bed Leveling menu:**
 
 `Z_MIN_PROBE_REPEATABILITY_TEST` (in Configuration.h)<br>
-`G26_MESH_VALIDATION (in Configuration.h)` (in Configuration.h)<br>
+`G26_MESH_VALIDATION` (in Configuration.h)<br>
 `Z_STEPPER_AUTO_ALIGN` (in Configuration_adv.h)<br>
 
 ## Connecting the TFT to the Mainboard

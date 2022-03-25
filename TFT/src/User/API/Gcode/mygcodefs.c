@@ -20,7 +20,7 @@ bool mountGcodeSDCard(void)
 static inline void rrfScanPrintFilesGcodeFs(void)
 {
   // TODO detect files_sort_by and set with_ts appropriately once M20 S3 works
-  request_M20_rrf(infoFile.title, false, parseJobListResponse);
+  request_M20_rrf(infoFile.path, false, parseJobListResponse);
 }
 
 /**
@@ -162,7 +162,7 @@ bool scanPrintFilesGcodeFs(void)
   char * relativePath;
   char * strPtr;
   uint8_t strLen;
-  uint8_t sourceLenExtra = strlen(getCurFileSource()) + 1;  // "+ 1" for "/" character (e.g. "bMD:/sub_dir" -> "bMD:/")
+  uint8_t sourceLenExtra = strlen(getFS()) + 1;  // "+ 1" for "/" character (e.g. "oMD:/sub_dir" -> "oMD:/")
 
   for (; line != NULL; line = strtok(NULL, s))
   {
@@ -190,13 +190,13 @@ bool scanPrintFilesGcodeFs(void)
 
     relativePath = line;  // initialize relative path to "line"
 
-    // "line" never has "/" at the beginning of a path (e.g. "sub_dir/cap.gcode") while "infoFile.title" has it
-    // (e.g. "bMD:/sub_dir"), so we skip it during the check of current folder match
+    // "line" never has "/" at the beginning of a path (e.g. "sub_dir/cap.gcode") while "infoFile.path" has it
+    // (e.g. "oMD:/sub_dir"), so we skip it during the check of current folder match
     //
-    strLen = strlen(infoFile.title);
-    if (strLen > sourceLenExtra)                               // we're in a sub folder (e.g. "infoFile.title" = "bMD:/sub_dir")
+    strLen = strlen(infoFile.path);
+    if (strLen > sourceLenExtra)                              // we're in a sub folder (e.g. "infoFile.path" = "oMD:/sub_dir")
     {
-      strPtr = strstr(line, infoFile.title + sourceLenExtra);  // (e.g. "infoFile.title" = "bMD:/sub_dir" -> "sub_dir")
+      strPtr = strstr(line, infoFile.path + sourceLenExtra);  // (e.g. "infoFile.path" = "oMD:/sub_dir" -> "sub_dir")
 
       if (strPtr == NULL || strPtr != line)             // if "line" doesn't include current folder or doesn't fully match from beginning
         continue;                                       // (e.g. "line" = "before_sub_dir/cap.gcode" -> "sub_dir/cap.gcode")
@@ -210,7 +210,7 @@ bool scanPrintFilesGcodeFs(void)
 
     // examples:
     //
-    // "infoFile.title" = "bMD:"
+    // "infoFile.path" = "oMD:"
     // "line" = "arm.gcode"
     // "line" = "sub_dir/cap.gcode"
     //
@@ -219,7 +219,7 @@ bool scanPrintFilesGcodeFs(void)
     //
     // examples:
     //
-    // "infoFile.title" = "bMD:/sub_dir"
+    // "infoFile.path" = "oMD:/sub_dir"
     // "line" = "sub_dir/cap.gcode"
     // "line" = "sub_dir/sub_dir_2/cap2.gcode"
     // "line" = "sub_dir/sub_dir_2/sub_dir_3/cap3.gcode"
@@ -232,12 +232,12 @@ bool scanPrintFilesGcodeFs(void)
     {
       // examples:
       //
-      // "infoFile.title" = "bMD:"
+      // "infoFile.path" = "oMD:"
       // "relativePath" = "arm.gcode"
       //
       // examples:
       //
-      // "infoFile.title" = "bMD:/sub_dir"
+      // "infoFile.path" = "oMD:/sub_dir"
       // "relativePath" = "cap.gcode"
 
       if (infoFile.fileCount >= FILE_NUM)  // gcode file max number is FILE_NUM
@@ -249,12 +249,12 @@ bool scanPrintFilesGcodeFs(void)
     {
       // examples:
       //
-      // "infoFile.title" = "bMD:"
+      // "infoFile.path" = "oMD:"
       // "relativePath" = "sub_dir/cap.gcode"
       //
       // examples:
       //
-      // "infoFile.title" = "bMD:/sub_dir"
+      // "infoFile.path" = "oMD:/sub_dir"
       // "relativePath" = "sub_dir_2/cap2.gcode"
       // "relativePath" = "sub_dir_2/sub_dir_3/cap3.gcode"
 

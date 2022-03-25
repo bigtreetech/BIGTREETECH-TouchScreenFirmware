@@ -125,7 +125,7 @@ void loopToast(void)
       _toastRunning = false;
       GUI_ClearPrect(&toastIconRect);
       GUI_ClearPrect(&toastRect);
-      menuReDrawCurTitle();
+      menuDrawTitle();
     }
   }
 }

@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "includes.h"
 #include "variants.h"
 #include "ff.h"
 
@@ -39,8 +40,6 @@ typedef struct
 extern PRINT_SUMMARY infoPrintSummary;
 
 void setExtrusionDuringPause(bool extruded);
-
-bool isHostPrinting(void);  // condition callback for loopProcessToCondition()
 
 void setRunoutAlarmTrue(void);
 void setRunoutAlarmFalse(void);
@@ -93,7 +92,10 @@ void printSetUpdateWaiting(bool isWaiting);           // called in interfaceCmd.
 void updatePrintUsedFilament(void);                   // called in PrintingMenu.c
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
-void printComplete(void);                             // print complete
+//
+// commented because NOT externally invoked
+//
+//void printComplete(void);                           // print complete
 
 // start print originated or handled by remote host
 // (e.g. print started from remote onboard media or hosted by remote host)
@@ -110,14 +112,19 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType);
 bool isPrinting(void);
 bool isPaused(void);
 bool isTFTPrinting(void);
+bool isHostPrinting(void);
 bool isRemoteHostPrinting(void);
 
+//
+// used for print originated or handled by remote host
+// (e.g. print started from (remote) onboard media or hosted by remote host)
+//
 void setPrintAbort(void);
-void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
-void setPrintResume(bool updateHost);
+void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
+void setPrintResume(HOST_STATUS hostStatus);
 
-void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT media, if any
-void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
+void loopPrintFromTFT(void);      // called in loopBackEnd(). It handles a print from TFT media, if any
+void loopPrintFromOnboard(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
 
 #ifdef __cplusplus
 }
