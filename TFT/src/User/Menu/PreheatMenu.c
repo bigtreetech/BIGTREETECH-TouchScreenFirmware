@@ -18,9 +18,10 @@ const ITEM itemToolPreheat[] = {
 };
 
 // Redraw Preheat icon details
-void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM * menuitem)
+void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redrawIcon)
 {
   LIVE_INFO lvIcon;
+  lvIcon.iconIndex = ICON_PREHEAT;
   lvIcon.enabled[0] = true;
   lvIcon.enabled[1] = true;
   lvIcon.enabled[2] = true;
@@ -58,7 +59,7 @@ void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM *
   lvIcon.lines[1].text = (uint8_t *)temptool;
   lvIcon.lines[2].text = (uint8_t *)tempbed;
 
-  showLiveInfo(index, &lvIcon, menuitem);
+  showLiveInfo(index, &lvIcon, redrawIcon);
 }
 
 void menuPreheat(void)
@@ -90,7 +91,7 @@ void menuPreheat(void)
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
-    refreshPreheatIcon(&preheatStore, i, &preheatItems.items[i]);
+    refreshPreheatIcon(&preheatStore, i, false);
   }
 
   while (MENU_IS(menuPreheat))
@@ -119,7 +120,7 @@ void menuPreheat(void)
             heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_temp[key_num]);
             break;
         }
-        refreshPreheatIcon(&preheatStore, key_num, &preheatItems.items[key_num]);
+        refreshPreheatIcon(&preheatStore, key_num, false);
         break;
 
       case KEY_ICON_6:
