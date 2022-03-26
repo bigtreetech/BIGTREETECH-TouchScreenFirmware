@@ -94,7 +94,7 @@ void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_IN
 
 void getBMPsize(BMP_INFO *bmp)
 {
-  if (!bmp->address && bmp->index)
+  if (!bmp->address && bmp->index < ICON_NULL)
     bmp->address = ICON_ADDR(bmp->index);
 
   W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
@@ -106,7 +106,7 @@ void getBMPsize(BMP_INFO *bmp)
 // draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
-  BMP_INFO bmpInfo = {.address = address};
+  BMP_INFO bmpInfo = {.index = ICON_NULL,.address = address};
 
   getBMPsize(&bmpInfo);
   lcd_frame_display(sx, sy, bmpInfo.width, bmpInfo.height, bmpInfo.address);
