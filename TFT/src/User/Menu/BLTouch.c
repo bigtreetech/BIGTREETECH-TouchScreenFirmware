@@ -62,10 +62,8 @@ void menuBLTouch(void)
 
       case KEY_ICON_5:
         if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != HS_DISABLED)
-        {
-          bltHSmode = !bltHSmode;
-          storeCmd("M401 S%u\n", bltHSmode);
-        }
+          storeCmd("M401 S%u\n", !bltHSmode);  // Switch HS mode On/Off
+          // "bltHSmode" will be updated in parseACK() if "M401 Sx" is sent successfully
         break;
 
       case KEY_ICON_7:

@@ -184,8 +184,8 @@
 
     #define STRING_START_PRINT            "%s\nfájl kiválasztva.\nElindítod a nyomtatását?"
     #define STRING_STOP_PRINT             "Megállítod a nyomtatást?"
-    #define STRING_IS_PAUSE               "A művelet tiltva van a nyomtatás alatt.\nSzünetelteted a nyomtatást?"
-    #define STRING_M0_PAUSE               "Szünetelés M0 parancsal"
+    #define STRING_IS_PAUSE               "Nyomtatás idején a művelet tiltott.\nSzünetelteted a nyomtatást?"
+    #define STRING_M0_PAUSE               "Szünetelés M0 paranccsal"
 
     #define STRING_TEST                   "Teszt"
     #define STRING_DEPLOY                 "Bevetés"
