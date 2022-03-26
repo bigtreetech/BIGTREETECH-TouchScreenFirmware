@@ -10,26 +10,27 @@ void setHSmode(BLT_HS_MODE hsMode)
   bltHSmode = hsMode;
 }
 
-MENUITEMS BLTouchItems = {
-  // title
-  LABEL_BLTOUCH,
-  // icon                          label
-  {
-    {ICON_BLTOUCH_RESET,           LABEL_RESET},
-    {ICON_BLTOUCH_TEST,            LABEL_TEST},
-    {ICON_BLTOUCH_DEPLOY,          LABEL_DEPLOY},
-    {ICON_BLTOUCH_STOW,            LABEL_STOW},
-    {ICON_BLTOUCH_REPEAT,          LABEL_REPEAT},
-    {ICON_NULL,                    LABEL_NULL},
-    {ICON_NULL,                    LABEL_NULL},
-    {ICON_BACK,                    LABEL_BACK},
-  }
-};
 
 void menuBLTouch(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t hsModeOld = HS_DISABLED;
+
+  MENUITEMS BLTouchItems = {
+    // title
+    LABEL_BLTOUCH,
+    // icon                          label
+    {
+      {ICON_BLTOUCH_RESET,           LABEL_RESET},
+      {ICON_BLTOUCH_TEST,            LABEL_TEST},
+      {ICON_BLTOUCH_DEPLOY,          LABEL_DEPLOY},
+      {ICON_BLTOUCH_STOW,            LABEL_STOW},
+      {ICON_BLTOUCH_REPEAT,          LABEL_REPEAT},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_BACK,                    LABEL_BACK},
+    }
+  };
 
   menuDrawPage(&BLTouchItems);
 
@@ -61,10 +62,8 @@ void menuBLTouch(void)
 
       case KEY_ICON_5:
         if (infoMachineSettings.firmwareType == FW_MARLIN && bltHSmode != HS_DISABLED)
-        {
-          bltHSmode = HS_ON - bltHSmode;
-          storeCmd("M401 S%u\n", bltHSmode);
-        }
+          storeCmd("M401 S%u\n", !bltHSmode);  // Switch HS mode On/Off
+          // "bltHSmode" will be updated in parseACK() if "M401 Sx" is sent successfully
         break;
 
       case KEY_ICON_7:

@@ -235,7 +235,7 @@ bool heatGetSendWaiting(uint8_t index)
 
 void updateNextHeatCheckTime(void)
 {
-  nextHeatCheckTime = OS_GetTimeMs() + heat_update_seconds * 1000;
+  nextHeatCheckTime = OS_GetTimeMs() + SEC_TO_MS(heat_update_seconds);
 }
 
 void loopCheckHeater(void)

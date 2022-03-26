@@ -4,6 +4,17 @@
 // file list number per page
 #define NUM_PER_PAGE 5
 
+// key enums for media selection page
+enum
+{
+  PRINT_KEY_TFT_SD,
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    PRINT_KEY_TFT_USB,
+  #endif
+  PRINT_KEY_ONBOARD_SD,
+  PRINT_KEY_ONBOARD_USB
+};
+
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
@@ -334,6 +345,7 @@ void menuPrintFromSource(void)
   }
 }
 
+
 void menuPrint(void)
 {
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
@@ -352,12 +364,8 @@ void menuPrint(void)
       {ICON_ONTFT_SD,                LABEL_TFT_SD},
       #ifdef USB_FLASH_DRIVE_SUPPORT
         {ICON_USB_DISK,                LABEL_TFT_USB},
-        #define ONBOARD_SD_INDEX  2
-        #define ONBOARD_USB_INDEX 3
       #else
         {ICON_NULL,                    LABEL_NULL},
-        #define ONBOARD_SD_INDEX  1
-        #define ONBOARD_USB_INDEX 2
       #endif
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
@@ -372,13 +380,13 @@ void menuPrint(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    sourceSelItems.items[ONBOARD_SD_INDEX].icon = ICON_ONBOARD_SD;
-    sourceSelItems.items[ONBOARD_SD_INDEX].label.index = LABEL_ONBOARD_SD;
+    sourceSelItems.items[PRINT_KEY_ONBOARD_SD].icon = ICON_ONBOARD_SD;
+    sourceSelItems.items[PRINT_KEY_ONBOARD_SD].label.index = LABEL_ONBOARD_SD;
 
     if (infoMachineSettings.multiVolume == ENABLED)
     {
-      sourceSelItems.items[ONBOARD_USB_INDEX].icon = ICON_USB_DISK;
-      sourceSelItems.items[ONBOARD_USB_INDEX].label.index = LABEL_ONBOARD_USB;
+      sourceSelItems.items[PRINT_KEY_ONBOARD_USB].icon = ICON_USB_DISK;
+      sourceSelItems.items[PRINT_KEY_ONBOARD_USB].label.index = LABEL_ONBOARD_USB;
     }
   }
 
@@ -390,7 +398,7 @@ void menuPrint(void)
 
     switch (key_num)
     {
-      case KEY_ICON_0:
+      case PRINT_KEY_TFT_SD:
         if (volumeExists(FS_TFT_SD))
         {
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
@@ -406,7 +414,7 @@ void menuPrint(void)
         break;
 
       #ifdef USB_FLASH_DRIVE_SUPPORT
-        case KEY_ICON_1:
+        case PRINT_KEY_TFT_USB:
           if (volumeExists(FS_TFT_USB))
           {
             list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
@@ -420,26 +428,25 @@ void menuPrint(void)
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_USB_NOT_DETECTED));
           }
           break;
-
-        case KEY_ICON_2:
-        case KEY_ICON_3:
-      #else
-        case KEY_ICON_1:
-        case KEY_ICON_2:
       #endif
+
+      case PRINT_KEY_ONBOARD_SD:
+      case PRINT_KEY_ONBOARD_USB:
         if (infoMachineSettings.onboardSD == ENABLED)
         {
-          if (key_num == ONBOARD_SD_INDEX)
+          if (key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_SD)
             infoFile.onboardSource = BOARD_SD;
           else if (infoMachineSettings.multiVolume == ENABLED)
             infoFile.onboardSource = BOARD_USB;
-          else
-            break;
 
-          list_mode = true;  // force list mode in onboard media
-          infoFile.source = FS_ONBOARD_MEDIA;
-          OPEN_MENU(menuPrintFromSource);
-          goto selectEnd;
+          if (key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_SD ||
+              ( infoMachineSettings.multiVolume == ENABLED && key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_USB))
+          {
+            list_mode = true;  // force list mode in onboard media
+            infoFile.source = FS_ONBOARD_MEDIA;
+            OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
+            goto selectEnd;
+          }
         }
         break;
 

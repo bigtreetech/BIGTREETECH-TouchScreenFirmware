@@ -2,12 +2,12 @@
 #define _LANGUAGE_HU_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Magyar"
     #define STRING_EMULATED_M600          "Emulált M600"
     #define STRING_EMULATED_M109_M190     "Emulált M109 / M190"
     #define STRING_EVENT_LED              "Esemény LED"
     #define STRING_FILE_COMMENT_PARSING   "Fájl megjegyzés elemzése"
     #define STRING_ROTATED_UI             "Forgatás"
-    #define STRING_LANGUAGE               "Magyar"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_FILES_SORT_BY          "Fájlok rendezése"
     #define STRING_FILES_LIST_MODE        "Fájlnéző listamód"
@@ -184,8 +184,8 @@
 
     #define STRING_START_PRINT            "%s\nfájl kiválasztva.\nElindítod a nyomtatását?"
     #define STRING_STOP_PRINT             "Megállítod a nyomtatást?"
-    #define STRING_IS_PAUSE               "A művelet tiltva van a nyomtatás alatt.\nSzünetelteted a nyomtatást?"
-    #define STRING_M0_PAUSE               "Szünetelés M0 parancsal"
+    #define STRING_IS_PAUSE               "Nyomtatás idején a művelet tiltott.\nSzünetelteted a nyomtatást?"
+    #define STRING_M0_PAUSE               "Szünetelés M0 paranccsal"
 
     #define STRING_TEST                   "Teszt"
     #define STRING_DEPLOY                 "Bevetés"

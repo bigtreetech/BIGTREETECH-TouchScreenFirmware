@@ -53,6 +53,7 @@ enum {
   LABEL_CUSTOM_VALUE,
 };
 
+extern const char *const default_pack[LABEL_NUM];
 extern const char *const lang_key_list[LABEL_NUM];
 
 // use only once in any function call. Calling multiple times will overwrite previous text.
