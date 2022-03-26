@@ -2,12 +2,12 @@
 #define _LANGUAGE_IT_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Italiano"
     #define STRING_EMULATED_M600          "M600 emulato"
     #define STRING_EMULATED_M109_M190     "M109 / M190 emulati"
     #define STRING_EVENT_LED              "LED evento"
     #define STRING_FILE_COMMENT_PARSING   "Analisi commenti su file"
     #define STRING_ROTATED_UI             "Ruota"
-    #define STRING_LANGUAGE               "Italiano"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_FILES_SORT_BY          "Ordina file per"
     #define STRING_FILES_LIST_MODE        "File in modalità lista"

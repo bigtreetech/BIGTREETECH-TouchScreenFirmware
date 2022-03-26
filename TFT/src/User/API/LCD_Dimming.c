@@ -4,7 +4,7 @@
 
 #ifdef LCD_LED_PWM_CHANNEL
 
-const uint32_t lcd_brightness[LCD_BRIGHTNESS_COUNT] = {
+const uint8_t lcd_brightness[LCD_BRIGHTNESS_COUNT] = {
   BRIGHTNESS_0,
   BRIGHTNESS_5,
   BRIGHTNESS_10,
@@ -19,7 +19,7 @@ const uint32_t lcd_brightness[LCD_BRIGHTNESS_COUNT] = {
   BRIGHTNESS_100
 };
 
-const uint32_t lcd_idle_times[LCD_IDLE_TIME_COUNT] = {
+const uint16_t lcd_idle_times[LCD_IDLE_TIME_COUNT] = {
   IDLE_TIME_OFF,
   IDLE_TIME_5,
   IDLE_TIME_10,
@@ -115,7 +115,7 @@ void LCD_CheckDimming(void)
   }
   else
   {
-    if (OS_GetTimeMs() - lcd_dim.idle_ms < (lcd_idle_times[infoSettings.lcd_idle_time] * 1000))
+    if (OS_GetTimeMs() - lcd_dim.idle_ms < SEC_TO_MS(lcd_idle_times[infoSettings.lcd_idle_time]))
       return;
 
     if (!lcd_dim.dimmed)

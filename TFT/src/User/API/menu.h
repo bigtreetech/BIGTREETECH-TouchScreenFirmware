@@ -160,6 +160,7 @@ typedef struct
 
 typedef struct
 {
+  uint8_t   iconIndex;
   uint8_t   enabled[LIVEICON_LINES];
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
@@ -203,7 +204,7 @@ void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 
-void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon);
 void displayExhibitHeader(const char * titleStr, const char * unitStr);
 void displayExhibitValue(const char * valueStr);
 

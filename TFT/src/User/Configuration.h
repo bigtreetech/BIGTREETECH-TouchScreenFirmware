@@ -13,7 +13,7 @@
 
 /**
  * Serial Ports (Primary and Supplementary)
- * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, other TFTs etc.
+ * Serial ports connected to devices such as Printer, ESP3D, OctoPrint, and other Controllers.
  * In order to successfully establish a communication through a serial port, set a baudrate
  * matching the baudrate configured on the connected device.
  * Disable the serial port when it is not in use and/or not connected to a device (floating) to
@@ -21,7 +21,7 @@
  *
  * NOTES:
  *   - Serial port P1 is the primary serial connection to the printer and cannot be disabled.
- *   - A baudrate of 250000 works in most cases, but you might try a lower speed if you
+ *   - A baudrate of 250000 works in most cases, but you can try a lower speed if you
  *     commonly experience drop-outs during host printing.
  *     You may try up to 1000000 to speed up SD file transfer.
  *
@@ -55,7 +55,7 @@
 /**
  * Emulated M109 And M190
  * The TFT intercepts the blocking M109 and M190 G-codes (set target hotend and bed temperatures)
- * and converts them to the non blocking M104 and M140 G-codes respectively.
+ * and converts them to the non-blocking M104 and M140 G-codes respectively.
  *
  * NOTE: Enable it so the TFT can still communicate with Marlin firmware even if the target
  *       temperature is not reached yet. Otherwise the communication (TFT<->Marlin) will be
@@ -764,7 +764,7 @@
 
 /**
  * Most suitable for Delta printers since most printers will
- * crash into printed model when homing after powerloss.
+ * crash into printed model when homing after power loss.
  */
 
 /**
@@ -980,7 +980,7 @@
  * Start, End and Cancel G-code
  * START_GCODE will run before starting a print if "START_GCODE_ENABLED" is enabled.
  * END_GCODE will run after a print is completed if "END_GCODE_ENABLED" is enabled.
- * CANCEL_GCODE will run when a print is canceled if "CANCEL_GCODE_ENABLED" is enabled.
+ * CANCEL_GCODE will run when a print is cancelled if "CANCEL_GCODE_ENABLED" is enabled.
  *   Value range: [min: 3, max: 75 characters]
  */
 #define START_GCODE  "G28 XY R20\n"
@@ -1185,7 +1185,7 @@
 
 /**
  * Rapid Serial Communication
- * More frequent Serial communicaiton while printing.
+ * More frequent Serial communication while printing.
  * Send and parse G-codes more frequently while drawing on screen to
  * prevent printer idling and stuttering due to empty printer buffer.
  *
@@ -1273,7 +1273,7 @@
  * Toast Notification Duration (in MilliSeconds)
  * Set the duration for displaying toast notification on top of the screen.
  */
-#define TOAST_DURATION (3 * 1000)  // in ms. Default: 3 * 1000
+#define TOAST_DURATION 3  // in sec. Default: 3
 
 /**
  * Keyboard On Left Side (Mesh Editor, LED Color Custom)
@@ -1336,48 +1336,6 @@
  * Comment to use standard colors.
  */
 //#define LIVE_TEXT_COMMON_COLOR  // Default: commented (disabled)
-
-/**
- * Live Text Background Color Rendering Technique (Printing menu and Status Screen menu)
- * When enabled, it allows to eliminate the flickering on alternating icons avoiding to
- * draw the icon background under the live text area.
- * Furthermore, it allows to use the icon background colors or a sampled icon background
- * uniform color for each live text.
- * When disabled (set to 0), alternating icons are always fully drawn causing some
- * flickering when live text is drawn on top of them.
- * Furthermore, a standard rendering based on the sampling and use, in a pixel by pixel
- * basis, of the underlying icon background colors is used.
- *
- * NOTES:
- *   - Enable it only in case the icons maintain always the same background colors under
- *     the live text areas (e.g. applicable to Unified, Round Miracle etc... menu themes).
- *   - If enabled, it speeds up the rendering of the live text and the responsiveness of
- *     the TFT, so it can improve the print quality.
- *     Suitable in particular for the TFTs with a not fast HW (e.g. 24, 48 MHz).
- *   - If enabled, it allows to eliminate the flickering on alternating icons.
- */
-
-/**
- * Live Text Background Color Rendering Technique (Printing menu)
- *   Value range: [min: 0, max: 2]
- *     0: disabled
- *     1: apply icon background colors to live text
- *     2: apply sampled icon background uniform color to live text
- */
-#define LIVE_TEXT_BG_COLOR_PRINTING 0  // Default: 0 (disabled)
-
-/**
- * Live Text Background Color Rendering Technique (Status Screen menu)
- *   Value range: [min: 0, max: 6]
- *     0: disabled
- *     1: apply icon background colors to live text 1 (name)
- *     2: apply sampled icon background uniform color to live text 1 (name)
- *     3: apply icon background colors to live text 2 (value)
- *     4: apply sampled icon background uniform color to live text 2 (value)
- *     5: apply icon background colors to both live text 1 and live text 2
- *     6: apply sampled icon background uniform color to both live text 1 and live text 2
- */
-#define LIVE_TEXT_BG_COLOR_STATUS 0  // Default: 0 (disabled)
 
 /**
  * Show Embedded Thumbnails Of G-code Files

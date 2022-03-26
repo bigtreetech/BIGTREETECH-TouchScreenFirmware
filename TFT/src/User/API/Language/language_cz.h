@@ -2,12 +2,12 @@
 #define _LANGUAGE_CZ_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Čeština"
     #define STRING_EMULATED_M600          "Emulace M600"
     #define STRING_EMULATED_M109_M190     "Emulace M109 / M190"
     #define STRING_EVENT_LED              "LED události"
     #define STRING_FILE_COMMENT_PARSING   "Analýzovat komentáře"
     #define STRING_ROTATED_UI             "Otočit UI"
-    #define STRING_LANGUAGE               "Čeština"
     #define STRING_ACK_NOTIFICATION       "Styl oznámení ACK"
     #define STRING_FILES_SORT_BY          "Řazení souboru"
     #define STRING_FILES_LIST_MODE        "Soubory jako seznam"

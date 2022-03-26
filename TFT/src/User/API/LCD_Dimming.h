@@ -62,9 +62,9 @@ extern "C" {
     LCD_IDLE_TIME_COUNT
   } LCD_IDLE_TIME_;
 
-  extern const uint32_t lcd_brightness[LCD_BRIGHTNESS_COUNT];
+  extern const uint8_t lcd_brightness[LCD_BRIGHTNESS_COUNT];
 
-  extern const uint32_t lcd_idle_times[LCD_IDLE_TIME_COUNT];
+  extern const uint16_t lcd_idle_times[LCD_IDLE_TIME_COUNT];
   extern const LABEL lcd_idle_time_names[LCD_IDLE_TIME_COUNT];
 
   bool LCD_IsBlocked(void);
