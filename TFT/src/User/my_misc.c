@@ -3,6 +3,7 @@
 #include "my_misc.h"
 #include <stddef.h>
 #include <string.h>
+#include "printf/printf.h"
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -138,6 +139,16 @@ double stringToDouble(char *str, char **endptr)
     *endptr = p;  // asign pointer to remaining string
 
   return val * sign;
+}
+
+// convert time to string with given formatting
+void timeToString(char * buf, char *strFormat, uint32_t time)
+{
+  uint8_t hour = HOURS(time);
+  uint8_t min = MINUTES(time);
+  uint8_t sec = SECONDS(time);
+
+  sprintf(buf,strFormat, hour, min, sec);
 }
 
 // strip out any leading " ", "/" or ":" character that might be in the string

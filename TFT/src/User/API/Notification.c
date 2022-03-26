@@ -102,7 +102,7 @@ void drawToast(bool redraw)
 
     // set new timer if notification is new
     if (!redraw)
-      nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
+      nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);
 
     GUI_RestoreColorDefault();
   }
