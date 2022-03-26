@@ -577,7 +577,7 @@ GUI_POINT getIconStartPoint(int index)
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
-  if (label->index == LABEL_NULL)  // No content in label
+  if (label == NULL || label->index == LABEL_NULL)  // No content in label
     return NULL;
   if (label->index < LABEL_NUM)  // Index of language
     return textSelect(label->index);
@@ -928,8 +928,8 @@ void menuDrawListPage(const LISTITEMS *listItems)
 // Show live info text on icons
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
 {
-  GUI_RECT *iconRect = MENU_IS(menuPrinting) ? rect_of_keyPS : curRect;
-  GUI_POINT iconPt = {iconRect[index].x0, iconRect[index].y0};
+  const GUI_RECT *iconRect = MENU_IS(menuPrinting) ? rect_of_keyPS : curRect;
+  const GUI_POINT iconPt = {iconRect[index].x0, iconRect[index].y0};
 
   if (redrawIcon)
     ICON_ReadDisplay(iconPt.x, iconPt.y, liveicon->iconIndex);
