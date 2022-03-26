@@ -1079,9 +1079,7 @@ void parseACK(void)
         infoMachineSettings.autoReportTemp = ack_value();
 
         if (infoMachineSettings.autoReportTemp)
-        {
           storeCmd("M155 S%u\n", heatGetUpdateSeconds());
-        }
       }
       else if (ack_seen("Cap:AUTOREPORT_POS:"))
       {

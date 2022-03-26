@@ -862,7 +862,7 @@ void sendQueueCmd(void)
         case 104:  // M104
           if (fromTFT)
             synchNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
-           break;
+          break;
 
         case 114:  // M114
           #ifdef FIL_RUNOUT_PIN
