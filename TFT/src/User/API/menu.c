@@ -928,8 +928,8 @@ void menuDrawListPage(const LISTITEMS *listItems)
 // Show live info text on icons
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
 {
-  GUI_RECT *iconRect = MENU_IS(menuPrinting) ? rect_of_keyPS : curRect;
-  GUI_POINT iconPt = {iconRect[index].x0, iconRect[index].y0};
+  const GUI_RECT *iconRect = MENU_IS(menuPrinting) ? rect_of_keyPS : curRect;
+  const GUI_POINT iconPt = {iconRect[index].x0, iconRect[index].y0};
 
   if (redrawIcon)
     ICON_ReadDisplay(iconPt.x, iconPt.y, liveicon->iconIndex);
