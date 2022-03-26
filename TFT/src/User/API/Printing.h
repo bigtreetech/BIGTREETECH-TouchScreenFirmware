@@ -54,12 +54,10 @@ uint32_t getPrintExpectedTime(void);
 
 void setPrintTime(uint32_t elapsedTime);
 uint32_t getPrintTime(void);
-void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
 void parsePrintRemainingTime(char * buffer);        // used for M117 Time Left xx
 uint32_t getPrintRemainingTime();
-void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 void setPrintLayerNumber(uint16_t layerNumber);
 uint16_t getPrintLayerNumber();
