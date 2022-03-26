@@ -106,13 +106,6 @@ uint32_t getPrintTime(void)
   return infoPrinting.time;
 }
 
-void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
-{
-  *hour = infoPrinting.time / 3600;
-  *min = infoPrinting.time % 3600 / 60;
-  *sec = infoPrinting.time % 60;
-}
-
 void setPrintRemainingTime(int32_t remainingTime)
 {
   float speedFactor = (float) (speedGetCurPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
@@ -137,13 +130,6 @@ void parsePrintRemainingTime(char * buffer)
 uint32_t getPrintRemainingTime()
 {
   return infoPrinting.remainingTime;
-}
-
-void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec)
-{
-  *hour = infoPrinting.remainingTime / 3600;
-  *min = infoPrinting.remainingTime % 3600 / 60;
-  *sec = infoPrinting.remainingTime % 60;
 }
 
 void setPrintLayerNumber(uint16_t layerNumber)
@@ -891,7 +877,7 @@ void loopPrintFromOnboard(void)
   if (MENU_IS(menuTerminal)) return;
 
   static uint32_t nextCheckPrintTime = 0;
-  uint32_t update_M27_time = infoSettings.m27_refresh_time * 1000;
+  uint32_t update_M27_time = SEC_TO_MS(infoSettings.m27_refresh_time);
 
   do
   { // WAIT FOR M27

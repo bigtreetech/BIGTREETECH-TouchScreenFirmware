@@ -44,53 +44,72 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 
 #endif
 
-void lcd_frame_partial_display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint16_t w, uint16_t h, uint32_t addr)
+void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_INFO *iconInfo)
 {
-  uint16_t x, y;
-  uint16_t color;
+  uint16_t frameLines = (endPoint.y - startPoint.y);  // total lines in frame
+  uint16_t blockLines = (endPoint.y >= iconInfo->height) ? (iconInfo->height - startPoint.y) : frameLines;  // total drawable lines
 
-  LCD_SetWindow(sx, sy, ex - 1, ey - 1);
+  uint16_t frameWidth = (endPoint.x - startPoint.x);  // total frame width
+  uint16_t blockWidth = (endPoint.x >= iconInfo->width) ? (iconInfo->width - startPoint.x) : frameWidth;  // total drawable width
+  uint16_t bgWidth = frameWidth - blockWidth;  // total empty width to be filled with bg color
+  uint16_t color = 0;
 
-  W25Qxx_SPI_CS_Set(0);
-  W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF0000) >> 16);
-  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF00) >> 8);
-  W25Qxx_SPI_Read_Write_Byte(addr & 0xFF);
+  // move address to block starting point
+  iconInfo->address += ((iconInfo->width * startPoint.y) + startPoint.x) * COLOR_BYTE_SIZE;
 
-  for (y = sy; y < ey; y++)
+  for (uint16_t y = 0; y < blockLines; y++)
   {
-    for (x = sx; x < sx + w; x++)
+    W25Qxx_SPI_CS_Set(0);
+    W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
+    W25Qxx_SPI_Read_Write_Byte((iconInfo->address & 0xFF0000) >> 16);
+    W25Qxx_SPI_Read_Write_Byte((iconInfo->address & 0xFF00) >> 8);
+    W25Qxx_SPI_Read_Write_Byte(iconInfo->address & 0xFF);
+
+    for (uint8_t x = 0; x < blockWidth; x++)
     {
       color = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
-
-      if (x < ex)
-        LCD_WR_16BITS_DATA(color);
+      buf[(y * frameWidth) + x] = color;
     }
+
+    W25Qxx_SPI_CS_Set(1);
+
+    if (bgWidth)
+    {
+      for (uint8_t x = blockWidth; x < frameWidth; x++)
+      {
+        buf[(y * frameWidth) + x] = infoSettings.bg_color;
+      }
+    }
+
+    iconInfo->address += iconInfo->width * COLOR_BYTE_SIZE;
   }
 
-  W25Qxx_SPI_CS_Set(1);
+  // fill empty frame lines with background color
+  for (uint16_t i = (blockLines * frameWidth); i < (frameLines * frameWidth); i++)
+  {
+    buf[i] = infoSettings.bg_color;
+  }
 }
 
-uint32_t getBMPsize(uint8_t *w, uint8_t *h, uint32_t address)
+void getBMPsize(BMP_INFO *bmp)
 {
-  uint16_t len = sizeof(uint16_t);
+  if (!bmp->address && bmp->index)
+    bmp->address = ICON_ADDR(bmp->index);
 
-  W25Qxx_ReadBuffer(w, address, len);
-  address +=len;
-  W25Qxx_ReadBuffer(h, address, len);
-  address +=len;
-
-  return address;
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address +=COLOR_BYTE_SIZE;
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address +=COLOR_BYTE_SIZE;
 }
 
 // draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
-  uint16_t w, h;
+  BMP_INFO bmpInfo = {.address = address};
 
-  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, address);
-  lcd_frame_display(sx, sy, w, h, address);
+  getBMPsize(&bmpInfo);
+  lcd_frame_display(sx, sy, bmpInfo.width, bmpInfo.height, bmpInfo.address);
 }
 
 void LOGO_ReadDisplay(void)
@@ -98,20 +117,15 @@ void LOGO_ReadDisplay(void)
   IMAGE_ReadDisplay(0, 0, LOGO_ADDR);
 }
 
-void ICON_PartialReadDisplay(uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint8_t icon, uint16_t isx, uint16_t isy)
+// load the selected area of bmp icon from flash to buffer
+void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon)
 {
-  uint16_t w, h;
-  uint32_t address;
+  BMP_INFO iconInfo = {.index = icon, .address = 0};
+  GUI_POINT startPoint = {.x = x, .y = y};
+  GUI_POINT endPoint = {.x = x + w, .y = y + h};
 
-  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
-
-  if (width < 0 || (isx + width) > w)
-    width = w - isx;
-
-  if (height < 0 || (isy + height) > h)
-    height = h - isy;
-
-  lcd_frame_partial_display(sx, sy, sx + width, sy + height, w, h, address + (isy * w * 2) + (isx * 2));
+  getBMPsize(&iconInfo);
+  bmpToBuffer(buf, startPoint, endPoint, &iconInfo);
 }
 
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
@@ -119,43 +133,14 @@ void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
   IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
 }
 
-typedef struct
+uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int16_t y)
 {
-  uint16_t sx;
-  uint16_t sy;
-  uint16_t w;
-  uint16_t h;
-  uint32_t address;
-  GUI_TEXT_MODE pre_mode;
-  uint16_t pre_bgColor;
-} TEXT_ON_ICON;
+  // Out of range calls
+  if (x > w || y > h)
+    return infoSettings.bg_color;
 
-TEXT_ON_ICON backgroundIcon;
-
-void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
-{
-  backgroundIcon.pre_bgColor = GUI_GetBkColor();
-  backgroundIcon.pre_mode = GUI_GetTextMode();
-  backgroundIcon.address = getBMPsize((uint8_t *)&backgroundIcon.w, (uint8_t *)&backgroundIcon.h, ICON_ADDR(icon));
-  backgroundIcon.sx = sx;
-  backgroundIcon.sy = sy;
-
-  GUI_SetTextMode(GUI_TEXTMODE_ON_ICON);
-}
-
-void ICON_PrepareReadEnd(void)
-{
-  GUI_SetBkColor(backgroundIcon.pre_bgColor);
-  GUI_SetTextMode(backgroundIcon.pre_mode);
-}
-
-uint16_t ICON_ReadPixel(int16_t x, int16_t y)
-{
-  // // Out of range calls
-  // if ((x > backgroundIcon.sx + backgroundIcon.w) || (y > backgroundIcon.sy + backgroundIcon.h))
-  //   return 0;
   uint16_t color;
-  uint32_t address = backgroundIcon.address + ((x - backgroundIcon.sx) + (y - backgroundIcon.sy) * backgroundIcon.w) * 2;
+  address += ((w * y) + x) * COLOR_BYTE_SIZE;
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
@@ -540,21 +525,21 @@ void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   uint16_t mode = 0x0FF0;
   uint16_t x, y;
-  uint16_t w, h;
   uint16_t color = 0;
-  uint32_t address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
+  BMP_INFO bmpInfo = {.index = icon, .address = 0};
+  getBMPsize(&bmpInfo);
 
-  LCD_SetWindow(sx, sy, sx + w - 1, sy + h - 1);
+  LCD_SetWindow(sx, sy, sx + bmpInfo.width - 1, sy + bmpInfo.height - 1);
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF0000) >> 16);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF00) >> 8);
-  W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
+  W25Qxx_SPI_Read_Write_Byte((bmpInfo.address & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((bmpInfo.address & 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(bmpInfo.address & 0xFF);
 
-  for (y = sy; y < sy + w; y++)
+  for (y = sy; y < sy + bmpInfo.width; y++)
   {
-    for (x = sx; x < sx + h; x++)
+    for (x = sx; x < sx + bmpInfo.height; x++)
     {
       color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
