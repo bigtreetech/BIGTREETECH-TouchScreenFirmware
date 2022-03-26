@@ -273,7 +273,7 @@ static inline void toggleTool(void)
     drawStatus();
 
     // gcode queries must be call after drawStatus
-    coordinateQuery(UPDATE_TOOL_TIME / 1000);
+    coordinateQuery(MS_TO_SEC(UPDATE_TOOL_TIME));
     speedQuery();
     ctrlFanQuery();
   }

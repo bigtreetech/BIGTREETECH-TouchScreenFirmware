@@ -37,9 +37,9 @@ void _setDialogCancelTextLabel(int16_t index);
 #define setDialogOkText(x) _Generic(((x+0)), const uint8_t*: _setDialogOkTextStr, \
                                                    uint8_t*: _setDialogOkTextStr, \
                                                     default: _setDialogOkTextLabel)(x)
-#define setDialogCancelText(x)  _Generic(((x+0)), const uint8_t*: _setDialogCancelTextStr, \
-                                                        uint8_t*: _setDialogCancelTextStr, \
-                                                         default: _setDialogCancelTextLabel)(x)
+#define setDialogCancelText(x) _Generic(((x+0)), const uint8_t*: _setDialogCancelTextStr, \
+                                                       uint8_t*: _setDialogCancelTextStr, \
+                                                        default: _setDialogCancelTextLabel)(x)
 
 //set text from LABEL index or pointer (uint8_t*)
 #define setDialogText(title, msg, oktext, canceltext) \

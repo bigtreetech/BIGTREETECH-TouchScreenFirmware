@@ -49,6 +49,12 @@ extern "C" {
 // Flip all bits
 #define FLIP_BITS(num) ~num
 
+// Time conversion
+#define SEC_TO_MS(t)  (t * 1000)           // seconds to milliseconds
+#define MS_TO_SEC(t)  (t / 1000)           // milliseconds to seconds
+#define MIN_TO_SEC(t) (t * 60)             // minute to seconds
+#define MIN_TO_MS(t)  (SEC_TO_MS(t) * 60)  // minute to milliseconds
+
 #define strtod stringToDouble  // enable light weight string to double function without exponential support
 
 uint8_t inRange(int cur, int tag , int range);
