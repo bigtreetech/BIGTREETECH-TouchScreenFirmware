@@ -577,7 +577,7 @@ GUI_POINT getIconStartPoint(int index)
 
 uint8_t *labelGetAddress(const LABEL *label)
 {
-  if (label->index == LABEL_NULL)  // No content in label
+  if (label == NULL || label->index == LABEL_NULL)  // No content in label
     return NULL;
   if (label->index < LABEL_NUM)  // Index of language
     return textSelect(label->index);
