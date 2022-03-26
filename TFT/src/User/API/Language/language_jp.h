@@ -2,12 +2,12 @@
 #define _LANGUAGE_JP_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "日本語"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "回転UI"
-    #define STRING_LANGUAGE               "日本語"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "ファイルビューアリストモード"

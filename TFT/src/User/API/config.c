@@ -122,6 +122,7 @@ bool getLangFromFile(char * rootDir)
 
   if (foundkeys != LABEL_NUM)
   {
+    showError(CSTAT_FILE_INVALID);
     success = false;
   }
   else

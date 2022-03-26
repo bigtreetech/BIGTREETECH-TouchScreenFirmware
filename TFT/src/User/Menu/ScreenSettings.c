@@ -234,23 +234,28 @@ void menuLanguage(void)
   LABEL title = {LABEL_LANGUAGE};
   LISTITEM totalItems[LANGUAGE_NUM];
   uint16_t curIndex = KEY_IDLE;
-  SETTINGS now = infoSettings;
   uint16_t curItem = infoSettings.language;
-  uint16_t curPage = curItem / LISTITEM_PER_PAGE;
+  SETTINGS now = infoSettings;
 
-  // fill language items
+  char *firstLanguage = (char *)default_pack[LABEL_LANGUAGE]; // get first language name directly from memory
+  char secondLanguage[MAX_LANG_LABEL_LENGTH];
+
+  W25Qxx_ReadBuffer((uint8_t *)&secondLanguage, getLabelFlashAddr(LABEL_LANGUAGE), MAX_LANG_LABEL_LENGTH);  // read second language name from SPI flash
+
+  //set language name labels
+  setDynamicLabel(0, firstLanguage);
+  setDynamicLabel(1, secondLanguage);
+
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
-    if (i == infoSettings.language)
-      totalItems[i].icon = CHARICON_CHECKED;
-    else
-      totalItems[i].icon = CHARICON_UNCHECKED;
-
+    totalItems[i].icon = CHARICON_UNCHECKED;
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = textSelect(LABEL_LANGUAGE);
+    totalItems[i].titlelabel.index = LABEL_DYNAMIC;
   }
 
-  listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
+  totalItems[curItem].icon = CHARICON_CHECKED; // check current selected language
+
+  listViewCreate(title, totalItems, COUNT(totalItems), NULL, true, NULL, NULL);
 
   while (MENU_IS(menuLanguage))
   {
