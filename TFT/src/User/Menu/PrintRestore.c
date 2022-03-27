@@ -6,6 +6,7 @@ void menuPrintRestore(void)
   uint16_t key_num = IDLE_TOUCH;
 
   GUI_Clear(infoSettings.bg_color);
+  menuSetTitle(NULL);
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
 
