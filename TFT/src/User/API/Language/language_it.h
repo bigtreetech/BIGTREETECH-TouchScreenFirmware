@@ -2,12 +2,12 @@
 #define _LANGUAGE_IT_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Italiano"
     #define STRING_EMULATED_M600          "M600 emulato"
     #define STRING_EMULATED_M109_M190     "M109 / M190 emulati"
     #define STRING_EVENT_LED              "LED evento"
     #define STRING_FILE_COMMENT_PARSING   "Analisi commenti su file"
     #define STRING_ROTATED_UI             "Ruota"
-    #define STRING_LANGUAGE               "Italiano"
     #define STRING_ACK_NOTIFICATION       "Tipo di popup"
     #define STRING_FILES_SORT_BY          "Ordina file per"
     #define STRING_FILES_LIST_MODE        "File in modalità lista"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Mostra barra di stato"
     #define STRING_TERMINAL_ACK           "Mostra ACK in console"
     #define STRING_SERIAL_ALWAYS_ON       "Seriale sempre accesa"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin a schermo intero"
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
     #define STRING_MARLIN_TYPE            "Modalità Marlin"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Processo completato!"
     #define STRING_PROCESS_ABORTED        "Processo annullato!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD card"
-    #define STRING_READ_TFTSD_ERROR       "Errore lettura SD card!"
-    #define STRING_TFTSD_INSERTED         "SD card inserita"
-    #define STRING_TFTSD_REMOVED          "SD card rimossa"
-    #define STRING_TFTSD_NOT_DETECTED     "SD card non rilevata!"
-    #define STRING_USB_DISK               "Pen drive"
-    #define STRING_READ_USB_DISK_ERROR    "Errore lettura pen drive!"
-    #define STRING_USB_DISK_INSERTED      "Pen drive inserita"
-    #define STRING_USB_DISK_REMOVED       "Pen drive rimossa"
-    #define STRING_USB_DISK_NOT_DETECTED  "Pen drive non rilevata!"
-    #define STRING_ONBOARDSD              "SD scheda"
-    #define STRING_ONBOARDUSB             "USB scheda"
-    #define STRING_READ_ONBOARDSD_ERROR   "Errore lettura media su scheda!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD card"
+    #define STRING_TFT_SD_READ_ERROR      "Errore lettura SD card!"
+    #define STRING_TFT_SD_INSERTED        "SD card inserita"
+    #define STRING_TFT_SD_REMOVED         "SD card rimossa"
+    #define STRING_TFT_SD_NOT_DETECTED    "SD card non rilevata!"
+    #define STRING_TFT_USB                "Pen drive"
+    #define STRING_TFT_USB_READ_ERROR     "Errore lettura pen drive!"
+    #define STRING_TFT_USB_INSERTED       "Pen drive inserita"
+    #define STRING_TFT_USB_REMOVED        "Pen drive rimossa"
+    #define STRING_TFT_USB_NOT_DETECTED   "Pen drive non rilevata!"
+    #define STRING_ONBOARD_SD             "SD scheda"
+    #define STRING_ONBOARD_USB            "USB scheda"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Errore lettura media su scheda!"
     #define STRING_FILAMENT_RUNOUT        "Filamento finito!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

@@ -7,7 +7,7 @@ extern "C" {
 
 typedef enum
 {
-  HS_OFF,
+  HS_OFF = 0,
   HS_ON,
   HS_DISABLED
 } BLT_HS_MODE;

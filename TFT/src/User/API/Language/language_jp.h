@@ -2,12 +2,12 @@
 #define _LANGUAGE_JP_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "日本語"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "回転UI"
-    #define STRING_LANGUAGE               "日本語"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "ファイルビューアリストモード"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "永続的なステータス情報"
     #define STRING_TERMINAL_ACK           "端末でACKを表示する"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "フルスクリーンでマーリンモード"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "TFT SD"
-    #define STRING_READ_TFTSD_ERROR       "TFT SDカードの読み取りがエラー発生しました!"
-    #define STRING_TFTSD_INSERTED         "SDカード入りました!"
-    #define STRING_TFTSD_REMOVED          "SDカード出しました!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "USBメモリー"
-    #define STRING_READ_USB_DISK_ERROR    "USBメモリー読み込みエラー!"
-    #define STRING_USB_DISK_INSERTED      "U Diskカード入りました!"
-    #define STRING_USB_DISK_REMOVED       "U Diskカード出しました!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "内部 mSDカード"
-    #define STRING_ONBOARDUSB             "OnboardUSB"
-    #define STRING_READ_ONBOARDSD_ERROR   "内部 mSDカードの読み取りがエラー発生しました!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "TFT SD"
+    #define STRING_TFT_SD_READ_ERROR      "TFT SDカードの読み取りがエラー発生しました!"
+    #define STRING_TFT_SD_INSERTED        "SDカード入りました!"
+    #define STRING_TFT_SD_REMOVED         "SDカード出しました!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "USBメモリー"
+    #define STRING_TFT_USB_READ_ERROR     "USBメモリー読み込みエラー!"
+    #define STRING_TFT_USB_INSERTED       "U Diskカード入りました!"
+    #define STRING_TFT_USB_REMOVED        "U Diskカード出しました!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "内部 mSDカード"
+    #define STRING_ONBOARD_USB            "OnboardUSB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "内部 mSDカードの読み取りがエラー発生しました!"
     #define STRING_FILAMENT_RUNOUT        "フィラメントランアウト!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

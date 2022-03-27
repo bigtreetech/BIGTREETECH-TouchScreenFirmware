@@ -2,12 +2,12 @@
 #define _LANGUAGE_FR_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Français"
     #define STRING_EMULATED_M600          "Emuler M600"
     #define STRING_EMULATED_M109_M190     "Emuler M109 / M190"
     #define STRING_EVENT_LED              "LED Neopixel"
     #define STRING_FILE_COMMENT_PARSING   "Analyse commentaires Gcode"
     #define STRING_ROTATED_UI             "Rotation"
-    #define STRING_LANGUAGE               "Français"
     #define STRING_ACK_NOTIFICATION       "Style de notification ACK"
     #define STRING_FILES_SORT_BY          "Trier les fichiers par"
     #define STRING_FILES_LIST_MODE        "Fichiers en mode liste"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Temp. toujours affichées"
     #define STRING_TERMINAL_ACK           "Afficher ACK sur Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial toujours actif"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin plein écran"
     #define STRING_MARLIN_SHOW_TITLE      "Titre en Mode Marlin"
     #define STRING_MARLIN_TYPE            "Type du Mode Marlin"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Processus terminé !"
     #define STRING_PROCESS_ABORTED        "Processus annulé !"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD TFT"
-    #define STRING_READ_TFTSD_ERROR       "Erreur de lecture de la carte SD !"
-    #define STRING_TFTSD_INSERTED         "Carte insérée !"
-    #define STRING_TFTSD_REMOVED          "Carte retirée !"
-    #define STRING_TFTSD_NOT_DETECTED     "Aucune carte SD détectée."
-    #define STRING_USB_DISK               "USB TFT"
-    #define STRING_READ_USB_DISK_ERROR    "Erreur de lecture de la clé USB !"
-    #define STRING_USB_DISK_INSERTED      "Clé USB insérée !"
-    #define STRING_USB_DISK_REMOVED       "Clé USB retirée !"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD interne"
-    #define STRING_ONBOARDUSB             "USB interne"
-    #define STRING_READ_ONBOARDSD_ERROR   "Erreur de lecture de la media interne !"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD TFT"
+    #define STRING_TFT_SD_READ_ERROR      "Erreur de lecture de la carte SD !"
+    #define STRING_TFT_SD_INSERTED        "Carte insérée !"
+    #define STRING_TFT_SD_REMOVED         "Carte retirée !"
+    #define STRING_TFT_SD_NOT_DETECTED    "Aucune carte SD détectée."
+    #define STRING_TFT_USB                "USB TFT"
+    #define STRING_TFT_USB_READ_ERROR     "Erreur de lecture de la clé USB !"
+    #define STRING_TFT_USB_INSERTED       "Clé USB insérée !"
+    #define STRING_TFT_USB_REMOVED        "Clé USB retirée !"
+    #define STRING_TFT_USB_NOT_DETECTED   "Aucune clé USB détectée."
+    #define STRING_ONBOARD_SD             "SD interne"
+    #define STRING_ONBOARD_USB            "USB interne"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Erreur de lecture de la media interne !"
     #define STRING_FILAMENT_RUNOUT        "Fin de Filament !"
 
     // Steppers, Print, Probe Process Commands / Status / Info

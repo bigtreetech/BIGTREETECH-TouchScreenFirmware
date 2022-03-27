@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+#include "includes.h"
 #include "variants.h"
 #include "ff.h"
 
@@ -53,12 +54,10 @@ uint32_t getPrintExpectedTime(void);
 
 void setPrintTime(uint32_t elapsedTime);
 uint32_t getPrintTime(void);
-void getPrintTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
 void parsePrintRemainingTime(char * buffer);        // used for M117 Time Left xx
 uint32_t getPrintRemainingTime();
-void getPrintRemainingTimeDetail(uint8_t * hour, uint8_t * min, uint8_t * sec);
 
 void setPrintLayerNumber(uint16_t layerNumber);
 uint16_t getPrintLayerNumber();
@@ -91,7 +90,10 @@ void printSetUpdateWaiting(bool isWaiting);           // called in interfaceCmd.
 void updatePrintUsedFilament(void);                   // called in PrintingMenu.c
 void clearInfoPrint(void);                            // called in PrintingMenu.c
 
-void printComplete(void);                             // print complete
+//
+// commented because NOT externally invoked
+//
+//void printComplete(void);                           // print complete
 
 // start print originated or handled by remote host
 // (e.g. print started from remote onboard media or hosted by remote host)
@@ -108,14 +110,19 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType);
 bool isPrinting(void);
 bool isPaused(void);
 bool isTFTPrinting(void);
+bool isHostPrinting(void);
 bool isRemoteHostPrinting(void);
 
+//
+// used for print originated or handled by remote host
+// (e.g. print started from (remote) onboard media or hosted by remote host)
+//
 void setPrintAbort(void);
-void setPrintPause(bool updateHost, PAUSE_TYPE pauseType);
-void setPrintResume(bool updateHost);
+void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
+void setPrintResume(HOST_STATUS hostStatus);
 
-void loopPrintFromTFT(void);        // called in loopBackEnd(). It handles a print from TFT media, if any
-void loopPrintFromOnboardSD(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
+void loopPrintFromTFT(void);      // called in loopBackEnd(). It handles a print from TFT media, if any
+void loopPrintFromOnboard(void);  // called in loopBackEnd(). It handles a print from (remote) onboard media, if any
 
 #ifdef __cplusplus
 }

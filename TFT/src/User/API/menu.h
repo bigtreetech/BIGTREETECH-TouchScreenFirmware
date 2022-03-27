@@ -107,11 +107,11 @@ typedef struct
 
 typedef enum
 {
-  STATUS_IDLE = 0,
-  STATUS_BUSY,
-  STATUS_DISCONNECTED,
-  STATUS_LISTENING,
-  STATUS_NORMAL
+  SYS_STATUS_IDLE = 0,
+  SYS_STATUS_BUSY,
+  SYS_STATUS_DISCONNECTED,
+  SYS_STATUS_LISTENING,
+  SYS_STATUS_NORMAL
 } SYS_STATUS;
 
 typedef struct
@@ -148,18 +148,19 @@ typedef struct
 
 typedef struct
 {
-  uint8_t *     text;
-  GUI_POINT     pos;      // relative to icon top left corner
-  uint8_t       h_align;  // left, right or center of pos point
-  uint8_t       v_align;  // left, right or center of pos point
-  uint16_t      fn_color;
-  uint16_t      bk_color;
-  GUI_TEXT_MODE text_mode;
-  uint16_t      font;
+  const uint8_t * text;
+  GUI_POINT       pos;      // relative to icon top left corner
+  uint8_t         h_align;  // left, right or center of pos point
+  uint8_t         v_align;  // top, bottom or center of pos point
+  uint16_t        fn_color;
+  uint16_t        bk_color;
+  GUI_TEXT_MODE   text_mode;
+  uint16_t        font;
 } LIVE_DATA;
 
 typedef struct
 {
+  uint8_t   iconIndex;
   uint8_t   enabled[LIVEICON_LINES];
   LIVE_DATA lines[LIVEICON_LINES];
 } LIVE_INFO;
@@ -196,12 +197,12 @@ void menuDrawIconOnly(const ITEM *item, uint8_t position);
 void menuDrawIconText(const ITEM *item, uint8_t position);
 void menuDrawListItem(const LISTITEM *item, uint8_t position);
 void menuRefreshListPage(void);
-void menuDrawTitle(const uint8_t *content);  //(const MENUITEMS * menuItems);
-void menuReDrawCurTitle(void);
+void menuSetTitle(const LABEL *title);
+void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);
 void menuDrawListPage(const LISTITEMS *listItems);
 
-void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, const ITEM * item);
+void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon);
 void displayExhibitHeader(const char * titleStr, const char * unitStr);
 void displayExhibitValue(const char * valueStr);
 

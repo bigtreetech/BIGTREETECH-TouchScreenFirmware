@@ -4,6 +4,17 @@
 // file list number per page
 #define NUM_PER_PAGE 5
 
+// key enums for media selection page
+enum
+{
+  PRINT_KEY_TFT_SD,
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    PRINT_KEY_TFT_USB,
+  #endif
+  PRINT_KEY_ONBOARD_SD,
+  PRINT_KEY_ONBOARD_USB
+};
+
 const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
 const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
@@ -41,7 +52,7 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
 };
 
 // error labels for files/Volume errors
-const int16_t labelVolumeError[3] = {LABEL_READ_TFTSD_ERROR, LABEL_READ_USB_DISK_ERROR, LABEL_READ_ONBOARDSD_ERROR};
+const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ_ERROR, LABEL_ONBOARD_SD_READ_ERROR};
 
 static bool list_mode = true;
 
@@ -76,17 +87,17 @@ void gocdeIconDraw(void)
   {
     restoreFilenameExtension(baseIndex + i - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
 
-    if (EnterDir(infoFile.file[baseIndex + i - infoFile.folderCount]) == false)  // always use short filename for file path
+    if (enterFolder(infoFile.file[baseIndex + i - infoFile.folderCount]) == false)  // always use short filename for file path
       break;
 
     // if model preview bmp exists, display bmp directly without writing to flash
-    if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.title))
+    if (infoMachineSettings.firmwareType == FW_REPRAPFW || !model_DirectDisplay(getIconStartPoint(i), infoFile.path))
     {
       curItem.icon = ICON_FILE;
       menuDrawItem(&curItem, i);
     }
 
-    ExitDir();
+    exitFolder();
 
     hideFilenameExtension(baseIndex + i - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
     normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[baseIndex + i - infoFile.folderCount]);  // always use short filename
@@ -126,7 +137,7 @@ bool printPageItemSelected(uint16_t index)
 
   if (index < infoFile.folderCount)  // folder
   {
-    if (EnterDir(infoFile.folder[index]) == false)  // always use short folder name for file path
+    if (enterFolder(infoFile.folder[index]) == false)  // always use short folder name for file path
     {
       hasUpdate = false;
     }
@@ -141,21 +152,21 @@ bool printPageItemSelected(uint16_t index)
     infoFile.fileIndex = index - infoFile.folderCount;
     char * filename = restoreFilenameExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
-    if (infoHost.connected != true || EnterDir(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
+    if (infoHost.connected != true || enterFolder(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
       hasUpdate = false;
     }
     else
     {
       // load model preview in flash if icon exists
-      setPrintModelIcon(infoFile.source < BOARD_MEDIA && model_DecodeToFlash(infoFile.title));
+      setPrintModelIcon(infoFile.source < FS_ONBOARD_MEDIA && model_DecodeToFlash(infoFile.path));
 
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
 
       // confirm file selction
       setDialogText(LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL);
-      showDialog(DIALOG_TYPE_QUESTION, startPrint, ExitDir, NULL);
+      showDialog(DIALOG_TYPE_QUESTION, startPrint, exitFolder, NULL);
 
       hasUpdate = false;
     }
@@ -196,13 +207,13 @@ void menuPrintFromSource(void)
 
     if (list_mode != true)
     {
-      printIconItems.title.address = (uint8_t*)infoFile.title;
+      printIconItems.title.address = (uint8_t*)infoFile.path;
       menuDrawPage(&printIconItems);
     }
   }
   else
   {
-    if (infoFile.source == BOARD_MEDIA)  // error when the filesystem selected from TFT media not available
+    if (infoFile.source == FS_ONBOARD_MEDIA)  // error when the filesystem selected from TFT media not available
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t*)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
@@ -241,7 +252,7 @@ void menuPrintFromSource(void)
         case KEY_ICON_7:
           infoFile.curPage = 0;
 
-          if (IsRootDir() == true)
+          if (isRootFolder() == true)
           {
             clearInfoFile();
             CLOSE_MENU();
@@ -249,7 +260,7 @@ void menuPrintFromSource(void)
           }
           else
           {
-            ExitDir();
+            exitFolder();
             scanPrintFiles();
             update = 1;
           }
@@ -271,14 +282,14 @@ void menuPrintFromSource(void)
       switch (key_num)
       {
         case KEY_BACK:
-          if (IsRootDir() == true)
+          if (isRootFolder() == true)
           {
             clearInfoFile();
             CLOSE_MENU();
           }
           else
           {
-            ExitDir();
+            exitFolder();
             scanPrintFiles();
             update = 1;
           }
@@ -301,19 +312,19 @@ void menuPrintFromSource(void)
     {
       if (list_mode != true)
       {
-        printIconItems.title.address = (uint8_t *)infoFile.title;
+        printIconItems.title.address = (uint8_t *)infoFile.path;
         gocdeIconDraw();
 
         if (update != 2)  // update title only when entering/exiting to/from directory
-          menuDrawTitle((uint8_t *)infoFile.title);
+          menuDrawTitle();
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.index = LABEL_DYNAMIC, .address = (uint8_t *)infoFile.title}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.address = (uint8_t *)infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gocdeListDraw);
       }
 
-      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.title, &titleRect);
+      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.path, &titleRect);
 
       update = 0;  // finally reset update request
     }
@@ -334,12 +345,13 @@ void menuPrintFromSource(void)
   }
 }
 
+
 void menuPrint(void)
 {
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     list_mode = infoSettings.files_list_mode;
-    infoFile.source = BOARD_MEDIA;
+    infoFile.source = FS_ONBOARD_MEDIA;
     REPLACE_MENU(menuPrintFromSource);
     goto selectEnd;
   }
@@ -349,15 +361,11 @@ void menuPrint(void)
     LABEL_PRINT,
     // icon                          label
     {
-      {ICON_ONTFT_SD,                LABEL_TFTSD},
+      {ICON_ONTFT_SD,                LABEL_TFT_SD},
       #ifdef USB_FLASH_DRIVE_SUPPORT
-        {ICON_USB_DISK,                LABEL_USB_DISK},
-        #define ONBOARD_SD_INDEX 2
-        #define ONBOARD_USB_INDEX 3
+        {ICON_USB_DISK,                LABEL_TFT_USB},
       #else
         {ICON_NULL,                    LABEL_NULL},
-        #define ONBOARD_SD_INDEX 1
-        #define ONBOARD_USB_INDEX 2
       #endif
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
@@ -372,13 +380,13 @@ void menuPrint(void)
 
   if (infoMachineSettings.onboardSD == ENABLED)
   {
-    sourceSelItems.items[ONBOARD_SD_INDEX].icon = ICON_ONBOARD_SD;
-    sourceSelItems.items[ONBOARD_SD_INDEX].label.index = LABEL_ONBOARDSD;
+    sourceSelItems.items[PRINT_KEY_ONBOARD_SD].icon = ICON_ONBOARD_SD;
+    sourceSelItems.items[PRINT_KEY_ONBOARD_SD].label.index = LABEL_ONBOARD_SD;
 
     if (infoMachineSettings.multiVolume == ENABLED)
     {
-      sourceSelItems.items[ONBOARD_USB_INDEX].icon = ICON_USB_DISK;
-      sourceSelItems.items[ONBOARD_USB_INDEX].label.index = LABEL_ONBOARDUSB;
+      sourceSelItems.items[PRINT_KEY_ONBOARD_USB].icon = ICON_USB_DISK;
+      sourceSelItems.items[PRINT_KEY_ONBOARD_USB].label.index = LABEL_ONBOARD_USB;
     }
   }
 
@@ -390,67 +398,57 @@ void menuPrint(void)
 
     switch (key_num)
     {
-      case KEY_ICON_0:
-        if (volumeExists(TFT_SD))
+      case PRINT_KEY_TFT_SD:
+        if (volumeExists(FS_TFT_SD))
         {
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
-          infoFile.source = TFT_SD;
+          infoFile.source = FS_TFT_SD;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
           goto selectEnd;
         }
         else
         {
-          setDialogText(LABEL_WARNING, LABEL_TFTSD_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
-          showDialog(DIALOG_TYPE_ALERT, NULL, NULL, NULL);
+          addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_SD_NOT_DETECTED));
         }
         break;
 
       #ifdef USB_FLASH_DRIVE_SUPPORT
-        case KEY_ICON_1:
-          if (volumeExists(TFT_USB_DISK))
+        case PRINT_KEY_TFT_USB:
+          if (volumeExists(FS_TFT_USB))
           {
             list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT USB disk
-            infoFile.source = TFT_USB_DISK;
+            infoFile.source = FS_TFT_USB;
             OPEN_MENU(menuPrintFromSource);
             OPEN_MENU(menuPrintRestore);
             goto selectEnd;
           }
           else
           {
-            setDialogText(LABEL_WARNING, LABEL_USB_DISK_NOT_DETECTED, LABEL_CONFIRM, LABEL_NULL);
-            showDialog(DIALOG_TYPE_ALERT, NULL, NULL, NULL);
+            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_USB_NOT_DETECTED));
           }
           break;
-
-        case KEY_ICON_2:
-        case KEY_ICON_3:
-          if (infoMachineSettings.onboardSD == ENABLED)
-          {
-            if (key_num == KEY_ICON_2)
-              infoFile.boardSource = BOARD_SD;
-            else if (infoMachineSettings.multiVolume == ENABLED)
-              infoFile.boardSource = BOARD_USB;
-            if (key_num == KEY_ICON_2 || (key_num == KEY_ICON_3 && infoMachineSettings.multiVolume == ENABLED))
-      #else
-        case KEY_ICON_1:
-        case KEY_ICON_2:
-          if (infoMachineSettings.onboardSD == ENABLED)
-          {
-            if (key_num == KEY_ICON_1)
-              infoFile.boardSource = BOARD_SD;
-            else if (infoMachineSettings.multiVolume == ENABLED)
-              infoFile.boardSource = BOARD_USB;
-            if ((key_num == KEY_ICON_1) || (key_num == KEY_ICON_2 && infoMachineSettings.multiVolume == ENABLED))
       #endif
-            {
-              list_mode = true;  // force list mode in onboard media
-              infoFile.source = BOARD_MEDIA;
-              OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
-              goto selectEnd;
-            }
+
+      case PRINT_KEY_ONBOARD_SD:
+      case PRINT_KEY_ONBOARD_USB:
+        if (infoMachineSettings.onboardSD == ENABLED)
+        {
+          if (key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_SD)
+            infoFile.onboardSource = BOARD_SD;
+          else if (infoMachineSettings.multiVolume == ENABLED)
+            infoFile.onboardSource = BOARD_USB;
+
+          if (key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_SD ||
+              ( infoMachineSettings.multiVolume == ENABLED && key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_USB))
+          {
+            list_mode = true;  // force list mode in onboard media
+            infoFile.source = FS_ONBOARD_MEDIA;
+            OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
+            goto selectEnd;
           }
-          break;
+        }
+        break;
 
       case KEY_ICON_4:
         if (infoPrintSummary.name[0] != '\0')
@@ -469,6 +467,6 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!infoHost.printing)  // prevent reset if printing from other source
+  if (!isHostPrinting())  // prevent reset if printing from other source
     resetInfoFile();
 }

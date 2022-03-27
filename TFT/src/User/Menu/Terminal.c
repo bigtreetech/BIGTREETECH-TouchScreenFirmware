@@ -881,7 +881,7 @@ void menuTerminal(void)
 {
   TERMINAL_DATA termPage = {{terminalBuf}, MAX_PAGE_COUNT, 0, 0, 0, 0, TERMINAL_MAX_CHAR, 0, SRC_TERMINAL_COUNT};
 
-  if (isPrinting() || infoHost.printing)  // display only 1 page if printing
+  if (isPrinting() || isHostPrinting())  // display only 1 page if printing
   {
     termPage.bufSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termPage.maxPageCount = 1;

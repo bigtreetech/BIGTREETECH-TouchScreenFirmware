@@ -2,12 +2,12 @@
 #define _LANGUAGE_UK_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Українська"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Повернути інтерфейс"
-    #define STRING_LANGUAGE               "Українська"
     #define STRING_ACK_NOTIFICATION       "ACK стиль повідомлення"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Файли в режимі рядків"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Нагрівання в інфостроці"
     #define STRING_TERMINAL_ACK           "ACK терміналу (°С)"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь екран"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Процес завершений!"
     #define STRING_PROCESS_ABORTED        "Процес перерваний!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD екрану"
-    #define STRING_READ_TFTSD_ERROR       "Не можу прочитати SD картку!"
-    #define STRING_TFTSD_INSERTED         "SD карта вставлена!"
-    #define STRING_TFTSD_REMOVED          "SD карта витягнута!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected.\nPlease insert an SD Card."
-    #define STRING_USB_DISK               "Флеш карта"
-    #define STRING_READ_USB_DISK_ERROR    "Не можу прочитати флеш картку!"
-    #define STRING_USB_DISK_INSERTED      "Флеш карта вставлена!"
-    #define STRING_USB_DISK_REMOVED       "Флеш карта витягнута!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD на платі"
-    #define STRING_ONBOARDUSB             "USB на платі"
-    #define STRING_READ_ONBOARDSD_ERROR   "Не можу прочитати SD картку!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD екрану"
+    #define STRING_TFT_SD_READ_ERROR      "Не можу прочитати SD картку!"
+    #define STRING_TFT_SD_INSERTED        "SD карта вставлена!"
+    #define STRING_TFT_SD_REMOVED         "SD карта витягнута!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected.\nPlease insert an SD Card."
+    #define STRING_TFT_USB                "Флеш карта"
+    #define STRING_TFT_USB_READ_ERROR     "Не можу прочитати флеш картку!"
+    #define STRING_TFT_USB_INSERTED       "Флеш карта вставлена!"
+    #define STRING_TFT_USB_REMOVED        "Флеш карта витягнута!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "SD на платі"
+    #define STRING_ONBOARD_USB            "USB на платі"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Не можу прочитати SD картку!"
     #define STRING_FILAMENT_RUNOUT        "Філамент закінчився"
 
     // Steppers, Print, Probe Process Commands / Status / Info

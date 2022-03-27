@@ -10,7 +10,6 @@ typedef enum
   UNLOAD_STARTED,
 } CMD_TYPE;
 
-// 1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS loadUnloadItems = {
   // title
   LABEL_LOAD_UNLOAD,
@@ -49,7 +48,7 @@ void menuLoadUnload(void)
     {
       loopProcess();
     }
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_MEDIA) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.coordinate = coordinateGetAxis(E_AXIS);
     eAxisBackup.handled = true;
   }
 

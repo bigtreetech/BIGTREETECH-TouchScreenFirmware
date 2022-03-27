@@ -2,12 +2,12 @@
 #define _LANGUAGE_AM_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Հայերեն"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Rotate UI"
-    #define STRING_LANGUAGE               "Հայերեն"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Files viewer List Mode"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Persistent Status Info"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on"   
     #define STRING_MARLIN_FULLSCREEN      "Marlin mode in fullscreen"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "TFT SD"
-    #define STRING_READ_TFTSD_ERROR       "TFTSD հիշողության սարքը չկա"
-    #define STRING_TFTSD_INSERTED         "Card inserted!"
-    #define STRING_TFTSD_REMOVED          "Card removed!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "U Disk"
-    #define STRING_READ_USB_DISK_ERROR    "Read U Disk error!"
-    #define STRING_USB_DISK_INSERTED      "U Disk inserted!"
-    #define STRING_USB_DISK_REMOVED       "U Disk removed!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "OnboardSD"
-    #define STRING_ONBOARDUSB             "OnboardUSB"
-    #define STRING_READ_ONBOARDSD_ERROR   "OnboardSD հիշողության սարքը չկա"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "TFT SD"
+    #define STRING_TFT_SD_READ_ERROR      "TFTSD հիշողության սարքը չկա"
+    #define STRING_TFT_SD_INSERTED        "Card inserted!"
+    #define STRING_TFT_SD_REMOVED         "Card removed!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "U Disk"
+    #define STRING_TFT_USB_READ_ERROR     "Read U Disk error!"
+    #define STRING_TFT_USB_INSERTED       "U Disk inserted!"
+    #define STRING_TFT_USB_REMOVED        "U Disk removed!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "OnboardSD"
+    #define STRING_ONBOARD_USB            "OnboardUSB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "OnboardSD հիշողության սարքը չկա"
     #define STRING_FILAMENT_RUNOUT        "Filament runout!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

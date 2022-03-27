@@ -99,7 +99,7 @@ void LED_CheckEvent(void)
   }
   else
   {
-    if (!isTFTPrinting() || heatingDone)  // if not printng from TFT or if heating is finished, nothing to do
+    if (!isTFTPrinting() || heatingDone)  // if not printng from TFT media or if heating is finished, nothing to do
       return;
 
     if (!nextUpdate())  // if not time for a new update, nothing to do

@@ -2,12 +2,12 @@
 #define _LANGUAGE_TC_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "正體中文"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "顯示方向"
-    #define STRING_LANGUAGE               "正體中文"
     #define STRING_ACK_NOTIFICATION       "ACK 弹窗类型"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "文件預覽列表模式"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "頂部溫度訊息"
     #define STRING_TERMINAL_ACK           "在G-code終端顯示溫度"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "全螢幕Marlin模式"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "處理已完成!"
     #define STRING_PROCESS_ABORTED        "處理已被中斷!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD卡"
-    #define STRING_READ_TFTSD_ERROR       "SD卡讀取失敗"
-    #define STRING_TFTSD_INSERTED         "偵測到SD卡"
-    #define STRING_TFTSD_REMOVED          "SD卡已拔出"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "隨身碟"
-    #define STRING_READ_USB_DISK_ERROR    "隨身碟讀取失敗"
-    #define STRING_USB_DISK_INSERTED      "偵測到隨身碟"
-    #define STRING_USB_DISK_REMOVED       "隨身碟已拔出"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "主機板插槽的SD卡"
-    #define STRING_ONBOARDUSB             "主機板插槽的USB"
-    #define STRING_READ_ONBOARDSD_ERROR   "主機板的存儲介質讀取失敗"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD卡"
+    #define STRING_TFT_SD_READ_ERROR      "SD卡讀取失敗"
+    #define STRING_TFT_SD_INSERTED        "偵測到SD卡"
+    #define STRING_TFT_SD_REMOVED         "SD卡已拔出"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "隨身碟"
+    #define STRING_TFT_USB_READ_ERROR     "隨身碟讀取失敗"
+    #define STRING_TFT_USB_INSERTED       "偵測到隨身碟"
+    #define STRING_TFT_USB_REMOVED        "隨身碟已拔出"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "主機板插槽的SD卡"
+    #define STRING_ONBOARD_USB            "主機板插槽的USB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "主機板的存儲介質讀取失敗"
     #define STRING_FILAMENT_RUNOUT        "沒偵測到耗材"
 
     // Steppers, Print, Probe Process Commands / Status / Info

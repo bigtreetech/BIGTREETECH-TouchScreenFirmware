@@ -30,6 +30,7 @@
 #ifndef USB_FLASH_DRIVE_SUPPORT
   #define USB_FLASH_DRIVE_SUPPORT
   #define USE_USB_FS
+  #define USE_USB_OTG_FS
 #endif
 
 // LCD Backlight pins (adjust brightness with LED PWM)

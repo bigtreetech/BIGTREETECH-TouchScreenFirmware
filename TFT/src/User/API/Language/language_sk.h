@@ -2,12 +2,12 @@
 #define _LANGUAGE_SK_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Slovensky"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Otočiť"
-    #define STRING_LANGUAGE               "Slovensky"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Zobraziť súbory ako zoznam"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Trvalé info o stave"
     #define STRING_TERMINAL_ACK           "Show ACK in Terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin mode in fullscreen"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "TFT SD"
-    #define STRING_READ_TFTSD_ERROR       "Chyba pri načítaní SD karty!"
-    #define STRING_TFTSD_INSERTED         "SD karta vložená!"
-    #define STRING_TFTSD_REMOVED          "SD karta odstránená!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "USB kľúč"
-    #define STRING_READ_USB_DISK_ERROR    "Chyba pri načítaní USB kľúča!"
-    #define STRING_USB_DISK_INSERTED      "USB kľúč vložený!"
-    #define STRING_USB_DISK_REMOVED       "USB disk odstránený!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD karta na doske"
-    #define STRING_ONBOARDUSB             "USB na doske"
-    #define STRING_READ_ONBOARDSD_ERROR   "Chyba pri načítaní media na doske!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "TFT SD"
+    #define STRING_TFT_SD_READ_ERROR      "Chyba pri načítaní SD karty!"
+    #define STRING_TFT_SD_INSERTED        "SD karta vložená!"
+    #define STRING_TFT_SD_REMOVED         "SD karta odstránená!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "USB kľúč"
+    #define STRING_TFT_USB_READ_ERROR     "Chyba pri načítaní USB kľúča!"
+    #define STRING_TFT_USB_INSERTED       "USB kľúč vložený!"
+    #define STRING_TFT_USB_REMOVED        "USB disk odstránený!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "SD karta na doske"
+    #define STRING_ONBOARD_USB            "USB na doske"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Chyba pri načítaní media na doske!"
     #define STRING_FILAMENT_RUNOUT        "Chýba filament!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

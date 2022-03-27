@@ -2,12 +2,12 @@
 #define _LANGUAGE_CA_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Català"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Rotar"
-    #define STRING_LANGUAGE               "Català"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Mode de visualització de fitxers"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Informació d'estat persistent"
     #define STRING_TERMINAL_ACK           "Mostra ACK a la terminal"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Mode Marlin a pantalla completa"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD TFT"
-    #define STRING_READ_TFTSD_ERROR       "Error a la targeta SD TFT!"
-    #define STRING_TFTSD_INSERTED         "¡Targeta inserida!"
-    #define STRING_TFTSD_REMOVED          "¡Targeta extreta!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "Pendrive"
-    #define STRING_READ_USB_DISK_ERROR    "¡Error al Pendrive!"
-    #define STRING_USB_DISK_INSERTED      "¡Pendrive inserit!"
-    #define STRING_USB_DISK_REMOVED       "¡Pendrive extret!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD Placa"
-    #define STRING_ONBOARDUSB             "USB Placa"
-    #define STRING_READ_ONBOARDSD_ERROR   "Error a la targeta SD de la placa!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD TFT"
+    #define STRING_TFT_SD_READ_ERROR      "Error a la targeta SD TFT!"
+    #define STRING_TFT_SD_INSERTED        "¡Targeta inserida!"
+    #define STRING_TFT_SD_REMOVED         "¡Targeta extreta!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "Pendrive"
+    #define STRING_TFT_USB_READ_ERROR     "¡Error al Pendrive!"
+    #define STRING_TFT_USB_INSERTED       "¡Pendrive inserit!"
+    #define STRING_TFT_USB_REMOVED        "¡Pendrive extret!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "SD Placa"
+    #define STRING_ONBOARD_USB            "USB Placa"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Error a la targeta SD de la placa!"
     #define STRING_FILAMENT_RUNOUT        "¡Filament esgotat!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

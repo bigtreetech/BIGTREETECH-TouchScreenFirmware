@@ -7,7 +7,7 @@
 #endif
 
 #define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20220124  // (YYYYMMDD) If a new setting parameter is added,
+#define PARA_SIGN 0x20220321  // (YYYYMMDD) If a new setting parameter is added,
                               // modify here and initialize the initial value
                               // in the "initSettings()" function
 enum

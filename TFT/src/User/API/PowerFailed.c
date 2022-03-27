@@ -37,7 +37,7 @@ bool powerFailedGetRestore(void)
 
 void powerFailedSetDriverSource(void)
 {
-  strcpy(powerFailedFileName, getCurFileSource());
+  strcpy(powerFailedFileName, getFS());
   strcat(powerFailedFileName, BREAK_POINT_FILE);
 }
 
@@ -147,7 +147,7 @@ bool powerFailedExist(void)
   powerFailedSetDriverSource();
 
   if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
-  if (f_read(&fp, infoFile.title, MAX_PATH_LEN, &br)               != FR_OK) return false;
+  if (f_read(&fp, infoFile.path, MAX_PATH_LEN, &br)                != FR_OK) return false;
   if (f_close(&fp)                                                 != FR_OK) return false;
 
   create_ok = true;
@@ -161,8 +161,8 @@ bool powerFailedCreate(char *path)
   powerFailedSetDriverSource();
 
   create_ok = false;
-  if (!infoSettings.plr) return false;               // if PLR is disabled
-  if (infoFile.source >= BOARD_MEDIA) return false;  // onboard media not supported now
+  if (!infoSettings.plr) return false;                    // if PLR is disabled
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return false;  // onboard media not supported now
 
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
 
@@ -215,7 +215,7 @@ void powerFailedCache(uint32_t offset)
 
   infoBreakPoint.pause = isPaused();
 
-  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.title + infoPrinting.model_icon
+  f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.path + infoPrinting.model_icon
   f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
   f_sync(&fpPowerFailed);
 }

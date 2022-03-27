@@ -40,7 +40,7 @@ void parseComment(void)
         if (temp_value != 0)
           setPrintLayerCount(temp_value);
       }
-      else if (temp_char[0] >= '0' && temp_char[0] <= '9')  // check if a number is found
+      else if (NUMERIC(temp_char[0]))  // check if a number is found
       {
         temp_value = strtoul(temp_char, NULL, 0);
         // "temp_value == 0" for object by object printing, when print goes to the next object

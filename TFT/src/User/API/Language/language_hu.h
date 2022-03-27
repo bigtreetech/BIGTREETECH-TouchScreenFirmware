@@ -2,12 +2,12 @@
 #define _LANGUAGE_HU_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Magyar"
     #define STRING_EMULATED_M600          "Emulált M600"
     #define STRING_EMULATED_M109_M190     "Emulált M109 / M190"
     #define STRING_EVENT_LED              "Esemény LED"
     #define STRING_FILE_COMMENT_PARSING   "Fájl megjegyzés elemzése"
     #define STRING_ROTATED_UI             "Forgatás"
-    #define STRING_LANGUAGE               "Magyar"
     #define STRING_ACK_NOTIFICATION       "ACK Értesítési stílus"
     #define STRING_FILES_SORT_BY          "Fájlok rendezése"
     #define STRING_FILES_LIST_MODE        "Fájlnéző listamód"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Állandó állapotinfó"
     #define STRING_TERMINAL_ACK           "ACK Megjelenítése"
     #define STRING_SERIAL_ALWAYS_ON       "Soros port mindig"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Nagyképernyős Marlin mód"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin mód cím támogatás"
     #define STRING_MARLIN_TYPE            "Marlin mód típusa"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "TFT-SD"
-    #define STRING_READ_TFTSD_ERROR       "TFT-SD olvasási hiba!"
-    #define STRING_TFTSD_INSERTED         "SD-Kártya behelyezve!"
-    #define STRING_TFTSD_REMOVED          "SD-Kártya eltávolítva!"
-    #define STRING_TFTSD_NOT_DETECTED     "Nem észlelhető SD-Kártya."
-    #define STRING_USB_DISK               "USB Tár"
-    #define STRING_READ_USB_DISK_ERROR    "USB olvasási hiba!"
-    #define STRING_USB_DISK_INSERTED      "USB behelyezve!"
-    #define STRING_USB_DISK_REMOVED       "USB eltávolítva!"
-    #define STRING_USB_DISK_NOT_DETECTED  "Nem észlelhető USB-lemez."
-    #define STRING_ONBOARDSD              "Lap-SD"
-    #define STRING_ONBOARDUSB             "Lap-USB"
-    #define STRING_READ_ONBOARDSD_ERROR   "Alaplap média olvasási hiba!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "TFT-SD"
+    #define STRING_TFT_SD_READ_ERROR      "TFT-SD olvasási hiba!"
+    #define STRING_TFT_SD_INSERTED        "SD-Kártya behelyezve!"
+    #define STRING_TFT_SD_REMOVED         "SD-Kártya eltávolítva!"
+    #define STRING_TFT_SD_NOT_DETECTED    "Nem észlelhető SD-Kártya."
+    #define STRING_TFT_USB                "USB Tár"
+    #define STRING_TFT_USB_READ_ERROR     "USB olvasási hiba!"
+    #define STRING_TFT_USB_INSERTED       "USB behelyezve!"
+    #define STRING_TFT_USB_REMOVED        "USB eltávolítva!"
+    #define STRING_TFT_USB_NOT_DETECTED   "Nem észlelhető USB-lemez."
+    #define STRING_ONBOARD_SD             "Lap-SD"
+    #define STRING_ONBOARD_USB            "Lap-USB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Alaplap média olvasási hiba!"
     #define STRING_FILAMENT_RUNOUT        "Szál kifutás!"
 
     // Steppers, Print, Probe Process Commands / Status / Info
@@ -186,8 +184,8 @@
 
     #define STRING_START_PRINT            "%s\nfájl kiválasztva.\nElindítod a nyomtatását?"
     #define STRING_STOP_PRINT             "Megállítod a nyomtatást?"
-    #define STRING_IS_PAUSE               "A művelet tiltva van a nyomtatás alatt.\nSzünetelteted a nyomtatást?"
-    #define STRING_M0_PAUSE               "Szünetelés M0 parancsal"
+    #define STRING_IS_PAUSE               "Nyomtatás idején a művelet tiltott.\nSzünetelteted a nyomtatást?"
+    #define STRING_M0_PAUSE               "Szünetelés M0 paranccsal"
 
     #define STRING_TEST                   "Teszt"
     #define STRING_DEPLOY                 "Bevetés"

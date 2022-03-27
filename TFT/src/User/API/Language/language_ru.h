@@ -2,12 +2,12 @@
 #define _LANGUAGE_RU_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Русский"
     #define STRING_EMULATED_M600          "Эмуляция M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Переворот"
-    #define STRING_LANGUAGE               "Русский"
     #define STRING_ACK_NOTIFICATION       "ACK стиль уведомления"
     #define STRING_FILES_SORT_BY          "Сортировать по"
     #define STRING_FILES_LIST_MODE        "Файлы в режиме строк"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Нагрев в инфостроке"
     #define STRING_TERMINAL_ACK           "ACK терминала (C°)"
     #define STRING_SERIAL_ALWAYS_ON       "Серийный порт Всегда ВКЛЮЧЕН"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Marlin на весь экран"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin тип режима"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Процесс завершён!"
     #define STRING_PROCESS_ABORTED        "Процесс прерван!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD экрана"
-    #define STRING_READ_TFTSD_ERROR       "Ошибка чтения SD карты!"
-    #define STRING_TFTSD_INSERTED         "SD карта вставлена!"
-    #define STRING_TFTSD_REMOVED          "SD карта извлечена!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "Флеш карта"
-    #define STRING_READ_USB_DISK_ERROR    "Ошибка чтения флеш карты!"
-    #define STRING_USB_DISK_INSERTED      "Флеш карта вставлена!"
-    #define STRING_USB_DISK_REMOVED       "Флеш карта извлечена!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "SD платы"
-    #define STRING_ONBOARDUSB             "USB платы"
-    #define STRING_READ_ONBOARDSD_ERROR   "Ошибка чтения SD карты!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD экрана"
+    #define STRING_TFT_SD_READ_ERROR      "Ошибка чтения SD карты!"
+    #define STRING_TFT_SD_INSERTED        "SD карта вставлена!"
+    #define STRING_TFT_SD_REMOVED         "SD карта извлечена!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "Флеш карта"
+    #define STRING_TFT_USB_READ_ERROR     "Ошибка чтения флеш карты!"
+    #define STRING_TFT_USB_INSERTED       "Флеш карта вставлена!"
+    #define STRING_TFT_USB_REMOVED        "Флеш карта извлечена!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "SD платы"
+    #define STRING_ONBOARD_USB            "USB платы"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Ошибка чтения SD карты!"
     #define STRING_FILAMENT_RUNOUT        "Пруток закончился"
 
     // Steppers, Print, Probe Process Commands / Status / Info

@@ -2,12 +2,12 @@
 #define _LANGUAGE_TR_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Türkçe"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Döndür"
-    #define STRING_LANGUAGE               "Türkçe"
     #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Liste Görünümü"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
     #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
     #define STRING_SERIAL_ALWAYS_ON       "Seri Bağ. Sürekli Açık"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Tam Ekran Marlin Modu"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Modu Başlık Desteği"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Proses tamamlandı!"
     #define STRING_PROCESS_ABORTED        "Proses durduruldu!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "SD Kart"
-    #define STRING_READ_TFTSD_ERROR       "SD kart okunamadı!"
-    #define STRING_TFTSD_INSERTED         "SD Kart Takıldı!"
-    #define STRING_TFTSD_REMOVED          "SD Kart Çıkarıldı!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "USB Disk"
-    #define STRING_READ_USB_DISK_ERROR    "USB disk okunamadı!"
-    #define STRING_USB_DISK_INSERTED      "USB Disk Takıldı!"
-    #define STRING_USB_DISK_REMOVED       "USB Disk Çıkarıldı!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "Dahili SD"
-    #define STRING_ONBOARDUSB             "Dahili USB"
-    #define STRING_READ_ONBOARDSD_ERROR   "Dahili SD Okunamadı!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "SD Kart"
+    #define STRING_TFT_SD_READ_ERROR      "SD kart okunamadı!"
+    #define STRING_TFT_SD_INSERTED        "SD Kart Takıldı!"
+    #define STRING_TFT_SD_REMOVED         "SD Kart Çıkarıldı!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "USB Disk"
+    #define STRING_TFT_USB_READ_ERROR     "USB disk okunamadı!"
+    #define STRING_TFT_USB_INSERTED       "USB Disk Takıldı!"
+    #define STRING_TFT_USB_REMOVED        "USB Disk Çıkarıldı!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "Dahili SD"
+    #define STRING_ONBOARD_USB            "Dahili USB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Dahili SD Okunamadı!"
     #define STRING_FILAMENT_RUNOUT        "Filaman Bitti!"
 
     // Steppers, Print, Probe Process Commands / Status / Info

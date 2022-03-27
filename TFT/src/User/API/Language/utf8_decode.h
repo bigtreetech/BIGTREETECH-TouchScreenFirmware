@@ -38,11 +38,10 @@ uint16_t getUTF8Length(const uint8_t *const str);
 uint16_t GUI_StrPixelWidth_str(const uint8_t *str);
 uint16_t GUI_StrPixelWidth_label(int16_t index);
 
-#define GUI_StrPixelWidth(X) _Generic(((X+0)),                             \
-                              const uint8_t*: GUI_StrPixelWidth_str,       \
-                              const uint8_t* const: GUI_StrPixelWidth_str, \
-                              uint8_t*: GUI_StrPixelWidth_str,             \
-                              default: GUI_StrPixelWidth_label)(X)
+#define GUI_StrPixelWidth(X) _Generic(((X+0)), const uint8_t* const: GUI_StrPixelWidth_str, \
+                                                     const uint8_t*: GUI_StrPixelWidth_str, \
+                                                           uint8_t*: GUI_StrPixelWidth_str, \
+                                                            default: GUI_StrPixelWidth_label)(X)
 #ifdef __cplusplus
 }
 #endif

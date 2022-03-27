@@ -2,12 +2,12 @@
 #define _LANGUAGE_GR_H_
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
+    #define STRING_LANGUAGE               "Ελληνικά"
     #define STRING_EMULATED_M600          "Emulated M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"
     #define STRING_FILE_COMMENT_PARSING   "File comment parsing"
     #define STRING_ROTATED_UI             "Περιστροφή UI"
-    #define STRING_LANGUAGE               "Ελληνικά"
     #define STRING_ACK_NOTIFICATION       "ACK notification style"
     #define STRING_FILES_SORT_BY          "Sort files by"
     #define STRING_FILES_LIST_MODE        "Λειτουργία λίστας προβολής αρχείων"
@@ -16,8 +16,6 @@
     #define STRING_PERSISTENT_INFO        "Πληροφορίες μόνιμης κατάστασης"
     #define STRING_TERMINAL_ACK           "Εμφάνιση ACK στο τερματικό"
     #define STRING_SERIAL_ALWAYS_ON       "Serial Always ON"
-    #define STRING_SHOW_BOOTSCREEN        "Show Bootscreen"
-    #define STRING_ALERT_HEATERS_ON       "Alert that heaters are still on" 
     #define STRING_MARLIN_FULLSCREEN      "Λειτουργία Marlin σε πλήρη οθόνη"
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
@@ -164,20 +162,20 @@
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
-    // TFT SD, USB Disk, Onboard SD, Filament Runout Process Commands / Status / Info
-    #define STRING_TFTSD                  "TFT SD"
-    #define STRING_READ_TFTSD_ERROR       "Σφάλμα ανάγνωσης κάρτας SD οθόνης!"
-    #define STRING_TFTSD_INSERTED         "Η κάρτα έχει εισαχθεί!"
-    #define STRING_TFTSD_REMOVED          "Η κάρτα αφαιρέθηκε!"
-    #define STRING_TFTSD_NOT_DETECTED     "No SD Card detected."
-    #define STRING_USB_DISK               "USB Δίσκος"
-    #define STRING_READ_USB_DISK_ERROR    "Σφάλμα ανάγνωσης USB Δίσκου!"
-    #define STRING_USB_DISK_INSERTED      "Ο USB Δίσκος έχει εισαχθεί!"
-    #define STRING_USB_DISK_REMOVED       "Ο USB Δίσκος αφαιρέθηκε!"
-    #define STRING_USB_DISK_NOT_DETECTED  "No USB Disk detected."
-    #define STRING_ONBOARDSD              "Ενσωματωμένη κάρτα SD"
-    #define STRING_ONBOARDUSB             "Ενσωματωμένη κάρτα USB"
-    #define STRING_READ_ONBOARDSD_ERROR   "Σφάλμα ανάγνωσης ενσωματωμένης κάρτας SD!"
+    // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
+    #define STRING_TFT_SD                 "TFT SD"
+    #define STRING_TFT_SD_READ_ERROR      "Σφάλμα ανάγνωσης κάρτας SD οθόνης!"
+    #define STRING_TFT_SD_INSERTED        "Η κάρτα έχει εισαχθεί!"
+    #define STRING_TFT_SD_REMOVED         "Η κάρτα αφαιρέθηκε!"
+    #define STRING_TFT_SD_NOT_DETECTED    "No SD Card detected."
+    #define STRING_TFT_USB                "USB Δίσκος"
+    #define STRING_TFT_USB_READ_ERROR     "Σφάλμα ανάγνωσης USB Δίσκου!"
+    #define STRING_TFT_USB_INSERTED       "Ο USB Δίσκος έχει εισαχθεί!"
+    #define STRING_TFT_USB_REMOVED        "Ο USB Δίσκος αφαιρέθηκε!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB Disk detected."
+    #define STRING_ONBOARD_SD             "Ενσωματωμένη κάρτα SD"
+    #define STRING_ONBOARD_USB            "Ενσωματωμένη κάρτα USB"
+    #define STRING_ONBOARD_SD_READ_ERROR  "Σφάλμα ανάγνωσης ενσωματωμένης κάρτας SD!"
     #define STRING_FILAMENT_RUNOUT        "τελείωσε το νημά!"
 
     // Steppers, Print, Probe Process Commands / Status / Info
