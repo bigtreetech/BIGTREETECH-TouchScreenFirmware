@@ -195,13 +195,14 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
   char tempstrTop[14];
   char tempstrBottom[14];
 
-  lvIcon.iconIndex = printingIcon[icon_pos];
   lvIcon.enabled[2] = false;
 
-  if (icon_pos == ICON_POS_BED && currentBCIndex != 0)
+  if (icon_pos == ICON_POS_BED && currentBCIndex != 0)  // Bed & Chamber
     lvIcon.iconIndex = printingIcon2nd[0];
-  else if (icon_pos == ICON_POS_SPD && currentSpeedID != 0)
+  else if (icon_pos == ICON_POS_SPD && currentSpeedID != 0)  // Speed & Flow
     lvIcon.iconIndex = printingIcon2nd[1];
+  else
+    lvIcon.iconIndex = printingIcon[icon_pos];
 
   if (draw_type & LIVE_INFO_TOP_ROW)
   {
@@ -251,6 +252,10 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
       default:
         break;
     }
+  }
+  else
+  {    
+    lvIcon.enabled[0] = false;
   }
 
   if (draw_type & LIVE_INFO_BOTTOM_ROW)
@@ -307,8 +312,12 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
     }
   }
+  else
+  {    
+    lvIcon.enabled[1] = false;
+  }
 
-  showLiveInfo(icon_pos, &lvIcon, (draw_type & LIVE_INFO_ICON));
+  showLiveInfo(icon_pos, &lvIcon, draw_type & LIVE_INFO_ICON);
 }  // reDrawPrintingValue
 
 static inline void toggleInfo(void)

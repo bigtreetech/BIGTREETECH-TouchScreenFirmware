@@ -148,14 +148,14 @@ typedef struct
 
 typedef struct
 {
-  uint8_t *     text;
-  GUI_POINT     pos;      // relative to icon top left corner
-  uint8_t       h_align;  // left, right or center of pos point
-  uint8_t       v_align;  // left, right or center of pos point
-  uint16_t      fn_color;
-  uint16_t      bk_color;
-  GUI_TEXT_MODE text_mode;
-  uint16_t      font;
+  const uint8_t * text;
+  GUI_POINT       pos;      // relative to icon top left corner
+  uint8_t         h_align;  // left, right or center of pos point
+  uint8_t         v_align;  // top, bottom or center of pos point
+  uint16_t        fn_color;
+  uint16_t        bk_color;
+  GUI_TEXT_MODE   text_mode;
+  uint16_t        font;
 } LIVE_DATA;
 
 typedef struct
