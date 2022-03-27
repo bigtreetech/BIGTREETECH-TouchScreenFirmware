@@ -253,7 +253,12 @@ void setupMachine(FW_TYPE fwType)
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
     return;
   }
-
+  else if (infoMachineSettings.firmwareType == FW_MARLIN)
+  {
+    mustStoreCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
+    mustStoreCmd("M402\n");    // if Marlin version has no BLTouch HS mode report capability the probe will deploy by "M401 H" so it needs to be stowed back
+  }
+  
   mustStoreCmd("M503 S0\n");
 
   if (infoSettings.hotend_count > 0)
