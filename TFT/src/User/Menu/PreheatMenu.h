@@ -16,7 +16,7 @@ typedef enum
   NOZZLE0_PREHEAT = 2,
 } TOOLPREHEAT;
 
-void refreshPreheatIcon(PREHEAT_STORE * preheatStore, int8_t index, const ITEM * menuitem);
+void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redrawIcon);
 void menuPreheat(void);
 
 #ifdef __cplusplus

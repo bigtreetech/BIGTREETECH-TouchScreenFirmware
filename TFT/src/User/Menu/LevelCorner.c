@@ -19,12 +19,12 @@ static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
   uint8_t index = 4;
   GUI_POINT loc;
   LIVE_INFO lvIcon;
-  const ITEM * menuitem = &levelItems->items[valIconIndex[index]];
   char * str = "M48";
 
   loc.x = 5;
   loc.y = ICON_HEIGHT - 5;
 
+  lvIcon.iconIndex = levelItems->items[valIconIndex[index]].icon;
   lvIcon.enabled[0] = true;
   lvIcon.enabled[1] = true;
   lvIcon.enabled[2] = false;
@@ -46,7 +46,7 @@ static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
   lvIcon.lines[0].text = (uint8_t *)str;
   lvIcon.lines[1].text = (uint8_t *)str;
 
-  showLiveInfo(valIconIndex[index], &lvIcon, menuitem);
+  showLiveInfo(valIconIndex[index], &lvIcon, false);
 }
 
 void menuLevelCorner(void)

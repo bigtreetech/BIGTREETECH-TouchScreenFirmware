@@ -436,7 +436,7 @@ void parseACK(void)
         storeCmd("M211\n");    // retrieve the software endstops state
         storeCmd("M115\n");    // as last command to identify the FW type!
         storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
-        storeCmd("M402\n)");   // if Marlin is older than 12.III.2022 BLTouch probe will deploy by "M401 H" so it needs to be stowed back
+        storeCmd("M402\n");    // if Marlin is older than 12.III.2022 BLTouch probe will deploy by "M401 H" so it needs to be stowed back
       }
 
       infoHost.connected = true;
