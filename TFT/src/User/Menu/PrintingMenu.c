@@ -254,7 +254,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     }
   }
   else
-  {    
+  {
     lvIcon.enabled[0] = false;
   }
 
@@ -313,7 +313,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     }
   }
   else
-  {    
+  {
     lvIcon.enabled[1] = false;
   }
 
@@ -397,7 +397,7 @@ static inline void reDrawProgress(uint8_t prevProgress)
 {
   uint8_t nextProgress = getPrintProgress();
 
-  if (nextProgress > prevProgress)
+  if (nextProgress != prevProgress)
   { // we need speed, do not draw anything if progress isn't increased (it cannot decrease)
     reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
 
