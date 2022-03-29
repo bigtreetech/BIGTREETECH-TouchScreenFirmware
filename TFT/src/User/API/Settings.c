@@ -253,7 +253,7 @@ void setupMachine(FW_TYPE fwType)
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
     return;
   }
- 
+
   mustStoreCmd("M503 S0\n");
 
   if (infoSettings.hotend_count > 0)
