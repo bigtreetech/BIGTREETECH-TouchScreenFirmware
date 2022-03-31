@@ -656,6 +656,7 @@ void parseACK(void)
       {
         // NOTE: this block is not reached in case of printing from onboard media because printStart() will call
         //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
+
         char file_name[MAX_PATH_LEN];
         char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 
