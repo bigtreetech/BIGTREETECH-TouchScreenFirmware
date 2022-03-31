@@ -430,11 +430,11 @@ void parseACK(void)
       }
       else if (infoMachineSettings.firmwareType == FW_NOT_DETECTED)  // if never connected to the printer since boot
       {
-        storeCmd("M503\n");    // query detailed printer capabilities
-        storeCmd("M92\n");     // steps/mm of extruder is an important parameter for Smart filament runout
-                               // avoid can't getting this parameter due to disabled M503 in Marlin
-        storeCmd("M211\n");    // retrieve the software endstops state
-        storeCmd("M115\n");    // as last command to identify the FW type!
+        storeCmd("M503\n");  // query detailed printer capabilities
+        storeCmd("M92\n");   // steps/mm of extruder is an important parameter for Smart filament runout
+                             // avoid can't getting this parameter due to disabled M503 in Marlin
+        storeCmd("M211\n");  // retrieve the software endstops state
+        storeCmd("M115\n");  // as last command to identify the FW type!
         storeCmd("M401 H\n");  // check the state of BLTouch HighSpeed mode
         storeCmd("M402\n");    // if Marlin is older than 12.III.2022 BLTouch probe will deploy by "M401 H" so it needs to be stowed back
       }
@@ -443,8 +443,7 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
     }
 
-    // onboard media gcode command response
-
+    // onboard media gcode command response start
     if (requestCommandInfo.inWaitResponse)
     {
       if (ack_seen(requestCommandInfo.startMagic))
@@ -463,7 +462,7 @@ void parseACK(void)
 
         if (requestCommandInfo.stream_handler != NULL)
         {
-          clearRequestCommandInfo(); // unused if the streaming handler is involved
+          clearRequestCommandInfo();  // unused if the streaming handler is involved
           requestCommandInfo.stream_handler(dmaL2Cache);
         }
         else
@@ -482,7 +481,7 @@ void parseACK(void)
     {
       if (requestCommandInfo.stream_handler != NULL)
       {
-        clearRequestCommandInfo(); // unused if the streaming handler is involved
+        clearRequestCommandInfo();  // unused if the streaming handler is involved
         requestCommandInfo.stream_handler(dmaL2Cache);
 
         if (ack_seen(requestCommandInfo.stopMagic))
@@ -655,6 +654,8 @@ void parseACK(void)
       // parse and store M23, select SD file
       else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
+        // NOTE: this block is not reached in case of printing from onboard media because printStart() will call
+        //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
         char file_name[MAX_PATH_LEN];
         char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
 

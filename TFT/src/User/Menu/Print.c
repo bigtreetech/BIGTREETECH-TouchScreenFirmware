@@ -345,7 +345,6 @@ void menuPrintFromSource(void)
   }
 }
 
-
 void menuPrint(void)
 {
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
@@ -440,11 +439,11 @@ void menuPrint(void)
             infoFile.onboardSource = BOARD_USB;
 
           if (key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_SD ||
-              ( infoMachineSettings.multiVolume == ENABLED && key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_USB))
+              (infoMachineSettings.multiVolume == ENABLED && key_num == (KEY_VALUES)PRINT_KEY_ONBOARD_USB))
           {
             list_mode = true;  // force list mode in onboard media
             infoFile.source = FS_ONBOARD_MEDIA;
-            OPEN_MENU(menuPrintFromSource);  // TODO: fix here, onboard media PLR feature
+            OPEN_MENU(menuPrintFromSource);
             goto selectEnd;
           }
         }
