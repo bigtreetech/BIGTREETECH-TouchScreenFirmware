@@ -6,9 +6,9 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "includes.h"
-#include "variants.h"
-#include "ff.h"
+#include <stdint.h>
+#include "variants.h"  // for RAPID_SERIAL_COMM
+#include "main.h"      // for HOST_STATUS
 
 #ifdef RAPID_SERIAL_COMM
   #define RAPID_SERIAL_LOOP() loopBackEnd()

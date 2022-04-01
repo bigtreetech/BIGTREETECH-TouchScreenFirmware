@@ -55,9 +55,9 @@ extern "C" {
 #define MIN_TO_SEC(t) (t * 60)             // minute to seconds
 #define MIN_TO_MS(t)  (SEC_TO_MS(t) * 60)  // minute to milliseconds
 
-#define HOURS(t)   (t / (60 * 60))      // hours completed
-#define MINUTES(t) (t % (60 * 60) / 60) // minutes remaining to next hour
-#define SECONDS(t) (t % 60)             // seconds remaining to next minute
+#define HOURS(t)   (t / (60 * 60))       // hours completed
+#define MINUTES(t) (t % (60 * 60) / 60)  // minutes remaining to next hour
+#define SECONDS(t) (t % 60)              // seconds remaining to next minute
 
 #define strtod stringToDouble  // enable light weight string to double function without exponential support
 
@@ -69,7 +69,7 @@ uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);
 double stringToDouble(char *str, char **endptr);
-void timeToString(char * buf, char *strFormat, uint32_t time);
+void timeToString(char *buf, char *strFormat, uint32_t time);
 
 const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string

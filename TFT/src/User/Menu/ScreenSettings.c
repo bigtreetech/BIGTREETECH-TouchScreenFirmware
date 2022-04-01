@@ -237,12 +237,12 @@ void menuLanguage(void)
   uint16_t curItem = infoSettings.language;
   SETTINGS now = infoSettings;
 
-  char *firstLanguage = (char *)default_pack[LABEL_LANGUAGE]; // get first language name directly from memory
+  char *firstLanguage = (char *)default_pack[LABEL_LANGUAGE];  // get first language name directly from memory
   char secondLanguage[MAX_LANG_LABEL_LENGTH];
 
   W25Qxx_ReadBuffer((uint8_t *)&secondLanguage, getLabelFlashAddr(LABEL_LANGUAGE), MAX_LANG_LABEL_LENGTH);  // read second language name from SPI flash
 
-  //set language name labels
+  // set language name labels
   setDynamicLabel(0, firstLanguage);
   setDynamicLabel(1, secondLanguage);
 
@@ -253,7 +253,7 @@ void menuLanguage(void)
     totalItems[i].titlelabel.index = LABEL_DYNAMIC;
   }
 
-  totalItems[curItem].icon = CHARICON_CHECKED; // check current selected language
+  totalItems[curItem].icon = CHARICON_CHECKED;  // check current selected language
 
   listViewCreate(title, totalItems, COUNT(totalItems), NULL, true, NULL, NULL);
 

@@ -1178,7 +1178,7 @@ void GUI_DrawButton(const BUTTON *button, uint8_t pressed)
   GUI_FillCircle(sx + radius,     ey - radius - 1, radius);
   GUI_FillCircle(ex - radius - 1, ey - radius - 1, radius);
 
-  for (uint16_t i=0; i < lineWidth ;i++)
+  for (uint16_t i = 0; i < lineWidth; i++)
   {
     GUI_HLine(sx + radius, sy + i,      ex - radius);
     GUI_HLine(sx + radius, ey - 1 - i,  ex - radius);

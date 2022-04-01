@@ -254,7 +254,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     }
   }
   else
-  {    
+  {
     lvIcon.enabled[0] = false;
   }
 
@@ -313,7 +313,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     }
   }
   else
-  {    
+  {
     lvIcon.enabled[1] = false;
   }
 

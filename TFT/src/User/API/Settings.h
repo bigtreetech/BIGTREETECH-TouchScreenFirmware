@@ -64,15 +64,6 @@ enum
   sign_count
 };
 
-typedef enum
-{
-  HOST_STATUS_IDLE = 0,
-  HOST_STATUS_PRINTING,
-  HOST_STATUS_RESUMING,
-  HOST_STATUS_PAUSED,
-  HOST_STATUS_PAUSING
-} HOST_STATUS;
-
 // General Settings
 
 typedef enum

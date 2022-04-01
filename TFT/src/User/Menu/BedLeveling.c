@@ -98,14 +98,14 @@ void menuBedLeveling(void)
         #if DELTA_PROBE_TYPE == 0
           OPEN_MENU(menuBedLevelingLayer2);
         #else
-        {
-          #if DELTA_PROBE_TYPE != 2  // if not removable probe
-            ablStart();
-          #else  // if removable probe
-            setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, ablStart, NULL, NULL);
-          #endif
-        } 
+          {
+            #if DELTA_PROBE_TYPE != 2  // if not removable probe
+              ablStart();
+            #else  // if removable probe
+              setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
+              showDialog(DIALOG_TYPE_ALERT, ablStart, NULL, NULL);
+            #endif
+          }
         #endif
         break;
 
