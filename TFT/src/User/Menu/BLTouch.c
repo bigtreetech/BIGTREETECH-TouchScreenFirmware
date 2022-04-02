@@ -27,15 +27,15 @@ void menuBLTouch(void)
       {ICON_BACK,                    LABEL_BACK},
     }
   };
-  
-  if (infoMachineSettings.firmwareType == FW_MARLIN)
-  {
-    mustStoreCmd("M401 H\n");       // check the state of BLTouch HighSpeed mode
-    mustStoreCmd(SERVO_GCODE, 90);  // if Marlin version has no BLTouch HS mode report capability the probe will deploy by "M401 H" so it needs to be stowed back
-  }
 
   KEY_VALUES key_num = KEY_IDLE;
   BLT_HS_MODE hsModeOld = HS_DISABLED;  // just to force icon 5 update in case HS Mode is supported
+
+  if (infoMachineSettings.firmwareType == FW_MARLIN)
+  {
+    mustStoreCmd("M401 H\n");       // get BLTouch HS Mode state (bltHSmode will be updated in parseACK())
+    mustStoreCmd(SERVO_GCODE, 90);  // if "M401 H" is not supported the probe will be deployed so it needs to be stowed back
+  }
 
   menuDrawPage(&BLTouchItems);
 
