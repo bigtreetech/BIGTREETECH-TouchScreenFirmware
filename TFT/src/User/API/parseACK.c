@@ -655,8 +655,11 @@ void parseACK(void)
         // NOTE: this block is not reached in case of printing from onboard media because printStart() will call
         //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
 
+        // parse file name.
+        // Format: "File opened: <file name> Size: <YYYY>" (e.g. "File opened: 1A29A~1.GCO Size: 6974")
+        //
         char file_name[MAX_PATH_LEN];
-        char * end_string = " Size:";  // File opened: 1A29A~1.GCO Size: 6974
+        char * end_string = " Size:";
 
         uint16_t start_index = ack_index;
         uint16_t end_index = ack_continue_seen(end_string) ? (ack_index - strlen(end_string)) : start_index;
@@ -680,10 +683,10 @@ void parseACK(void)
       {
         setPrintResume(HOST_STATUS_PRINTING);
 
-        // parsing printing data
-        // format: SD printing byte <XXXX>/<YYYY> (e.g. SD printing byte 123/12345)
+        // parse file data progress.
+        // Format: "SD printing byte <XXXX>/<YYYY>" (e.g. "SD printing byte 123/12345")
+        //
         setPrintProgress(ack_value(), ack_second_value());
-        //powerFailedCache(position);
       }
       // parse and store M24, printing from (remote) onboard media completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
