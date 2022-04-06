@@ -44,7 +44,7 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 
 #endif
 
-void lcd_display_write_buffer(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit)
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit)
 {
   uint16_t wl = w - limit->x1;
   uint16_t hl = h - limit->y1;
