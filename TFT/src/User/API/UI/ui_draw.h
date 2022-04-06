@@ -51,7 +51,7 @@ typedef struct
 
 //#define getBMPsize(x, y, c) _Generic(((c+0)), uint32_t: _getBMPsizeAddr, uint32_t*: _getBMPsizeAddr, default: _getBMPsizeIndex)(x, y, c)
 
-void lcd_display_write_buffer(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit);
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit);
 
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);

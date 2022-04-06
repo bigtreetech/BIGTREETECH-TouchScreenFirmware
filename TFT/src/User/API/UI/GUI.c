@@ -688,7 +688,7 @@ void GUI_DispOne(int16_t sx, int16_t sy, const CHAR_INFO *pInfo)
       }
     }
 
-    lcd_display_write_buffer(sx, sy, w, h, buf, &limit);
+    lcd_buffer_display(sx, sy, w, h, buf, &limit);
   }
 }
 
