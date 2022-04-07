@@ -301,7 +301,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         else if (layerDisplayType == SHOW_LAYER_NUMBER || layerDisplayType == SHOW_LAYER_BOTH)  // layer number or height & number (both)
           setLayerNumberTxt(tempstrBottom);
         else
-          lvIcon.lines[1].text=  (uint8_t*)("        ");
+          lvIcon.lines[1].text = (uint8_t*)("        ");
         break;
 
       case ICON_POS_SPD:
