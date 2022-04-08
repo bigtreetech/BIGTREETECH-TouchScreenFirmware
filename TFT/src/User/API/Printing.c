@@ -173,11 +173,11 @@ bool updatePrintProgress(void)
 
   if (!infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
   {
-    // in case not printing or a wrong size was set, we consider progress as 100%
-    if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
+    // in case not printing, a wrong size was set or current position at the end of file we consider progress as 100%
+    if (infoPrinting.size <= infoPrinting.cur)
       infoPrinting.progress = 100;
     else
-      infoPrinting.progress = MIN((uint64_t)((infoPrinting.cur - infoPrinting.offset) * 100 / (infoPrinting.size - infoPrinting.offset)), 100);
+      infoPrinting.progress = (uint32_t)((infoPrinting.cur - infoPrinting.offset) * 100ULL / (infoPrinting.size - infoPrinting.offset));
   }
 
   if (infoPrinting.progress != prevProgress)
@@ -813,7 +813,8 @@ void loopPrintFromTFT(void)
     bool comment_parsing = (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1 &&
                             read_char == ';') ? true : false;
 
-    for ( ; ip_cur < ip_size; ip_cur++)  // continue to parse the line (e.g. comment) until command end flag
+    // continue to parse the line (e.g. comment) until command end flag
+    for ( ; ip_cur < ip_size; ip_cur++, infoPrinting.offset++ /*count non-gcode size*/)
     {
       if (f_read(ip_file, &read_char, 1, &br) != FR_OK)
       { // in case of error reading from file, force a print abort
@@ -847,8 +848,6 @@ void loopPrintFromTFT(void)
             comment_parsing = false;
         }
       }
-
-      infoPrinting.offset++;  // count non-gcode size
     }
   }
 
