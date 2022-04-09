@@ -715,11 +715,11 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
   // in case print was completed or printAbort() is aborting the print,
   // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE"
   // in case it is "HOST_STATUS_STOPPING" just to finalize the print abort)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-  {
-    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
-    return;
-  }
+  // if (infoHost.status <= HOST_STATUS_STOPPING)
+  // {
+  //   infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
+  //   return;
+  // }
 
   if (infoPrinting.printing)
   {
@@ -740,8 +740,8 @@ void setPrintResume(HOST_STATUS hostStatus)
 {
   // in case print was completed or printAbort() is aborting the print,
   // nothing to do (infoHost.status must never be changed)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-    return;
+  // if (infoHost.status <= HOST_STATUS_STOPPING)
+  //   return;
 
   // no need to check it is printing when setting the value to "false"
   infoPrinting.pause = false;
