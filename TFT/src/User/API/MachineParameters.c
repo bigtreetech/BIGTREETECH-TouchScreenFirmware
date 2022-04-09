@@ -4,30 +4,30 @@
 #define MAX_ELEMENT_COUNT 10
 
 const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
-  AXIS_INDEX_COUNT,        // Steps/mm (X, Y, Z, E0, E1)
-  3,                       // Filament Diameter (Enable, E0, E1)
-  AXIS_INDEX_COUNT,        // MaxAcceleration (X, Y, Z, E0, E1)
-  AXIS_INDEX_COUNT,        // MaxFeedrate (X, Y, Z, E0, E1)
-  3,                       // Acceleration (Print, Retract, Travel)
-  (AXIS_INDEX_COUNT - 1),  // Jerk (X, Y, Z, E)
-  1,                       // Junction Deviation
-  (AXIS_INDEX_COUNT - 2),  // Home offset (X, Y, Z)
-  4,                       // FW retract (Length, Swap Length, Feedrate, Z lift height)
-  4,                       // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  1,                       // Set auto FW retract
-  (AXIS_INDEX_COUNT - 2),  // Hotend Offset (X, Y, Z)
-  2,                       // ABL State & Z Fade
-  STEPPER_INDEX_COUNT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  4,                       // Delta Configuration
-  3,                       // Delta Tower Angle
-  3,                       // Delta Diagonal Rod Trim
-  3,                       // Delta Endstop Adjustments
-  (AXIS_INDEX_COUNT - 2),  // Probe offset (X, Y, Z)
-  2,                       // Linear Advance (E0, E1)
-  STEPPER_INDEX_COUNT,     // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  STEPPER_INDEX_COUNT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  STEPPER_INDEX_COUNT,     // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-  1                        // MBL offset
+  AXIS_INDEX_COUNT,           // Steps/mm (X, Y, Z, E0, E1)
+  3,                          // Filament Diameter (Enable, E0, E1)
+  AXIS_INDEX_COUNT,           // MaxAcceleration (X, Y, Z, E0, E1)
+  AXIS_INDEX_COUNT,           // MaxFeedrate (X, Y, Z, E0, E1)
+  3,                          // Acceleration (Print, Retract, Travel)
+  (AXIS_INDEX_COUNT - 1),     // Jerk (X, Y, Z, E)
+  1,                          // Junction Deviation
+  (AXIS_INDEX_COUNT - 2),     // Home offset (X, Y, Z)
+  4,                          // FW retract (Length, Swap Length, Feedrate, Z lift height)
+  4,                          // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
+  1,                          // Set auto FW retract
+  (AXIS_INDEX_COUNT - 2),     // Hotend Offset (X, Y, Z)
+  2,                          // ABL State & Z Fade
+  STEPPER_INDEX_COUNT,        // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  4,                          // Delta Configuration
+  3,                          // Delta Tower Angle
+  3,                          // Delta Diagonal Rod Trim
+  3,                          // Delta Endstop Adjustments
+  (AXIS_INDEX_COUNT - 2),     // Probe offset (X, Y, Z)
+  2,                          // Linear Advance (E0, E1)
+  STEPPER_INDEX_COUNT,        // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  STEPPER_INDEX_COUNT,        // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  (STEPPER_INDEX_COUNT - 2),  // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+  1                           // MBL offset
 };
 
 const char * const parameterCode[PARAMETERS_COUNT] = {
