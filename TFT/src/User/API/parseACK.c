@@ -980,9 +980,9 @@ void parseACK(void)
         else if (ack_seen("Z")) i = STEPPER_INDEX_Z;
         else if (ack_seen("E")) i = STEPPER_INDEX_E0;
 
-        if (i < STEPPER_INDEX_E0)  // if "X", "X1", "X2", "Y", "Y1", "Y2", "Z", "Z1" or "Z2"
+        if (i < STEPPER_INDEX_E0)  // if "X", "X1", "X2", "Y", "Y1", "Y2", "Z", "Z1", "Z2", "Z3", "Z4"
         {
-          if (ack_value() > 0)  // if "X"->0, "X1"->0, "X2"->1, "Y"->2, "Y1"->2, "Y2"->3, "Z"->4, "Z1"->4, "Z2"->5
+          if (ack_value() > 0)  // if "X"->0, "X1"->0, "X2"->1, "Y"->2, "Y1"->2, "Y2"->3, "Z"->4, "Z1"->4, "Z2"->5, "Z3"->6, "Z4"->7
             i += ack_value() - 1;
         }
 
