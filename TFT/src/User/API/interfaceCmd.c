@@ -246,7 +246,7 @@ bool sendCmd(bool purge, bool avoidTerminal)
     setCurrentAckSrc(cmd_port_index);
   }
 
-  if (!avoidTerminal)
+  if (!avoidTerminal && MENU_IS(menuTerminal))
   {
     if (purge)
       terminalCache(purgeStr, strlen(purgeStr), cmd_port_index, SRC_TERMINAL_GCODE);
