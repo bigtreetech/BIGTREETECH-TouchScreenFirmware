@@ -28,13 +28,6 @@ static bool updateM27_waiting = false;
 static bool extrusionDuringPause = false;  // flag for extrusion during Print -> Pause
 static float last_E_pos;
 bool filamentRunoutAlarm;
-bool hostActive = false;
-
-// condition callback for loopProcessToCondition()
-bool isHostActive(void)
-{
-  return hostActive;
-}
 
 void setExtrusionDuringPause(bool extruded)
 {
@@ -358,12 +351,12 @@ void printComplete(void)
 
 bool printRemoteStart(const char * filename)
 {
-  infoHost.status = HOST_STATUS_PRINTING;  // always set (even if printing from onboard media)
+  infoHost.status = HOST_STATUS_PRINTING;  // always set first
 
   if (MENU_IS(menuMarlinMode))  // do not process any printing info if Marlin Mode is active
     return false;
 
-  // if printing from TFT media or onboard media, exit (printStart function was called just before)
+  // if printing from TFT media or onboard media, exit
   if (infoPrinting.printing && infoFile.source <= FS_ONBOARD_MEDIA)
     return false;
 
@@ -455,7 +448,10 @@ bool printStart(void)
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
   {
-    //infoHost.status = HOST_STATUS_PRINTING;    // Not so fast! Let Marlin tell that it started printing!
+    // let setPrintResume() (that will be called in parseAck.c by parsing ACK message for M24 or M27)
+    // notify the print as started (infoHost.status set to "HOST_STATUS_PRINTING")
+    infoHost.status = HOST_STATUS_RESUMING;
+
     request_M24(0);                              // start print from onboard media
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
   }
@@ -517,8 +513,6 @@ void printAbort(void)
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      //infoHost.status = HOST_STATUS_IDLE;  // Not so fast! Let Marlin tell that it's done!
-
       // several M108 are sent to Marlin because consecutive blocking operations
       // such as heating bed, extruder may defer processing of M524
       breakAndContinue();
@@ -541,9 +535,13 @@ void printAbort(void)
       setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
       showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-      hostActive = true;
+      // let setPrintPause() (that will be called in parseAck.c by parsing ACK message for M524, M25 or M27)
+      // notify the print as aborted/completed (infoHost.status set to "HOST_STATUS_IDLE") instead of paused
+      infoHost.status = HOST_STATUS_STOPPING;
 
-      loopProcessToCondition(&isHostActive);  // wait for the printer to settle down
+      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
+      loopProcessToCondition(&isHostPrinting);
+
       break;
 
     case FS_REMOTE_HOST:  // nothing to do
@@ -714,9 +712,12 @@ void setPrintAbort(void)
 
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 {
-  if (infoHost.status == HOST_STATUS_IDLE)  // in case print was aborted or completed, nothing to do
+  // in case print was completed or printAbort() is aborting the print,
+  // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE"
+  // in case it is "HOST_STATUS_STOPPING" just to finalize the print abort)
+  if (infoHost.status <= HOST_STATUS_STOPPING)
   {
-    hostActive = false;  // wakeup printAbort() if waiting for print completion
+    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
     return;
   }
 
@@ -737,7 +738,9 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 
 void setPrintResume(HOST_STATUS hostStatus)
 {
-  if (infoHost.status == HOST_STATUS_IDLE)  // in case print was aborted or completed, nothing to do
+  // in case print was completed or printAbort() is aborting the print,
+  // nothing to do (infoHost.status must never be changed)
+  if (infoHost.status <= HOST_STATUS_STOPPING)
     return;
 
   // no need to check it is printing when setting the value to "false"

@@ -106,7 +106,7 @@ void getBMPsize(BMP_INFO *bmp)
 // draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
-  BMP_INFO bmpInfo = {.index = ICON_NULL,.address = address};
+  BMP_INFO bmpInfo = {.index = ICON_NULL, .address = address};
 
   getBMPsize(&bmpInfo);
   lcd_frame_display(sx, sy, bmpInfo.width, bmpInfo.height, bmpInfo.address);

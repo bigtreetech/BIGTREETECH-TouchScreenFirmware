@@ -43,10 +43,8 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE * pdev)
   rcu_periph_clock_enable(RCU_USBFS);
 #else
   #ifdef STM32F10X_CL
-
     RCC_OTGFSCLKConfig(RCC_OTGFSCLKSource_PLLVCO_Div3);
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS, ENABLE);
-
   #else
     #ifdef USE_USB_OTG_FS
       GPIO_InitTypeDef GPIO_InitStructure;
@@ -86,13 +84,13 @@ void USB_OTG_BSP_EnableInterrupt(USB_OTG_CORE_HANDLE * pdev)
   nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
   nvic_irq_enable((uint8_t)USBFS_IRQn, 2U, 0U);
 #else
-    NVIC_InitTypeDef NVIC_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
 
-    NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
+  NVIC_InitStructure.NVIC_IRQChannel = OTG_FS_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
 #endif  // USE_USB_FS
 }
 
