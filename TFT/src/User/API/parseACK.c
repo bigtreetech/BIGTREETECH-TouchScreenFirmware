@@ -265,18 +265,15 @@ bool processKnownEcho(void)
     if (knownEcho[i].notifyType == ECHO_NOTIFY_NONE)
       return isKnown;
 
-    //if (forceIgnore[i] == 0)
-    //{
-      if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
-      {
-        addToast(DIALOG_TYPE_INFO, dmaL2Cache);
-      }
-      else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
-      {
-        BUZZER_PLAY(SOUND_NOTIFY);
-        addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)dmaL2Cache + ack_index, true);
-      }
-    //}
+    if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
+    {
+      addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+    }
+    else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
+    {
+      BUZZER_PLAY(SOUND_NOTIFY);
+      addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)dmaL2Cache + ack_index, true);
+    }
   }
 
   return isKnown;
