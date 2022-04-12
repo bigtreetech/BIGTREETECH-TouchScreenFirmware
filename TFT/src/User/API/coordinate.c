@@ -105,6 +105,11 @@ void coordinateSetAxisActual(AXIS axis, float position)
   curPosition.axis[axis] = position;
 }
 
+void coordinateGetAllActual(COORDINATE *tmp)
+{
+  memcpy(tmp, &curPosition, sizeof(curPosition));
+}
+
 void coordinateQuerySetWait(bool wait)
 {
   coordinateQueryWait = wait;

@@ -9,7 +9,6 @@ bool mblRunning = false;
 static inline void mblStart(void)
 {
   mblRunning = true;
-  mblPoint = 0;
 
   probeHeightEnable();  // temporary disable software endstops and save ABL state
 
@@ -28,6 +27,7 @@ static inline void mblStart(void)
 static inline void mblStop(void)
 {
   mblRunning = false;
+  mblPoint = 0;
 
   if (infoMachineSettings.zProbe == ENABLED)
     probeHeightStop(infoSettings.level_z_raise);  // raise nozzle
@@ -94,35 +94,36 @@ void mblNotifyError(bool isStarted)
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
-void mblDrawHeader(uint8_t *point)
+void mblDraw(COORDINATE *val)
 {
-  char tempstr[20];
+  char tempstr[24], tempstr2[24], tempstr3[24];
 
-  if (point != NULL)
+  if (mblPoint == 0)
   {
-    sprintf(tempstr, "P:%-4d", *point);
-    GUI_SetColor(infoSettings.status_color);
+    sprintf(tempstr, "%-15s", textSelect(LABEL_OFF));
+    sprintf(tempstr2, "%s", "");  // temp string
+
+    GUI_SetColor(infoSettings.reminder_color);
   }
   else
   {
-    sprintf(tempstr, "%-15s", textSelect(LABEL_OFF));
-    GUI_SetColor(infoSettings.reminder_color);
+    sprintf(tempstr, "P:%-4d", mblPoint);
+    sprintf(tempstr2, "X:%.3f Y:%.3f", val->axis[X_AXIS], val->axis[Y_AXIS]);  // temp string
+
+    GUI_SetColor(infoSettings.status_color);
   }
 
+  sprintf(tempstr3, "%-19s", tempstr2);              // X, Y
+  sprintf(tempstr2, "  %.3f  ", val->axis[Z_AXIS]);  // Z
+
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
+  GUI_SetColor(infoSettings.status_color);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr3);
+
   GUI_SetColor(infoSettings.font_color);
   setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) "mm");
-  setFontSize(FONT_SIZE_NORMAL);
-}
-
-void mblDrawValue(float val)
-{
-  char tempstr[20];
-
-  sprintf(tempstr, "  %.2f  ", val);
-  setFontSize(FONT_SIZE_LARGE);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr2);
   setFontSize(FONT_SIZE_NORMAL);
 }
 
@@ -154,10 +155,10 @@ void menuMBL(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  float now, curValue;
+  COORDINATE now, curValue;
   float unit;
 
-  now = curValue = coordinateGetAxisActual(Z_AXIS);
+  coordinateGetAllActual(&now);
 
   INVERT_Z_AXIS_ICONS(&mblItems);
   mblItems.items[KEY_ICON_4] = itemMoveLen[curUnit_index];
@@ -169,13 +170,12 @@ void menuMBL(void)
   }
 
   menuDrawPage(&mblItems);
-  mblDrawHeader(!mblRunning ? NULL : &mblPoint);
-  mblDrawValue(now);
+  mblDraw(&now);
 
   while (MENU_IS(menuMBL))
   {
     unit = moveLenSteps[curUnit_index];
-    curValue = coordinateGetAxisActual(Z_AXIS);
+    coordinateGetAllActual(&curValue);
     key_num = menuKeyGetValue();
 
     switch (key_num)
@@ -219,7 +219,7 @@ void menuMBL(void)
         if (!mblRunning)
           mblNotifyError(false);
         else
-          probeHeightMove(curValue, -1);
+          probeHeightMove(curValue.axis[Z_AXIS], -1);
         break;
 
       // start MBL or move to next mesh point
@@ -234,7 +234,6 @@ void menuMBL(void)
           menuDrawItem(&mblItems.items[key_num], key_num);
 
           ++mblPoint;
-          mblDrawHeader(&mblPoint);
         }
         else
         {
@@ -245,7 +244,6 @@ void menuMBL(void)
           #endif
 
           ++mblPoint;
-          mblDrawHeader(&mblPoint);
         }
         break;
 
@@ -260,10 +258,10 @@ void menuMBL(void)
         break;
     }
 
-    if (now != curValue)
+    if (memcmp(&now, &curValue, sizeof(COORDINATE)))
     {
-      now = curValue;
-      mblDrawValue(now);
+      coordinateGetAllActual(&now);
+      mblDraw(&now);
     }
 
     probeHeightQueryCoord();
