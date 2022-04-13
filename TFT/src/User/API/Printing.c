@@ -712,19 +712,19 @@ void setPrintAbort(void)
 
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 {
-  // in case print was completed or printAbort() is aborting the print,
-  // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE"
-  // in case it is "HOST_STATUS_STOPPING" just to finalize the print abort)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-  {
-    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
-    return;
-  }
-
   if (infoPrinting.printing)
   {
     infoPrinting.pause = true;
     infoPrinting.pauseType = pauseType;
+  }
+
+  // in case host is not printing, print was completed or printAbort() is aborting the print,
+  // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE" in case it is
+  // "HOST_STATUS_STOPPING" just to finalize the print abort)
+  if (infoHost.status <= HOST_STATUS_STOPPING)
+  {
+    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
+    return;
   }
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
@@ -738,13 +738,13 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
 
 void setPrintResume(HOST_STATUS hostStatus)
 {
-  // in case print was completed or printAbort() is aborting the print,
+  // no need to check it is printing when setting the value to "false"
+  infoPrinting.pause = false;
+
+  // in case host is not printing, print was completed or printAbort() is aborting the print,
   // nothing to do (infoHost.status must never be changed)
   if (infoHost.status <= HOST_STATUS_STOPPING)
     return;
-
-  // no need to check it is printing when setting the value to "false"
-  infoPrinting.pause = false;
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
   // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to
