@@ -12,7 +12,6 @@ typedef struct
   uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
   uint16_t   layerNumber;
   uint16_t   layerCount;
-  uint8_t    prevProgress;
   uint8_t    progress;
   bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
   bool       runout;              // 1: runout in printing, 0: idle
@@ -167,27 +166,16 @@ void setPrintProgressPercentage(uint8_t percentage)
   infoPrinting.progress = percentage;
 }
 
-bool updatePrintProgress(void)
+void updatePrintProgress(void)
 {
-  uint8_t prevProgress = infoPrinting.prevProgress;
+  if (infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
+    return;
 
-  if (!infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
-  {
-    // in case not printing or a wrong size was set, we consider progress as 100%
-    if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
-      infoPrinting.progress = 100;
-    else
-      infoPrinting.progress = MIN((uint64_t)((infoPrinting.cur - infoPrinting.offset) * 100 / (infoPrinting.size - infoPrinting.offset)), 100);
-  }
-
-  if (infoPrinting.progress != prevProgress)
-  {
-    infoPrinting.prevProgress = infoPrinting.progress;
-
-    return true;
-  }
-
-  return false;
+  // in case not printing or a wrong size was set, we consider progress as 100%
+  if (infoPrinting.size == 0)  // avoid a division for 0 (a crash) and set progress to 100%
+    infoPrinting.progress = 100;
+  else
+    infoPrinting.progress = MIN((uint32_t)((infoPrinting.cur - infoPrinting.offset) * 100 / (infoPrinting.size - infoPrinting.offset)), 100);
 }
 
 uint8_t getPrintProgress(void)

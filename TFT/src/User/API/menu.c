@@ -802,7 +802,11 @@ void menuSetTitle(const LABEL *title)
 
 void menuDrawTitle(void)
 {
-  if (menuType == MENU_TYPE_FULLSCREEN)
+  if (menuType == MENU_TYPE_DIALOG)
+  {
+    return;
+  }
+  else if (menuType == MENU_TYPE_FULLSCREEN)
   {
     if (curMenuRedrawHandle != NULL)
       curMenuRedrawHandle();
