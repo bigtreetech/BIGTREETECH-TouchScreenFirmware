@@ -317,6 +317,7 @@ static inline void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
     lvIcon.enabled[1] = false;
   }
 
+  RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
   showLiveInfo(icon_pos, &lvIcon, draw_type & LIVE_INFO_ICON);
 }  // reDrawPrintingValue
 
@@ -327,19 +328,16 @@ static inline void toggleInfo(void)
     if (infoSettings.hotend_count > 1)
     {
       currentTool = (currentTool + 1) % infoSettings.hotend_count;
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_EXT, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
 
     if (infoSettings.chamber_en == 1)
     {
       currentBCIndex = (currentBCIndex + 1) % 2;
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_BED, LIVE_INFO_ICON | LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
     else
     {
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_BED, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
 
@@ -350,12 +348,10 @@ static inline void toggleInfo(void)
         currentFan = (currentFan + 1) % MAX_COOLING_FAN_COUNT;
       } while (!fanIsValid(currentFan));
 
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
 
     currentSpeedID = (currentSpeedID + 1) % 2;
-    RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
     reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_ICON | LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
 
     speedQuery();
@@ -395,17 +391,10 @@ static inline void reDrawProgressBar(uint8_t prevProgress, uint8_t nextProgress,
 
 static inline void reDrawProgress(uint8_t prevProgress)
 {
-  uint8_t nextProgress = getPrintProgress();
+  reDrawProgressBar(prevProgress, getPrintProgress(), PB_FILL, PB_STRIPE_ELAPSED);
 
-  if (nextProgress > prevProgress)
-  { // we need speed, do not draw anything if progress isn't increased (it cannot decrease)
-    reDrawProgressBar(prevProgress, nextProgress, PB_FILL, PB_STRIPE_ELAPSED);
-
-    if (progDisplayType != ELAPSED_REMAINING)
-    {
-      reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_TOP_ROW);
-    }
-  }
+  if (progDisplayType != ELAPSED_REMAINING)
+    reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_TOP_ROW);
 }
 
 static inline void drawLiveInfo(void)
@@ -418,9 +407,9 @@ static inline void drawLiveInfo(void)
   // progress
   GUI_SetColor(PB_BORDER);
   GUI_DrawRect(progressBar.x0 - 1, progressBar.y0 - 1, progressBar.x1 + 1, progressBar.y1 + 1);  // draw progress bar border
-  GUI_RestoreColorDefault();
   reDrawProgressBar(0, 100, PB_BCKG, PB_STRIPE_REMAINING);  // draw progress bar
   reDrawProgress(0);  // draw progress
+  GUI_RestoreColorDefault();
 }
 
 void drawPrintInfo(void)
@@ -551,7 +540,6 @@ void menuPrinting(void)
     {
       nowHeat.T[currentTool].current = heatGetCurrentTemp(currentTool);
       nowHeat.T[currentTool].target = heatGetTargetTemp(currentTool);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_EXT, LIVE_INFO_BOTTOM_ROW);
     }
 
@@ -560,7 +548,6 @@ void menuPrinting(void)
     {
       nowHeat.T[BED].current = heatGetCurrentTemp(BED);
       nowHeat.T[BED].target = heatGetTargetTemp(BED);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_BED, LIVE_INFO_BOTTOM_ROW);
     }
 
@@ -568,45 +555,36 @@ void menuPrinting(void)
     if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
     {
       nowFan[currentFan] = fanGetCurSpeed(currentFan);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
     }
 
     // check printing progress
+    updatePrintProgress();
+
     if (getPrintSize() != 0)
     {
       // check print time change
       if (time != getPrintTime())
       {
         time = getPrintTime();
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         if (progDisplayType == ELAPSED_REMAINING)
-        {
           reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
-        }
         else
-        {
           reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_BOTTOM_ROW);
-        }
       }
 
       // check print progress percentage change
-      if (updatePrintProgress())
+      if (oldProgress != getPrintProgress())
       {
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
       }
     }
-    else
-    {
-      if (getPrintProgress() != 100)
-      {
-        reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_BOTTOM_ROW);
-        updatePrintProgress();
-        reDrawProgress(oldProgress);
-        oldProgress = getPrintProgress();
-      }
+    else if (oldProgress != getPrintProgress())
+    { // draw full progress
+      reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_BOTTOM_ROW);
+      reDrawProgress(oldProgress);
+      oldProgress = getPrintProgress();
     }
 
     // Z_AXIS coordinate
@@ -622,7 +600,6 @@ void menuPrinting(void)
         if (layerDrawEnabled == true)
         {
           usedLayerHeight = curLayerHeight;
-          RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
           reDrawPrintingValue(ICON_POS_Z, (layerDisplayType == SHOW_LAYER_BOTH) ? LIVE_INFO_TOP_ROW : LIVE_INFO_BOTTOM_ROW);
         }
         if (ABS(curLayerHeight - prevLayerHeight) < LAYER_DELTA)
@@ -639,7 +616,6 @@ void menuPrinting(void)
       if (curLayerNumber != prevLayerNumber)
       {
         prevLayerNumber = curLayerNumber;
-        RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
         reDrawPrintingValue(ICON_POS_Z, LIVE_INFO_BOTTOM_ROW);
       }
     }
@@ -648,7 +624,6 @@ void menuPrinting(void)
     if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
     {
       curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
-      RAPID_SERIAL_LOOP();  // perform backend printing loop before drawing to avoid printer idling
       reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_BOTTOM_ROW);
     }
 
