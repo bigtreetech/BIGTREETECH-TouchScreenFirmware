@@ -512,12 +512,15 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
-  else  // returned to this menu after a print was done (ex: after a popup)
+  else  // returned to this menu after print was done or aborted
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // Main Screen
     printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // Background
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // Background
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
+    updatePrintProgress();
+    if (getPrintTime() == 0)  // it was reset (ex. by printAbort())
+      setPrintTime(infoPrintSummary.time);
   }
 
   printingItems.title.address = title;
@@ -558,10 +561,7 @@ void menuPrinting(void)
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
     }
 
-    // check printing progress
-    updatePrintProgress();
-
-    if (getPrintSize() != 0)
+    if (lastPrinting == true)
     {
       // check print time change
       if (time != getPrintTime())
@@ -574,17 +574,12 @@ void menuPrinting(void)
       }
 
       // check print progress percentage change
-      if (oldProgress != getPrintProgress())
+      updatePrintProgress();
+      if (oldProgress < getPrintProgress())
       {
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
       }
-    }
-    else if (oldProgress != getPrintProgress())
-    { // draw full progress
-      reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_BOTTOM_ROW);
-      reDrawProgress(oldProgress);
-      oldProgress = getPrintProgress();
     }
 
     // Z_AXIS coordinate

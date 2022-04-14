@@ -81,7 +81,12 @@ uint32_t getPrintExpectedTime(void)
 
 void setPrintTime(uint32_t elapsedTime)
 {
-  if (elapsedTime % 1000 == 0)
+  infoPrinting.time = elapsedTime;
+}
+
+void adjustPrintTime(uint32_t osTime)
+{
+  if (osTime % 1000 == 0)
   {
     if (infoPrinting.printing && !infoPrinting.pause)
     {
