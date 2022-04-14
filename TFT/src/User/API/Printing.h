@@ -70,7 +70,7 @@ uint32_t getPrintCur(void);
 
 void setPrintProgress(float cur, float size);
 void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
-bool updatePrintProgress(void);
+void updatePrintProgress(void);
 uint8_t getPrintProgress(void);
 
 void setPrintRunout(bool runout);
