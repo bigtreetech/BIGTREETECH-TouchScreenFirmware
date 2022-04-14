@@ -707,6 +707,7 @@ void setPrintAbort(void)
 
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
+  setPrintAborted(true);
 }
 
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
