@@ -10,13 +10,14 @@ typedef struct
   uint32_t   expectedTime;        // expected print duration in sec
   uint32_t   time;                // current elapsed time in sec
   uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
-  uint16_t   layerNumber;
-  uint16_t   layerCount;
-  uint8_t    progress;
+  uint16_t   layerNumber;         // current printing layer number
+  uint16_t   layerCount;          // total number of layers
+  uint8_t    progress;            // printing progress in percentage (0% - 100%)
   bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
   bool       runout;              // 1: runout in printing, 0: idle
   bool       printing;            // 1: means printing, 0: means idle
   bool       pause;               // 1: means paused
+  bool       aborted;             // 1: means aborted
   PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
@@ -77,11 +78,6 @@ void setPrintExpectedTime(uint32_t expectedTime)
 uint32_t getPrintExpectedTime(void)
 {
   return infoPrinting.expectedTime;
-}
-
-void setPrintTime(uint32_t elapsedTime)
-{
-  infoPrinting.time = elapsedTime;
 }
 
 void adjustPrintTime(uint32_t osTime)
@@ -198,6 +194,16 @@ bool getPrintRunout(void)
   return infoPrinting.runout;
 }
 
+void setPrintAborted(bool aborted)
+{
+  infoPrinting.aborted = aborted;
+}
+
+bool getPrintAborted(void)
+{
+  return infoPrinting.aborted;
+}
+
 // Shut down menu, when the hotend temperature is higher than "AUTO_SHUT_DOWN_MAXTEMP"
 // wait for cool down, in the meantime, you can shut down by force
 void shutdown(void)
@@ -308,7 +314,6 @@ void updatePrintUsedFilament(void)
 void clearInfoPrint(void)
 {
   memset(&infoPrinting, 0, sizeof(PRINTING));
-  exitFolder();
 }
 
 void printComplete(void)
@@ -354,7 +359,7 @@ bool printRemoteStart(const char * filename)
     return false;
 
   // always clean infoPrinting first and then set the needed attributes
-  memset(&infoPrinting, 0, sizeof(PRINTING));
+  clearInfoPrint();
 
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.size = 1;  // .size must be different than .cur to avoid 100% progress on TFT
@@ -385,7 +390,7 @@ bool printRemoteStart(const char * filename)
 bool printStart(void)
 {
   // always clean infoPrinting first and then set the needed attributes
-  memset(&infoPrinting, 0, sizeof(PRINTING));
+  clearInfoPrint();
 
   switch (infoFile.source)
   {
@@ -546,7 +551,8 @@ void printAbort(void)
     sendPrintCodes(2);
 
   printComplete();
-  clearInfoPrint();  // finally clear infoPrinting and move to current folder (instead of file)
+  exitFolder();  // move to current folder (instead of file)
+  setPrintAborted(true);
 
   loopDetected = false;
 }

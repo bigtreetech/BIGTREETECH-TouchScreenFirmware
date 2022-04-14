@@ -425,7 +425,7 @@ void drawPrintInfo(void)
                           rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                           rect_of_keySS[KEY_INFOBOX].x1 - STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
-                          (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
+                          (uint8_t *)textSelect((getPrintAborted() == true) ? LABEL_PROCESS_ABORTED : LABEL_PRINT_FINISHED));
 
   GUI_SetColor(INFOMSG_FONT_COLOR);
   GUI_SetBkColor(INFOMSG_BG_COLOR);
@@ -436,7 +436,6 @@ void drawPrintInfo(void)
 void stopConfirm(void)
 {
   printAbort();
-  CLOSE_MENU();
 }
 
 void printSummaryPopup(void)
@@ -446,7 +445,12 @@ void printSummaryPopup(void)
 
   timeToString(showInfo, (char*)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 
-  if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
+  if (getPrintAborted() == true)
+  {
+    sprintf(tempstr, "\n\n%s", (char *)textSelect(LABEL_PROCESS_ABORTED));
+    strcat(showInfo, tempstr);
+  }
+  else if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
   {
     strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
@@ -519,8 +523,6 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // Background
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
     updatePrintProgress();
-    if (getPrintTime() == 0)  // it was reset (ex. by printAbort())
-      setPrintTime(infoPrintSummary.time);
   }
 
   printingItems.title.address = title;
@@ -699,7 +701,6 @@ void menuPrinting(void)
         }
         else
         { // Main button
-          clearInfoPrint();
           clearInfoFile();
           infoMenu.cur = 0;
         }
@@ -715,7 +716,7 @@ void menuPrinting(void)
 
       case PS_KEY_9:
         if (lastPrinting == true)  // if printing
-        {
+        { // Stop button
           if (isRemoteHostPrinting())
           {
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
@@ -727,8 +728,8 @@ void menuPrinting(void)
           }
         }
         else
-        {
-          clearInfoPrint();
+        { // Back button
+          exitFolder();
           CLOSE_MENU();
         }
         break;
