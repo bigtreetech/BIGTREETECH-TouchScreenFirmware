@@ -729,7 +729,6 @@ void menuPrinting(void)
         }
         else
         { // Back button
-          exitFolder();
           CLOSE_MENU();
         }
         break;

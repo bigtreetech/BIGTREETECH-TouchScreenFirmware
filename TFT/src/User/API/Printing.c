@@ -328,11 +328,13 @@ void printComplete(void)
     case FS_TFT_SD:
     case FS_TFT_USB:
       f_close(&infoPrinting.file);
+      exitFolder();  // move to current folder (instead of file)
       powerFailedClose();   // close PLR file
       powerFailedDelete();  // delete PLR file
       break;
 
     case FS_ONBOARD_MEDIA:
+      exitFolder();  // move to current folder (instead of file)
     case FS_ONBOARD_MEDIA_REMOTE:
       infoHost.status = HOST_STATUS_IDLE;
       request_M27(0);
@@ -551,7 +553,6 @@ void printAbort(void)
     sendPrintCodes(2);
 
   printComplete();
-  exitFolder();  // move to current folder (instead of file)
   setPrintAborted(true);
 
   loopDetected = false;
