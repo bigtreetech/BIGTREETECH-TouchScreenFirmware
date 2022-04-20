@@ -540,9 +540,6 @@ static inline void saveGcodeTerminalCache(const char * str, uint16_t strLen)
 
 void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX portIndex, TERMINAL_SRC src)
 {
-  if (MENU_IS_NOT(menuTerminal))
-    return;
-
   char * srcId[SRC_TERMINAL_COUNT] = {"\5", "\6"};
 
   // copy string source identifier

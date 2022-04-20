@@ -535,12 +535,18 @@ void parseACK(void)
       if (ack_cmp("ok"))  // if "ok N10 P15 B3\n", "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n" etc...
         infoHost.wait = false;
 
+      // suppress "wait" from terminal
+      if (ack_cmp("wait"))
+      {
+        avoid_terminal = !infoSettings.terminal_ack;
+      }
+
       //----------------------------------------
       // Pushed / polled / on printing parsed responses
       //----------------------------------------
 
       // parse and store temperatures
-      if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
+      else if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value() + 0.5f);
 
@@ -1186,7 +1192,7 @@ void parseACK(void)
     }
 
   parse_end:
-    if (avoid_terminal != true)
+    if (avoid_terminal != true && MENU_IS(menuTerminal))
     {
       terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, SRC_TERMINAL_ACK);
     }
