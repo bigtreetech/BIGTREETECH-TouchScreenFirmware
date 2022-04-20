@@ -29,15 +29,17 @@ void zOffsetDraw(bool status, float val)
   {
     sprintf(tempstr, "%-15s", textSelect(itemToggle[status].index));
     sprintf(tempstr3, "%-15s", "");
-    GUI_SetColor(infoSettings.reminder_color);
     sprintf(tempstr2, "  %.2f  ", val);
+
+    GUI_SetColor(infoSettings.reminder_color);
   }
   else
   {
     sprintf(tempstr, "ZO:%.2f  ", val);
     sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
-    GUI_SetColor(infoSettings.status_color);
     sprintf(tempstr2, "  %.2f  ", val + infoSettings.level_z_pos);
+
+    GUI_SetColor(infoSettings.status_color);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
