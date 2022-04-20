@@ -551,6 +551,7 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial po
 | **pause**                   | `M118 A1 P0 action:pause`                                                                                                                                                                                   |
 | **resume**                  | `M118 A1 P0 action:resume`                                                                                                                                                                                  |
 | **time remaining progress** | `M118 A1 P0 action:notification Time Left <XX>h<YY>m<ZZ>s`<br>or<br>`M117 Time Left <XX>h<YY>m<ZZ>s`<br><br>Examples:<br>`M118 A1 P0 action:notification Time Left 02h04m06s`<br>`M117 Time Left 02h04m06s` |
+| **print layer progress**    | `M118 A1 P0 action:notification Layer Left <XXXX>/<YYYY>`<br>or<br>`M117 Layer Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Layer Left 51/940`<br>`M117 Layer Left 51/940`       |
 | **file data progress**      | `M118 A1 P0 action:notification Data Left <XXXX>/<YYYY>`<br>or<br>`M117 Data Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Data Left 123/12345`<br>`M117 Data Left 123/12345`     |
 
 When the trigger `print_start` is received, the TFT switches to **Printing** menu.
@@ -558,7 +559,9 @@ Once on Printing menu, the **pause**, **resume** and **stop** buttons on the men
 That means, only the remote host will control the print.
 Only on print end or cancel (with triggers `print_end` or `cancel`) the TFT Printing menu is finalized (statistics available etc.) and unlocked (the menu can be closed).
 
-**NOTE:** A new plugin on OctoPrint implementing the above protocol should be the preferable way (available to everyone).
+**NOTES:**
+- A new plugin on OctoPrint implementing the above protocol should be the preferable way (available to everyone)
+- With the exception of TFT70, the maximum number of displayable layer count is 999 (there's no space to display layer number and count if the layer count is above 999)
 
 ### Adding Gcode Thumbnails
 

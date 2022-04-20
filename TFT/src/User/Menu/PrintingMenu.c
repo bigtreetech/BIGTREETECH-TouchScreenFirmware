@@ -425,7 +425,7 @@ void drawPrintInfo(void)
                           rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                           rect_of_keySS[KEY_INFOBOX].x1 - STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
-                          (uint8_t *)textSelect(LABEL_PRINT_FINISHED));
+                          (uint8_t *)textSelect((getPrintAborted() == true) ? LABEL_PROCESS_ABORTED : LABEL_PRINT_FINISHED));
 
   GUI_SetColor(INFOMSG_FONT_COLOR);
   GUI_SetBkColor(INFOMSG_BG_COLOR);
@@ -436,7 +436,6 @@ void drawPrintInfo(void)
 void stopConfirm(void)
 {
   printAbort();
-  CLOSE_MENU();
 }
 
 void printSummaryPopup(void)
@@ -446,7 +445,12 @@ void printSummaryPopup(void)
 
   timeToString(showInfo, (char*)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 
-  if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
+  if (getPrintAborted() == true)
+  {
+    sprintf(tempstr, "\n\n%s", (char *)textSelect(LABEL_PROCESS_ABORTED));
+    strcat(showInfo, tempstr);
+  }
+  else if (infoPrintSummary.length + infoPrintSummary.weight + infoPrintSummary.cost == 0)  // all  equals 0
   {
     strcat(showInfo, (char *)textSelect(LABEL_NO_FILAMENT_STATS));
   }
@@ -512,12 +516,13 @@ void menuPrinting(void)
     printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
-  else  // returned to this menu after a print was done (ex: after a popup)
+  else  // returned to this menu after print was done or aborted
   {
     printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // Main Screen
     printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // Background
     printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // Background
     printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
+    updatePrintProgress();
   }
 
   printingItems.title.address = title;
@@ -558,10 +563,7 @@ void menuPrinting(void)
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
     }
 
-    // check printing progress
-    updatePrintProgress();
-
-    if (getPrintSize() != 0)
+    if (lastPrinting == true)
     {
       // check print time change
       if (time != getPrintTime())
@@ -574,17 +576,12 @@ void menuPrinting(void)
       }
 
       // check print progress percentage change
-      if (oldProgress != getPrintProgress())
+      updatePrintProgress();
+      if (oldProgress < getPrintProgress())
       {
         reDrawProgress(oldProgress);
         oldProgress = getPrintProgress();
       }
-    }
-    else if (oldProgress != getPrintProgress())
-    { // draw full progress
-      reDrawPrintingValue(ICON_POS_TIM, LIVE_INFO_BOTTOM_ROW);
-      reDrawProgress(oldProgress);
-      oldProgress = getPrintProgress();
     }
 
     // Z_AXIS coordinate
@@ -704,7 +701,6 @@ void menuPrinting(void)
         }
         else
         { // Main button
-          clearInfoPrint();
           clearInfoFile();
           infoMenu.cur = 0;
         }
@@ -720,7 +716,7 @@ void menuPrinting(void)
 
       case PS_KEY_9:
         if (lastPrinting == true)  // if printing
-        {
+        { // Stop button
           if (isRemoteHostPrinting())
           {
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
@@ -732,8 +728,7 @@ void menuPrinting(void)
           }
         }
         else
-        {
-          clearInfoPrint();
+        { // Back button
           CLOSE_MENU();
         }
         break;
