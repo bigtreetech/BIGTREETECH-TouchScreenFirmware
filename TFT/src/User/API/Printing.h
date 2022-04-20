@@ -52,7 +52,7 @@ void resumeAndContinue(void);
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);
 
-void setPrintTime(uint32_t elapsedTime);
+void adjustPrintTime(uint32_t osTime);
 uint32_t getPrintTime(void);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
@@ -75,6 +75,8 @@ uint8_t getPrintProgress(void);
 
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);
+
+bool getPrintAborted(void);
 
 //
 // commented because NOT externally invoked
