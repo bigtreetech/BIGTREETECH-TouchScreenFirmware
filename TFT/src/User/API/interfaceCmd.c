@@ -1205,6 +1205,9 @@ void sendQueueCmd(void)
 
           uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
 
+          if (i > 0)  // "X1"->0, "X2"->1, "Y1"->0, "Y2"->1, "Z1"->0, "Z2"->1, "Z3"->2, "Z4"->3
+            i--;
+
           if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
           if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + i, cmd_value());
           if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + i, cmd_value());
