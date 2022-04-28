@@ -15,22 +15,23 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
   // if invert is true, 'direction' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], (GET_BIT(infoSettings.inverted_axis, xyz) ? -direction : direction) * moveLenSteps[item_moveLen_index],
            ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
-  // update now axis be selected
-  nowAxis = xyz;
+
+  nowAxis = xyz;  // update now axis be selected
 }
 
-#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis) do{ \
-                                                            moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
-                                                            moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
-                                                         }while(0)
+#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis) do { \
+                                                         moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
+                                                         moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
+                                                       } while(0)
 
 void drawXYZ(void)
 {
   char tempstr[30];
+
   GUI_SetColor(infoSettings.status_color);
 
   #ifdef PORTRAIT_MODE
-    sprintf(tempstr, "X:%.2f  Y:%.2f  Z:%2.f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
+    sprintf(tempstr, "X:%.2f Y:%.2f Z:%.2f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
             coordinateGetAxisActual(Z_AXIS));
     GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
   #else
@@ -90,26 +91,27 @@ void menuMove(void)
   mustStoreCmd("G91\n");
   mustStoreCmd("M114\n");
 
-  // postion table of key
+  // keys position table
   uint8_t table[TOTAL_AXIS][2] =
-  #ifdef ALTERNATIVE_MOVE_MENU
-    /*-------*-------*-------*---------*
-     | Z-(0) | Y+(1) | Z+(2) | unit(3) |
-     *-------*-------*-------*---------*
-     | X-(4) | Y-(5) | X+(6) | back(7) |
-     *-------*-------*-------*---------*/
-    //X+ X-   Y+ Y-   Z+ Z-
-    {{6, 4}, {1, 5}, {2, 0}}
-  #else
-    /*-------*-------*-------*---------*
-     | X+(0) | Y+(1) | Z+(2) | unit(3) |
-     *-------*-------*-------*---------*
-     | X-(4) | Y-(5) | Z-(6) | back(7) |
-     *-------*-------*-------*---------*/
-    //X+ X-   Y+ Y-   Z+ Z-
-    {{0, 4}, {1, 5}, {2, 6}}
-  #endif
+    #ifdef ALTERNATIVE_MOVE_MENU
+      /*-------*-------*-------*---------*
+       | Z-(0) | Y+(1) | Z+(2) | unit(3) |
+       *-------*-------*-------*---------*
+       | X-(4) | Y-(5) | X+(6) | back(7) |
+       *-------*-------*-------*---------*
+       |X+ X-  |Y+ Y-  |Z+ Z-            */
+      {{6, 4}, {1, 5}, {2, 0}}
+    #else
+      /*-------*-------*-------*---------*
+       | X+(0) | Y+(1) | Z+(2) | unit(3) |
+       *-------*-------*-------*---------*
+       | X-(4) | Y-(5) | Z-(6) | back(7) |
+       *-------*-------*-------*---------*
+       |X+ X-  |Y+ Y-  |Z+ Z-            */
+      {{0, 4}, {1, 5}, {2, 6}}
+    #endif
     ;
+
   if (!GET_BIT(infoSettings.inverted_axis, X_AXIS))
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], INC, table[X_AXIS][1], DEC, X);  // table[0] <--> INC(+) table[1] <--> DEC(+) if not inverted
   else
