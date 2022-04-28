@@ -78,7 +78,7 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 void drawStatus(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
-  char tempstr[10];
+  char tempstr[45];
 
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
@@ -185,8 +185,8 @@ void drawStatus(void)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
   GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
-  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
-          coordinateGetAxisActual(Z_AXIS));
+
+  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
 
   GUI_RestoreColorDefault();
