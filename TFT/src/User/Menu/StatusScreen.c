@@ -15,7 +15,7 @@
 #define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
-  #define XYZ_STATUS " X: %.2f  Y: %.2f  Z: %.2f "
+  #define XYZ_STATUS " X:%.2f Y:%.2f Z:%.2f "
 #else
   #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
 #endif
