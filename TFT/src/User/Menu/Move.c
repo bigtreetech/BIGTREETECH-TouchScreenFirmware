@@ -26,7 +26,7 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
 
 void drawXYZ(void)
 {
-  char tempstr[20];
+  char tempstr[30];
   GUI_SetColor(infoSettings.status_color);
 
   #ifdef PORTRAIT_MODE
