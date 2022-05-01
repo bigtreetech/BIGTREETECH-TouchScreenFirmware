@@ -185,11 +185,11 @@ void drawStatus(void)
   sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), coordinateGetAxisActual(Z_AXIS));
 
   #ifdef PORTRAIT_MODE
-    int padding_width = ((RecGantry.x1 - RecGantry.x0) - (strlen(tempstr) * BYTE_WIDTH)) / 2;
+    int paddingWidth = ((RecGantry.x1 - RecGantry.x0) - (strlen(tempstr) * BYTE_WIDTH)) / 2;
 
     GUI_SetColor(GANTRY_XYZ_BG_COLOR);
-    GUI_FillRect(RecGantry.x0, RecGantry.y0, RecGantry.x0 + padding_width, RecGantry.y1);
-    GUI_FillRect(RecGantry.x1 - padding_width, RecGantry.y0, RecGantry.x1, RecGantry.y1);
+    GUI_FillRect(RecGantry.x0, RecGantry.y0, RecGantry.x0 + paddingWidth, RecGantry.y1);
+    GUI_FillRect(RecGantry.x1 - paddingWidth, RecGantry.y0, RecGantry.x1, RecGantry.y1);
   #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
