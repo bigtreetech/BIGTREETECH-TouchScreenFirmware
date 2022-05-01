@@ -1,10 +1,20 @@
 #include "Move.h"
 #include "includes.h"
 
+#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis) do { \
+                                                         moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
+                                                         moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
+                                                       } while(0)
 #define X_MOVE_GCODE "G1 X%.2f F%d\n"
 #define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
 #define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
 #define GANTRY_UPDATE_DELAY 500  // 1 seconds is 1000
+
+#ifdef PORTRAIT_MODE
+  #define OFFSET 0
+#else
+  #define OFFSET 1
+#endif
 
 const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
@@ -19,31 +29,20 @@ void storeMoveCmd(AXIS xyz, int8_t direction)
   nowAxis = xyz;  // update now axis be selected
 }
 
-#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis) do { \
-                                                         moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
-                                                         moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
-                                                       } while(0)
-
 void drawXYZ(void)
 {
   char tempstr[30];
 
   GUI_SetColor(infoSettings.status_color);
 
-  #ifdef PORTRAIT_MODE
-    sprintf(tempstr, "X:%.2f Y:%.2f Z:%.2f", coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
-            coordinateGetAxisActual(Z_AXIS));
-    GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-  #else
-    sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-    GUI_DispString(START_X + 1 * SPACE_X + 1 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
+  GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-    sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-    GUI_DispString(START_X + 2 * SPACE_X + 2 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
+  GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
-    sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-    GUI_DispString(START_X + 3 * SPACE_X + 3 * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
-  #endif
+  sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
+  GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (ICON_START_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
 
   GUI_SetColor(infoSettings.font_color);
 }
