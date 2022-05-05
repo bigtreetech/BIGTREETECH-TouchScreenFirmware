@@ -131,7 +131,7 @@ void menuLevelCorner(void)
         infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX,
                                                getLevelEdgeDefault(), infoSettings.level_edge);
 
-        if (infoSettings.level_edge != curLevelEdge && infoSettings.level_edge < getLevelEdgeMin())
+        if (curLevelEdge >= getLevelEdgeMin() && infoSettings.level_edge < getLevelEdgeMin())  // if new value is below min limit
         {
           setDialogText(LABEL_WARNING, LABEL_LEVEL_CORNER_INFO, LABEL_CONFIRM, LABEL_CANCEL);
           showDialog(DIALOG_TYPE_QUESTION, setLevelEdgeMin, NULL, NULL);
