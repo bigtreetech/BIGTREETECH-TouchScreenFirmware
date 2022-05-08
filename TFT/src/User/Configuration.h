@@ -594,7 +594,7 @@
 
 /**
  * Inverted Axes (Manual Leveling, Leveling Corner, Move, Probe Offset)
- * Used by Manual Leveling, Move and Probe Offset menus in order axis matches the actual axis movement.
+ * Used by Manual Leveling, Leveling Corner, Move and Probe Offset menus in order axis matches the actual axis movement.
  *
  * NOTE: The Y axis of different printer (move hotbed or move nozzle) move in different directions.
  *       So Y axis leveling inversion can't follow up inverted_axis[Y_AXIS].
