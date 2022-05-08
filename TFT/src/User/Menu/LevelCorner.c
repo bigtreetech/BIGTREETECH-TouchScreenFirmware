@@ -90,11 +90,11 @@ void menuLevelCorner(void)
   char iconText[LEVELING_POINT_COUNT][15];
   LEVELING_POINT levelingPoint;
 
-  if (coordinateIsKnown() == false)
-    probeHeightHomeAndRaise();  // home and raise nozzle
-
   if (origLevelEdge < 0)  // initialize leveling edge value to be used for leveling corner if not yet initialized (-1)
   {
+    mustStoreCmd(UNLOCK_STEPPER_CMD);  // disarm all steppers just to force initial homing
+    mustStoreCmd(LOCK_STEPPER_CMD);
+
     origLevelEdge = infoSettings.level_edge;          // save leveling edge value to restore after leveling corner completion
     infoSettings.level_edge = getLevelEdgeDefault();  // set leveling edge value for leveling corner
   }
@@ -143,8 +143,7 @@ void menuLevelCorner(void)
 
       case KEY_ICON_3:
         mustStoreCmd("M48\n");
-        mustStoreCmd(ENABLE_STEPPER_CMD);
-        mustStoreCmd(DISABLE_STEPPER_CMD);
+
         drawProbeAccuracyIcon(&levelCornerItems);
         break;
 
@@ -157,13 +156,18 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_6:
-        levelingProbePoint(LEVEL_BOTTOM_LEFT);
-        levelingProbePoint(LEVEL_BOTTOM_RIGHT);
-        levelingProbePoint(LEVEL_TOP_RIGHT);
-        levelingProbePoint(LEVEL_TOP_LEFT);
+        for (int i = LEVEL_BOTTOM_LEFT; i < LEVELING_POINT_COUNT - 1; i++)
+        {
+          levelingProbePoint(i);
+
+          loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+        }
+
         break;
 
       case KEY_ICON_7:
+        mustStoreCmd(UNLOCK_STEPPER_CMD);
+
         infoSettings.level_edge = origLevelEdge;  // restore original leveling edge value
         origLevelEdge = -1;
         CLOSE_MENU();

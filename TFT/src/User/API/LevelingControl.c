@@ -76,6 +76,9 @@ void levelingProbePoint(LEVELING_POINT point)
 
   levelingGetPointCoords(coords);
 
+  if (coordinateIsKnown() == false)
+    probeHeightHomeAndRaise();  // home and raise nozzle
+
   if (infoSettings.touchmi_sensor != 0)
   {
     mustStoreCmd("M401\n");
@@ -86,9 +89,6 @@ void levelingProbePoint(LEVELING_POINT point)
   {
     mustStoreCmd("G30 E1 X%d Y%d\n", coords[point][0], coords[point][1]);  // move to selected point
   }
-
-  mustStoreCmd(ENABLE_STEPPER_CMD);
-  mustStoreCmd(DISABLE_STEPPER_CMD);
 
   probedPoint = LEVEL_NO_POINT;  // reset probedPoint before waiting for new probed Z
 }

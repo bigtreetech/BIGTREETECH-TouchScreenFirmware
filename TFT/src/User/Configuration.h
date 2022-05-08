@@ -564,7 +564,7 @@
  * Inset distance from bed edges. This distance is added to minimum X & Y bed coordinates and
  * subtracted from maximum X & Y bed coordinates to calculate manual leveling points.
  * For Leveling Corner, the default distance is the maximum between this setting value and
- * the probe offset X/Y values configured in Marlin firmware.
+ * the rounded probe offset X/Y values configured in Marlin firmware.
  *   Unit: [distance in mm]
  *   Value range: [min: 0, max: 2000]
  *
