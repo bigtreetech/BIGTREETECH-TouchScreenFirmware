@@ -9,12 +9,15 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   {
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, LABEL_BABYSTEP);
 
-    if (infoMachineSettings.zProbe == ENABLED)
-      GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_PROBE_OFFSET);
-    else if (infoMachineSettings.leveling == BL_MBL)
-      GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_MBL);
-    else
-      GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_HOME_OFFSET);
+    if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    {
+      if (infoMachineSettings.zProbe == ENABLED)
+        GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_PROBE_OFFSET);
+      else if (infoMachineSettings.leveling == BL_MBL)
+        GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_MBL);
+      else
+        GUI_DispString(exhibitRect.x0, exhibitRect.y0 + BYTE_HEIGHT + LARGE_BYTE_HEIGHT, LABEL_HOME_OFFSET);
+    }
   }
 
   char tempstr[20];
@@ -25,14 +28,19 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool skip_h
   setFontSize(FONT_SIZE_LARGE);
   sprintf(tempstr, "% 6.2f", babystep);
   GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
-  sprintf(tempstr, "% 6.2f", z_offset);
 
-  if (force_z_offset)
-    GUI_SetColor(infoSettings.reminder_color);
-  else
-    GUI_SetColor(infoSettings.font_color);
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    sprintf(tempstr, "% 6.2f", z_offset);
 
-  GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
+    if (force_z_offset)
+      GUI_SetColor(infoSettings.reminder_color);
+    else
+      GUI_SetColor(infoSettings.font_color);
+
+    GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
+  }
+
   GUI_SetColor(infoSettings.font_color);  // restore default font color
   setFontSize(FONT_SIZE_NORMAL);
 }
@@ -162,10 +170,13 @@ void menuBabystep(void)
       case KEY_ICON_6:
         orig_babystep = babystepResetValue();
 
-        if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
-          orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
-        else  // if HomeOffset
-          orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+        {
+          if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
+            orig_z_offset = offsetSetValue(new_z_offset - babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          else  // if HomeOffset
+            orig_z_offset = offsetSetValue(new_z_offset + babystep);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+        }
         break;
 
       case KEY_ICON_7:
@@ -208,5 +219,6 @@ void menuBabystep(void)
     loopProcess();
   }
 
-  offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    offsetSetValue(new_z_offset);  // set new Z offset. Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
 }
