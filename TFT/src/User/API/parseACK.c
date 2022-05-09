@@ -1208,7 +1208,7 @@ void parseACK(void)
     }
 
   parse_end:
-    if (avoid_terminal != true && MENU_IS(menuTerminal))
+    if (!avoid_terminal && MENU_IS(menuTerminal))
     {
       terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, SRC_TERMINAL_ACK);
     }

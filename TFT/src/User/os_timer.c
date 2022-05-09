@@ -41,7 +41,7 @@ void TIMER6_IRQHandler(void)
 
     os_counter++;
 
-    adjustPrintTime(os_counter);
+    updatePrintTime(os_counter);
 
     loopTouchScreen();
 
@@ -60,7 +60,7 @@ void TIM7_IRQHandler(void)
 
     os_counter++;
 
-    adjustPrintTime(os_counter);
+    updatePrintTime(os_counter);
 
     loopTouchScreen();
 

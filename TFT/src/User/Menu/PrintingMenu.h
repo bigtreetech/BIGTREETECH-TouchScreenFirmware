@@ -7,6 +7,8 @@ extern "C" {
 
 #include <stdbool.h>
 
+extern bool hasFilamentData;
+
 // start print originated or handled by remote host
 // (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
 void startRemotePrint(const char * filename);
@@ -15,10 +17,8 @@ void startRemotePrint(const char * filename);
 // (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
 void startPrint(void);
 
-void menuPrinting(void);
 void printSummaryPopup(void);
-
-extern bool hasFilamentData;
+void menuPrinting(void);
 
 #ifdef __cplusplus
 }

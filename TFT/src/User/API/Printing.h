@@ -52,7 +52,7 @@ void resumeAndContinue(void);
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);
 
-void adjustPrintTime(uint32_t osTime);
+void updatePrintTime(uint32_t osTime);
 uint32_t getPrintTime(void);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
@@ -70,13 +70,11 @@ uint32_t getPrintCur(void);
 
 void setPrintProgress(float cur, float size);
 void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
-void updatePrintProgress(void);
+uint8_t updatePrintProgress(void);
 uint8_t getPrintProgress(void);
 
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);
-
-bool getPrintAborted(void);
 
 //
 // commented because NOT externally invoked
@@ -111,6 +109,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
 bool isPaused(void);
+bool isAborted(void);
 bool isTFTPrinting(void);
 bool isHostPrinting(void);
 bool isRemoteHostPrinting(void);

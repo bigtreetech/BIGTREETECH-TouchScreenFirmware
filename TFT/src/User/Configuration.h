@@ -214,8 +214,8 @@
 #define PERSISTENT_INFO 0  // Default: 0
 
 /**
- * Temperature ACK In Terminal
- * Show temperature ACK in Terminal menu.
+ * Temperature And Wait ACK In Terminal
+ * Show "temperature" and "wait" ACK in Terminal menu.
  *   Options: [disable: 0, enable: 1]
  */
 #define TERMINAL_ACK 0  // Default: 0
@@ -1081,7 +1081,7 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                    // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                                // (X, Y, Z, E0, E1)
 #define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
 
 // Manual Leveling
