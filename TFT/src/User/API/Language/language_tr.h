@@ -297,6 +297,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Yuvayı hafızaya al? (EEPROM a kaydet)"
     #define STRING_ABL_Z                  "Z Etki"
     #define STRING_LEVEL_CORNER           "L corner"
+    #define STRING_LEVEL_CORNER_INFO      "Edge distance is below probe offset X/Y and some target points could be not reachable.\nDo you want to use a safe edge distance?"
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "Mesafe"

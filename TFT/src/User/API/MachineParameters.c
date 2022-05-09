@@ -58,30 +58,30 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
 };
 
 const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n", NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
-  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n", NULL,           NULL,           NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
-  {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Acceleration (Print, Retract, Travel)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Jerk (X, Y, Z, E)
-  {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Junction Deviation
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Home offset (X, Y, Z)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract (Length, Swap Length, Feedrate, Z lift height)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Set auto FW retract
-  {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
-  {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // ABL State & Z Fade
-  {"S%.0f X\n",          "S%.0f I1 X\n",  "S%.0f Y\n",     "S%.0f I1 Y\n", "S%.0f Z\n",  "S%.0f I1 Z\n", "S%.0f I2 Z\n", "S%.0f I3 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",      NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
-  {"A%.2f\n",            "B%.2f\n",       "C%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
-  {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"X%.0f\n",            "I1 X%.0f\n",    "Y%.0f\n",       "I1 Y%.0f\n",   "Z%.0f\n",    "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-  {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,         NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
+  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
+  {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Acceleration (Print, Retract, Travel)
+  {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Jerk (X, Y, Z, E)
+  {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Junction Deviation
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Home offset (X, Y, Z)
+  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract (Length, Swap Length, Feedrate, Z lift height)
+  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
+  {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Set auto FW retract
+  {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
+  {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // ABL State & Z Fade
+  {"S%.0f I0 X\n",       "S%.0f I1 X\n",  "S%.0f I0 Y\n",  "S%.0f I1 Y\n", "S%.0f I0 Z\n", "S%.0f I1 Z\n", "S%.0f I2 Z\n", "S%.0f I3 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
+  {"A%.2f\n",            "B%.2f\n",       "C%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
+  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
+  {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
+  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+  {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
 };
 
 const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {

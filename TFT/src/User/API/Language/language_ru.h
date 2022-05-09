@@ -297,6 +297,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Восстановить из ячейки при перезагрузке?\n(Сохранить в EEPROM)"
     #define STRING_ABL_Z                  "Z затухание"
     #define STRING_LEVEL_CORNER           "Прямой угол"
+    #define STRING_LEVEL_CORNER_INFO      "Edge distance is below probe offset X/Y and some target points could be not reachable.\nDo you want to use a safe edge distance?"
     #define STRING_P_OFFSET               "Отступ P"
     #define STRING_H_OFFSET               "Отступ H"
     #define STRING_DISTANCE               "Отступы"

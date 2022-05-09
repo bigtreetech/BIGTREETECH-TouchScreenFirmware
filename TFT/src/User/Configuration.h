@@ -214,8 +214,8 @@
 #define PERSISTENT_INFO 0  // Default: 0
 
 /**
- * Temperature ACK In Terminal
- * Show temperature ACK in Terminal menu.
+ * Temperature And Wait ACK In Terminal
+ * Show "temperature" and "wait" ACK in Terminal menu.
  *   Options: [disable: 0, enable: 1]
  */
 #define TERMINAL_ACK 0  // Default: 0
@@ -560,25 +560,27 @@
  * Leveling Settings
  * These settings are used for leveling.
  *
- * Leveling Edge Distance (Manual Leveling)
+ * Leveling Edge Distance (Manual Leveling, Leveling Corner)
  * Inset distance from bed edges. This distance is added to minimum X & Y bed coordinates and
  * subtracted from maximum X & Y bed coordinates to calculate manual leveling points.
+ * For Leveling Corner, the default distance is the maximum between this setting value and
+ * the rounded probe offset X/Y values configured in Marlin firmware.
  *   Unit: [distance in mm]
  *   Value range: [min: 0, max: 2000]
  *
- * Leveling Z Position (Manual Leveling, Mesh Leveling, Probe/Home Offset, Mesh Tuner)
+ * Leveling Z Position (Manual Leveling, Leveling Corner, Mesh Leveling, Probe/Home Offset, Mesh Tuner)
  * For Manual Leveling and MBL, lower Z axis to this absolute position after reaching a leveling point.
  * For Probe/Home Offset and ABL in Mesh Tuner, raise Z axis by this relative position after reaching
  * a leveling point.
  *   Unit: [position in mm]
  *   Value range: [min: 0.0, max: 2000.0]
  *
- * Leveling Z Raise (Manual Leveling, Mesh Leveling)
+ * Leveling Z Raise (Manual Leveling, Leveling Corner, Mesh Leveling)
  * Raise Z axis by this relative value before moving to another point during leveling/probing procedures.
  *   Unit: [distance in mm]
  *   Value range: [min: 0.0, max: 2000.0]
  *
- * Leveling Feed Rate (Manual Leveling, Mesh Leveling)
+ * Leveling Feed Rate (Manual Leveling, Leveling Corner, Mesh Leveling)
  * Feedrate to use when moving an axis during leveling/probing procedures.
  *   Format: [level_feedrate: XY<feedrate> Z<feedrate>]
  *   Unit: [feedrate in mm/min]
@@ -591,8 +593,8 @@
 #define LEVELING_Z_FEEDRATE     6000  // (mm/min) Z axis move feedrate (Default: 6000)
 
 /**
- * Inverted Axes (Manual Leveling, Move, Probe Offset)
- * Used by Manual Leveling, Move and Probe Offset menus in order axis matches the actual axis movement.
+ * Inverted Axes (Manual Leveling, Leveling Corner, Move, Probe Offset)
+ * Used by Manual Leveling, Leveling Corner, Move and Probe Offset menus in order axis matches the actual axis movement.
  *
  * NOTE: The Y axis of different printer (move hotbed or move nozzle) move in different directions.
  *       So Y axis leveling inversion can't follow up inverted_axis[Y_AXIS].
@@ -1081,7 +1083,7 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                    // (X, Y, Z, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                                // (X, Y, Z, E0, E1)
 #define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
 
 // Manual Leveling
