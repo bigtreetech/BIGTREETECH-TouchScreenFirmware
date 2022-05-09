@@ -15,7 +15,7 @@
 #define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
-  #define XYZ_STATUS " X: %.2f  Y: %.2f  Z: %.2f "
+  #define XYZ_STATUS "X:%.2f Y:%.2f Z:%.2f"
 #else
   #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
 #endif
@@ -62,11 +62,11 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 
 // info box msg area
 #ifdef PORTRAIT_MODE
-  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y +  0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y +  1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y + 1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT RecGantry = {START_X-2,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
-                              START_X+2 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+  const GUI_RECT RecGantry = {START_X - 3,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                              START_X + 3 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #else
   const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                              START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
@@ -78,7 +78,7 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 void drawStatus(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
-  char tempstr[10];
+  char tempstr[45];
 
   LIVE_INFO lvIcon;
   lvIcon.enabled[0] = true;
@@ -182,11 +182,19 @@ void drawStatus(void)
     showLiveInfo(3, &lvIcon, true);
   #endif
 
+  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), coordinateGetAxisActual(Z_AXIS));
+
+  #ifdef PORTRAIT_MODE
+    int paddingWidth = ((RecGantry.x1 - RecGantry.x0) - (strlen(tempstr) * BYTE_WIDTH)) / 2;
+
+    GUI_SetColor(GANTRY_XYZ_BG_COLOR);
+    GUI_FillRect(RecGantry.x0, RecGantry.y0, RecGantry.x0 + paddingWidth, RecGantry.y1);  // left padding
+    GUI_FillRect(RecGantry.x1 - paddingWidth, RecGantry.y0, RecGantry.x1, RecGantry.y1);  // right padding
+  #endif
+
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
   GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
-  sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS),
-          coordinateGetAxisActual(Z_AXIS));
   GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
 
   GUI_RestoreColorDefault();
@@ -285,7 +293,7 @@ void menuStatus(void)
 
   GUI_SetBkColor(infoSettings.bg_color);
   menuDrawPage(&StatusItems);
-  GUI_SetColor(infoSettings.status_xyz_bg_color);
+  GUI_SetColor(GANTRY_XYZ_BG_COLOR);
   GUI_FillPrect(&RecGantry);
   drawStatus();
   drawStatusScreenMsg();
