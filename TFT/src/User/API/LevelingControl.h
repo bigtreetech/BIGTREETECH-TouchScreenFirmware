@@ -7,8 +7,8 @@ extern "C" {
 
 #include <stdint.h>
 
-#define ENABLE_STEPPER_CMD  "M17 X Y Z\n"
-#define DISABLE_STEPPER_CMD "M18 S0 X Y Z\n"
+#define LOCK_STEPPER_CMD   "M18 S0\n"  // set stepper inactivity timeout to infinite just to avoid the steppers are disarmed
+#define UNLOCK_STEPPER_CMD "M18\n"     // disarm all steppers
 
 typedef enum
 {

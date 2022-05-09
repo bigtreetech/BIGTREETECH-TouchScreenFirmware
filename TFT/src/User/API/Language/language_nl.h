@@ -297,6 +297,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Onthoud sleuf voor volgende reboot? (sla op in EEPROM)"
     #define STRING_ABL_Z                  "Z vervagen"
     #define STRING_LEVEL_CORNER           "L corner"
+    #define STRING_LEVEL_CORNER_INFO      "Edge distance is below probe offset X/Y and some target points could be not reachable.\nDo you want to use a safe edge distance?"
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "Afstand"

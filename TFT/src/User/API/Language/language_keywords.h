@@ -304,6 +304,7 @@ extern "C" {
 #define LANG_KEY_ABL_SLOT_EEPROM              "label_abl_slot_eeprom:"
 #define LANG_KEY_ABL_Z                        "label_abl_z:"
 #define LANG_KEY_LEVEL_CORNER                 "label_level_corner:"
+#define LANG_KEY_LEVEL_CORNER_INFO            "label_level_corner_info:"
 #define LANG_KEY_P_OFFSET                     "label_p_offset:"
 #define LANG_KEY_H_OFFSET                     "label_h_offset:"
 #define LANG_KEY_DISTANCE                     "label_distance:"

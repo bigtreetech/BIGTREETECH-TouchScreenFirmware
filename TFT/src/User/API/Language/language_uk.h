@@ -297,6 +297,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Пам'ятати слот при перезавантаженні? (Зберегти в EEPROM)"
     #define STRING_ABL_Z                  "Z загасання"
     #define STRING_LEVEL_CORNER           "L corner"
+    #define STRING_LEVEL_CORNER_INFO      "Edge distance is below probe offset X/Y and some target points could be not reachable.\nDo you want to use a safe edge distance?"
     #define STRING_P_OFFSET               "Відступ P"
     #define STRING_H_OFFSET               "Відступ H"
     #define STRING_DISTANCE               "Відступи"
