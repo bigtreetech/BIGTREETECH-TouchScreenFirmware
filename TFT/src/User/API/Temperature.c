@@ -8,10 +8,10 @@ const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
 const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
 
 static HEATER  heater = {{}, NOZZLE0};
-static int16_t lastTarget[MAX_HEATER_COUNT] = {0};
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static bool    heat_update_waiting = false;
 static uint8_t heat_send_waiting = 0;
+static uint8_t heat_feedback_waiting = 0;
 
 uint32_t nextHeatCheckTime = 0;
 
@@ -36,6 +36,7 @@ static uint8_t heaterIndexFix(uint8_t index)
 }
 
 // Set target temperature
+// Use only when target request is made from TFT !!!
 void heatSetTargetTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
@@ -44,26 +45,26 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
     return;
 
   heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
-
-  if (heater.T[index].target + TEMPERATURE_RANGE > heater.T[index].current)
-    heater.T[index].status = HEATING;
-
-  if (heater.T[index].target < heater.T[index].current + TEMPERATURE_RANGE)
-    heater.T[index].status = COOLING;
+  SET_BIT_ON(heat_send_waiting, index);
 
   if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
     heater.T[index].status = SETTLED;
+  else
+    heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
 }
 
 // Sync target temperature
-void heatSyncTargetTemp(uint8_t index, int16_t temp)
+void heatSyncTargetTemp(uint8_t index, int16_t temperature)
 {
   index = heaterIndexFix(index);
 
   if (index == INVALID_HEATER)
     return;
 
-  lastTarget[index] = heater.T[index].target = temp;
+  if (GET_BIT(heat_feedback_waiting, index))
+    SET_BIT_OFF(heat_feedback_waiting, index);
+  else if (!GET_BIT(heat_send_waiting, index))
+    heater.T[index].target = temperature;
 }
 
 // Get target temperature
@@ -200,7 +201,7 @@ void heatSetUpdateSeconds(uint8_t seconds)
   heat_update_seconds = seconds;
 
   if (infoMachineSettings.autoReportTemp && !heat_update_waiting)
-    heat_update_waiting = storeCmd("M155 ");
+    heat_update_waiting = storeCmd("M155 S%u\n", heatGetUpdateSeconds());
 }
 
 // Get query temperature seconds
@@ -219,18 +220,6 @@ void heatSyncUpdateSeconds(uint8_t seconds)
 void heatSetUpdateWaiting(bool isWaiting)
 {
   heat_update_waiting = isWaiting;
-}
-
-// Set whether the heating command has been sent
-void heatSetSendWaiting(uint8_t index, bool isWaiting)
-{
-  SET_BIT_VALUE(heat_send_waiting, index, isWaiting);
-}
-
-// Get whether has heating command in Queue
-bool heatGetSendWaiting(uint8_t index)
-{
-  return GET_BIT(heat_send_waiting, index);
 }
 
 void updateNextHeatCheckTime(void)
@@ -270,8 +259,7 @@ void loopCheckHeater(void)
   {
     if (OS_GetTimeMs() > AUTOREPORT_TIMEOUT && !heat_update_waiting)
     {
-      heat_update_waiting = storeCmd("M155 ");
-
+      heat_update_waiting = storeCmd("M155 S%u\n", heatGetUpdateSeconds());
       if (heat_update_waiting)
         updateNextHeatCheckTime();  // set next timeout for temperature auto-report
     }
@@ -306,7 +294,7 @@ void loopCheckHeater(void)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
   }
 
-  // Query heaters if they reached the target temperature (only if not prining)
+  // Query heaters if they reached the target temperature (only if not printing)
   for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
   {
     if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE))
@@ -331,12 +319,13 @@ void loopCheckHeater(void)
 
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a gcode to set the motherboard
   {
-    if (lastTarget[i] != heater.T[i].target)
+    if (GET_BIT(heat_send_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
     {
-      lastTarget[i] = heater.T[i].target;
-
-      if ( GET_BIT(heat_send_waiting, i) != true)
-        SET_BIT_VALUE(heat_send_waiting, i, storeCmd("%s ", heatCmd[i]));
+      if (storeCmd("%s S%u\n", heatCmd[i], heatGetTargetTemp(i)))
+      {
+        SET_BIT_OFF(heat_send_waiting, i);
+        SET_BIT_ON(heat_feedback_waiting, i);
+      }
     }
   }
 }

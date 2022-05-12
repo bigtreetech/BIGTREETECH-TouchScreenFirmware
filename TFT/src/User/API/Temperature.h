@@ -91,8 +91,6 @@ void heatSetUpdateSeconds(uint8_t seconds);
 uint8_t heatGetUpdateSeconds(void);
 void heatSyncUpdateSeconds(uint8_t seconds);
 void heatSetUpdateWaiting(bool isWaiting);
-void heatSetSendWaiting(uint8_t index, bool isWaiting);
-bool heatGetSendWaiting(uint8_t index);
 
 void updateNextHeatCheckTime(void);
 void loopCheckHeater(void);

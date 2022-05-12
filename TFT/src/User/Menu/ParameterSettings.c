@@ -263,8 +263,9 @@ void menuParameterSettings(void)
         else
         {
           psCurPage = 0;
-          CLOSE_MENU();
         }
+
+        CLOSE_MENU();
         break;
 
       default:
