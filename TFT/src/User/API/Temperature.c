@@ -54,7 +54,7 @@ void heatSetTargetTemp(uint8_t index, int16_t temp)
 }
 
 // Sync target temperature
-void heatSyncTargetTemp(uint8_t index, int16_t temperature)
+void heatSyncTargetTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
 
@@ -64,7 +64,7 @@ void heatSyncTargetTemp(uint8_t index, int16_t temperature)
   if (GET_BIT(heat_feedback_waiting, index))
     SET_BIT_OFF(heat_feedback_waiting, index);
   else if (!GET_BIT(heat_send_waiting, index))
-    heater.T[index].target = temperature;
+    heater.T[index].target = temp;
 }
 
 // Get target temperature
