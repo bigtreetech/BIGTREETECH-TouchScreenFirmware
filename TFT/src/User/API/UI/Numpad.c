@@ -458,7 +458,7 @@ int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negat
           val = 0;
         }
         len = strlen(ParameterBuf);
-        if (len < INT_BUF_LENGTH && !(val == 0 && key_num == NUM_KEY_0))
+        if (len < INT_BUF_LENGTH)
         {
           int num = (numPadKeyChar[key_num][0] - '0');
           val = (val * 10) + ABS(num);
