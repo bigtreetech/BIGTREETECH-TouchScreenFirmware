@@ -437,7 +437,7 @@ void writeRemoteTFT()
   Serial_Puts(cmd_port, "ok\n");
 }
 
-void setNoWaitHeating(uint8_t index)
+void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
   {
@@ -448,6 +448,22 @@ void setNoWaitHeating(uint8_t index)
   {
     heatSetIsWaiting(index, WAIT_HEATING);
   }
+}
+
+void syncTargetTemp(uint8_t index)
+{
+  uint16_t temp;
+
+  if (!cmd_seen('S'))
+  {
+    if (!cmd_seen('R'))
+      return;
+  }
+
+  temp = cmd_value();
+
+  if (temp != heatGetTargetTemp(index))
+    heatSetTargetTemp(index, cmd_value(), FROM_CMD);  
 }
 
 // Parse and send gcode cmd in infoCmd queue.
@@ -868,7 +884,13 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin, send M104
-            setNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+            setWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+          }
+        // no break here. The data processing of M109 is the same as that of M104 below
+        case 104:  // M104
+          if (fromTFT)
+          {
+            syncTargetTemp(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
           break;
 
@@ -918,17 +940,29 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin, send M140 
-            setNoWaitHeating(BED);
+            setWaitHeating(BED);
           }
-          break;
+          // no break here. The data processing of M190 is the same as that of M140 below
+          case 140:  // M140
+            if (fromTFT)
+            {
+              syncTargetTemp(BED);
+            }
+            break;
 
         case 191:  // M191
           if (fromTFT)
           {
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin, send M141
-            setNoWaitHeating(CHAMBER);
+            setWaitHeating(CHAMBER);
           }
-          break;
+          // no break here. The data processing of M191 is the same as that of M141 below
+          case 141:  // M141
+            if (fromTFT)
+            {
+              syncTargetTemp(CHAMBER);
+            }
+            break;
 
         case 200:  // M200 filament diameter
         {

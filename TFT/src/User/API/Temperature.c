@@ -36,35 +36,40 @@ static uint8_t heaterIndexFix(uint8_t index)
 }
 
 // Set target temperature
-// Use only when target request is made from TFT !!!
-void heatSetTargetTemp(uint8_t index, int16_t temp)
+void heatSetTargetTemp(uint8_t index, int16_t temp, TEMP_SOURCE tempSource)
 {
   index = heaterIndexFix(index);
 
   if (index == INVALID_HEATER)
     return;
 
-  heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
-  SET_BIT_ON(heat_send_waiting, index);
+  switch (tempSource)
+  {
+    case FROM_HOST:
+      if (GET_BIT(heat_feedback_waiting, index))
+        SET_BIT_OFF(heat_feedback_waiting, index);
+      else if (!GET_BIT(heat_send_waiting, index))
+        heater.T[index].target = temp;
+      break;
 
-  if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
-    heater.T[index].status = SETTLED;
-  else
-    heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
-}
+    case FROM_GUI:
+      heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
+      SET_BIT_ON(heat_send_waiting, index);
 
-// Sync target temperature
-void heatSyncTargetTemp(uint8_t index, int16_t temp)
-{
-  index = heaterIndexFix(index);
+      if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
+        heater.T[index].status = SETTLED;
+      else
+        heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
+      break;
 
-  if (index == INVALID_HEATER)
-    return;
-
-  if (GET_BIT(heat_feedback_waiting, index))
-    SET_BIT_OFF(heat_feedback_waiting, index);
-  else if (!GET_BIT(heat_send_waiting, index))
-    heater.T[index].target = temp;
+    case FROM_CMD:
+      if (GET_BIT(heat_feedback_waiting, index) == false)
+      {
+        heater.T[index].target = temp;
+        SET_BIT_ON(heat_feedback_waiting, index);
+      }
+      break;
+  }
 }
 
 // Get target temperature
@@ -108,7 +113,7 @@ void heatCoolDown(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    heatSetTargetTemp(i, 0);
+    heatSetTargetTemp(i, 0, FROM_GUI);
   }
 }
 

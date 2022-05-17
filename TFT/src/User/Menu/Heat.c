@@ -97,7 +97,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_6:
-        heatSetTargetTemp(tool_index, 0);
+        heatSetTargetTemp(tool_index, 0, FROM_GUI);
         break;
 
       case KEY_ICON_7:
@@ -110,7 +110,7 @@ void menuHeat(void)
 
     if (setTarget != lastTarget)
     {
-      heatSetTargetTemp(tool_index, setTarget);
+      heatSetTargetTemp(tool_index, setTarget, FROM_GUI);
       actTarget = setTarget;
     }
 
