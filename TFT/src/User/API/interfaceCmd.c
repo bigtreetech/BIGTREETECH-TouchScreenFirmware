@@ -454,17 +454,15 @@ void syncTargetTemp(uint8_t index)
 {
   uint16_t temp;
 
-  if (!cmd_seen('S'))
+  if (cmd_seen('S'))
   {
-    if (!cmd_seen('R'))
-      return;
+    temp = cmd_value();
+
+    if (temp != heatGetTargetTemp(index))
+      heatSetTargetTemp(index, temp, FROM_CMD);  
   }
-
-  temp = cmd_value();
-
-  if (temp != heatGetTargetTemp(index))
-    heatSetTargetTemp(index, cmd_value(), FROM_CMD);  
 }
+
 
 // Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
