@@ -3,21 +3,22 @@
 
 typedef struct
 {
-  FIL        file;
-  uint32_t   size;                // gcode file total size
-  uint32_t   cur;                 // gcode file printed size
-  uint32_t   expectedTime;        // expected print duration in sec
-  uint32_t   time;                // current elapsed time in sec
-  uint32_t   remainingTime;       // current remaining time in sec (if set with M73 or M117)
-  uint16_t   layerNumber;         // current printing layer number
-  uint16_t   layerCount;          // total number of layers
-  uint8_t    progress;            // printing progress in percentage (0% - 100%)
-  bool       progressFromSlicer;  // 1: progress controlled by Slicer (if set with M73)
-  bool       runout;              // 1: runout in printing, 0: idle
-  bool       printing;            // 1: means printing, 0: means idle
-  bool       paused;              // 1: means paused
-  bool       aborted;             // 1: means aborted
-  PAUSE_TYPE pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
+  FIL                file;
+  uint32_t           size;                // gcode file total size
+  uint32_t           cur;                 // gcode file printed size
+  uint32_t           fileOffset;          // size of non-printing lines (calculated dynamically)
+  uint32_t           expectedTime;        // expected print duration in sec
+  uint32_t           elapsedTime;         // current elapsed time in sec
+  uint32_t           remainingTime;       // current remaining time in sec
+  uint16_t           layerNumber;         // current printing layer number
+  uint16_t           layerCount;          // total number of layers
+  uint8_t            progress;            // printing progress in percentage (0% - 100%)
+  PROG_FROM          progressSource;      // source for progress (file progress, time progress, progress from slicer)
+  bool               runout;              // 1: runout in printing, 0: idle
+  bool               printing;            // 1: means printing, 0: means idle
+  bool               paused;              // 1: means paused
+  bool               aborted;             // 1: means aborted
+  PAUSE_TYPE         pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting = {0};
@@ -83,11 +84,11 @@ void updatePrintTime(uint32_t osTime)
 {
   if (osTime % 1000 == 0)
   {
-    if (infoPrinting.printing)
+    if (infoPrinting.printing && !infoPrinting.paused)
     {
-      infoPrinting.time++;
+      infoPrinting.elapsedTime++;
 
-      if (infoPrinting.remainingTime > 0 && !infoPrinting.paused && !heatHasWaiting())
+      if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
         infoPrinting.remainingTime--;
     }
   }
@@ -95,7 +96,7 @@ void updatePrintTime(uint32_t osTime)
 
 uint32_t getPrintTime(void)
 {
-  return infoPrinting.time;
+  return infoPrinting.elapsedTime;
 }
 
 void setPrintRemainingTime(int32_t remainingTime)
@@ -162,19 +163,28 @@ void setPrintProgress(float cur, float size)
 
 void setPrintProgressPercentage(uint8_t percentage)
 {
-  infoPrinting.progressFromSlicer = true;  // set to true to force a progress controlled by slicer
+  infoPrinting.progressSource = PROG_SLICER;
   infoPrinting.progress = percentage;
 }
 
 uint8_t updatePrintProgress(void)
 {
-  if (!infoPrinting.progressFromSlicer)  // avoid to update progress if it is controlled by slicer
+  switch (infoPrinting.progressSource)
   {
-    // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%
-    if (infoPrinting.size <= infoPrinting.cur)
-      infoPrinting.progress = 100;
-    else
-      infoPrinting.progress = ((float)(infoPrinting.cur) / infoPrinting.size) * 100;
+    case PROG_SLICER:
+      break;  //no progress update if it is controlled by slicer
+
+    case PROG_FILE:
+      // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%
+      if (infoPrinting.size <= infoPrinting.cur)
+        infoPrinting.progress = 100;
+      else
+        infoPrinting.progress = (uint8_t)((float)(infoPrinting.cur - infoPrinting.fileOffset) / (infoPrinting.size - infoPrinting.fileOffset) * 100);
+      break;
+
+    case PROG_TIME:
+        infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
+      break;
   }
 
   return infoPrinting.progress;
@@ -188,6 +198,16 @@ uint8_t getPrintProgress(void)
 void setPrintRunout(bool runout)
 {
   infoPrinting.runout = runout;
+}
+
+PROG_FROM getPrintProgSource (void)
+{
+  return infoPrinting.progressSource;
+}
+
+void setPrintProgSource(PROG_FROM progressSource)
+{
+  infoPrinting.progressSource = progressSource;
 }
 
 bool getPrintRunout(void)
@@ -250,7 +270,7 @@ void initPrintSummary(void)
 
 void preparePrintSummary(void)
 {
-  infoPrintSummary.time = infoPrinting.time;
+  infoPrintSummary.time = infoPrinting.elapsedTime;
 
   if (speedGetCurPercent(1) != 100)
   {
@@ -845,6 +865,8 @@ void loopPrintFromTFT(void)
       }
     }
   }
+  if (gcode_count == 0)
+    infoPrinting.fileOffset += ip_cur - infoPrinting.cur;
 
   infoPrinting.cur = ip_cur;  // update infoPrinting.cur with current file position
 
