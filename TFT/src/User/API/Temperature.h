@@ -30,9 +30,9 @@ typedef enum
 
 typedef enum
 {
-  FROM_HOST = 0,
-  FROM_GUI,
-  FROM_CMD,
+  FROM_HOST = 0,  // temperature status (actual/requested) from host (Marlin, Reprap, etc.)
+  FROM_GUI,       // temperature requested from the TFT's GUI
+  FROM_CMD,       // temperature requested in the command queue (from gcode or external source connected to the TFT)
 } TEMP_SOURCE;
 
 enum
