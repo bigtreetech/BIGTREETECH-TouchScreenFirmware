@@ -297,7 +297,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Emlékezzen a következő újraindításnál? (EEPROM Mentése)"
     #define STRING_ABL_Z                  "Z Áttűnés"
     #define STRING_LEVEL_CORNER           "Sarok szint"
-    #define STRING_LEVEL_CORNER_INFO      "Edge distance is below probe offset X/Y and some target points could be not reachable.\nDo you want to use a safe edge distance?"
+    #define STRING_LEVEL_CORNER_INFO      "Az ágyszél távolsága a szonda X/Y eltolása alatt van, egyes célpontok nem érhetők el.\nAkarsz biztonságos ágyszél távolságot használni?"
     #define STRING_P_OFFSET               "P Eltolás"
     #define STRING_H_OFFSET               "H Eltolás"
     #define STRING_DISTANCE               "Távolság"
