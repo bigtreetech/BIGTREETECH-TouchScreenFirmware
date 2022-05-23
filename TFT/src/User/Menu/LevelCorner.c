@@ -32,6 +32,19 @@ void refreshValue(MENUITEMS * levelItems, uint8_t index)
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
+void checkRefreshValue(MENUITEMS * levelItems)
+{
+  LEVELING_POINT levelingPoint = levelingGetProbedPoint();
+
+  if (levelingPoint != LEVEL_NO_POINT)
+  {
+    levelCornerPosition[levelingPoint] = levelingGetProbedZ();
+    refreshValue(levelItems, levelingPoint);
+
+    levelingResetProbedPoint();  // reset to check for new updates
+  }
+}
+
 // show M48 on icon
 void drawProbeAccuracyIcon(MENUITEMS * levelItems)
 {
@@ -88,7 +101,6 @@ void menuLevelCorner(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   char iconText[LEVELING_POINT_COUNT][15];
-  LEVELING_POINT levelingPoint;
 
   if (origLevelEdge < 0)  // initialize leveling edge value to be used for leveling corner if not yet initialized (-1)
   {
@@ -102,10 +114,7 @@ void menuLevelCorner(void)
   for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
   {
     levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
-  }
 
-  for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
-  {
     refreshValue(&levelCornerItems, i);
   }
 
@@ -160,7 +169,12 @@ void menuLevelCorner(void)
         {
           levelingProbePoint(i);
 
-          loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+          while (isNotEmptyCmdQueue())  // wait for the communication to be clean
+          {
+            loopProcess();
+
+            checkRefreshValue(&levelCornerItems);
+          }
         }
 
         break;
@@ -177,16 +191,8 @@ void menuLevelCorner(void)
         break;
     }
 
-    levelingPoint = levelingGetProbedPoint();
-
-    if (levelingPoint != LEVEL_NO_POINT)
-    {
-      levelCornerPosition[levelingPoint] = levelingGetProbedZ();
-      refreshValue(&levelCornerItems, levelingPoint);
-
-      levelingResetProbedPoint();  // reset to check for new updates
-    }
-
     loopProcess();
+
+    checkRefreshValue(&levelCornerItems);
   }
 }
