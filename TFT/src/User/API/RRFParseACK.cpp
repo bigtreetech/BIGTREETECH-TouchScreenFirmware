@@ -140,7 +140,7 @@ void ParseACKJsonParser::value(const char *value)
         }
         else if (index <= INVALID_HEATER)
         {
-         heatSetTargetTemp(index - 1, 0, FROM_HOST);
+          heatSetTargetTemp(index - 1, 0, FROM_HOST);
         }
       }
       break;
