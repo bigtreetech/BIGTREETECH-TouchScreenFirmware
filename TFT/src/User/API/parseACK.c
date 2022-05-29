@@ -911,13 +911,13 @@ void parseACK(void)
         if (ack_seen("M201")) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
         if (ack_seen("M203")) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
 
-        if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
+        if (ack_seen("X:") || ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y:") || ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z:") || ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
 
         uint8_t i = (ack_seen("T")) ? ack_value() : 0;
 
-        if (ack_seen("E")) setParameter(param, AXIS_INDEX_E0 + i, ack_value());
+        if (ack_seen("E:") || ack_seen("E")) setParameter(param, AXIS_INDEX_E0 + i, ack_value());
       }
       // parse and store acceleration (units/s2)
       else if (ack_seen("M204 P"))
@@ -929,10 +929,10 @@ void parseACK(void)
       // parse and store advanced settings
       else if (ack_seen("M205"))
       {
-        if (ack_seen("X")) setParameter(P_JERK, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y")) setParameter(P_JERK, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z")) setParameter(P_JERK, AXIS_INDEX_Z, ack_value());
-        if (ack_seen("E")) setParameter(P_JERK, AXIS_INDEX_E0, ack_value());
+        if (ack_seen("X:") || ack_seen("X")) setParameter(P_JERK, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y:") || ack_seen("Y")) setParameter(P_JERK, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z:") || ack_seen("Z")) setParameter(P_JERK, AXIS_INDEX_Z, ack_value());
+        if (ack_seen("E:") || ack_seen("E")) setParameter(P_JERK, AXIS_INDEX_E0, ack_value());
         if (ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
       }
       // parse and store home offset (M206) and hotend offset (M218)
@@ -942,9 +942,9 @@ void parseACK(void)
 
         if (ack_seen("M218")) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
 
-        if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
+        if (ack_seen("X:") || ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y:") || ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z:") || ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
@@ -993,9 +993,9 @@ void parseACK(void)
           if (ack_seen("C")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, ack_value());
         }
 
-        if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
-        if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
+        if (ack_seen("X:") || ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
+        if (ack_seen("Y:") || ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
+        if (ack_seen("Z:") || ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
       // parse and store ABL on/off state & Z fade value on M503
       else if (ack_seen("M420 S"))
