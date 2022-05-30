@@ -116,6 +116,7 @@ extern char * const stepperDisplayID[STEPPER_INDEX_COUNT];
 
 // param attributes hard coded labels
 extern char * const filamentDiaDisplayID[];
+extern char * const autoRetractDisplayID[];
 extern char * const ablStateDisplayID[];
 extern char * const stealthChopDisplayID[];
 extern char * const deltaConfigurationDisplayID[];
@@ -129,7 +130,6 @@ extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
-extern const LABEL autoRetractDisplayID[];
 
 // Get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);

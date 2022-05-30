@@ -127,6 +127,7 @@ char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
 
 // param attributes hard coded labels
 char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament"};
+char * const autoRetractDisplayID[] = {"S " ONOFF_DISPLAY_ID};
 char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
@@ -142,7 +143,6 @@ const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERA
 const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
 const LABEL recoverDisplayID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
-const LABEL autoRetractDisplayID[] = {LABEL_RETRACT_AUTO};
 
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {

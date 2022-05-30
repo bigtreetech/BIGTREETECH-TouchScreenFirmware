@@ -83,7 +83,7 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           break;
 
         case P_AUTO_RETRACT:
-          parameterMainItem->titlelabel = autoRetractDisplayID[elementIndex];
+          parameterMainItem->titlelabel.address = autoRetractDisplayID[elementIndex];
           break;
 
         case P_ABL_STATE:
