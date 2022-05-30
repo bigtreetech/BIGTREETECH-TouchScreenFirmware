@@ -6,11 +6,11 @@
 #define HIGH_TO_LOW_CASE     32  // 'a' - 'A'
 
 char gCodeCommentLine[COMMENT_MAX_CHAR] = {0};
-bool M73R_presence = false;
+bool slicerTimePresence = false;
 
-void setM73R_presence(bool present)
+void setTimeFromSlicer(bool present)
 {
-  M73R_presence = present;
+  slicerTimePresence = present;
 }
 
 void parseComment(void)
@@ -58,7 +58,7 @@ void parseComment(void)
     strlwr(temp_char);
 
     // check for "time" keyword in comment to retrieve total or elapsed time, Cura specific
-    if (strcmp(temp_char, "time") == 0 && M73R_presence == false)  // check if first word is "time"
+    if (strcmp(temp_char, "time") == 0 && slicerTimePresence == false)  // check if first word is "time"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
       strlwr(temp_char);
@@ -73,6 +73,8 @@ void parseComment(void)
       {
         setPrintExpectedTime(strtoul(temp_char, NULL, 0));
         setPrintRemainingTime(getPrintExpectedTime());
+        if (getPrintProgSource() == PROG_FILE && infoSettings.prog_source == 1)
+          setPrintProgSource(PROG_TIME);
       }
     }
     // continue here with "else if" for another token that starts with "t" or "T"
@@ -85,7 +87,7 @@ void parseComment(void)
     strlwr(temp_char);
 
     // check for "remaining" keyword in comment to retrieve remaining time, IdeaMaker specific
-    if (strcmp(temp_char, "remaining") == 0 && M73R_presence == false)  // check if first word is "remaining"
+    if (strcmp(temp_char, "remaining") == 0 && slicerTimePresence == false)  // check if first word is "remaining"
     {
       temp_char = strtok(NULL, TOKEN_DELIMITERS);
       strlwr(temp_char);
@@ -95,6 +97,8 @@ void parseComment(void)
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         temp_value = strtoul(temp_char, NULL, 0);  // get the remaining time in seconds
         setPrintRemainingTime(temp_value);
+        if (getPrintProgSource() == PROG_FILE && infoSettings.prog_source == 1)
+          setPrintProgSource(PROG_TIME);
       }
     }
     // continue here with "else if" for another token that starts with "r" or "R"
