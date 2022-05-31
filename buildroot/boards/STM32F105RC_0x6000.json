@@ -1,0 +1,51 @@
+{
+  "build": {
+    "core": "stm32",
+    "cpu": "cortex-m3",
+    "extra_flags": "-DSTM32F105xC",
+    "f_cpu": "72000000L",
+    "hwids": [
+      [
+        "0x1EAF",
+        "0x0003"
+      ],
+      [
+        "0x1EAF",
+        "0x0004"
+      ]
+    ],
+    "mcu": "stm32f105rct6",
+    "product_line": "wrongLineForLocal_S"
+  },
+  "debug": {
+    "jlink_device": "STM32F105RC",
+    "openocd_target": "stm32f1x",
+    "svd_path": "STM32F105xx.svd"
+  },
+  "frameworks": [
+    "arduino",
+    "libopencm3",
+    "cmsis",
+    "stm32cube"
+  ],
+  "name": "STM32F105RC (64k RAM. 256k - 24K Flash)",
+  "upload": {
+    "disable_flushing": false,
+    "maximum_ram_size": 65536,
+    "maximum_size": 237568,
+    "protocol": "cmsis-dap",
+    "protocols": [
+	  "cmsis-dap",
+      "jlink",
+      "stlink",
+      "blackmagic",
+      "serial"
+    ],
+    "offset_address": "0x8006000",
+    "require_upload_port": true,
+    "use_1200bps_touch": false,
+    "wait_for_upload_port": false
+  },
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f105-107.html",
+  "vendor": "Generic"
+}

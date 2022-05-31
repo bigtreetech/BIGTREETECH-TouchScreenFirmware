@@ -45,34 +45,34 @@ static volatile uint32_t* const rcc_spi_en[_SPI_CNT] = {
 };
 
 static const uint32_t rcc_spi_bit[_SPI_CNT] = {
-  0x00001000, // RCC_APB2  bit 12
-  0x00004000, // RCC_APB1  bit 14
-  0x00008000, // RCC_APB1  bit 15
+  0x00001000,  // RCC_APB2  bit 12
+  0x00004000,  // RCC_APB1  bit 14
+  0x00008000,  // RCC_APB1  bit 15
 };
 
 static SPI_TypeDef* const spi[_SPI_CNT] = {
-  SPI1, // SCK--PA5   MISO--PA6   MOSI--PA7
-  SPI2, // SCK--PB13  MISO--PB14  MOSI--PB15
-  SPI3, // SCK--PB3   MISO--PB4   MOSI--PB5
+  SPI1,  // SCK--PA5   MISO--PA6   MOSI--PA7
+  SPI2,  // SCK--PB13  MISO--PB14  MOSI--PB15
+  SPI3,  // SCK--PB3   MISO--PB4   MOSI--PB5
 };
 
-static const uint16_t spi_sck[_SPI_CNT]  = {SPI1_SCK_PIN,  SPI2_SCK_PIN,  SPI3_SCK_PIN};  // SCK
-static const uint16_t spi_miso[_SPI_CNT] = {SPI1_MISO_PIN, SPI2_MISO_PIN, SPI3_MISO_PIN}; // MISO
-static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_MOSI_PIN}; // MOSI
+static const uint16_t spi_sck[_SPI_CNT]  = {SPI1_SCK_PIN,  SPI2_SCK_PIN,  SPI3_SCK_PIN};   // SCK
+static const uint16_t spi_miso[_SPI_CNT] = {SPI1_MISO_PIN, SPI2_MISO_PIN, SPI3_MISO_PIN};  // MISO
+static const uint16_t spi_mosi[_SPI_CNT] = {SPI1_MOSI_PIN, SPI2_MOSI_PIN, SPI3_MOSI_PIN};  // MOSI
 
 void SPI_GPIO_Init(uint8_t port)
 {
-  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_AF_PP, 0); // SCK
-  GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, 0); // MISO
-  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, 0); // MOSI
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_AF_PP, 0);  // SCK
+  GPIO_InitSet(spi_miso[port], MGPIO_MODE_AF_PP, 0);  // MISO
+  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_AF_PP, 0);  // MOSI
 }
 
 void SPI_GPIO_DeInit(uint8_t port)
 {
   // Set all of spi pins to input
-  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0); // SCK
-  GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0); // MISO
-  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0); // MOSI
+  GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0);  // SCK
+  GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0);  // MISO
+  GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0);  // MOSI
 }
 
 // port: SPI index
@@ -80,9 +80,9 @@ void SPI_GPIO_DeInit(uint8_t port)
 void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)
 {
   *rcc_spi_rst[port] |= rcc_spi_bit[port];
-  *rcc_spi_rst[port] &= ~rcc_spi_bit[port]; // Reset SPI clock
-  
-  *rcc_spi_en[port] |= rcc_spi_bit[port]; // Enable SPI clock
+  *rcc_spi_rst[port] &= ~rcc_spi_bit[port];  // Reset SPI clock
+
+  *rcc_spi_en[port] |= rcc_spi_bit[port];  // Enable SPI clock
 
   spi[port]->CR1 = (0<<15)        // 0:2-line 1: 1-line
                  | (0<<14)        // in bidirectional mode 0:read only 1: read/write
@@ -111,13 +111,13 @@ void SPI_DeConfig(uint8_t port)
 {
   SPI_GPIO_DeInit(port);
   *rcc_spi_rst[port] |= rcc_spi_bit[port];
-  *rcc_spi_rst[port] &= ~rcc_spi_bit[port]; // Reset SPI clock
+  *rcc_spi_rst[port] &= ~rcc_spi_bit[port];  // Reset SPI clock
 }
 
 uint16_t SPI_Read_Write(uint8_t port, uint16_t d)
 {
-  while((spi[port]->SR & (1 << 1)) == RESET); // wait for tx empty
+  while((spi[port]->SR & (1 << 1)) == RESET);  // wait for tx empty
   spi[port]->DR = d;
-  while((spi[port]->SR & (1 << 0)) == RESET); // wait for rx no empty
+  while((spi[port]->SR & (1 << 0)) == RESET);  // wait for rx no empty
   return spi[port]->DR;
 }

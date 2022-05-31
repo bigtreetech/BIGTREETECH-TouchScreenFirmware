@@ -24,7 +24,7 @@
 #include "usb_defines.h"
 #include "usb_hcd_int.h"
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 
 #if defined   (__CC_ARM) /*!< ARM Compiler */
 #pragma O0

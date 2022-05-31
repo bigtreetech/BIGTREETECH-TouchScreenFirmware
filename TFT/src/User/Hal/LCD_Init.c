@@ -2,7 +2,6 @@
 #include "GPIO_Init.h"
 #include "includes.h"
 
-
 #ifdef LCD_LED_PIN
 void LCD_LED_On()
 {
@@ -22,8 +21,9 @@ void LCD_LED_Off()
 }
 
 #ifdef LCD_LED_PWM_CHANNEL
-LCD_AUTO_DIM lcd_dim;
+LCD_AUTO_DIM lcd_dim = {0, 0};
 const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
+  LCD_0_PERCENT,
   LCD_5_PERCENT,
   LCD_10_PERCENT,
   LCD_20_PERCENT,
@@ -36,20 +36,7 @@ const uint32_t LCD_BRIGHTNESS[ITEM_BRIGHTNESS_NUM] = {
   LCD_90_PERCENT,
   LCD_100_PERCENT
 };
-const LABEL itemBrightness[ITEM_BRIGHTNESS_NUM] = {
-  //item value text(only for custom value)
-  LABEL_5_PERCENT,
-  LABEL_10_PERCENT,
-  LABEL_20_PERCENT,
-  LABEL_30_PERCENT,
-  LABEL_40_PERCENT,
-  LABEL_50_PERCENT,
-  LABEL_60_PERCENT,
-  LABEL_70_PERCENT,
-  LABEL_80_PERCENT,
-  LABEL_90_PERCENT,
-  LABEL_100_PERCENT
-};
+
 const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
   //item value text(only for custom value)
   LABEL_OFF,
@@ -59,8 +46,9 @@ const LABEL itemDimTime[ITEM_SECONDS_NUM] = {
   LABEL_60_SECONDS,
   LABEL_120_SECONDS,
   LABEL_300_SECONDS,
-  LABEL_CUSTOM_SECONDS
+  LABEL_CUSTOM
 };
+
 const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
   LCD_DIM_OFF,
   LCD_DIM_5_SECONDS,
@@ -72,43 +60,64 @@ const uint32_t LCD_DIM_IDLE_TIME[ITEM_SECONDS_NUM] = {
   LCD_DIM_CUSTOM_SECONDS
 };
 
-void LCD_Dim_Idle_Timer_init()
+void loopDimTimer(void)
 {
-  lcd_dim.idle_time_counter  = 0;
-  lcd_dim._last_dim_state    = false;
-  lcd_dim.idle_timer_reset   = false;
-}
+  if (infoSettings.lcd_idle_timer == LCD_DIM_OFF)
+    return;
 
-void LCD_Dim_Idle_Timer_Reset()
-{
-  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF) {
-    lcd_dim.idle_timer_reset= true;
-  }
-}
-
-void LCD_Dim_Idle_Timer()
-{
-  if(infoSettings.lcd_idle_timer > LCD_DIM_OFF)
+  if (isPress()
+    #if LCD_ENCODER_SUPPORT
+      || encoder_CheckState() || encoder_ReadBtn(LCD_BUTTON_INTERVALS)
+    #endif
+  )
   {
-    if(lcd_dim.idle_time_counter >= (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
+    if (lcd_dim.dimmed)
     {
+      lcd_dim.dimmed = false;
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+      #ifdef LED_COLOR_PIN
+        if (infoSettings.knob_led_idle)
+        {
+          WS2812_Send_DAT(led_color[infoSettings.knob_led_color]);
+        }
+      #endif
+    }
+    lcd_dim.idle_ms = OS_GetTimeMs();
+  }
+  else
+  {
+    if (OS_GetTimeMs() - lcd_dim.idle_ms < (LCD_DIM_IDLE_TIME[infoSettings.lcd_idle_timer] * 1000))
+      return;
+
+    if (!lcd_dim.dimmed)
+    {
+      lcd_dim.dimmed = true;
       Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_idle_brightness]);
-      lcd_dim._last_dim_state= true;
-    } else lcd_dim.idle_time_counter++;
-
-    if(lcd_dim.idle_timer_reset)
-    {
-      if(lcd_dim._last_dim_state)
-      {
-        Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
-        lcd_dim._last_dim_state = false;
-      }
-
-      lcd_dim.idle_timer_reset  = false;
-      lcd_dim.idle_time_counter = 0;
+      #ifdef LED_COLOR_PIN
+        if (infoSettings.knob_led_idle)
+        {
+          WS2812_Send_DAT(led_color[LED_OFF]);
+        }
+      #endif
     }
   }
 }
+
+void _wakeLCD(void)
+{
+  if (infoSettings.lcd_idle_timer != LCD_DIM_OFF)
+  {
+    // The LCD dim function is activated. First check if it's dimmed
+    if (lcd_dim.dimmed)
+    {
+      lcd_dim.dimmed = false;
+      Set_LCD_Brightness(LCD_BRIGHTNESS[infoSettings.lcd_brightness]);
+    }
+    // Set a new idle_ms time
+    lcd_dim.idle_ms = OS_GetTimeMs();
+  }
+}
+
 #endif
 
 void LCD_LED_Init(void)
@@ -116,7 +125,6 @@ void LCD_LED_Init(void)
   #ifdef LCD_LED_PWM_CHANNEL
     GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_AF_PP, LCD_LED_PIN_ALTERNATE);
     TIM_PWM_Init(LCD_LED_PWM_CHANNEL);
-    LCD_Dim_Idle_Timer_init();
   #else
     LCD_LED_Off();
     GPIO_InitSet(LCD_LED_PIN, MGPIO_MODE_OUT_PP, 0);
@@ -130,15 +138,15 @@ void LCD_init_RGB(void)
 {
   LCD_WR_REG(0X11);
   Delay_ms(20);
-  LCD_WR_REG(0XD0);//VCI1  VCL  VGH  VGL DDVDH VREG1OUT power amplitude setting
+  LCD_WR_REG(0XD0);   // VCI1  VCL  VGH  VGL DDVDH VREG1OUT power amplitude setting
   LCD_WR_DATA(0X07);
   LCD_WR_DATA(0X42);
   LCD_WR_DATA(0X1C);
-  LCD_WR_REG(0XD1);//VCOMH VCOM_AC amplitude setting
+  LCD_WR_REG(0XD1);   // VCOMH VCOM_AC amplitude setting
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X19);
   LCD_WR_DATA(0X16);
-  LCD_WR_REG(0XD2);//Operational Amplifier Circuit Constant Current Adjust , charge pump frequency setting
+  LCD_WR_REG(0XD2);   // Operational Amplifier Circuit Constant Current Adjust , charge pump frequency setting
   LCD_WR_DATA(0X01);
   LCD_WR_DATA(0X11);
   LCD_WR_REG(0XE4);
@@ -146,15 +154,15 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0XF3);
   LCD_WR_DATA(0X0000);
   LCD_WR_DATA(0X002A);
-  LCD_WR_REG(0XC0);//REV SM GS
+  LCD_WR_REG(0XC0);   // REV SM GS
   LCD_WR_DATA(0X10);
   LCD_WR_DATA(0X3B);
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X02);
   LCD_WR_DATA(0X11);
-  LCD_WR_REG(0XC5);// Frame rate setting = 72HZ  when setting 0x03
+  LCD_WR_REG(0XC5);   // Frame rate setting = 72HZ  when setting 0x03
   LCD_WR_DATA(0X03);
-  LCD_WR_REG(0XC8);//Gamma setting
+  LCD_WR_REG(0XC8);   // Gamma setting
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X35);
   LCD_WR_DATA(0X23);
@@ -167,14 +175,31 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0X70);
   LCD_WR_DATA(0X00);
   LCD_WR_DATA(0X04);
-  LCD_WR_REG(0X20);//Exit invert mode
+  LCD_WR_REG(0X20);   // Exit invert mode
   LCD_WR_REG(0X36);
   LCD_WR_DATA(0X28);
   LCD_WR_REG(0X3A);
-  LCD_WR_DATA(0X55);//16λģʽ
+  LCD_WR_DATA(0X55);  // 16λģʽ
   Delay_ms(120);
   LCD_WR_REG(0X29);
 }
+
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA();  // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
+#endif
 
 #elif LCD_DRIVER_IS(ILI9488)
 // ILI9488
@@ -191,15 +216,15 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x80);
   LCD_WR_REG(0x36);
   LCD_WR_DATA(0x28);
-  LCD_WR_REG(0x3A); //Interface Mode Control
+  LCD_WR_REG(0x3A);   // Interface Mode Control
   LCD_WR_DATA(0x55);
-  LCD_WR_REG(0XB0);  //Interface Mode Control
+  LCD_WR_REG(0XB0);   // Interface Mode Control
   LCD_WR_DATA(0x00);
-  LCD_WR_REG(0xB1);   //Frame rate 70HZ
+  LCD_WR_REG(0xB1);   // Frame rate 70HZ
   LCD_WR_DATA(0xB0);
   LCD_WR_REG(0xB4);
   LCD_WR_DATA(0x02);
-  LCD_WR_REG(0xB6); //RGB/MCU Interface Control
+  LCD_WR_REG(0xB6);   // RGB/MCU Interface Control
   LCD_WR_DATA(0x02);
   LCD_WR_DATA(0x02);
   LCD_WR_REG(0xE9);
@@ -214,11 +239,27 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x29);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA();  // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
+  }
+#endif
+
 #elif LCD_DRIVER_IS(ILI9341)
 // ILI9341
 void LCD_init_RGB(void)
 {
-  Delay_ms(50); // delay 50 ms
+  Delay_ms(50);  // delay 50 ms
 
   LCD_WR_REG(0xCF);
   LCD_WR_DATA(0x00);
@@ -250,40 +291,40 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0xF7);
   LCD_WR_DATA(0x20);
 
-  LCD_WR_REG(0xC0);    /// @diff Power control
-  LCD_WR_DATA(0x25);   // VRH[5:0]
+  LCD_WR_REG(0xC0);   /// @diff Power control
+  LCD_WR_DATA(0x25);  // VRH[5:0]
 
-  LCD_WR_REG(0xC1);    /// @diff control
-  LCD_WR_DATA(0x12);   // SAP[2:0];BT[3:0]
+  LCD_WR_REG(0xC1);   /// @diff control
+  LCD_WR_DATA(0x12);  // SAP[2:0];BT[3:0]
 
-  LCD_WR_REG(0xC5);    /// @diff VCM control
+  LCD_WR_REG(0xC5);   /// @diff VCM control
   LCD_WR_DATA(0x33);
   LCD_WR_DATA(0x3C);
 
-  LCD_WR_REG(0xC7);    ///@diff VCM control2
+  LCD_WR_REG(0xC7);   /// @diff VCM control2
   LCD_WR_DATA(0x9A);
 
-  LCD_WR_REG(0xB1);    /// @diff Frame Rate Control
+  LCD_WR_REG(0xB1);   /// @diff Frame Rate Control
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0x15);
 
   LCD_WR_REG(0x3A);
   LCD_WR_DATA(0x55);
 
-  LCD_WR_REG(0x36);    // Memory Access Control
+  LCD_WR_REG(0x36);   // Memory Access Control
   LCD_WR_DATA(0x68);
 
-  LCD_WR_REG(0xB6);    // Display Function Control
+  LCD_WR_REG(0xB6);   // Display Function Control
   LCD_WR_DATA(0x0A);
   LCD_WR_DATA(0xA2);
 
-  LCD_WR_REG(0xF2);    // 3Gamma Function Disable
+  LCD_WR_REG(0xF2);   // 3Gamma Function Disable
   LCD_WR_DATA(0x00);
 
-  LCD_WR_REG(0x26);    // Gamma curve selected
+  LCD_WR_REG(0x26);   // Gamma curve selected
   LCD_WR_DATA(0x01);
 
-  LCD_WR_REG(0xE0);    /// @diff Set Gamma
+  LCD_WR_REG(0xE0);   /// @diff Set Gamma
   LCD_WR_DATA(0x1F);
   LCD_WR_DATA(0x1C);
   LCD_WR_DATA(0x1A);
@@ -300,7 +341,7 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x08);
   LCD_WR_DATA(0x00);
 
-  LCD_WR_REG(0XE1);    /// @diff Set Gamma
+  LCD_WR_REG(0XE1);   /// @diff Set Gamma
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0x24);
   LCD_WR_DATA(0x25);
@@ -329,88 +370,118 @@ void LCD_init_RGB(void)
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0xef);
 
-  LCD_WR_REG(0x11); //Exit Sleep
+  LCD_WR_REG(0x11);   // Exit Sleep
   Delay_ms(120);
-  LCD_WR_REG(0x29); //display on
+  LCD_WR_REG(0x29);   // Display on
+}
+
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+  LCD_RD_DATA();  // Dummy read
+
+  uint16_t rg, br;
+  rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
+  br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
+
+  return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
 }
 
 #elif LCD_DRIVER_IS(ST7789)
 // ST7789
 void LCD_init_RGB(void)
 {
- 	LCD_WR_REG(0x11);
-	Delay_ms(120); //Delay 120ms
-	//------------------------------display and color format setting--------------------------------//
-	LCD_WR_REG(0x36);
-	LCD_WR_DATA(0x68);
-	LCD_WR_REG(0x3a);
-	LCD_WR_DATA(0x05);
-	//--------------------------------ST7789V Frame rate setting----------------------------------//
-	LCD_WR_REG(0xb2);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x0c);
-	LCD_WR_DATA(0x00);
-	LCD_WR_DATA(0x33);
-	LCD_WR_DATA(0x33);
-	LCD_WR_REG(0xb7);
-	LCD_WR_DATA(0x35);
-	//---------------------------------ST7789V Power setting--------------------------------------//
-	LCD_WR_REG(0xbb);
-	LCD_WR_DATA(0x28);
-	LCD_WR_REG(0xc0);
-	LCD_WR_DATA(0x2c);
-	LCD_WR_REG(0xc2);
-	LCD_WR_DATA(0x01);
-	LCD_WR_REG(0xc3);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_REG(0xc4);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xc6);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_REG(0xd0);
-	LCD_WR_DATA(0xa4);
-	LCD_WR_DATA(0xa1);
-	//--------------------------------ST7789V gamma setting---------------------------------------//
-	LCD_WR_REG(0xe0);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x01);
-	LCD_WR_DATA(0x08);
-	LCD_WR_DATA(0x0f);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x2a);
-	LCD_WR_DATA(0x36);
-	LCD_WR_DATA(0x55);
-	LCD_WR_DATA(0x44);
-	LCD_WR_DATA(0x3a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x06);
-	LCD_WR_DATA(0x11);
-	LCD_WR_DATA(0x20);
-	LCD_WR_REG(0xe1);
-	LCD_WR_DATA(0xd0);
-	LCD_WR_DATA(0x02);
-	LCD_WR_DATA(0x07);
-	LCD_WR_DATA(0x0a);
-	LCD_WR_DATA(0x0b);
-	LCD_WR_DATA(0x18);
-	LCD_WR_DATA(0x34);
-	LCD_WR_DATA(0x43);
-	LCD_WR_DATA(0x4a);
-	LCD_WR_DATA(0x2b);
-	LCD_WR_DATA(0x1b);
-	LCD_WR_DATA(0x1c);
-	LCD_WR_DATA(0x22);
-	LCD_WR_DATA(0x1f);
-	LCD_WR_REG(0x29);
+  LCD_WR_REG(0x11);
+  Delay_ms(120);  // Delay 120ms
+  //------------------------------display and color format setting------------------------------//
+  LCD_WR_REG(0x36);
+  LCD_WR_DATA(0x68);
+  LCD_WR_REG(0x3a);
+  LCD_WR_DATA(0x05);
+  //--------------------------------ST7789V Frame rate setting----------------------------------//
+  LCD_WR_REG(0xb2);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x0c);
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x33);
+  LCD_WR_DATA(0x33);
+  LCD_WR_REG(0xb7);
+  LCD_WR_DATA(0x35);
+  //---------------------------------ST7789V Power setting--------------------------------------//
+  LCD_WR_REG(0xbb);
+  LCD_WR_DATA(0x28);
+  LCD_WR_REG(0xc0);
+  LCD_WR_DATA(0x2c);
+  LCD_WR_REG(0xc2);
+  LCD_WR_DATA(0x01);
+  LCD_WR_REG(0xc3);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_REG(0xc4);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xc6);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_REG(0xd0);
+  LCD_WR_DATA(0xa4);
+  LCD_WR_DATA(0xa1);
+  //--------------------------------ST7789V gamma setting---------------------------------------//
+  LCD_WR_REG(0xe0);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x01);
+  LCD_WR_DATA(0x08);
+  LCD_WR_DATA(0x0f);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x2a);
+  LCD_WR_DATA(0x36);
+  LCD_WR_DATA(0x55);
+  LCD_WR_DATA(0x44);
+  LCD_WR_DATA(0x3a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x06);
+  LCD_WR_DATA(0x11);
+  LCD_WR_DATA(0x20);
+  LCD_WR_REG(0xe1);
+  LCD_WR_DATA(0xd0);
+  LCD_WR_DATA(0x02);
+  LCD_WR_DATA(0x07);
+  LCD_WR_DATA(0x0a);
+  LCD_WR_DATA(0x0b);
+  LCD_WR_DATA(0x18);
+  LCD_WR_DATA(0x34);
+  LCD_WR_DATA(0x43);
+  LCD_WR_DATA(0x4a);
+  LCD_WR_DATA(0x2b);
+  LCD_WR_DATA(0x1b);
+  LCD_WR_DATA(0x1c);
+  LCD_WR_DATA(0x22);
+  LCD_WR_DATA(0x1f);
+  LCD_WR_REG(0x29);
 }
+
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X2E);
+    Delay_us(1);
+    LCD_RD_DATA();  // Dummy read
+
+    uint16_t rg, br;
+    rg = LCD_RD_DATA();  // First pixel R:8bit-G:8bit
+    br = LCD_RD_DATA();  // First pixel B:8bit - Second pixel R:8bit
+
+    return ((rg) << 8) | ((br & 0xFF00) >> 8);  // RG-B
+  }
+#endif
 
 #elif LCD_DRIVER_IS(HX8558)
 // HX8558
 void LCD_init_RGB(void)
 {
-  Delay_ms(50); // delay 50 ms
+  Delay_ms(50);  // delay 50 ms
 
-  LCD_WR_REG(0xFE);                     //
+  LCD_WR_REG(0xFE);
   LCD_WR_REG(0xEF);
   LCD_WR_REG(0x3A);
   LCD_WR_DATA(5);
@@ -510,13 +581,122 @@ void LCD_init_RGB(void)
   LCD_WR_REG(0x2C);
 }
 
+#ifdef SCREEN_SHOT_TO_SD
+  uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+  {
+    LCD_SetWindow(x, y, x, y);
+    LCD_WR_REG(0X22);
+    Delay_us(1);
+    LCD_RD_DATA();  // Dummy read
+
+    GUI_COLOR pix;
+    pix.color = LCD_RD_DATA();
+    return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+  }
+  #warning "LCD_ReadPixel_24Bit() hasn't been tested yet"
 #endif
 
-u16 LCD_ReadID(void)
+#elif LCD_DRIVER_IS(SSD1963)
+// SSD1963  resolution max:864*480
+#define SSD_HOR_RESOLUTION LCD_WIDTH   // LCD width pixel
+#define SSD_VER_RESOLUTION LCD_HEIGHT  // LCD height pixel
+
+#define SSD_HT  (SSD_HOR_RESOLUTION+SSD_HOR_BACK_PORCH+SSD_HOR_FRONT_PORCH)
+#define SSD_HPS (SSD_HOR_BACK_PORCH)
+#define SSD_VT  (SSD_VER_RESOLUTION+SSD_VER_BACK_PORCH+SSD_VER_FRONT_PORCH)
+#define SSD_VPS (SSD_VER_BACK_PORCH)
+
+void LCD_init_RGB(void)
 {
-  u16 id = 0;
+  uint32_t LCDC_FPR;
+  LCD_WR_REG(0xE2);   // Set PLL with OSC = 25MHz (hardware), 250Mhz < VC0 < 800Mhz
+  LCD_WR_DATA(0x17);  // M = 0x17 = 23, VCO = 25Mhz * (M + 1) = 25 * 24 = 600Mhz
+  LCD_WR_DATA(0x04);  // N = 0x04 = 4, PLL = VCO / (N + 1) = 600 / 5 = 120Mhz
+  LCD_WR_DATA(0x54);  // C[2] = 1, Effectuate the multiplier and divider value
+  LCD_WR_REG(0xE0);   // Start PLL command
+  LCD_WR_DATA(0x01);  // enable PLL
+  Delay_ms(10);
+  LCD_WR_REG(0xE0);   // Start PLL command again
+  LCD_WR_DATA(0x03);  // now, use PLL output as system clock
+  Delay_ms(10);
+  LCD_WR_REG(0x01);   // Soft reset
+  Delay_ms(100);
+  LCDC_FPR = (SSD_DCLK_FREQUENCY * 1048576) / 120 -1;  // DCLK Frequency = PLL * (LCDC_FPR + 1)/1048576, LCDC_FPR = (DCLK Frequency * 1048576) / PLL - 1
+  LCD_WR_REG(0xE6);   // 12Mhz = 120Mhz * (LCDC_FPR + 1)/1048576, LCDC_FPR = 104856.6 = 0x019998
+  LCD_WR_DATA((LCDC_FPR >> 16) & 0xFF);
+  LCD_WR_DATA((LCDC_FPR >> 8) & 0xFF);
+  LCD_WR_DATA(LCDC_FPR & 0xFF);
+  LCD_WR_REG(0xB0);   // Set LCD mode
+  LCD_WR_DATA(0x00);  // 0x00: 16bits data, 0x20: 24bits data
+  LCD_WR_DATA(0x00);  // 0x00: TFT Mode
+  LCD_WR_DATA((SSD_HOR_RESOLUTION - 1) >> 8);  // LCD width pixel
+  LCD_WR_DATA((SSD_HOR_RESOLUTION - 1) & 0xFF);
+  LCD_WR_DATA((SSD_VER_RESOLUTION - 1) >> 8);  // LCD height pixel
+  LCD_WR_DATA((SSD_VER_RESOLUTION - 1) & 0xFF);
+  LCD_WR_DATA(0x00);  // RGB format
+  LCD_WR_REG(0xB4);   // Set horizontal period
+  LCD_WR_DATA((SSD_HT - 1) >> 8);  // Horizontal total period (display + non-display) in pixel clock
+  LCD_WR_DATA(SSD_HT - 1);
+  LCD_WR_DATA(SSD_HPS >> 8);  // Non-display period between the start of the horizontal sync (LLINE) signal and the first display data
+  LCD_WR_DATA(SSD_HPS);
+  LCD_WR_DATA(SSD_HOR_PULSE_WIDTH - 1);  // horizontal sync pulse width (LLINE) in pixel clock
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x00);
+  LCD_WR_REG(0xB6);   // Set vertical period
+  LCD_WR_DATA((SSD_VT - 1) >> 8);
+  LCD_WR_DATA(SSD_VT - 1);
+  LCD_WR_DATA(SSD_VPS >> 8);
+  LCD_WR_DATA(SSD_VPS);
+  LCD_WR_DATA(SSD_VER_FRONT_PORCH - 1);
+  LCD_WR_DATA(0x00);
+  LCD_WR_DATA(0x00);
+  LCD_WR_REG(0xF0);   // Set pixel data interface format
+  LCD_WR_DATA(0x03);  // 16-bit(565 format) data for 16bpp
+  LCD_WR_REG(0xBC);   // postprocessor for contrast/brightness/saturation.
+  LCD_WR_DATA(0x34);  // Contrast value (0-127). Set to 52 to reduce banding/flickering.
+  LCD_WR_DATA(0x77);  // Brightness value (0-127). Set to 119 to reduce banding/flickering.
+  LCD_WR_DATA(0x48);  // Saturation value (0-127).
+  LCD_WR_DATA(0x01);  // Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
+  LCD_WR_REG(0x29);   // Set display on
+
+  LCD_WR_REG(0x36);   // Set address mode
+  LCD_WR_DATA(0x00);
+}
+
+uint32_t LCD_ReadPixel_24Bit(int16_t x, int16_t y)
+{
+  LCD_SetWindow(x, y, x, y);
+  LCD_WR_REG(0X2E);
+  Delay_us(1);
+
+  GUI_COLOR pix;
+  pix.color = LCD_RD_DATA();
+  return (pix.RGB.r << 19) | (pix.RGB.g << 10) | (pix.RGB.b << 3);
+}
+
+#elif LCD_DRIVER_IS(ILI9325)
+void LCD_init_RGB(void)
+{
+  uint16_t R01h, R03h, R60h;
+  R01h = (1 << 8) | (0 << 10);                        // SS = 1, SM = 0,  from S720 to S1 (see also  GS bit (R60h))
+  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);  // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
+  R60h = (0 << 15) | (0x27 << 8);                     // Gate Scan Control (R60h) GS=0(G1) NL[5:0]=0x27 (320 lines)
+
+  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
+  LCD_WR_DATA(R01h);
+  LCD_WR_REG(0x0003); // Entry Mode (R03h)
+  LCD_WR_DATA(R03h);
+  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
+  LCD_WR_DATA(R60h);
+}
+#endif
+
+uint16_t LCD_ReadID(void)
+{
+  uint16_t id = 0;
   LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();	//dummy read
+  id = LCD_RD_DATA();  // dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;
@@ -525,18 +705,35 @@ u16 LCD_ReadID(void)
   return id;
 }
 
+#if LCD_DRIVER_IS(ILI9325)
+void LCD_RefreshDirection(void)
+{
+  uint16_t R01h, R03h, R60h;
+  R01h = (infoSettings.rotate_ui ? 0 : 1 << 8) | (0 << 10);     // SS=horizontal flip, SM=0
+  R03h = (1 << 12) | (1 << 5) | (1 << 4) | (1 << 3);            // TRI=0, DFM=0, BGR=1, ORG=0, I/D[1:0]=11, AM=1
+  R60h = (infoSettings.rotate_ui ? 1 : 0 << 15) | (0x27 << 8);  // GS=vertical flip, NL[5:0]=0x27 (320 lines)
+
+  LCD_WR_REG(0x0001); // Driver Output Control Register (R01h)
+  LCD_WR_DATA(R01h);
+  LCD_WR_REG(0x0003); // Entry Mode (R03h)
+  LCD_WR_DATA(R03h);
+  LCD_WR_REG(0x0060); // Driver Output Control (R60h)
+  LCD_WR_DATA(R60h);
+}
+#else
 void LCD_RefreshDirection(void)
 {
   LCD_WR_REG(0X36);
   LCD_WR_DATA(infoSettings.rotate_ui ? TFTLCD_180_DEGREE_REG_VALUE : TFTLCD_0_DEGREE_REG_VALUE);
 }
+#endif
 
 void LCD_Init(void)
 {
   LCD_HardwareConfig();
   LCD_init_RGB();
   GUI_Clear(BLACK);
-  Delay_ms(20);
+  Delay_ms(120);
 
 #ifdef LCD_LED_PIN
   LCD_LED_Init();
@@ -544,6 +741,6 @@ void LCD_Init(void)
 #endif
 
 #ifdef STM32_HAS_FSMC
-  LCD_DMA_Config();  //spi flash to fsmc lcd DMA channel configuration
+  LCD_DMA_Config();  // spi flash to fsmc lcd DMA channel configuration
 #endif
 }

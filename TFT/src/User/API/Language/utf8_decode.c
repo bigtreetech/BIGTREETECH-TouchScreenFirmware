@@ -1,6 +1,7 @@
 #include "utf8_decode.h"
 #include "includes.h"
 
+bool largeFont = false;
 
 static FONT_BITMAP font[] = {
   { // Visible ASCII code, from ' ' to '~'
@@ -21,9 +22,29 @@ static FONT_BITMAP font[] = {
     // the first character code point in this font bitmap file
     0x20, // the first character in BYTE_ASCII_ADDR is 0x20(' ')
   },
+  { // large ASCII font
+    0x20,
+    0x7E,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    LARGE_FONT_ADDR,
+    LARGE_BYTE_HEIGHT,
+    LARGE_BYTE_WIDTH,
+    0x20,
+  },
   { // Czech(Latin 1 Supplement, Extended-A&B)
     0x80,
     0x24F,
+    BYTE_HEIGHT,
+    BYTE_WIDTH,
+    WORD_UNICODE,
+    BYTE_HEIGHT,
+    BYTE_WIDTH * 2, // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
+    0x0,  // the first character in WORD_UNICODE is 0x0000
+  },
+  { // Greek and Coptic
+    0x370,
+    0x3FF,
     BYTE_HEIGHT,
     BYTE_WIDTH,
     WORD_UNICODE,
@@ -52,7 +73,7 @@ static FONT_BITMAP font[] = {
     0,
   },
   { // default font
-    0x0,
+    0x9,
     0xFFFF,
     BYTE_HEIGHT,
     BYTE_WIDTH * 2,
@@ -63,22 +84,47 @@ static FONT_BITMAP font[] = {
   },
 };
 
+//set Large font
+void setLargeFont(bool status)
+{
+  largeFont = status;
+}
+
+bool isLargeFont(void)
+{
+  return largeFont;
+}
+
 // decode character encode info (UTF8)
 static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
-  uint8_t i;
-  uint8_t bytes = 0;
-  uint8_t utfFlg = 0x80;
-
-  while ((ch[0] & utfFlg) == utfFlg)
+  if ((ch[0] & 0x80) == 0) // 0x00 ~ 0x7F
   {
-    utfFlg |= (utfFlg >> 1);
-    bytes++;
+    pInfo->bytes = 1;
+    pInfo->codePoint = (ch[0] & 0x7F);
   }
-  // bytes == 0 means 1 byte, ASCII, 0XXX XXXX
-  pInfo->bytes = bytes ? bytes : 1;
-  pInfo->codePoint = ch[0] & (~utfFlg);
-  for (i = 1; i < bytes; i++)
+  else if ((ch[0] & 0xE0) == 0xC0) // 0x80 ~ 0x7FF
+  {
+    pInfo->bytes = 2;
+    pInfo->codePoint = (ch[0] & 0x1F);
+  }
+  else if ((ch[0] & 0xF0) == 0xE0) // 0x800 ~ 0xFFFF
+  {
+    pInfo->bytes = 3;
+    pInfo->codePoint = (ch[0] & 0x0F);
+  }
+  else if ((ch[0] & 0xF8) == 0xF0) // 0x10000 ~ 0x1FFFFF
+  {
+    pInfo->bytes = 4;
+    pInfo->codePoint = (ch[0] & 0x07);
+  }
+  else // Wrong char return '?' means unkown
+  {
+    pInfo->bytes = 1;
+    pInfo->codePoint = '?';
+  }
+
+  for (uint8_t i = 1; i < pInfo->bytes; i++)
   {
     pInfo->codePoint = (pInfo->codePoint << 6) | (ch[i] & 0x3F);
   }
@@ -87,11 +133,20 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 // get character font bitmap info
 static void getBitMapFontInfo(CHAR_INFO *pInfo)
 {
-  uint8_t i;
-  for (i = 0; i < COUNT(font); i++)
+  if(pInfo->codePoint < 9)
+  {
+    pInfo->pixelWidth = 0;
+    pInfo->pixelHeight = 0;
+    pInfo->bitMapAddr = 0;
+    return;
+  }
+
+  for (uint8_t i = 0; i < COUNT(font); i++)
   {
     if(pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {
+      if(i == 0 && largeFont)
+        i++;
       pInfo->pixelWidth = font[i].pixelWidth;
       pInfo->pixelHeight = font[i].pixelHeight;
       pInfo->bitMapAddr = font[i].bitMapStartAddr + (pInfo->codePoint - font[i].bitMapStartCodePoint) * (font[i].bitMapHeight * font[i].bitMapWidth / 8);
@@ -113,7 +168,7 @@ void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 }
 
 // decode UTF-8 char display bit width
-uint16_t GUI_StrPixelWidth(const uint8_t *const str)
+uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
 {
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
@@ -124,6 +179,29 @@ uint16_t GUI_StrPixelWidth(const uint8_t *const str)
     getCharacterInfo(str + i, &info);
     i += info.bytes;
     len += info.pixelWidth;
+  }
+  return len;
+}
+// decode UTF-8 char display bit width
+uint16_t GUI_StrPixelWidth_label(int16_t index)
+{
+  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
+  if (loadLabelText((u8*)tempstr, index) == false) return 0;
+  return GUI_StrPixelWidth_str(tempstr);
+}
+
+uint16_t getUTF8Length(const uint8_t *const str)
+{
+ uint16_t i = 0, len = 0;
+  CHAR_INFO info;
+
+  if(str == NULL) return 0;
+  while(str[i])
+  {
+    info.bytes = 0;
+    getUTF8EncodeInfo(str + i, &info);
+    i += info.bytes;
+    len ++;
   }
   return len;
 }

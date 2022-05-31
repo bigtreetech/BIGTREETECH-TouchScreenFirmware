@@ -1,134 +1,97 @@
 #include "Language.h"
 #include "includes.h"
-#include "language_en.h"
-#include "language_cn.h"
-#include "language_ru.h"
-#include "language_jp.h"
-#include "language_de.h"
-#include "language_am.h"
-#include "language_cz.h"
-#include "language_es.h"
-#include "language_fr.h"
-#include "language_pt.h"
-#include "language_it.h"
-#include "language_pl.h"
-#include "language_sk.h"
-#include "language_du.h"
-#include "language_hu.h"
+#include "language_keywords.h"
 
+#if DEFAULT_LANGUAGE == ENGLISH
+#include "language_en.h"
+#elif DEFAULT_LANGUAGE == CHINESE
+#include "language_cn.h"
+#elif DEFAULT_LANGUAGE == RUSSIAN
+#include "language_ru.h"
+#elif DEFAULT_LANGUAGE == JAPANESE
+#include "language_jp.h"
+#elif DEFAULT_LANGUAGE == GERMAN
+#include "language_de.h"
+#elif DEFAULT_LANGUAGE == ARMENIAN
+#include "language_am.h"
+#elif DEFAULT_LANGUAGE == CZECH
+#include "language_cz.h"
+#elif DEFAULT_LANGUAGE == SPANISH
+#include "language_es.h"
+#elif DEFAULT_LANGUAGE == FRENCH
+#include "language_fr.h"
+#elif DEFAULT_LANGUAGE == PORTUGUESE
+#include "language_pt.h"
+#elif DEFAULT_LANGUAGE == ITALIAN
+#include "language_it.h"
+#elif DEFAULT_LANGUAGE == POLISH
+#include "language_pl.h"
+#elif DEFAULT_LANGUAGE == SLOVAK
+#include "language_sk.h"
+#elif DEFAULT_LANGUAGE == DUTCH
+#include "language_du.h"
+#elif DEFAULT_LANGUAGE == HUNGARIAN
+#include "language_hu.h"
+#elif DEFAULT_LANGUAGE == TURKISH
+#include "language_tr.h"
+#elif DEFAULT_LANGUAGE == GREEK
+#include "language_gr.h"
+#elif DEFAULT_LANGUAGE == SLOVENIAN
+#include "language_sl.h"
+#elif DEFAULT_LANGUAGE == CATALAN
+#include "language_ca.h"
+#elif DEFAULT_LANGUAGE == TRAD_CHINESE
+#include "language_tc.h"
+#elif DEFAULT_LANGUAGE == UKRAINIAN
+#include "language_uk.h"
+#else
+  #error "Error: invalid language defined"
+#endif
 //
 // Add new Keywords in Language.inc file Only
 //
-const char *const en_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) EN_##NAME ,
+uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
+
+const char *const default_pack[LABEL_NUM] = {
+  #define X_WORD(NAME) STRING_##NAME ,
   #include "Language.inc"
   #undef  X_WORD
 };
 
-const char *const cn_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) CN_##NAME ,
+//keyword list for language.ini
+const char *const lang_key_list[LABEL_NUM] =
+{
+  #define X_WORD(NAME) LANG_KEY_##NAME ,
   #include "Language.inc"
   #undef  X_WORD
 };
 
-const char *const ru_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) RU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const jp_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) JP_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const am_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) AM_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const de_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) DE_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const cz_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) CZ_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const es_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) ES_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const fr_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) FR_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const pt_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) PT_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const it_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) IT_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const pl_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) PL_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const sk_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) SK_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const du_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) DU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-const char *const hu_pack[LABEL_NUM] = {
-  #define X_WORD(NAME) HU_##NAME ,
-  #include "Language.inc"
-  #undef  X_WORD
-};
-
-u8 * textSelect(u8 sel)
+uint8_t *textSelect(uint16_t sel)
 {
   switch(infoSettings.language)
   {
-    case ENGLISH:     return (u8 *)en_pack[sel];
-    case CHINESE:     return (u8 *)cn_pack[sel];
-    case RUSSIAN:     return (u8 *)ru_pack[sel];
-    case JAPANESE:    return (u8 *)jp_pack[sel];
-    case ARMENIAN:    return (u8 *)am_pack[sel];
-    case GERMAN:      return (u8 *)de_pack[sel];
-    case CZECH:       return (u8 *)cz_pack[sel];
-    case SPAIN:       return (u8 *)es_pack[sel];
-    case FRENCH:      return (u8 *)fr_pack[sel];
-    case PORTUGUESE:  return (u8 *)pt_pack[sel];
-    case ITALIAN:     return (u8 *)it_pack[sel];
-    case POLISH:      return (u8 *)pl_pack[sel];
-    case SLOVAK:      return (u8 *)sk_pack[sel];
-    case DUTCH:       return (u8 *)du_pack[sel];
-    case HUNGARIAN:   return (u8 *)hu_pack[sel];
-
-    default:        return NULL;
+    case LANG_DEFAULT:
+      return (uint8_t *)default_pack[sel];
+    case LANG_FLASH:
+      loadLabelText(tempLabelString, sel);
+      return tempLabelString;
+    default:
+      return NULL;
   }
+}
+
+uint32_t getLabelFlashAddr(uint16_t index)
+{
+  if (index > LABEL_BACKGROUND) return LANGUAGE_ADDR;
+  return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
+}
+
+bool loadLabelText(uint8_t* buf, uint16_t index)
+{
+  if(index >= LABEL_NUM) return false;
+  if(infoSettings.language == LANG_FLASH)
+    W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+  else
+    memcpy(buf, textSelect(index), sizeof(tempLabelString));
+  return true;
 }

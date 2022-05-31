@@ -1,0 +1,49 @@
+{
+  "build": {
+    "core": "stm32",
+    "cpu": "cortex-m4",
+    "extra_flags": "-DSTM32F4 -DSTM32F407xx",
+    "f_cpu": "168000000L",
+    "libopencm3": {
+      "ldscript": "stm32f405x6.ld"
+    },
+    "mcu": "stm32f407vgt6",
+    "product_line": "wrongLineForLocal_S"
+  },
+  "debug": {
+    "default_tools": [
+      "cmsis-dap"
+    ],
+    "jlink_device": "STM32F407VG",
+    "onboard_tools": [
+      "cmsis-dap"
+    ],
+    "openocd_board": "stm32f4",
+    "svd_path": "STM32F40x.svd"
+  },
+  "frameworks": [
+    "arduino",
+    "mbed",
+    "cmsis",
+    "spl",
+    "libopencm3",
+    "stm32cube",
+    "zephyr"
+  ],
+  "name": "STM32F407VG (192k RAM. 1024k - 32K Flash)",
+  "upload": {
+    "offset_address": "0x8008000",
+    "maximum_ram_size": 196608,
+    "maximum_size": 1015808,
+    "protocol": "cmsis-dap",
+    "protocols": [
+      "jlink",
+      "stlink",
+      "cmsis-dap",
+      "blackmagic",
+      "mbed"
+    ]
+  },
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f407-417.html",
+  "vendor": "ST"
+}

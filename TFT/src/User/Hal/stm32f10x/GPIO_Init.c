@@ -7,27 +7,27 @@ void GPIO_InitSet(uint16_t io, GPIO_MODE mode, uint8_t AF)
   u16 port = GPIO_GET_PORT(io);
   u16 pin = GPIO_GET_PIN(io);
 
-  RCC->APB2ENR |= 1 << (port+2);  //Enable GPIO Clock, GPIOA start at APB2 bit2
+  RCC->APB2ENR |= 1 << (port+2);            // Enable GPIO Clock, GPIOA start at APB2 bit2
 
   if (mode == MGPIO_MODE_IPD)
   {
-    GPIO_Port[port]->BSRR = 1 << (pin+16);  //set low
+    GPIO_Port[port]->BSRR = 1 << (pin+16);  // set low
     mode = MGPIO_MODE_IPU;
   }
   else if (mode == MGPIO_MODE_IPU)
   {
-    GPIO_Port[port]->BSRR = 1 << pin;  //set high
+    GPIO_Port[port]->BSRR = 1 << pin;       // set high
   }
 
   if(pin <= 7)
   {
-    GPIO_Port[port]->CRL &= ~(0xF << 4*(pin & 0x7));  //clear control reg bits
-    GPIO_Port[port]->CRL |= mode << 4*(pin & 0x7);  //clear control reg bits
+    GPIO_Port[port]->CRL &= ~(0xF << 4*(pin & 0x7));  // clear control reg bits
+    GPIO_Port[port]->CRL |= mode << 4*(pin & 0x7);    // clear control reg bits
   }
   else
   {
-    GPIO_Port[port]->CRH &= ~(0xF << 4*(pin & 0x7));  //clear control reg bits
-    GPIO_Port[port]->CRH |= mode << 4*(pin & 0x7);  //clear control reg bits
+    GPIO_Port[port]->CRH &= ~(0xF << 4*(pin & 0x7));  // clear control reg bits
+    GPIO_Port[port]->CRH |= mode << 4*(pin & 0x7);    // clear control reg bits
   }
 }
 

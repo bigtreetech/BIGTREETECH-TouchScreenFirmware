@@ -41,7 +41,7 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE USB_OTG_Core __ALIGN_END;
 __ALIGN_BEGIN USBH_HOST USB_Host __ALIGN_END;
 
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 
 uint8_t u_disk_inserted = 0;
 
@@ -379,6 +379,12 @@ uint8_t USBH_UDISK_Read(uint8_t* buf, uint32_t sector, uint32_t cnt)
 
   if (HCD_IsDeviceConnected(&USB_OTG_Core))
   {
+    while(USBH_MSC_BOTXferParam.MSCState != USBH_MSC_DEFAULT_APPLI_STATE)
+    {
+      // Precess the unfinished USB event before being called by FatFs
+      USBH_Process(&USB_OTG_Core, &USB_Host);
+    }
+
     do
     {
       status = USBH_MSC_Read10(&USB_OTG_Core, buf, sector,512 * cnt);
@@ -404,6 +410,12 @@ uint8_t USBH_UDISK_Write(uint8_t* buf, uint32_t sector, uint32_t cnt)
 
   if (HCD_IsDeviceConnected(&USB_OTG_Core))
   {
+    while(USBH_MSC_BOTXferParam.MSCState != USBH_MSC_DEFAULT_APPLI_STATE)
+    {
+      // Precess the unfinished USB event before being called by FatFs
+      USBH_Process(&USB_OTG_Core, &USB_Host);
+    }
+
     do
     {
       status = USBH_MSC_Write10(&USB_OTG_Core, buf, sector, 512 * cnt);

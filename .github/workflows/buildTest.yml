@@ -1,9 +1,24 @@
 name: Build Test
-on: [pull_request, push]
+on:
+  pull_request:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
+
+  push:
+    paths-ignore:
+    - Bootloader/**
+    - Copy to SD Card root directory to update/**
+    - images/**
+    - readme/**
+    - '**/*.md'
 
 jobs:
   main:
-    name: Main
+    name: Build Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -27,13 +42,27 @@ jobs:
         run: platformio run --environment BIGTREE_TFT35_V3_0
       - name: Build TFT35 E3 V3.0
         run: platformio run --environment BIGTREE_TFT35_E3_V3_0
+      - name: Build TFT35 B1 V3.0
+        run: platformio run --environment BIGTREE_TFT35_B1_V3_0
+      - name: Build TFT43 V3.0
+        run: platformio run --environment BIGTREE_TFT43_V3_0
+      - name: Build TFT50 V3.0
+        run: platformio run --environment BIGTREE_TFT50_V3_0
+      - name: Build TFT70 V3.0
+        run: platformio run --environment BIGTREE_TFT70_V3_0
       - name: Build TFT28 V1.0
         run: platformio run --environment BIGTREE_TFT28_V1_0
       - name: Build TFT28 V3.0
         run: platformio run --environment BIGTREE_TFT28_V3_0
       - name: Build TFT24 V1.1
         run: platformio run --environment BIGTREE_TFT24_V1_1
+      - name: Build MKS TFT32 V1.3
+        run: platformio run --environment MKS_TFT32_V1_3
       - name: Build MKS TFT32 V1.4
-        run: platformio run --environment MKS_32_V1_4
+        run: platformio run --environment MKS_TFT32_V1_4
       - name: Build MKS TFT32 V1.4 No Bootloader
-        run: platformio run --environment MKS_32_V1_4_NOBL
+        run: platformio run --environment MKS_TFT32_V1_4_NOBL
+      - name: Build MKS TFT28 V3.0
+        run: platformio run --environment MKS_TFT28_V3_0
+      - name: Build MKS TFT28 V4.0
+        run: platformio run --environment MKS_TFT28_V4_0

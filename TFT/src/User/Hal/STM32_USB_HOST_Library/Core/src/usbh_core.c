@@ -28,7 +28,7 @@
 #include "usbh_core.h"
 #include "usb_hcd_int.h"
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 
 /** @addtogroup USBH_LIB
   * @{
@@ -473,7 +473,7 @@ void USBH_ErrorHandle(USBH_HOST *phost, USBH_Status errType)
 static USBH_Status USBH_HandleEnum(USB_OTG_CORE_HANDLE *pdev, USBH_HOST *phost)
 {
   USBH_Status Status = USBH_BUSY;
-  uint8_t Local_Buffer[64];
+  uint8_t Local_Buffer[256];
 
   switch (phost->EnumState)
   {

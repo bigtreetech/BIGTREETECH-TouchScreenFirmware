@@ -103,10 +103,10 @@
      If you are using different crystal you have to adapt those functions accordingly.
     */
 
-#if defined (STM32F10X_LD_VL) || (defined STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
  #define SYSCLK_FREQ_24MHz  24000000
-#elif defined (MKS_32_V1_4)
+#elif defined (MKS_TFT32_V1_3) || defined (MKS_TFT32_V1_4) || defined (MKS_TFT28_V3_0) || defined (MKS_TFT28_V4_0)
  #define SYSCLK_FREQ_48MHz  48000000
 #else
 /* #define SYSCLK_FREQ_HSE    HSE_VALUE */
@@ -120,7 +120,7 @@
 /*!< Uncomment the following line if you need to use external SRAM mounted
      on STM3210E-EVAL board (STM32 High density and XL-density devices) or on
      STM32100E-EVAL board (STM32 High-density value line devices) as data memory */
-#if defined (STM32F10X_HD) || (defined STM32F10X_XL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_HD) || defined (STM32F10X_XL) || defined (STM32F10X_HD_VL)
 /* #define DATA_IN_ExtSRAM */
 #endif
 
@@ -150,23 +150,23 @@
 /*******************************************************************************
 *  Clock Definitions
 *******************************************************************************/
-#ifdef SYSCLK_FREQ_HSE
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_HSE;        /*!< System Clock Frequency (Core Clock) */
-#elif defined SYSCLK_FREQ_24MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_24MHz;        /*!< System Clock Frequency (Core Clock) */
-#elif defined SYSCLK_FREQ_36MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_36MHz;        /*!< System Clock Frequency (Core Clock) */
-#elif defined SYSCLK_FREQ_48MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_48MHz;        /*!< System Clock Frequency (Core Clock) */
-#elif defined SYSCLK_FREQ_56MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_56MHz;        /*!< System Clock Frequency (Core Clock) */
-#elif defined SYSCLK_FREQ_72MHz
-  uint32_t SystemCoreClock         = SYSCLK_FREQ_72MHz;        /*!< System Clock Frequency (Core Clock) */
-#else /*!< HSI Selected as System Clock source */
-  uint32_t SystemCoreClock         = HSI_VALUE;        /*!< System Clock Frequency (Core Clock) */
-#endif
+// #ifdef SYSCLK_FREQ_HSE
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_HSE;        /*!< System Clock Frequency (Core Clock) */
+// #elif defined SYSCLK_FREQ_24MHz
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_24MHz;        /*!< System Clock Frequency (Core Clock) */
+// #elif defined SYSCLK_FREQ_36MHz
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_36MHz;        /*!< System Clock Frequency (Core Clock) */
+// #elif defined SYSCLK_FREQ_48MHz
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_48MHz;        /*!< System Clock Frequency (Core Clock) */
+// #elif defined SYSCLK_FREQ_56MHz
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_56MHz;        /*!< System Clock Frequency (Core Clock) */
+// #elif defined SYSCLK_FREQ_72MHz
+//   uint32_t SystemCoreClock         = SYSCLK_FREQ_72MHz;        /*!< System Clock Frequency (Core Clock) */
+// #else /*!< HSI Selected as System Clock source */
+//   uint32_t SystemCoreClock         = HSI_VALUE;        /*!< System Clock Frequency (Core Clock) */
+// #endif
 
-__I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+// __I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
 /**
   * @}
   */
@@ -211,7 +211,7 @@ static void SetSysClock(void);
   * @param  None
   * @retval None
   */
-void SystemInit (void)
+void SystemClockInit (void)
 {
   /* Reset the RCC clock configuration to the default reset state(for debug purpose) */
   /* Set HSION bit */
@@ -242,7 +242,7 @@ void SystemInit (void)
 
   /* Reset CFGR2 register */
   RCC->CFGR2 = 0x00000000;
-#elif defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
+#elif defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
   /* Disable all interrupts and clear pending bits  */
   RCC->CIR = 0x009F0000;
 
@@ -253,7 +253,7 @@ void SystemInit (void)
   RCC->CIR = 0x009F0000;
 #endif /* STM32F10X_CL */
 
-#if defined (STM32F10X_HD) || (defined STM32F10X_XL) || (defined STM32F10X_HD_VL)
+#if defined (STM32F10X_HD) || defined (STM32F10X_XL) || defined (STM32F10X_HD_VL)
   #ifdef DATA_IN_ExtSRAM
     SystemInit_ExtMemCtl();
   #endif /* DATA_IN_ExtSRAM */
@@ -305,113 +305,113 @@ void SystemInit (void)
   * @param  None
   * @retval None
   */
-void SystemCoreClockUpdate (void)
-{
-  uint32_t tmp = 0, pllmull = 0, pllsource = 0;
+// void SystemCoreClockUpdate (void)
+// {
+//   uint32_t tmp = 0, pllmull = 0, pllsource = 0;
 
-#ifdef  STM32F10X_CL
-  uint32_t prediv1source = 0, prediv1factor = 0, prediv2factor = 0, pll2mull = 0;
-#endif /* STM32F10X_CL */
+// #ifdef  STM32F10X_CL
+//   uint32_t prediv1source = 0, prediv1factor = 0, prediv2factor = 0, pll2mull = 0;
+// #endif /* STM32F10X_CL */
 
-#if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
-  uint32_t prediv1factor = 0;
-#endif /* STM32F10X_LD_VL or STM32F10X_MD_VL or STM32F10X_HD_VL */
+// #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
+//   uint32_t prediv1factor = 0;
+// #endif /* STM32F10X_LD_VL or STM32F10X_MD_VL or STM32F10X_HD_VL */
 
-  /* Get SYSCLK source -------------------------------------------------------*/
-  tmp = RCC->CFGR & RCC_CFGR_SWS;
+//   /* Get SYSCLK source -------------------------------------------------------*/
+//   tmp = RCC->CFGR & RCC_CFGR_SWS;
 
-  switch (tmp)
-  {
-    case 0x00:  /* HSI used as system clock */
-      SystemCoreClock = HSI_VALUE;
-      break;
-    case 0x04:  /* HSE used as system clock */
-      SystemCoreClock = HSE_VALUE;
-      break;
-    case 0x08:  /* PLL used as system clock */
+//   switch (tmp)
+//   {
+//     case 0x00:  /* HSI used as system clock */
+//       SystemCoreClock = HSI_VALUE;
+//       break;
+//     case 0x04:  /* HSE used as system clock */
+//       SystemCoreClock = HSE_VALUE;
+//       break;
+//     case 0x08:  /* PLL used as system clock */
 
-      /* Get PLL clock source and multiplication factor ----------------------*/
-      pllmull = RCC->CFGR & RCC_CFGR_PLLMULL;
-      pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
+//       /* Get PLL clock source and multiplication factor ----------------------*/
+//       pllmull = RCC->CFGR & RCC_CFGR_PLLMULL;
+//       pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
 
-#ifndef STM32F10X_CL
-      pllmull = ( pllmull >> 18) + 2;
+// #ifndef STM32F10X_CL
+//       pllmull = ( pllmull >> 18) + 2;
 
-      if (pllsource == 0x00)
-      {
-        /* HSI oscillator clock divided by 2 selected as PLL clock entry */
-        SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
-      }
-      else
-      {
- #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || (defined STM32F10X_HD_VL)
-       prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
-       /* HSE oscillator clock selected as PREDIV1 clock entry */
-       SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
- #else
-        /* HSE selected as PLL clock entry */
-        if ((RCC->CFGR & RCC_CFGR_PLLXTPRE) != (uint32_t)RESET)
-        {/* HSE oscillator clock divided by 2 */
-          SystemCoreClock = (HSE_VALUE >> 1) * pllmull;
-        }
-        else
-        {
-          SystemCoreClock = HSE_VALUE * pllmull;
-        }
- #endif
-      }
-#else
-      pllmull = pllmull >> 18;
+//       if (pllsource == 0x00)
+//       {
+//         /* HSI oscillator clock divided by 2 selected as PLL clock entry */
+//         SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+//       }
+//       else
+//       {
+//  #if defined (STM32F10X_LD_VL) || defined (STM32F10X_MD_VL) || defined (STM32F10X_HD_VL)
+//        prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
+//        /* HSE oscillator clock selected as PREDIV1 clock entry */
+//        SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
+//  #else
+//         /* HSE selected as PLL clock entry */
+//         if ((RCC->CFGR & RCC_CFGR_PLLXTPRE) != (uint32_t)RESET)
+//         {/* HSE oscillator clock divided by 2 */
+//           SystemCoreClock = (HSE_VALUE >> 1) * pllmull;
+//         }
+//         else
+//         {
+//           SystemCoreClock = HSE_VALUE * pllmull;
+//         }
+//  #endif
+//       }
+// #else
+//       pllmull = pllmull >> 18;
 
-      if (pllmull != 0x0D)
-      {
-         pllmull += 2;
-      }
-      else
-      { /* PLL multiplication factor = PLL input clock * 6.5 */
-        pllmull = 13 / 2;
-      }
+//       if (pllmull != 0x0D)
+//       {
+//          pllmull += 2;
+//       }
+//       else
+//       { /* PLL multiplication factor = PLL input clock * 6.5 */
+//         pllmull = 13 / 2;
+//       }
 
-      if (pllsource == 0x00)
-      {
-        /* HSI oscillator clock divided by 2 selected as PLL clock entry */
-        SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
-      }
-      else
-      {/* PREDIV1 selected as PLL clock entry */
+//       if (pllsource == 0x00)
+//       {
+//         /* HSI oscillator clock divided by 2 selected as PLL clock entry */
+//         SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+//       }
+//       else
+//       {/* PREDIV1 selected as PLL clock entry */
 
-        /* Get PREDIV1 clock source and division factor */
-        prediv1source = RCC->CFGR2 & RCC_CFGR2_PREDIV1SRC;
-        prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
+//         /* Get PREDIV1 clock source and division factor */
+//         prediv1source = RCC->CFGR2 & RCC_CFGR2_PREDIV1SRC;
+//         prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
 
-        if (prediv1source == 0)
-        {
-          /* HSE oscillator clock selected as PREDIV1 clock entry */
-          SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
-        }
-        else
-        {/* PLL2 clock selected as PREDIV1 clock entry */
+//         if (prediv1source == 0)
+//         {
+//           /* HSE oscillator clock selected as PREDIV1 clock entry */
+//           SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull;
+//         }
+//         else
+//         {/* PLL2 clock selected as PREDIV1 clock entry */
 
-          /* Get PREDIV2 division factor and PLL2 multiplication factor */
-          prediv2factor = ((RCC->CFGR2 & RCC_CFGR2_PREDIV2) >> 4) + 1;
-          pll2mull = ((RCC->CFGR2 & RCC_CFGR2_PLL2MUL) >> 8 ) + 2;
-          SystemCoreClock = (((HSE_VALUE / prediv2factor) * pll2mull) / prediv1factor) * pllmull;
-        }
-      }
-#endif /* STM32F10X_CL */
-      break;
+//           /* Get PREDIV2 division factor and PLL2 multiplication factor */
+//           prediv2factor = ((RCC->CFGR2 & RCC_CFGR2_PREDIV2) >> 4) + 1;
+//           pll2mull = ((RCC->CFGR2 & RCC_CFGR2_PLL2MUL) >> 8 ) + 2;
+//           SystemCoreClock = (((HSE_VALUE / prediv2factor) * pll2mull) / prediv1factor) * pllmull;
+//         }
+//       }
+// #endif /* STM32F10X_CL */
+//       break;
 
-    default:
-      SystemCoreClock = HSI_VALUE;
-      break;
-  }
+//     default:
+//       SystemCoreClock = HSI_VALUE;
+//       break;
+//   }
 
-  /* Compute HCLK clock frequency ----------------*/
-  /* Get HCLK prescaler */
-  tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
-  /* HCLK clock frequency */
-  SystemCoreClock >>= tmp;
-}
+//   /* Compute HCLK clock frequency ----------------*/
+//   /* Get HCLK prescaler */
+//   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+//   /* HCLK clock frequency */
+//   SystemCoreClock >>= tmp;
+// }
 
 /**
   * @brief  Configures the System clock frequency, HCLK, PCLK2 and PCLK1 prescalers.

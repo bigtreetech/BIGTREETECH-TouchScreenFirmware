@@ -115,7 +115,7 @@ __ALIGN_BEGIN uint8_t USBH_DataOutBuffer[512] __ALIGN_END ;
 
 
 
-#ifdef U_DISK_SUPPROT
+#ifdef U_DISK_SUPPORT
 /**
   * @brief  USBH_MSC_TestUnitReady
   *         Issues 'Test unit ready' command to the device. Once the response

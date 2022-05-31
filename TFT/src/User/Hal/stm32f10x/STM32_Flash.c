@@ -2,7 +2,7 @@
 #include "my_misc.h"
 #include "stm32f10x.h"
 
-#define SIGN_ADDRESS (0x08040000 - 0x800)  //reserve the last page (2KB) to save user parameters
+#define SIGN_ADDRESS (0x08040000 - 0x800)  // reserve the last page (2KB) to save user parameters
 
 void STM32_FlashRead(u8 *data, u32 len)
 {
@@ -20,7 +20,7 @@ void STM32_FlashWrite(u8 *data, u32 len)
   FLASH_ErasePage(SIGN_ADDRESS);
   for(i = 0; i < len; i += 2)
   {
-    u16 data16 = data[i] | (data[MIN(i+1, len-1)] << 8);  //stm32f10x needs to write at least 16 bits at a time
+    u16 data16 = data[i] | (data[MIN(i+1, len-1)] << 8);  // stm32f10x needs to write at least 16 bits at a time
     FLASH_ProgramHalfWord(SIGN_ADDRESS + i, data16);
   }
   FLASH_Lock();

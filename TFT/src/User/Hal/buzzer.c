@@ -6,26 +6,25 @@
 
 void TIM3_Config(void)
 {
-	NVIC_InitTypeDef NVIC_InitStructure;
+  NVIC_InitTypeDef NVIC_InitStructure;
 
-	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
+  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
 
-	RCC->APB1ENR |= RCC_APB1Periph_TIM3;
-	TIM3->CR1 &= ~(0x01);
-	TIM3->DIER |= 1<<0;
-  TIM3->SR = (uint16_t)~(1<<0);
- 	TIM3->ARR = F_CPUM - 1; // 20hz to 1Mhz
+  RCC->APB1ENR |= RCC_APB1Periph_TIM3;
+  TIM3->CR1 &= ~TIM_CR1_CEN;
+  TIM3->DIER |= TIM_DIER_UIE;
+  TIM3->SR &= ~TIM_SR_UIF;
+  TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 20hz to 1Mhz
 }
 
 void Buzzer_Config(void)
 {
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_OUT_PP, 0);
-
-	TIM3_Config();
+  TIM3_Config();
 }
 
 void Buzzer_DeConfig(void)
@@ -35,33 +34,35 @@ void Buzzer_DeConfig(void)
 
 static BUZZER buzzer;
 volatile uint32_t buzzerEndTime = 0;
+volatile uint32_t toggles = 0;
 
-void tone(const uint32_t frequency, const uint32_t duration);
-void loopBuzzer(void) {
-  const uint32_t now = OS_GetTimeMs();
+void tone(const uint16_t frequency, const uint16_t duration);
 
-  if (!buzzerEndTime) {
+void loopBuzzer(void)
+{
+  if (!buzzerEndTime)
+  {
     if (buzzer.count == 0) return;
-
-    buzzerEndTime = now + buzzer.duration[buzzer.rIndex];
-
-    if (buzzer.frequency[buzzer.rIndex] > 0) {
+    buzzerEndTime = OS_GetTimeMs() + buzzer.duration[buzzer.rIndex];
+    if (buzzer.frequency[buzzer.rIndex] > 0)
+    {
       tone(buzzer.frequency[buzzer.rIndex], buzzer.duration[buzzer.rIndex]);
     }
-
     buzzer.rIndex = (buzzer.rIndex + 1) % BUZZER_CACHE_SIZE;
     buzzer.count--;
   }
-  else if (now > buzzerEndTime) {
+  else if (OS_GetTimeMs() > buzzerEndTime && toggles == 0)
+  {
     buzzerEndTime = 0;
+    TIM3->CR1 &= ~TIM_CR1_CEN;  // stop timer (for safety)
     GPIO_SetLevel(BUZZER_PIN, BUZZER_STOP_LEVEL);
   }
 }
 
-void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
+void Buzzer_TurnOn(const uint16_t frequency, const uint16_t duration)
 {
-    if(infoSettings.silent) return;
-  while (buzzer.count == BUZZER_CACHE_SIZE) {
+  while (buzzer.count == BUZZER_CACHE_SIZE)
+  {
     loopBuzzer();
   }
   buzzer.duration[buzzer.wIndex] = duration;
@@ -70,71 +71,126 @@ void Buzzer_TurnOn(const uint32_t frequency, const uint32_t duration)
   buzzer.count++;
 }
 
-void Buzzer_play(SOUND sound){
-switch (sound)
+void Buzzer_play(SOUND sound)
 {
-case sound_ok:
-  Buzzer_TurnOn(3800,40);
-  Buzzer_TurnOn(0,20);
-  Buzzer_TurnOn(5500,50);
-  break;
-case sound_success:
+  // if (infoSettings.allSound != 1)
+    // return;
+  switch (sound)
+  {
+    case sound_ok:
+      if (infoSettings.alertSound != 1)
+        break;
+      Buzzer_TurnOn(3500, 50);
+      Buzzer_TurnOn(0, 40);
+      Buzzer_TurnOn(5500, 50);
+      break;
 
-  Buzzer_TurnOn(3500,50);
-  Buzzer_TurnOn(0,50);
-  Buzzer_TurnOn(3500,50);
-  Buzzer_TurnOn(0,50);
-  Buzzer_TurnOn(3500,50);
-  break;
-case sound_cancel:
-  Buzzer_TurnOn(5500,50);
-  Buzzer_TurnOn(0,20);
-  Buzzer_TurnOn(3800,40);
-  break;
-  case sound_notify:
-  Buzzer_TurnOn(3090,50);
-  Buzzer_TurnOn(0,50);
-  Buzzer_TurnOn(4190,50);
-  break;
-case sound_error:
-   Buzzer_TurnOn(2200,200);
-   Buzzer_TurnOn(0,60);
-   Buzzer_TurnOn(2200,200);
-   Buzzer_TurnOn(0,60);
-   Buzzer_TurnOn(2200,200);
-  break;
-case sound_keypress:
-default:
-  Buzzer_TurnOn(BUZZER_FREQUENCY_HZ,BUZZER_FREQUENCY_DURATION_MS);
-  break;
-}
+    case sound_success:
+      if (infoSettings.alertSound != 1)
+        break;
+      Buzzer_TurnOn(3500, 50);
+      Buzzer_TurnOn(0, 50);
+      Buzzer_TurnOn(3500, 50);
+      Buzzer_TurnOn(0, 50);
+      Buzzer_TurnOn(3500, 50);
+      break;
+
+    case sound_cancel:
+      if (infoSettings.alertSound != 1)
+        break;
+      Buzzer_TurnOn(5500, 50);
+      Buzzer_TurnOn(0, 20);
+      Buzzer_TurnOn(3500, 40);
+      break;
+
+    case sound_notify:
+      if (infoSettings.alertSound != 1)
+        break;
+      Buzzer_TurnOn(3090, 50);
+      Buzzer_TurnOn(0, 50);
+      Buzzer_TurnOn(4190, 50);
+      break;
+
+    case sound_error:
+      Buzzer_TurnOn(2200, 200);
+      Buzzer_TurnOn(0, 60);
+      Buzzer_TurnOn(2200, 200);
+      Buzzer_TurnOn(0, 60);
+      Buzzer_TurnOn(2200, 200);
+      break;
+
+    case sound_deny:
+      if (infoSettings.alertSound != 1)
+        break;
+      Buzzer_TurnOn(500, 10);
+      Buzzer_TurnOn(10000, 20);
+      break;
+
+    case sound_toast:
+      if (infoSettings.toastSound != 1)
+        break;
+      Buzzer_TurnOn(1500, 30);
+      Buzzer_TurnOn(2000, 30);
+      break;
+
+    case sound_heated:
+      if (infoSettings.heaterSound != 1)
+        break;
+      Buzzer_TurnOn(3136, 50);
+      Buzzer_TurnOn(0, 50);
+      Buzzer_TurnOn(3951, 50);
+      Buzzer_TurnOn(0, 100);
+      Buzzer_TurnOn(3951, 50);
+      break;
+
+    case sound_cooled:
+      if (infoSettings.heaterSound != 1)
+        break;
+      Buzzer_TurnOn(3951, 50);
+      Buzzer_TurnOn(0, 50);
+      Buzzer_TurnOn(3136, 50);
+      Buzzer_TurnOn(0, 100);
+      Buzzer_TurnOn(3136, 50);
+      break;
+
+    case sound_keypress:
+    default:
+      if (infoSettings.touchSound != 1)
+        break;
+      Buzzer_TurnOn(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
+      break;
+  }
 }
 
-volatile uint32_t toggles = 0;
-void tone(const uint32_t frequency, const uint32_t duration) {
+void tone(const uint16_t frequency, const uint16_t duration)
+{
   if (frequency == 0 || duration == 0) return;
 
   NVIC_DisableIRQ(TIM3_IRQn);
-  toggles = 2 * frequency * duration / 1000;
+  toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
-  TIM3->CR1 &= ~(0x01);
-	TIM3->CNT =0;
-	TIM3->PSC = (1000000 / (2 * frequency)) - 1;
-  TIM3->CR1 |= 0x01;
+  TIM3->CR1 &= ~TIM_CR1_CEN;
+  TIM3->CNT =0;
+  TIM3->PSC = (1000000 / (2 * frequency)) - 1;
+  TIM3->CR1 |= TIM_CR1_CEN;
 
   NVIC_EnableIRQ(TIM3_IRQn);
 }
 
-
-void TIM3_IRQHandler(void) {
-  if ((TIM3->SR & 0x01) != 0) {   // update interrupt flag
-    TIM3->SR = (uint16_t)~(1<<0); // clear interrupt flag
-    if (toggles != 0) {
-      if(toggles > 0) toggles--;
-       GPIO_ToggleLevel(BUZZER_PIN);
-    } else {
-      TIM3->CR1 &= ~(0x01); // stop timer
+void TIM3_IRQHandler(void)
+{
+  if ((TIM3->SR & TIM_SR_UIF) != 0)  // update interrupt flag
+  {
+    if (toggles != 0)
+    {
+      toggles--;
+      GPIO_ToggleLevel(BUZZER_PIN);
     }
+    else
+    {
+      TIM3->CR1 &= ~TIM_CR1_CEN;  // stop timer
+    }
+    TIM3->SR &= ~TIM_SR_UIF;  // clear interrupt flag
   }
 }
 
