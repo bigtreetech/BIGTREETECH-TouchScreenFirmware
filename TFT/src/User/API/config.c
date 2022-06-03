@@ -662,6 +662,10 @@ void parseConfigKey(uint16_t index)
       infoSettings.notification_m117 = getOnOff();
       break;
 
+    case C_INDEX_PROG_SOURCE:
+      SET_VALID_INT_VALUE(infoSettings.prog_source, 0, 1);
+      break;
+
     case C_INDEX_PROG_DISP_TYPE:
       SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
       break;

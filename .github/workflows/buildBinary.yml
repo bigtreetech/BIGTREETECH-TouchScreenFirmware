@@ -139,5 +139,5 @@ jobs:
         with:
           email: 38851044+bigtreetech@users.noreply.github.com
           name: bigtreetech
-          message: Update prebuilt binaries and config
+          message: 📦️ Update prebuilt binaries and config
           token: ${{ secrets.MY_SECRET_TOKEN }}

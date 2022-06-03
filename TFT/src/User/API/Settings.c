@@ -52,6 +52,7 @@ void initSettings(void)
   infoSettings.persistent_info        = PERSISTENT_INFO;
   infoSettings.terminal_ack           = TERMINAL_ACK;
   infoSettings.notification_m117      = NOTIFICATION_M117;
+  infoSettings.prog_source            = PROG_SOURCE;
   infoSettings.prog_disp_type         = PROG_DISP_TYPE;
   infoSettings.layer_disp_type        = LAYER_DISP_TYPE;
 
