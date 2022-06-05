@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "FW Obnovení"
     #define STRING_RETRACT_AUTO           "Auto Firmware Retract"
     #define STRING_HOTEND_OFFSET          "Offset 2.trysky"
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC Tichý režim"
     #define STRING_DELTA_CONFIGURATION    "Delta konfigurace"
     #define STRING_DELTA_TOWER_ANGLE      "Úhel věže"

@@ -63,6 +63,8 @@ extern "C" {
 #define LANG_KEY_FWRECOVER                    "label_fwrecover:"
 #define LANG_KEY_RETRACT_AUTO                 "label_retract_auto:"
 #define LANG_KEY_HOTEND_OFFSET                "label_hotend_offset:"
+#define LANG_KEY_HOTEND_PID                   "label_hotend_pid:"
+#define LANG_KEY_BED_PID                      "label_bed_pid:"
 #define LANG_KEY_STEALTH_CHOP                 "label_stealth_chop:"
 #define LANG_KEY_DELTA_CONFIGURATION          "label_delta_configuration:"
 #define LANG_KEY_DELTA_TOWER_ANGLE            "label_delta_tower_angle:"

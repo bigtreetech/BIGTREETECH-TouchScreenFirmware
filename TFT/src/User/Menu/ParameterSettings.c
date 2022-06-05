@@ -18,6 +18,8 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_FWRECOVER,
   LABEL_RETRACT_AUTO,
   LABEL_HOTEND_OFFSET,
+  LABEL_HOTEND_PID,
+  LABEL_BED_PID,
   LABEL_ABL,
   LABEL_STEALTH_CHOP,
   LABEL_DELTA_CONFIGURATION,
@@ -72,6 +74,14 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 
         case P_JUNCTION_DEVIATION:
           parameterMainItem->titlelabel = junctionDeviationDisplayID[elementIndex];
+          break;
+
+        case P_HOTEND_PID:
+          parameterMainItem->titlelabel.address = hotendPidDisplayID[elementIndex];
+          break;
+
+        case P_BED_PID:
+          parameterMainItem->titlelabel.address = bedPidDisplayID[elementIndex];
           break;
 
         case P_FWRETRACT:
@@ -263,8 +273,9 @@ void menuParameterSettings(void)
         else
         {
           psCurPage = 0;
-          CLOSE_MENU();
         }
+
+        CLOSE_MENU();
         break;
 
       default:
