@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Autocalibrage PID"
     #define STRING_TUNE_START_INFO        "L'autocalibrage va être lancé. Cela peut prendre quelques minutes.\nContinuer ?"
-    #define STRING_TUNE_START_INFO_2      "Autocalibrage en cours !"
-    #define STRING_TUNE_START_INFO_3      "Ne touchez pas l'écran avant la fin (LED verte allumée) !"
     #define STRING_TUNE_EXTRUDER          "Extrudeur"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Réglage de l'extrudeur"

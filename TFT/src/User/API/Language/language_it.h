@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Autoregolazione PID"
     #define STRING_TUNE_START_INFO        "Partirà l'autoregolazione. Può richiedere diversi minuti.\nContinuare?"
-    #define STRING_TUNE_START_INFO_2      "Autoregolazione in corso!"
-    #define STRING_TUNE_START_INFO_3      "NON TOCCARE lo schermo fino al completamento!"
     #define STRING_TUNE_EXTRUDER          "Step/mm E"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Estr. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Regolazione estr. | Scalda"

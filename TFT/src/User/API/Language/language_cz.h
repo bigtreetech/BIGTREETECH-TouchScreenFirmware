@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autokalibrace"
     #define STRING_TUNE_START_INFO        "Autokalibrace bude spuštěna. Bude to chvíli trvat.\nPokračovat?"
-    #define STRING_TUNE_START_INFO_2      "Autokalibrace probíhá!"
-    #define STRING_TUNE_START_INFO_3      "NEDOTÝKEJ se displeje dokud není dokončeno (Zelená LED svítí)!"
     #define STRING_TUNE_EXTRUDER          "E-Krok"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define STRING_TUNE_EXT_TEMP          "Kalibrace extruderu, ohřev"

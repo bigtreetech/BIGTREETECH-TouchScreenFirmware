@@ -5,52 +5,79 @@
 
 const char *const pidCmdMarlin[] = PID_CMD_MARLIN;
 const char *const pidCmdRRF[] = PID_CMD_RRF;
-static int16_t pidHeaterTarget[MAX_HEATER_COUNT] = {0};
+
+static int16_t pidHeaterTarget[MAX_HEATER_PID_COUNT] = {0};
 static uint8_t curTool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
-static uint32_t pidTimeout = 0;
-static uint8_t pidCounter = 0;
-static bool pidSucceeded = false;
-static bool pidRunning = false;
+uint32_t pidTimeout = 0;
+static PID_STATUS pidStatus = PID_IDLE;
 
 // called by parseAck() to notify PID process status
-void pidUpdateStatus(bool succeeded)
+void pidUpdateStatus(PID_STATUS status)
 {
-  if (!pidRunning && pidCounter == 0)  // if PID process was not started from PID menu, nothing to do
+  if (pidStatus != PID_RUNNING)  // update only if PID tuning is running and initiated from GUI
     return;
 
-  if (pidCounter > 0)
-    pidCounter--;
+  pidStatus = status;
+}
 
-  if (!succeeded)  // if one PID process fails, the overall PID process must be marked as failed so no save to EEPROM will be allowed
-    pidSucceeded = false;
+uint8_t checkFirstValidPID(void)
+{
+  uint8_t tool = 0;
 
-  if (pidCounter > 0)  // if all the PID processes were still not terminated, simply provide a notification
+  while (tool < MAX_HEATER_PID_COUNT)
   {
-    #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-      LABELCHAR(tempMsg, LABEL_PID_TITLE);
-
-      if (succeeded)
-      {
-        sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
-        BUZZER_PLAY(SOUND_NOTIFY);
-        addToast(DIALOG_TYPE_INFO, tempMsg);
-      }
-      else
-      {
-        sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_ABORTED));
-        BUZZER_PLAY(SOUND_ERROR);
-        addToast(DIALOG_TYPE_ERROR, tempMsg);
-      }
-    #endif
+    if (pidHeaterTarget[tool] == 0)
+      tool++;
+    else
+      break;
   }
-  else  // if all the PID processes terminated, provide the final dialog
+
+  return tool;
+}
+
+void pidRun(void)
+{
+  uint8_t tool = checkFirstValidPID();
+
+  if (tool < MAX_HEATER_PID_COUNT)
   {
-    pidRunning = false;
+    mustStoreCmd("%s S%d\n", (infoMachineSettings.firmwareType == FW_REPRAPFW) ? pidCmdRRF[tool] : pidCmdMarlin[tool], (int)pidHeaterTarget[tool]);  // start PID autotune
+    pidStatus = PID_RUNNING;
+  }
+}
 
-    LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
+static inline void pidStart(void)
+{
+  pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
+  LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
+  LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
+  pidRun();
+}
 
-    if (pidSucceeded)  // if all the PID processes successfully terminated, allow to save to EEPROM
+void pidResultAction(void)
+{
+  if (pidStatus == PID_TIMEOUT)
+  {
+    memset(pidHeaterTarget, 0, sizeof(pidHeaterTarget));  // reset pidHeaterTarget[] to 0
+
+    LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
+    sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
+    BUZZER_PLAY(SOUND_NOTIFY);
+    popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, (uint8_t *) tempMsg);
+  }
+  else if (pidStatus == PID_FAILED)
+  {
+    memset(pidHeaterTarget, 0, sizeof(pidHeaterTarget));  // reset pidHeaterTarget[] to 0
+
+    BUZZER_PLAY(SOUND_ERROR);
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, LABEL_PROCESS_ABORTED);
+  }
+  else if (pidStatus == PID_SUCCESS)
+  {
+    pidHeaterTarget[checkFirstValidPID()] = 0;  // reset the succesful PID tool's target temperature to 0
+
+    if (checkFirstValidPID() == MAX_HEATER_PID_COUNT)  // no more tools left, PID autotune finished
     {
       BUZZER_PLAY(SOUND_SUCCESS);
 
@@ -68,66 +95,24 @@ void pidUpdateStatus(bool succeeded)
         popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (uint8_t *) tempMsg);
       }
     }
-    else  // if at least a PID process failed, provide an error dialog
+    else  // PID tuning process not finished for all tools
     {
-      BUZZER_PLAY(SOUND_ERROR);
+      #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
+        LABELCHAR(tempMsg, LABEL_PID_TITLE);
 
-      popupReminder(DIALOG_TYPE_ERROR, LABEL_PID_TITLE, LABEL_PROCESS_ABORTED);
+        sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_PROCESS_COMPLETED));
+        BUZZER_PLAY(SOUND_NOTIFY);
+        addToast(DIALOG_TYPE_INFO, tempMsg);
+      #endif
+
+      pidRun();  // autotune next tool
     }
   }
-}
 
-static inline void pidCheckTimeout(void)
-{
-  if (pidRunning)
+  if (checkFirstValidPID() == MAX_HEATER_PID_COUNT)  // no more tools left, PID autotune finished
   {
-    if (OS_GetTimeMs() > pidTimeout)
-    {
-      pidRunning = false;
-      //pidCounter = 0;        // we voluntary don't reset (commented out the code) also pidCounter and pidSucceeded to let the
-      //pidSucceeded = false;  // pidUpdateStatus function allow to handle status updates eventually arriving after the timeout
-
-      LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
-
-      LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
-
-      sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_BUSY));
-      BUZZER_PLAY(SOUND_NOTIFY);
-      popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, (uint8_t *) tempMsg);
-    }
-  }
-}
-
-static inline void pidUpdateCounter(void)
-{
-  pidCounter = 0;
-
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // hotends + bed + chamber
-  {
-    if (pidHeaterTarget[i] > 0)
-      pidCounter++;
-  }
-}
-
-static inline void pidStart(void)
-{
-  const char *const *pidCmd = (infoMachineSettings.firmwareType == FW_REPRAPFW) ? pidCmdRRF : pidCmdMarlin;
-  pidRunning = true;
-  pidSucceeded = true;
-
-  pidUpdateCounter();  // update the number of set temperatures (number of PID processes to execute)
-  pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
-
-  LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
-  LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
-
-  for (uint8_t i = 0; i < MAX_HEATER_PID_COUNT; i++)  // hotends + bed
-  {
-    if (pidHeaterTarget[i] > 0)
-    {
-      mustStoreCmd("%s S%d\n", pidCmd[i], (int)pidHeaterTarget[i]);  // start PID autotune
-      mustStoreCmd("G4 S1\n");                                       // wait 1 sec
-    }
+    pidStatus = PID_IDLE;
+    LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
   }
 }
 
@@ -153,7 +138,7 @@ void menuPid(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   if (hasMPC() && curTool_index < MAX_HOTEND_COUNT)
-    curTool_index = MAX_HOTEND_COUNT;  // there's no PID for hotends if MPC enabled
+    curTool_index = BED;  // there's no PID for hotends if MPC enabled
 
   pidItems.items[KEY_ICON_4] = itemTool[curTool_index];
   pidItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
@@ -163,7 +148,7 @@ void menuPid(void)
 
   while (MENU_IS(menuPid))
   {
-    if (!pidRunning)
+    if (pidStatus == PID_IDLE)
     {
       key_num = menuKeyGetValue();
 
@@ -223,9 +208,7 @@ void menuPid(void)
           break;
 
         case KEY_ICON_6:
-          pidUpdateCounter();
-
-          if (pidCounter == 0)  // if no temperature was set to a value > 0
+          if (checkFirstValidPID() == MAX_HEATER_PID_COUNT)  // if no temperature was set to a value > 0
           {
             addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
           }
@@ -248,13 +231,20 @@ void menuPid(void)
           break;
       }
     }
-    else if (getMenuType() != MENU_TYPE_SPLASH)
+    else
     {
-      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
-    }
+      if (getMenuType() != MENU_TYPE_SPLASH)
+      {
+        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
+        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      }
 
-    pidCheckTimeout();
+      if (OS_GetTimeMs() > pidTimeout)
+        pidUpdateStatus(PID_TIMEOUT);
+
+      if (pidStatus != PID_RUNNING)
+        pidResultAction();
+    }
 
     loopProcess();
   }

@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID oto. ayar"
     #define STRING_TUNE_START_INFO        "Oto. ayarlama zaman alabilir.\nDevam?"
-    #define STRING_TUNE_START_INFO_2      "Oto. ayar sürüyor!"
-    #define STRING_TUNE_START_INFO_3      "Tamamlanana kadar ekrana dokunmayınız (yeşil led açık)!"
     #define STRING_TUNE_EXTRUDER          "Ext. Adım"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Ekstruder ayarlama | Isı"

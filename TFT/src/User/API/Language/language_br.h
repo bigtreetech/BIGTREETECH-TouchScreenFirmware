@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Auto Ajuste do PID"
     #define STRING_TUNE_START_INFO        "O Auto Ajuste começará. Isso pode demorar. \nContinua?"
-    #define STRING_TUNE_START_INFO_2      "Autoajuste em andamento!"
-    #define STRING_TUNE_START_INFO_3      "NÃO TOQUE na tela até completar!"
     #define STRING_TUNE_EXTRUDER          "Passos/mm E"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Extr. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extr. ajuste | Aquece"

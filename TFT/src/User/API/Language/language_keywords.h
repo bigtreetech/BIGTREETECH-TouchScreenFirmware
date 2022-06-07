@@ -343,8 +343,6 @@ extern "C" {
 #define LANG_KEY_PID                          "label_pid:"
 #define LANG_KEY_PID_TITLE                    "label_pid_title:"
 #define LANG_KEY_TUNE_START_INFO              "label_tune_start_info:"
-#define LANG_KEY_TUNE_START_INFO_2            "label_tune_start_info_2:"
-#define LANG_KEY_TUNE_START_INFO_3            "label_tune_start_info_3:"
 #define LANG_KEY_TUNE_EXTRUDER                "label_tune_extruder:"
 #define LANG_KEY_TUNE_EXT_EXTRUDE_100         "label_tune_ext_extrude_100:"
 #define LANG_KEY_TUNE_EXT_TEMP                "label_tune_ext_temp:"

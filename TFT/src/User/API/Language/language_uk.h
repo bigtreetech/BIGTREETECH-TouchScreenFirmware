@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID автоналаштування"
     #define STRING_TUNE_START_INFO        "Зараз буде почато автоналаштування, це займе деякий час. Продовжити?"
-    #define STRING_TUNE_START_INFO_2      "Автоналаштування в дії!"
-    #define STRING_TUNE_START_INFO_3      "Не чіпайте екран до закінчення налаштування (LED засвітиться зеленим)!"
     #define STRING_TUNE_EXTRUDER          "Налаштування кроків"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Екст. 100мм"
     #define STRING_TUNE_EXT_TEMP          "Налаштування екструдера\nНагрівання"

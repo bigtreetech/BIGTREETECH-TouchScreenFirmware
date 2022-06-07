@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
     #define STRING_TUNE_START_INFO        "Autotune dauert einige Zeit.\nWeitermachen?"
-    #define STRING_TUNE_START_INFO_2      "Autotune läuft!"
-    #define STRING_TUNE_START_INFO_3      "Berühren Sie den Bildschirm erst nach Fertigstellung (grüne LED)!"
     #define STRING_TUNE_EXTRUDER          "Schritte"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm ext."
     #define STRING_TUNE_EXT_TEMP          "Düsentemperatur"

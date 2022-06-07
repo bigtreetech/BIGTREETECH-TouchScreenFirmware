@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
     #define STRING_TUNE_START_INFO        "Autotune zal starten. Dit kan een paar minuten duren.\nDoorgaan?"
-    #define STRING_TUNE_START_INFO_2      "Autotune is bezig!"
-    #define STRING_TUNE_START_INFO_3      "Raak het scherm NIET aan totdat deze klaar is (groene LED aan)!"
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"

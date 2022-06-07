@@ -780,23 +780,23 @@ void parseACK(void)
       // parse M303, PID autotune finished message
       else if (ack_seen("PID Autotune finished"))
       {
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       // parse M303, PID autotune failed message
       else if (ack_seen("PID Autotune failed"))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
       }
       // parse M303, PID autotune finished message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
       {
         //ack_index += 84; -> need length check
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       // parse M303, PID autotune failed message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
       }
       // parse M306 tuning end message (interrupted or finished)
       else if (ack_seen("MPC Autotune"))

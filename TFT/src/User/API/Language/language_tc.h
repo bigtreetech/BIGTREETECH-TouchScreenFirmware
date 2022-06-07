@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID自动整定"
     #define STRING_TUNE_START_INFO        "开始自动整定,需要几分钟来完成,是否继续?"
-    #define STRING_TUNE_START_INFO_2      "正在自动整定中!"
-    #define STRING_TUNE_START_INFO_3      "不要操作触控屏直到整定完成!"
     #define STRING_TUNE_EXTRUDER          "Tune steps"
     #define STRING_TUNE_EXT_EXTRUDE_100   "挤出100mm"
     #define STRING_TUNE_EXT_TEMP          "Extruder tuning | Heat"

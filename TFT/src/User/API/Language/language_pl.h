@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Autodostrajanie PID"
     #define STRING_TUNE_START_INFO        "Autodostrajanie może zająć trochę czasu do zakończenia.\nKontynuować?"
-    #define STRING_TUNE_START_INFO_2      "Trwa autostrojenie!"
-    #define STRING_TUNE_START_INFO_3      "Nie dotykaj ekranu aż do zakończenia (zielona dioda LED WŁĄCZONA)!"
     #define STRING_TUNE_EXTRUDER          "Kroki"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Wsuń 10cm"
     #define STRING_TUNE_EXT_TEMP          "Dostrajanie wytłaczarki | Grzanie"

@@ -336,8 +336,6 @@
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID önhangolás"
     #define STRING_TUNE_START_INFO        "Az  önhangolása elindul. Percekig is eltarthat.\nFolytatod?"
-    #define STRING_TUNE_START_INFO_2      "Automatikus hangolása zajlik!"
-    #define STRING_TUNE_START_INFO_3      "NE ÉRINTSD meg a kijelzőt míg nincs kész! (Zöld LED jelzi!)"
     #define STRING_TUNE_EXTRUDER          "Lépés hangolás"
     #define STRING_TUNE_EXT_EXTRUDE_100   "Kiad 100mm"
     #define STRING_TUNE_EXT_TEMP          "Adagoló hangolás | Fűt"
