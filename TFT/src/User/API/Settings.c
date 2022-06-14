@@ -250,7 +250,7 @@ void setupMachine(FW_TYPE fwType)
   else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     infoMachineSettings.softwareEndstops = ENABLED;
-
+    infoMachineSettings.leveling         = BL_ABL;
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
     return;
   }
