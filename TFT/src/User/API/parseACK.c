@@ -780,23 +780,31 @@ void parseACK(void)
       // parse M303, PID autotune finished message
       else if (ack_seen("PID Autotune finished"))
       {
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       // parse M303, PID autotune failed message
       else if (ack_seen("PID Autotune failed"))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
       }
       // parse M303, PID autotune finished message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("PID Autotune Complete!"))
       {
         //ack_index += 84; -> need length check
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       // parse M303, PID autotune failed message in case of Smoothieware
       else if ((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) && ack_seen("// WARNING: Autopid did not resolve within"))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
+      }
+      // parse M306 tuning end message (interrupted or finished)
+      else if (ack_seen("MPC Autotune"))
+      {
+        if (ack_continue_seen("finished"))
+          setMpcTuningResult(FINISHED);
+        else if (ack_continue_seen("interrupted"))
+          setMpcTuningResult(INTERRUPTED);
       }
       // parse and store M355, case light message
       else if (ack_seen("Case light:"))
@@ -970,6 +978,19 @@ void parseACK(void)
       else if (ack_seen("M209 S"))
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+      else if (ack_seen("M306"))
+      {
+        if (ack_continue_seen("E"))
+        {
+          uint8_t index = ack_value();
+
+          if (ack_continue_seen("P"))
+            setMpcHeaterPower(index, ack_value());
+          
+          if (ack_continue_seen("H"))
+            setMpcFilHeatCapacity(index, ack_value());
+        }
       }
       // parse and store Delta configuration / Delta tower angle (M665) and Delta endstop adjustments (M666)
       //

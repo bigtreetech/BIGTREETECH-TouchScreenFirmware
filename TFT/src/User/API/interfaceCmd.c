@@ -1099,6 +1099,12 @@ void sendQueueCmd(void)
             break;
         #endif
 
+        case 306:  // M306
+          if (getMpcTuningStatus() == REQUESTED && cmd_seen('T'))  // only if requested by GUI
+            setMpcTuningStatus(STARTED);
+
+          break;
+
         case 355:  // M355
           if (cmd_seen('S'))
             caseLightSetState(cmd_value() > 0);

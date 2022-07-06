@@ -398,17 +398,19 @@ void menuPrint(void)
     switch (key_num)
     {
       case PRINT_KEY_TFT_SD:
-        if (volumeExists(FS_TFT_SD))
+      #ifdef SD_CD_PIN
+        if (!volumeExists(FS_TFT_SD))
+        {
+          addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_SD_NOT_DETECTED));
+        }
+        else
+      #endif
         {
           list_mode = infoSettings.files_list_mode;  // follow list mode setting in TFT SD card
           infoFile.source = FS_TFT_SD;
           OPEN_MENU(menuPrintFromSource);
           OPEN_MENU(menuPrintRestore);
           goto selectEnd;
-        }
-        else
-        {
-          addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_SD_NOT_DETECTED));
         }
         break;
 

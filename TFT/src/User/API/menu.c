@@ -494,6 +494,7 @@ void menuClearGaps(void)
   else if ((MENU_IS(menuStatus)) ||
            (MENU_IS(menuHeat)) ||
            (MENU_IS(menuLoadUnload)) ||
+           (MENU_IS(menuMPC)) ||
            (MENU_IS(menuPid)) ||
            (MENU_IS(menuTuneExtruder)) ||
            (MENU_IS(menuFan)) ||
@@ -869,6 +870,7 @@ void menuDrawPage(const MENUITEMS *menuItems)
       curRect = rect_of_keySS;
     else if ((MENU_IS(menuHeat)) ||
              (MENU_IS(menuLoadUnload)) ||
+             (MENU_IS(menuMPC)) ||
              (MENU_IS(menuPid)) ||
              (MENU_IS(menuTuneExtruder)) ||
              (MENU_IS(menuFan)) ||
@@ -1098,6 +1100,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if ((MENU_IS(menuHeat)) ||
                    (MENU_IS(menuLoadUnload)) ||
+                   (MENU_IS(menuMPC)) ||
                    (MENU_IS(menuPid)) ||
                    (MENU_IS(menuTuneExtruder)) ||
                    (MENU_IS(menuFan)) ||

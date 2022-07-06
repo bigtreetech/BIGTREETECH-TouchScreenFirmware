@@ -7,6 +7,7 @@
 
 #define KEY_COUNT        16
 #define FLOAT_BUF_LENGTH  9
+#define FLOAT_PREC_LENGTH 5
 #define INT_BUF_LENGTH    6
 
 typedef enum
@@ -213,7 +214,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
   uint8_t nowIndex;
   uint8_t lastIndex = 0;
   char ParameterBuf[FLOAT_BUF_LENGTH + 1] = {0};
-  uint8_t prec = (old_val == 0) ? 0 : 3;
+  uint8_t prec = (old_val == 0) ? 0 : FLOAT_PREC_LENGTH;
   bool valueFirstPress = true;
 
   sprintf(ParameterBuf, "%.*f", prec, old_val);
