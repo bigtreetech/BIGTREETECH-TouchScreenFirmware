@@ -52,6 +52,7 @@ void initSettings(void)
   infoSettings.persistent_info        = PERSISTENT_INFO;
   infoSettings.terminal_ack           = TERMINAL_ACK;
   infoSettings.notification_m117      = NOTIFICATION_M117;
+  infoSettings.prog_source            = PROG_SOURCE;
   infoSettings.prog_disp_type         = PROG_DISP_TYPE;
   infoSettings.layer_disp_type        = LAYER_DISP_TYPE;
 
@@ -249,7 +250,9 @@ void setupMachine(FW_TYPE fwType)
   else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     infoMachineSettings.softwareEndstops = ENABLED;
-
+    #if BED_LEVELING_TYPE == 1
+    infoMachineSettings.leveling         = BL_ABL;
+    #endif
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
     return;
   }

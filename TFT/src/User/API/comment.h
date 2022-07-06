@@ -12,7 +12,7 @@ extern "C" {
 
 extern char gCodeCommentLine[COMMENT_MAX_CHAR];
 
-void setM73R_presence(bool present);
+void setTimeFromSlicer(bool present);
 void parseComment(void);
 
 #ifdef __cplusplus

@@ -27,6 +27,13 @@ typedef enum
   PAUSE_EXTERNAL,
 } PAUSE_TYPE;
 
+typedef enum
+{
+  PROG_FILE = 0, // file execution progress ()
+  PROG_TIME,     // time based progress (elapsed/total)
+  PROG_SLICER,   // progress from slicer (M73)
+} PROG_FROM;
+
 typedef struct
 {
   // data
@@ -72,6 +79,8 @@ void setPrintProgress(float cur, float size);
 void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
 uint8_t updatePrintProgress(void);
 uint8_t getPrintProgress(void);
+PROG_FROM getPrintProgSource (void);
+void setPrintProgSource(PROG_FROM progressSource);
 
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);

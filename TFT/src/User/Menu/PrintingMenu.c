@@ -140,7 +140,7 @@ static void initMenuPrinting(void)
   layerDisplayType = infoSettings.layer_disp_type * 2;
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
-  setM73R_presence(false);
+  setTimeFromSlicer(false);
 }
 
 // start print originated or handled by remote host
