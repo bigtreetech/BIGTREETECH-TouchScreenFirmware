@@ -62,7 +62,7 @@ void windowReDrawButton(uint8_t position, uint8_t pressed)
 void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
                    const uint8_t * no)
 {
-  setMenuType(MENU_TYPE_DIALOG);
+  setMenuType(btn == NULL ? MENU_TYPE_SPLASH : MENU_TYPE_DIALOG);
 
   if (btn != NULL)  // set the following global variables only if buttons must be provided.
   {                 // Otherwise, leave these variables unchanged so current values are maintained

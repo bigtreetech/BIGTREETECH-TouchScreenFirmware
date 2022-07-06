@@ -224,11 +224,11 @@ void ParseACKJsonParser::value(const char *value)
       }
       else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
       {
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
       }
 
       break;
