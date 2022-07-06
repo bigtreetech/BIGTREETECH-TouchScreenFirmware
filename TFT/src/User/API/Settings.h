@@ -18,8 +18,8 @@ extern "C" {
 
 #define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
 #define CONFIG_FLASH_SIGN     20220518  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20220509  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
+#define LANGUAGE_FLASH_SIGN   20220601  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20220601  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
@@ -32,6 +32,7 @@ extern "C" {
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
 #define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2)  // hotends + bed + chamber
+#define MAX_HEATER_PID_COUNT  (MAX_HOTEND_COUNT + 1)  // hotends + bed
 #define MAX_COOLING_FAN_COUNT 6
 #define MAX_CRTL_FAN_COUNT    2
 #define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)

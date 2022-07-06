@@ -7,8 +7,17 @@ extern "C" {
 
 #include <stdbool.h>
 
+typedef enum
+{
+  PID_IDLE = 0,
+  PID_RUNNING,
+  PID_TIMEOUT,
+  PID_FAILED,
+  PID_SUCCESS,
+} PID_STATUS;
+
 // called by parseAck() to notify PID process status
-void pidUpdateStatus(bool succeeded);
+void pidUpdateStatus(PID_STATUS status);
 
 void menuPid(void);
 
