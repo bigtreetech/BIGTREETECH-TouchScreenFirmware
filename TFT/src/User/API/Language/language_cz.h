@@ -335,7 +335,7 @@
     #define STRING_MPC_TITLE              "MPC autokalibrace"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autokalibrace"
-    #define STRING_TUNE_START_INFO        "Spustit kalibraci vytápění? Bude to chvíli trvat.\nPokračovat?"
+    #define STRING_TUNE_START_INFO        "Spuštěna kalibrace vytápění. Bude to chvíli trvat.\nPokračovat?"
     #define STRING_TUNE_EXTRUDER          "E-Krok"
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define STRING_TUNE_EXT_TEMP          "Kalibrace extruderu, ohřev"
