@@ -562,11 +562,9 @@ void parseACK(void)
       else if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value() + 0.5f);
+        heatSetTargetTemp(NOZZLE0, ack_second_value() + 0.5f, FROM_HOST);
 
-        if (!heatGetSendWaiting(NOZZLE0))
-          heatSyncTargetTemp(NOZZLE0, ack_second_value() + 0.5f);
-
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+        for (uint8_t i = 1; i < MAX_HEATER_COUNT; i++)
         {
           if (!heaterDisplayIsValid(i))
             continue;
@@ -574,9 +572,7 @@ void parseACK(void)
           if (ack_seen(heaterID[i]))
           {
             heatSetCurrentTemp(i, ack_value() + 0.5f);
-
-            if (!heatGetSendWaiting(i))
-              heatSyncTargetTemp(i, ack_second_value() + 0.5f);
+            heatSetTargetTemp(i, ack_second_value() + 0.5f, FROM_HOST);
           }
         }
 
@@ -1141,7 +1137,7 @@ void parseACK(void)
         infoMachineSettings.autoReportTemp = ack_value();
 
         if (infoMachineSettings.autoReportTemp)
-          storeCmd("M155 ");
+          storeCmd("M155 S%u\n", heatGetUpdateSeconds());
       }
       else if (ack_seen("Cap:AUTOREPORT_POS:"))
       {
