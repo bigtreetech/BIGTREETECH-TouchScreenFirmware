@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "M208 відновлення ретракт"
     #define STRING_RETRACT_AUTO           "Авто FW ретракт"
     #define STRING_HOTEND_OFFSET          "Зсув 2-го сопла"
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"

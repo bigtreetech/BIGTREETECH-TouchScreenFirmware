@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "Przywracanie retrakcji FW"
     #define STRING_RETRACT_AUTO           "Automatyczna retrakcja FW"
     #define STRING_HOTEND_OFFSET          "Przesunięcie 2. dyszy"
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Konfiguracja delta"
     #define STRING_DELTA_TOWER_ANGLE      "Trymowanie kąta wieży"

@@ -1084,6 +1084,22 @@ void sendQueueCmd(void)
             break;
         #endif
 
+        case 301:  // Hotend PID
+        {
+          if (cmd_seen('P')) setParameter(P_HOTEND_PID, 0, cmd_float());
+          if (cmd_seen('I')) setParameter(P_HOTEND_PID, 1, cmd_float());
+          if (cmd_seen('D')) setParameter(P_HOTEND_PID, 2, cmd_float());
+          break;
+        }
+
+        case 304:  // Bed PID
+        {
+          if (cmd_seen('P')) setParameter(P_BED_PID, 0, cmd_float());
+          if (cmd_seen('I')) setParameter(P_BED_PID, 1, cmd_float());
+          if (cmd_seen('D')) setParameter(P_BED_PID, 2, cmd_float());
+          break;
+        }
+
         case 306:  // M306
           if (getMpcTuningStatus() == REQUESTED && cmd_seen('T'))  // only if requested by GUI
             setMpcTuningStatus(STARTED);

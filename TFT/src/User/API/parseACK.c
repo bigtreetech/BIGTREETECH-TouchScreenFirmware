@@ -950,6 +950,28 @@ void parseACK(void)
         if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
+      // parse and store hotend PID (M301)
+      else if (ack_seen("M301"))
+      {
+        uint8_t param = P_HOTEND_PID;
+
+        if (ack_seen("M301")) param = P_HOTEND_PID;  // P_HOTEND_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
+      }
+      // parse and store bed PID (M304)
+      else if (ack_seen("M304"))
+      {
+        uint8_t param = P_BED_PID;
+
+        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
+      }
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
       {
