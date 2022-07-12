@@ -16,6 +16,8 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   4,                          // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   1,                          // Set auto FW retract
   (AXIS_INDEX_COUNT - 2),     // Hotend Offset (X, Y, Z)
+  3,                          // Hotend PID
+  3,                          // Bed PID
   2,                          // ABL State & Z Fade
   STEPPER_INDEX_COUNT,        // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   4,                          // Delta Configuration
@@ -43,6 +45,8 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M208",  // FW retract recover
   "M209",  // Set auto FW retract
   "M218",  // Hotend Offset
+  "M301",  // Hotend PID
+  "M304",  // Bed PID
   "M420",  // ABL State & Z Fade
   "M569",  // TMC StealthChop
   "M665",  // Delta Configuration
@@ -70,12 +74,14 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Set auto FW retract
   {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
+  {"P%.4f\n",            "I%.4f\n",       "D%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend PID
+  {"P%.4f\n",            "I%.4f\n",       "D%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Bed PID
   {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // ABL State & Z Fade
   {"S%.0f I0 X\n",       "S%.0f I1 X\n",  "S%.0f I0 Y\n",  "S%.0f I1 Y\n", "S%.0f I0 Z\n", "S%.0f I1 Z\n", "S%.0f I2 Z\n", "S%.0f I3 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"H%.2f\n",            "S%.2f\n",       "R%.2f\n",       "L%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
-  {"A%.2f\n",            "B%.2f\n",       "C%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
+  {"H%.4f\n",            "S%.4f\n",       "R%.4f\n",       "L%.4f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+  {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
+  {"A%.4f\n",            "B%.4f\n",       "C%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
+  {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
   {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
   {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
@@ -97,6 +103,8 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   {VAL_TYPE_INT},                                                                                    // Set auto FW retract
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset (X, Y, Z)
+  {VAL_TYPE_FLOAT,  VAL_TYPE_FLOAT, VAL_TYPE_FLOAT},                                                 // Hotend PID
+  {VAL_TYPE_FLOAT,  VAL_TYPE_FLOAT, VAL_TYPE_FLOAT},                                                 // Bed PID
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},
@@ -127,6 +135,9 @@ char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
 
 // param attributes hard coded labels
 char * const filamentDiaDisplayID[] = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament"};
+char * const autoRetractDisplayID[] = {"S " ONOFF_DISPLAY_ID};
+char * const hotendPidDisplayID[] = {"Kp", "Ki", "Kd"};
+char * const bedPidDisplayID[] = {"Kp", "Ki", "Kd"};
 char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
@@ -142,7 +153,6 @@ const LABEL accelDisplayID[] = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERA
 const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
 const LABEL recoverDisplayID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
-const LABEL autoRetractDisplayID[] = {LABEL_RETRACT_AUTO};
 
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {
@@ -253,6 +263,12 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_HOTEND_OFFSET:
       return infoParameters.HotendOffset[index];
 
+    case P_HOTEND_PID:
+      return infoParameters.HotendPid[index];
+
+    case P_BED_PID:
+      return infoParameters.BedPid[index];
+
     case P_ABL_STATE:
       return infoParameters.ABLState[index];
 
@@ -350,6 +366,14 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_HOTEND_OFFSET:
       infoParameters.HotendOffset[index] = val;
+      break;
+
+    case P_HOTEND_PID:
+      infoParameters.HotendPid[index] = val;
+      break;
+
+    case P_BED_PID:
+      infoParameters.BedPid[index] = val;
       break;
 
     case P_ABL_STATE:

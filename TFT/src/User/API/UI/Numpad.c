@@ -5,10 +5,10 @@
 #define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4
 #define SKEYWIDTH  LCD_WIDTH / 4
 
-#define KEY_COUNT        16
-#define FLOAT_BUF_LENGTH  9
-#define FLOAT_PREC_LENGTH 5
-#define INT_BUF_LENGTH    6
+#define KEY_COUNT         16
+#define FLOAT_BUF_LENGTH   9
+#define FLOAT_PREC_LENGTH  4
+#define INT_BUF_LENGTH     6
 
 typedef enum
 {
@@ -459,7 +459,7 @@ int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negat
           val = 0;
         }
         len = strlen(ParameterBuf);
-        if (len < INT_BUF_LENGTH && !(val == 0 && key_num == NUM_KEY_0))
+        if (len < INT_BUF_LENGTH)
         {
           int num = (numPadKeyChar[key_num][0] - '0');
           val = (val * 10) + ABS(num);

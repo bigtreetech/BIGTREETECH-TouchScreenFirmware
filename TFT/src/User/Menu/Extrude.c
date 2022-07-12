@@ -10,7 +10,7 @@ static uint8_t itemSpeed_index = 1;
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void extrusionMinTemp_OK(void)
 {
-  heatSetTargetTemp(curExtruder_index, infoSettings.min_ext_temp);
+  heatSetTargetTemp(curExtruder_index, infoSettings.min_ext_temp, FROM_GUI);
 }
 
 void menuExtrude(void)

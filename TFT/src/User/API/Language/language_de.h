@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "FW Rückeinschub"
     #define STRING_RETRACT_AUTO           "Auto-Rückzug (Firmware)"
     #define STRING_HOTEND_OFFSET          "Abstand 2te Düse"
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Konfiguration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"

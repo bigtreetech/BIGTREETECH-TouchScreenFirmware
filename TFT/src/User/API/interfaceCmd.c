@@ -217,12 +217,6 @@ static inline bool getCmd(void)
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
-void updateCmd(const char * buf)
-{
-  strcat(cmd_ptr, buf);       // append buf to gcode
-  cmd_len = strlen(cmd_ptr);  // new length of gcode
-}
-
 // Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
@@ -443,7 +437,7 @@ void writeRemoteTFT()
   Serial_Puts(cmd_port, "ok\n");
 }
 
-void setNoWaitHeating(uint8_t index)
+void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
   {
@@ -456,20 +450,19 @@ void setNoWaitHeating(uint8_t index)
   }
 }
 
-void synchNoWaitHeating(uint8_t index)
+void syncTargetTemp(uint8_t index)
 {
+  uint16_t temp;
+
   if (cmd_seen('S'))
   {
-    heatSyncTargetTemp(index, cmd_value());
-  }
-  else if (!cmd_seen('\n'))
-  {
-    char buf[12];
-    sprintf(buf, "S%u\n", heatGetTargetTemp(index));
-    updateCmd(buf);
-    heatSetSendWaiting(index, false);
+    temp = cmd_value();
+
+    if (temp != heatGetTargetTemp(index))
+      heatSetTargetTemp(index, temp, FROM_CMD);  
   }
 }
+
 
 // Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
@@ -861,16 +854,8 @@ void sendQueueCmd(void)
             heatSetUpdateWaiting(false);
 
             if (cmd_seen('S'))
-            {
               heatSyncUpdateSeconds(cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
 
-              sprintf(buf, "S%u\n", heatGetUpdateSeconds());
-              updateCmd(buf);
-            }
           }
           break;
 
@@ -896,14 +881,14 @@ void sendQueueCmd(void)
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
-            cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin
-            setNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+            cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin, send M104
+            setWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
         // no break here. The data processing of M109 is the same as that of M104 below
         case 104:  // M104
           if (fromTFT)
           {
-            synchNoWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+            syncTargetTemp(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
           break;
 
@@ -952,30 +937,30 @@ void sendQueueCmd(void)
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M109_M190) == 0)  // if emulated M109 / M190 is disabled
               break;
 
-            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin
-            setNoWaitHeating(BED);
+            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin, send M140 
+            setWaitHeating(BED);
           }
-        // no break here. The data processing of M190 is the same as that of M140 below
-        case 140:  // M140
-          if (fromTFT)
-          {
-            synchNoWaitHeating(BED);
-          }
-          break;
+          // no break here. The data processing of M190 is the same as that of M140 below
+          case 140:  // M140
+            if (fromTFT)
+            {
+              syncTargetTemp(BED);
+            }
+            break;
 
         case 191:  // M191
           if (fromTFT)
           {
-            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin
-            setNoWaitHeating(CHAMBER);
+            cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin, send M141
+            setWaitHeating(CHAMBER);
           }
-        // no break here. The data processing of M191 is the same as that of M141 below
-        case 141:  // M141
-          if (fromTFT)
-          {
-            synchNoWaitHeating(CHAMBER);
-          }
-          break;
+          // no break here. The data processing of M191 is the same as that of M141 below
+          case 141:  // M141
+            if (fromTFT)
+            {
+              syncTargetTemp(CHAMBER);
+            }
+            break;
 
         case 200:  // M200 filament diameter
         {
@@ -1098,6 +1083,22 @@ void sendQueueCmd(void)
             }
             break;
         #endif
+
+        case 301:  // Hotend PID
+        {
+          if (cmd_seen('P')) setParameter(P_HOTEND_PID, 0, cmd_float());
+          if (cmd_seen('I')) setParameter(P_HOTEND_PID, 1, cmd_float());
+          if (cmd_seen('D')) setParameter(P_HOTEND_PID, 2, cmd_float());
+          break;
+        }
+
+        case 304:  // Bed PID
+        {
+          if (cmd_seen('P')) setParameter(P_BED_PID, 0, cmd_float());
+          if (cmd_seen('I')) setParameter(P_BED_PID, 1, cmd_float());
+          if (cmd_seen('D')) setParameter(P_BED_PID, 2, cmd_float());
+          break;
+        }
 
         case 306:  // M306
           if (getMpcTuningStatus() == REQUESTED && cmd_seen('T'))  // only if requested by GUI

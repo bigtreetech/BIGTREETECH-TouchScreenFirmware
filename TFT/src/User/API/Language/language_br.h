@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "Firmware retraction rec." // TRADUZIR
     #define STRING_RETRACT_AUTO           "Retração de Firmware Auto."
     #define STRING_HOTEND_OFFSET          "Offset de acordo com hotend" //
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Configuração Delta"
     #define STRING_DELTA_TOWER_ANGLE      "Guarnição do ângulo da torre" //

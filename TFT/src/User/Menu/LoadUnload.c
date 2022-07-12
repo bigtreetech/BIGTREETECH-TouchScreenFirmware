@@ -32,7 +32,7 @@ CMD_TYPE lastCmd = NONE;
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void loadMinTemp_OK(void)
 {
-  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp);
+  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp, FROM_GUI);
 }
 
 void menuLoadUnload(void)
@@ -90,7 +90,7 @@ void menuLoadUnload(void)
           int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
 
           if (val != actTarget)
-            heatSetTargetTemp(tool_index, val);
+            heatSetTargetTemp(tool_index, val, FROM_GUI);
 
           temperatureReDraw(tool_index, NULL, false);
           lastCmd = NONE;

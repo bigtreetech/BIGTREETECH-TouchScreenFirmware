@@ -23,6 +23,8 @@ typedef enum
   P_FWRECOVER,
   P_AUTO_RETRACT,
   P_HOTEND_OFFSET,
+  P_HOTEND_PID,
+  P_BED_PID,
   P_ABL_STATE,
   P_STEALTH_CHOP,
   P_DELTA_CONFIGURATION,
@@ -94,6 +96,8 @@ typedef struct
   float FwRecover[4];
   float AutoRetract[1];
   float HotendOffset[AXIS_INDEX_COUNT - 2];
+  float HotendPid[3];
+  float BedPid[3];
   float ABLState[2];
   float StealthChop[STEPPER_INDEX_COUNT];
   float DeltaConfiguration[4];
@@ -116,6 +120,9 @@ extern char * const stepperDisplayID[STEPPER_INDEX_COUNT];
 
 // param attributes hard coded labels
 extern char * const filamentDiaDisplayID[];
+extern char * const autoRetractDisplayID[];
+extern char * const hotendPidDisplayID[];
+extern char * const bedPidDisplayID[];
 extern char * const ablStateDisplayID[];
 extern char * const stealthChopDisplayID[];
 extern char * const deltaConfigurationDisplayID[];
@@ -129,7 +136,6 @@ extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
-extern const LABEL autoRetractDisplayID[];
 
 // Get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);

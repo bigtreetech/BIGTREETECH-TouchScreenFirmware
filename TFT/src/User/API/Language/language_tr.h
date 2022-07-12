@@ -56,6 +56,8 @@
     #define STRING_FWRECOVER              "Yazılım Geriitmesi"
     #define STRING_RETRACT_AUTO           "Oto. yazılım geriçekmesi"
     #define STRING_HOTEND_OFFSET          "2. Nozül Mesafesi"
+    #define STRING_HOTEND_PID             "Hotend PID"
+    #define STRING_BED_PID                "Bed PID"
     #define STRING_STEALTH_CHOP           "TMC StealthChop"
     #define STRING_DELTA_CONFIGURATION    "Delta Configuration"
     #define STRING_DELTA_TOWER_ANGLE      "Tower Angle Trim"

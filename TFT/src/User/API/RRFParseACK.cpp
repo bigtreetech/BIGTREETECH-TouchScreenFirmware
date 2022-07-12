@@ -122,11 +122,11 @@ void ParseACKJsonParser::value(const char *value)
     case active:
       if (index == 0)
       {
-        heatSyncTargetTemp(BED, strtod((char *)value, NULL) + 0.5f);
+        heatSetTargetTemp(BED, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
       }
       else if (index <= INVALID_HEATER)
       {
-        heatSyncTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
+        heatSetTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
       }
       break;
     case standby:
@@ -136,11 +136,11 @@ void ParseACKJsonParser::value(const char *value)
       {
         if (index == 0)
         {
-          heatSetTargetTemp(BED, 0);
+          heatSetTargetTemp(BED, 0, FROM_HOST);
         }
         else if (index <= INVALID_HEATER)
         {
-          heatSetTargetTemp(index - 1, 0);
+          heatSetTargetTemp(index - 1, 0, FROM_HOST);
         }
       }
       break;

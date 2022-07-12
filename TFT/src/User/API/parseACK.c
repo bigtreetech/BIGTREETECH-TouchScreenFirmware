@@ -562,11 +562,9 @@ void parseACK(void)
       else if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
       {
         heatSetCurrentTemp(NOZZLE0, ack_value() + 0.5f);
+        heatSetTargetTemp(NOZZLE0, ack_second_value() + 0.5f, FROM_HOST);
 
-        if (!heatGetSendWaiting(NOZZLE0))
-          heatSyncTargetTemp(NOZZLE0, ack_second_value() + 0.5f);
-
-        for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+        for (uint8_t i = 1; i < MAX_HEATER_COUNT; i++)
         {
           if (!heaterDisplayIsValid(i))
             continue;
@@ -574,9 +572,7 @@ void parseACK(void)
           if (ack_seen(heaterID[i]))
           {
             heatSetCurrentTemp(i, ack_value() + 0.5f);
-
-            if (!heatGetSendWaiting(i))
-              heatSyncTargetTemp(i, ack_second_value() + 0.5f);
+            heatSetTargetTemp(i, ack_second_value() + 0.5f, FROM_HOST);
           }
         }
 
@@ -954,6 +950,28 @@ void parseACK(void)
         if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
+      // parse and store hotend PID (M301)
+      else if (ack_seen("M301"))
+      {
+        uint8_t param = P_HOTEND_PID;
+
+        if (ack_seen("M301")) param = P_HOTEND_PID;  // P_HOTEND_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
+      }
+      // parse and store bed PID (M304)
+      else if (ack_seen("M304"))
+      {
+        uint8_t param = P_BED_PID;
+
+        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
+      }
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
       {
@@ -1141,7 +1159,7 @@ void parseACK(void)
         infoMachineSettings.autoReportTemp = ack_value();
 
         if (infoMachineSettings.autoReportTemp)
-          storeCmd("M155 ");
+          storeCmd("M155 S%u\n", heatGetUpdateSeconds());
       }
       else if (ack_seen("Cap:AUTOREPORT_POS:"))
       {
