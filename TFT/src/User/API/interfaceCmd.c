@@ -440,14 +440,9 @@ void writeRemoteTFT()
 void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
-  {
     cmd_ptr[cmd_index - 1] = 'S';
-    heatSetIsWaiting(index, WAIT_COOLING_HEATING);
-  }
-  else
-  {
-    heatSetIsWaiting(index, WAIT_HEATING);
-  }
+
+  heatSetIsWaiting(index, true);
 }
 
 void syncTargetTemp(uint8_t index)

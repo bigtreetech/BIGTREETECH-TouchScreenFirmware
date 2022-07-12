@@ -35,22 +35,7 @@ char * getDynamicTextValue(uint8_t i)
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
 void setDynamicValue(uint8_t i, float value)
 {
-  float n = ABS(value);
-  uint8_t neg = value < 0.0f;
-  char * format;
-
-  if (n < 10.0f && !neg)  // upto 9.99999
-    format = "%.5f";
-  if ((n < 100.0f && !neg) || (n < 10.0f && neg))  // upto 99.9999 or -9.9999 (negative sign takes 1 character space)
-    format = "%.4f";
-  else if ((n < 1000.0f && !neg) || (n < 100.0f && neg))  // upto 999.999 or -99.999
-    format = "%.3f";
-  else if ((n < 10000.0f && !neg) || (n < 1000.0f && neg))  // upto 9999.99 or -999.99
-    format = "%.2f";
-  else
-    format = "%.1f";
-
-  sprintf(dynamic_text_value[i], format, value);
+  snprintf(dynamic_text_value[i], 8, "%.5f", value);
 }
 
 // draw item pressed feedback
