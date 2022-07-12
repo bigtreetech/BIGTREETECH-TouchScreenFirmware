@@ -5,10 +5,10 @@
 #define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4
 #define SKEYWIDTH  LCD_WIDTH / 4
 
-#define KEY_COUNT        16
-#define FLOAT_BUF_LENGTH  9
-#define FLOAT_PREC_LENGTH 5
-#define INT_BUF_LENGTH    6
+#define KEY_COUNT         16
+#define FLOAT_BUF_LENGTH   9
+#define FLOAT_PREC_LENGTH  4
+#define INT_BUF_LENGTH     6
 
 typedef enum
 {

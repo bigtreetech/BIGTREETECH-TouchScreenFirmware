@@ -3,6 +3,8 @@
 #include "ListItem.h"
 #include "includes.h"
 
+#define CUSTOM_VAL_LEN 7
+
 char * dynamic_label[LISTITEM_PER_PAGE];
 char dynamic_text_value[LISTITEM_PER_PAGE][10];
 
@@ -33,13 +35,28 @@ char * getDynamicTextValue(uint8_t i)
 // save dynamic value (upto 7 digits) ( i : index of the value position, value:float value)
 void setDynamicValue(uint8_t i, float value)
 {
-  snprintf(dynamic_text_value[i], 8, "%.5f", value);
+  float n = ABS(value);
+  uint8_t neg = value < 0.0f;
+  char * format;
+
+  if (n < 10.0f && !neg)  // upto 9.99999
+    format = "%.5f";
+  if ((n < 100.0f && !neg) || (n < 10.0f && neg))  // upto 99.9999 or -9.9999 (negative sign takes 1 character space)
+    format = "%.4f";
+  else if ((n < 1000.0f && !neg) || (n < 100.0f && neg))  // upto 999.999 or -99.999
+    format = "%.3f";
+  else if ((n < 10000.0f && !neg) || (n < 1000.0f && neg))  // upto 9999.99 or -999.99
+    format = "%.2f";
+  else
+    format = "%.1f";
+
+  sprintf(dynamic_text_value[i], format, value);
 }
 
 // draw item pressed feedback
 void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 {
-  if (pressed != false)
+  if (pressed)
   {
     GUI_SetColor(LI_KEY_PRESSED_COLOR);
     GUI_DrawPrect(rect);
@@ -75,7 +92,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
         GUI_ClearPrect(rect);
         GUI_DispStringInPrect(rect, curitem->titlelabel.index);
       }
-      if (pressed != false)
+      if (pressed)
       {
         GUI_SetColor(LI_KEY_PRESSED_COLOR);
         GUI_DrawPrect(rect);
@@ -92,6 +109,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
   {
     GUI_POINT pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, LEFT, (char *)IconCharSelect(curitem->icon));
     int textarea_width;
+
     switch (curitem->itemType)
     {
       case LIST_LABEL:
@@ -102,7 +120,6 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
         }
         textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
-        DrawListItemPress(rect, pressed);
         break;
 
       case LIST_TOGGLE:
@@ -115,7 +132,6 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, RIGHT, (char *)IconCharSelect(CHARICON_TOGGLE_BODY));
           GUI_ClearRect(rect->x1 - wy, rect->y0, rect->x1, rect->y1);
           ListItem_DisplayToggle(pos.x, pos.y, curitem->icon);
-          DrawListItemPress(rect, pressed);
         }
         break;
 
@@ -133,7 +149,6 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
         pos = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, RIGHT, (char *)IconCharSelect(CHARICON_DETAIL2));
         GUI_SetColor(charIconColor[CHARICON_DETAIL2]);
         GUI_DispString(pos.x, pos.y, IconCharSelect(CHARICON_DETAIL2));
-        DrawListItemPress(rect, pressed);
         break;
 
       case LIST_CUSTOMVALUE:
@@ -146,12 +161,13 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
         textarea_width = LISTITEM_WIDTH - (pos.x + 1);                            // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
         ListItem_DisplayCustomValue(rect, curitem->valueLabel, position);
-        DrawListItemPress(rect, pressed);
         break;
 
       default:
         break;
     }
+
+    DrawListItemPress(rect, pressed);
   }
   else
   {
@@ -166,6 +182,7 @@ void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_w
   if (label.index != LABEL_NULL)
   {
     int textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
+
     if (label.index == LABEL_DYNAMIC)
       GUI_DispLenString(pos.x, pos.y, (uint8_t *)getDynamicLabel(position), textarea_width, true);
     else
@@ -179,9 +196,10 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(infoSettings.list_border_color);
   _GUI_DispString(sx, sy, (uint8_t *)(char *)IconCharSelect(CHARICON_TOGGLE_BODY));
-  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
+  GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(charIconColor[iconchar_state]);
+
   if (iconchar_state == CHARICON_TOGGLE_OFF)
     _GUI_DispString(sx, sy, IconCharSelect(CHARICON_TOGGLE_SWITCH));
   else
@@ -193,14 +211,14 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
 // draw custom value for list item
 void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i)
 {
-  const GUI_RECT rectVal = {rect->x1 - BYTE_WIDTH * 8 - 1, rect->y0 + (LISTITEM_HEIGHT - BYTE_HEIGHT) / 2, rect->x1 - 1,
+  const GUI_RECT rectVal = {rect->x1 - BYTE_WIDTH * (CUSTOM_VAL_LEN + 1) - 1, rect->y0 + (LISTITEM_HEIGHT - BYTE_HEIGHT) / 2, rect->x1 - 1,
                             rect->y1 - (LISTITEM_HEIGHT - BYTE_HEIGHT) / 2};
 
   GUI_ClearPrect(&rectVal);
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-
   GUI_SetColor(infoSettings.list_border_color);
   GUI_DrawPrect(&rectVal);
+
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(LI_VAL_COLOR);
 
