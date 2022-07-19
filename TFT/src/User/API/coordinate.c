@@ -58,15 +58,13 @@ float coordinateGetAxisTarget(AXIS axis)
 
 void coordinateSetAxisTarget(AXIS axis, float position)
 {
-  bool r = (axis == E_AXIS) ? (relative_e || relative_mode) : relative_mode;
-
-  if (r == false)
+  if ((axis == E_AXIS) ? relative_e : relative_mode)
   {
-    targetPosition.axis[axis] = position;
+    targetPosition.axis[axis] += position;
   }
   else
   {
-    targetPosition.axis[axis] += position;
+    targetPosition.axis[axis] = position;
   }
 }
 
