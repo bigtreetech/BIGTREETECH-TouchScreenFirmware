@@ -1289,14 +1289,16 @@ void sendQueueCmd(void)
           break;
         #endif
 
-        case 90:  // G90, set absolute position mode, this includes the extruder position unless overridden by M83.
+        case 90:  // G90, set absolute position mode, in Marlin this includes the extruder position unless overridden by M83.
           coorSetRelative(false);
-          eSetRelative(false);
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            eSetRelative(false);
           break;
 
-        case 91:  // G91, set relative position mode, this includes the extruder position unless overridden by M82.
+        case 91:  // G91, set relative position mode, in Marlin this includes the extruder position unless overridden by M82.
           coorSetRelative(true);
-          eSetRelative(true);
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            eSetRelative(true);
           break;
 
         case 92:  // G92
