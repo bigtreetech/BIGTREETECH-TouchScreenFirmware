@@ -442,11 +442,11 @@ void setWaitHeating(uint8_t index)
   if (cmd_seen('R'))
   {
     cmd_ptr[cmd_index - 1] = 'S';
-    heatSetIsWaiting(index, WAIT_COOLING_HEATING);
+    heatSetIsWaiting(index, true);
   }
-  else
+  else if (cmd_seen('S'))
   {
-    heatSetIsWaiting(index, WAIT_HEATING);
+    heatSetIsWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
   }
 }
 
@@ -1289,12 +1289,16 @@ void sendQueueCmd(void)
           break;
         #endif
 
-        case 90:  // G90
+        case 90:  // G90, set absolute position mode, in Marlin this includes the extruder position unless overridden by M83.
           coorSetRelative(false);
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            eSetRelative(false);
           break;
 
-        case 91:  // G91
+        case 91:  // G91, set relative position mode, in Marlin this includes the extruder position unless overridden by M82.
           coorSetRelative(true);
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            eSetRelative(true);
           break;
 
         case 92:  // G92

@@ -120,7 +120,7 @@ void heatCoolDown(void)
 // Is heating waiting to heat up
 bool heatGetIsWaiting(uint8_t index)
 {
-  return (heater.T[index].waiting != WAIT_NONE);
+  return (heater.T[index].waiting == true);
 }
 
 // Check all heater if there is a heater waiting to be waited
@@ -128,7 +128,7 @@ bool heatHasWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if (heater.T[i].waiting != WAIT_NONE)
+    if (heater.T[i].waiting == true)
       return true;
   }
 
@@ -136,7 +136,7 @@ bool heatHasWaiting(void)
 }
 
 // Set heater waiting status
-void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting)
+void heatSetIsWaiting(uint8_t index, bool isWaiting)
 {
   index = heaterIndexFix(index);
 
@@ -145,7 +145,7 @@ void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting)
 
   heater.T[index].waiting = isWaiting;
 
-  if (isWaiting != WAIT_NONE)  // wait heating now, query more frequently
+  if (isWaiting == true)  // wait heating now, query more frequently
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
   else if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
@@ -155,7 +155,7 @@ void heatClearIsWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    heater.T[i].waiting = WAIT_NONE;
+    heater.T[i].waiting = false;
   }
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
@@ -270,38 +270,11 @@ void loopCheckHeater(void)
     }
   }
 
-  // Query the heater that needs to wait for the temperature to rise, whether it reaches the set temperature
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if (heater.T[i].waiting == WAIT_NONE)
-    {
-      continue;
-    }
-    else if (heater.T[i].waiting == WAIT_HEATING)
-    {
-      if (heater.T[i].current + TEMPERATURE_RANGE <= heater.T[i].target)
-        continue;
-    }
-    else if (heater.T[i].waiting == WAIT_COOLING_HEATING)
-    {
-      if (inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE) == false)
-        continue;
-    }
+    if (heater.T[i].waiting && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE))
+      heater.T[i].waiting = false;
 
-    heater.T[i].waiting = WAIT_NONE;
-
-    if (heatHasWaiting())
-      continue;
-
-    if (MENU_IS(menuHeat))
-      break;
-
-    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
-  }
-
-  // Query heaters if they reached the target temperature (only if not printing)
-  for (uint8_t i = 0; (i < MAX_HEATER_COUNT) && (!isPrinting()); i++)
-  {
     if (heater.T[i].status != SETTLED && inRange(heater.T[i].current, heater.T[i].target, TEMPERATURE_RANGE))
     {
       switch (heater.T[i].status)
@@ -320,10 +293,7 @@ void loopCheckHeater(void)
 
       heater.T[i].status = SETTLED;
     }
-  }
 
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)  // If the target temperature changes, send a gcode to set the motherboard
-  {
     if (GET_BIT(heat_send_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
     {
       if (storeCmd("%s S%u\n", heatCmd[i], heatGetTargetTemp(i)))
@@ -333,4 +303,10 @@ void loopCheckHeater(void)
       }
     }
   }
+
+  if (MENU_IS_NOT(menuHeat) && !heatHasWaiting())
+    heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
+
+
+
