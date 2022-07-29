@@ -5,10 +5,6 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
-
-extern bool hasFilamentData;
-
 // start print originated or handled by remote host
 // (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
 void startRemotePrint(const char * filename);

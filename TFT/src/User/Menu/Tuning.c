@@ -26,16 +26,20 @@ void menuTuning(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   if (!hasMPC())
+  {
     for (uint8_t i = 0; i < 4; i++)
     {
       TuningItems.items[i] = TuningItems.items[i + 1];
     }
+  }
   else if (!infoSettings.bed_en)
+  {
     for (uint8_t i = 1; i < 4; i++)
     {
       TuningItems.items[i] = TuningItems.items[i + 1];
     }
-  
+  }
+
   menuDrawPage(&TuningItems);
 
   while (MENU_IS(menuTuning))

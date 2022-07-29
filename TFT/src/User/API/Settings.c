@@ -223,18 +223,15 @@ void setupMachine(FW_TYPE fwType)
 
   #if BED_LEVELING_TYPE > 1  // if not disabled and not auto-detect
     #if BED_LEVELING_TYPE == 2
-        infoMachineSettings.leveling = BL_ABL;
+      infoMachineSettings.leveling = BL_ABL;
     #elif BED_LEVELING_TYPE == 3
-        infoMachineSettings.leveling = BL_BBL;
+      infoMachineSettings.leveling = BL_BBL;
     #elif BED_LEVELING_TYPE == 4
-        infoMachineSettings.leveling = BL_UBL;
+      infoMachineSettings.leveling = BL_UBL;
     #elif BED_LEVELING_TYPE == 5
-        infoMachineSettings.leveling = BL_MBL;
+      infoMachineSettings.leveling = BL_MBL;
     #endif
   #endif
-
-  if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
-    storeCmd("M420 S1\n");
 
   if (infoSettings.onboard_sd != AUTO)
     infoMachineSettings.onboardSD = infoSettings.onboard_sd;
@@ -242,29 +239,32 @@ void setupMachine(FW_TYPE fwType)
   if (infoSettings.long_filename != AUTO)
     infoMachineSettings.longFilename = infoSettings.long_filename;
 
-  if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)  // Smoothieware does not report detailed M115 capabilities
-  {
-    infoMachineSettings.leveling = BL_ABL;
-    infoMachineSettings.emergencyParser = ENABLED;
-  }
-  else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-  {
-    infoMachineSettings.softwareEndstops = ENABLED;
-    #if BED_LEVELING_TYPE == 1
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW)  // RRF does not report detailed M115 capabilities
+  { // set only the values that differ from the ones initialized in initMachineSettings() function
+    #if BED_LEVELING_TYPE == 1  // if auto-detect is enabled
       infoMachineSettings.leveling = BL_ABL;
     #endif
+
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
   }
+  else if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)  // Smoothieware does not report detailed M115 capabilities
+  { // set only the values that differ from the ones initialized in initMachineSettings() function
+    #if BED_LEVELING_TYPE == 1  // if auto-detect is enabled
+      infoMachineSettings.leveling = BL_ABL;
+    #endif
+  }
+
+  if (infoMachineSettings.leveling != BL_DISABLED && infoMachineSettings.EEPROM == 1 && infoSettings.auto_load_leveling == 1)
+    mustStoreCmd("M420 S1\n");
 
   mustStoreCmd("M503 S0\n");
+  mustStoreCmd("G90\n");  // set to absolute positioning
 
   if (infoSettings.hotend_count > 0)
   {
-    // This is good, but we need to set the extruder number first, and it's defaulting to 1.
-    mustStoreCmd("M82\n");  // Set extruder to absolute mode
+    // this is good, but we need to set the extruder number first, and it's defaulting to 1
+    mustStoreCmd("M82\n");  // set extruder to absolute mode
   }
-
-  mustStoreCmd("G90\n");  // Set to Absolute Positioning
 
   if (infoSettings.led_always_on == 1)
     LED_SendColor(&ledColor);  // set (neopixel) LED light to current color (initialized in HW_Init function)

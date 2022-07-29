@@ -60,7 +60,7 @@ static inline void extrudeFilament(void)
   #else
     mustStoreCmd("G0 Z%.3f F%d\n", coordinateGetAxisActual(Z_AXIS) + infoSettings.pause_z_raise,
                  infoSettings.pause_feedrate[FEEDRATE_Z]);
-  #endif        
+  #endif
   // Move to pause location
   mustStoreCmd("G0 X%.3f Y%.3f F%d\n", infoSettings.pause_pos[X_AXIS], infoSettings.pause_pos[Y_AXIS],
                infoSettings.pause_feedrate[FEEDRATE_XY]);
