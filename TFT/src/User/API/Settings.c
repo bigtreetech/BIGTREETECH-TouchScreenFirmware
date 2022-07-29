@@ -244,17 +244,16 @@ void setupMachine(FW_TYPE fwType)
 
   if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)  // Smoothieware does not report detailed M115 capabilities
   {
-    infoMachineSettings.leveling        = BL_ABL;
+    infoMachineSettings.leveling = BL_ABL;
     infoMachineSettings.emergencyParser = ENABLED;
   }
   else if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     infoMachineSettings.softwareEndstops = ENABLED;
     #if BED_LEVELING_TYPE == 1
-    infoMachineSettings.leveling         = BL_ABL;
+      infoMachineSettings.leveling = BL_ABL;
     #endif
     mustStoreCmd("M552\n");  // query network state, populate IP if the screen boots up after RRF
-    return;
   }
 
   mustStoreCmd("M503 S0\n");
