@@ -16,13 +16,6 @@ extern "C" {
 
 typedef enum
 {
-  WAIT_NONE = 0,
-  WAIT_HEATING,
-  WAIT_COOLING_HEATING,
-} HEATER_WAIT;
-
-typedef enum
-{
   SETTLED = 0,
   HEATING,
   COOLING,
@@ -52,7 +45,7 @@ typedef struct
 {
   int16_t current;
   int16_t target;
-  HEATER_WAIT waiting;
+  bool waiting;
   HEATER_STATUS status;
 } _HEATER;
 
@@ -85,7 +78,7 @@ void heatCoolDown(void);
 
 bool heatGetIsWaiting(uint8_t index);
 bool heatHasWaiting(void);
-void heatSetIsWaiting(uint8_t index, HEATER_WAIT isWaiting);
+void heatSetIsWaiting(uint8_t index, bool isWaiting);
 void heatClearIsWaiting(void);
 
 void heatSetCurrentTool(uint8_t tool);

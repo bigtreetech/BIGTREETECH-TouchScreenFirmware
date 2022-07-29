@@ -442,11 +442,11 @@ void setWaitHeating(uint8_t index)
   if (cmd_seen('R'))
   {
     cmd_ptr[cmd_index - 1] = 'S';
-    heatSetIsWaiting(index, WAIT_COOLING_HEATING);
+    heatSetIsWaiting(index, true);
   }
-  else
+  else if (cmd_seen('S'))
   {
-    heatSetIsWaiting(index, WAIT_HEATING);
+    heatSetIsWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
   }
 }
 
