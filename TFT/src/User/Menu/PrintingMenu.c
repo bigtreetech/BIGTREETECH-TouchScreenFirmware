@@ -58,7 +58,6 @@ const char * const speedId[2] = {"Speed", "Flow "};
 #define MAX_TITLE_LEN   70
 #define TIME_FORMAT_STR "%02u:%02u:%02u"
 
-bool hasFilamentData;
 PROGRESS_DISPLAY progDisplayType;
 LAYER_TYPE layerDisplayType;
 char title[MAX_TITLE_LEN] = "";
@@ -357,7 +356,7 @@ static inline void toggleInfo(void)
     if (infoFile.source >= FS_ONBOARD_MEDIA)
       coordinateQuery(MS_TO_SEC(TOGGLE_TIME));
 
-    if (!hasFilamentData && isPrinting())
+    if (!infoPrintSummary.hasFilamentData && isPrinting())
       updatePrintUsedFilament();
   }
 }
@@ -438,8 +437,8 @@ static inline void drawPrintInfo(void)
 
 void printSummaryPopup(void)
 {
-  char showInfo[150];
-  char tempstr[30];
+  char showInfo[300];
+  char tempstr[60];
 
   timeToString(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 

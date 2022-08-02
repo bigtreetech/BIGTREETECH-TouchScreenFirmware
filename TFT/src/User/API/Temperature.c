@@ -307,6 +307,3 @@ void loopCheckHeater(void)
   if (MENU_IS_NOT(menuHeat) && !heatHasWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
-
-
-

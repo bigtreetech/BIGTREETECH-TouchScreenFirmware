@@ -662,7 +662,7 @@ void parseACK(void)
         else if (ack_seen("W:")) ack_values_sum(&infoPrintSummary.weight);
         else if (ack_seen("C:")) ack_values_sum(&infoPrintSummary.cost);
 
-        hasFilamentData = true;
+        infoPrintSummary.hasFilamentData = true;
       }
       // parse and store M23, select SD file
       else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
@@ -794,7 +794,7 @@ void parseACK(void)
       {
         pidUpdateStatus(PID_FAILED);
       }
-      // parse M306 tuning end message (interrupted or finished)
+      // parse M306, model predictive temperature control tuning end message (interrupted or finished)
       else if (ack_seen("MPC Autotune"))
       {
         if (ack_continue_seen("finished"))
@@ -871,21 +871,22 @@ void parseACK(void)
         if (ack_seen("Y: ")) y = ack_value();
         if (ack_seen("Z: ")) levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
       }
-      // parse and store Delta Calibration settings
       #if DELTA_PROBE_TYPE != 0
-      else if (ack_seen("Calibration OK"))
-      {
-        BUZZER_PLAY(SOUND_SUCCESS);
-        if (infoMachineSettings.EEPROM == 1)
+        // parse and store Delta calibration settings
+        else if (ack_seen("Calibration OK"))
+        {
+          BUZZER_PLAY(SOUND_SUCCESS);
+
+          if (infoMachineSettings.EEPROM == 1)
           {
             setDialogText(LABEL_DELTA_CONFIGURATION, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
             showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
           }
-        else
+          else
           {
             popupReminder(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_PROCESS_COMPLETED);
-          } 
-      } 
+          }
+        }
       #endif
 
       //----------------------------------------
@@ -997,6 +998,7 @@ void parseACK(void)
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
       }
+      // parse and store model predictive temperature control
       else if (ack_seen("M306"))
       {
         if (ack_continue_seen("E"))
@@ -1005,7 +1007,7 @@ void parseACK(void)
 
           if (ack_continue_seen("P"))
             setMpcHeaterPower(index, ack_value());
-          
+
           if (ack_continue_seen("H"))
             setMpcFilHeatCapacity(index, ack_value());
         }
