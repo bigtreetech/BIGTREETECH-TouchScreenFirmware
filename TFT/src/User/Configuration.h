@@ -811,7 +811,7 @@
 
 /**
  * Power Loss Recovery Mode
- * Enable power loss recovery.
+ * Enable/disable power loss recovery mode.
  * If enabled, a recovery file named "Printing.sys", created in the same media (e.g. TFT SD card) of the file
  * that is being printed, containing the current print status is updated during the print and deleted on print
  * completion. In case of a power failure, the recovery file is used to restore the print from the outage point.
