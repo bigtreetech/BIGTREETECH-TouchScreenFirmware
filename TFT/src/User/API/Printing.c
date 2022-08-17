@@ -155,15 +155,14 @@ uint32_t getPrintCur(void)
   return infoPrinting.cur;
 }
 
-void setPrintProgress(float cur, float size)
+void setPrintProgData(float cur, float size)
 {
   infoPrinting.cur = cur;
   infoPrinting.size = size;
 }
 
-void setPrintProgressPercentage(uint8_t percentage)
+void setPrintProgPercentage(uint8_t percentage)
 {
-  infoPrinting.progressSource = PROG_SLICER;
   infoPrinting.progress = percentage;
 }
 
@@ -171,8 +170,9 @@ uint8_t updatePrintProgress(void)
 {
   switch (infoPrinting.progressSource)
   {
+    case PROG_RRF:
     case PROG_SLICER:
-      break;  //no progress update if it is controlled by slicer
+      break;  //progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
 
     case PROG_FILE:
       // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%

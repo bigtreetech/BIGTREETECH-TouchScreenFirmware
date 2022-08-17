@@ -14,23 +14,24 @@ extern "C"
 #include "JsonStreamingParser.hpp"
 #include <string.h>
 
-#define STATUS      "status"
-#define HEATERS     "heaters"
-#define ACTIVE      "active"
-#define STANDBY     "standby"
-#define HSTAT       "hstat"
-#define POS         "pos"
-#define SPEED       "sfactor"
-#define EXTRUSION   "efactor"
-#define BABYSTEP    "babystep"
-#define FAN_PERCENT "fanPercent"
-#define MBOX_SEQ    "msgBox.seq"
-#define MBOX_MODE   "msgBox.mode"
-#define MBOX_TIMEO  "msgBox.timeout"
-#define MBOX_MSG    "msgBox.msg"
-#define MBOX_TITLE  "msgBox.title"
-#define RESP        "resp"
-#define RESULT      "result"
+#define STATUS            "status"
+#define HEATERS           "heaters"
+#define ACTIVE            "active"
+#define STANDBY           "standby"
+#define HSTAT             "hstat"
+#define POS               "pos"
+#define SPEED             "sfactor"
+#define EXTRUSION         "efactor"
+#define BABYSTEP          "babystep"
+#define FAN_PERCENT       "fanPercent"
+#define FRACTION_PRINTED  "fraction_printed"
+#define MBOX_SEQ          "msgBox.seq"
+#define MBOX_MODE         "msgBox.mode"
+#define MBOX_TIMEO        "msgBox.timeout"
+#define MBOX_MSG          "msgBox.msg"
+#define MBOX_TITLE        "msgBox.title"
+#define RESP              "resp"
+#define RESULT            "result"
 
 enum DOCUMENT_STATE
 {
@@ -48,6 +49,7 @@ enum DOCUMENT_STATE
   probe,
   fan_percent,
   fanRPM,
+  fraction_printed,
   mbox_seq,
   mbox_mode,
   mbox_timeo,
@@ -124,6 +126,10 @@ public:
     else if (strcmp(FAN_PERCENT, key) == 0)
     {
       state = fan_percent;
+    }
+    else if (strcmp(FRACTION_PRINTED, key) == 0)
+    {
+      state = fraction_printed;
     }
     else if (strcmp(MBOX_SEQ, key) == 0)
     {

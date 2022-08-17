@@ -790,14 +790,17 @@ void sendQueueCmd(void)
 
         case 73:
           if (cmd_seen('P'))
-            setPrintProgressPercentage(cmd_value());
+          {
+            setPrintProgSource(PROG_SLICER);
+            setPrintProgPercentage(cmd_value());
+          }
 
           if (cmd_seen('R'))
           {
             setPrintRemainingTime((cmd_value() * 60));
             setTimeFromSlicer(true);  // disable parsing remaning time from gcode comments
 
-            if (getPrintProgSource() == PROG_FILE && infoSettings.prog_source == 1)
+            if (getPrintProgSource() < PROG_TIME && infoSettings.prog_source == 1)
               setPrintProgSource(PROG_TIME);
           }
 
@@ -915,7 +918,7 @@ void sendQueueCmd(void)
           else if (cmd_seen_from(cmd_base_index, "Data Left"))  // parsing printing data left
           {
             // format: Data Left <XXXX>/<YYYY> (e.g. Data Left 123/12345)
-            setPrintProgress(cmd_value(), cmd_second_value());
+            setPrintProgData(cmd_value(), cmd_second_value());
           }
           else
           {
