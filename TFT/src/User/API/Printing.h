@@ -78,7 +78,7 @@ uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
 
 void setPrintProgData(float cur, float size);
-void setPrintProgPercentage(uint8_t percentage);  // used by M73 Pxx
+void setPrintProgPercentage(uint8_t percentage);  // used by M73 Pxx and RRF
 uint8_t updatePrintProgress(void);
 uint8_t getPrintProgress(void);
 PROG_FROM getPrintProgSource(void);
