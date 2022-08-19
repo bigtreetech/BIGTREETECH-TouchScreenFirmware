@@ -180,10 +180,6 @@ uint8_t updatePrintProgress(void)
 {
   switch (infoPrinting.progressSource)
   {
-    case PROG_RRF:
-    case PROG_SLICER:
-      break;  // progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
-
     case PROG_FILE:
       // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%
       if (infoPrinting.size <= infoPrinting.cur)
@@ -192,6 +188,10 @@ uint8_t updatePrintProgress(void)
         infoPrinting.progress = (uint8_t)((float)(infoPrinting.cur - infoPrinting.fileOffset) / (infoPrinting.size - infoPrinting.fileOffset) * 100);
 
       break;
+
+    case PROG_RRF:
+    case PROG_SLICER:
+      break;  // progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
 
     case PROG_TIME:
       infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
