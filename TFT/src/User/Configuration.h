@@ -376,19 +376,30 @@
 
 /**
  * Heated Bed Support
+ * Enable/disable presence of heated bed.
+ *
+ * NOTE: Disable it to let the TFT auto-detect if bed heating is enabled in Marlin firmware.
+ *
  *   Options: [disable: 0, enable: 1]
  */
 #define HEATED_BED 1  // Default: 1
 
 /**
  * Heated Chamber Support
- * The TFT will auto-detect if chamber heating is enabled in Marlin firmware.
+ * Enable/disable presence of heated chamber.
+ *
+ * NOTE: Disable it to let the TFT auto-detect if chamber heating is enabled in Marlin firmware.
+ *
  *   Options: [disable: 0, enable: 1]
  */
 #define HEATED_CHAMBER 0  // Default: 0
 
 /**
  * Extruder Count
+ * Set extruder count.
+ *
+ * NOTE: This value is overridden by the TFT if provided by Marlin firmware.
+ *
  *   Value range: [min: 0, max: 6]
  */
 #define EXTRUDER_COUNT  1  // Default: 1
@@ -490,10 +501,14 @@
 #define EXTRUDE_FAST_SPEED   1200  // Default: 1200
 
 /**
- * Auto Save/Load Bed Leveling Data
- * The TFT will auto-detect if Auto Bed Level is available.
- * Enable this will send "M500" after "G29" to store leveling value and send "M420 S1"
- * to enable leveling state after startup.
+ * Auto Load Bed Leveling Data
+ * If enabled, load bed leveling data and turn leveling on at startup sending gcode "M420 S1".
+ *
+ * NOTE: If enabled, it is required:
+ *       1) EEPROM and a bed leveling type (e.g. UBL) enabled in Marlin.
+ *       2) A valid mesh saved on EEPROM (it is required to enable bed leveling).
+ *          If the mesh is invalid / incomplete leveling will not be enabled.
+ *
  *   Options: [disable: 0, enable: 1]
  */
 #define AUTO_LOAD_LEVELING 1  // Default: 1
@@ -507,8 +522,11 @@
 
 /**
  * Onboard / Printer Media Support
- * On Marlin firmware, the TFT will auto-detect onboard media.
- * Auto-detect is not available for other firmwares like Smoothieware.
+ * Enable/disable presence of onboard media.
+ *
+ * NOTE: Auto-detect option is currently available (supported) by Marlin firmware.
+ *       Auto-detect is not available for other firmwares like Smoothieware.
+ *
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
 #define ONBOARD_SD 2  // Default: 2
@@ -530,8 +548,11 @@
 
 /**
  * Long File Names Support
- * On Marlin firmware, the TFT will auto-detect Long File Name support.
- * Auto-detect is not available for other firmwares like Smoothieware.
+ * Enable/disable support to long file names.
+ *
+ * NOTE: Auto-detect option is currently available (supported) by Marlin firmware.
+ *       Auto-detect is not available for other firmwares like Smoothieware.
+ *
  *   Options: [disable: 0, enable: 1, auto-detect: 2]
  */
 #define LONG_FILENAME 2  // Default: 2
@@ -790,8 +811,16 @@
 
 /**
  * Power Loss Recovery Mode
- * Enable power loss recovery.
- * Disable to reduce the loss of TFT SD card or TFT USB disk.
+ * Enable/disable power loss recovery mode.
+ * If enabled, a recovery file named "Printing.sys", created in the same media (e.g. TFT SD card) of the file
+ * that is being printed, containing the current print status is updated during the print and deleted on print
+ * completion. In case of a power failure, the recovery file is used to restore the print from the outage point.
+ * After a power failure, a popup message asking to restore the failed print is prompted when browsing the media
+ * containing the recovery file.
+ *
+ * NOTE: Disable it in case issues such as the loss of media (e.g. read error messages from TFT SD card) during
+ *       the print are experienced.
+ *
  *   Options: [disable: 0, enable: 1]
  */
 #define PL_RECOVERY 1  // Default: 1
