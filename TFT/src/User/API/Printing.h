@@ -29,9 +29,10 @@ typedef enum
 
 typedef enum
 {
-  PROG_FILE = 0, // file execution progress ()
-  PROG_TIME,     // time based progress (elapsed/total)
-  PROG_SLICER,   // progress from slicer (M73)
+  PROG_FILE = 0,  // file execution progress ()
+  PROG_RRF,       // progress from RRF ("fraction_printed")
+  PROG_TIME,      // time based progress (elapsed/total)
+  PROG_SLICER,    // progress from slicer (M73)
 } PROG_FROM;
 
 typedef struct
@@ -42,6 +43,7 @@ typedef struct
   float length;
   float weight;
   float cost;
+  bool hasFilamentData;
 } PRINT_SUMMARY;
 
 extern PRINT_SUMMARY infoPrintSummary;
@@ -75,11 +77,11 @@ uint16_t getPrintLayerCount();
 uint32_t getPrintSize(void);
 uint32_t getPrintCur(void);
 
-void setPrintProgress(float cur, float size);
-void setPrintProgressPercentage(uint8_t percentage);  // used by M73 Pxx
+void setPrintProgData(float cur, float size);
+void setPrintProgPercentage(uint8_t percentage);  // used by M73 Pxx and RRF
 uint8_t updatePrintProgress(void);
 uint8_t getPrintProgress(void);
-PROG_FROM getPrintProgSource (void);
+PROG_FROM getPrintProgSource(void);
 void setPrintProgSource(PROG_FROM progressSource);
 
 void setPrintRunout(bool runout);

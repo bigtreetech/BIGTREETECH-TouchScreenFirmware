@@ -103,8 +103,8 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
   {VAL_TYPE_INT},                                                                                    // Set auto FW retract
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset (X, Y, Z)
-  {VAL_TYPE_FLOAT,  VAL_TYPE_FLOAT, VAL_TYPE_FLOAT},                                                 // Hotend PID
-  {VAL_TYPE_FLOAT,  VAL_TYPE_FLOAT, VAL_TYPE_FLOAT},                                                 // Bed PID
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Hotend PID
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Bed PID
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},

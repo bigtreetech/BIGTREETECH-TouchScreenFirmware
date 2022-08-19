@@ -68,7 +68,7 @@ int16_t drawTemperatureStatus(void)
 
   if (infoSettings.hotend_count)
   {  // global hotend
-    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
+    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en)  // dual hotend
     {
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
       tmpHeater[tmpIndex++] = NOZZLE0;

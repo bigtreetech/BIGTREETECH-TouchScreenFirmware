@@ -73,7 +73,8 @@ void parseComment(void)
       {
         setPrintExpectedTime(strtoul(temp_char, NULL, 0));
         setPrintRemainingTime(getPrintExpectedTime());
-        if (getPrintProgSource() == PROG_FILE && infoSettings.prog_source == 1)
+
+        if (getPrintProgSource() < PROG_TIME && infoSettings.prog_source == 1)
           setPrintProgSource(PROG_TIME);
       }
     }
@@ -97,7 +98,8 @@ void parseComment(void)
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         temp_value = strtoul(temp_char, NULL, 0);  // get the remaining time in seconds
         setPrintRemainingTime(temp_value);
-        if (getPrintProgSource() == PROG_FILE && infoSettings.prog_source == 1)
+
+        if (getPrintProgSource() < PROG_TIME && infoSettings.prog_source == 1)
           setPrintProgSource(PROG_TIME);
       }
     }

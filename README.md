@@ -105,15 +105,14 @@ Main branch: **Master**
 
 ## Marlin Dependencies
 
-Firmware source: https://github.com/MarlinFirmware/Marlin/releases
+Minimum Marlin firmware version: **2.1.1**<br>
+Distribution date: **2022-08-06**<br>
+Firmware source: https://github.com/MarlinFirmware/Marlin/releases<br>
 
-Minimum Marlin firmware version: **2.0.8.1**
+To use all the features and functionalities supported by the TFT,
+the following options must be enabled in Marlin firmware.
 
-Distribution date: **2021-05-15**
-
-</br>To use all the features and functionalities supported by the TFT, the following options must be enabled in Marlin firmware.
-
-**General options which MUST be activated:**
+**General options which MUST be always activated:**
 
 `EEPROM_SETTINGS` (in Configuration.h)<br>
 `BABYSTEPPING` (in Configuration_adv.h)<br>
@@ -136,10 +135,11 @@ Distribution date: **2021-05-15**
 `SERIAL_FLOAT_PRECISION 4` (in Configuration_adv.h)<br>
 `HOST_ACTION_COMMANDS` (in Configuration_adv.h)<br>
 `HOST_PROMPT_SUPPORT` (in Configuration_adv.h)<br>
+`HOST_STATUS_NOTIFICATIONS` (in Configuration_adv.h)<br>
 
 **Options to support M600 with host & (Un)Load menu:**
 
-`Options to support dialog with host` as pre requisite<br>
+`Options to support dialog with host` (as pre requisite)<br>
 `NOZZLE_PARK_FEATURE` (in Configuration.h)<br>
 `ADVANCED_PAUSE_FEATURE` (in Configuration_adv.h)<br>
 `PARK_HEAD_ON_PAUSE` (in Configuration_adv.h)<br>

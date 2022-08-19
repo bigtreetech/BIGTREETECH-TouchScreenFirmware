@@ -53,10 +53,8 @@ void menuHeat(void)
   while (MENU_IS(menuHeat))
   {
     actCurrent = heatGetCurrentTemp(tool_index);
-    actTarget = heatGetTargetTemp(tool_index);
+    actTarget = setTarget = heatGetTargetTemp(tool_index);
     key_num = menuKeyGetValue();
-
-    setTarget = actTarget;
 
     switch (key_num)
     {
@@ -74,7 +72,7 @@ void menuHeat(void)
 
       case KEY_ICON_3:
       case KEY_INCREASE:
-          setTarget += degreeSteps[degreeSteps_index];
+        setTarget += degreeSteps[degreeSteps_index];
         break;
 
       case KEY_ICON_4:

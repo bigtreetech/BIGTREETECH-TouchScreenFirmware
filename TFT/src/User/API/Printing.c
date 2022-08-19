@@ -3,31 +3,31 @@
 
 typedef struct
 {
-  FIL                file;
-  uint32_t           size;                // gcode file total size
-  uint32_t           cur;                 // gcode file printed size
-  uint32_t           fileOffset;          // size of non-printing lines (calculated dynamically)
-  uint32_t           expectedTime;        // expected print duration in sec
-  uint32_t           elapsedTime;         // current elapsed time in sec
-  uint32_t           remainingTime;       // current remaining time in sec
-  uint16_t           layerNumber;         // current printing layer number
-  uint16_t           layerCount;          // total number of layers
-  uint8_t            progress;            // printing progress in percentage (0% - 100%)
-  PROG_FROM          progressSource;      // source for progress (file progress, time progress, progress from slicer)
-  bool               runout;              // 1: runout in printing, 0: idle
-  bool               printing;            // 1: means printing, 0: means idle
-  bool               paused;              // 1: means paused
-  bool               aborted;             // 1: means aborted
-  PAUSE_TYPE         pauseType;           // pause type trigged by different sources and gcodes like M0 & M600
+  FIL        file;
+  uint32_t   size;            // gcode file total size
+  uint32_t   cur;             // gcode file printed size
+  uint32_t   fileOffset;      // size of non-printing lines (calculated dynamically)
+  uint32_t   expectedTime;    // expected print duration in sec
+  uint32_t   elapsedTime;     // current elapsed time in sec
+  uint32_t   remainingTime;   // current remaining time in sec
+  uint16_t   layerNumber;     // current printing layer number
+  uint16_t   layerCount;      // total number of layers
+  uint8_t    progress;        // printing progress in percentage (0% - 100%)
+  PROG_FROM  progressSource;  // source for progress (file progress, time progress, progress from slicer)
+  bool       runout;          // 1: runout in printing, 0: idle
+  bool       printing;        // 1: means printing, 0: means idle
+  bool       paused;          // 1: means paused
+  bool       aborted;         // 1: means aborted
+  PAUSE_TYPE pauseType;       // pause type trigged by different sources and gcodes like M0 & M600
 } PRINTING;
 
 PRINTING infoPrinting = {0};
-PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0};
+PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
 
-static bool updateM27_waiting = false;
+static bool updateM27Waiting = false;
 static bool extrusionDuringPause = false;  // flag for extrusion during Print -> Pause
-static float last_E_pos;
-bool filamentRunoutAlarm;
+static bool filamentRunoutAlarm = false;
+static float lastEPos = 0;                 // used only to update stats in infoPrintSummary
 
 void setExtrusionDuringPause(bool extruded)
 {
@@ -155,15 +155,14 @@ uint32_t getPrintCur(void)
   return infoPrinting.cur;
 }
 
-void setPrintProgress(float cur, float size)
+void setPrintProgData(float cur, float size)
 {
   infoPrinting.cur = cur;
   infoPrinting.size = size;
 }
 
-void setPrintProgressPercentage(uint8_t percentage)
+void setPrintProgPercentage(uint8_t percentage)
 {
-  infoPrinting.progressSource = PROG_SLICER;
   infoPrinting.progress = percentage;
 }
 
@@ -171,8 +170,9 @@ uint8_t updatePrintProgress(void)
 {
   switch (infoPrinting.progressSource)
   {
+    case PROG_RRF:
     case PROG_SLICER:
-      break;  //no progress update if it is controlled by slicer
+      break;  //progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
 
     case PROG_FILE:
       // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%
@@ -180,10 +180,11 @@ uint8_t updatePrintProgress(void)
         infoPrinting.progress = 100;
       else
         infoPrinting.progress = (uint8_t)((float)(infoPrinting.cur - infoPrinting.fileOffset) / (infoPrinting.size - infoPrinting.fileOffset) * 100);
+
       break;
 
     case PROG_TIME:
-        infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
+      infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
       break;
   }
 
@@ -200,7 +201,7 @@ void setPrintRunout(bool runout)
   infoPrinting.runout = runout;
 }
 
-PROG_FROM getPrintProgSource (void)
+PROG_FROM getPrintProgSource(void)
 {
   return infoPrinting.progressSource;
 }
@@ -260,9 +261,8 @@ void shutdownStart(void)
 
 void initPrintSummary(void)
 {
-  last_E_pos = coordinateGetAxis(E_AXIS);
-  infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0};
-  hasFilamentData = false;
+  lastEPos = coordinateGetAxis(E_AXIS);
+  infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0, false};
 
   // save print filename (short or long filename)
   sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintFilename());
@@ -308,18 +308,18 @@ void sendPrintCodes(uint8_t index)
 
 void printSetUpdateWaiting(bool isWaiting)
 {
-  updateM27_waiting = isWaiting;
+  updateM27Waiting = isWaiting;
 }
 
 void updatePrintUsedFilament(void)
 {
-  float E_pos = coordinateGetAxis(E_AXIS);
+  float ePos = coordinateGetAxis(E_AXIS);
 
-  if ((E_pos + MAX_RETRACT_LIMIT) < last_E_pos)  // Check whether E position reset (G92 E0)
-    last_E_pos = 0;
+  if ((ePos + MAX_RETRACT_LIMIT) < lastEPos)  // check whether E position reset (G92 E0)
+    lastEPos = 0;
 
-  infoPrintSummary.length += (E_pos - last_E_pos) / 1000;
-  last_E_pos = E_pos;
+  infoPrintSummary.length += (ePos - lastEPos) / 1000;
+  lastEPos = ePos;
 }
 
 void clearInfoPrint(void)
@@ -865,6 +865,7 @@ void loopPrintFromTFT(void)
       }
     }
   }
+
   if (gcode_count == 0)
     infoPrinting.fileOffset += ip_cur - infoPrinting.cur;
 
@@ -900,7 +901,7 @@ void loopPrintFromOnboard(void)
 
   do
   { // WAIT FOR M27
-    if (updateM27_waiting == true)
+    if (updateM27Waiting == true)
     {
       nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
       break;
@@ -913,6 +914,6 @@ void loopPrintFromOnboard(void)
       break;
 
     nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
-    updateM27_waiting = true;
+    updateM27Waiting = true;
   } while (0);
 }

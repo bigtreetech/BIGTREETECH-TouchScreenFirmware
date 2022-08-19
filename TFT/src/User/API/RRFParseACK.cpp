@@ -19,6 +19,7 @@
  *    "fanPercent": [ 0, 100, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
  *    "fanRPM": [ -1, -1, -1 ],
  *    "homed": [ 0, 0, 0 ],
+ *    "fraction_printed": 0,
  *    "msgBox.mode": -1
  *  }
  *
@@ -171,6 +172,12 @@ void ParseACKJsonParser::value(const char *value)
       break;
     case fanRPM:
       break;
+    case fraction_printed:
+      if (getPrintProgSource() < PROG_RRF)
+        setPrintProgSource(PROG_RRF);
+      if (getPrintProgSource() == PROG_RRF)
+        setPrintProgPercentage((value[0] - '0') * 100 + (value[2] - '0') * 10 + (value[3] - '0'));
+      break;
     case mbox_seq:
       seq = strtod((char *)value, NULL);
       show_m291 = seq != m291_seq;
@@ -220,7 +227,7 @@ void ParseACKJsonParser::value(const char *value)
       else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)       // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}
       {
         string_end = strstr(string_start, (char *)"/");
-        setPrintProgress(atoi(string_start + 14), atoi(string_end + 1));
+        setPrintProgData(atoi(string_start + 14), atoi(string_end + 1));
       }
       else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
       {
