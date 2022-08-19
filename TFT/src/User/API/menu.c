@@ -946,6 +946,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
     {
       GUI_POINT loc;
 
+      // set horizontal text align
       switch (liveicon->lines[i].h_align)
       {
         case CENTER:

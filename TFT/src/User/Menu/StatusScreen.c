@@ -20,7 +20,7 @@
   #define XYZ_STATUS "   X: %.2f   Y: %.2f   Z: %.2f   "
 #endif
 
-const MENUITEMS StatusItems = {
+const MENUITEMS statusItems = {
   // title
   LABEL_READY,
   // icon                          label
@@ -41,17 +41,17 @@ const MENUITEMS StatusItems = {
   }
 };
 
-const uint8_t BedIcons[2] = {ICON_STATUS_BED, ICON_STATUS_CHAMBER};
+const uint8_t bedIcons[2] = {ICON_STATUS_BED, ICON_STATUS_CHAMBER};
 
 const uint8_t speedIcons[2] = {ICON_STATUS_SPEED, ICON_STATUS_FLOW};
 
-static int8_t lastConnection_status = -1;
+static int8_t lastConnectionStatus = -1;
 static bool msgNeedRefresh = false;
 
-static char msgtitle[20];
-static char msgbody[MAX_MSG_LENGTH];
+static char msgTitle[20];
+static char msgBody[MAX_MSG_LENGTH];
 
-const char *const SpeedID[2] = SPEED_ID;
+const char *const speedID[2] = SPEED_ID;
 
 // text position rectangles for Live icons
 const GUI_POINT ss_title_point = {SS_ICON_WIDTH - BYTE_WIDTH / 2, SS_ICON_NAME_Y0};
@@ -65,13 +65,13 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
   const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                              START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y + 1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT RecGantry = {START_X - 3,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+  const GUI_RECT recGantry = {START_X - 3,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X + 3 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #else
   const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
                              START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT RecGantry = {START_X,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+  const GUI_RECT recGantry = {START_X,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
@@ -122,7 +122,7 @@ void drawStatus(void)
     showLiveInfo(0, &lvIcon, false);
 
     // BED / CHAMBER
-    lvIcon.iconIndex = BedIcons[currentBCIndex];
+    lvIcon.iconIndex = bedIcons[currentBCIndex];
     lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
     sprintf(tempstr, "%3d℃", heatGetCurrentTemp(BED + currentBCIndex));
     sprintf(tempstr2, "%3d℃", heatGetTargetTemp(BED + currentBCIndex));
@@ -140,7 +140,7 @@ void drawStatus(void)
     showLiveInfo(0, &lvIcon, false);
 
     // BED
-    lvIcon.iconIndex = BedIcons[currentBCIndex];
+    lvIcon.iconIndex = bedIcons[currentBCIndex];
     lvIcon.lines[0].text = (uint8_t *)heatShortID[BED + currentBCIndex];
     sprintf(tempstr, "%3d/%-3d", heatGetCurrentTemp(BED + currentBCIndex), heatGetTargetTemp(BED + currentBCIndex));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
@@ -162,21 +162,21 @@ void drawStatus(void)
   #ifdef TFT70_V3_0
     // SPEED
     lvIcon.iconIndex = ICON_STATUS_SPEED;
-    lvIcon.lines[0].text = (uint8_t *)SpeedID[0];
+    lvIcon.lines[0].text = (uint8_t *)speedID[0];
     sprintf(tempstr, "%3d%%", speedGetCurPercent(0));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, false);
 
     // FLOW
     lvIcon.iconIndex = ICON_STATUS_FLOW;
-    lvIcon.lines[0].text = (uint8_t *)SpeedID[1];
+    lvIcon.lines[0].text = (uint8_t *)speedID[1];
     sprintf(tempstr, "%3d%%", speedGetCurPercent(1));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(4, &lvIcon, false);
   #else
     // SPEED / FLOW
     lvIcon.iconIndex = speedIcons[currentSpeedID];
-    lvIcon.lines[0].text = (uint8_t *)SpeedID[currentSpeedID];
+    lvIcon.lines[0].text = (uint8_t *)speedID[currentSpeedID];
     sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
     showLiveInfo(3, &lvIcon, true);
@@ -185,41 +185,41 @@ void drawStatus(void)
   sprintf(tempstr, XYZ_STATUS, coordinateGetAxisActual(X_AXIS), coordinateGetAxisActual(Y_AXIS), coordinateGetAxisActual(Z_AXIS));
 
   #ifdef PORTRAIT_MODE
-    int paddingWidth = ((RecGantry.x1 - RecGantry.x0) - (strlen(tempstr) * BYTE_WIDTH)) / 2;
+    int paddingWidth = ((recGantry.x1 - recGantry.x0) - (strlen(tempstr) * BYTE_WIDTH)) / 2;
 
     GUI_SetColor(GANTRY_XYZ_BG_COLOR);
-    GUI_FillRect(RecGantry.x0, RecGantry.y0, RecGantry.x0 + paddingWidth, RecGantry.y1);  // left padding
-    GUI_FillRect(RecGantry.x1 - paddingWidth, RecGantry.y0, RecGantry.x1, RecGantry.y1);  // right padding
+    GUI_FillRect(recGantry.x0, recGantry.y0, recGantry.x0 + paddingWidth, recGantry.y1);  // left padding
+    GUI_FillRect(recGantry.x1 - paddingWidth, recGantry.y0, recGantry.x1, recGantry.y1);  // right padding
   #endif
 
   GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
   GUI_SetColor(GANTRY_XYZ_FONT_COLOR);
   GUI_SetBkColor(GANTRY_XYZ_BG_COLOR);
-  GUI_DispStringInPrect(&RecGantry, (uint8_t *)tempstr);
+  GUI_DispStringInPrect(&recGantry, (uint8_t *)tempstr);
 
   GUI_RestoreColorDefault();
 }
 
 void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 {
-  strncpy(msgtitle, (char *)title, sizeof(msgtitle));
-  strncpy(msgbody, (char *)msg, sizeof(msgbody));
+  strncpy(msgTitle, (char *)title, sizeof(msgTitle));
+  strncpy(msgBody, (char *)msg, sizeof(msgBody));
   msgNeedRefresh = true;
 }
 
 void statusScreen_setReady(void)
 {
-  strncpy(msgtitle, (char *)textSelect(LABEL_STATUS), sizeof(msgtitle));
+  strncpy(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
 
   if (infoHost.connected == false)
   {
-    strncpy(msgbody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgbody));
+    strncpy(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   }
   else
   {
-    strncpy(msgbody, (char *)machine_type, sizeof(msgbody));
-    strcat(msgbody, " ");
-    strcat(msgbody, (char *)textSelect(LABEL_READY));
+    strncpy(msgBody, (char *)machine_type, sizeof(msgBody));
+    strcat(msgBody, " ");
+    strcat(msgBody, (char *)textSelect(LABEL_READY));
   }
 
   msgNeedRefresh = true;
@@ -237,11 +237,11 @@ void drawStatusScreenMsg(void)
 
   GUI_DispString(rect_of_keySS[KEY_INFOBOX].x0 + BYTE_HEIGHT + STATUS_MSG_TITLE_XOFFSET,
                  rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
-                 (uint8_t *)msgtitle);
+                 (uint8_t *)msgTitle);
 
   GUI_SetBkColor(INFOMSG_BG_COLOR);
   GUI_FillPrect(&msgRect);
-  Scroll_CreatePara(&scrollLine, (uint8_t *)msgbody, &msgRect);
+  Scroll_CreatePara(&scrollLine, (uint8_t *)msgBody, &msgRect);
   GUI_RestoreColorDefault();
 
   msgNeedRefresh = false;
@@ -292,18 +292,18 @@ void menuStatus(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   GUI_SetBkColor(infoSettings.bg_color);
-  menuDrawPage(&StatusItems);
+  menuDrawPage(&statusItems);
   GUI_SetColor(GANTRY_XYZ_BG_COLOR);
-  GUI_FillPrect(&RecGantry);
+  GUI_FillPrect(&recGantry);
   drawStatus();
   drawStatusScreenMsg();
 
   while (MENU_IS(menuStatus))
   {
-    if (infoHost.connected != lastConnection_status)
+    if (infoHost.connected != lastConnectionStatus)
     {
       statusScreen_setReady();
-      lastConnection_status = infoHost.connected;
+      lastConnectionStatus = infoHost.connected;
     }
 
     if (msgNeedRefresh)

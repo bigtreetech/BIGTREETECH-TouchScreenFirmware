@@ -1223,7 +1223,7 @@ void parseACK(void)
       {
         infoMachineSettings.buildPercent = ack_value();
       }
-      else if (ack_seen("Cap:CHAMBER_TEMPERATURE:"))
+      else if (ack_seen("Cap:CHAMBER_TEMPERATURE:") && infoSettings.chamber_en == DISABLED)  // auto-detect only if set to disabled
       {
         infoSettings.chamber_en = ack_value();
       }
