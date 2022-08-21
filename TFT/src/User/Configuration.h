@@ -253,7 +253,7 @@
  *
  *   Options: [File mode: 0, Time mode: 1]
  */
-#define PROG_SOURCE 0
+#define PROG_SOURCE 1
 
 /**
  * Progress Numeric Display Mode During Print
