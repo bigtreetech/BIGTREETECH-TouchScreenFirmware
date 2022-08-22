@@ -82,7 +82,7 @@
  * The TFT parses and processes extra information provided by the slicer as comments in the G-code file.
  * If enabled, the current implementation parses and processes print time and print layer information
  * from the G-code file (nothing else).
- * If disabled, the "layer_disp_type" setting provided in "UI Settings" section becomes redundant.
+ * If disabled, the "LAYER_DISP_TYPE" setting provided in "UI Settings" section becomes redundant.
  *
  * NOTE: Enable it in case the slicer (e.g. Cura) supports extra information.
  *
@@ -951,7 +951,7 @@
 /**
  * Knob LED Pixels (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
  * Set the number of LEDs in the strip connected to "Neopixel" port of TFT.
- * It shares the same signal line as "knob_led". 0 means the default number in TFT hardware.
+ * It shares the same signal line as "KNOB_LED_COLOR". 0 means the default number in TFT hardware.
  * Greater than 0 means the number of LEDs in the strip.
  *   Value range: [min: 0, max: 200]
  */
@@ -1185,7 +1185,7 @@
 
 /**
  * MBL Settings
- * Apply the "level_z_pos" configurable parameter value as the
+ * Apply the "LEVELING_Z_POS" configurable parameter value as the
  * starting Z height for each point during MBL process.
  * If not enabled, you can set the desired starting Z height
  * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).
