@@ -51,7 +51,7 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
 #endif
 };
 
-// error labels for files/Volume errors
+// error labels for files/volume errors
 const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ_ERROR, LABEL_ONBOARD_SD_READ_ERROR};
 
 static bool list_mode = true;
