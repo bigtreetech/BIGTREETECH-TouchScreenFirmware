@@ -22,18 +22,18 @@ extern "C" {
 
 typedef enum
 {
-  PAUSE_NORMAL = 0,
-  PAUSE_M0,
-  PAUSE_EXTERNAL,
-} PAUSE_TYPE;
-
-typedef enum
-{
   PROG_FILE = 0,  // file execution progress ()
   PROG_RRF,       // progress from RRF ("fraction_printed")
   PROG_TIME,      // time based progress (elapsed/total)
   PROG_SLICER,    // progress from slicer (M73)
 } PROG_FROM;
+
+typedef enum
+{
+  PAUSE_NORMAL = 0,
+  PAUSE_M0,
+  PAUSE_EXTERNAL,
+} PAUSE_TYPE;
 
 typedef struct
 {
@@ -74,15 +74,23 @@ uint16_t getPrintLayerNumber();
 void setPrintLayerCount(uint16_t layerCount);
 uint16_t getPrintLayerCount();
 
-uint32_t getPrintSize(void);
-uint32_t getPrintCur(void);
+void setPrintProgressSource(PROG_FROM progressSource);
+PROG_FROM getPrintProgressSource(void);
 
-void setPrintProgData(float cur, float size);
-void setPrintProgPercentage(uint8_t percentage);  // used by M73 Pxx and RRF
+//
+// used for print based on gcode file
+//
+uint32_t getPrintDataSize(void);
+uint32_t getPrintDataCur(void);
+void setPrintProgressData(float cur, float size);
+
+//
+// used for print based on M73 Pxx or RRF
+//
+void setPrintProgressPercentage(uint8_t percentage);
+
 uint8_t updatePrintProgress(void);
 uint8_t getPrintProgress(void);
-PROG_FROM getPrintProgSource(void);
-void setPrintProgSource(PROG_FROM progressSource);
 
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);

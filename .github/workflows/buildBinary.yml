@@ -118,13 +118,13 @@ jobs:
         run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
 
       - name: Remove Old Config
-        run: find "Copy to SD Card root directory to update/" -name 'config.ini' -print -delete
+        run: find "Copy to SD Card root directory to update/" -name 'config*.ini' -print -delete
 
       - name: Copy New Binaries
         run: find .pio/build/ -name '*.bin' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
 
       - name: Copy New Config
-        run: find TFT/src/User/ -name 'config.ini' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
+        run: find TFT/src/User/ -name 'config*.ini' -exec cp -vf '{}' "./Copy to SD Card root directory to update/" ";"
 
       - name: Stage New Binaries
         run: |
@@ -132,7 +132,7 @@ jobs:
 
       - name: Stage New Config
         run: |
-          find "Copy to SD Card root directory to update/" -name 'config.ini' -exec git add {} \;
+          find "Copy to SD Card root directory to update/" -name 'config*.ini' -exec git add {} \;
 
       - name: Push
         uses: actions-x/commit@v6
