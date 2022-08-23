@@ -82,7 +82,7 @@
  * The TFT parses and processes extra information provided by the slicer as comments in the G-code file.
  * If enabled, the current implementation parses and processes print time and print layer information
  * from the G-code file (nothing else).
- * If disabled, the "layer_disp_type" setting provided in "UI Settings" section becomes redundant.
+ * If disabled, the "LAYER_DISP_TYPE" setting provided in "UI Settings" section becomes redundant.
  *
  * NOTE: Enable it in case the slicer (e.g. Cura) supports extra information.
  *
@@ -236,34 +236,35 @@
 
 /**
  * Progress Source
- * This sets the source of the progress calculation, G-code file advance based or time based.
- * In file mode it is a simple file progress, it tells you the percentage of the G-codes
- * executed. It doesn't reflect the amount of work done, only in a very few cases (ex. a 2D
- * shape expanded vertically like a cylinder, cube, etc).
- * Time based mode is very close to the real amount of work done, but it is still not perfect,
- * it relies on the estimate the slicer has done. It needs info from the slicer, the elapsed
- * time or the remaining time, if it's missing, the progress source defaults to file progress
- * mode. If no "M73 R" is present in the G-code file than it requires "file_comment_parsing"
- * to be enabled.
+ * This sets the source of the progress calculation, G-code file advance based mode or time based mode:
+ * - File mode is a simple file progress, it tells you the percentage of the G-codes executed.
+ *   It doesn't reflect the amount of work done, only in a very few cases (ex. a 2D shape expanded
+ *   vertically like a cylinder, cube etc.).
+ * - Time mode is very close to the real amount of work done, but it is still not perfect and it relies
+ *   on the estimate the slicer has done (see notes below).
  *
- * NOTE: If "M73 P" is present in the G-code file than file or time based progress will be
- *       overriden by that.
+ * NOTES:
+ *   - Time mode needs info from the slicer such as the elapsed time or the remaining time ("M73 Rxx").
+ *     If no "M73 Rxx" is present in the G-code file then it needs the slicer includes the time related
+ *     info as comments and "FILE_COMMENT_PARSING" to be enabled.
+ *     If that info is missing (comment or "M73 Rxx"), the progress source defaults to option 0 (file mode).
+ *   - If "M73 Pxx" is present in the G-code file then file or time based progress modes will be overriden
+ *     by that.
  *
- *   Options: [File progress mode: 0, Time based progress: 1]
+ *   Options: [File mode: 0, Time mode: 1]
  */
 #define PROG_SOURCE 1
 
 /**
  * Progress Numeric Display Mode During Print
  * This sets the default display type for print progress numeric display. It can be changed during
- * print by pressing the hourglass icon.
- * At each click it will alter between the 3 variants.
+ * print by pressing the hourglass icon. At each click it will alter between the 3 variants.
  *
- * NOTE: Some slicers include time related info in the G-code files as comments. If the time info
- *       is not added by the slicer, then a post processing plugin is needed that adds that info in
- *       the G-code file (comment or M73 Rxx format).
- *       If no remaining time info is present in the G-code file (comment or M73 Rxx), the display
- *       defaults to option 0.
+ * NOTE: It needs info from the slicer such as the elapsed time or the remaining time ("M73 Rxx").
+ *       If no "M73 Rxx" is present in the G-code file then it needs the slicer includes the time related
+ *       info as comments and "FILE_COMMENT_PARSING" to be enabled.
+ *       If that info is missing (comment or "M73 Rxx"), the display defaults to option 0 (percentage &
+ *       elapsed time).
  *
  *   Options: [Percentage & Elapsed time: 0, Percentage & Remaining time: 1, Elapsed time & Remaining time: 2]
  */
@@ -283,8 +284,7 @@
  *     Separators can be " ", ":", "_" or "=".
  *   - If the total number of layers exceeds 999, this information will not be displayed because
  *     there is not enough space for both current and total layer number to be shown.
- *
- *   - For PrusaSlicer, to enable this feature, following comment lines must be added in
+ *   - To enable this feature on PrusaSlicer, the following comment lines must be added in
  *     Printer Settings -> Custom G-code section:
  *     - In After layer change G-code section:
  *       ";LAYER:[layer_num]"
@@ -951,7 +951,7 @@
 /**
  * Knob LED Pixels (only for TFT28/TFT35_E3/TFT43/TFT50/TFT70 V3.0)
  * Set the number of LEDs in the strip connected to "Neopixel" port of TFT.
- * It shares the same signal line as "knob_led". 0 means the default number in TFT hardware.
+ * It shares the same signal line as "KNOB_LED_COLOR". 0 means the default number in TFT hardware.
  * Greater than 0 means the number of LEDs in the strip.
  *   Value range: [min: 0, max: 200]
  */
@@ -1185,7 +1185,7 @@
 
 /**
  * MBL Settings
- * Apply the "level_z_pos" configurable parameter value as the
+ * Apply the "LEVELING_Z_POS" configurable parameter value as the
  * starting Z height for each point during MBL process.
  * If not enabled, you can set the desired starting Z height
  * in Marlin fw (MANUAL_PROBE_START_Z in Configuration.h).

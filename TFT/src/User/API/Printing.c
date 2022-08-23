@@ -12,8 +12,8 @@ typedef struct
   uint32_t   remainingTime;   // current remaining time in sec
   uint16_t   layerNumber;     // current printing layer number
   uint16_t   layerCount;      // total number of layers
-  uint8_t    progress;        // printing progress in percentage (0% - 100%)
   PROG_FROM  progressSource;  // source for progress (file progress, time progress, progress from slicer)
+  uint8_t    progress;        // printing progress in percentage (0% - 100%)
   bool       runout;          // 1: runout in printing, 0: idle
   bool       printing;        // 1: means printing, 0: means idle
   bool       paused;          // 1: means paused
@@ -145,23 +145,33 @@ uint16_t getPrintLayerCount()
   return infoPrinting.layerCount;
 }
 
-uint32_t getPrintSize(void)
+void setPrintProgressSource(PROG_FROM progressSource)
+{
+  infoPrinting.progressSource = progressSource;
+}
+
+PROG_FROM getPrintProgressSource(void)
+{
+  return infoPrinting.progressSource;
+}
+
+uint32_t getPrintDataSize(void)
 {
   return infoPrinting.size;
 }
 
-uint32_t getPrintCur(void)
+uint32_t getPrintDataCur(void)
 {
   return infoPrinting.cur;
 }
 
-void setPrintProgData(float cur, float size)
+void setPrintProgressData(float cur, float size)
 {
   infoPrinting.cur = cur;
   infoPrinting.size = size;
 }
 
-void setPrintProgPercentage(uint8_t percentage)
+void setPrintProgressPercentage(uint8_t percentage)
 {
   infoPrinting.progress = percentage;
 }
@@ -170,10 +180,6 @@ uint8_t updatePrintProgress(void)
 {
   switch (infoPrinting.progressSource)
   {
-    case PROG_RRF:
-    case PROG_SLICER:
-      break;  //progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
-
     case PROG_FILE:
       // in case of not printing, a wrong size was set or current position at the end of file, we consider progress as 100%
       if (infoPrinting.size <= infoPrinting.cur)
@@ -182,6 +188,10 @@ uint8_t updatePrintProgress(void)
         infoPrinting.progress = (uint8_t)((float)(infoPrinting.cur - infoPrinting.fileOffset) / (infoPrinting.size - infoPrinting.fileOffset) * 100);
 
       break;
+
+    case PROG_RRF:
+    case PROG_SLICER:
+      break;  // progress percentage already updated by the slicer of RRF direct percentage report ("fraction_printed")
 
     case PROG_TIME:
       infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
@@ -199,16 +209,6 @@ uint8_t getPrintProgress(void)
 void setPrintRunout(bool runout)
 {
   infoPrinting.runout = runout;
-}
-
-PROG_FROM getPrintProgSource(void)
-{
-  return infoPrinting.progressSource;
-}
-
-void setPrintProgSource(PROG_FROM progressSource)
-{
-  infoPrinting.progressSource = progressSource;
 }
 
 bool getPrintRunout(void)

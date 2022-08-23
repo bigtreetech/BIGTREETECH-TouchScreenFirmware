@@ -44,6 +44,35 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 
 #endif
 
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit)
+{
+  uint16_t wl = w - limit->x1;
+  uint16_t hl = h - limit->y1;
+  uint16_t x;
+  uint16_t y;
+
+  LCD_SetWindow(sx + limit->x0, sy + limit->y0, sx + wl - 1, sy + hl - 1);
+
+  for (y = limit->y0; y < hl; y++)
+  {
+    for (x = limit->x0; x < wl; x++)
+    {
+      LCD_WR_16BITS_DATA(buf[(y * w) + x]);
+    }
+  }
+}
+
+void getBMPsize(BMP_INFO *bmp)
+{
+  if (!bmp->address && bmp->index < ICON_NULL)
+    bmp->address = ICON_ADDR(bmp->index);
+
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address += COLOR_BYTE_SIZE;
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address += COLOR_BYTE_SIZE;
+}
+
 void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_INFO *iconInfo)
 {
   uint16_t frameLines = (endPoint.y - startPoint.y);  // total lines in frame
@@ -92,17 +121,6 @@ void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_IN
   }
 }
 
-void getBMPsize(BMP_INFO *bmp)
-{
-  if (!bmp->address && bmp->index < ICON_NULL)
-    bmp->address = ICON_ADDR(bmp->index);
-
-  W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
-  bmp->address +=COLOR_BYTE_SIZE;
-  W25Qxx_ReadBuffer((uint8_t*)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
-  bmp->address +=COLOR_BYTE_SIZE;
-}
-
 // draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
@@ -117,6 +135,11 @@ void LOGO_ReadDisplay(void)
   IMAGE_ReadDisplay(0, 0, LOGO_ADDR);
 }
 
+void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
+{
+  IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
+}
+
 // load the selected area of bmp icon from flash to buffer
 void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon)
 {
@@ -126,11 +149,6 @@ void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h
 
   getBMPsize(&iconInfo);
   bmpToBuffer(buf, startPoint, endPoint, &iconInfo);
-}
-
-void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
-{
-  IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
 }
 
 uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int16_t y)

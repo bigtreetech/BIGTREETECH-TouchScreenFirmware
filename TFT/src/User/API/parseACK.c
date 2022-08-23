@@ -299,7 +299,7 @@ void hostActionCommands(void)
     else if (ack_seen("Data Left"))  // parsing printing data left
     {
       // format: Data Left <XXXX>/<YYYY> (e.g. Data Left 123/12345)
-      setPrintProgData(ack_value(), ack_second_value());
+      setPrintProgressData(ack_value(), ack_second_value());
     }
     else
     {
@@ -701,7 +701,7 @@ void parseACK(void)
         // parse file data progress.
         // Format: "SD printing byte <XXXX>/<YYYY>" (e.g. "SD printing byte 123/12345")
         //
-        setPrintProgData(ack_value(), ack_second_value());
+        setPrintProgressData(ack_value(), ack_second_value());
       }
       // parse and store M24, printing from (remote) onboard media completed
       else if (infoMachineSettings.onboardSD == ENABLED &&
