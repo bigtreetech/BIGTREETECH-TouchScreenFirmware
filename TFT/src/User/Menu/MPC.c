@@ -11,7 +11,6 @@ typedef struct
   float fil_heat_capcity;
 } MPC_PARAM;
 
-
 typedef struct
 {
   MPC_STATUS status;
@@ -68,10 +67,11 @@ void menuSetMpcParam(void)
         do
         {
           tmpVal = numPadInt((uint8_t *)"1 ~ 255", mpcParameter[curTool_index].heater_power, DEF_HEATER_POWER, false);
-          if(tmpVal < 1 || tmpVal > 255)
+
+          if (tmpVal < 1 || tmpVal > 255)
             BUZZER_PLAY(SOUND_ERROR);
           else
-           break;
+            break;
         } while (true);
 
         mpcParameter[curTool_index].heater_power = tmpVal;
@@ -87,6 +87,7 @@ void menuSetMpcParam(void)
         do
         {
           tmpVal = numPadFloat((uint8_t *)"0.001 ~ 0.1", mpcParameter[curTool_index].fil_heat_capcity, DEF_FIL_HEAT_CAPACITY, false);
+
           if (tmpVal < 0.001 || tmpVal > 0.1)
             BUZZER_PLAY(SOUND_ERROR);
           else
@@ -103,7 +104,6 @@ void menuSetMpcParam(void)
         mustStoreCmd("M306 E%d P%d H%.5f\n", curTool_index, mpcParameter[curTool_index].heater_power, mpcParameter[curTool_index].fil_heat_capcity);
         CLOSE_MENU();
         break;
-
     }
 
     loopProcess();
@@ -112,7 +112,7 @@ void menuSetMpcParam(void)
 
 void mpcStart(void)
 {
-  if(storeCmd("%s\n", tool_change[curTool_index]))
+  if (storeCmd("%s\n", tool_change[curTool_index]))
   {
     if (storeCmd("M306 T\n"))
     {
@@ -188,6 +188,7 @@ void menuMPC(void)
           {
             curTool_index = (curTool_index + 1) % MAX_HOTEND_COUNT;
           } while (!heaterDisplayIsValid(curTool_index));
+
           displayValues();
           break;
 
@@ -205,6 +206,7 @@ void menuMPC(void)
           // set (neopixel) LED light to current color or to OFF according to infoSettings.led_always_on and
           // restore infoSettings.knob_led_idle and knob LED color to their default values
           LED_SetPostEventColor();
+
           CLOSE_MENU();
           break;
 
@@ -214,21 +216,23 @@ void menuMPC(void)
     }
     else if (mpcTuning.status == STARTED)
     {
+      mpcTuning.status = ONGOING;
+
       LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
       LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
-      mpcTuning.status = ONGOING;
     }
     else if (mpcTuning.status == ONGOING)
     {
       if (getMenuType() != MENU_TYPE_SPLASH)
       {
-       setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-       showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
+        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
       }
 
       if (mpcTuning.result != NO_RESULT)
       {
         mpcTuning.status = DONE;
+
         LED_SetEventColor(&ledGreen, false);  // set (neopixel) LED light to GREEN
 
         switch (mpcTuning.result)

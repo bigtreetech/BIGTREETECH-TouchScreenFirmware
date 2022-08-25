@@ -1139,13 +1139,23 @@ void sendQueueCmd(void)
         case 569:  // M569 TMC stepping mode
         {
           uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
-          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+
+          // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+          // to make sure array index is never negative
+          if (i < 0)
+            i = 0;
 
           if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
           if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
           if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
 
           i = (cmd_seen('T')) ? cmd_value() : 0;
+
+          // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+          // to make sure array index is never negative
+          if (i < 0)
+            i = 0;
 
           if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
           break;
@@ -1215,9 +1225,19 @@ void sendQueueCmd(void)
           if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
           if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
 
-          uint8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
 
-          if (i > 0)  // "X1"->0, "X2"->1, "Y1"->0, "Y2"->1, "Z1"->0, "Z2"->1, "Z3"->2, "Z4"->3
+          // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+          // to make sure array index is never negative
+          if (i < 0)
+            i = 0;
+
+          // for M913 and M914, provided index is:
+          //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
+          // and it must be converted to:
+          //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
+          // to make sure array index is properly accessed
+          if (param > P_CURRENT && i > 0)
             i--;
 
           if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
@@ -1227,6 +1247,11 @@ void sendQueueCmd(void)
           if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
           {
             i = (cmd_seen('T')) ? cmd_value() : 0;
+
+            // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+            // to make sure array index is never negative
+            if (i < 0)
+              i = 0;
 
             if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + i, cmd_value());
           }

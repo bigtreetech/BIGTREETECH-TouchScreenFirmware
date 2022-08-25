@@ -951,28 +951,6 @@ void parseACK(void)
         if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
-      // parse and store hotend PID (M301)
-      else if (ack_seen("M301"))
-      {
-        uint8_t param = P_HOTEND_PID;
-
-        if (ack_seen("M301")) param = P_HOTEND_PID;  // P_HOTEND_PID
-
-        if (ack_seen("P")) setParameter(param, 0, ack_value());
-        if (ack_seen("I")) setParameter(param, 1, ack_value());
-        if (ack_seen("D")) setParameter(param, 2, ack_value());
-      }
-      // parse and store bed PID (M304)
-      else if (ack_seen("M304"))
-      {
-        uint8_t param = P_BED_PID;
-
-        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
-
-        if (ack_seen("P")) setParameter(param, 0, ack_value());
-        if (ack_seen("I")) setParameter(param, 1, ack_value());
-        if (ack_seen("D")) setParameter(param, 2, ack_value());
-      }
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
       {
@@ -997,6 +975,28 @@ void parseACK(void)
       else if (ack_seen("M209 S"))
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+      // parse and store hotend PID (M301)
+      else if (ack_seen("M301"))
+      {
+        uint8_t param = P_HOTEND_PID;
+
+        if (ack_seen("M301")) param = P_HOTEND_PID;  // P_HOTEND_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
+      }
+      // parse and store bed PID (M304)
+      else if (ack_seen("M304"))
+      {
+        uint8_t param = P_BED_PID;
+
+        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
       }
       // parse and store model predictive temperature control
       else if (ack_seen("M306"))
@@ -1086,9 +1086,19 @@ void parseACK(void)
         if (ack_seen("M913")) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
         if (ack_seen("M914")) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
 
-        uint8_t i = (ack_seen("I")) ? ack_value() : 0;
+        int8_t i = (ack_seen("I")) ? ack_value() : 0;
 
-        if (i > 0)  // "X1"->0, "X2"->1, "Y1"->0, "Y2"->1, "Z1"->0, "Z2"->1, "Z3"->2, "Z4"->3
+        // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+        // to make sure array index is never negative
+        if (i < 0)
+          i = 0;
+
+        // for M913 and M914, provided index is:
+        //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
+        // and it must be converted to:
+        //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
+        // to make sure array index is properly accessed
+        if (param > P_CURRENT && i > 0)
           i--;
 
         if (ack_seen("X")) setParameter(param, STEPPER_INDEX_X + i, ack_value());
@@ -1098,6 +1108,11 @@ void parseACK(void)
         if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
         {
           i = (ack_seen("T")) ? ack_value() : 0;
+
+          // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+          // to make sure array index is never negative
+          if (i < 0)
+            i = 0;
 
           if (ack_seen("E")) setParameter(param, STEPPER_INDEX_E0 + i, ack_value());
         }
