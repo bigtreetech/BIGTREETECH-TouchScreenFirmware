@@ -1088,18 +1088,15 @@ void sendQueueCmd(void)
         #endif
 
         case 301:  // Hotend PID
-        {
-          if (cmd_seen('P')) setParameter(P_HOTEND_PID, 0, cmd_float());
-          if (cmd_seen('I')) setParameter(P_HOTEND_PID, 1, cmd_float());
-          if (cmd_seen('D')) setParameter(P_HOTEND_PID, 2, cmd_float());
-          break;
-        }
-
         case 304:  // Bed PID
         {
-          if (cmd_seen('P')) setParameter(P_BED_PID, 0, cmd_float());
-          if (cmd_seen('I')) setParameter(P_BED_PID, 1, cmd_float());
-          if (cmd_seen('D')) setParameter(P_BED_PID, 2, cmd_float());
+          uint8_t param = P_HOTEND_PID;
+
+          if (cmd_value() == 304) param = P_BED_PID;  // P_BED_PID
+
+          if (cmd_seen('P')) setParameter(param, 0, cmd_float());
+          if (cmd_seen('I')) setParameter(param, 1, cmd_float());
+          if (cmd_seen('D')) setParameter(param, 2, cmd_float());
           break;
         }
 
