@@ -132,14 +132,9 @@ static bool ack_seen(const char * str)
 { // searches the first appearance of the given string from the start
   // of the cache, on success sets the current index of the cache
   // ("ack_index") next to the position where the found string ended
-  int16_t max_index = dmaL2Cache_len - strlen(str);
-
-  if (max_index < 0)  // if str is longer than data present in cache, no match can be found
-    return false;
-
   uint16_t i;
 
-  for (ack_index = 0, i = 0; ack_index <= max_index; ack_index++, i = 0)
+  for (ack_index = 0, i = 0; dmaL2Cache[ack_index] != '\0'; ack_index++, i = 0)
   {
     while (str[i] == dmaL2Cache[ack_index + i])
     {
@@ -157,15 +152,10 @@ static bool ack_seen(const char * str)
 static bool ack_continue_seen(const char * str)
 { // unlike "ack_seen()", this starts the search from the current index, where previous
   // search left off and retains "ack_index" if the searched string is not found
-  int16_t max_index = dmaL2Cache_len - strlen(str);
-
-  if (max_index < ack_index)  // if str is longer than data left in cache after the current index ("ack_index"), no match can be found
-    return false;
-
   uint16_t tmp_index;
   uint16_t i;
 
-  for (tmp_index = ack_index, i = 0; tmp_index <= max_index; tmp_index++, i = 0)
+  for (tmp_index = ack_index, i = 0; dmaL2Cache[tmp_index] != '\0'; tmp_index++, i = 0)
   {
     while (str[i] == dmaL2Cache[tmp_index + i])
     {
