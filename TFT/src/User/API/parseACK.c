@@ -114,9 +114,6 @@ bool syncL2CacheFromL1(uint8_t port)
 
 static bool ack_starts_with(const char * str)  // checks if the cache starts with the given parameter
 {
-  if ( dmaL2Cache_len < strlen(str))  // if str is longer than data present in cache, no match can be found
-    return false;
-
   uint16_t i = 0;
 
   while (str[i] == dmaL2Cache[i])
