@@ -268,27 +268,30 @@ static bool cmd_seen_from(uint8_t index, const char * keyword)
   if (index >= cmd_len)
     return false;
 
-  char * strPtr = strstr(cmd_ptr + index, keyword);
-
-  if (strPtr != NULL)
+  for (uint16_t i = 0; cmd_ptr[index] != '\0'; index++, i = 0)
   {
-    cmd_index = (strPtr - cmd_ptr) + strlen(keyword);
-    return true;
+    while (keyword[i] == cmd_ptr[index + i])
+    {
+      if (keyword[++i] == '\0')
+      {
+        cmd_index = index + i;
+        return true;
+      }
+    }
   }
 
   return false;
 }
 
 // Check the presence of the specified "code" character in the current gcode command.
-static bool cmd_seen(char code)
+static bool cmd_seen(const char code)
 {
-  for (cmd_index = cmd_base_index; cmd_index < cmd_len; cmd_index++)
+  cmd_index = cmd_base_index;
+
+  while (cmd_ptr[cmd_index] != '\0')
   {
-    if (cmd_ptr[cmd_index] == code)
-    {
-      cmd_index += 1;
+    if (cmd_ptr[cmd_index++] == code)
       return true;
-    }
   }
 
   return false;
