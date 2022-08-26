@@ -911,7 +911,7 @@ void parseACK(void)
       // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
       else if (ack_seen("M92") || ack_seen("M201") || ack_seen("M203"))
       {
-        uint8_t param = P_STEPS_PER_MM;
+        PARAMETER_NAME param = P_STEPS_PER_MM;
 
         if (ack_seen("M201")) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
         if (ack_seen("M203")) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
@@ -943,7 +943,7 @@ void parseACK(void)
       // parse and store home offset (M206) and hotend offset (M218)
       else if (ack_seen("M206 X") || ack_seen("M218 T1 X"))
       {
-        uint8_t param = P_HOME_OFFSET;
+        PARAMETER_NAME param = P_HOME_OFFSET;
 
         if (ack_seen("M218")) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
 
@@ -954,7 +954,7 @@ void parseACK(void)
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
       {
-        uint8_t param = P_FWRETRACT;
+        PARAMETER_NAME param = P_FWRETRACT;
 
         if (ack_seen("M208")) param = P_FWRECOVER;  // P_FWRECOVER
 
@@ -979,7 +979,7 @@ void parseACK(void)
       // parse and store hotend PID (M301) and bed PID (M304)
       else if (ack_seen("M301") || ack_seen("M304"))
       {
-        uint8_t param = P_HOTEND_PID;
+        PARAMETER_NAME param = P_HOTEND_PID;
 
         if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
 
@@ -1008,7 +1008,7 @@ void parseACK(void)
       //
       else if (ack_seen("M665") || ack_seen("M666"))
       {
-        uint8_t param = P_DELTA_TOWER_ANGLE;
+        PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
 
         if (ack_seen("M666")) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
 
@@ -1070,7 +1070,7 @@ void parseACK(void)
       // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
       else if (ack_seen("M906") || ack_seen("M913") || ack_seen("M914"))
       {
-        uint8_t param = P_CURRENT;
+        PARAMETER_NAME param = P_CURRENT;
 
         if (ack_seen("M913")) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
         if (ack_seen("M914")) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY

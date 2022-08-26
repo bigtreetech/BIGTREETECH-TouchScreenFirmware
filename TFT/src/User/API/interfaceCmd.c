@@ -985,7 +985,7 @@ void sendQueueCmd(void)
         case 201:  // M201 max acceleration (units/s2)
         case 203:  // M203 max feedrate (units/s)
         {
-          uint8_t param = P_STEPS_PER_MM;
+          PARAMETER_NAME param = P_STEPS_PER_MM;
 
           if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
           if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
@@ -1018,7 +1018,7 @@ void sendQueueCmd(void)
         case 218:  // M218 hotend offset
         case 851:  // M851 probe offset
         {
-          uint8_t param = P_HOME_OFFSET;
+          PARAMETER_NAME param = P_HOME_OFFSET;
 
           if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
           if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
@@ -1032,7 +1032,7 @@ void sendQueueCmd(void)
         case 207:  // M207 FW retraction
         case 208:  // M208 FW recover
         {
-          uint8_t param = P_FWRETRACT;
+          PARAMETER_NAME param = P_FWRETRACT;
 
           if (cmd_value() == 208) param = P_FWRECOVER;  // P_FWRECOVER
 
@@ -1090,7 +1090,7 @@ void sendQueueCmd(void)
         case 301:  // Hotend PID
         case 304:  // Bed PID
         {
-          uint8_t param = P_HOTEND_PID;
+          PARAMETER_NAME param = P_HOTEND_PID;
 
           if (cmd_value() == 304) param = P_BED_PID;  // P_BED_PID
 
@@ -1178,7 +1178,7 @@ void sendQueueCmd(void)
         case 665:  // Delta configuration / Delta tower angle
         case 666:  // Delta endstop adjustments
         {
-          uint8_t param = P_DELTA_TOWER_ANGLE;
+          PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
 
           if (cmd_value() == 666) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
 
@@ -1217,7 +1217,7 @@ void sendQueueCmd(void)
         case 913:  // M913 TMC hybrid threshold speed
         case 914:  // M914 TMC bump sensitivity
         {
-          uint8_t param = P_CURRENT;
+          PARAMETER_NAME param = P_CURRENT;
 
           if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
           if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
