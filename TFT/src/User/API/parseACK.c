@@ -761,7 +761,7 @@ void parseACK(void)
       }
     }
     // parse and store M211 or M503, software endstops state (e.g. from Probe Offset, MBL, Mesh Editor menus)
-    else if (ack_seen("Soft endstops"))
+    else if (ack_starts_with("M211") || ack_seen("Soft endstops"))
     {
       uint8_t curValue = infoMachineSettings.softwareEndstops;
       infoMachineSettings.softwareEndstops = ack_continue_seen("ON");
@@ -893,15 +893,14 @@ void parseACK(void)
     // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
     else if (ack_starts_with("M92 ") || ack_starts_with("M201") || ack_starts_with("M203"))  // "M92 " to not trigger if "M928" received
       {
-      PARAMETER_NAME param = 0;
+      PARAMETER_NAME param = P_STEPS_PER_MM;
 
-      if (ack_starts_with("M92")) param = P_STEPS_PER_MM;
-      else if (ack_starts_with("M201")) param = P_MAX_ACCELERATION;
+      if (ack_starts_with("M201")) param = P_MAX_ACCELERATION;
       else if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
 
-      if (ack_continue_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
-      if (ack_continue_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
-      if (ack_continue_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
+      if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
+      if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
+      if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
 
       uint8_t i = (ack_seen("T")) ? ack_value() : 0;
 
@@ -926,14 +925,11 @@ void parseACK(void)
     // parse and store home offset (M206) and hotend offset (M218)
     else if (ack_starts_with("M206 X") || ack_starts_with("M218 T1 X"))
     {
-      PARAMETER_NAME param = 0;
+      PARAMETER_NAME param = ack_starts_with("M206") ? P_HOME_OFFSET : P_HOTEND_OFFSET;
 
-      if (ack_starts_with("M206")) param = P_HOME_OFFSET;
-      else if (ack_starts_with("M218")) param = P_HOTEND_OFFSET;
-
-      if (ack_continue_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
-      if (ack_continue_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
-      if (ack_continue_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
+      if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
+      if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
+      if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
     }
     // parse and store FW retraction (M207) and FW recover (M208)
     else if (ack_starts_with("M207 S") || ack_starts_with("M208 S"))
@@ -954,21 +950,18 @@ void parseACK(void)
       }
     }
     // parse and store auto retract
-    else if (ack_seen("M209 S"))
+    else if (ack_starts_with("M209 S"))
     {
       setParameter(P_AUTO_RETRACT, 0, ack_value());
     }
     // parse and store hotend PID (M301), bed PID (M304)
     else if (ack_starts_with("M301") || ack_starts_with("M304"))
     {
-      PARAMETER_NAME param = 0;
+      PARAMETER_NAME param = ack_starts_with("M301") ? P_HOTEND_PID : P_BED_PID;
 
-      if (ack_starts_with("M301")) param = P_HOTEND_PID;
-      else if (ack_starts_with("M304")) param = P_BED_PID;
-
-      if (ack_continue_seen("P")) setParameter(param, 0, ack_value());
-      if (ack_continue_seen("I")) setParameter(param, 1, ack_value());
-      if (ack_continue_seen("D")) setParameter(param, 2, ack_value());
+      if (ack_seen("P")) setParameter(param, 0, ack_value());
+      if (ack_seen("I")) setParameter(param, 1, ack_value());
+      if (ack_seen("D")) setParameter(param, 2, ack_value());
     }
     // parse and store model predictive temperature control (only for Marlin)
     else if (ack_starts_with("M306") && infoMachineSettings.firmwareType == FW_MARLIN)
@@ -991,9 +984,7 @@ void parseACK(void)
     //
     else if (ack_starts_with("M665") || ack_starts_with("M666"))
     {
-      PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
-
-      if (ack_starts_with("M666")) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
+      PARAMETER_NAME param = ack_starts_with("M665") ? P_DELTA_TOWER_ANGLE : P_DELTA_ENDSTOP;
 
       if (param < P_DELTA_ENDSTOP)  // options not supported by M666
       {
