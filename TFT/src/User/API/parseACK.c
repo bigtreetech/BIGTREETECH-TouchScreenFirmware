@@ -1289,23 +1289,23 @@ void parseACK(void)
 
 #ifdef SERIAL_PORT_2
 
-  void parseRcvGcode(void)
+void parseRcvGcode(void)
+{
+  for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
   {
-    for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
+    // forward data only if serial port is enabled
+    if (infoSettings.serial_port[i] > 0
+        #ifdef SERIAL_DEBUG_PORT
+          && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+        #endif
+        )
     {
-      // forward data only if serial port is enabled
-      if (infoSettings.serial_port[i] > 0
-          #ifdef SERIAL_DEBUG_PORT
-            && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
-          #endif
-          )
+      while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
       {
-        while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
-        {
-          storeCmdFromUART(i, dmaL2Cache);
-        }
+        storeCmdFromUART(i, dmaL2Cache);
       }
     }
   }
+}
 
 #endif
