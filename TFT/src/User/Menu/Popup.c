@@ -228,7 +228,13 @@ void loopPopup(void)
 
   // avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
   if (MENU_IS_NOT(menuDialog))
-  { // handle the user interaction, then reload the previous menu
-    OPEN_MENU(menuDialog);
+  { // handle user interaction then prepare to reload the previous menu
+    if (MENU_IS(menuDummy))
+      REPLACE_MENU(menuDialog);
+    else
+      OPEN_MENU(menuDialog);
+
+    menuDialog();  // activate the popup dialog handler
+    OPEN_MENU(menuDummy);  // trigger the redraw of the menu where the popup appeared
   }
 }

@@ -84,7 +84,7 @@ void abortAndTerminate(void)
     // clear the command queue and send the M524 gcode immediately if there is an already pending gcode waiting for an ACK message.
     // Otherwise, store the gcode on command queue to send it waiting for its related ACK message
     //
-    if (isPendingCmd())
+    if (infoHost.wait)
       sendEmergencyCmd("M524\n");
     else
       mustStoreCmd("M524\n");
@@ -625,7 +625,9 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
     case FS_TFT_SD:
     case FS_TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
-        loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+      {
+        TASK_LOOP_WHILE(isNotEmptyCmdQueue())  // wait for the communication to be clean
+      }
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();
