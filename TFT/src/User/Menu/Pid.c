@@ -86,9 +86,7 @@ void pidResultAction(void)
       if (infoMachineSettings.EEPROM == 1)
       {
         sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
-
-        setDialogText(LABEL_PID_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
+        popupDialog(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
       }
       else
       {
@@ -214,8 +212,7 @@ void menuPid(void)
           }
           else
           {
-            setDialogText(pidItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, pidStart, NULL, NULL);
+            popupDialog(DIALOG_TYPE_QUESTION, pidItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL, pidStart, NULL, NULL);
           }
           break;
 
@@ -234,10 +231,7 @@ void menuPid(void)
     else
     {
       if (getMenuType() != MENU_TYPE_SPLASH)
-      {
-        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
-      }
+        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
       if (OS_GetTimeMs() > pidTimeout)
         pidUpdateStatus(PID_TIMEOUT);

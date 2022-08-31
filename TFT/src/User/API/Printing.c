@@ -255,8 +255,7 @@ void shutdownStart(void)
     mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
 
-  setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
-  showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
+  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 }
 
 void initPrintSummary(void)
@@ -542,8 +541,7 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
       // let setPrintPause() (that will be called in parseAck.c by parsing ACK message for M524, M25 or M27)
       // notify the print as aborted/completed (infoHost.status set to "HOST_STATUS_IDLE") instead of paused
