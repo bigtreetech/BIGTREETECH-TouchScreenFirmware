@@ -401,6 +401,8 @@ bool printRemoteStart(const char * filename)
 
 bool printStart(void)
 {
+  bool printRestore = false;
+
   // always clean infoPrinting first and then set the needed attributes
   clearInfoPrint();
 
@@ -433,7 +435,10 @@ bool printStart(void)
         powerFailedInitData();
 
         if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
+        {
+          printRestore = true;
           powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
+        }
       }
 
       break;
@@ -453,7 +458,7 @@ bool printStart(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
-  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))
+  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT)) // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
