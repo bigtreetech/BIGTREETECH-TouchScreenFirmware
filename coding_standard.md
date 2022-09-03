@@ -3,7 +3,7 @@
 
 # Coding Standards
 
-> Coding style and formatting are pretty arbitrary, but it’s much easier to follow if everyone uses the same style. Individuals may not agree with every aspect of the formatting rules, and some of the rules may take some getting used to, but it is important that all project contributors follow the style rules so that they can all read and understand everyone’s code easily.
+> Coding style and formatting are pretty arbitrary, but it’s much easier to follow if everyone uses the same style. Individuals may not agree with every aspect of the formatting rules, and for some of the rules may take some time to get used to, but it is important that all project contributors follow the style rules so that they can all read and understand everyone’s code easily.
 
 <!-- toc -->
 
@@ -82,12 +82,12 @@ C function declarations
 ```C
 void testFunction(int a, int b)
 {
-  if(a > 0)
+  if (a > 0)
   {
     handleVariable(a);
     printf("a > 0");
   }
-  if(b > 0)
+  if (b > 0)
   {
     handleVariable(b);
     printf("b > 0");
@@ -113,7 +113,7 @@ How long is too long does not only depend on your code editor window, but all of
 
 ### Spacing
 - One space between keywords and their conditions:
-`if (…), while (…), do {…} while(…) etc.`
+`if (…), while (…), do {…} while (…) etc.`
 - No space between functions and their arguments:
 `myFunction(…);`
 - Operators should have a space on both sides of them:
@@ -153,7 +153,7 @@ bool updateIcon(void)
     processIcon(nowBmp, ICON_ADDR(i));
   }
 
-  if(notfound == 0)
+  if (notfound == 0)
     return true;
   else
     return false;
@@ -242,7 +242,7 @@ void testFunction()
 ```
 - Break up long Boolean expressions and parameters list onto separate lines with appropriate indentation for alignment
 ```C
-if( veryLongVariableA < veryLongVariableB &&
+if (veryLongVariableA < veryLongVariableB &&
     veryLongVariableC < veryLongVariableD)
 {
 ...
@@ -251,7 +251,7 @@ if( veryLongVariableA < veryLongVariableB &&
 - Indent case labels in a switch stamement.
 
 ```C
-switch(variableA)
+switch (variableA)
   {
     case 0:
     {
@@ -292,7 +292,7 @@ else if (variableA < variableD > VariableC)
   }
 
   //use braces for both `if` and `else` blocks to keep them uniform
-  if(a > b)
+  if (a > b)
   {
     handleVariable(b);
   }
@@ -314,8 +314,8 @@ else if (variableA < variableD > VariableC)
 
 
   // Use braces when a condition/expression is split into multiple lines
-  if( veryLongVariableA < veryLongVariableB &&
-    veryLongVariableC < veryLongVariableD)
+  if (veryLongVariableA < veryLongVariableB &&
+      veryLongVariableC < veryLongVariableD)
   {
     doSomething();
   }
@@ -345,7 +345,7 @@ Example:
 // Too much space before the comments like this will
 // make it hard to check for which line the comment is added.
 
-  if(count > 100 && isDone == true)                                           // check if input is complete
+  if (count > 100 && isDone == true)                                          // check if input is complete
   {
     clearBuffer(count);
     processVar();                                                             // Process the input data
@@ -356,7 +356,7 @@ Example:
 // making the comments closer to the lines makes it easier to
 // understand which line it is explaining.
 
-  if(count > 100 && isDone == true)  // Check if input is complete
+  if (count > 100 && isDone == true)  // Check if input is complete
   {
     clearBuffer(count);
     processVar();  // Process the input data
@@ -365,10 +365,10 @@ Example:
 
   //or
 
-  if(count > 100 && isDone == true)  // Check if input is complete
+  if (count > 100 && isDone == true)  // Check if input is complete
   {
     clearBuffer(count);
-    processVar();                    // Process the input data
+    processVar();                     // Process the input data
     processStr(count);
   }
 
@@ -377,7 +377,7 @@ Example:
 // Make it easier to understand
 
   // Check if input is complete
-  if(count > 100 && isDone == true)
+  if (count > 100 && isDone == true)
   {
     clearBuffer(count);
     // Process the input data
@@ -406,4 +406,3 @@ Favour bit-size types like uint8_t and int32_t over short, int, and long. This h
 - Consider both readability and maintainability.
 - Label #endif with the opening `#if` condition(s) if the block is over ~15 lines. Make the label compact.
 For example, `#endif // TFT35_E3_V3`.
-
