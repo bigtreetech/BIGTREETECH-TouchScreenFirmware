@@ -58,7 +58,7 @@ void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), 
 void loopPopup(void);
 
 /**
- * @brief Displays a popup for a dialog, it needs user confirmation to close it.
+ * @brief Displays a popup for a dialog, it needs user interaction to close it.
  *
  * @param type the type of the dialog (alert, question, error, etc)
  * @param title title of the message box
