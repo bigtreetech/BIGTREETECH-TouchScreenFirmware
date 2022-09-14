@@ -48,7 +48,16 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 static inline void extrudeFilament(void)
 {
-  // Home extruder
+  // check and adopt current E-steps
+  mustStoreCmd("M92\n");
+  infoParameters.StepsPerMM[E_AXIS] = 0;  // reset E-steps value
+
+  while (infoParameters.StepsPerMM[E_AXIS] == 0)  // wait until E-steps is updated
+  {
+    loopProcess();
+  }
+
+  // Home extruder and set absolute positioning
   mustStoreScript("G28\nG90\n");
 
   if (tool_index != heatGetCurrentTool())
@@ -69,7 +78,6 @@ static inline void extrudeFilament(void)
 
   OPEN_MENU(menuNewExtruderESteps);
 }
-// end Esteps part
 
 void menuTuneExtruder(void)
 {
@@ -230,8 +238,6 @@ void menuNewExtruderESteps(void)
   float measured_length;
   float now = measured_length = 20.00f;
   float old_esteps, new_esteps;  // get the value of the E-steps
-
-  mustStoreCmd("M503 S0\n");
 
   old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS);  // get the value of the E-steps
 
