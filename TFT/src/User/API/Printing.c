@@ -545,10 +545,6 @@ void printAbort(void)
       setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
       showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
 
-      // let setPrintPause() (that will be called in parseAck.c by parsing ACK message for M524, M25 or M27)
-      // notify the print as aborted/completed (infoHost.status set to "HOST_STATUS_IDLE") instead of paused
-      infoHost.status = HOST_STATUS_STOPPING;
-
       // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
       loopProcessToCondition(&isHostPrinting);
 
@@ -734,15 +730,6 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
     infoPrinting.pauseType = pauseType;
   }
 
-  // in case host is not printing, print was completed or printAbort() is aborting the print,
-  // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE" in case it is
-  // "HOST_STATUS_STOPPING" just to finalize the print abort)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-  {
-    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
-    return;
-  }
-
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
   // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to
   // "HOST_STATUS_PAUSED" because no other notification will be received
@@ -756,11 +743,6 @@ void setPrintResume(HOST_STATUS hostStatus)
 {
   // no need to check it is printing when setting the value to "false"
   infoPrinting.paused = false;
-
-  // in case host is not printing, print was completed or printAbort() is aborting the print,
-  // nothing to do (infoHost.status must never be changed)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-    return;
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
   // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to

@@ -685,30 +685,30 @@ void parseACK(void)
 
         startRemotePrint(file_name);  // start print and open Printing menu
       }
-      // parse and store M27
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("Not SD printing"))  // if printing from (remote) onboard media
+      else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE))
       {
-        setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
-      }
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("SD printing byte"))  // if printing from (remote) onboard media
-      {
-        setPrintResume(HOST_STATUS_PRINTING);
+        // parse and store M27
+        if (ack_seen("SD printing"))  // received "SD printing byte" or "Not SD printing"
+        {
+          if (infoHost.status == HOST_STATUS_RESUMING)
+            setPrintResume(HOST_STATUS_PRINTING);
 
-        // parse file data progress.
-        // Format: "SD printing byte <XXXX>/<YYYY>" (e.g. "SD printing byte 123/12345")
-        //
-        setPrintProgressData(ack_value(), ack_second_value());
-      }
-      // parse and store M24, printing from (remote) onboard media completed
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("Done printing file"))  // if printing from (remote) onboard media
-      {
-        printEnd();
+          if (infoHost.status == HOST_STATUS_PAUSING)
+            setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
+
+          if (infoHost.status == HOST_STATUS_PRINTING)
+          {
+            if (ack_continue_seen("byte"))  // received "SD printing byte"
+              setPrintProgressData(ack_value(), ack_second_value());
+            else  // received "Not SD printing"
+              setPrintAbort();
+          }
+        }
+        // parse and store M24, printing from (remote) onboard media completed
+        else if (ack_seen("Done printing file"))  // if printing from (remote) onboard media
+        {
+          printEnd();
+        }
       }
 
       //----------------------------------------
