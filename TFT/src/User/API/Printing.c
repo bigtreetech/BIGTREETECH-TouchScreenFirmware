@@ -255,8 +255,7 @@ void shutdownStart(void)
     mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
 
-  setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
-  showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
+  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 }
 
 void initPrintSummary(void)
@@ -547,8 +546,7 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
       // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
       loopProcessToCondition(&isHostPrinting);

@@ -724,9 +724,9 @@ void menuPrinting(void)
           }
           else
           {
-            setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, printAbort, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
           }
+
         }
         else
         { // Back button

@@ -65,28 +65,22 @@ void menuEepromSettings(void)
       case KEY_ICON_0:
         // save to EEPROM
         if (infoMachineSettings.EEPROM == 1)
-        {
-          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
-        }
+          popupDialog(DIALOG_TYPE_QUESTION, eepromSettingsItems.title.index, LABEL_EEPROM_SAVE_INFO,
+                      LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
         break;
 
       case KEY_ICON_1:
         // restore from EEPROM
         if (infoMachineSettings.EEPROM == 1)
-        {
-          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, restoreEepromSettings, NULL, NULL);
-        }
+          popupDialog(DIALOG_TYPE_QUESTION, eepromSettingsItems.title.index, LABEL_EEPROM_RESTORE_INFO,
+                      LABEL_CONFIRM, LABEL_CANCEL, restoreEepromSettings, NULL, NULL);
         break;
 
       case KEY_ICON_2:
         // reset EEPROM
         if (infoMachineSettings.EEPROM == 1)
-        {
-          setDialogText(eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, resetEepromSettings, NULL, NULL);
-        }
+          popupDialog(DIALOG_TYPE_QUESTION, eepromSettingsItems.title.index, LABEL_EEPROM_RESET_INFO,
+                      LABEL_CONFIRM, LABEL_CANCEL, resetEepromSettings, NULL, NULL);
         break;
 
       case KEY_ICON_7:

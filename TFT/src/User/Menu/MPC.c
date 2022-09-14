@@ -198,8 +198,7 @@ void menuMPC(void)
           break;
 
         case KEY_ICON_6:
-          setDialogText(mpcItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, mpcStart, NULL, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, mpcItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL, mpcStart, NULL, NULL);
           break;
 
         case KEY_ICON_7:
@@ -224,10 +223,7 @@ void menuMPC(void)
     else if (mpcTuning.status == ONGOING)
     {
       if (getMenuType() != MENU_TYPE_SPLASH)
-      {
-        setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
-      }
+        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
       if (mpcTuning.result != NO_RESULT)
       {
@@ -246,9 +242,7 @@ void menuMPC(void)
             if (infoMachineSettings.EEPROM == 1)
             {
               sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
-
-              setDialogText(LABEL_MPC_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
+              popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             }
             else
             {

@@ -159,8 +159,7 @@ void menuTuneExtruder(void)
       case KEY_ICON_7:
         if (heatGetTargetTemp(tool_index) > 0)
         {
-          setDialogText(tuneExtruderItems.title.index, LABEL_TUNE_EXT_HEATOFF, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, turnHeaterOff, returnToTuning, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, LABEL_TUNE_EXT_HEATOFF, LABEL_CONFIRM, LABEL_CANCEL, turnHeaterOff, returnToTuning, NULL);
         }
         else
         {
@@ -190,8 +189,7 @@ void menuTuneExtruder(void)
             LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
 
             sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+            popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL, extrudeFilament, NULL, NULL);
           }
           loadRequested = false;
           break;
