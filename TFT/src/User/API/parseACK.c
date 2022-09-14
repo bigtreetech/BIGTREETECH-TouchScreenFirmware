@@ -382,20 +382,18 @@ void hostActionCommands(void)
     switch (hostAction.button)
     {
       case 0:
-        setDialogText((uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin, LABEL_CONFIRM, LABEL_NULL);
-        showDialog(DIALOG_TYPE_ALERT, setRunoutAlarmFalse, NULL, NULL);
+        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin,
+                    LABEL_CONFIRM, LABEL_NULL, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
-                      (uint8_t *)hostAction.prompt_button[0], LABEL_NULL);
-        showDialog(DIALOG_TYPE_ALERT, breakAndContinue, NULL, NULL);
+        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
+                    (uint8_t *)hostAction.prompt_button[0], LABEL_NULL, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        setDialogText((uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
-                      (uint8_t *)hostAction.prompt_button[0], (uint8_t *)hostAction.prompt_button[1]);
-        showDialog(DIALOG_TYPE_ALERT, resumeAndPurge, resumeAndContinue, NULL);
+        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
+                    (uint8_t *)hostAction.prompt_button[0], (uint8_t *)hostAction.prompt_button[1], resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -647,8 +645,8 @@ void parseACK(void)
       // parse pause message
       else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
       {
-        setDialogText((uint8_t *)"Printer is Paused", (uint8_t *)"Paused for user\ncontinue?", LABEL_CONFIRM, LABEL_NULL);
-        showDialog(DIALOG_TYPE_QUESTION, breakAndContinue, NULL, NULL);
+        popupDialog(DIALOG_TYPE_QUESTION, (uint8_t *)"Printer is Paused", (uint8_t *)"Paused for user\ncontinue?",
+                    LABEL_CONFIRM, LABEL_NULL, breakAndContinue, NULL, NULL);
       }
       // parse host action commands. Required "HOST_ACTION_COMMANDS" and other settings in Marlin
       else if (ack_seen("//action:"))
@@ -685,30 +683,30 @@ void parseACK(void)
 
         startRemotePrint(file_name);  // start print and open Printing menu
       }
-      // parse and store M27
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("Not SD printing"))  // if printing from (remote) onboard media
+      else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE))
       {
-        setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
-      }
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("SD printing byte"))  // if printing from (remote) onboard media
-      {
-        setPrintResume(HOST_STATUS_PRINTING);
+        // parse and store M27
+        if (ack_seen("SD printing"))  // received "SD printing byte" or "Not SD printing"
+        {
+          if (infoHost.status == HOST_STATUS_RESUMING)
+            setPrintResume(HOST_STATUS_PRINTING);
 
-        // parse file data progress.
-        // Format: "SD printing byte <XXXX>/<YYYY>" (e.g. "SD printing byte 123/12345")
-        //
-        setPrintProgressData(ack_value(), ack_second_value());
-      }
-      // parse and store M24, printing from (remote) onboard media completed
-      else if (infoMachineSettings.onboardSD == ENABLED &&
-               infoFile.source >= FS_ONBOARD_MEDIA && infoFile.source <= FS_ONBOARD_MEDIA_REMOTE &&
-               ack_seen("Done printing file"))  // if printing from (remote) onboard media
-      {
-        printEnd();
+          if (infoHost.status == HOST_STATUS_PAUSING)
+            setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
+
+          if (infoHost.status == HOST_STATUS_PRINTING)
+          {
+            if (ack_continue_seen("byte"))  // received "SD printing byte"
+              setPrintProgressData(ack_value(), ack_second_value());
+            else  // received "Not SD printing"
+              setPrintAbort();
+          }
+        }
+        // parse and store M24, printing from (remote) onboard media completed
+        else if (ack_seen("Done printing file"))  // if printing from (remote) onboard media
+        {
+          printEnd();
+        }
       }
 
       //----------------------------------------
@@ -744,8 +742,7 @@ void parseACK(void)
         if (ack_seen("Max: ")) sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
         if (ack_seen("Range: ")) sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
 
-        setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_NULL);
-        showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+        popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
       }
       // parse M48, standard deviation
       else if (ack_seen("Standard Deviation: "))
@@ -760,8 +757,7 @@ void parseACK(void)
           levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
           sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
 
-          setDialogText((uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg, LABEL_CONFIRM, LABEL_NULL);
-          showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
+          popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
         }
       }
       // parse and store M211 or M503, software endstops state (e.g. from Probe Offset, MBL, Mesh Editor menus)
@@ -879,8 +875,8 @@ void parseACK(void)
 
           if (infoMachineSettings.EEPROM == 1)
           {
-            setDialogText(LABEL_DELTA_CONFIGURATION, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_SUCCESS, saveEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_EEPROM_SAVE_INFO,
+                        LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
           }
           else
           {
@@ -911,7 +907,7 @@ void parseACK(void)
       // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
       else if (ack_seen("M92") || ack_seen("M201") || ack_seen("M203"))
       {
-        uint8_t param = P_STEPS_PER_MM;
+        PARAMETER_NAME param = P_STEPS_PER_MM;
 
         if (ack_seen("M201")) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
         if (ack_seen("M203")) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
@@ -943,7 +939,7 @@ void parseACK(void)
       // parse and store home offset (M206) and hotend offset (M218)
       else if (ack_seen("M206 X") || ack_seen("M218 T1 X"))
       {
-        uint8_t param = P_HOME_OFFSET;
+        PARAMETER_NAME param = P_HOME_OFFSET;
 
         if (ack_seen("M218")) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
 
@@ -951,32 +947,10 @@ void parseACK(void)
         if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
         if (ack_seen("Z")) setParameter(param, AXIS_INDEX_Z, ack_value());
       }
-      // parse and store hotend PID (M301)
-      else if (ack_seen("M301"))
-      {
-        uint8_t param = P_HOTEND_PID;
-
-        if (ack_seen("M301")) param = P_HOTEND_PID;  // P_HOTEND_PID
-
-        if (ack_seen("P")) setParameter(param, 0, ack_value());
-        if (ack_seen("I")) setParameter(param, 1, ack_value());
-        if (ack_seen("D")) setParameter(param, 2, ack_value());
-      }
-      // parse and store bed PID (M304)
-      else if (ack_seen("M304"))
-      {
-        uint8_t param = P_BED_PID;
-
-        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
-
-        if (ack_seen("P")) setParameter(param, 0, ack_value());
-        if (ack_seen("I")) setParameter(param, 1, ack_value());
-        if (ack_seen("D")) setParameter(param, 2, ack_value());
-      }
       // parse and store FW retraction (M207) and FW recover (M208)
       else if (ack_seen("M207 S") || ack_seen("M208 S"))
       {
-        uint8_t param = P_FWRETRACT;
+        PARAMETER_NAME param = P_FWRETRACT;
 
         if (ack_seen("M208")) param = P_FWRECOVER;  // P_FWRECOVER
 
@@ -997,6 +971,17 @@ void parseACK(void)
       else if (ack_seen("M209 S"))
       {
         setParameter(P_AUTO_RETRACT, 0, ack_value());
+      }
+      // parse and store hotend PID (M301) and bed PID (M304)
+      else if (ack_seen("M301") || ack_seen("M304"))
+      {
+        PARAMETER_NAME param = P_HOTEND_PID;
+
+        if (ack_seen("M304")) param = P_BED_PID;  // P_BED_PID
+
+        if (ack_seen("P")) setParameter(param, 0, ack_value());
+        if (ack_seen("I")) setParameter(param, 1, ack_value());
+        if (ack_seen("D")) setParameter(param, 2, ack_value());
       }
       // parse and store model predictive temperature control
       else if (ack_seen("M306"))
@@ -1019,7 +1004,7 @@ void parseACK(void)
       //
       else if (ack_seen("M665") || ack_seen("M666"))
       {
-        uint8_t param = P_DELTA_TOWER_ANGLE;
+        PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
 
         if (ack_seen("M666")) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
 
@@ -1081,14 +1066,24 @@ void parseACK(void)
       // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
       else if (ack_seen("M906") || ack_seen("M913") || ack_seen("M914"))
       {
-        uint8_t param = P_CURRENT;
+        PARAMETER_NAME param = P_CURRENT;
 
         if (ack_seen("M913")) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
         if (ack_seen("M914")) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
 
-        uint8_t i = (ack_seen("I")) ? ack_value() : 0;
+        int8_t i = (ack_seen("I")) ? ack_value() : 0;
 
-        if (i > 0)  // "X1"->0, "X2"->1, "Y1"->0, "Y2"->1, "Z1"->0, "Z2"->1, "Z3"->2, "Z4"->3
+        // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+        // to make sure array index is never negative
+        if (i < 0)
+          i = 0;
+
+        // for M913 and M914, provided index is:
+        //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
+        // and it must be converted to:
+        //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
+        // to make sure array index is properly accessed
+        if (param > P_CURRENT && i > 0)
           i--;
 
         if (ack_seen("X")) setParameter(param, STEPPER_INDEX_X + i, ack_value());
@@ -1098,6 +1093,11 @@ void parseACK(void)
         if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
         {
           i = (ack_seen("T")) ? ack_value() : 0;
+
+          // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
+          // to make sure array index is never negative
+          if (i < 0)
+            i = 0;
 
           if (ack_seen("E")) setParameter(param, STEPPER_INDEX_E0 + i, ack_value());
         }

@@ -709,10 +709,7 @@ void meshSave(bool saveOnChange)
     return;
 
   if (infoMachineSettings.EEPROM == 1)
-  {
-    setDialogText((uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-    showDialog(DIALOG_TYPE_QUESTION, meshSaveCallback, NULL, NULL);
-  }
+    popupDialog(DIALOG_TYPE_QUESTION, (uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, meshSaveCallback, NULL, NULL);
 }
 
 bool meshIsWaitingFirstData(void)

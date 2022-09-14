@@ -48,7 +48,16 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
 
 static inline void extrudeFilament(void)
 {
-  // Home extruder
+  // check and adopt current E-steps
+  mustStoreCmd("M92\n");
+  infoParameters.StepsPerMM[E_AXIS] = 0;  // reset E-steps value
+
+  while (infoParameters.StepsPerMM[E_AXIS] == 0)  // wait until E-steps is updated
+  {
+    loopProcess();
+  }
+
+  // Home extruder and set absolute positioning
   mustStoreScript("G28\nG90\n");
 
   if (tool_index != heatGetCurrentTool())
@@ -69,7 +78,6 @@ static inline void extrudeFilament(void)
 
   OPEN_MENU(menuNewExtruderESteps);
 }
-// end Esteps part
 
 void menuTuneExtruder(void)
 {
@@ -151,8 +159,7 @@ void menuTuneExtruder(void)
       case KEY_ICON_7:
         if (heatGetTargetTemp(tool_index) > 0)
         {
-          setDialogText(tuneExtruderItems.title.index, LABEL_TUNE_EXT_HEATOFF, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, turnHeaterOff, returnToTuning, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, LABEL_TUNE_EXT_HEATOFF, LABEL_CONFIRM, LABEL_CANCEL, turnHeaterOff, returnToTuning, NULL);
         }
         else
         {
@@ -182,8 +189,7 @@ void menuTuneExtruder(void)
             LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
 
             sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
-            setDialogText(tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_QUESTION, extrudeFilament, NULL, NULL);
+            popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL, extrudeFilament, NULL, NULL);
           }
           loadRequested = false;
           break;
@@ -230,8 +236,6 @@ void menuNewExtruderESteps(void)
   float measured_length;
   float now = measured_length = 20.00f;
   float old_esteps, new_esteps;  // get the value of the E-steps
-
-  mustStoreCmd("M503 S0\n");
 
   old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS);  // get the value of the E-steps
 

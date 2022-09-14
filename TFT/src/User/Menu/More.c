@@ -55,8 +55,7 @@ void menuMore(void)
       case KEY_ICON_2:
         if (isPrinting() && !isPaused())  // need paused before extrude
         {
-          setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_ALERT, isPauseExtrude, NULL, NULL);
+          popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL, isPauseExtrude, NULL, NULL);
         }
         else
         {
@@ -80,8 +79,7 @@ void menuMore(void)
         #ifdef LOAD_UNLOAD_M701_M702
           if (isPrinting() && !isPaused())  // need paused before extrude
           {
-            setDialogText(LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, isPauseLoadUnload, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_IS_PAUSE, LABEL_CONFIRM, LABEL_CANCEL, isPauseLoadUnload, NULL, NULL);
           }
           else
           {
