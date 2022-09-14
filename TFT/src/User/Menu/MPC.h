@@ -23,13 +23,14 @@ typedef enum
   FINISHED,
 } MPC_RESULT;
 
-void menuMPC(void);
 void setMpcTuningStatus(MPC_STATUS status);
 MPC_STATUS getMpcTuningStatus(void);
 void setMpcTuningResult(MPC_RESULT result);
 void setMpcHeaterPower(uint8_t index, uint8_t power);
 void setMpcFilHeatCapacity(uint8_t index, float capacity);
 bool hasMPC(void);
+
+void menuMPC(void);
 
 #ifdef __cplusplus
 }
