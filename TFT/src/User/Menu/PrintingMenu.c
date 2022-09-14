@@ -136,7 +136,14 @@ static void initMenuPrinting(void)
   clearInfoFile();                      // as last, clear and free memory for file list
 
   progDisplayType = infoSettings.prog_disp_type;
-  layerDisplayType = infoSettings.layer_disp_type * 2;
+
+  // layer number can be parsed only when TFT reads directly the G-code file
+  // so if printing from onboard media or a remote host, display the layer height
+  if (WITHIN(infoFile.source, FS_TFT_SD, FS_TFT_USB))
+    layerDisplayType = infoSettings.layer_disp_type * 2;
+  else
+    layerDisplayType = SHOW_LAYER_HEIGHT;
+
   coordinateSetAxisActual(Z_AXIS, 0);
   coordinateSetAxisTarget(Z_AXIS, 0);
   setTimeFromSlicer(false);
@@ -717,9 +724,9 @@ void menuPrinting(void)
           }
           else
           {
-            setDialogText(LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, printAbort, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
           }
+
         }
         else
         { // Back button

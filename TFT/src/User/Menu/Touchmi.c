@@ -44,10 +44,7 @@ void menuTouchMi(void)
         mustStoreCmd("G28 X Y\n");
 
         if (infoMachineSettings.EEPROM == 1)
-        {
-          setDialogText(touchmiItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
-        }
+          popupDialog(DIALOG_TYPE_QUESTION, touchmiItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
         break;
 
       case KEY_ICON_3:

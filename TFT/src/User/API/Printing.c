@@ -255,8 +255,7 @@ void shutdownStart(void)
     mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
 
-  setDialogText(LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL);
-  showDialog(DIALOG_TYPE_INFO, shutdown, NULL, shutdownLoop);
+  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 }
 
 void initPrintSummary(void)
@@ -401,6 +400,8 @@ bool printRemoteStart(const char * filename)
 
 bool printStart(void)
 {
+  bool printRestore = false;
+
   // always clean infoPrinting first and then set the needed attributes
   clearInfoPrint();
 
@@ -433,7 +434,10 @@ bool printStart(void)
         powerFailedInitData();
 
         if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
+        {
+          printRestore = true;
           powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
+        }
       }
 
       break;
@@ -453,7 +457,7 @@ bool printStart(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
-  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))
+  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT)) // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
@@ -542,12 +546,7 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      setDialogText(LABEL_SCREEN_INFO, LABEL_BUSY, LABEL_NULL, LABEL_NULL);
-      showDialog(DIALOG_TYPE_INFO, NULL, NULL, NULL);
-
-      // let setPrintPause() (that will be called in parseAck.c by parsing ACK message for M524, M25 or M27)
-      // notify the print as aborted/completed (infoHost.status set to "HOST_STATUS_IDLE") instead of paused
-      infoHost.status = HOST_STATUS_STOPPING;
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
       // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
       loopProcessToCondition(&isHostPrinting);
@@ -734,15 +733,6 @@ void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
     infoPrinting.pauseType = pauseType;
   }
 
-  // in case host is not printing, print was completed or printAbort() is aborting the print,
-  // nothing to do (infoHost.status must be set to "HOST_STATUS_IDLE" in case it is
-  // "HOST_STATUS_STOPPING" just to finalize the print abort)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-  {
-    infoHost.status = HOST_STATUS_IDLE;  // wakeup printAbort() if waiting for print completion
-    return;
-  }
-
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
   // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to
   // "HOST_STATUS_PAUSED" because no other notification will be received
@@ -756,11 +746,6 @@ void setPrintResume(HOST_STATUS hostStatus)
 {
   // no need to check it is printing when setting the value to "false"
   infoPrinting.paused = false;
-
-  // in case host is not printing, print was completed or printAbort() is aborting the print,
-  // nothing to do (infoHost.status must never be changed)
-  if (infoHost.status <= HOST_STATUS_STOPPING)
-    return;
 
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false") or printing from remote host
   // (e.g. OctoPrint) or infoSettings.m27_active set to "false", infoHost.status is always forced to

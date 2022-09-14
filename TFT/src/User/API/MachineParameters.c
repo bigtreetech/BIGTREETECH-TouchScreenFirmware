@@ -26,9 +26,9 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   3,                          // Delta Endstop Adjustments
   (AXIS_INDEX_COUNT - 2),     // Probe offset (X, Y, Z)
   2,                          // Linear Advance (E0, E1)
-  STEPPER_INDEX_COUNT,        // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  STEPPER_INDEX_COUNT,        // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   STEPPER_INDEX_COUNT,        // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  (STEPPER_INDEX_COUNT - 2),  // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+  (STEPPER_INDEX_COUNT - 2),  // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
   1                           // MBL offset
 };
 
@@ -55,9 +55,9 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M666",  // Delta Endstop Adjustments
   "M851",  // Probe offset
   "M900",  // Linear Advance
-  "M906",  // Current
+  "M906",  // Stepper Motor Current
   "M913",  // TMC Hybrid Threshold Speed
-  "M914",  // bump Sensitivity
+  "M914",  // TMC Bump Sensitivity
   "G29",   // MBL offset
 };
 
@@ -84,9 +84,9 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
   {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
-  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"I0 X%.0f\n",         "I1 X%.0f\n",    "I0 Y%.0f\n",    "I1 Y%.0f\n",   "I0 Z%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL},           // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL},           // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
   {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
 };
 
@@ -114,11 +114,11 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Endstop Adjustments (Ex, Ey, Ez)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             // Linear Advance (E0, E1)
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,},
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,},
-  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
    VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,},
   {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
 };
