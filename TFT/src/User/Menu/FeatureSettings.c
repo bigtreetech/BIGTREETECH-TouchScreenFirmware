@@ -16,7 +16,7 @@ const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
 #define ITEM_TOGGLE_SMART_NUM 2
 const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
 {
-  LABEL_ON,
+  LABEL_NORMAL,
   LABEL_SMART
 };
 
@@ -38,7 +38,8 @@ typedef enum
   #endif
 
   #ifdef FIL_RUNOUT_PIN
-    SKEY_FIL_RUNOUT,
+    SKEY_FIL_RUNOUT_ON_OFF,
+    SKEY_FIL_RUNOUT_TYPE,
   #endif
 
   SKEY_PL_RECOVERY,
@@ -90,8 +91,12 @@ void updateFeatureSettings(uint8_t item_index)
     #endif
 
     #ifdef FIL_RUNOUT_PIN
-      case SKEY_FIL_RUNOUT:
-        infoSettings.runout ^= (1U << 0);
+      case SKEY_FIL_RUNOUT_ON_OFF:
+        TOGGLE_BIT(infoSettings.runout, 0);
+        break;
+
+      case SKEY_FIL_RUNOUT_TYPE:
+        TOGGLE_BIT(infoSettings.runout, 1);
         break;
     #endif
 
@@ -110,7 +115,7 @@ void updateFeatureSettings(uint8_t item_index)
     case SKEY_START_GCODE_ENABLED:
     case SKEY_END_GCODE_ENABLED:
     case SKEY_CANCEL_GCODE_ENABLED:
-      TOGGLE_BIT(infoSettings.send_gcodes, (item_index - SKEY_START_GCODE_ENABLED));
+      TOGGLE_BIT(infoSettings.send_gcodes, item_index - SKEY_START_GCODE_ENABLED);
       break;
 
     case SKEY_RESET_SETTINGS:
@@ -163,12 +168,13 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
       #endif
 
       #ifdef FIL_RUNOUT_PIN
-        case SKEY_FIL_RUNOUT:
-        {
-          LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
-          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF ;
+        case SKEY_FIL_RUNOUT_ON_OFF:
+          item->icon = iconToggle[GET_BIT(infoSettings.runout, 0)];
           break;
-        }
+
+        case SKEY_FIL_RUNOUT_TYPE:
+          item->valueLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
+          break;
       #endif
 
       case SKEY_PL_RECOVERY:
@@ -222,11 +228,12 @@ void menuFeatureSettings(void)
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_Z_STEPPERS_ALIGNMENT,   LABEL_NULL},
 
     #ifdef PS_ON_PIN
-      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
+      {CHARICON_BLANK,     LIST_CUSTOMVALUE,   LABEL_PS_AUTO_SHUTDOWN,       LABEL_OFF},
     #endif
 
     #ifdef FIL_RUNOUT_PIN
-      {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_FIL_RUNOUT,             LABEL_OFF},
+      {CHARICON_BLANK,     LIST_TOGGLE,        LABEL_FIL_RUNOUT,             LABEL_NULL},
+      {CHARICON_BLANK,     LIST_CUSTOMVALUE,   LABEL_FIL_RUNOUT,             LABEL_NORMAL},
     #endif
 
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PL_RECOVERY,            LABEL_NULL},
