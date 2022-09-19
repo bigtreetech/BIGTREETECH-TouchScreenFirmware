@@ -18,7 +18,7 @@ bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
   if (infoSettings.files_sort_by <= SORT_DATE_OLD_FIRST)
   {
     // file with most recent date displays first in newest first and last in oldest first
-    return ((date1 > date2) == infoSettings.files_sort_by % 2);
+    return ((date1 > date2) == GET_BIT(infoSettings.files_sort_by, 0));
   }
   // sort by name
   else
@@ -33,10 +33,10 @@ bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
       char b = (name2[i] > 64 && name2[i] < 91) ? (name2[i] + 32) : name2[i];
 
       if (a != b)
-        return ((a < b) == infoSettings.files_sort_by % 2);
+        return ((a < b) == GET_BIT(infoSettings.files_sort_by, 0));
     }
     // file with longer name displays last in ascending order and first in descending order
-    return ((strlen(name1) < strlen(name2)) == infoSettings.files_sort_by % 2);
+    return ((strlen(name1) < strlen(name2)) == GET_BIT(infoSettings.files_sort_by, 0));
   }
 }
 

@@ -185,7 +185,7 @@ void menuShowParameter(void)
         if (elementIndex < getElementCount(curParameter))
         {
           VAL_TYPE val_type = getParameterValType(curParameter, elementIndex);
-          bool negative_val = val_type % 2;  // accept negative values only for val_types with negetive
+          bool negative_val = GET_BIT(val_type, 0);  // accept negative values only for val_types with negetive
           float val = getParameter(curParameter, elementIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)

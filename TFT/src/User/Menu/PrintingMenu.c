@@ -337,7 +337,7 @@ static inline void toggleInfo(void)
 
     if (infoSettings.chamber_en == 1)
     {
-      currentBCIndex = (currentBCIndex + 1) % 2;
+      TOGGLE_BIT(currentBCIndex, 0);
       reDrawPrintingValue(ICON_POS_BED, LIVE_INFO_ICON | LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
     else
@@ -355,7 +355,7 @@ static inline void toggleInfo(void)
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
     }
 
-    currentSpeedID = (currentSpeedID + 1) % 2;
+    TOGGLE_BIT(currentSpeedID, 0);
     reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_ICON | LIVE_INFO_TOP_ROW | LIVE_INFO_BOTTOM_ROW);
 
     speedQuery();

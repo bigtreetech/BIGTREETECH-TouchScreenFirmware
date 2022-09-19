@@ -619,7 +619,8 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 25:  // M25
+          case 25:   // M25
+          case 125:  // M125
             if (!fromTFT)
             {
               if (isTFTPrinting())  // if printing from TFT media
@@ -747,22 +748,6 @@ void sendQueueCmd(void)
 
               sendCmd(true, avoid_terminal);
               return;
-            }
-            break;
-
-          case 125:  // M125
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printPause(true, PAUSE_NORMAL);
-                return;
-              }
             }
             break;
 
@@ -1279,37 +1264,42 @@ void sendQueueCmd(void)
         case 28:  // G28
           coordinateSetKnown(true);
           babystepReset();
-          storeCmd("M503 S0\n");
+          storeCmd("M420\n");  // check bed leveling state
           break;
 
-        #if BED_LEVELING_TYPE > 0  // if not Disabled
+        #if BED_LEVELING_TYPE > 0  // if bed leveling is enabled
           case 29:  // G29
-          {
-            if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-            {
-              if (cmd_seen('A'))
-              {
-                setParameter(P_ABL_STATE, 0, 1);
-                storeCmd("M117 UBL active\n");
-              }
-
-              if (cmd_seen('D'))
-              {
-                setParameter(P_ABL_STATE, 0, 0);
-                storeCmd("M117 UBL inactive\n");
-              }
-            }
-            else  // if RRF
+            if (infoMachineSettings.firmwareType == FW_REPRAPFW)
             {
               if (cmd_seen('S'))
               {
                 uint8_t v = cmd_value();
 
                 if (v == 1 || v == 2)
-                  setParameter(P_ABL_STATE, 0, v % 2);  // value will be 1 if v == 1, 0 if v == 2
+                  setParameter(P_ABL_STATE, 0, v & 1U);  // value will be 1 if v == 1, 0 if v == 2
               }
             }
-          }
+            #if BED_LEVELING_TYPE == 4  // if UBL
+              else if (infoMachineSettings.firmwareType == FW_MARLIN)
+              {
+                // if (cmd_seen('A'))
+                // {
+                //   setParameter(P_ABL_STATE, 0, 1);
+                //   storeCmd("M117 UBL active\n");
+                // }
+                // else if (cmd_seen('D'))
+                // {
+                //   setParameter(P_ABL_STATE, 0, 0);
+                //   storeCmd("M117 UBL inactive\n");
+                // }
+                /*
+                   Bed leveling state will be set through "parsACK.c" after receiving confirmation
+                   message from the printer to prevent wrong state and/or value in case of error
+                */
+
+                if (cmd_seen('A') || cmd_seen('D')) storeCmd("M420\n");  // check bed leveling state
+              }
+            #endif
           break;
         #endif
 

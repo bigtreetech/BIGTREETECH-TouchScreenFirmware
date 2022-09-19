@@ -874,7 +874,7 @@ void menuTerminalWindow(void)
         break;
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal
-        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.terminal_ack, 0);
         terminalDrawButton(TERM_TOGGLE_ACK, false);
         break;
 

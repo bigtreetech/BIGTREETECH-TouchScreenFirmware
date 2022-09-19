@@ -64,7 +64,7 @@ void updateFeatureSettings(uint8_t item_index)
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
-      infoSettings.serial_always_on = (infoSettings.serial_always_on + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.serial_always_on, 0);
       break;
 
     case SKEY_SPEED:
@@ -72,15 +72,15 @@ void updateFeatureSettings(uint8_t item_index)
       break;
 
     case SKEY_AUTO_LOAD_LEVELING:
-      infoSettings.auto_load_leveling = (infoSettings.auto_load_leveling + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.auto_load_leveling, 0);
       break;
 
     case SKEY_PROBING_Z_OFFSET:
-      infoSettings.probing_z_offset = (infoSettings.probing_z_offset + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.probing_z_offset, 0);
       break;
 
     case SKEY_Z_STEPPERS_ALIGNMENT:
-      infoSettings.z_steppers_alignment = (infoSettings.z_steppers_alignment + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.z_steppers_alignment, 0);
       break;
 
     #ifdef PS_ON_PIN
@@ -96,15 +96,15 @@ void updateFeatureSettings(uint8_t item_index)
     #endif
 
     case SKEY_PL_RECOVERY:
-      infoSettings.plr = (infoSettings.plr + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.plr, 0);
       break;
 
     case SKEY_PL_RECOVERY_HOME:
-      infoSettings.plr_home = (infoSettings.plr_home + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.plr_home, 0);
       break;
 
     case SKEY_BTT_MINI_UPS:
-      infoSettings.btt_ups = (infoSettings.btt_ups + 1) % ITEM_TOGGLE_NUM;
+      TOGGLE_BIT(infoSettings.btt_ups, 0);
       break;
 
     case SKEY_START_GCODE_ENABLED:
