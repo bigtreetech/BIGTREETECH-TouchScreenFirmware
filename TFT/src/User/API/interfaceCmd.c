@@ -26,7 +26,7 @@ typedef enum
 } WRITING_MODE;
 
 GCODE_QUEUE infoCmd;
-GCODE_QUEUE infoCacheCmd;  // only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue
+GCODE_QUEUE infoCacheCmd;          // only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue
 char * cmd_ptr;
 uint8_t cmd_len;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
@@ -48,20 +48,77 @@ bool isNotEmptyCmdQueue(void)
 
 bool isEnqueued(const CMD cmd)
 {
-  bool found = false;
+  uint8_t i = 0;
 
-  for (int i = 0; i < infoCmd.count && !found; ++i)
+  while (i < infoCmd.count)
   {
-    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
+    if (strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i++) % CMD_QUEUE_SIZE].gcode) == 0)
+      return true;
   }
 
-  return found;
+  return false;
 }
 
 bool isWritingMode(void)
 {
   return (writing_mode != NO_WRITING);
 }
+
+/* Emmergency command handling */
+
+// Store an emergency command in the front of the command queue
+// so it is sent as soon as possible to the printer.
+// The command parameter must be a clear command, not formatted
+void storeEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+{
+  if (emergencyCmd[0] == '\0') return;
+
+  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  {
+    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    do
+    {
+      loopProcess();
+    } while (infoCmd.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the queue in case the queue is currently full
+  }
+
+  infoCmd.index_r = (infoCmd.index_r + CMD_QUEUE_SIZE - 1) % CMD_QUEUE_SIZE;
+  strcpy(infoCmd.queue[infoCmd.index_r].gcode, emergencyCmd);
+  infoCmd.queue[infoCmd.index_r].port_index = portIndex;
+  infoCmd.count++;
+}
+
+// Send emergency command now
+// The command parameter must be a clear command, not formatted
+// Note: make sure that the printer can receive the command
+void sendEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+{
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    Serial_Puts(SERIAL_PORT, emergencyCmd);
+  else
+    rrfSendCmd(cmd_ptr);
+
+  setCurrentAckSrc(portIndex);
+
+  if (MENU_IS(menuTerminal))
+  {
+    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
+  }
+}
+
+// Handles emmergency command
+// It sends it immediately if the printer has emergency parser
+// otherwise puts it first in the command queue
+// The command parameter must be a clear command, not formatted
+void handleEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+{
+  if (infoMachineSettings.emergencyParser == 0)
+    storeEmergencyCmd(emergencyCmd, portIndex);
+  else
+    sendEmergencyCmd(emergencyCmd, portIndex);
+}
+
+/* end emergency command handling */
 
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
@@ -206,6 +263,8 @@ void clearCmdQueue(void)
   printSetUpdateWaiting(false);
 }
 
+// Get the data of the next to be sent command in infoCmd
+// and return "true" if sent from TFT, otherwise "false".
 static inline bool getCmd(void)
 {
   cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
@@ -217,7 +276,7 @@ static inline bool getCmd(void)
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
-// Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
+// Purge gcode cmd or send it to the printer and then remove it from infoCmd queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
@@ -259,6 +318,75 @@ bool sendCmd(bool purge, bool avoidTerminal)
   infoCmd.index_r = (infoCmd.index_r + 1) % CMD_QUEUE_SIZE;
 
   return !purge;  // return true if command was sent. Otherwise, return false
+}
+
+// Check if the received gcode is an emergency one or not
+// (M108, M112, M410, M524, M876) and parse it accordingly
+void handleCmd(char * cmd, const SERIAL_PORT_INDEX portIndex)
+{
+  char * strPtr;
+
+  while (cmd[0] == ' ') cmd++;  // remove leading space
+  strPtr = cmd;
+
+  // skip N[-0-9] (line number) if included in the command line
+  if (strPtr[0] == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28 XY\n" -> "G28 XY\n"
+  {
+    strPtr += 2;                               // skip N[-0-9]
+    while (NUMERIC(strPtr[0])) strPtr++;       // skip [0-9]*
+    while (strPtr[0] == ' ') strPtr++;         // skip [ ]*
+  }
+
+  if ((strPtr[0] == 'M') && NUMERIC(strPtr[1]))
+  {
+    switch ((uint16_t)strtod(&strPtr[1], NULL))
+    {
+      case 108:  // M108
+      case 112:  // M112
+      case 410:  // M410
+      case 876:  // M876
+        sendEmergencyCmd(cmd, portIndex);
+        break;
+
+      case 524:  // M524
+        if (isPrinting())
+        {
+          if (portIndex == PORT_1)  // from terminal
+          {
+            if (infoFile.source == FS_ONBOARD_MEDIA)
+              preparePrintAbort();
+          }
+          else
+          {
+            if (infoFile.source != FS_REMOTE_HOST)
+            {
+              preparePrintAbort();
+              Serial_Puts(serialPort[portIndex].port, "ok\n");
+            }
+          }
+        }
+        else
+        {
+          storeEmergencyCmd(cmd, portIndex);
+        }
+        break;
+
+      default:
+        if (cmd[0] != '\0')
+          while(!storeCmdFromUART(portIndex, cmd))
+          {
+            loopProcess();
+          }
+        break;
+    }
+  }
+  else if (cmd[0] != '\0')
+  {
+    while(!storeCmdFromUART(portIndex, cmd))
+    {
+      loopProcess();
+    }
+  }
 }
 
 // Check the presence of the specified "keyword" string in the current gcode command
@@ -466,12 +594,12 @@ void syncTargetTemp(uint8_t index)
 // Parse and send gcode cmd in infoCmd queue.
 void sendQueueCmd(void)
 {
-  if (infoHost.wait == true) return;
-  if (infoCmd.count == 0) return;
+  if (infoHost.wait == true || infoCmd.count == 0) return;
 
-  bool avoid_terminal = false;
-  bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
-  char * strPtr = cmd_ptr;  // cmd_ptr was set by getCmd function
+  bool avoid_terminal = false;  // flag to avoid or not showing the command on terminal
+  bool cmd_emergency = false;   // emergency command flag (M108, M112, M410, M524, M876)
+  bool fromTFT = getCmd();      // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
+  char * strPtr = cmd_ptr;      // cmd_ptr was set by getCmd function
 
   // skip leading spaces
   while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
@@ -507,7 +635,7 @@ void sendQueueCmd(void)
       if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
         writing_mode = NO_WRITING;
 
-      if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
+      if (sendCmd(false, avoid_terminal) && !cmd_emergency)  // if the command was sent and it's not an emergency type
         infoHost.wait = infoHost.connected;
     }
 
@@ -520,8 +648,8 @@ void sendQueueCmd(void)
     case 'M':
       switch (cmd_value())
       {
-        case 0:
-        case 1:
+        case 0:  // M0
+        case 1:  // M1
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT media and purge M0/M1 command
@@ -534,8 +662,8 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 18:  // M18/M84 disable steppers
-        case 84:
+        case 18:  // M18 disable steppers
+        case 84:  // M84 disable steppers
           // do not mark coordinate as unknown in case of a M18/M84 S<timeout> command that
           // doesn't disable the motors right away but will set their idling timeout
           if (!(cmd_seen('S') && !cmd_seen('Y') && !cmd_seen('Z') && !cmd_seen('E')))
@@ -723,7 +851,7 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 98:  // RRF macro execution, do not wait for it to complete
+          case 98:  // M98, RRF macro execution, do not wait for it to complete
             sendCmd(false, avoid_terminal);
             return;
 
@@ -766,29 +894,13 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 524:  // M524
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printAbort()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printAbort();
-                return;
-              }
-            }
-            break;
-
         #else  // not SERIAL_PORT_2
           case 27:  // M27
             printSetUpdateWaiting(false);
             break;
-        #endif  // not SERIAL_PORT_2
+        #endif  // SERIAL_PORT_2
 
-        case 73:
+        case 73:  // M73
           if (cmd_seen('P'))
           {
             setPrintProgressSource(PROG_SLICER);
@@ -845,23 +957,6 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 155:  // M155
-          if (rrfStatusIsMacroBusy())
-          {
-            sendCmd(true, avoid_terminal);
-            return;
-          }
-
-          if (fromTFT)
-          {
-            heatSetUpdateWaiting(false);
-
-            if (cmd_seen('S'))
-              heatSyncUpdateSeconds(cmd_value());
-
-          }
-          break;
-
         case 106:  // M106
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
@@ -877,6 +972,14 @@ void sendQueueCmd(void)
           fanSetCurSpeed(i, 0);
           break;
         }
+
+        case 108:  // M108
+        case 112:  // M112
+        case 410:  // M410
+        case 524:  // M524
+        case 876:  // M876
+          cmd_emergency = (infoMachineSettings.emergencyParser);
+          break;
 
         case 109:  // M109
           if (fromTFT)
@@ -934,6 +1037,23 @@ void sendQueueCmd(void)
           }
           break;
 
+        case 155:  // M155
+          if (rrfStatusIsMacroBusy())
+          {
+            sendCmd(true, avoid_terminal);
+            return;
+          }
+
+          if (fromTFT)
+          {
+            heatSetUpdateWaiting(false);
+
+            if (cmd_seen('S'))
+              heatSyncUpdateSeconds(cmd_value());
+
+          }
+          break;
+
         case 190:  // M190
           if (fromTFT)
           {
@@ -987,8 +1107,8 @@ void sendQueueCmd(void)
         {
           PARAMETER_NAME param = P_STEPS_PER_MM;
 
-          if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
-          if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
+          if (cmd_value() == 201) param = P_MAX_ACCELERATION;    // P_MAX_ACCELERATION
+          else if (cmd_value() == 203) param = P_MAX_FEED_RATE;  // P_MAX_FEED_RATE
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1020,8 +1140,8 @@ void sendQueueCmd(void)
         {
           PARAMETER_NAME param = P_HOME_OFFSET;
 
-          if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
-          if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
+          if (cmd_value() == 218) param = P_HOTEND_OFFSET;      // P_HOTEND_OFFSET
+          else if (cmd_value() == 851) param = P_PROBE_OFFSET;  // P_PROBE_OFFSET
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1032,9 +1152,7 @@ void sendQueueCmd(void)
         case 207:  // M207 FW retraction
         case 208:  // M208 FW recover
         {
-          PARAMETER_NAME param = P_FWRETRACT;
-
-          if (cmd_value() == 208) param = P_FWRECOVER;  // P_FWRECOVER
+          PARAMETER_NAME param = (cmd_value() == 207) ? P_FWRETRACT : P_FWRECOVER;
 
           if (cmd_seen('S')) setParameter(param, 0, cmd_float());
           if (cmd_seen('W')) setParameter(param, 1, cmd_float());
@@ -1090,9 +1208,7 @@ void sendQueueCmd(void)
         case 301:  // Hotend PID
         case 304:  // Bed PID
         {
-          PARAMETER_NAME param = P_HOTEND_PID;
-
-          if (cmd_value() == 304) param = P_BED_PID;  // P_BED_PID
+          PARAMETER_NAME param = (cmd_value() == 301) ? P_HOTEND_PID : P_BED_PID;
 
           if (cmd_seen('P')) setParameter(param, 0, cmd_float());
           if (cmd_seen('I')) setParameter(param, 1, cmd_float());
@@ -1118,8 +1234,8 @@ void sendQueueCmd(void)
             setParameter(P_ABL_STATE, 1, cmd_float());
           break;
 
-        case 292:
-        case 408:
+        case 292:  // M292
+        case 408:  // M408
           // RRF does not send "ok" while executing M98
           if (rrfStatusIsMacroBusy())
           {
@@ -1178,9 +1294,7 @@ void sendQueueCmd(void)
         case 665:  // Delta configuration / Delta tower angle
         case 666:  // Delta endstop adjustments
         {
-          PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
-
-          if (cmd_value() == 666) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
+          PARAMETER_NAME param = (cmd_value() == 665) ? P_DELTA_TOWER_ANGLE : P_DELTA_ENDSTOP;
 
           if (param < P_DELTA_ENDSTOP)  // options not supported by M666
           {
@@ -1219,8 +1333,8 @@ void sendQueueCmd(void)
         {
           PARAMETER_NAME param = P_CURRENT;
 
-          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
-          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
+          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;      // P_HYBRID_THRESHOLD
+          else if (cmd_value() == 914) param = P_BUMPSENSITIVITY;  // P_BUMPSENSITIVITY
 
           int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
 
@@ -1362,6 +1476,6 @@ void sendQueueCmd(void)
       break;
   }  // end parsing cmd
 
-  if (sendCmd(false, avoid_terminal) == true)  // if command was sent
+  if (sendCmd(false, avoid_terminal) && !cmd_emergency)  // if command was sent and it's not an emergency type
     infoHost.wait = infoHost.connected;
 }  // sendQueueCmd

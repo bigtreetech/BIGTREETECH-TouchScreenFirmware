@@ -120,10 +120,10 @@ bool printRemoteStart(const char * filename);
 
 // start print originated or handled by TFT
 // (e.g. print started from TFT's GUI or hosted by TFT)
-bool printStart(void);                                // it also sends start gcode
+bool preparePrint(void);                              // it also sends start gcode
 
 void printEnd(void);                                  // it also sends end gcode
-void printAbort(void);                                // it also sends cancel gcode
+void preparePrintAbort(void);                         // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);

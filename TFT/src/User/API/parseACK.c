@@ -363,12 +363,12 @@ void hostActionCommands(void)
       setPrintResume(HOST_STATUS_RESUMING);
 
       hostAction.prompt_show = false;
-      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      sendEmergencyCmd("M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_seen("Reheating"))
     {
       hostAction.prompt_show = false;
-      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      sendEmergencyCmd("M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
   }
   else if (ack_seen(":prompt_button "))
@@ -665,7 +665,7 @@ void parseACK(void)
       // parse and store M23, select SD file
       else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
-        // NOTE: this block is not reached in case of printing from onboard media because printStart() will call
+        // NOTE: this block is not reached in case of printing from onboard media because preparePrint() will call
         //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
 
         // parse file name.
@@ -1306,18 +1306,18 @@ void parseACK(void)
 
 void parseRcvGcode(void)
 {
-  for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
+  for (SERIAL_PORT_INDEX portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)  // scan all the supplementary serial ports
   {
     // forward data only if serial port is enabled
-    if (infoSettings.serial_port[i] > 0
+    if (infoSettings.serial_port[portIndex] > 0
         #ifdef SERIAL_DEBUG_PORT
-          && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data from serial debug port
         #endif
        )
     {
-      while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
+      while (syncL2CacheFromL1(serialPort[portIndex].port))  // if some data are retrieved from L1 to L2 cache
       {
-        storeCmdFromUART(i, dmaL2Cache);
+        handleCmd(dmaL2Cache, portIndex);
       }
     }
   }

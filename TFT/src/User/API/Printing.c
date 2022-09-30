@@ -53,21 +53,21 @@ void breakAndContinue(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M108\n");
+  sendEmergencyCmd("M108\n");
 }
 
 void resumeAndPurge(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M876 S0\n");
+  sendEmergencyCmd("M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M876 S1\n");
+  sendEmergencyCmd("M876 S1\n");
 }
 
 void setPrintExpectedTime(uint32_t expectedTime)
@@ -398,7 +398,7 @@ bool printRemoteStart(const char * filename)
   return true;
 }
 
-bool printStart(void)
+bool preparePrint(void)
 {
   bool printRestore = false;
 
@@ -466,8 +466,8 @@ bool printStart(void)
     // notify the print as started (infoHost.status set to "HOST_STATUS_PRINTING")
     infoHost.status = HOST_STATUS_RESUMING;
 
-    request_M24(0);                              // start print from onboard media
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
+    request_M24(0);                              // start print from onboard media
   }
 
   initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
@@ -507,7 +507,7 @@ void printEnd(void)
     shutdownStart();
 }
 
-void printAbort(void)
+void preparePrintAbort(void)
 {
   // used to avoid a possible loop in case an abort gcode (e.g. M524) is present in
   // the queue infoCmd and the function loopProcess() is invoked by this function
@@ -517,26 +517,24 @@ void printAbort(void)
   if (!infoPrinting.printing) return;
 
   loopDetected = true;
+  setRunoutAlarmFalse();
+  clearCmdQueue();
 
   switch (infoFile.source)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      clearCmdQueue();
+      setPrintAbort();
       break;
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      // several M108 are sent to Marlin because consecutive blocking operations
-      // such as heating bed, extruder may defer processing of M524
-      breakAndContinue();
-      breakAndContinue();
-      breakAndContinue();
-      breakAndContinue();
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      loopPopup();  // trigger the immediate draw of the above popup
 
       if (infoMachineSettings.firmwareType != FW_REPRAPFW)
       {
-        request_M524();
+        handleEmergencyCmd("M524\n");
       }
       else  // if RepRap
       {
@@ -546,23 +544,27 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      while (isHostPrinting())
+      {
+        // M108 is sent to Marlin because consecutive blocking operations
+        // such as heating bed, extruder may defer processing of M524.
+        // If there's any ongoing blocking command, "M108" will take that
+        // out from the closed loop and a response will be received from
+        // that command. Than another "M108" will be sent to unlock a next
+        // possible blocking command.
+        // This way enough "M108" will be sent to unlock all possible blocking
+        // command(s) (ongoing or enqueued) but not too much and not too fast
+        // one after another to overload/overrun the serial communication.
+        if (infoHost.rx_ok[SERIAL_PORT] == true)
+          sendEmergencyCmd("M108\n");
 
-      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
-      loopProcessToCondition(&isHostPrinting);
-
+        loopProcess();
+      }
       break;
 
-    case FS_REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return;
+    default:
+      break;
   }
-
-  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
-    sendPrintCodes(2);
-
-  printComplete();
-  infoPrinting.aborted = true;
 
   loopDetected = false;
 }
@@ -720,6 +722,9 @@ void setPrintAbort(void)
     return;
   }
 
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
+    sendPrintCodes(2);
+
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
   infoPrinting.aborted = true;
@@ -865,7 +870,7 @@ void loopPrintFromTFT(void)
     BUZZER_PLAY(SOUND_ERROR);
     popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == FS_TFT_SD) ? LABEL_TFT_SD_READ_ERROR : LABEL_TFT_USB_READ_ERROR, LABEL_PROCESS_ABORTED);
 
-    printAbort();
+    preparePrintAbort();
   }
 }
 

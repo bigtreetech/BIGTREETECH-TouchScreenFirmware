@@ -602,7 +602,7 @@ static inline void menuKeyboardView(void)
         {
           gcodeBuf[nowIndex++] = '\n';  // end char '\n' for gcode
           gcodeBuf[nowIndex] = '\0';
-          storeCmd(gcodeBuf);
+          handleCmd(gcodeBuf);
 
           strcpy(keyboardData->gcodeTable[lastGcodeIndex], gcodeBuf);  // save gcode to history table
           lastGcodeIndex = (lastGcodeIndex + 1) % MAX_GCODE_COUNT;     // move to next gcode index on history table
