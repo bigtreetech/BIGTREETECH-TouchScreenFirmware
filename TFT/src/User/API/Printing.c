@@ -398,7 +398,7 @@ bool printRemoteStart(const char * filename)
   return true;
 }
 
-bool preparePrint(void)
+bool printStartPrepare(void)
 {
   bool printRestore = false;
 
@@ -507,7 +507,7 @@ void printEnd(void)
     shutdownStart();
 }
 
-void preparePrintAbort(void)
+void printAbort(void)
 {
   // used to avoid a possible loop in case an abort gcode (e.g. M524) is present in
   // the queue infoCmd and the function loopProcess() is invoked by this function
@@ -524,7 +524,7 @@ void preparePrintAbort(void)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      setPrintAbort();
+      printAbortCease();
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -565,6 +565,9 @@ void preparePrintAbort(void)
     default:
       break;
   }
+
+  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
+    sendPrintCodes(2);
 
   loopDetected = false;
 }
@@ -712,7 +715,7 @@ bool isRemoteHostPrinting(void)
   return (infoPrinting.printing && infoFile.source == FS_REMOTE_HOST) ? true : false;
 }
 
-void setPrintAbort(void)
+void printAbortCease(void)
 {
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"),
   // always force infoHost.status to "HOST_STATUS_IDLE"
@@ -721,9 +724,6 @@ void setPrintAbort(void)
     infoHost.status = HOST_STATUS_IDLE;
     return;
   }
-
-  if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
-    sendPrintCodes(2);
 
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
@@ -870,7 +870,7 @@ void loopPrintFromTFT(void)
     BUZZER_PLAY(SOUND_ERROR);
     popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == FS_TFT_SD) ? LABEL_TFT_SD_READ_ERROR : LABEL_TFT_USB_READ_ERROR, LABEL_PROCESS_ABORTED);
 
-    preparePrintAbort();
+    printAbort();
   }
 }
 

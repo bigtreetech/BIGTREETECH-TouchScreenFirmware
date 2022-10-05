@@ -346,7 +346,7 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
-    setPrintAbort();
+    printAbortCease();
   }
   else if (ack_seen(":prompt_begin "))
   {
@@ -665,7 +665,7 @@ void parseACK(void)
       // parse and store M23, select SD file
       else if (infoMachineSettings.onboardSD == ENABLED && ack_seen("File opened:"))
       {
-        // NOTE: this block is not reached in case of printing from onboard media because preparePrint() will call
+        // NOTE: this block is not reached in case of printing from onboard media because printStartPrepare() will call
         //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
 
         // parse file name.
@@ -699,7 +699,7 @@ void parseACK(void)
             if (ack_continue_seen("byte"))  // received "SD printing byte"
               setPrintProgressData(ack_value(), ack_second_value());
             else  // received "Not SD printing"
-              setPrintAbort();
+              printAbortCease();
           }
         }
         // parse and store M24, printing from (remote) onboard media completed

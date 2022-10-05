@@ -354,13 +354,13 @@ void handleCmd(char * cmd, const SERIAL_PORT_INDEX portIndex)
           if (portIndex == PORT_1)  // from terminal
           {
             if (infoFile.source == FS_ONBOARD_MEDIA)
-              preparePrintAbort();
+              printAbort();
           }
           else
           {
             if (infoFile.source != FS_REMOTE_HOST)
             {
-              preparePrintAbort();
+              printAbort();
               Serial_Puts(serialPort[portIndex].port, "ok\n");
             }
           }
@@ -735,7 +735,7 @@ void sendQueueCmd(void)
 
                 if (!isPrinting())  // if not printing, start a new print
                 {
-                  startPrint();  // start print and open Printing menu
+                  printStart();  // start print and open Printing menu
                 }
                 else  // if printing, resume the print, in case it is paused, or continue to print
                 {

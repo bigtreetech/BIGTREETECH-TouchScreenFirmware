@@ -166,11 +166,11 @@ void startRemotePrint(const char * filename)
 
 // start print originated or handled by TFT
 // (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
-void startPrint(void)
+void printStart(void)
 {
-  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by preparePrint function
+  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by printStartPrepare function
 
-  if (!preparePrint())
+  if (!printStartPrepare())
   {
     // in case the calling function is menuPrintFromSource,
     // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
@@ -724,7 +724,7 @@ void menuPrinting(void)
           }
           else
           {
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, preparePrintAbort, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
           }
 
         }
