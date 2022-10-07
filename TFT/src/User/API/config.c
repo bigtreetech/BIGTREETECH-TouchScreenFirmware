@@ -189,8 +189,7 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
         comment_space = true;
         if (count != 0)
         {
-          cur_line[count++] = '\0';
-          cur_line[count] = 0;  // terminate string
+          cur_line[count] = '\0';  // terminate string
           lineParser();
           drawProgress();
 
@@ -219,8 +218,7 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
 
             if (configFile.cur == configFile.size)
             {
-              cur_line[count++] = '\0';
-              cur_line[count] = 0;  // terminate string
+              cur_line[count] = '\0';  // terminate string
               PRINTDEBUG("line read\n");
               lineParser();  // start parsing at the end of the file.
               drawProgress();
@@ -254,14 +252,15 @@ bool inLimit(int val, int min, int max)
 bool key_seen(const char * keyStr)
 {
   uint16_t i;
-  for (c_index = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != 0; c_index++)
+  for (c_index = 0, i = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != '\0'; c_index++, i = 0)
   {
-    for (i = 0; (c_index + i) < LINE_MAX_CHAR && keyStr[i] != 0 && cur_line[c_index + i] == keyStr[i]; i++)
-    {}
-    if (keyStr[i] == 0)
+    while (cur_line[c_index + i] == keyStr[i])
     {
-      c_index += i;
-      return true;
+      if (keyStr[++i] == '\0')
+      {
+        c_index += i;
+        return true;
+      }
     }
   }
   return false;

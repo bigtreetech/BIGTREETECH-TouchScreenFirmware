@@ -139,7 +139,7 @@ void menuExtrude(void)
           break;
 
         case HEATED:
-          if (storeCmd("G0 E%.5f F%d\n", extrNewCoord, infoSettings.ext_speed[itemSpeed_index]))
+          if (storeCmd("G1 E%.5f F%d\n", extrNewCoord, infoSettings.ext_speed[itemSpeed_index]))
           {
             extrKnownCoord = extrNewCoord;
             extruderReDraw(curExtruder_index, extrNewCoord, true);
