@@ -381,9 +381,9 @@ bool printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    infoFile.source = FS_ONBOARD_MEDIA_REMOTE;  // set source first
-    resetInfoFile();                            // then reset infoFile (source is restored)
-    enterFolder(stripHead(filename));           // set path as last
+    infoFile.source = FS_ONBOARD_MEDIA_REMOTE;   // set source first
+    resetInfoFile();                             // then reset infoFile (source is restored)
+    enterFolder(stripHead(filename));            // set path as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
@@ -393,7 +393,7 @@ bool printRemoteStart(const char * filename)
     resetInfoFile();                   // then reset infoFile (source is restored)
   }
 
-  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+  initPrintSummary();  // init print summary as last (it requires infoFile to be properly set)
 
   return true;
 }
@@ -417,8 +417,8 @@ bool printStartPrepare(void)
         {
           f_close(&infoPrinting.file);
 
-          // disable print restore flag (one shot flag) for the next print.
-          // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+          // disable print restore flag (one shot flag) for the next print
+          // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function).
           powerFailedSetRestore(false);
           break;
         }
@@ -426,11 +426,11 @@ bool printStartPrepare(void)
         infoPrinting.cur = infoPrinting.file.fptr;
         setExtrusionDuringPause(false);
 
-        // initialize PLR info.
+        // initialize PLR info
         // If print restore flag was enabled (e.g. by powerFailedSetRestore function called in PrintRestore.c),
         // try to load PLR info from file in order to restore the print from the failed point.
         // It finally disables print restore flag (one shot flag) for the next print.
-        // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+        // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function).
         powerFailedInitData();
 
         if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
@@ -457,7 +457,7 @@ bool printStartPrepare(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
-  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT)) // PLR continue printing, CAN NOT use start gcode
+  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
@@ -470,7 +470,7 @@ bool printStartPrepare(void)
     request_M24(0);                              // start print from onboard media
   }
 
-  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+  initPrintSummary();  // init print summary as last (it requires infoFile to be properly set)
 
   return true;
 }
@@ -601,7 +601,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause is originated from TFT
         {
           coordinateGetAll(&tmp);
 
@@ -634,7 +634,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           breakAndContinue();  // clear the queue and send a break and continue
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause is originated from TFT
         {
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
@@ -799,7 +799,7 @@ void loopPrintFromTFT(void)
         break;
       }
 
-      if (read_char == ';')  // if a comment was found, exit from loop. Otherwise (empty line found), continue parsing the next line
+      if (read_char == ';')  // if a comment was found then exit from loop, otherwise (empty line found) continue parsing the next line
         break;
     }
     else if (read_char == ' ' && gcode_count == 0)  // ignore initial ' ' space bytes
