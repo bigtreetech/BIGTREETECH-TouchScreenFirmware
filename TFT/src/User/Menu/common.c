@@ -203,11 +203,11 @@ void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val
 }
 
 // Show/draw a temperature in a standard menu
-void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
+void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(heatDisplayID[toolIndex], "ºC");
   }
@@ -221,11 +221,11 @@ void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
 }
 
 // Show/draw fan in a standard menu
-void fanReDraw(uint8_t fanIndex, bool skipHeader)
+void fanReDraw(uint8_t fanIndex, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(fanID[fanIndex], (infoSettings.fan_percentage == 1) ? " % " : "PWM");
   }
@@ -239,11 +239,11 @@ void fanReDraw(uint8_t fanIndex, bool skipHeader)
 }
 
 // Show/draw extruder in a standard menu
-void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
+void extruderReDraw(uint8_t extruderIndex, float extrusion, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(extruderDisplayID[extruderIndex], "mm");
   }
@@ -253,11 +253,11 @@ void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
 }
 
 // Show/draw percentage in a standard menu
-void percentageReDraw(uint8_t itemIndex, bool skipHeader)
+void percentageReDraw(uint8_t itemIndex, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader((char *)textSelect((itemIndex == 0) ? LABEL_PERCENTAGE_SPEED : LABEL_PERCENTAGE_FLOW), "%");
   }
@@ -304,8 +304,16 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   return NOBEYOND(minValue, val, maxValue);
 }
 
-NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void heatToMinTemp(void)
 {
+  heatSetTargetTemp(heatGetCurrentTool(), infoSettings.min_ext_temp, FROM_GUI);
+}
+
+NOZZLE_STATUS warmupNozzle(void)
+{
+  uint8_t toolIndex = heatGetCurrentTool();
+
   if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
   {
     if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
@@ -317,7 +325,7 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
       sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
-      popupDialog(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL, callback, NULL, NULL);
+      popupDialog(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL, heatToMinTemp, NULL, NULL);
 
       return COLD;
     }

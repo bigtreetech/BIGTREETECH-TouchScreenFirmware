@@ -48,7 +48,7 @@ void menuHeat(void)
   heatItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
 
   menuDrawPage(&heatItems);
-  temperatureReDraw(tool_index, NULL, false);
+  temperatureReDraw(tool_index, NULL, true);
 
   while (MENU_IS(menuHeat))
   {
@@ -66,7 +66,7 @@ void menuHeat(void)
       case KEY_INFOBOX:
       {
         setTarget = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
-        temperatureReDraw(tool_index, NULL, false);
+        temperatureReDraw(tool_index, NULL, true);
         break;
       }
 
@@ -84,7 +84,7 @@ void menuHeat(void)
         heatItems.items[key_num] = itemTool[tool_index];
 
         menuDrawItem(&heatItems.items[key_num], key_num);
-        temperatureReDraw(tool_index, NULL, false);
+        temperatureReDraw(tool_index, NULL, true);
         break;
 
       case KEY_ICON_5:
@@ -116,7 +116,7 @@ void menuHeat(void)
     {
       lastCurrent = actCurrent;
       lastTarget = actTarget;
-      temperatureReDraw(tool_index, NULL, true);
+      temperatureReDraw(tool_index, NULL, false);
     }
 
     loopProcess();
