@@ -614,7 +614,7 @@ static inline void menuKeyboardView(void)
         break;
 
       case GKEY_ABC_123:
-        numpad = !numpad;
+        TOGGLE_BIT(numpad, 0);
         drawKeyboard();
         break;
 
