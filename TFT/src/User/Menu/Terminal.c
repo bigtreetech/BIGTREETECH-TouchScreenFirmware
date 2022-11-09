@@ -1,7 +1,7 @@
 #include "Terminal.h"
 #include "includes.h"
 
-#define MAX_GCODE_COUNT       3
+#define MAX_GCODE_COUNT       3  // gcode history slots
 #define MAX_PAGE_COUNT        20
 #define MAX_TERMINAL_BUF_SIZE (NOBEYOND(600, RAM_SIZE * 45, 4800))
 
@@ -386,16 +386,19 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
 
       if (isPressed)  // if pressed key
       {
-        if (index == GKEY_CLEAR)
-          sprintf(statusText, gcodeKey123[GKEY_CLEAR]);
-        else if (index == GKEY_NEXT)
-          sprintf(statusText, "%s %d/%d", gcodeKey123[GKEY_NEXT], ((keyboardData->gcodeIndex + 1) % MAX_GCODE_COUNT) + 1, MAX_GCODE_COUNT);
-        else  // if GKEY_PREV
-          sprintf(statusText, "%s %d/%d", gcodeKey123[GKEY_PREV], ((keyboardData->gcodeIndex + MAX_GCODE_COUNT - 1) % MAX_GCODE_COUNT) + 1, MAX_GCODE_COUNT);
+        if (index < GKEY_CLEAR)
+        {
+          keyboardData->gcodeIndex = (keyboardData->gcodeIndex + MAX_GCODE_COUNT + (2 * (index == GKEY_NEXT)) - 1) % MAX_GCODE_COUNT;
+          sprintf(statusText, "%s %d/%d", gcodeKey123[index], keyboardData->gcodeIndex + 1, MAX_GCODE_COUNT);
+        }
+        else
+        {
+          strcpy(statusText, gcodeKey123[GKEY_CLEAR]);
+        }
       }
       else  // if released key
       {
-        sprintf(statusText, "%s", gcodeKey123[GKEY_SEND]);
+        strcpy(statusText, gcodeKey123[GKEY_SEND]);
       }
 
       rectBtn = (GUI_RECT){editorKeyRect[GKEY_SEND].x0 + 3, editorKeyRect[GKEY_SEND].y0 + 3,
@@ -458,19 +461,22 @@ static inline void keyboardDrawButton(uint8_t index, uint8_t isPressed)
 
       if (isPressed)  // if pressed key
       {
-        if (index == GKEY_CLEAR)
-          sprintf(statusText, gcodeKey123[GKEY_CLEAR]);
-        else if (index == GKEY_NEXT)
-          sprintf(statusText, "%s %d/%d", gcodeKey123[GKEY_NEXT], ((keyboardData->gcodeIndex + 1) % MAX_GCODE_COUNT) + 1, MAX_GCODE_COUNT);
-        else  // if GKEY_PREV
-          sprintf(statusText, "%s %d/%d", gcodeKey123[GKEY_PREV], ((keyboardData->gcodeIndex + MAX_GCODE_COUNT - 1) % MAX_GCODE_COUNT) + 1, MAX_GCODE_COUNT);
+        if (index < GKEY_CLEAR)
+        {
+          keyboardData->gcodeIndex = (keyboardData->gcodeIndex + MAX_GCODE_COUNT + (2 * (index == GKEY_NEXT)) - 1) % MAX_GCODE_COUNT;
+          sprintf(statusText, "%s %d/%d", gcodeKey123[index], keyboardData->gcodeIndex + 1, MAX_GCODE_COUNT);
+        }
+        else
+        {
+          strcpy(statusText, gcodeKey123[GKEY_CLEAR]);
+        }
 
         fontColor = BAR_BG_COLOR;
         bgColor = BAR_FONT_COLOR;
       }
       else  // if released key
       {
-        sprintf(statusText, "%s", gcodeKey123[GKEY_SEND]);
+        strcpy(statusText, gcodeKey123[GKEY_SEND]);
 
         fontColor = BAR_FONT_COLOR;
         bgColor = BAR_BG_COLOR;
@@ -564,9 +570,7 @@ static inline void menuKeyboardView(void)
 
       case GKEY_PREV:
       case GKEY_NEXT:
-        keyboardData->gcodeIndex = (keyboardData->gcodeIndex + MAX_GCODE_COUNT + ((key_num == (KEY_VALUES) GKEY_NEXT) ? 1 : -1)) % MAX_GCODE_COUNT;
-        strcpy(gcodeBuf, keyboardData->gcodeTable[keyboardData->gcodeIndex]);  // load gcode from history table
-        nowIndex = strlen(gcodeBuf);  // update gcode size
+        nowIndex = sprintf(gcodeBuf, keyboardData->gcodeTable[keyboardData->gcodeIndex]);  // load gcode from history table and update gcode size
         lastIndex = ~nowIndex;  // trigger text box redraw
         saveEnabled = false;
         break;
@@ -597,7 +601,7 @@ static inline void menuKeyboardView(void)
         break;
 
       case GKEY_SPACE:
-        if (nowIndex > 0 || nowIndex < CMD_MAX_SIZE - 2)  // -2 to leave space for '\n' and '\0' char
+        if (nowIndex > 0 && nowIndex < CMD_MAX_SIZE - 2)  // -2 to leave space for '\n' and '\0' char
         {
           gcodeBuf[nowIndex++] = ' ';
         }
