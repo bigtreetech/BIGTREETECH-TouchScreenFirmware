@@ -67,8 +67,7 @@ void ablStart(void)
 
     case BL_UBL:  // if Unified Bed Leveling
       storeCmd("G29 P1\n");
-      // run this multiple times since it only fills some missing points, not all
-      storeCmd("G29 P3\n");
+      storeCmd("G29 P3\n");  // run this multiple times since it only fills some missing points, not all
       storeCmd("G29 P3\n");
       storeCmd("G29 P3\n");
       break;
@@ -79,21 +78,15 @@ void ablStart(void)
   }
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-  {
     storeCmd("M118 A1 ABL Completed\n");
-  }
 }
 
 void ublSaveloadConfirm(void)
 {
   if (!ublIsSaving)
-  {
     storeCmd("G29 L%d\n", ublSlot);
-  }
   else
-  {
     ublSlotSaved = storeCmd("G29 S%d\n", ublSlot);
-  }
 }
 
 void menuUBLSaveLoad(void)
