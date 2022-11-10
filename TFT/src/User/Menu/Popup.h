@@ -102,7 +102,6 @@ void loopPopup(void);
     showDialog(_type, NULL, NULL, NULL);                    \
   }
 
-
 #ifdef __cplusplus
 }
 #endif

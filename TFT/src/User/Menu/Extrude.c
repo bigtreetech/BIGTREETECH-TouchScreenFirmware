@@ -47,10 +47,8 @@ void menuExtrude(void)
     eAxisBackup.handled = true;
   }
 
-  if (eAxisBackup.relative == false) // Set extruder to relative
-  {
+  if (eAxisBackup.relative == false)  // set extruder to relative
     mustStoreCmd("M83\n");
-  }
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
