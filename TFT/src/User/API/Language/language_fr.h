@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Ext. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Réglage de l'extrudeur"
     #define STRING_TUNE_EXT_MARK120MM     "Marquer 120 mm sur le filament\nAppuyer ensuite sur '%s'\nMesurer la longueur restante"
-    #define STRING_TUNE_EXT_HEATOFF       "Arrêter la chauffe ?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Ajustement E-Steps"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nouveau E-steps enregistré !"
     #define STRING_TUNE_EXT_MEASURED      "Longueur restante"

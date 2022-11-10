@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Estr. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Regolazione estr. | Scalda"
     #define STRING_TUNE_EXT_MARK120MM     "Fai un segno a 120mm sul filamento\nPremi '%s' quando sei pronto\nMisura la lunghezza mancante dopo l'estrusione"
-    #define STRING_TUNE_EXT_HEATOFF       "Spegnere l'hotend?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Regola step/mm E"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nuovi step/mm di E impostati!\nNon dimenticare di salvarli nellaEEPROM\nNuovo valore: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Lunghezza mancante:"

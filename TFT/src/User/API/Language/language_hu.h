@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Kiad 100mm"
     #define STRING_TUNE_EXT_TEMP          "Adagoló hangolás | Fűt"
     #define STRING_TUNE_EXT_MARK120MM     "A 120mm-t jelöld be a szálon\nNyomd '%s' ha kész\nMérd meg a hátralévő hosszt adagolás után."
-    #define STRING_TUNE_EXT_HEATOFF       "Kikapcsolod a fűtést?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "E-lépés állítás"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Új E-lépés mentve!\nNe felejtsd el menteni EEPROM-ba.\nÚj érték: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Hátramaradt hossz:"

@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm Vysunutí"
     #define STRING_TUNE_EXT_TEMP          "Kalibrace extruderu, ohřev"
     #define STRING_TUNE_EXT_MARK120MM     "Označ 120mm na filamentu\nStlač '%s' pokud jsi připraven.\nZměř zbývající délku po vytlačení."
-    #define STRING_TUNE_EXT_HEATOFF       "Vypnout topení?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Nastavení E-Kroku"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nové E-kroky nastaveny!\nNezapmeň uložit do EEPROM.\nNová hodnota: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Zbývající délka:"

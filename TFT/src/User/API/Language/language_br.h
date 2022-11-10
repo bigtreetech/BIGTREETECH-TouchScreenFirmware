@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Extr. 100mm"
     #define STRING_TUNE_EXT_TEMP          "Extr. ajuste | Aquece"
     #define STRING_TUNE_EXT_MARK120MM     "Marque o filamento em 120mm \nPressione '%s' quando estiver pronto \nMeça o comprimento marcado após a extrusão"
-    #define STRING_TUNE_EXT_HEATOFF       "Desliguar o Hotend?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Ajustar passos/mm E"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Novos passos/mm E definidos\nNão se esqueça de salvar na EEPROM\nNovo valor: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Comprimento restante:"
