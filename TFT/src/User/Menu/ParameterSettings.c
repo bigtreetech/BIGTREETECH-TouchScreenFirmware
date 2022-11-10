@@ -197,7 +197,6 @@ void menuShowParameter(void)
 
           listViewRefreshMenu();
         }
-
         break;
       }
     }
@@ -291,7 +290,6 @@ void menuParameterSettings(void)
 
             OPEN_MENU(menuShowParameter);
           }
-
           break;
         }
         // perform EEPROM task
