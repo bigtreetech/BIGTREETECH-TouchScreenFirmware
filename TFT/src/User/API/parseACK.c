@@ -921,10 +921,10 @@ void parseACK(void)
     // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
     else if (ack_starts_with("M92 ") || ack_starts_with("M201") || ack_starts_with("M203"))  // "M92 " to not trigger if "M928" received
     {
-      PARAMETER_NAME param = P_STEPS_PER_MM;
+      PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
 
       if (ack_starts_with("M201")) param = P_MAX_ACCELERATION;
-      else if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
+      if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
 
       if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
       if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
@@ -1068,10 +1068,10 @@ void parseACK(void)
     // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
     else if (ack_starts_with("M906") || ack_starts_with("M913") || ack_starts_with("M914"))
     {
-      PARAMETER_NAME param = P_CURRENT;
+      PARAMETER_NAME param = P_CURRENT;  // default value
 
       if (ack_starts_with("M913")) param = P_HYBRID_THRESHOLD;
-      else if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
+      if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
 
       int8_t stepperIndex = (ack_seen("I")) ? ack_value() : 0;
 

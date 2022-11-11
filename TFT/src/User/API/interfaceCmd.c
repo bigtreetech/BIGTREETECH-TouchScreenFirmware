@@ -988,10 +988,10 @@ void sendQueueCmd(void)
         case 201:  // M201 max acceleration (units/s2)
         case 203:  // M203 max feedrate (units/s)
         {
-          PARAMETER_NAME param = P_STEPS_PER_MM;
+          PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
 
-          if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
-          if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
+          if (cmd_value() == 201) param = P_MAX_ACCELERATION;
+          if (cmd_value() == 203) param = P_MAX_FEED_RATE;
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1021,10 +1021,10 @@ void sendQueueCmd(void)
         case 218:  // M218 hotend offset
         case 851:  // M851 probe offset
         {
-          PARAMETER_NAME param = P_HOME_OFFSET;
+          PARAMETER_NAME param = P_HOME_OFFSET;  // default value
 
-          if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
-          if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
+          if (cmd_value() == 218) param = P_HOTEND_OFFSET;
+          if (cmd_value() == 851) param = P_PROBE_OFFSET;
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1035,9 +1035,7 @@ void sendQueueCmd(void)
         case 207:  // M207 FW retraction
         case 208:  // M208 FW recover
         {
-          PARAMETER_NAME param = P_FWRETRACT;
-
-          if (cmd_value() == 208) param = P_FWRECOVER;  // P_FWRECOVER
+          PARAMETER_NAME param = (cmd_value() == 207) ? P_FWRETRACT : P_FWRECOVER;
 
           if (cmd_seen('S')) setParameter(param, 0, cmd_float());
           if (cmd_seen('W')) setParameter(param, 1, cmd_float());
@@ -1093,9 +1091,7 @@ void sendQueueCmd(void)
         case 301:  // Hotend PID
         case 304:  // Bed PID
         {
-          PARAMETER_NAME param = P_HOTEND_PID;
-
-          if (cmd_value() == 304) param = P_BED_PID;  // P_BED_PID
+          PARAMETER_NAME param = (cmd_value() == 301) ? P_HOTEND_PID : P_BED_PID;
 
           if (cmd_seen('P')) setParameter(param, 0, cmd_float());
           if (cmd_seen('I')) setParameter(param, 1, cmd_float());
@@ -1181,9 +1177,7 @@ void sendQueueCmd(void)
         case 665:  // Delta configuration / Delta tower angle
         case 666:  // Delta endstop adjustments
         {
-          PARAMETER_NAME param = P_DELTA_TOWER_ANGLE;
-
-          if (cmd_value() == 666) param = P_DELTA_ENDSTOP;  // P_DELTA_ENDSTOP
+          PARAMETER_NAME param = (cmd_value() == 665) ? P_DELTA_TOWER_ANGLE : P_DELTA_ENDSTOP;
 
           if (param < P_DELTA_ENDSTOP)  // options not supported by M666
           {
@@ -1220,40 +1214,40 @@ void sendQueueCmd(void)
         case 913:  // M913 TMC hybrid threshold speed
         case 914:  // M914 TMC bump sensitivity
         {
-          PARAMETER_NAME param = P_CURRENT;
+          PARAMETER_NAME param = P_CURRENT;  // default value
 
-          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
-          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
+          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;
+          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;
 
-          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
           // for M913 and M914, provided index is:
           //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
           // and it must be converted to:
           //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
           // to make sure array index is properly accessed
-          if (param > P_CURRENT && i > 0)
-            i--;
+          if (param > P_CURRENT && stepperIndex > 0)
+            stepperIndex--;
 
-          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
-          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + i, cmd_value());
-          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + i, cmd_value());
+          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + stepperIndex, cmd_value());
+          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + stepperIndex, cmd_value());
+          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + stepperIndex, cmd_value());
 
           if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
           {
-            i = (cmd_seen('T')) ? cmd_value() : 0;
+            stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
 
             // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
             // to make sure array index is never negative
-            if (i < 0)
-              i = 0;
+            if (stepperIndex < 0)
+              stepperIndex = 0;
 
-            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + i, cmd_value());
+            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + stepperIndex, cmd_value());
           }
           break;
         }
