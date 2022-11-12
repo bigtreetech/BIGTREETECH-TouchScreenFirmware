@@ -93,6 +93,12 @@ int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int
 // Edit a float value in a standard menu
 float editFloatValue(float minValue, float maxValue, float resetValue, float value);
 
+// Backup current Settings data if not already backed up
+void backupCurrentSettings(void);
+
+// Store new Settings data to FLASH, if changed, and release backed up Settings data
+void storeCurrentSettings(void);
+
 NOZZLE_STATUS warmupNozzle(void);
 
 #ifdef SAFETY_ALERT
