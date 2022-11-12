@@ -29,7 +29,6 @@ void menuManualLeveling(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool forceExit = false;
 
   backupCurrentSettings();  // backup current Settings data if not already backed up
 
@@ -98,8 +97,6 @@ void menuManualLeveling(void)
 
       case KEY_ICON_7:
         CLOSE_MENU();
-
-        forceExit = true;
         break;
 
       default:
@@ -109,6 +106,5 @@ void menuManualLeveling(void)
     loopProcess();
   }
 
-  if (forceExit)
-    storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
 }
