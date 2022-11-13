@@ -622,17 +622,22 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 25:  // M25
+          case 25:   // M25
+          case 125:  // M125
+          case 524:  // M524
             if (!fromTFT)
             {
               if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
+                // case the function loopProcess() is invoked by the following function printPause() / printAbort()
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                printPause(true, PAUSE_NORMAL);
+                if (cmd_value() != 524)  // if M25 or M125
+                  printPause(true, PAUSE_NORMAL);
+                else  // if M524
+                  printAbort();
                 return;
               }
             }
@@ -753,38 +758,6 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 125:  // M125
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printPause(true, PAUSE_NORMAL);
-                return;
-              }
-            }
-            break;
-
-          case 524:  // M524
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printAbort()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printAbort();
-                return;
-              }
-            }
-            break;
-
         #else  // not SERIAL_PORT_2
           case 27:  // M27
             printSetUpdateWaiting(false);
@@ -835,19 +808,6 @@ void sendQueueCmd(void)
           break;
 
         case 105:  // M105
-          if (rrfStatusIsMacroBusy())
-          {
-            sendCmd(true, avoid_terminal);
-            return;
-          }
-
-          if (fromTFT)
-          {
-            heatSetUpdateWaiting(false);
-            avoid_terminal = !infoSettings.terminal_ack;
-          }
-          break;
-
         case 155:  // M155
           if (rrfStatusIsMacroBusy())
           {
@@ -859,25 +819,31 @@ void sendQueueCmd(void)
           {
             heatSetUpdateWaiting(false);
 
-            if (cmd_seen('S'))
-              heatSyncUpdateSeconds(cmd_value());
-
+            if (cmd_value() == 105)  // if M105
+            {
+              avoid_terminal = !infoSettings.terminal_ack;
+            }
+            else  // if M155
+            {
+              if (cmd_seen('S'))
+                heatSyncUpdateSeconds(cmd_value());
+            }
           }
           break;
 
         case 106:  // M106
-        {
-          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-
-          if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
-          break;
-        }
-
         case 107:  // M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
 
-          fanSetCurSpeed(i, 0);
+          if (cmd_value() == 106)  // if M106
+          {
+            if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
+          }
+          else  // if M107
+          {
+            fanSetCurSpeed(i, 0);
+          }          
           break;
         }
 
