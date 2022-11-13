@@ -832,18 +832,18 @@ void sendQueueCmd(void)
           break;
 
         case 106:  // M106
+        {
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+
+          if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
+          break;
+        }
+
         case 107:  // M107
         {
           uint8_t i = cmd_seen('P') ? cmd_value() : 0;
 
-          if (cmd_value() == 106)  // if M106
-          {
-            if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
-          }
-          else  // if M107
-          {
-            fanSetCurSpeed(i, 0);
-          }          
+          fanSetCurSpeed(i, 0);
           break;
         }
 
