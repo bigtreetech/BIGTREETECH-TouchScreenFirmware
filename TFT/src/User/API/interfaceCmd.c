@@ -825,8 +825,7 @@ void sendQueueCmd(void)
             }
             else  // if M155
             {
-              if (cmd_seen('S'))
-                heatSyncUpdateSeconds(cmd_value());
+              if (cmd_seen('S')) heatSyncUpdateSeconds(cmd_value());
             }
           }
           break;
@@ -1023,13 +1022,11 @@ void sendQueueCmd(void)
           break;
 
         case 220:  // M220
-          if (cmd_seen('S'))
-            speedSetCurPercent(0, cmd_value());
+          if (cmd_seen('S')) speedSetCurPercent(0, cmd_value());
           break;
 
         case 221:  // M221
-          if (cmd_seen('S'))
-            speedSetCurPercent(1, cmd_value());
+          if (cmd_seen('S')) speedSetCurPercent(1, cmd_value());
           break;
 
         #ifdef BUZZER_PIN
@@ -1071,11 +1068,8 @@ void sendQueueCmd(void)
           break;
 
         case 355:  // M355
-          if (cmd_seen('S'))
-            caseLightSetState(cmd_value() > 0);
-
-          if (cmd_seen('P'))
-            caseLightSetBrightness(cmd_value());
+          if (cmd_seen('S')) caseLightSetState(cmd_value() > 0);
+          if (cmd_seen('P')) caseLightSetBrightness(cmd_value());
           break;
 
         case 376:  // M376 (Reprap FW)
@@ -1230,12 +1224,10 @@ void sendQueueCmd(void)
         {
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
-            if (cmd_seen(axis_id[i]))
-              coordinateSetAxisTarget(i, cmd_float());
+            if (cmd_seen(axis_id[i])) coordinateSetAxisTarget(i, cmd_float());
           }
 
-          if (cmd_seen('F'))
-            coordinateSetFeedRate(cmd_value());
+          if (cmd_seen('F')) coordinateSetFeedRate(cmd_value());
           break;
         }
 
