@@ -19,7 +19,7 @@ extern "C" {
 #define STRINGIFY_(M) #M
 #define STRINGIFY(M)  STRINGIFY_(M)
 
-#define COUNT(n) (sizeof(n)/sizeof(n[0]))
+#define COUNT(n) (sizeof(n) / sizeof(n[0]))
 
 #define ABS(n)    ((n) > 0 ? (n) : -(n))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -44,7 +44,7 @@ extern "C" {
 #define SET_BIT_VALUE(num, index, value) num = ((value) == 1) ? (1 << index) | num : num & (~(1 << index))
 
 // Toggle bit status at selected index
-#define TOGGLE_BIT(num, index) num =  num ^ (1 << index)
+#define TOGGLE_BIT(num, index) num = num ^ (1 << index)
 
 // Flip all bits
 #define FLIP_BITS(num) ~num
