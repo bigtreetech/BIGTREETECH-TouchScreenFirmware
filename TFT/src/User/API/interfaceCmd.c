@@ -1094,26 +1094,26 @@ void sendQueueCmd(void)
 
         case 569:  // M569 TMC stepping mode
         {
-          uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
-          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          float isStealthChop = (cmd_seen('S')) ? cmd_value() : 0;  // integer type value also casted to float type
+          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
-          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
-          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
-          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
+          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + stepperIndex, isStealthChop);
+          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + stepperIndex, isStealthChop);
+          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + stepperIndex, isStealthChop);
 
-          i = (cmd_seen('T')) ? cmd_value() : 0;
+          stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
-          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
+          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + stepperIndex, isStealthChop);
           break;
         }
 
@@ -1261,7 +1261,7 @@ void sendQueueCmd(void)
                 uint8_t v = cmd_value();
 
                 if (v == 1 || v == 2)
-                  setParameter(P_ABL_STATE, 0, v % 2);  // value will be 1 if v == 1, 0 if v == 2
+                  setParameter(P_ABL_STATE, 0, v & 1U);  // value will be 1 if v == 1, 0 if v == 2
               }
             }
           }

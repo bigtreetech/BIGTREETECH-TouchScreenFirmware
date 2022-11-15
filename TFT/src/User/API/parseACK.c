@@ -1042,7 +1042,7 @@ void parseACK(void)
     }
     else if (ack_seen("driver mode:"))
     {
-      bool isStealthChop = ack_continue_seen("stealthChop");
+      float isStealthChop = ack_continue_seen("stealthChop");  // boolean type value also casted to float type
       STEPPER_INDEX stepperIndex = 0;
 
       if (ack_seen("X")) stepperIndex = STEPPER_INDEX_X;
