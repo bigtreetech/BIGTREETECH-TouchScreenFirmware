@@ -511,7 +511,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define AUTO_LOAD_LEVELING 1  // Default: 1
+#define AUTO_LOAD_LEVELING 0  // Default: 0
 
 /**
  * Onboard / Printer Media

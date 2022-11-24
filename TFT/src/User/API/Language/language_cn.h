@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "挤出100mm"
     #define STRING_TUNE_EXT_TEMP          "挤出机微调 | 加热"
     #define STRING_TUNE_EXT_MARK120MM     "在耗材上标记120mm\n标记完成后点击 '%s'\n挤出完成后测量剩余长度"
-    #define STRING_TUNE_EXT_HEATOFF       "关闭加热?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "调整E-Steps"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "新的E-Steps已生效,需要手动保存到EEPROM\n新E-Steps: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "剩余的长度:"
