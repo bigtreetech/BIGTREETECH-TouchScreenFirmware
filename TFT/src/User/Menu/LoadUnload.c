@@ -29,12 +29,6 @@ const MENUITEMS loadUnloadItems = {
 static uint8_t tool_index = NOZZLE0;
 CMD_TYPE lastCmd = NONE;
 
-// set the hotend to the minimum extrusion temperature if user selected "OK"
-void loadMinTemp_OK(void)
-{
-  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp, FROM_GUI);
-}
-
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
@@ -48,7 +42,7 @@ void menuLoadUnload(void)
   }
 
   menuDrawPage(&loadUnloadItems);
-  temperatureReDraw(tool_index, NULL, false);
+  temperatureReDraw(tool_index, NULL, true);
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
@@ -92,7 +86,7 @@ void menuLoadUnload(void)
           if (val != actTarget)
             heatSetTargetTemp(tool_index, val, FROM_GUI);
 
-          temperatureReDraw(tool_index, NULL, false);
+          temperatureReDraw(tool_index, NULL, true);
           lastCmd = NONE;
           break;
         }
@@ -100,7 +94,7 @@ void menuLoadUnload(void)
         case KEY_ICON_4:  // nozzle select
           tool_index = (tool_index + 1) % infoSettings.hotend_count;
 
-          temperatureReDraw(tool_index, NULL, false);
+          temperatureReDraw(tool_index, NULL, true);
           lastCmd = NONE;
           break;
 
@@ -124,13 +118,16 @@ void menuLoadUnload(void)
           break;
 
         default:
-          temperatureReDraw(tool_index, NULL, true);
+          temperatureReDraw(tool_index, NULL, false);
           break;
       }
 
       if ((lastCmd == UNLOAD_REQUESTED) || (lastCmd == LOAD_REQUESTED))
       {
-        switch (warmupNozzle(tool_index, loadMinTemp_OK))
+        if (tool_index != heatGetCurrentTool())
+          mustStoreCmd("%s\n", tool_change[tool_index]);
+
+        switch (warmupNozzle())
         {
           case COLD:
             lastCmd = NONE;
@@ -143,27 +140,19 @@ void menuLoadUnload(void)
             if (lastCmd == UNLOAD_REQUESTED)
             { // unload
               if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-              {
-                mustStoreCmd("M702 T%d\n", tool_index);
-              }
+                mustStoreCmd("M702\n");
               else
-              {
-                mustStoreCmd("T%d\n", tool_index);
                 request_M98("sys/unload.g");
-              }
+
               lastCmd = UNLOAD_STARTED;
             }
             else  // LOAD_REQUESTED
             { // load
               if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-              {
-                mustStoreCmd("M701 T%d\n", tool_index);
-              }
+                mustStoreCmd("M701\n");
               else
-              {
-                mustStoreCmd("T%d\n", tool_index);
                 request_M98("sys/load.g");
-              }
+
               lastCmd = LOAD_STARTED;
             }
             if (isPrinting() && isPaused())

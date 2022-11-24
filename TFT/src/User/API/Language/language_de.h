@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "100mm ext."
     #define STRING_TUNE_EXT_TEMP          "Düsentemperatur"
     #define STRING_TUNE_EXT_MARK120MM     "Filament 120 mm über Einlass markieren,\ndann '%s' drücken & nach Extrusion\nerneut messen."
-    #define STRING_TUNE_EXT_HEATOFF       "Heizung abschalten?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "E-Schritte einstellen"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Neue E-Schritte gespeichert! Bitte auch im EEPROM speichern.\nNeuer Wert: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Restlänge:"

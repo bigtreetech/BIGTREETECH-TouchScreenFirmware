@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Екст. 100мм"
     #define STRING_TUNE_EXT_TEMP          "Налаштування екструдера\nНагрівання"
     #define STRING_TUNE_EXT_MARK120MM     "Позначте 120 мм на філаменті.\nПо готовності '%s' введіть\nвиміряну отриману довжину після екструзії"
-    #define STRING_TUNE_EXT_HEATOFF       "Відключити нагрів?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Підстроювання E-кроків"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "E-кроки встановлені!\nНе забудьте зберегти їх в EEPROM\nНове значення:%0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Довжина частини, що залишилася:"

@@ -26,7 +26,7 @@ typedef struct
 typedef struct
 {
   float coordinate;
-  uint32_t feedrate;
+  uint16_t feedrate;
   bool relative;
   bool handled;
 } E_AXIS_BACKUP;

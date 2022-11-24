@@ -342,7 +342,6 @@
     #define STRING_TUNE_EXT_EXTRUDE_100   "Wsuń 10cm"
     #define STRING_TUNE_EXT_TEMP          "Dostrajanie wytłaczarki | Grzanie"
     #define STRING_TUNE_EXT_MARK120MM     "Zaznacz 120 mm na filamencie.\nNaciśnij '%s' gdy będziesz gotowy.\nZmierz pozostałą długość po wytłoczeniu."
-    #define STRING_TUNE_EXT_HEATOFF       "Wyłączyć grzałkę?"
     #define STRING_TUNE_EXT_ADJ_ESTEPS    "Dostosuj kroki E"
     #define STRING_TUNE_EXT_ESTEPS_SAVED  "Nowe kroki E zastosowane.\nNie zapomnij zapisać to w EEPROM.\nNowa wartość: %0.2f"
     #define STRING_TUNE_EXT_MEASURED      "Pozostała długość:"
