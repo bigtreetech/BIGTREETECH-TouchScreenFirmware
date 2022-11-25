@@ -623,7 +623,6 @@ void sendQueueCmd(void)
             break;
 
           case 25:   // M25
-          case 125:  // M125
             if (!fromTFT)
             {
               if (isTFTPrinting())  // if printing from TFT media
@@ -751,6 +750,22 @@ void sendQueueCmd(void)
 
               sendCmd(true, avoid_terminal);
               return;
+            }
+            break;
+
+          case 125:  // M125
+            if (!fromTFT)
+            {
+              if (isTFTPrinting())  // if printing from TFT media
+              {
+                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
+                // case the function loopProcess() is invoked by the following function printPause()
+                Serial_Puts(cmd_port, "ok\n");
+                sendCmd(true, avoid_terminal);
+
+                printPause(true, PAUSE_NORMAL);
+                return;
+              }
             }
             break;
 
