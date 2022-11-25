@@ -621,7 +621,7 @@ void parseACK(void)
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))
     {
-      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_continue_seen("S") ? ack_value() : 100);
+      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     // parse and store M710, controller fan
     else if (ack_starts_with("M710"))
