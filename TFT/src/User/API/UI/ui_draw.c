@@ -426,7 +426,16 @@ bool model_DirectDisplay_Base64PNG(GUI_POINT pos, FIL *gcodeFile)
 
 bool model_DecodeToFlash_Base64PNG(FIL *gcodeFile, uint32_t addr)
 {
+  uint16_t w = ICON_WIDTH;
+  uint16_t h = ICON_HEIGHT;
+
   W25Qxx_DECODE session = {0, addr, {}};
+
+  memcpy(session.buf, (uint8_t *)&w, sizeof(uint16_t));
+  session.bnum += sizeof(uint16_t);
+  memcpy(session.buf + session.bnum, (uint8_t *)&h, sizeof(uint16_t));
+  session.bnum += sizeof(uint16_t);
+
   return model_Process_Base64PNG(gcodeFile, &session, on_decode_png_pixel, on_decode_png_pixel_done);
 }
 
