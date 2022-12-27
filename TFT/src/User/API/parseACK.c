@@ -932,7 +932,7 @@ void parseACK(void)
     // parse and store FW retraction (M207) and FW recover (M208)
     else if (ack_starts_with("M207 S") || ack_starts_with("M208 S"))
     {
-      PARAMETER_NAME param = ack_starts_with("207") ? P_FWRETRACT : P_FWRECOVER;
+      PARAMETER_NAME param = ack_starts_with("M207") ? P_FWRETRACT : P_FWRECOVER;
 
       if (ack_seen("S")) setParameter(param, 0, ack_value());
       if (ack_seen("W")) setParameter(param, 1, ack_value());
