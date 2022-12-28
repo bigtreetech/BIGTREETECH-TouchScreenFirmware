@@ -624,12 +624,9 @@ void parseACK(void)
       speedQuerySetWait(false);
     }
     // parse and store M106, fan speed
-    else if (ack_starts_with("M106 P"))
+    else if (ack_starts_with("M106"))
     {
-      uint8_t i = ack_value();
-
-      if (ack_continue_seen("S"))
-        fanSetCurSpeed(i, ack_value());
+      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     // parse and store M710, controller fan
     else if (ack_starts_with("M710"))
