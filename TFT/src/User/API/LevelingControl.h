@@ -21,10 +21,6 @@ typedef enum
   LEVELING_POINT_COUNT
 } LEVELING_POINT;
 
-typedef int16_t LEVELING_POINT_COORDS[LEVELING_POINT_COUNT][2];  // [][0] X coord, [][1] Y coord
-
-void levelingGetPointCoords(LEVELING_POINT_COORDS coords);   // get all point coords
-LEVELING_POINT levelingGetPoint(int16_t x, int16_t y);       // get point matching XY coords or LEVEL_CENTER in case of no match
 void levelingMoveToPoint(LEVELING_POINT point);              // move to point
 void levelingProbePoint(LEVELING_POINT point);               // probe point
 void levelingSetProbedPoint(int16_t x, int16_t y, float z);  // set probed point and Z offset for point matching XY coords
