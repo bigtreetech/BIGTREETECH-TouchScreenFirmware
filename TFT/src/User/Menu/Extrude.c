@@ -35,7 +35,6 @@ void menuExtrude(void)
   extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
   menuDrawPage(&extrudeItems);
-  extruderReDraw(curExtruder_index, extrAmount, true);
 
   if (eAxisBackup.handled == false)
   {
@@ -46,6 +45,12 @@ void menuExtrude(void)
     eAxisBackup.relative = eGetRelative();
     eAxisBackup.handled = true;
   }
+  else
+  {
+    extrAmount = coordinateGetAxis(E_AXIS) - eAxisBackup.coordinate;
+  }
+
+  extruderReDraw(curExtruder_index, extrAmount, true);
 
   if (eAxisBackup.relative == false) // Set extruder to relative
   {
@@ -85,7 +90,7 @@ void menuExtrude(void)
         {
           heatSetCurrentIndex(curExtruder_index);  // preselect current nozzle for "Heat" menu
           OPEN_MENU(menuHeat);
-          menuHeat();  // call from here to retain the extruded filament amount
+          menuHeat();  // call from here to retain E axis parameters
 
           if (MENU_IS(menuExtrude))  // user exited from heating menu by short pressing "Back"
           {
@@ -94,7 +99,7 @@ void menuExtrude(void)
           }
           else  // user exited from heating menu by long pressing "Back"
           {
-            eAxisBackup.handled = false;  // exiting from Extrude menu, no need for it anymore
+            eAxisBackup.handled = false;  // exiting from Extrude menu, trigger E axis parameters restore
           }
         }
         break;
@@ -116,7 +121,7 @@ void menuExtrude(void)
       case KEY_ICON_7:
         COOLDOWN_TEMPERATURE();
         CLOSE_MENU();
-        eAxisBackup.handled = false;  // exiting from Extrude menu, no need for it anymore
+        eAxisBackup.handled = false;  // exiting from Extrude menu, trigger E axis parameters restore
         break;
 
       default:
