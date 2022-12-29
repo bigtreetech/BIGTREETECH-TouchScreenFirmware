@@ -552,19 +552,24 @@ void parseACK(void)
     // parse and store temperatures
     else if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
     {
-      heatSetCurrentTemp(NOZZLE0, ack_value() + 0.5f);
-      heatSetTargetTemp(NOZZLE0, ack_second_value() + 0.5f, FROM_HOST);
+      uint8_t heaterIndex = NOZZLE0;
 
-      for (uint8_t i = 1; i < MAX_HEATER_COUNT; i++)
+      if (infoSettings.hotend_count == 1)
       {
-        if (!heaterDisplayIsValid(i))
-          continue;
+        heatSetCurrentTemp(heaterIndex, ack_value() + 0.5f);
+        heatSetTargetTemp(heaterIndex, ack_second_value() + 0.5f, FROM_HOST);
+        heaterIndex = BED;
+      }
 
-        if (ack_seen(heaterID[i]))
+      while (heaterIndex < MAX_HEATER_COUNT)
+      {
+        if (heaterDisplayIsValid(heaterIndex) && ack_seen(heaterID[heaterIndex]))
         {
-          heatSetCurrentTemp(i, ack_value() + 0.5f);
-          heatSetTargetTemp(i, ack_second_value() + 0.5f, FROM_HOST);
+          heatSetCurrentTemp(heaterIndex, ack_value() + 0.5f);
+          heatSetTargetTemp(heaterIndex, ack_second_value() + 0.5f, FROM_HOST);
         }
+
+        heaterIndex++;
       }
 
       avoid_terminal = !infoSettings.terminal_ack;
@@ -619,12 +624,9 @@ void parseACK(void)
       speedQuerySetWait(false);
     }
     // parse and store M106, fan speed
-    else if (ack_starts_with("M106 P"))
+    else if (ack_starts_with("M106"))
     {
-      uint8_t i = ack_value();
-
-      if (ack_continue_seen("S"))
-        fanSetCurSpeed(i, ack_value());
+      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     // parse and store M710, controller fan
     else if (ack_starts_with("M710"))
@@ -932,7 +934,7 @@ void parseACK(void)
     // parse and store FW retraction (M207) and FW recover (M208)
     else if (ack_starts_with("M207 S") || ack_starts_with("M208 S"))
     {
-      PARAMETER_NAME param = ack_starts_with("207") ? P_FWRETRACT : P_FWRECOVER;
+      PARAMETER_NAME param = ack_starts_with("M207") ? P_FWRETRACT : P_FWRECOVER;
 
       if (ack_seen("S")) setParameter(param, 0, ack_value());
       if (ack_seen("W")) setParameter(param, 1, ack_value());
