@@ -866,20 +866,12 @@ void sendQueueCmd(void)
           break;
 
         case 106:  // M106
-        {
-          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-
-          if (cmd_seen('S')) fanSetCurSpeed(i, cmd_value());
+          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, cmd_seen('S') ? cmd_value() : 100);
           break;
-        }
 
         case 107:  // M107
-        {
-          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-
-          fanSetCurSpeed(i, 0);
+          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
           break;
-        }
 
         case 109:  // M109
           if (fromTFT)

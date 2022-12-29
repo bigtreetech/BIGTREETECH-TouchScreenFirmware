@@ -62,7 +62,7 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
 };
 
 const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
+  {"X%.4f\n",            "Y%.4f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
   {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
   {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
   {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
@@ -83,9 +83,9 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"A%.4f\n",            "B%.4f\n",       "C%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
   {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
   {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
-  {"T0 K%.2f\n",         "T1 K%.2f\n",    NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
-  {"I0 X%.0f\n",         "I1 X%.0f\n",    "I0 Y%.0f\n",    "I1 Y%.0f\n",   "I0 Z%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n"    "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"T0 K%.3f\n",         "T1 K%.3f\n",    NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
+  {"I0 X%.0f\n",         "I1 X%.0f\n",    "I0 Y%.0f\n",    "I1 Y%.0f\n",   "I0 Z%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
   {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL},           // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
   {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
 };
@@ -115,11 +115,11 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                                                             // Linear Advance (E0, E1)
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,},
+   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,},
+   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},
   {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,},
+   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},
   {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
 };
 
