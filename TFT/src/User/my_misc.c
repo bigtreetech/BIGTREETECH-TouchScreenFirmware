@@ -43,6 +43,53 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
   return crc;
 }
 
+/*
+ * - always copy num-1 characters from source to destination
+ *   regardless of null terminating character found in source
+ * - destination always ends with '\0'
+ */
+void strxcpy(char * destination, const char * source, size_t num)
+{
+  num -= !!num;
+
+  memcpy(destination, source, num);
+  destination[num] ='\0';
+}
+
+/*
+ * - copy source to destination but no more than width-1 characters
+ * - if null terminating character found in source the rest is padded with 0
+ * - destination always ends with '\0'
+ */
+void strwcpy(char * destination, const char * source, size_t width)
+{
+  width -= !!width;
+  while (width > 1 && *source != '\0')
+  {
+    *destination++ = *source++;
+    width--;
+  }
+
+  memset(destination, '\0', width);
+}
+
+/*
+ * - copy source to destination but no more than size-1 characters
+ * - if null terminating character found in source the copy stops there
+ * - destination always ends with '\0'
+ */
+void strscpy(char * destination, const char * source, size_t size)
+{
+  size -= !!size;
+  while (size > 1 && *source != '\0')
+  {
+    *destination++ = *source++;
+    size--;
+  }
+
+  destination[size] ='\0';
+}
+
 // string convert to uint8, MSB
 // "2C" to 0x2C
 uint8_t string_2_uint8_t(const uint8_t *string)
