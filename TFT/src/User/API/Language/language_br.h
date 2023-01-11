@@ -303,6 +303,7 @@
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "Distância"
+    #define STRING_SHIM                   "Shim"
     #define STRING_LOAD_UNLOAD            "Carrega/Descarrega"
     #define STRING_LOAD_UNLOAD_SHORT      "Filamento"
     #define STRING_TOUCHSCREEN_ADJUST     "Cal. Touch"
@@ -331,7 +332,6 @@
     #define STRING_UNIFIEDHEAT            "TEMP/FAN"
     #define STRING_TOUCH_TO_EXIT          "Toque p/ sair"
     #define STRING_MAINMENU               "Menu"
-    #define STRING_LEVELING_EDGE_DISTANCE "Distância da borda"
     #define STRING_TUNING                 "Ajuste"// TRADUZIR MELHOR
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "Auto Ajuste do MPC"

@@ -23,7 +23,7 @@ void zOffsetNotifyError(bool isStarted)
 
 void zOffsetDraw(bool status, float val)
 {
-  char tempstr[20], tempstr2[20], tempstr3[20];
+  char tempstr[20], tempstr2[20], tempstr3[30];
 
   if (!status)
   {
@@ -36,7 +36,7 @@ void zOffsetDraw(bool status, float val)
   else
   {
     sprintf(tempstr, "ZO:%.2f  ", val);
-    sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
+    sprintf(tempstr3, "%s:%.3f", textSelect(LABEL_SHIM), infoSettings.level_z_pos);
     sprintf(tempstr2, "  %.2f  ", val + infoSettings.level_z_pos);
 
     GUI_SetColor(infoSettings.status_color);
