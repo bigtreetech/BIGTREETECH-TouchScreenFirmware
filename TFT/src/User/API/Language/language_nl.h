@@ -303,6 +303,7 @@
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "Afstand"
+    #define STRING_SHIM                   "Shim"
     #define STRING_LOAD_UNLOAD            "Load/Unload"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "(Un)Load"  // needs translation
     #define STRING_TOUCHSCREEN_ADJUST     "TSC Aanpassen"
@@ -331,7 +332,6 @@
     #define STRING_UNIFIEDHEAT            "Verwarm/Ventilator"
     #define STRING_TOUCH_TO_EXIT          "Aanraken om te verlaten"
     #define STRING_MAINMENU               "Menu"
-    #define STRING_LEVELING_EDGE_DISTANCE "Bed edge distance"
     #define STRING_TUNING                 "Tuning"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC autotune"

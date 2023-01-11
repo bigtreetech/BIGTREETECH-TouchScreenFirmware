@@ -129,7 +129,6 @@ const char * const ledString[LED_COLOR_COMPONENT_COUNT] = {"R", "G", "B", "W", "
 
 uint8_t ledPage = 0;
 uint8_t ledIndex = 0;
-SETTINGS * nowInfoSettings = NULL;
 
 uint8_t ledGetComponentIndex(uint8_t index)
 {
@@ -480,11 +479,7 @@ void menuLEDColor(void)
   KEY_VALUES key_num = KEY_IDLE;
   bool forceLedOff, forceExit;
 
-  if (nowInfoSettings == NULL)
-  {
-    nowInfoSettings = (SETTINGS *) malloc(sizeof(SETTINGS));
-    *nowInfoSettings = infoSettings;
-  }
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
   LED_SendColor(&ledColor);                      // set (neopixel) LED light to current color
@@ -553,13 +548,9 @@ void menuLEDColor(void)
 
   if (forceExit)
   {
-    if (memcmp(nowInfoSettings, &infoSettings, sizeof(SETTINGS)))  // if configured color is changed, save it to flash
-      storePara();
+    storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
 
     if (forceLedOff)  // if LED is switched off, set (neopixel) LED light current color to OFF
       LED_SetColor(&ledOff, false);
-
-    free(nowInfoSettings);
-    nowInfoSettings = NULL;
   }
 }
