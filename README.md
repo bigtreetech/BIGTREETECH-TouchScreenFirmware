@@ -229,6 +229,10 @@ Precompiled firmwares are available on [`Copy to SD Card root directory to updat
 
 For **BTT TFTs**, the firmwares use the naming convention `BIGTREE_TFT*_V*.*.*.x.bin`.
 
+For **BTT GD TFTs**, the firmwares use the naming convention `BIGTREE_GD_TFT*_V*.*.*.x.bin`
+
+![GD Chip](https://user-images.githubusercontent.com/46979052/187049050-2bf05b07-3a1a-43c9-a375-6ef53cf48850.png)
+
 For **MKS TFTs**:
 
 1. The firmwares use the naming convention `MKS_TFT*_V*.*.*.x.bin`

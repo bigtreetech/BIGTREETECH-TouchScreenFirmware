@@ -50,7 +50,8 @@ void menuBaudrate(void)
   KEY_VALUES curIndex = KEY_IDLE;
   uint8_t curItem = 0;
   uint16_t curPage;
-  SETTINGS now = infoSettings;
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   // fill baudrate items
   for (uint8_t i = 0; i < size; i++)
@@ -92,10 +93,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
-  {
-    storePara();
-  }
+  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
 }
 
 void menuSerialPorts(void)

@@ -303,6 +303,7 @@
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "距离"
+    #define STRING_SHIM                   "Shim"
     #define STRING_LOAD_UNLOAD            "挤出/回抽耗材"  // needs translation
     #define STRING_LOAD_UNLOAD_SHORT      "进/退料"  // needs translation
     #define STRING_TOUCHSCREEN_ADJUST     "触屏校准"
@@ -331,7 +332,6 @@
     #define STRING_UNIFIEDHEAT            "温度"
     #define STRING_TOUCH_TO_EXIT          "触摸任意点退出当前界面"
     #define STRING_MAINMENU               "菜单"
-    #define STRING_LEVELING_EDGE_DISTANCE "手动调平边沿距离"
     #define STRING_TUNING                 "调整"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC自动整定"
