@@ -303,7 +303,7 @@
     #define STRING_P_OFFSET               "P Eltolás"
     #define STRING_H_OFFSET               "H Eltolás"
     #define STRING_DISTANCE               "Távolság"
-    #define STRING_SHIM                   "Shim"
+    #define STRING_SHIM                   "Alátét"
     #define STRING_LOAD_UNLOAD            "Betöltés/Kiadás"
     #define STRING_LOAD_UNLOAD_SHORT      "Be/Ki"
     #define STRING_TOUCHSCREEN_ADJUST     "Igazítás"
