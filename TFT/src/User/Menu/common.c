@@ -304,6 +304,32 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   return NOBEYOND(minValue, val, maxValue);
 }
 
+// Backup of current Settings data
+static SETTINGS * nowInfoSettings = NULL;
+
+// Backup current Settings data if not already backed up
+void backupCurrentSettings(void)
+{
+  if (nowInfoSettings == NULL)
+  {
+    nowInfoSettings = (SETTINGS *) malloc(sizeof(SETTINGS));
+    *nowInfoSettings = infoSettings;
+  }
+}
+
+// Store new Settings data to FLASH, if changed, and release backed up Settings data
+void storeCurrentSettings(void)
+{
+  if (nowInfoSettings != NULL)
+  {
+    if (memcmp(nowInfoSettings, &infoSettings, sizeof(SETTINGS)))  // if settings have been modified, save to FLASH
+      storePara();
+
+    free(nowInfoSettings);
+    nowInfoSettings = NULL;
+  }
+}
+
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void heatToMinTemp(void)
 {

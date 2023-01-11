@@ -1,25 +1,38 @@
 #include "Leveling.h"
 #include "includes.h"
 
-const MENUITEMS manualLevelingItems = {
-  // title
-  LABEL_LEVELING,
-  // icon                          label
-  {
-    {ICON_POINT_4,                 LABEL_POINT_4},
-    {ICON_POINT_3,                 LABEL_POINT_3},
-    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
-    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
-    {ICON_POINT_1,                 LABEL_POINT_1},
-    {ICON_POINT_2,                 LABEL_POINT_2},
-    {ICON_POINT_5,                 LABEL_POINT_5},
-    {ICON_BACK,                    LABEL_BACK},
-  }
-};
+static uint8_t curSubmenu_index = 0;
 
 void menuManualLeveling(void)
 {
+  ITEM itemSubmenu[] = {
+    // icon                        label
+    {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+    {ICON_LEVEL_EDGE_DISTANCE,     LABEL_DISTANCE},
+    {ICON_BABYSTEP,                LABEL_SHIM},
+  };
+
+  MENUITEMS manualLevelingItems = {
+    // title
+    LABEL_LEVELING,
+    // icon                          label
+    {
+      {ICON_POINT_4,                 LABEL_POINT_4},
+      {ICON_POINT_3,                 LABEL_POINT_3},
+      {ICON_PAGE_DOWN,               LABEL_NEXT},
+      {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
+      {ICON_POINT_1,                 LABEL_POINT_1},
+      {ICON_POINT_2,                 LABEL_POINT_2},
+      {ICON_POINT_5,                 LABEL_POINT_5},
+      {ICON_BACK,                    LABEL_BACK},
+    }
+  };
+
   KEY_VALUES key_num = KEY_IDLE;
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
+
+  manualLevelingItems.items[KEY_ICON_3] = itemSubmenu[curSubmenu_index];
 
   menuDrawPage(&manualLevelingItems);
 
@@ -36,15 +49,38 @@ void menuManualLeveling(void)
         levelingMoveToPoint(LEVEL_TOP_RIGHT);
         break;
 
+      // change submenu
       case KEY_ICON_2:
-      {
-        infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX,
-                                               LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
-        break;
-      }
+        curSubmenu_index = (curSubmenu_index + 1) % COUNT(itemSubmenu);
+        manualLevelingItems.items[KEY_ICON_3] = itemSubmenu[curSubmenu_index];
 
+        menuDrawItem(&manualLevelingItems.items[KEY_ICON_3], KEY_ICON_3);
+        break;
+
+      // handle submenu
       case KEY_ICON_3:
-        storeCmd("M84 X Y E\n");
+        switch (curSubmenu_index)
+        {
+          // unlock XY axis
+          case 0:
+            storeCmd("M84 X Y E\n");
+            break;
+
+          // set level edge distance
+          case 1:
+            infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX,
+                                                   LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
+            break;
+
+          // set level Z pos (shim)
+          case 2:
+            infoSettings.level_z_pos = editFloatValue(LEVELING_Z_POS_MIN, LEVELING_Z_POS_MAX,
+                                                      LEVELING_Z_POS_DEFAULT, infoSettings.level_z_pos);
+            break;
+
+          default:
+            break;
+        }
         break;
 
       case KEY_ICON_4:
@@ -69,4 +105,6 @@ void menuManualLeveling(void)
 
     loopProcess();
   }
+
+  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
 }

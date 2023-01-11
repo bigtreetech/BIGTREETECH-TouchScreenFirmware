@@ -240,7 +240,8 @@ void menuFeatureSettings(void)
   };
 
   uint16_t index = KEY_IDLE;
-  SETTINGS now = infoSettings;
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   listViewCreate(title, settingPage, SKEY_COUNT, &fe_cur_page, true, NULL, loadFeatureSettings);
 
@@ -257,8 +258,5 @@ void menuFeatureSettings(void)
     loopProcess();
   }
 
-  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
-  {
-    storePara();
-  }
+  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
 }
