@@ -91,7 +91,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  saveSettings();  // save settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuSerialPorts(void)

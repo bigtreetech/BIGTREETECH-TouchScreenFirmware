@@ -370,7 +370,7 @@ extern const uint8_t default_custom_enabled[];
 // Init settings data with default values
 void initSettings(void);
 
-// save settings data to FLASH, if changed, and release backed up Settings data
+// Save settings to Flash only if CRC does not match
 void saveSettings(void);
 
 // Init Machine settings data with default values

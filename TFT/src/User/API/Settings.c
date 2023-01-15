@@ -187,7 +187,7 @@ void initSettings(void)
                                                 sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 }
 
-// save settings data to FLASH, if changed, and release backed up Settings data
+// Save settings to Flash only if CRC does not match
 void saveSettings(void)
 {
   // Calculate checksum excluding the CRC variable in infoSettings
