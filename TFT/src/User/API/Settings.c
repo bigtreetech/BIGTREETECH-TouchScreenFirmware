@@ -181,6 +181,24 @@ void initSettings(void)
   }
 
   resetConfig();
+
+  // Calculate checksum excluding the CRC variable in infoSettings
+  infoSettings.CRC_checksum = calculateCRC16((uint8_t*)&infoSettings + sizeof(infoSettings.CRC_checksum),
+                                                sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+}
+
+// save settings data to FLASH, if changed, and release backed up Settings data
+void saveSettings(void)
+{
+  // Calculate checksum excluding the CRC variable in infoSettings
+  uint32_t curCRC = calculateCRC16((uint8_t*)&infoSettings + sizeof(infoSettings.CRC_checksum),
+                                      sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+
+  if (curCRC != infoSettings.CRC_checksum) // save to Flash only if CRC does not match
+  {
+    infoSettings.CRC_checksum = curCRC;
+    storePara();
+  }
 }
 
 void initMachineSettings(void)
