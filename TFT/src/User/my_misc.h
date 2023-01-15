@@ -34,17 +34,17 @@ extern "C" {
 // Get bit status at selected index
 #define GET_BIT(num, index) ((num >> index) & 1)
 
-// set bit status at selected index to 1
+// Set bit status at selected index to 1
 #define SET_BIT_ON(num, index) num = (1 << index) | num
 
-// set bit status at selected index to 0
+// Set bit status at selected index to 0
 #define SET_BIT_OFF(num, index) num = num & (~(1 << index))
 
-// set bit status value (0 or 1) at selected index
+// Set bit status value (0 or 1) at selected index
 #define SET_BIT_VALUE(num, index, value) num = ((value) == 1) ? (1 << index) | num : num & (~(1 << index))
 
 // Toggle bit status at selected index
-#define TOGGLE_BIT(num, index) num =  num ^ (1 << index)
+#define TOGGLE_BIT(num, index) num = num ^ (1 << index)
 
 // Flip all bits
 #define FLIP_BITS(num) ~num

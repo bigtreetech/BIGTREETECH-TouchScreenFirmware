@@ -413,7 +413,8 @@ void parseACK(void)
     if (infoHost.connected == false)
     {
       // parse error information even though not connected to printer
-      if (ack_seen(magic_error)) ackPopupInfo(magic_error);
+      if (ack_seen(magic_error))
+        ackPopupInfo(magic_error);
 
       // the first response should be such as "T:25/50\n"
       // the "T:0" response is specifically for Marlin when EXTRUDER_COUNT:0
@@ -426,9 +427,14 @@ void parseACK(void)
           break;
       }
 
-      if (infoSettings.ext_count < infoSettings.hotend_count) infoSettings.ext_count = infoSettings.hotend_count;
-      if (ack_seen(heaterID[BED])) infoSettings.bed_en = ENABLED;
-      if (ack_seen(heaterID[CHAMBER])) infoSettings.chamber_en = ENABLED;
+      if (infoSettings.ext_count < infoSettings.hotend_count)
+        infoSettings.ext_count = infoSettings.hotend_count;
+
+      if (ack_seen(heaterID[BED]))
+        infoSettings.bed_en = ENABLED;
+
+      if (ack_seen(heaterID[CHAMBER]))
+        infoSettings.chamber_en = ENABLED;
 
       updateNextHeatCheckTime();
 
@@ -655,8 +661,11 @@ void parseACK(void)
     // parse and store M710, controller fan
     else if (ack_starts_with("M710"))
     {
-      if (ack_seen("S")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
-      if (ack_seen("I")) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+      if (ack_seen("S"))
+        fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+
+      if (ack_seen("I"))
+        fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
 
       ctrlFanQuerySetWait(false);
     }
@@ -674,9 +683,12 @@ void parseACK(void)
     // parse and store M118, filament data update
     else if (ack_seen("filament_data"))
     {
-      if (ack_continue_seen("L:")) ack_values_sum(&infoPrintSummary.length);
-      else if (ack_continue_seen("W:")) ack_values_sum(&infoPrintSummary.weight);
-      else if (ack_continue_seen("C:")) ack_values_sum(&infoPrintSummary.cost);
+      if (ack_continue_seen("L:"))
+        ack_values_sum(&infoPrintSummary.length);
+      else if (ack_continue_seen("W:"))
+        ack_values_sum(&infoPrintSummary.weight);
+      else if (ack_continue_seen("C:"))
+        ack_values_sum(&infoPrintSummary.cost);
 
       infoPrintSummary.hasFilamentData = true;
     }
@@ -764,9 +776,12 @@ void parseACK(void)
       strcpy (tmpMsg, "Mean: ");
       sprintf (&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
 
-      if (ack_continue_seen("Min: ")) sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
-      if (ack_continue_seen("Max: ")) sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
-      if (ack_continue_seen("Range: ")) sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
+      if (ack_continue_seen("Min: "))
+        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
+      if (ack_continue_seen("Max: "))
+        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
+      if (ack_continue_seen("Range: "))
+        sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
 
       popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
     }
@@ -817,8 +832,10 @@ void parseACK(void)
     // parse M306, model predictive temperature control tuning end message (interrupted or finished)
     else if (ack_seen("MPC Autotune"))
     {
-      if (ack_continue_seen("finished")) setMpcTuningResult(FINISHED);
-      else if (ack_continue_seen("interrupted")) setMpcTuningResult(INTERRUPTED);
+      if (ack_continue_seen("finished"))
+        setMpcTuningResult(FINISHED);
+      else if (ack_continue_seen("interrupted"))
+        setMpcTuningResult(INTERRUPTED);
     }
     // parse and store M355, case light message
     else if (ack_seen("Case light:"))
@@ -872,8 +889,11 @@ void parseACK(void)
       float x = ack_value();
       float y = 0;
 
-      if (ack_continue_seen("Y: ")) y = ack_value();
-      if (ack_continue_seen("Z: ")) levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
+      if (ack_continue_seen("Y: "))
+        y = ack_value();
+
+      if (ack_continue_seen("Z: "))
+        levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
     }
     #if DELTA_PROBE_TYPE != 0
       // parse and store Delta calibration settings
@@ -1124,10 +1144,14 @@ void parseACK(void)
       uint16_t string_start = ack_index;
       uint16_t string_end = string_start;
 
-      if (ack_continue_seen("Marlin")) setupMachine(FW_MARLIN);
-      else if (ack_continue_seen("RepRapFirmware")) setupMachine(FW_REPRAPFW);
-      else if (ack_continue_seen("Smoothieware")) setupMachine(FW_SMOOTHIEWARE);
-      else setupMachine(FW_UNKNOWN);
+      if (ack_continue_seen("Marlin"))
+        setupMachine(FW_MARLIN);
+      else if (ack_continue_seen("RepRapFirmware"))
+        setupMachine(FW_REPRAPFW);
+      else if (ack_continue_seen("Smoothieware"))
+        setupMachine(FW_SMOOTHIEWARE);
+      else
+        setupMachine(FW_UNKNOWN);
 
       if (ack_seen("FIRMWARE_URL:"))  // for Smoothieware
         string_end = ack_index - sizeof("FIRMWARE_URL:");
