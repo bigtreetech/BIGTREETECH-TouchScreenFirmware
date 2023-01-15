@@ -457,7 +457,7 @@ bool printStart(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
-  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT)) // PLR continue printing, CAN NOT use start gcode
+  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
@@ -548,7 +548,7 @@ void printAbort(void)
 
       popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
-      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
+      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by printEnd() in parseAck.c
       loopProcessToCondition(&isHostPrinting);
 
       break;

@@ -242,6 +242,7 @@ void menuMPC(void)
             if (infoMachineSettings.EEPROM == 1)
             {
               sprintf(&tempMsg[strlen(tempMsg)], "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
+
               popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             }
             else
