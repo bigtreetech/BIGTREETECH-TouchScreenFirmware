@@ -166,15 +166,15 @@
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
     #define STRING_TFT_SD                 "SD card"
-    #define STRING_TFT_SD_READ_ERROR      "Errore lettura SD card!"
     #define STRING_TFT_SD_INSERTED        "SD card inserita"
     #define STRING_TFT_SD_REMOVED         "SD card rimossa"
     #define STRING_TFT_SD_NOT_DETECTED    "SD card non rilevata!"
+    #define STRING_TFT_SD_READ_ERROR      "Errore lettura SD card!"
     #define STRING_TFT_USB                "Pen drive"
-    #define STRING_TFT_USB_READ_ERROR     "Errore lettura pen drive!"
     #define STRING_TFT_USB_INSERTED       "Pen drive inserita"
     #define STRING_TFT_USB_REMOVED        "Pen drive rimossa"
     #define STRING_TFT_USB_NOT_DETECTED   "Pen drive non rilevata!"
+    #define STRING_TFT_USB_READ_ERROR     "Errore lettura pen drive!"
     #define STRING_ONBOARD_SD             "SD scheda"
     #define STRING_ONBOARD_USB            "USB scheda"
     #define STRING_ONBOARD_SD_READ_ERROR  "Errore lettura media su scheda!"
