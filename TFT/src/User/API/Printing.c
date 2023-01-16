@@ -558,11 +558,12 @@ void printAbort(void)
       return;
   }
 
+  infoPrinting.aborted = true;
+
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 
   printComplete();
-  infoPrinting.aborted = true;
 
   loopDetected = false;
 }
@@ -720,9 +721,10 @@ void setPrintAbort(void)
     return;
   }
 
+  infoPrinting.aborted = true;
+
   BUZZER_PLAY(SOUND_ERROR);
   printComplete();
-  infoPrinting.aborted = true;
 }
 
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType)
