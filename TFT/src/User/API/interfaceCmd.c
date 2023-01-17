@@ -261,6 +261,39 @@ bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return true if command was sent. Otherwise, return false
 }
 
+#ifdef SERIAL_PORT_2
+
+void forwardMsg(const char * msg, SERIAL_PORT_INDEX portIndex)
+{
+  if (portIndex >= SERIAL_PORT_COUNT)
+    return;
+
+  uint8_t portCount = SERIAL_PORT_COUNT;
+
+  // forward the message to all or to the provided (if portIndex is different than 0) enabled serial ports
+  if (portIndex == 0)
+    portIndex++;
+  else
+    portCount = portIndex + 1;
+
+  while (portIndex < portCount)
+  {
+    // forward data only if serial port is enabled
+    if (infoSettings.serial_port[portIndex] > 0
+        #ifdef SERIAL_DEBUG_PORT
+          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+        #endif
+        )
+    {
+      Serial_Puts(serialPort[portIndex].port, msg);  // pass on the message to the port
+    }
+
+    portIndex++;
+  }
+}
+
+#endif
+
 // Check the presence of the specified "keyword" string in the current gcode command
 // starting the search from index "index".
 static bool cmd_seen_from(uint8_t index, const char * keyword)
@@ -753,6 +786,27 @@ void sendQueueCmd(void)
             }
             break;
 
+          case 118:  // M118
+          {
+            CMD msg;
+            CMD rawMsg;
+            const char * msgText;
+            bool hasE, hasA;
+
+            // make a copy to work on
+            strncpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+
+            // retrieve message text and flags of M118 gcode
+            msgText = parseM118(rawMsg, &hasE, &hasA);
+
+            // format: <E prefix> + <A prefix> + <text> + "\n"
+            snprintf(msg, CMD_MAX_SIZE, "%s%s%s\n", (hasE == true) ? "echo:" : "", (hasA == true) ? "//" : "", msgText);
+
+            // forward the message to all or to the provided (if P value different than 0) enabled serial ports
+            forwardMsg(msg, cmd_seen('P') ? cmd_value() : 0);
+            break;
+          }
+
           case 125:  // M125
             if (!fromTFT)
             {
@@ -917,15 +971,20 @@ void sendQueueCmd(void)
           }
           else
           {
-            CMD message;
+            CMD rawMsg;
+            const char * msgText;
 
-            strncpy(message, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
-            stripChecksum(message);
+            // make a copy to work on
+            strncpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
-            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)&message);
+            // retrieve message text
+            stripChecksum(rawMsg);
+            msgText = stripHead(rawMsg);
+
+            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)msgText);
 
             if (MENU_IS_NOT(menuStatus))
-              addToast(DIALOG_TYPE_INFO, message);
+              addToast(DIALOG_TYPE_INFO, (char *)msgText);
           }
           break;
 
