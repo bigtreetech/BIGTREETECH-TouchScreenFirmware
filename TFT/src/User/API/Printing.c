@@ -457,6 +457,7 @@ bool printStart(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
+  // execute pre print start tasks
   if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
@@ -490,6 +491,7 @@ void printEnd(void)
     case FS_TFT_SD:
     case FS_TFT_USB:
     case FS_ONBOARD_MEDIA:
+      // execute post print end tasks
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
         sendPrintCodes(1);
 
@@ -557,14 +559,15 @@ void printAbort(void)
       return;
   }
 
-  infoPrinting.aborted = true;
+  infoPrinting.aborted = true;  // update abort status after abort procedure
 
+  // execute post print cancel tasks
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
 
   printComplete();
 
-  loopDetected = false;
+  loopDetected = false;  // finally, remove lock and exit
 }
 
 bool printPause(bool isPause, PAUSE_TYPE pauseType)
@@ -596,7 +599,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
         {
           coordinateGetAll(&tmp);
 
@@ -629,7 +632,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           breakAndContinue();  // clear the queue and send a break and continue
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
         {
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
@@ -675,7 +678,8 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
   }
 
   infoPrinting.paused = isPause;  // update pause status after pause/resume procedure
-  loopDetected = false;
+
+  loopDetected = false;  // finally, remove lock and exit
 
   return true;
 }
