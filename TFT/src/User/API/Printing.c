@@ -550,7 +550,6 @@ void printAbort(void)
 
       // wait until infoHost.status is set to "HOST_STATUS_IDLE" by printEnd() in parseAck.c
       loopProcessToCondition(&isHostPrinting);
-
       break;
 
     case FS_REMOTE_HOST:  // nothing to do
