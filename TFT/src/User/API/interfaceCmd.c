@@ -276,7 +276,7 @@ void forwardMsg(const char * msg, SERIAL_PORT_INDEX portIndex)
   else
     portCount = portIndex + 1;
 
-  while (portIndex < portCount)
+  for (; portIndex < portCount; portIndex++)
   {
     // forward data only if serial port is enabled
     if (infoSettings.serial_port[portIndex] > 0
@@ -287,8 +287,6 @@ void forwardMsg(const char * msg, SERIAL_PORT_INDEX portIndex)
     {
       Serial_Puts(serialPort[portIndex].port, msg);  // pass on the message to the port
     }
-
-    portIndex++;
   }
 }
 
