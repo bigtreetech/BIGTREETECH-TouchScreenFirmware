@@ -49,25 +49,45 @@ bool getRunoutAlarm(void)
   return filamentRunoutAlarm;
 }
 
+void clearQueueAndRunoutAlarm(void)
+{
+  clearCmdQueue();
+  setRunoutAlarmFalse();
+}
+
 void breakAndContinue(void)
 {
-  setRunoutAlarmFalse();
-  clearCmdQueue();
+  clearQueueAndRunoutAlarm();
   Serial_Puts(SERIAL_PORT, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
-  setRunoutAlarmFalse();
-  clearCmdQueue();
+  clearQueueAndRunoutAlarm();
   Serial_Puts(SERIAL_PORT, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
-  setRunoutAlarmFalse();
-  clearCmdQueue();
+  clearQueueAndRunoutAlarm();
   Serial_Puts(SERIAL_PORT, "M876 S1\n");
+}
+
+void abortAndTerminate(void)
+{
+  clearQueueAndRunoutAlarm();
+
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+  {
+    Serial_Puts(SERIAL_PORT, "M524\n");
+  }
+  else  // if RepRap
+  {
+    if (!infoPrinting.paused)
+      request_M25();  // must pause the print before cancelling it
+
+    request_M0();  // M524 is not supported in RepRap firmware
+  }
 }
 
 void setPrintExpectedTime(uint32_t expectedTime)
@@ -524,7 +544,7 @@ void printAbort(void)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      clearCmdQueue();
+      clearQueueAndRunoutAlarm();
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -536,21 +556,17 @@ void printAbort(void)
       breakAndContinue();
       breakAndContinue();
 
-      if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      {
-        request_M524();
-      }
-      else  // if RepRap
-      {
-        if (!infoPrinting.paused)
-          request_M25();  // must pause the print before cancel it
-
-        request_M0();  // M524 is not supported in RepRap firmware
-      }
+      // force the transmission of M524 (gcode sent directly bypassing the command queue) to abort the
+      // print followed by the reception of the "ok" ACK (enabling again the use of the command queue).
+      // Finally, forward the print cancel notification allowing the invokation of setPrintAbort() in
+      // parseAck.c to finalize the print (e.g. stats) followed by the execution of the post print
+      // cancel tasks provided at the end of this function
+      abortAndTerminate();
+      mustStoreCmd("M118 P0 A1 action:cancel\n");
 
       popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
-      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by printEnd() in parseAck.c
+      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintAbort() in parseAck.c
       loopProcessToCondition(&isHostPrinting);
       break;
 
