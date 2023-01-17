@@ -874,7 +874,7 @@ void parseACK(void)
       if (ack_seen("Z") || (ack_seen("Z:"))) setParameter(P_PROBE_OFFSET, AXIS_INDEX_Z, ack_value());
     }
     // parse G29 (ABL) + M118, ABL completed message (ABL, BBL, UBL) (e.g. from ABL menu)
-    else if (ack_seen("ABL Completed"))
+    else if (ack_starts_with("ABL Completed"))
     {
       ablUpdateStatus(true);
     }
@@ -1331,7 +1331,9 @@ void parseACK(void)
                   && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
                 #endif
                 )
+            {
               Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
+            }
           }
         }
       }

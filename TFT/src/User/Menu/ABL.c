@@ -78,7 +78,7 @@ void ablStart(void)
   }
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    storeCmd("M118 A1 ABL Completed\n");
+    storeCmd("M118 P0 ABL Completed\n");
 }
 
 void ublSaveloadConfirm(void)
