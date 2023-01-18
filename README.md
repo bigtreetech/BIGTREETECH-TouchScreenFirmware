@@ -559,9 +559,14 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial po
 | **file data progress**      | `M118 A1 P0 action:notification Data Left <XXXX>/<YYYY>`<br>or<br>`M117 Data Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Data Left 123/12345`<br>`M117 Data Left 123/12345`     |
 
 When the trigger `print_start` is received, the TFT switches to **Printing** menu.
-Once on Printing menu, the **pause**, **resume** and **stop** buttons on the menu will be disabled.
-That means, only the remote host will control the print.
-Only on print end or cancel (with triggers `print_end` or `cancel`) the TFT Printing menu is finalized (statistics available etc.) and unlocked (the menu can be closed).
+Only on print end or cancel (with triggers `print_end` or `cancel`) the TFT Printing menu is finalized (statistics available etc.).
+Once on Printing menu, pressing on the **pause**, **resume** and **stop** buttons will trigger to the remote host the following notifications respectively:
+
+- //action:notification remote pause
+- //action:notification remote resume
+- //action:notification remote cancel
+
+The remote host must properly handle the received notifications. For example, if `//action:notification remote pause` is received then the remote host must effectively pause the print and send `M118 P0 A1 action:pause` in order to trigger the pause action to the TFT.
 
 **NOTES:**
 - A new plugin on OctoPrint implementing the above protocol should be the preferable way (available to everyone)
