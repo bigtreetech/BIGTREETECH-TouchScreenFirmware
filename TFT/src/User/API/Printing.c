@@ -692,8 +692,10 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
       break;
 
     case FS_REMOTE_HOST:
-      // forward a print pause notification to the remote host asking to pause the print
-      mustStoreCmd("M118 P0 A1 action:notification remote pause\n");
+      if (isPause)  // if print pause, forward a print pause notification to the remote host asking to pause the print
+        mustStoreCmd("M118 P0 A1 action:notification remote pause\n");
+      else          // if print resume, forward a print resume notification to the remote host asking to resume the print
+        mustStoreCmd("M118 P0 A1 action:notification remote resume\n");
 
       loopDetected = false;  // finally, remove lock and exit
       return true;
