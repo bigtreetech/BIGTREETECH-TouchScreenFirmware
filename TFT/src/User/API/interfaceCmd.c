@@ -523,8 +523,8 @@ void sendQueueCmd(void)
     case 'M':
       switch (cmd_value())
       {
-        case 0:
-        case 1:
+        case 0:  // M0
+        case 1:  // M1
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT media and purge M0/M1 command
@@ -761,7 +761,7 @@ void sendQueueCmd(void)
             break;
         #endif  // not SERIAL_PORT_2
 
-        case 73:
+        case 73:  // M73
           if (cmd_seen('P'))
           {
             setPrintProgressSource(PROG_SLICER);
@@ -1080,8 +1080,8 @@ void sendQueueCmd(void)
             setParameter(P_ABL_STATE, 1, cmd_float());
           break;
 
-        case 292:
-        case 408:
+        case 292:  // M292
+        case 408:  // M408
           // RRF does not send "ok" while executing M98
           if (rrfStatusIsMacroBusy())
           {
