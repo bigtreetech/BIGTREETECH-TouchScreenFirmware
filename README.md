@@ -554,9 +554,9 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial po
 | **cancel**                  | `M118 P0 A1 action:cancel`                                                                                                                                                                                  |
 | **pause**                   | `M118 P0 A1 action:pause`                                                                                                                                                                                   |
 | **resume**                  | `M118 P0 A1 action:resume`                                                                                                                                                                                  |
-| **remaining time progress** | `M118 P0 A1 action:notification Time Left <XX>h<YY>m<ZZ>s`<br>or<br>`M117 Time Left <XX>h<YY>m<ZZ>s`<br><br>Examples:<br>`M118 A1 P0 action:notification Time Left 02h04m06s`<br>`M117 Time Left 02h04m06s` |
-| **print layer progress**    | `M118 P0 A1 action:notification Layer Left <XXXX>/<YYYY>`<br>or<br>`M117 Layer Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Layer Left 51/940`<br>`M117 Layer Left 51/940`       |
-| **file data progress**      | `M118 P0 A1 action:notification Data Left <XXXX>/<YYYY>`<br>or<br>`M117 Data Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 A1 P0 action:notification Data Left 123/12345`<br>`M117 Data Left 123/12345`     |
+| **remaining time progress** | `M118 P0 A1 action:notification Time Left <XX>h<YY>m<ZZ>s`<br>or<br>`M117 Time Left <XX>h<YY>m<ZZ>s`<br><br>Examples:<br>`M118 P0 A1 action:notification Time Left 02h04m06s`<br>`M117 Time Left 02h04m06s` |
+| **print layer progress**    | `M118 P0 A1 action:notification Layer Left <XXXX>/<YYYY>`<br>or<br>`M117 Layer Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 P0 A1 action:notification Layer Left 51/940`<br>`M117 Layer Left 51/940`       |
+| **file data progress**      | `M118 P0 A1 action:notification Data Left <XXXX>/<YYYY>`<br>or<br>`M117 Data Left <XXXX>/<YYYY>`<br><br>Examples:<br>`M118 P0 A1 action:notification Data Left 123/12345`<br>`M117 Data Left 123/12345`     |
 
 When the trigger `print_start` is received, the TFT switches to **Printing** menu.
 When the trigger `print_end` or `cancel` is received, the TFT Printing menu is finalized (statistics available etc.).
