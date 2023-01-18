@@ -694,7 +694,7 @@ void menuPrinting(void)
       case PS_KEY_6:
         if (lastPrinting == true)  // if printing
         { // Pause button
-          if (getHostDialog() || isRemoteHostPrinting())
+          if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));
@@ -718,15 +718,7 @@ void menuPrinting(void)
       case PS_KEY_9:
         if (lastPrinting == true)  // if printing
         { // Stop button
-          if (isRemoteHostPrinting())
-          {
-            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
-          }
-          else
-          {
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
-          }
-
+          popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
         }
         else
         { // Back button

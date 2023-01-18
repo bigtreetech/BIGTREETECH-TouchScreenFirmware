@@ -213,14 +213,6 @@ void request_M24(int pos)
 }
 
 /**
- * Abort print
- */
-void request_M524(void)
-{
-  mustStoreCmd("M524\n");
-}
-
-/**
  * Pause print
  */
 void request_M25(void)

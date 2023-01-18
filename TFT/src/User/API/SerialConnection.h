@@ -14,7 +14,8 @@ extern "C" {
 
 typedef enum
 {
-  ALL_PORTS = -1,
+  ALL_PORTS = -2,
+  SUP_PORTS = -1,
   PORT_1 = 0,
   #ifdef SERIAL_PORT_2
     PORT_2,
@@ -40,8 +41,25 @@ extern const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT];  // serial port (in
 extern const uint32_t baudrateValues[BAUDRATE_COUNT];         // baudrate values
 extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 
-void Serial_Init(SERIAL_PORT_INDEX port);    // index ALL_PORTS to apply to all serial ports (primary and supplementary)
-void Serial_DeInit(SERIAL_PORT_INDEX port);  // index ALL_PORTS to apply to all serial ports (primary and supplementary)
+// initialize the provided serial port/s, if enabled:
+//   - ALL_PORTS index to apply to all serial ports (primary and supplementary)
+//   - SUP_PORTS index to apply to all supplementary serial ports
+//   - specific index to apply only to that specific serial port
+void Serial_Init(SERIAL_PORT_INDEX port);
+
+// deinitialize the provided serial port/s (even if not enabled):
+//   - ALL_PORTS index to apply to all serial ports (primary and supplementary)
+//   - SUP_PORTS index to apply to all supplementary serial ports
+//   - specific index to apply only to that specific serial port
+void Serial_DeInit(SERIAL_PORT_INDEX port);
+
+// forward a message to the provided serial port/s, if enabled:
+//   - ALL_PORTS index to apply to all serial ports (primary and supplementary)
+//   - SUP_PORTS index to apply to all supplementary serial ports
+//   - specific index to apply only to that specific serial port
+void Serial_ForwardMsg(SERIAL_PORT_INDEX port, const char * msg);
+
+#define FORWARD_MSG(portIndex, msg) Serial_ForwardMsg(portIndex, msg)
 
 #ifdef __cplusplus
 }

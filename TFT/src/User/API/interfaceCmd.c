@@ -30,7 +30,6 @@ GCODE_QUEUE infoCacheCmd;  // only when heatHasWaiting() is false the cmd in thi
 char * cmd_ptr;
 uint8_t cmd_len;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
-uint8_t cmd_port;                  // physical port (e.g. _USART1) related to serial port index
 uint8_t cmd_base_index;            // base index in case the gcode has checksum ("Nxxx " is present at the beginning of gcode)
 uint8_t cmd_index;
 WRITING_MODE writing_mode = NO_WRITING;
@@ -211,7 +210,6 @@ static inline bool getCmd(void)
   cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
   cmd_len = strlen(cmd_ptr);                                   // length of gcode
   cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
-  cmd_port = serialPort[cmd_port_index].port;                  // physical port (e.g. _USART1) related to serial port index
   cmd_base_index = cmd_index = 0;
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
@@ -260,37 +258,6 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   return !purge;  // return true if command was sent. Otherwise, return false
 }
-
-#ifdef SERIAL_PORT_2
-
-void forwardMsg(const char * msg, SERIAL_PORT_INDEX portIndex)
-{
-  if (portIndex >= SERIAL_PORT_COUNT)
-    return;
-
-  uint8_t portCount = SERIAL_PORT_COUNT;
-
-  // forward the message to all or to the provided (if portIndex is different than 0) enabled serial ports
-  if (portIndex == 0)
-    portIndex++;
-  else
-    portCount = portIndex + 1;
-
-  for (; portIndex < portCount; portIndex++)
-  {
-    // forward data only if serial port is enabled
-    if (infoSettings.serial_port[portIndex] > 0
-        #ifdef SERIAL_DEBUG_PORT
-          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
-        #endif
-        )
-    {
-      Serial_Puts(serialPort[portIndex].port, msg);  // pass on the message to the port
-    }
-  }
-}
-
-#endif
 
 // Check the presence of the specified "keyword" string in the current gcode command
 // starting the search from index "index".
@@ -388,9 +355,9 @@ bool openRemoteTFT(bool writingMode)
 {
   bool open = false;
 
-  Serial_Puts(cmd_port, "echo:Now fresh file: ");
-  Serial_Puts(cmd_port, infoFile.path);
-  Serial_Puts(cmd_port, "\n");
+  FORWARD_MSG(cmd_port_index, "echo:Now fresh file: ");
+  FORWARD_MSG(cmd_port_index, infoFile.path);
+  FORWARD_MSG(cmd_port_index, "\n");
 
   if (!writingMode)  // if reading mode
   {
@@ -402,11 +369,11 @@ bool openRemoteTFT(bool writingMode)
       sprintf(buf, "%d", f_size(&file));
       f_close(&file);
 
-      Serial_Puts(cmd_port, "File opened: ");
-      Serial_Puts(cmd_port, infoFile.path);
-      Serial_Puts(cmd_port, " Size: ");
-      Serial_Puts(cmd_port, buf);
-      Serial_Puts(cmd_port, "\nFile selected\n");
+      FORWARD_MSG(cmd_port_index, "File opened: ");
+      FORWARD_MSG(cmd_port_index, infoFile.path);
+      FORWARD_MSG(cmd_port_index, " Size: ");
+      FORWARD_MSG(cmd_port_index, buf);
+      FORWARD_MSG(cmd_port_index, "\nFile selected\n");
 
       open = true;
     }
@@ -416,9 +383,9 @@ bool openRemoteTFT(bool writingMode)
     // mount FS and open the file (infoFile.source and infoFile.path are used)
     if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
     {
-      Serial_Puts(cmd_port, "Writing to file: ");
-      Serial_Puts(cmd_port, infoFile.path);
-      Serial_Puts(cmd_port, "\n");
+      FORWARD_MSG(cmd_port_index, "Writing to file: ");
+      FORWARD_MSG(cmd_port_index, infoFile.path);
+      FORWARD_MSG(cmd_port_index, "\n");
 
       open = true;
     }
@@ -426,12 +393,12 @@ bool openRemoteTFT(bool writingMode)
 
   if (!open)
   {
-    Serial_Puts(cmd_port, "open failed, File: ");
-    Serial_Puts(cmd_port, infoFile.path);
-    Serial_Puts(cmd_port, "\n");
+    FORWARD_MSG(cmd_port_index, "open failed, File: ");
+    FORWARD_MSG(cmd_port_index, infoFile.path);
+    FORWARD_MSG(cmd_port_index, "\n");
   }
 
-  Serial_Puts(cmd_port, "ok\n");
+  FORWARD_MSG(cmd_port_index, "ok\n");
 
   return open;
 }
@@ -449,7 +416,7 @@ void writeRemoteTFT()
   {
     f_close(&file);
 
-    Serial_Puts(cmd_port, "Done saving file.\n");
+    FORWARD_MSG(cmd_port_index, "Done saving file.\n");
 
     writing_mode = NO_WRITING;
   }
@@ -468,7 +435,7 @@ void writeRemoteTFT()
     f_sync(&file);
   }
 
-  Serial_Puts(cmd_port, "ok\n");
+  FORWARD_MSG(cmd_port_index, "ok\n");
 }
 
 void setWaitHeating(uint8_t index)
@@ -554,8 +521,8 @@ void sendQueueCmd(void)
     case 'M':
       switch (cmd_value())
       {
-        case 0:
-        case 1:
+        case 0:  // M0
+        case 1:  // M1
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT media and purge M0/M1 command
@@ -586,26 +553,26 @@ void sendQueueCmd(void)
             {
               if (initRemoteTFT())  // examples: "M20 SD:/test\n", "M20 S /test\n"
               {
-                Serial_Puts(cmd_port, "Begin file list\n");
+                FORWARD_MSG(cmd_port_index, "Begin file list\n");
 
                 // then mount FS and scan for files (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
-                    Serial_Puts(cmd_port, infoFile.file[i]);
-                    Serial_Puts(cmd_port, "\n");
+                    FORWARD_MSG(cmd_port_index, infoFile.file[i]);
+                    FORWARD_MSG(cmd_port_index, "\n");
                   }
 
                   for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
-                    Serial_Puts(cmd_port, "/");
-                    Serial_Puts(cmd_port, infoFile.folder[i]);
-                    Serial_Puts(cmd_port, "/\n");
+                    FORWARD_MSG(cmd_port_index, "/");
+                    FORWARD_MSG(cmd_port_index, infoFile.folder[i]);
+                    FORWARD_MSG(cmd_port_index, "/\n");
                   }
                 }
 
-                Serial_Puts(cmd_port, "End file list\nok\n");
+                FORWARD_MSG(cmd_port_index, "End file list\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -636,34 +603,36 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(cmd_port, "ok\n");
+                FORWARD_MSG(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                if (!isPrinting())  // if not printing, start a new print
-                {
-                  startPrint();  // start print and open Printing menu
-                }
-                else  // if printing, resume the print, in case it is paused, or continue to print
-                {
-                  printPause(false, PAUSE_NORMAL);
-                }
+                if (!isPrinting())                  // if not printing
+                  startPrint();                     // start a new print and open Printing menu
+                else                                // if printing
+                  printPause(false, PAUSE_NORMAL);  // resume the print, in case it is paused, or continue to print
 
                 return;
               }
             }
             break;
 
-          case 25:  // M25
+          case 25:   // M25
+          case 125:  // M125
+          case 524:  // M524
             if (!fromTFT)
             {
               if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(cmd_port, "ok\n");
+                // case the function loopProcess() is invoked by the following function printPause() / printAbort()
+                FORWARD_MSG(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                printPause(true, PAUSE_NORMAL);
+                if (cmd_value() != 524)            // if M25 or M125
+                  printPause(true, PAUSE_NORMAL);
+                else                               // if M524
+                  printAbort();
+
                 return;
               }
             }
@@ -684,14 +653,14 @@ void sendQueueCmd(void)
 
                 if (cmd_seen('C'))
                 {
-                  Serial_Puts(cmd_port, "Current file: ");
-                  Serial_Puts(cmd_port, infoFile.path);
-                  Serial_Puts(cmd_port, ".\n");
+                  FORWARD_MSG(cmd_port_index, "Current file: ");
+                  FORWARD_MSG(cmd_port_index, infoFile.path);
+                  FORWARD_MSG(cmd_port_index, ".\n");
                 }
 
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == FS_TFT_SD) ? "TFT SD" : "TFT USB", getPrintDataCur(), getPrintDataSize());
-                Serial_Puts(cmd_port, buf);
-                Serial_Puts(cmd_port, "ok\n");
+                FORWARD_MSG(cmd_port_index, buf);
+                FORWARD_MSG(cmd_port_index, "ok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -731,7 +700,7 @@ void sendQueueCmd(void)
               // NOTE: this scenario is reachable only if not already in writing mode (no M28 was previously received).
               //       So, we only need to send back and ACK message
 
-              Serial_Puts(cmd_port, "ok\n");
+              FORWARD_MSG(cmd_port_index, "ok\n");
               sendCmd(true, avoid_terminal);
               return;
             }
@@ -744,12 +713,12 @@ void sendQueueCmd(void)
               {
                 // then mount FS and delete the file (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && f_unlink(infoFile.path) == FR_OK)
-                  Serial_Puts(cmd_port, "File deleted: ");
+                  FORWARD_MSG(cmd_port_index, "File deleted: ");
                 else
-                  Serial_Puts(cmd_port, "Deletion failed, File: ");
+                  FORWARD_MSG(cmd_port_index, "Deletion failed, File: ");
 
-                Serial_Puts(cmd_port, infoFile.path);
-                Serial_Puts(cmd_port, ".\nok\n");
+                FORWARD_MSG(cmd_port_index, infoFile.path);
+                FORWARD_MSG(cmd_port_index, ".\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -766,18 +735,18 @@ void sendQueueCmd(void)
             {
               char buf[50];
 
-              Serial_Puts(cmd_port,
+              FORWARD_MSG(cmd_port_index,
                           "FIRMWARE_NAME: " FIRMWARE_NAME
                           " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
               sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
-              Serial_Puts(cmd_port, buf);
+              FORWARD_MSG(cmd_port_index, buf);
               sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
-              Serial_Puts(cmd_port, buf);
+              FORWARD_MSG(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
-              Serial_Puts(cmd_port, buf);
+              FORWARD_MSG(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
-              Serial_Puts(cmd_port, buf);
-              Serial_Puts(cmd_port, "ok\n");
+              FORWARD_MSG(cmd_port_index, buf);
+              FORWARD_MSG(cmd_port_index, "ok\n");
 
               sendCmd(true, avoid_terminal);
               return;
@@ -800,42 +769,15 @@ void sendQueueCmd(void)
             // format: <E prefix> + <A prefix> + <text> + "\n"
             snprintf(msg, CMD_MAX_SIZE, "%s%s%s\n", (hasE == true) ? "echo:" : "", (hasA == true) ? "//" : "", msgText);
 
-            // forward the message to all or to the provided (if P value different than 0) enabled serial ports
-            forwardMsg(msg, cmd_seen('P') ? cmd_value() : 0);
+            int32_t fwdPort = cmd_seen('P') ? cmd_value() : SUP_PORTS;
+
+            if (fwdPort == 0)  // if P value is 0 (all ports), map it to the TFT all supplementary serial ports
+              fwdPort = SUP_PORTS;
+
+            // forward the message to all the supplementary or the provided enabled serial ports
+            FORWARD_MSG(fwdPort, msg);
             break;
           }
-
-          case 125:  // M125
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printPause(true, PAUSE_NORMAL);
-                return;
-              }
-            }
-            break;
-
-          case 524:  // M524
-            if (!fromTFT)
-            {
-              if (isTFTPrinting())  // if printing from TFT media
-              {
-                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printAbort()
-                Serial_Puts(cmd_port, "ok\n");
-                sendCmd(true, avoid_terminal);
-
-                printAbort();
-                return;
-              }
-            }
-            break;
 
         #else  // not SERIAL_PORT_2
           case 27:  // M27
@@ -843,7 +785,7 @@ void sendQueueCmd(void)
             break;
         #endif  // not SERIAL_PORT_2
 
-        case 73:
+        case 73:  // M73
           if (cmd_seen('P'))
           {
             setPrintProgressSource(PROG_SLICER);
@@ -887,19 +829,6 @@ void sendQueueCmd(void)
           break;
 
         case 105:  // M105
-          if (rrfStatusIsMacroBusy())
-          {
-            sendCmd(true, avoid_terminal);
-            return;
-          }
-
-          if (fromTFT)
-          {
-            heatSetUpdateWaiting(false);
-            avoid_terminal = !infoSettings.terminal_ack;
-          }
-          break;
-
         case 155:  // M155
           if (rrfStatusIsMacroBusy())
           {
@@ -911,9 +840,15 @@ void sendQueueCmd(void)
           {
             heatSetUpdateWaiting(false);
 
-            if (cmd_seen('S'))
-              heatSyncUpdateSeconds(cmd_value());
-
+            if (cmd_value() == 105)  // if M105
+            {
+              avoid_terminal = !infoSettings.terminal_ack;
+            }
+            else  // if M155
+            {
+              if (cmd_seen('S'))
+                heatSyncUpdateSeconds(cmd_value());
+            }
           }
           break;
 
@@ -1037,10 +972,12 @@ void sendQueueCmd(void)
         case 201:  // M201 max acceleration (units/s2)
         case 203:  // M203 max feedrate (units/s)
         {
-          PARAMETER_NAME param = P_STEPS_PER_MM;
+          PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
 
-          if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
-          if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
+          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+          // instead of optimizing performance (code typically not executed during a print)
+          if (cmd_value() == 201) param = P_MAX_ACCELERATION;
+          if (cmd_value() == 203) param = P_MAX_FEED_RATE;
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1070,10 +1007,12 @@ void sendQueueCmd(void)
         case 218:  // M218 hotend offset
         case 851:  // M851 probe offset
         {
-          PARAMETER_NAME param = P_HOME_OFFSET;
+          PARAMETER_NAME param = P_HOME_OFFSET;  // default value
 
-          if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
-          if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
+          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+          // instead of optimizing performance (code typically not executed during a print)
+          if (cmd_value() == 218) param = P_HOTEND_OFFSET;
+          if (cmd_value() == 851) param = P_PROBE_OFFSET;
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1170,8 +1109,8 @@ void sendQueueCmd(void)
             setParameter(P_ABL_STATE, 1, cmd_float());
           break;
 
-        case 292:
-        case 408:
+        case 292:  // M292
+        case 408:  // M408
           // RRF does not send "ok" while executing M98
           if (rrfStatusIsMacroBusy())
           {
@@ -1187,26 +1126,26 @@ void sendQueueCmd(void)
 
         case 569:  // M569 TMC stepping mode
         {
-          uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
-          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          float isStealthChop = (cmd_seen('S')) ? cmd_value() : 0;  // integer type value also casted to float type
+          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
-          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
-          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
-          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
+          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + stepperIndex, isStealthChop);
+          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + stepperIndex, isStealthChop);
+          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + stepperIndex, isStealthChop);
 
-          i = (cmd_seen('T')) ? cmd_value() : 0;
+          stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
-          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
+          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + stepperIndex, isStealthChop);
           break;
         }
 
@@ -1252,8 +1191,11 @@ void sendQueueCmd(void)
         }
 
         case 710:  // M710 controller fan
-          if (cmd_seen('S')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
-          if (cmd_seen('I')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
+          if (cmd_seen('S'))
+            fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
+
+          if (cmd_seen('I'))
+            fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
           break;
 
         case 900:  // M900 linear advance factor
@@ -1269,40 +1211,42 @@ void sendQueueCmd(void)
         case 913:  // M913 TMC hybrid threshold speed
         case 914:  // M914 TMC bump sensitivity
         {
-          PARAMETER_NAME param = P_CURRENT;
+          PARAMETER_NAME param = P_CURRENT;  // default value
 
-          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
-          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
+          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+          // instead of optimizing performance (code typically not executed during a print)
+          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;
+          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;
 
-          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
+          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (i < 0)
-            i = 0;
+          if (stepperIndex < 0)
+            stepperIndex = 0;
 
           // for M913 and M914, provided index is:
           //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
           // and it must be converted to:
           //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
           // to make sure array index is properly accessed
-          if (param > P_CURRENT && i > 0)
-            i--;
+          if (param > P_CURRENT && stepperIndex > 0)
+            stepperIndex--;
 
-          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
-          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + i, cmd_value());
-          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + i, cmd_value());
+          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + stepperIndex, cmd_value());
+          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + stepperIndex, cmd_value());
+          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + stepperIndex, cmd_value());
 
           if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
           {
-            i = (cmd_seen('T')) ? cmd_value() : 0;
+            stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
 
             // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
             // to make sure array index is never negative
-            if (i < 0)
-              i = 0;
+            if (stepperIndex < 0)
+              stepperIndex = 0;
 
-            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + i, cmd_value());
+            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + stepperIndex, cmd_value());
           }
           break;
         }
