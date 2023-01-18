@@ -560,7 +560,7 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's or mainboard's serial po
 
 When the trigger `print_start` is received, the TFT switches to **Printing** menu.
 When the trigger `print_end` or `cancel` is received, the TFT Printing menu is finalized (statistics available etc.).
-When on Printing menu, pressing on the **pause**, **resume** and **stop** buttons will trigger to the remote host the following notifications respectively:
+When on Printing menu, pressing on the **pause**, **resume** and **stop** buttons will trigger to the remote host the following notifications, respectively:
 
 | **NOTIFICATION**            | **ACK MESSAGE**                       |
 | :-------------------------- | :------------------------------------ |
