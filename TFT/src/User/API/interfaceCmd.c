@@ -523,8 +523,8 @@ void sendQueueCmd(void)
     case 'M':
       switch (cmd_value())
       {
-        case 0:  // M0
-        case 1:  // M1
+        case 0:
+        case 1:
           if (isPrinting() && infoMachineSettings.firmwareType != FW_REPRAPFW)  // abort printing by "M0" in RepRapFirmware
           {
             // pause if printing from TFT media and purge M0/M1 command
@@ -608,33 +608,31 @@ void sendQueueCmd(void)
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                if (!isPrinting())                  // if not printing
-                  startPrint();                     // start a new print and open Printing menu
-                else                                // if printing
-                  printPause(false, PAUSE_NORMAL);  // resume the print, in case it is paused, or continue to print
+                if (!isPrinting())  // if not printing, start a new print
+                {
+                  startPrint();  // start print and open Printing menu
+                }
+                else  // if printing, resume the print, in case it is paused, or continue to print
+                {
+                  printPause(false, PAUSE_NORMAL);
+                }
 
                 return;
               }
             }
             break;
 
-          case 25:   // M25
-          case 125:  // M125
-          case 524:  // M524
+          case 25:  // M25
             if (!fromTFT)
             {
               if (isTFTPrinting())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause() / printAbort()
+                // case the function loopProcess() is invoked by the following function printPause()
                 Serial_Puts(cmd_port, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                if (cmd_value() != 524)            // if M25 or M125
-                  printPause(true, PAUSE_NORMAL);
-                else                               // if M524
-                  printAbort();
-
+                printPause(true, PAUSE_NORMAL);
                 return;
               }
             }
@@ -755,13 +753,45 @@ void sendQueueCmd(void)
             }
             break;
 
+          case 125:  // M125
+            if (!fromTFT)
+            {
+              if (isTFTPrinting())  // if printing from TFT media
+              {
+                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
+                // case the function loopProcess() is invoked by the following function printPause()
+                Serial_Puts(cmd_port, "ok\n");
+                sendCmd(true, avoid_terminal);
+
+                printPause(true, PAUSE_NORMAL);
+                return;
+              }
+            }
+            break;
+
+          case 524:  // M524
+            if (!fromTFT)
+            {
+              if (isTFTPrinting())  // if printing from TFT media
+              {
+                // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
+                // case the function loopProcess() is invoked by the following function printAbort()
+                Serial_Puts(cmd_port, "ok\n");
+                sendCmd(true, avoid_terminal);
+
+                printAbort();
+                return;
+              }
+            }
+            break;
+
         #else  // not SERIAL_PORT_2
           case 27:  // M27
             printSetUpdateWaiting(false);
             break;
         #endif  // not SERIAL_PORT_2
 
-        case 73:  // M73
+        case 73:
           if (cmd_seen('P'))
           {
             setPrintProgressSource(PROG_SLICER);
@@ -805,6 +835,19 @@ void sendQueueCmd(void)
           break;
 
         case 105:  // M105
+          if (rrfStatusIsMacroBusy())
+          {
+            sendCmd(true, avoid_terminal);
+            return;
+          }
+
+          if (fromTFT)
+          {
+            heatSetUpdateWaiting(false);
+            avoid_terminal = !infoSettings.terminal_ack;
+          }
+          break;
+
         case 155:  // M155
           if (rrfStatusIsMacroBusy())
           {
@@ -816,15 +859,9 @@ void sendQueueCmd(void)
           {
             heatSetUpdateWaiting(false);
 
-            if (cmd_value() == 105)  // if M105
-            {
-              avoid_terminal = !infoSettings.terminal_ack;
-            }
-            else  // if M155
-            {
-              if (cmd_seen('S'))
-                heatSyncUpdateSeconds(cmd_value());
-            }
+            if (cmd_seen('S'))
+              heatSyncUpdateSeconds(cmd_value());
+
           }
           break;
 
@@ -943,12 +980,10 @@ void sendQueueCmd(void)
         case 201:  // M201 max acceleration (units/s2)
         case 203:  // M203 max feedrate (units/s)
         {
-          PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
+          PARAMETER_NAME param = P_STEPS_PER_MM;
 
-          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
-          // instead of optimizing performance (code typically not executed during a print)
-          if (cmd_value() == 201) param = P_MAX_ACCELERATION;
-          if (cmd_value() == 203) param = P_MAX_FEED_RATE;
+          if (cmd_value() == 201) param = P_MAX_ACCELERATION;  // P_MAX_ACCELERATION
+          if (cmd_value() == 203) param = P_MAX_FEED_RATE;     // P_MAX_FEED_RATE
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -978,12 +1013,10 @@ void sendQueueCmd(void)
         case 218:  // M218 hotend offset
         case 851:  // M851 probe offset
         {
-          PARAMETER_NAME param = P_HOME_OFFSET;  // default value
+          PARAMETER_NAME param = P_HOME_OFFSET;
 
-          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
-          // instead of optimizing performance (code typically not executed during a print)
-          if (cmd_value() == 218) param = P_HOTEND_OFFSET;
-          if (cmd_value() == 851) param = P_PROBE_OFFSET;
+          if (cmd_value() == 218) param = P_HOTEND_OFFSET;  // P_HOTEND_OFFSET
+          if (cmd_value() == 851) param = P_PROBE_OFFSET;   // P_PROBE_OFFSET
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
           if (cmd_seen('Y')) setParameter(param, AXIS_INDEX_Y, cmd_float());
@@ -1080,8 +1113,8 @@ void sendQueueCmd(void)
             setParameter(P_ABL_STATE, 1, cmd_float());
           break;
 
-        case 292:  // M292
-        case 408:  // M408
+        case 292:
+        case 408:
           // RRF does not send "ok" while executing M98
           if (rrfStatusIsMacroBusy())
           {
@@ -1097,26 +1130,26 @@ void sendQueueCmd(void)
 
         case 569:  // M569 TMC stepping mode
         {
-          float isStealthChop = (cmd_seen('S')) ? cmd_value() : 0;  // integer type value also casted to float type
-          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
+          uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
+          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (stepperIndex < 0)
-            stepperIndex = 0;
+          if (i < 0)
+            i = 0;
 
-          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + stepperIndex, isStealthChop);
-          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + stepperIndex, isStealthChop);
-          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + stepperIndex, isStealthChop);
+          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + i, k);
+          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + i, k);
+          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + i, k);
 
-          stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
+          i = (cmd_seen('T')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (stepperIndex < 0)
-            stepperIndex = 0;
+          if (i < 0)
+            i = 0;
 
-          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + stepperIndex, isStealthChop);
+          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + i, k);
           break;
         }
 
@@ -1162,11 +1195,8 @@ void sendQueueCmd(void)
         }
 
         case 710:  // M710 controller fan
-          if (cmd_seen('S'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
-
-          if (cmd_seen('I'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
+          if (cmd_seen('S')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
+          if (cmd_seen('I')) fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
           break;
 
         case 900:  // M900 linear advance factor
@@ -1182,42 +1212,40 @@ void sendQueueCmd(void)
         case 913:  // M913 TMC hybrid threshold speed
         case 914:  // M914 TMC bump sensitivity
         {
-          PARAMETER_NAME param = P_CURRENT;  // default value
+          PARAMETER_NAME param = P_CURRENT;
 
-          // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
-          // instead of optimizing performance (code typically not executed during a print)
-          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;
-          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;
+          if (cmd_value() == 913) param = P_HYBRID_THRESHOLD;  // P_HYBRID_THRESHOLD
+          if (cmd_value() == 914) param = P_BUMPSENSITIVITY;   // P_BUMPSENSITIVITY
 
-          int8_t stepperIndex = (cmd_seen('I')) ? cmd_value() : 0;
+          int8_t i = (cmd_seen('I')) ? cmd_value() : 0;
 
           // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
           // to make sure array index is never negative
-          if (stepperIndex < 0)
-            stepperIndex = 0;
+          if (i < 0)
+            i = 0;
 
           // for M913 and M914, provided index is:
           //   1->"X1", 2->"X2", 1->"Y1", 2->"Y2", 1->"Z1", 2->"Z2", 3->"Z3", 4->"Z4"
           // and it must be converted to:
           //   0->"X1", 1->"X2", 0->"Y1", 1->"Y2", 0->"Z1", 1->"Z2", 2->"Z3", 3->"Z4"
           // to make sure array index is properly accessed
-          if (param > P_CURRENT && stepperIndex > 0)
-            stepperIndex--;
+          if (param > P_CURRENT && i > 0)
+            i--;
 
-          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + stepperIndex, cmd_value());
-          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + stepperIndex, cmd_value());
-          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + stepperIndex, cmd_value());
+          if (cmd_seen('X')) setParameter(param, STEPPER_INDEX_X + i, cmd_value());
+          if (cmd_seen('Y')) setParameter(param, STEPPER_INDEX_Y + i, cmd_value());
+          if (cmd_seen('Z')) setParameter(param, STEPPER_INDEX_Z + i, cmd_value());
 
           if (param < P_BUMPSENSITIVITY)  // T and E options not supported by M914
           {
-            stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
+            i = (cmd_seen('T')) ? cmd_value() : 0;
 
             // if index is missing or set to -1 (meaning all indexes) then it must be converted to 0
             // to make sure array index is never negative
-            if (stepperIndex < 0)
-              stepperIndex = 0;
+            if (i < 0)
+              i = 0;
 
-            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + stepperIndex, cmd_value());
+            if (cmd_seen('E')) setParameter(param, STEPPER_INDEX_E0 + i, cmd_value());
           }
           break;
         }
