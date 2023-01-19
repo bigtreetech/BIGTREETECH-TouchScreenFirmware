@@ -101,6 +101,44 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex)
   #endif
 }
 
+uint16_t Serial_Read(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize)
+{
+  // if port index is out of range or no data to read from L1 cache
+  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || !infoHost.rx_ok[portIndex])
+    return 0;
+
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[portIndex];  // make access to most used variables/attributes faster and also reducing the code
+  uint16_t * rIndex_ptr = &dmaL1Data_ptr->rIndex;               // make access to most used variables/attributes faster and also reducing the code
+  uint16_t * wIndex_ptr = &dmaL1Data_ptr->wIndex;               // make access to most used variables/attributes faster and also reducing the code
+
+  while (dmaL1Data_ptr->cache[*rIndex_ptr] == ' ' && *rIndex_ptr != *wIndex_ptr)  // remove leading empty space
+  {
+    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
+  }
+
+  if (*rIndex_ptr == *wIndex_ptr)  // if L1 cache is empty
+  {
+    infoHost.rx_ok[portIndex] = false;  // mark the port as containing no more data
+
+    return 0;
+  }
+
+  uint16_t i = 0;
+
+  while (i < (l2CacheSize - 1) && *rIndex_ptr != *wIndex_ptr)  // retrieve data at most until L2 cache is full or L1 cache is empty
+  {
+    l2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
+    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
+
+    if (l2Cache[i++] == '\n')  // if data end marker is found, exit from the loop
+      break;
+  }
+
+  l2Cache[i] = 0;  // end character
+
+  return i;  // return the length of data in the cache
+}
+
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
 {
   if (!WITHIN(portIndex, ALL_PORTS, SERIAL_PORT_COUNT - 1))
@@ -140,3 +178,29 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
     }
   }
 }
+
+#ifdef SERIAL_PORT_2
+
+void Serial_Retrieve(void)
+{
+  CMD cmd;
+
+  // scan all the supplementary serial ports
+  for (SERIAL_PORT_INDEX portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)
+  {
+    // forward data only if serial port is enabled
+    if (infoSettings.serial_port[portIndex] > 0
+        #ifdef SERIAL_DEBUG_PORT
+          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+        #endif
+        )
+    {
+      while (Serial_Read(serialPort[portIndex].port, cmd, CMD_MAX_SIZE))  // if some data are retrieved from L1 to L2 cache
+      {
+        storeCmdFromUART(portIndex, cmd);
+      }
+    }
+  }
+}
+
+#endif

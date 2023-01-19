@@ -25,8 +25,8 @@ typedef enum
   ONBOARD_WRITING
 } WRITING_MODE;
 
-GCODE_QUEUE infoCmd;
-GCODE_QUEUE infoCacheCmd;  // only when heatHasWaiting() is false the cmd in this cache will move to infoCmd queue
+GCODE_QUEUE cmdQueue;              // Command queue where commands to be sent are stored
+GCODE_QUEUE cmdCache;              // only when heatHasWaiting() is false the cmd in this cache will move to cmdQueue queue
 char * cmd_ptr;
 uint8_t cmd_len;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
@@ -37,24 +37,23 @@ FIL file;
 
 bool isFullCmdQueue(void)
 {
-  return (infoCmd.count >= CMD_QUEUE_SIZE);
+  return (cmdQueue.count >= CMD_QUEUE_SIZE);
 }
 
 bool isNotEmptyCmdQueue(void)
 {
-  return (infoCmd.count != 0 || infoHost.wait == true);
+  return (cmdQueue.count != 0 || infoHost.wait == true);
 }
 
 bool isEnqueued(const CMD cmd)
 {
-  bool found = false;
-
-  for (int i = 0; i < infoCmd.count && !found; ++i)
+  for (int i = 0; i < cmdQueue.count; i++)
   {
-    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
+    if (strcmp(cmd, cmdQueue.queue[(cmdQueue.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0)
+      return true;
   }
 
-  return found;
+  return false;
 }
 
 bool isWritingMode(void)
@@ -72,14 +71,14 @@ void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
   pQueue->count++;
 }
 
-// Store gcode cmd to infoCmd queue.
+// Store gcode cmd to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
+// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmd(const char * format, ...)
 {
   if (format[0] == 0) return false;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
@@ -87,21 +86,21 @@ bool storeCmd(const char * format, ...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(&infoCmd, format, va);
+  commonStoreCmd(&cmdQueue, format, va);
   va_end(va);
 
   return true;
 }
 
-// Store gcode cmd to infoCmd queue.
+// Store gcode cmd to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue is full, a reminder message is displayed
+// If the cmdQueue queue is full, a reminder message is displayed
 // and it will for wait the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
   if (format[0] == 0) return;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
@@ -109,11 +108,11 @@ void mustStoreCmd(const char * format, ...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(&infoCmd, format, va);
+  commonStoreCmd(&cmdQueue, format, va);
   va_end(va);
 }
 
-// Store Script cmd to infoCmd queue.
+// Store Script cmd to cmdQueue queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n".
 void mustStoreScript(const char * format, ...)
 {
@@ -144,34 +143,34 @@ void mustStoreScript(const char * format, ...)
   }
 }
 
-// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to infoCmd queue.
+// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the infoCmd queue is full, a reminder message is displayed and the command is discarded.
+// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
 {
   if (cmd[0] == 0) return false;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
-  strncpy(infoCmd.queue[infoCmd.index_w].gcode, cmd, CMD_MAX_SIZE);
+  strncpy(cmdQueue.queue[cmdQueue.index_w].gcode, cmd, CMD_MAX_SIZE);
 
-  infoCmd.queue[infoCmd.index_w].port_index = portIndex;
-  infoCmd.index_w = (infoCmd.index_w + 1) % CMD_QUEUE_SIZE;
-  infoCmd.count++;
+  cmdQueue.queue[cmdQueue.index_w].port_index = portIndex;
+  cmdQueue.index_w = (cmdQueue.index_w + 1) % CMD_QUEUE_SIZE;
+  cmdQueue.count++;
 
   return true;
 }
 
-// Store gcode cmd to infoCacheCmd queue.
-// This command will be moved to infoCmd queue by loopPrintFromTFT() -> moveCacheToCmd().
+// Store gcode cmd to cmdCache queue.
+// This command will be moved to cmdQueue queue by loopPrintFromTFT() -> moveCacheToCmd().
 // This function is used only to restore the printing status after a power failed.
 void mustStoreCacheCmd(const char * format, ...)
 {
-  if (infoCacheCmd.count >= CMD_QUEUE_SIZE)
+  if (cmdCache.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
@@ -179,43 +178,42 @@ void mustStoreCacheCmd(const char * format, ...)
 
   va_list va;
   va_start(va, format);
-  commonStoreCmd(&infoCacheCmd, format, va);
+  commonStoreCmd(&cmdCache, format, va);
   va_end(va);
 }
 
-// Move gcode cmd from infoCacheCmd to infoCmd queue.
+// Move gcode cmd from cmdCache to cmdQueue queue.
 bool moveCacheToCmd(void)
 {
-  if (infoCmd.count >= CMD_QUEUE_SIZE) return false;
-  if (infoCacheCmd.count == 0) return false;
+  if (cmdQueue.count >= CMD_QUEUE_SIZE || cmdCache.count == 0) return false;
 
-  storeCmd("%s", infoCacheCmd.queue[infoCacheCmd.index_r].gcode);
-  infoCacheCmd.count--;
-  infoCacheCmd.index_r = (infoCacheCmd.index_r + 1) % CMD_QUEUE_SIZE;
+  storeCmd("%s", cmdCache.queue[cmdCache.index_r].gcode);
+  cmdCache.count--;
+  cmdCache.index_r = (cmdCache.index_r + 1) % CMD_QUEUE_SIZE;
 
   return true;
 }
 
-// Clear all gcode cmd in infoCmd queue when printing is aborted.
+// Clear all gcode cmd in cmdQueue queue when printing is aborted.
 void clearCmdQueue(void)
 {
-  infoCmd.count = infoCmd.index_w = infoCmd.index_r = 0;
-  infoCacheCmd.count = infoCacheCmd.index_w = infoCacheCmd.index_r = 0;
+  cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
+  cmdCache.count = cmdCache.index_w = cmdCache.index_r = 0;
   heatSetUpdateWaiting(false);
   printSetUpdateWaiting(false);
 }
 
 static inline bool getCmd(void)
 {
-  cmd_ptr = &infoCmd.queue[infoCmd.index_r].gcode[0];          // gcode
-  cmd_len = strlen(cmd_ptr);                                   // length of gcode
-  cmd_port_index = infoCmd.queue[infoCmd.index_r].port_index;  // index of serial port originating the gcode
+  cmd_ptr = &cmdQueue.queue[cmdQueue.index_r].gcode[0];          // gcode
+  cmd_len = strlen(cmd_ptr);                                     // length of gcode
+  cmd_port_index = cmdQueue.queue[cmdQueue.index_r].port_index;  // index of serial port originating the gcode
   cmd_base_index = cmd_index = 0;
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
 }
 
-// Send gcode cmd to printer and remove leading gcode cmd from infoCmd queue.
+// Send gcode cmd to printer and remove leading gcode cmd from cmdQueue queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
@@ -253,8 +251,8 @@ bool sendCmd(bool purge, bool avoidTerminal)
     terminalCache(cmd_ptr, cmd_len, cmd_port_index, SRC_TERMINAL_GCODE);
   }
 
-  infoCmd.count--;
-  infoCmd.index_r = (infoCmd.index_r + 1) % CMD_QUEUE_SIZE;
+  cmdQueue.count--;
+  cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
 
   return !purge;  // return true if command was sent. Otherwise, return false
 }
@@ -355,9 +353,9 @@ bool openRemoteTFT(bool writingMode)
 {
   bool open = false;
 
-  SERIAL_FORWARD(cmd_port_index, "echo:Now fresh file: ");
-  SERIAL_FORWARD(cmd_port_index, infoFile.path);
-  SERIAL_FORWARD(cmd_port_index, "\n");
+  Serial_Forward(cmd_port_index, "echo:Now fresh file: ");
+  Serial_Forward(cmd_port_index, infoFile.path);
+  Serial_Forward(cmd_port_index, "\n");
 
   if (!writingMode)  // if reading mode
   {
@@ -369,11 +367,11 @@ bool openRemoteTFT(bool writingMode)
       sprintf(buf, "%d", f_size(&file));
       f_close(&file);
 
-      SERIAL_FORWARD(cmd_port_index, "File opened: ");
-      SERIAL_FORWARD(cmd_port_index, infoFile.path);
-      SERIAL_FORWARD(cmd_port_index, " Size: ");
-      SERIAL_FORWARD(cmd_port_index, buf);
-      SERIAL_FORWARD(cmd_port_index, "\nFile selected\n");
+      Serial_Forward(cmd_port_index, "File opened: ");
+      Serial_Forward(cmd_port_index, infoFile.path);
+      Serial_Forward(cmd_port_index, " Size: ");
+      Serial_Forward(cmd_port_index, buf);
+      Serial_Forward(cmd_port_index, "\nFile selected\n");
 
       open = true;
     }
@@ -383,9 +381,9 @@ bool openRemoteTFT(bool writingMode)
     // mount FS and open the file (infoFile.source and infoFile.path are used)
     if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
     {
-      SERIAL_FORWARD(cmd_port_index, "Writing to file: ");
-      SERIAL_FORWARD(cmd_port_index, infoFile.path);
-      SERIAL_FORWARD(cmd_port_index, "\n");
+      Serial_Forward(cmd_port_index, "Writing to file: ");
+      Serial_Forward(cmd_port_index, infoFile.path);
+      Serial_Forward(cmd_port_index, "\n");
 
       open = true;
     }
@@ -393,12 +391,12 @@ bool openRemoteTFT(bool writingMode)
 
   if (!open)
   {
-    SERIAL_FORWARD(cmd_port_index, "open failed, File: ");
-    SERIAL_FORWARD(cmd_port_index, infoFile.path);
-    SERIAL_FORWARD(cmd_port_index, "\n");
+    Serial_Forward(cmd_port_index, "open failed, File: ");
+    Serial_Forward(cmd_port_index, infoFile.path);
+    Serial_Forward(cmd_port_index, "\n");
   }
 
-  SERIAL_FORWARD(cmd_port_index, "ok\n");
+  Serial_Forward(cmd_port_index, "ok\n");
 
   return open;
 }
@@ -416,7 +414,7 @@ void writeRemoteTFT()
   {
     f_close(&file);
 
-    SERIAL_FORWARD(cmd_port_index, "Done saving file.\n");
+    Serial_Forward(cmd_port_index, "Done saving file.\n");
 
     writing_mode = NO_WRITING;
   }
@@ -435,7 +433,7 @@ void writeRemoteTFT()
     f_sync(&file);
   }
 
-  SERIAL_FORWARD(cmd_port_index, "ok\n");
+  Serial_Forward(cmd_port_index, "ok\n");
 }
 
 void setWaitHeating(uint8_t index)
@@ -464,11 +462,10 @@ void syncTargetTemp(uint8_t index)
   }
 }
 
-// Parse and send gcode cmd in infoCmd queue.
+// Parse and send gcode cmd in cmdQueue queue.
 void sendQueueCmd(void)
 {
-  if (infoHost.wait == true) return;
-  if (infoCmd.count == 0) return;
+  if (infoHost.wait == true || cmdQueue.count == 0) return;
 
   bool avoid_terminal = false;
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
@@ -535,7 +532,7 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 18:  // M18/M84 disable steppers
+        case 18:  // M18 / M84 disable steppers
         case 84:
           // do not mark coordinate as unknown in case of a M18/M84 S<timeout> command that
           // doesn't disable the motors right away but will set their idling timeout
@@ -553,26 +550,26 @@ void sendQueueCmd(void)
             {
               if (initRemoteTFT())  // examples: "M20 SD:/test\n", "M20 S /test\n"
               {
-                SERIAL_FORWARD(cmd_port_index, "Begin file list\n");
+                Serial_Forward(cmd_port_index, "Begin file list\n");
 
                 // then mount FS and scan for files (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
-                    SERIAL_FORWARD(cmd_port_index, infoFile.file[i]);
-                    SERIAL_FORWARD(cmd_port_index, "\n");
+                    Serial_Forward(cmd_port_index, infoFile.file[i]);
+                    Serial_Forward(cmd_port_index, "\n");
                   }
 
                   for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
-                    SERIAL_FORWARD(cmd_port_index, "/");
-                    SERIAL_FORWARD(cmd_port_index, infoFile.folder[i]);
-                    SERIAL_FORWARD(cmd_port_index, "/\n");
+                    Serial_Forward(cmd_port_index, "/");
+                    Serial_Forward(cmd_port_index, infoFile.folder[i]);
+                    Serial_Forward(cmd_port_index, "/\n");
                   }
                 }
 
-                SERIAL_FORWARD(cmd_port_index, "End file list\nok\n");
+                Serial_Forward(cmd_port_index, "End file list\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -603,7 +600,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                SERIAL_FORWARD(cmd_port_index, "ok\n");
+                Serial_Forward(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())                  // if not printing
@@ -625,7 +622,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause() / printAbort()
-                SERIAL_FORWARD(cmd_port_index, "ok\n");
+                Serial_Forward(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
                 if (cmd_value() != 524)            // if M25 or M125
@@ -653,14 +650,14 @@ void sendQueueCmd(void)
 
                 if (cmd_seen('C'))
                 {
-                  SERIAL_FORWARD(cmd_port_index, "Current file: ");
-                  SERIAL_FORWARD(cmd_port_index, infoFile.path);
-                  SERIAL_FORWARD(cmd_port_index, ".\n");
+                  Serial_Forward(cmd_port_index, "Current file: ");
+                  Serial_Forward(cmd_port_index, infoFile.path);
+                  Serial_Forward(cmd_port_index, ".\n");
                 }
 
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == FS_TFT_SD) ? "TFT SD" : "TFT USB", getPrintDataCur(), getPrintDataSize());
-                SERIAL_FORWARD(cmd_port_index, buf);
-                SERIAL_FORWARD(cmd_port_index, "ok\n");
+                Serial_Forward(cmd_port_index, buf);
+                Serial_Forward(cmd_port_index, "ok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -700,7 +697,7 @@ void sendQueueCmd(void)
               // NOTE: this scenario is reachable only if not already in writing mode (no M28 was previously received).
               //       So, we only need to send back and ACK message
 
-              SERIAL_FORWARD(cmd_port_index, "ok\n");
+              Serial_Forward(cmd_port_index, "ok\n");
               sendCmd(true, avoid_terminal);
               return;
             }
@@ -713,12 +710,12 @@ void sendQueueCmd(void)
               {
                 // then mount FS and delete the file (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && f_unlink(infoFile.path) == FR_OK)
-                  SERIAL_FORWARD(cmd_port_index, "File deleted: ");
+                  Serial_Forward(cmd_port_index, "File deleted: ");
                 else
-                  SERIAL_FORWARD(cmd_port_index, "Deletion failed, File: ");
+                  Serial_Forward(cmd_port_index, "Deletion failed, File: ");
 
-                SERIAL_FORWARD(cmd_port_index, infoFile.path);
-                SERIAL_FORWARD(cmd_port_index, ".\nok\n");
+                Serial_Forward(cmd_port_index, infoFile.path);
+                Serial_Forward(cmd_port_index, ".\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -726,7 +723,7 @@ void sendQueueCmd(void)
             }
             break;
 
-          case 98:  // RRF macro execution, do not wait for it to complete
+          case 98:  // M98 RRF macro execution, do not wait for it to complete
             sendCmd(false, avoid_terminal);
             return;
 
@@ -735,18 +732,18 @@ void sendQueueCmd(void)
             {
               char buf[50];
 
-              SERIAL_FORWARD(cmd_port_index,
+              Serial_Forward(cmd_port_index,
                              "FIRMWARE_NAME: " FIRMWARE_NAME
                              " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
               sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
-              SERIAL_FORWARD(cmd_port_index, buf);
+              Serial_Forward(cmd_port_index, buf);
               sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
-              SERIAL_FORWARD(cmd_port_index, buf);
+              Serial_Forward(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
-              SERIAL_FORWARD(cmd_port_index, buf);
+              Serial_Forward(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
-              SERIAL_FORWARD(cmd_port_index, buf);
-              SERIAL_FORWARD(cmd_port_index, "ok\n");
+              Serial_Forward(cmd_port_index, buf);
+              Serial_Forward(cmd_port_index, "ok\n");
 
               sendCmd(true, avoid_terminal);
               return;
@@ -775,7 +772,7 @@ void sendQueueCmd(void)
               fwdPort = SUP_PORTS;
 
             // forward the message to all the supplementary or the provided enabled serial ports
-            SERIAL_FORWARD(fwdPort, msg);
+            Serial_Forward(fwdPort, msg);
             break;
           }
 
