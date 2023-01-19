@@ -58,19 +58,19 @@ void clearQueueAndRunoutAlarm(void)
 void breakAndContinue(void)
 {
   clearQueueAndRunoutAlarm();
-  FORWARD_MSG(PORT_1, "M108\n");
+  SERIAL_FORWARD(PORT_1, "M108\n");
 }
 
 void resumeAndPurge(void)
 {
   clearQueueAndRunoutAlarm();
-  FORWARD_MSG(PORT_1, "M876 S0\n");
+  SERIAL_FORWARD(PORT_1, "M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   clearQueueAndRunoutAlarm();
-  FORWARD_MSG(PORT_1, "M876 S1\n");
+  SERIAL_FORWARD(PORT_1, "M876 S1\n");
 }
 
 void abortAndTerminate(void)
@@ -79,7 +79,7 @@ void abortAndTerminate(void)
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
-    FORWARD_MSG(PORT_1, "M524\n");
+    SERIAL_FORWARD(PORT_1, "M524\n");
   }
   else  // if RepRap
   {

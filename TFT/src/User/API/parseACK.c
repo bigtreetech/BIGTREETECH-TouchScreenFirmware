@@ -355,12 +355,12 @@ void hostActionCommands(void)
       setPrintResume(HOST_STATUS_RESUMING);
 
       hostAction.prompt_show = false;
-      FORWARD_MSG(PORT_1, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      SERIAL_FORWARD(PORT_1, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_continue_seen("Reheating"))
     {
       hostAction.prompt_show = false;
-      FORWARD_MSG(PORT_1, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      SERIAL_FORWARD(PORT_1, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
   }
   else if (ack_seen(":prompt_button "))

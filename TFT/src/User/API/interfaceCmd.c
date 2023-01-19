@@ -355,9 +355,9 @@ bool openRemoteTFT(bool writingMode)
 {
   bool open = false;
 
-  FORWARD_MSG(cmd_port_index, "echo:Now fresh file: ");
-  FORWARD_MSG(cmd_port_index, infoFile.path);
-  FORWARD_MSG(cmd_port_index, "\n");
+  SERIAL_FORWARD(cmd_port_index, "echo:Now fresh file: ");
+  SERIAL_FORWARD(cmd_port_index, infoFile.path);
+  SERIAL_FORWARD(cmd_port_index, "\n");
 
   if (!writingMode)  // if reading mode
   {
@@ -369,11 +369,11 @@ bool openRemoteTFT(bool writingMode)
       sprintf(buf, "%d", f_size(&file));
       f_close(&file);
 
-      FORWARD_MSG(cmd_port_index, "File opened: ");
-      FORWARD_MSG(cmd_port_index, infoFile.path);
-      FORWARD_MSG(cmd_port_index, " Size: ");
-      FORWARD_MSG(cmd_port_index, buf);
-      FORWARD_MSG(cmd_port_index, "\nFile selected\n");
+      SERIAL_FORWARD(cmd_port_index, "File opened: ");
+      SERIAL_FORWARD(cmd_port_index, infoFile.path);
+      SERIAL_FORWARD(cmd_port_index, " Size: ");
+      SERIAL_FORWARD(cmd_port_index, buf);
+      SERIAL_FORWARD(cmd_port_index, "\nFile selected\n");
 
       open = true;
     }
@@ -383,9 +383,9 @@ bool openRemoteTFT(bool writingMode)
     // mount FS and open the file (infoFile.source and infoFile.path are used)
     if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
     {
-      FORWARD_MSG(cmd_port_index, "Writing to file: ");
-      FORWARD_MSG(cmd_port_index, infoFile.path);
-      FORWARD_MSG(cmd_port_index, "\n");
+      SERIAL_FORWARD(cmd_port_index, "Writing to file: ");
+      SERIAL_FORWARD(cmd_port_index, infoFile.path);
+      SERIAL_FORWARD(cmd_port_index, "\n");
 
       open = true;
     }
@@ -393,12 +393,12 @@ bool openRemoteTFT(bool writingMode)
 
   if (!open)
   {
-    FORWARD_MSG(cmd_port_index, "open failed, File: ");
-    FORWARD_MSG(cmd_port_index, infoFile.path);
-    FORWARD_MSG(cmd_port_index, "\n");
+    SERIAL_FORWARD(cmd_port_index, "open failed, File: ");
+    SERIAL_FORWARD(cmd_port_index, infoFile.path);
+    SERIAL_FORWARD(cmd_port_index, "\n");
   }
 
-  FORWARD_MSG(cmd_port_index, "ok\n");
+  SERIAL_FORWARD(cmd_port_index, "ok\n");
 
   return open;
 }
@@ -416,7 +416,7 @@ void writeRemoteTFT()
   {
     f_close(&file);
 
-    FORWARD_MSG(cmd_port_index, "Done saving file.\n");
+    SERIAL_FORWARD(cmd_port_index, "Done saving file.\n");
 
     writing_mode = NO_WRITING;
   }
@@ -435,7 +435,7 @@ void writeRemoteTFT()
     f_sync(&file);
   }
 
-  FORWARD_MSG(cmd_port_index, "ok\n");
+  SERIAL_FORWARD(cmd_port_index, "ok\n");
 }
 
 void setWaitHeating(uint8_t index)
@@ -553,26 +553,26 @@ void sendQueueCmd(void)
             {
               if (initRemoteTFT())  // examples: "M20 SD:/test\n", "M20 S /test\n"
               {
-                FORWARD_MSG(cmd_port_index, "Begin file list\n");
+                SERIAL_FORWARD(cmd_port_index, "Begin file list\n");
 
                 // then mount FS and scan for files (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && scanPrintFiles() == true)
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
-                    FORWARD_MSG(cmd_port_index, infoFile.file[i]);
-                    FORWARD_MSG(cmd_port_index, "\n");
+                    SERIAL_FORWARD(cmd_port_index, infoFile.file[i]);
+                    SERIAL_FORWARD(cmd_port_index, "\n");
                   }
 
                   for (uint16_t i = 0; i < infoFile.folderCount; i++)
                   {
-                    FORWARD_MSG(cmd_port_index, "/");
-                    FORWARD_MSG(cmd_port_index, infoFile.folder[i]);
-                    FORWARD_MSG(cmd_port_index, "/\n");
+                    SERIAL_FORWARD(cmd_port_index, "/");
+                    SERIAL_FORWARD(cmd_port_index, infoFile.folder[i]);
+                    SERIAL_FORWARD(cmd_port_index, "/\n");
                   }
                 }
 
-                FORWARD_MSG(cmd_port_index, "End file list\nok\n");
+                SERIAL_FORWARD(cmd_port_index, "End file list\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -603,7 +603,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause()
-                FORWARD_MSG(cmd_port_index, "ok\n");
+                SERIAL_FORWARD(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())                  // if not printing
@@ -625,7 +625,7 @@ void sendQueueCmd(void)
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
                 // case the function loopProcess() is invoked by the following function printPause() / printAbort()
-                FORWARD_MSG(cmd_port_index, "ok\n");
+                SERIAL_FORWARD(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
                 if (cmd_value() != 524)            // if M25 or M125
@@ -653,14 +653,14 @@ void sendQueueCmd(void)
 
                 if (cmd_seen('C'))
                 {
-                  FORWARD_MSG(cmd_port_index, "Current file: ");
-                  FORWARD_MSG(cmd_port_index, infoFile.path);
-                  FORWARD_MSG(cmd_port_index, ".\n");
+                  SERIAL_FORWARD(cmd_port_index, "Current file: ");
+                  SERIAL_FORWARD(cmd_port_index, infoFile.path);
+                  SERIAL_FORWARD(cmd_port_index, ".\n");
                 }
 
                 sprintf(buf, "%s printing byte %d/%d\n", (infoFile.source == FS_TFT_SD) ? "TFT SD" : "TFT USB", getPrintDataCur(), getPrintDataSize());
-                FORWARD_MSG(cmd_port_index, buf);
-                FORWARD_MSG(cmd_port_index, "ok\n");
+                SERIAL_FORWARD(cmd_port_index, buf);
+                SERIAL_FORWARD(cmd_port_index, "ok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -700,7 +700,7 @@ void sendQueueCmd(void)
               // NOTE: this scenario is reachable only if not already in writing mode (no M28 was previously received).
               //       So, we only need to send back and ACK message
 
-              FORWARD_MSG(cmd_port_index, "ok\n");
+              SERIAL_FORWARD(cmd_port_index, "ok\n");
               sendCmd(true, avoid_terminal);
               return;
             }
@@ -713,12 +713,12 @@ void sendQueueCmd(void)
               {
                 // then mount FS and delete the file (infoFile.source and infoFile.path are used)
                 if (mountFS() == true && f_unlink(infoFile.path) == FR_OK)
-                  FORWARD_MSG(cmd_port_index, "File deleted: ");
+                  SERIAL_FORWARD(cmd_port_index, "File deleted: ");
                 else
-                  FORWARD_MSG(cmd_port_index, "Deletion failed, File: ");
+                  SERIAL_FORWARD(cmd_port_index, "Deletion failed, File: ");
 
-                FORWARD_MSG(cmd_port_index, infoFile.path);
-                FORWARD_MSG(cmd_port_index, ".\nok\n");
+                SERIAL_FORWARD(cmd_port_index, infoFile.path);
+                SERIAL_FORWARD(cmd_port_index, ".\nok\n");
 
                 sendCmd(true, avoid_terminal);
                 return;
@@ -735,18 +735,18 @@ void sendQueueCmd(void)
             {
               char buf[50];
 
-              FORWARD_MSG(cmd_port_index,
-                          "FIRMWARE_NAME: " FIRMWARE_NAME
-                          " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
+              SERIAL_FORWARD(cmd_port_index,
+                             "FIRMWARE_NAME: " FIRMWARE_NAME
+                             " SOURCE_CODE_URL:https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware\n");
               sprintf(buf, "Cap:HOTEND_NUM:%d\n", infoSettings.hotend_count);
-              FORWARD_MSG(cmd_port_index, buf);
+              SERIAL_FORWARD(cmd_port_index, buf);
               sprintf(buf, "Cap:EXTRUDER_NUM:%d\n", infoSettings.ext_count);
-              FORWARD_MSG(cmd_port_index, buf);
+              SERIAL_FORWARD(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
-              FORWARD_MSG(cmd_port_index, buf);
+              SERIAL_FORWARD(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
-              FORWARD_MSG(cmd_port_index, buf);
-              FORWARD_MSG(cmd_port_index, "ok\n");
+              SERIAL_FORWARD(cmd_port_index, buf);
+              SERIAL_FORWARD(cmd_port_index, "ok\n");
 
               sendCmd(true, avoid_terminal);
               return;
@@ -775,7 +775,7 @@ void sendQueueCmd(void)
               fwdPort = SUP_PORTS;
 
             // forward the message to all the supplementary or the provided enabled serial ports
-            FORWARD_MSG(fwdPort, msg);
+            SERIAL_FORWARD(fwdPort, msg);
             break;
           }
 
