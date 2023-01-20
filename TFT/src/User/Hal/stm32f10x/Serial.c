@@ -113,7 +113,7 @@ void UART5_IRQHandler(void)
   USART_IRQHandler(_UART5);
 }
 
-void Serial_Puts(uint8_t port, const char *s)
+void Serial_Put(uint8_t port, const char *s)
 {
   while (*s)
   {
@@ -122,7 +122,7 @@ void Serial_Puts(uint8_t port, const char *s)
   }
 }
 
-void Serial_Putchar(uint8_t port, const char ch)
+void Serial_PutChar(uint8_t port, const char ch)
 {
   while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
   Serial[port].uart->DR = (uint8_t) ch;

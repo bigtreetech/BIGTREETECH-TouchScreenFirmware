@@ -360,8 +360,8 @@ void parseACK(void)
   {
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
-      Serial_Puts(SERIAL_DEBUG_PORT, "<<");
-      Serial_Puts(SERIAL_DEBUG_PORT, ack_cache);
+      Serial_Put(SERIAL_DEBUG_PORT, "<<");
+      Serial_Put(SERIAL_DEBUG_PORT, ack_cache);
     #endif
 
     bool avoid_terminal = false;

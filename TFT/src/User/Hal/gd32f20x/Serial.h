@@ -17,7 +17,7 @@ extern DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT];
 
 void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate);
 void Serial_DeConfig(uint8_t port);
-void Serial_Puts(uint8_t port, char *s);
-void Serial_Putchar(uint8_t port, char ch);
+void Serial_Put(uint8_t port, const char *s);
+void Serial_PutChar(uint8_t port, const char ch);
 
 #endif

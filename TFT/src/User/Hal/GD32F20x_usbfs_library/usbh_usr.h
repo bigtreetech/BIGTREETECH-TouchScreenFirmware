@@ -102,7 +102,7 @@ uint8_t USBH_UDISK_Write(uint8_t* buf, uint32_t sector, uint32_t cnt);
 
 #if 0
   #include "Serial.h"
-  #define LOG_printf(...) {char buf[256]; sprintf(buf, __VA_ARGS__); Serial_Puts(1, buf);}
+  #define LOG_printf(...) {char buf[256]; sprintf(buf, __VA_ARGS__); Serial_Put(1, buf);}
 #else
   #define LOG_printf(...) ((void)0)
 #endif

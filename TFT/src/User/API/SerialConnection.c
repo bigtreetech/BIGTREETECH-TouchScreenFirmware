@@ -101,7 +101,7 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex)
   #endif
 }
 
-uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize)
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
 {
   // if port index is out of range or no data to read from L1 cache
   if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || !infoHost.rx_ok[portIndex])
@@ -125,18 +125,18 @@ uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2Cach
 
   uint16_t i = 0;
 
-  while (i < (l2CacheSize - 1) && *rIndex_ptr != *wIndex_ptr)  // retrieve data at most until L2 cache is full or L1 cache is empty
+  while (i < (bufSize - 1) && *rIndex_ptr != *wIndex_ptr)  // retrieve data until buf is full or L1 cache is empty
   {
-    l2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
+    buf[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
     *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
 
-    if (l2Cache[i++] == '\n')  // if data end marker is found, exit from the loop
+    if (buf[i++] == '\n')  // if data end marker is found, exit from the loop
       break;
   }
 
-  l2Cache[i] = 0;  // end character
+  buf[i] = 0;  // end character
 
-  return i;  // return the length of data in the cache
+  return i;  // return the number of bytes stored in buf
 }
 
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
@@ -146,8 +146,8 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
-    Serial_Puts(SERIAL_DEBUG_PORT, ">>");
-    Serial_Puts(SERIAL_DEBUG_PORT, msg);
+    Serial_Put(SERIAL_DEBUG_PORT, ">>");
+    Serial_Put(SERIAL_DEBUG_PORT, msg);
   #endif
 
   uint16_t msgLen = MENU_IS(menuTerminal ? strlen(msg) : 0);  // retrieve message lenght if Terminal menu is currently displayed
@@ -171,7 +171,7 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
         #endif
         )
     {
-      Serial_Puts(serialPort[portIndex].port, msg);  // pass on the message to the port
+      Serial_Put(serialPort[portIndex].port, msg);  // pass on the message to the port
 
       if (msgLen != 0)  // if Terminal menu is currently displayed
         terminalCache(msg, msgLen, portIndex, SRC_TERMINAL_GCODE);

@@ -43,31 +43,31 @@ extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 
 // initialize the provided serial port/s, if enabled:
 //   - portIndex:
-//     - ALL_PORTS index to apply to all serial ports (primary and supplementary)
-//     - SUP_PORTS index to apply to all supplementary serial ports
-//     - specific index to apply only to that specific serial port
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
 void Serial_Init(SERIAL_PORT_INDEX portIndex);
 
 // deinitialize the provided serial port/s (even if not enabled):
 //   - portIndex:
-//     - ALL_PORTS index to apply to all serial ports (primary and supplementary)
-//     - SUP_PORTS index to apply to all supplementary serial ports
-//     - specific index to apply only to that specific serial port
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
 void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 
 // get a message from the provided serial port, if any:
-//   - portIndex: index of serial port to read data
-//   - l2Cache: L2 cache buffer where data are stored
-//   - l2cacheSize: size of L2 cache buffer
+//   - portIndex: index of serial port where data are read from
+//   - buf: buffer where data are stored
+//   - bufSize: size of buffer (max number of bytes that can be stored in buf)
 //
-//   - return value: number of bytes stored in L2 cache buffer
-uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize);
+//   - return value: number of bytes stored in buf
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
 
 // forward a message to the provided serial port/s, if enabled:
 //   - portIndex:
-//     - ALL_PORTS index to apply to all serial ports (primary and supplementary)
-//     - SUP_PORTS index to apply to all supplementary serial ports
-//     - specific index to apply only to that specific serial port
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
 #ifdef SERIAL_PORT_2

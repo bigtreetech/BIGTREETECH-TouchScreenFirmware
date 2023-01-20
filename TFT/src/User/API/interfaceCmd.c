@@ -224,19 +224,19 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
     // dump serial data sent to debug port
-    Serial_Puts(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
-    Serial_Puts(SERIAL_DEBUG_PORT, ">>");
+    Serial_Put(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Put(SERIAL_DEBUG_PORT, ">>");
 
     if (purge)
-      Serial_Puts(SERIAL_DEBUG_PORT, purgeStr);
+      Serial_Put(SERIAL_DEBUG_PORT, purgeStr);
 
-    Serial_Puts(SERIAL_DEBUG_PORT, cmd_ptr);
+    Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
   if (!purge)  // if command is not purged, send it to printer
   {
     if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      Serial_Puts(SERIAL_PORT, cmd_ptr);
+      Serial_Put(SERIAL_PORT, cmd_ptr);
     else
       rrfSendCmd(cmd_ptr);
 
