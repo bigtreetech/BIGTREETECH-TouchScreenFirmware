@@ -603,10 +603,10 @@ void sendQueueCmd(void)
                 Serial_Forward(cmd_port_index, "ok\n");
                 sendCmd(true, avoid_terminal);
 
-                if (!isPrinting())                  // if not printing
-                  startPrint();                     // start a new print and open Printing menu
-                else                                // if printing
-                  printPause(false, PAUSE_NORMAL);  // resume the print, in case it is paused, or continue to print
+                if (!isPrinting())  // if not printing, start a new print and open Printing menu
+                  startPrint();
+                else                // if printing, resume the print, in case it is paused, or continue to print
+                  printPause(false, PAUSE_NORMAL);
 
                 return;
               }
