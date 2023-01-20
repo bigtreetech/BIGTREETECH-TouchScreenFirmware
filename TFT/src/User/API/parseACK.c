@@ -45,7 +45,7 @@ const char magic_message[] = "message";   // RRF message in Json format
 
 #define ACK_CACHE_SIZE 512  // including ending character '\0'
 
-char ack_cache[ACK_CACHE_SIZE];             // L2 cache buffer where read ACK messages are stored
+char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
 uint16_t ack_len;                           // length of data currently present in ack_cache
 uint16_t ack_index;
 SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
@@ -355,8 +355,7 @@ void hostActionCommands(void)
 
 void parseACK(void)
 {
-  // if some data are retrieved from L1 to L2 cache
-  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)
+  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
   {
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port

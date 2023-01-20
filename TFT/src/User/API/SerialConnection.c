@@ -195,7 +195,7 @@ void Serial_Retrieve(void)
         #endif
         )
     {
-      while (Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)  // if some data are retrieved from L1 to L2 cache
+      while (Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)  // if some data have been retrieved
       {
         storeCmdFromUART(portIndex, cmd);
       }
