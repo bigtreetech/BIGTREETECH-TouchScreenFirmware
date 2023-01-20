@@ -20,7 +20,7 @@
     #define STRING_MARLIN_SHOW_TITLE      "Mostra titolo in Marlin"
     #define STRING_MARLIN_TYPE            "Modalità Marlin"
     #define STRING_MOVE_SPEED             "Vel. movimenti(X Y Z)"
-    #define STRING_AUTO_LOAD_LEVELING     "Auto salva/carica liv."
+    #define STRING_AUTO_LOAD_LEVELING     "Auto carica livellam."
     #define STRING_PROBING_Z_OFFSET       "Sondare per Z offset"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Auto allineamento asse Z"
     #define STRING_PS_AUTO_SHUTDOWN       "Auto spegnimento"

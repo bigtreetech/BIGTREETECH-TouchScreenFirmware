@@ -20,7 +20,7 @@
     #define STRING_MARLIN_SHOW_TITLE      "Show Title"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Move speed(X Y Z)"
-    #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
+    #define STRING_AUTO_LOAD_LEVELING     "Auto Load Leveling"
     #define STRING_PROBING_Z_OFFSET       "Probing for Z offset"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
     #define STRING_PS_AUTO_SHUTDOWN       "Auto shutdown"
