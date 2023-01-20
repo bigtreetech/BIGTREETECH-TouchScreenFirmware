@@ -356,7 +356,7 @@ void hostActionCommands(void)
 void parseACK(void)
 {
   // if some data are retrieved from L1 to L2 cache
-  while ((ack_len = Serial_Read(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)
+  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)
   {
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port

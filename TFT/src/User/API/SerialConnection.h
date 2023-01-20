@@ -55,13 +55,13 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex);
 //     - specific index to apply only to that specific serial port
 void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 
-// read a message from the provided serial port, if enabled:
+// get a message from the provided serial port, if any:
 //   - portIndex: index of serial port to read data
 //   - l2Cache: L2 cache buffer where data are stored
 //   - l2cacheSize: size of L2 cache buffer
 //
 //   - return value: number of bytes stored in L2 cache buffer
-uint16_t Serial_Read(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize);
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize);
 
 // forward a message to the provided serial port/s, if enabled:
 //   - portIndex:

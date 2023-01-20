@@ -101,7 +101,7 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex)
   #endif
 }
 
-uint16_t Serial_Read(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize)
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * l2Cache, uint16_t l2CacheSize)
 {
   // if port index is out of range or no data to read from L1 cache
   if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || !infoHost.rx_ok[portIndex])
@@ -195,7 +195,7 @@ void Serial_Retrieve(void)
         #endif
         )
     {
-      while (Serial_Read(serialPort[portIndex].port, cmd, CMD_MAX_SIZE))  // if some data are retrieved from L1 to L2 cache
+      while (Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)  // if some data are retrieved from L1 to L2 cache
       {
         storeCmdFromUART(portIndex, cmd);
       }
