@@ -55,14 +55,6 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex);
 //     - specific port index: specific serial port
 void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 
-// get a message from the provided serial port, if any:
-//   - portIndex: index of serial port where data are read from
-//   - buf: buffer where data are stored
-//   - bufSize: size of buffer (max number of bytes that can be stored in buf)
-//
-//   - return value: number of bytes stored in buf
-uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
-
 // forward a message to the provided serial port/s, if enabled:
 //   - portIndex:
 //     - ALL_PORTS: all serial ports (primary and supplementary)
@@ -70,10 +62,18 @@ uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
 //     - specific port index: specific serial port
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
+// retrieve a message from the provided serial port, if any:
+//   - portIndex: index of serial port where data are read from
+//   - buf: buffer where data are stored
+//   - bufSize: size of buffer (max number of bytes that can be stored in buf)
+//
+//   - return value: number of bytes stored in buf
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
+
 #ifdef SERIAL_PORT_2
   // retrieve messages from all the enabled supplementary ports storing them
   // in the command queue (in interfaceCmd.c) for further processing
-  void Serial_Retrieve(void);
+  void Serial_GetFromUART(void);
 #endif
 
 #ifdef __cplusplus

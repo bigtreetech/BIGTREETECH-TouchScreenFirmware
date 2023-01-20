@@ -1259,7 +1259,7 @@ void loopBackEnd(void)
 
   // Retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc...
   #ifdef SERIAL_PORT_2
-    Serial_Retrieve();
+    Serial_GetFromUART();
   #endif
 
   // Temperature monitor
