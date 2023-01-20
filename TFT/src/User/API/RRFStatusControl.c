@@ -44,7 +44,7 @@ void rrfStatusSet(char status)
           case 'R':
           case 'A':
           case 'D':
-            setPrintAbort(); // done is the same as abort
+            setPrintAbort();  // done is the same as abort
             break;
 
           case 'B':
