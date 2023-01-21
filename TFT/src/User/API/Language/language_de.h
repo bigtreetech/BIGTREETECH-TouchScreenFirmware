@@ -169,7 +169,7 @@
     #define STRING_TFT_SD_INSERTED        "SD-Karte eingesteckt"
     #define STRING_TFT_SD_REMOVED         "SD-Karte entfernt"
     #define STRING_TFT_SD_NOT_DETECTED    "No SD card detected!"
-    #define STRING_TFT_SD_READ_ERROR      "SD-Karte Lesefehler!"
+    #define STRING_TFT_SD_READ_ERROR      "SD-Karte lesefehler!"
     #define STRING_TFT_USB                "USB-Stick"
     #define STRING_TFT_USB_INSERTED       "USB-Stick eingesteckt"
     #define STRING_TFT_USB_REMOVED        "USB-Stick entfernt"
