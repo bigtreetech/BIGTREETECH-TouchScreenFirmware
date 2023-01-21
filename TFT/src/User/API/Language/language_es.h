@@ -20,7 +20,7 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Move speed(X Y Z)"
-    #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
+    #define STRING_AUTO_LOAD_LEVELING     "Auto Load Leveling"
     #define STRING_PROBING_Z_OFFSET       "Probing for Z offset"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
     #define STRING_PS_AUTO_SHUTDOWN       "Apag. aut."
@@ -165,7 +165,7 @@
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD card"
+    #define STRING_TFT_SD                 "SD Card"
     #define STRING_TFT_SD_INSERTED        "¡Tarjeta insertada"
     #define STRING_TFT_SD_REMOVED         "¡Tarjeta extraida"
     #define STRING_TFT_SD_NOT_DETECTED    "No SD card detected!"
@@ -173,10 +173,10 @@
     #define STRING_TFT_USB                "Pendrive"
     #define STRING_TFT_USB_INSERTED       "¡Pendrive insertado"
     #define STRING_TFT_USB_REMOVED        "¡Pendrive extraido"
-    #define STRING_TFT_USB_NOT_DETECTED   "No USB stick detected!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
     #define STRING_TFT_USB_READ_ERROR     "¡Error en el pendrive!"
-    #define STRING_ONBOARD_SD             "SD placa"
-    #define STRING_ONBOARD_USB            "USB placa"
+    #define STRING_ONBOARD_SD             "SD Placa"
+    #define STRING_ONBOARD_USB            "USB Placa"
     #define STRING_ONBOARD_SD_READ_ERROR  "¡Error en la tarjeta media de la placa!"
     #define STRING_FILAMENT_RUNOUT        "¡Filamento agotado!"
 

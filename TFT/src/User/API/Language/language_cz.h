@@ -165,12 +165,12 @@
     #define STRING_PROCESS_ABORTED        "Proces přerušen!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD karta"
+    #define STRING_TFT_SD                 "SD Card"
     #define STRING_TFT_SD_INSERTED        "SD karta vložena"
     #define STRING_TFT_SD_REMOVED         "SD karta vyjmuta"
     #define STRING_TFT_SD_NOT_DETECTED    "SD karta není detekována!"
     #define STRING_TFT_SD_READ_ERROR      "Chyba při čtení SD karty!"
-    #define STRING_TFT_USB                "USB disku"
+    #define STRING_TFT_USB                "USB Disk"
     #define STRING_TFT_USB_INSERTED       "USB disku vložen"
     #define STRING_TFT_USB_REMOVED        "USB disku vyjmut"
     #define STRING_TFT_USB_NOT_DETECTED   "USB disku není detekován!"

@@ -173,7 +173,7 @@
     #define STRING_TFT_USB                "Dysk USB"
     #define STRING_TFT_USB_INSERTED       "Dysk USB włożony"
     #define STRING_TFT_USB_REMOVED        "Dysk USB wyjęty"
-    #define STRING_TFT_USB_NOT_DETECTED   "No USB stick detected!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
     #define STRING_TFT_USB_READ_ERROR     "Błąd odczytu dysku USB!"
     #define STRING_ONBOARD_SD             "Onboard SD"
     #define STRING_ONBOARD_USB            "OnboardUSB"

@@ -165,18 +165,18 @@
     #define STRING_PROCESS_ABORTED        "Processo cancelado!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD card"
+    #define STRING_TFT_SD                 "SD Card"
     #define STRING_TFT_SD_INSERTED        "SD card inserido"
     #define STRING_TFT_SD_REMOVED         "SD card removido"
     #define STRING_TFT_SD_NOT_DETECTED    "SD card não detectado!"
     #define STRING_TFT_SD_READ_ERROR      "Erro de leitura do SD card!"
-    #define STRING_TFT_USB                "Pen drive"
+    #define STRING_TFT_USB                "Pen Drive"
     #define STRING_TFT_USB_INSERTED       "Pen drive inserido"
     #define STRING_TFT_USB_REMOVED        "Pen drive removido"
     #define STRING_TFT_USB_NOT_DETECTED   "Pen drive não detectado!"
     #define STRING_TFT_USB_READ_ERROR     "Erro de leitura do pen drive!"
-    #define STRING_ONBOARD_SD             "SD onboard"
-    #define STRING_ONBOARD_USB            "USB onboard"
+    #define STRING_ONBOARD_SD             "SD Onboard"
+    #define STRING_ONBOARD_USB            "USB Onboard"
     #define STRING_ONBOARD_SD_READ_ERROR  "Erro de leitura do onboard media!"
     #define STRING_FILAMENT_RUNOUT        "Filamento acabou!"
 

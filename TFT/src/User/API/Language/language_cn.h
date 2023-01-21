@@ -173,7 +173,7 @@
     #define STRING_TFT_USB                "USB盘"
     #define STRING_TFT_USB_INSERTED       "USB盘已插入"
     #define STRING_TFT_USB_REMOVED        "USB盘已拔出"
-    #define STRING_TFT_USB_NOT_DETECTED   "No USB stick detected!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
     #define STRING_TFT_USB_READ_ERROR     "读USB盘出错!"
     #define STRING_ONBOARD_SD             "板载SD"
     #define STRING_ONBOARD_USB            "板载USB"

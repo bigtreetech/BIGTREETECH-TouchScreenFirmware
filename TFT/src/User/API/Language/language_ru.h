@@ -173,7 +173,7 @@
     #define STRING_TFT_USB                "Флеш карта"
     #define STRING_TFT_USB_INSERTED       "Флеш карта вставлена"
     #define STRING_TFT_USB_REMOVED        "Флеш карта извлечена"
-    #define STRING_TFT_USB_NOT_DETECTED   "No USB stick detected!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
     #define STRING_TFT_USB_READ_ERROR     "Ошибка чтения флеш карты!"
     #define STRING_ONBOARD_SD             "SD платы"
     #define STRING_ONBOARD_USB            "USB платы"

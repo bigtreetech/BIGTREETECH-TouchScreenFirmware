@@ -20,7 +20,7 @@
     #define STRING_MARLIN_SHOW_TITLE      "Marlin Mode Title Support"
     #define STRING_MARLIN_TYPE            "Marlin Mode Type"
     #define STRING_MOVE_SPEED             "Ταχύτητα κίνησης(X Y Z)"
-    #define STRING_AUTO_LOAD_LEVELING     "Auto Save Load Leveling"
+    #define STRING_AUTO_LOAD_LEVELING     "Auto Load Leveling"
     #define STRING_PROBING_Z_OFFSET       "Probing for Z offset"
     #define STRING_Z_STEPPERS_ALIGNMENT   "Z Steppers Auto-Alignment"
     #define STRING_PS_AUTO_SHUTDOWN       "Αυτόματη απενεργοποίηση"
@@ -165,7 +165,7 @@
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD card"
+    #define STRING_TFT_SD                 "SD Card"
     #define STRING_TFT_SD_INSERTED        "Η κάρτα έχει εισαχθεί"
     #define STRING_TFT_SD_REMOVED         "Η κάρτα αφαιρέθηκε"
     #define STRING_TFT_SD_NOT_DETECTED    "No SD card detected!"
@@ -173,7 +173,7 @@
     #define STRING_TFT_USB                "USB Δίσκος"
     #define STRING_TFT_USB_INSERTED       "Ο USB Δίσκος έχει εισαχθεί"
     #define STRING_TFT_USB_REMOVED        "Ο USB Δίσκος αφαιρέθηκε"
-    #define STRING_TFT_USB_NOT_DETECTED   "No USB stick detected!"
+    #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
     #define STRING_TFT_USB_READ_ERROR     "Σφάλμα ανάγνωσης USB Δίσκου!"
     #define STRING_ONBOARD_SD             "Ενσωματωμένη κάρτα SD"
     #define STRING_ONBOARD_USB            "Ενσωματωμένη κάρτα USB"
