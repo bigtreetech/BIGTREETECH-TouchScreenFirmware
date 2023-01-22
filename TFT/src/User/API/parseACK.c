@@ -902,14 +902,10 @@ void parseACK(void)
         BUZZER_PLAY(SOUND_SUCCESS);
 
         if (infoMachineSettings.EEPROM == 1)
-        {
           popupDialog(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_EEPROM_SAVE_INFO,
                       LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
-        }
         else
-        {
           popupReminder(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_PROCESS_COMPLETED);
-        }
       }
     #endif
 
