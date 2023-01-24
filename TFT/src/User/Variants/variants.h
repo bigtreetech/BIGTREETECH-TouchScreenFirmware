@@ -73,6 +73,8 @@
   #include "pin_MKS_TFT35_V1_0.h"
 #elif defined(MKS_GD_TFT28_V4_0)
   #include "pin_MKS_GD_TFT28_V4_0.h"
+#elif defined(MKS_GD_V2_TFT28_V4_0)
+  #include "pin_MKS_GD_V2_TFT28_V4_0.h"
 #endif
 
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
