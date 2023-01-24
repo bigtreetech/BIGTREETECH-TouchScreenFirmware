@@ -11,7 +11,7 @@ volatile static OS_COUNTER os_counter = {0, 0};
 
 void OS_InitTimerMs(void)
 {
-#ifdef GD32F2XX
+#if defined GD32F2XX || defined GD32F3XX
   nvic_irq_enable(TIMER6_IRQn, 2U, 0U);
 
   rcu_periph_clock_enable(RCU_TIMER6);
@@ -38,7 +38,7 @@ void OS_InitTimerMs(void)
 #endif
 }
 
-#ifdef GD32F2XX
+#if defined GD32F2XX || defined GD32F3XX
 void TIMER6_IRQHandler(void)
 {
   if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)

@@ -7,7 +7,7 @@
 
 void HW_GetClocksFreq(CLOCKS *clk)
 {
-#ifdef GD32F2XX
+#if defined GD32F2XX || defined GD32F3XX
   RCU_GetClocksFreq(&clk->rccClocks);
 #else
   RCC_GetClocksFreq(&clk->rccClocks);
@@ -27,7 +27,7 @@ void HW_GetClocksFreq(CLOCKS *clk)
 void HW_Init(void)
 {
   HW_GetClocksFreq(&mcuClocks);
-#ifdef GD32F2XX
+#if defined GD32F2XX || defined GD32F3XX
   nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
 #else
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
