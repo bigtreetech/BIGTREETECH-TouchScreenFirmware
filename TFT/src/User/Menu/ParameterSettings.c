@@ -22,6 +22,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_BED_PID,
   LABEL_ABL,
   LABEL_STEALTH_CHOP,
+  LABEL_INPUT_SHAPING,
   LABEL_DELTA_CONFIGURATION,
   LABEL_DELTA_TOWER_ANGLE,
   LABEL_DELTA_DIAGONAL_ROD,
@@ -102,6 +103,10 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
 
         case P_STEALTH_CHOP:
           parameterMainItem->titlelabel.address = stealthChopDisplayID[elementIndex];
+          break;
+
+        case P_INPUT_SHAPING:
+          parameterMainItem->titlelabel.address = inputShapingDisplayID[elementIndex];
           break;
 
         case P_DELTA_CONFIGURATION:
@@ -185,7 +190,7 @@ void menuShowParameter(void)
         if (elementIndex < getElementCount(curParameter))
         {
           VAL_TYPE val_type = getParameterValType(curParameter, elementIndex);
-          bool negative_val = val_type % 2;  // accept negative values only for val_types with negetive
+          bool negative_val = GET_BIT(val_type, 0);  // accept negative values only for val_types with negative
           float val = getParameter(curParameter, elementIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)

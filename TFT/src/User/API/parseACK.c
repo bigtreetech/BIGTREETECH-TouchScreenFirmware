@@ -977,6 +977,47 @@ void parseACK(void)
           setMpcFilHeatCapacity(index, ack_value());
       }
     }
+    // parse and store input shaping parameters (only for Marlin)
+    else if (ack_starts_with("M593") && infoMachineSettings.firmwareType == FW_MARLIN)
+    {
+      // M593 accepts its parameters in any order,
+      // if both X and Y axis are missing than the rest
+      // of the parameters are referring to each axis
+
+      enum
+      {
+        SET_NONE = 0B00,
+        SET_X = 0B01,
+        SET_Y = 0B10,
+        SET_BOTH = 0B11
+      } setAxis = SET_NONE;
+
+      float pValue;
+
+      if (ack_seen("X")) setAxis |= SET_X;
+      if (ack_seen("Y")) setAxis |= SET_Y;
+      if (setAxis == SET_NONE) setAxis = SET_BOTH;
+
+      if (ack_seen("F"))
+      {
+        pValue = ack_value();
+
+        if (setAxis & SET_X)
+            setParameter(P_INPUT_SHAPING, 0, pValue);
+        if (setAxis & SET_Y)
+            setParameter(P_INPUT_SHAPING, 2, pValue);
+      }
+
+      if (ack_seen("D"))
+      {
+        pValue = ack_value();
+
+        if (setAxis & SET_X)
+            setParameter(P_INPUT_SHAPING, 1, pValue);
+        if (setAxis & SET_Y)
+            setParameter(P_INPUT_SHAPING, 3, pValue);
+      }
+    }
     // parse and store Delta configuration / Delta tower angle (M665) and Delta endstop adjustments (M666)
     //
     // IMPORTANT: It must be placed before the following keywords:

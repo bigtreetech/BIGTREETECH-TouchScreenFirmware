@@ -20,6 +20,7 @@ const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
   3,                          // Bed PID
   2,                          // ABL State & Z Fade
   STEPPER_INDEX_COUNT,        // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  4,                          // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
   4,                          // Delta Configuration
   3,                          // Delta Tower Angle
   3,                          // Delta Diagonal Rod Trim
@@ -49,6 +50,7 @@ const char * const parameterCode[PARAMETERS_COUNT] = {
   "M304",  // Bed PID
   "M420",  // ABL State & Z Fade
   "M569",  // TMC StealthChop
+  "M593",  // Input Shape
   "M665",  // Delta Configuration
   "M665",  // Delta Tower Angle
   "M665",  // Delta Diagonal Rod Trim
@@ -78,6 +80,7 @@ const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {"P%.4f\n",            "I%.4f\n",       "D%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Bed PID
   {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // ABL State & Z Fade
   {"S%.0f I0 X\n",       "S%.0f I1 X\n",  "S%.0f I0 Y\n",  "S%.0f I1 Y\n", "S%.0f I0 Z\n", "S%.0f I1 Z\n", "S%.0f I2 Z\n", "S%.0f I3 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+  {"X F%.3f\n",          "X D%.3f\n",     "Y F%.3f\n",     "Y D%.3f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
   {"H%.4f\n",            "S%.4f\n",       "R%.4f\n",       "L%.4f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
   {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
   {"A%.4f\n",            "B%.4f\n",       "C%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
@@ -108,6 +111,7 @@ const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
   {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
   {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
    VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT},
+  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
   {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Tower Angle (Tx, Ty, Tz)
   {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Diagonal Rod Trim (Dx, Dy, Dz)
@@ -139,9 +143,10 @@ char * const autoRetractDisplayID[] = {"S " ONOFF_DISPLAY_ID};
 char * const hotendPidDisplayID[] = {"Kp", "Ki", "Kd"};
 char * const bedPidDisplayID[] = {"Kp", "Ki", "Kd"};
 char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
-char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "ONOFF_DISPLAY_ID, "Y2 "ONOFF_DISPLAY_ID,
+char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y " ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
                                        "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID};
+char * const inputShapingDisplayID[] = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
 char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
 char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
 char * const deltaDiagonalRodDisplayID[] = {"Dx", "Dy", "Dz"};
@@ -275,6 +280,9 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_STEALTH_CHOP:
       return infoParameters.StealthChop[index];
 
+    case P_INPUT_SHAPING:
+      return infoParameters.InputShaping[index];
+
     case P_DELTA_CONFIGURATION:
       return infoParameters.DeltaConfiguration[index];
 
@@ -382,6 +390,10 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_STEALTH_CHOP:
       infoParameters.StealthChop[index] = val;
+      break;
+
+    case P_INPUT_SHAPING:
+      infoParameters.InputShaping[index] = val;
       break;
 
     case P_DELTA_CONFIGURATION:
