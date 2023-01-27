@@ -137,6 +137,12 @@ the following options must be enabled in Marlin firmware.
 `HOST_PROMPT_SUPPORT` (in Configuration_adv.h)<br>
 `HOST_STATUS_NOTIFICATIONS` (in Configuration_adv.h)<br>
 
+**Options to support M73 with host:**
+
+`Options to support dialog with host` (as pre requisite)<br>
+`SET_PROGRESS_MANUALLY` (in Configuration_adv.h)<br>
+`M73_REPORT` (in Configuration_adv.h)<br>
+
 **Options to support M600 with host & (Un)Load menu:**
 
 `Options to support dialog with host` (as pre requisite)<br>
