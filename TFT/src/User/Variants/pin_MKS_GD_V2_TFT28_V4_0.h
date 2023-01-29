@@ -69,7 +69,7 @@
 
 // FSMC 8080 interface (high speed) or normal IO interface (low speed)
 #ifndef STM32_HAS_FSMC
-  #define STM32_HAS_FSMC
+  // #define STM32_HAS_FSMC
 #endif
 
 // LCD data 16bit or 8bit
