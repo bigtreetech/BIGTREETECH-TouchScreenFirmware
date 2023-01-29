@@ -479,14 +479,14 @@ void menuLEDColor(void)
   KEY_VALUES key_num = KEY_IDLE;
   bool forceLedOff, forceExit;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
   LED_SendColor(&ledColor);                      // set (neopixel) LED light to current color
   forceLedOff = false;
   forceExit = false;
 
   menuDrawPage(&LEDColorItems);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuLEDColor))
   {

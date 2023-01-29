@@ -50,8 +50,6 @@ void menuEmulatorFontColor(void)
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
@@ -70,6 +68,8 @@ void menuEmulatorFontColor(void)
   uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuEmulatorFontColor))
   {
@@ -102,8 +102,6 @@ void menuEmulatorBGColor(void)
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
@@ -122,6 +120,8 @@ void menuEmulatorBGColor(void)
   uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuEmulatorBGColor))
   {
@@ -175,9 +175,9 @@ void menuMarlinModeSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), NULL, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuMarlinModeSettings))
   {
@@ -304,8 +304,6 @@ void menuUISettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
   uiItems[2].icon = iconToggle[infoSettings.files_list_mode];
@@ -324,6 +322,8 @@ void menuUISettings(void)
   #endif
 
   listViewCreate(title, uiItems, COUNT(uiItems), NULL, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuUISettings))
   {
@@ -413,14 +413,14 @@ void menuSoundSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   for (uint8_t i = 0; i < SOUND_TYPE_COUNT; i++)
   {
     sounditems[i].icon = iconToggle[GET_BIT(infoSettings.sounds, i)];
   }
 
   listViewCreate(title, sounditems, COUNT(sounditems), NULL, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuSoundSettings))
   {
@@ -457,8 +457,6 @@ void menuBrightnessSettings(void)
   uint16_t curIndex = KEY_IDLE;
   char tempstr[8];
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
   setDynamicTextValue(0, tempstr);
 
@@ -469,6 +467,8 @@ void menuBrightnessSettings(void)
   brightnessitems[3].icon = iconToggle[infoSettings.lcd_lock_on_idle];
 
   listViewCreate(title, brightnessitems, COUNT(brightnessitems), NULL, true, NULL, NULL);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuBrightnessSettings))
   {
@@ -554,9 +554,9 @@ void menuScreenSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   menuDrawPage(&screenSettingsItems);
+
+  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   while (MENU_IS(menuScreenSettings))
   {
