@@ -64,6 +64,8 @@ extern "C" {
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
+uint32_t calculateCRC16(const uint8_t *data, uint32_t length);  // Calculate CRC16 checksum
+
 uint8_t string_2_uint8_t(const uint8_t *string);
 uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
