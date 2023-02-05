@@ -50,8 +50,6 @@ void menuEmulatorFontColor(void)
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
@@ -92,7 +90,7 @@ void menuEmulatorFontColor(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuEmulatorBGColor(void)
@@ -101,8 +99,6 @@ void menuEmulatorBGColor(void)
   LISTITEM totalItems[LCD_COLOR_COUNT];
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
@@ -144,7 +140,7 @@ void menuEmulatorBGColor(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuMarlinModeSettings(void)
@@ -174,8 +170,6 @@ void menuMarlinModeSettings(void)
   setDynamicTextValue(4, (char *)labelMarlinType[infoSettings.marlin_type]);
 
   uint16_t curIndex = KEY_IDLE;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), NULL, true, NULL, NULL);
 
@@ -218,7 +212,7 @@ void menuMarlinModeSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #endif  // ST7920_EMULATOR
@@ -303,8 +297,6 @@ void menuUISettings(void)
   };
 
   uint16_t curIndex = KEY_IDLE;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
@@ -395,7 +387,7 @@ void menuUISettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #ifdef BUZZER_PIN
@@ -412,8 +404,6 @@ void menuSoundSettings(void)
   };
 
   uint16_t curIndex = KEY_IDLE;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   for (uint8_t i = 0; i < SOUND_TYPE_COUNT; i++)
   {
@@ -436,7 +426,7 @@ void menuSoundSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }  // menuSoundSettings
 
 #endif  // BUZZER_PIN
@@ -456,8 +446,6 @@ void menuBrightnessSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
   char tempstr[8];
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
   setDynamicTextValue(0, tempstr);
@@ -512,7 +500,7 @@ void menuBrightnessSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #endif  // LCD_LED_PWM_CHANNEL
@@ -553,8 +541,6 @@ void menuScreenSettings(void)
   #endif
 
   uint16_t curIndex = KEY_IDLE;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   menuDrawPage(&screenSettingsItems);
 
@@ -616,5 +602,5 @@ void menuScreenSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }

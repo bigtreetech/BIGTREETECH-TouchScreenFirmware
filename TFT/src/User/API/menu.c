@@ -1198,43 +1198,33 @@ void loopCheckBackPress(void)
     }
   #endif
 
-  if (longPress == false)  // check if longpress already handled
+  if (longPress == false && Touch_Enc_ReadPen(LONG_TOUCH))  // check if longpress already handled and check if TSC is pressed and held
   {
-    if (Touch_Enc_ReadPen(LONG_TOUCH))  // check if TSC is pressed and held
+    KEY_VALUES tempKey = KEY_IDLE;
+    longPress = true;
+    touchSound = false;
+
+    if (MENU_IS(menuPrinting))
     {
-      KEY_VALUES tempKey = KEY_IDLE;
-      longPress = true;
-      touchSound = false;
+      tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+    }
+    else
+    {
+      tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+    }
 
-      if (MENU_IS(menuPrinting))
-      {
-        tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
-      }
-      else
-      {
-        tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
-      }
+    touchSound = true;
 
-      touchSound = true;
+    if (tempKey != KEY_IDLE && getCurMenuItems()->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
+    {
+      BUZZER_PLAY(SOUND_OK);
 
-      if (tempKey != KEY_IDLE)
-      {
-        if (getCurMenuItems()->items[tempKey].label.index != LABEL_BACK)  // check if Back button is held
-        {
-          return;
-        }
-        else
-        {
-          BUZZER_PLAY(SOUND_OK);
+      #ifdef HAS_EMULATOR
+        backHeld = true;
+      #endif
 
-          #ifdef HAS_EMULATOR
-            backHeld = true;
-          #endif
-
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
-          infoMenu.cur = 1;
-        }
-      }
+      infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
+      infoMenu.cur = 1;
     }
   }
 }
