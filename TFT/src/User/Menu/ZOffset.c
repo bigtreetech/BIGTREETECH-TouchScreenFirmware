@@ -134,8 +134,6 @@ void menuZOffset(void)
   menuDrawPage(&zOffsetItems);
   zOffsetDraw(offsetGetStatus(), now);
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   while (MENU_IS(menuZOffset))
   {
     unit = moveLenSteps[curUnit_index];
