@@ -16,9 +16,6 @@ enum
   PARA_NOT_STORED = (1 << 1),
 };
 
-int32_t TSC_Para[7];
-SETTINGS infoSettings;
-
 uint8_t paraStatus = 0;
 
 void wordToByte(uint32_t word, uint8_t *bytes)
@@ -90,6 +87,7 @@ void storePara(void)
   {
     wordToByte(TSC_Para[i], data + (index += 4));
   }
+
   wordToByte(PARA_SIGN, data + (index += 4));
   memcpy(data + (index += 4), &infoSettings, sizeof(SETTINGS));
 
