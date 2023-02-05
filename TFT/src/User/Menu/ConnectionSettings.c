@@ -51,8 +51,6 @@ void menuBaudrate(void)
   uint8_t curItem = 0;
   uint16_t curPage;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   // fill baudrate items
   for (uint8_t i = 0; i < size; i++)
   {
@@ -93,7 +91,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuSerialPorts(void)
