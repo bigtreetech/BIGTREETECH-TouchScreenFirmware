@@ -49,9 +49,9 @@ bool isEnqueued(const CMD cmd)
 {
   bool found = false;
 
-  for (int i = 0; i < infoCmd.count && !found; ++i)
+  for (int i = 0; i < cmdQueue.count && !found; ++i)
   {
-    found = strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
+    found = strcmp(cmd, cmdQueue.queue[(cmdQueue.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0;
   }
 
   return found;
@@ -467,7 +467,7 @@ void syncTargetTemp(uint8_t index)
 void sendQueueCmd(void)
 {
   if (infoHost.wait == true) return;
-  if (infoCmd.count == 0) return;
+  if (cmdQueue.count == 0) return;
 
   bool avoid_terminal = false;
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
