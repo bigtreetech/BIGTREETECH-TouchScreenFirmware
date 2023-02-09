@@ -106,7 +106,7 @@ Main branch: **Master**
 ## Marlin Dependencies
 
 Minimum Marlin firmware version: **2.1.1**<br>
-Distribution date: **2022-08-06**<br>
+Distribution date: **2022-09-22**<br>
 Firmware source: https://github.com/MarlinFirmware/Marlin/releases<br>
 
 To use all the features and functionalities supported by the TFT,
@@ -120,6 +120,7 @@ the following options must be enabled in Marlin firmware.
 `AUTO_REPORT_POSITION` (in Configuration_adv.h)<br>
 `M115_GEOMETRY_REPORT` (in Configuration_adv.h)<br>
 `M114_DETAIL` (in Configuration_adv.h)<br>
+`EXTENDED_CAPABILITIES_REPORT` (in Configuration_adv.h)<br>
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)<br>
 
 **Options to support printing from onboard media:**

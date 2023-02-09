@@ -27,6 +27,7 @@ typedef enum
   P_BED_PID,
   P_ABL_STATE,
   P_STEALTH_CHOP,
+  P_INPUT_SHAPING,
   P_DELTA_CONFIGURATION,
   P_DELTA_TOWER_ANGLE,
   P_DELTA_DIAGONAL_ROD,
@@ -100,6 +101,7 @@ typedef struct
   float BedPid[3];
   float ABLState[2];
   float StealthChop[STEPPER_INDEX_COUNT];
+  float InputShaping[4];
   float DeltaConfiguration[4];
   float DeltaTowerAngle[3];
   float DeltaDiagonalRod[3];
@@ -125,6 +127,7 @@ extern char * const hotendPidDisplayID[];
 extern char * const bedPidDisplayID[];
 extern char * const ablStateDisplayID[];
 extern char * const stealthChopDisplayID[];
+extern char * const inputShapingDisplayID[];
 extern char * const deltaConfigurationDisplayID[];
 extern char * const deltaTowerAngleDisplayID[];
 extern char * const deltaDiagonalRodDisplayID[];

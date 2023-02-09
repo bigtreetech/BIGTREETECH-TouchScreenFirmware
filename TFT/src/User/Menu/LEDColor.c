@@ -479,8 +479,6 @@ void menuLEDColor(void)
   KEY_VALUES key_num = KEY_IDLE;
   bool forceLedOff, forceExit;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
   LED_SendColor(&ledColor);                      // set (neopixel) LED light to current color
   forceLedOff = false;
@@ -548,7 +546,7 @@ void menuLEDColor(void)
 
   if (forceExit)
   {
-    storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+    saveSettings();  // Save settings
 
     if (forceLedOff)  // if LED is switched off, set (neopixel) LED light current color to OFF
       LED_SetColor(&ledOff, false);
