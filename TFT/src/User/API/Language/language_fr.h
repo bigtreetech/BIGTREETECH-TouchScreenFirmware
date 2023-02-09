@@ -120,7 +120,7 @@
     #define STRING_HALF                   "Moitié"
     #define STRING_FULL                   "Max"
     #define STRING_CUSTOM                 "Custom"
-    #define STRING_CLEAR                  "Effacer"
+    #define STRING_CLEAR                  "Suppr."
     #define STRING_DEFAULT                "Défaut"
 
     // Action Buttons
@@ -132,7 +132,7 @@
     #define STRING_DISCONNECT             "Libérer"
     #define STRING_SHUT_DOWN              "Eteindre"
     #define STRING_FORCE_SHUT_DOWN        "Forcer l'extinction"
-    #define STRING_EMERGENCYSTOP          "Arrêt"
+    #define STRING_EMERGENCYSTOP          "Urgence"
     #define STRING_PREHEAT                "Préparer"
     #define STRING_PREHEAT_BOTH           "Global"
     #define STRING_COOLDOWN               "Refroidir"
@@ -167,8 +167,8 @@
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
     #define STRING_TFT_SD                 "SD TFT"
     #define STRING_TFT_SD_READ_ERROR      "Erreur de lecture de la carte SD !"
-    #define STRING_TFT_SD_INSERTED        "Carte insérée !"
-    #define STRING_TFT_SD_REMOVED         "Carte retirée !"
+    #define STRING_TFT_SD_INSERTED        "Carte SD insérée !"
+    #define STRING_TFT_SD_REMOVED         "Carte SD retirée !"
     #define STRING_TFT_SD_NOT_DETECTED    "Aucune carte SD détectée."
     #define STRING_TFT_USB                "USB TFT"
     #define STRING_TFT_USB_READ_ERROR     "Erreur de lecture de la clé USB !"

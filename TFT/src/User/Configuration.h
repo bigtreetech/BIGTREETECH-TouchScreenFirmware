@@ -1232,7 +1232,7 @@
  *   Options: [ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
  *             SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
  *             HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN,
- *             BRAZIL]
+ *             BRAZIL,     CROATIAN]
  */
 #define SYSTEM_LANGUAGE ENGLISH  // Default: ENGLISH
 
