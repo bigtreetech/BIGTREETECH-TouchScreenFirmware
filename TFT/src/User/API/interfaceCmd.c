@@ -1128,6 +1128,50 @@ void sendQueueCmd(void)
         //  // message from the printer to prevent wrong state and/or value in case of error
         //  break;
 
+        case 593:  // M593 Input Shaping (only for Marlin)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+          {
+            // M593 accepts its parameters in any order,
+            // if both X and Y axis are missing than the rest
+            // of the parameters are referring to each axis
+
+            enum
+            {
+              SET_NONE = 0B00,
+              SET_X = 0B01,
+              SET_Y = 0B10,
+              SET_BOTH = 0B11
+            } setAxis = SET_NONE;
+
+            float pValue;
+
+            if (cmd_seen('X')) setAxis |= SET_X;
+            if (cmd_seen('Y')) setAxis |= SET_Y;
+            if (setAxis == SET_NONE) setAxis = SET_BOTH;
+
+            if (cmd_seen('F'))
+            {
+              pValue = cmd_float();
+
+              if (setAxis & SET_X)
+                  setParameter(P_INPUT_SHAPING, 0, pValue);
+              if (setAxis & SET_Y)
+                  setParameter(P_INPUT_SHAPING, 2, pValue);
+            }
+
+            if (cmd_seen('D'))
+            {
+              pValue = cmd_float();
+
+              if (setAxis & SET_X)
+                  setParameter(P_INPUT_SHAPING, 1, pValue);
+              if (setAxis & SET_Y)
+                  setParameter(P_INPUT_SHAPING, 3, pValue);
+            }
+          }
+        }
+
         case 569:  // M569 TMC stepping mode
         {
           uint8_t k = (cmd_seen('S')) ? cmd_value() : 0;
