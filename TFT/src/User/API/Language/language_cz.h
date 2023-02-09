@@ -165,7 +165,7 @@
     #define STRING_PROCESS_ABORTED        "Proces přerušen!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD Karta"
+    #define STRING_TFT_SD                 "TFT SD"
     #define STRING_TFT_SD_INSERTED        "SD karta vložena"
     #define STRING_TFT_SD_REMOVED         "SD karta vyjmuta"
     #define STRING_TFT_SD_NOT_DETECTED    "SD karta není detekována!"

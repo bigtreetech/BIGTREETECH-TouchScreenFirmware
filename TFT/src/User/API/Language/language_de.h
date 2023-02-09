@@ -166,7 +166,7 @@
     #define STRING_PROCESS_ABORTED        "Prozess abgebrochen!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD-Karte"
+    #define STRING_TFT_SD                 "TFT SD"
     #define STRING_TFT_SD_INSERTED        "SD-Karte eingesteckt"
     #define STRING_TFT_SD_REMOVED         "SD-Karte entfernt"
     #define STRING_TFT_SD_NOT_DETECTED    "No SD card detected!"

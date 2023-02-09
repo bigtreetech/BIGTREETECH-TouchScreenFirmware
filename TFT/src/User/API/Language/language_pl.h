@@ -166,7 +166,7 @@
     #define STRING_PROCESS_ABORTED        "Przerwano przetwarzanie!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "Karty SD"
+    #define STRING_TFT_SD                 "SD TFT"
     #define STRING_TFT_SD_INSERTED        "Karta SD wyświetlacza włożona"
     #define STRING_TFT_SD_REMOVED         "Karta SD wyświetlacza wyjęta"
     #define STRING_TFT_SD_NOT_DETECTED    "Nie wykryto karty SD wyświetlacza!"

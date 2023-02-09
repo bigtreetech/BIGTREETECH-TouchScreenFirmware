@@ -166,12 +166,12 @@
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
     // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
-    #define STRING_TFT_SD                 "SD Cartao"
+    #define STRING_TFT_SD                 "TFT SD"
     #define STRING_TFT_SD_INSERTED        "Cartao inserido"
     #define STRING_TFT_SD_REMOVED         "Cartao removido"
     #define STRING_TFT_SD_NOT_DETECTED    "No SD card detected!"
     #define STRING_TFT_SD_READ_ERROR      "Erro a ler SD card!"
-    #define STRING_TFT_USB                "USB Disk"
+    #define STRING_TFT_USB                "TFT USB"
     #define STRING_TFT_USB_INSERTED       "USB disk inserido"
     #define STRING_TFT_USB_REMOVED        "USB disk removido"
     #define STRING_TFT_USB_NOT_DETECTED   "No USB disk detected!"
