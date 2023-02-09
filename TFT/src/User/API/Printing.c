@@ -53,21 +53,21 @@ void breakAndContinue(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M108\n");
+  sendEmergencyCmd("M108\n");
 }
 
 void resumeAndPurge(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M876 S0\n");
+  sendEmergencyCmd("M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
   setRunoutAlarmFalse();
   clearCmdQueue();
-  Serial_Puts(SERIAL_PORT, "M876 S1\n");
+  sendEmergencyCmd("M876 S1\n");
 }
 
 void setPrintExpectedTime(uint32_t expectedTime)
@@ -381,9 +381,9 @@ bool printRemoteStart(const char * filename)
 
   if (filename != NULL)
   {
-    infoFile.source = FS_ONBOARD_MEDIA_REMOTE;  // set source first
-    resetInfoFile();                            // then reset infoFile (source is restored)
-    enterFolder(stripHead(filename));           // set path as last
+    infoFile.source = FS_ONBOARD_MEDIA_REMOTE;   // set source first
+    resetInfoFile();                             // then reset infoFile (source is restored)
+    enterFolder(stripHead(filename));            // set path as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
@@ -393,12 +393,12 @@ bool printRemoteStart(const char * filename)
     resetInfoFile();                   // then reset infoFile (source is restored)
   }
 
-  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+  initPrintSummary();  // init print summary as last (it requires infoFile to be properly set)
 
   return true;
 }
 
-bool printStart(void)
+bool printStartPrepare(void)
 {
   bool printRestore = false;
 
@@ -417,8 +417,8 @@ bool printStart(void)
         {
           f_close(&infoPrinting.file);
 
-          // disable print restore flag (one shot flag) for the next print.
-          // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+          // disable print restore flag (one shot flag) for the next print
+          // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function).
           powerFailedSetRestore(false);
           break;
         }
@@ -426,11 +426,11 @@ bool printStart(void)
         infoPrinting.cur = infoPrinting.file.fptr;
         setExtrusionDuringPause(false);
 
-        // initialize PLR info.
+        // initialize PLR info
         // If print restore flag was enabled (e.g. by powerFailedSetRestore function called in PrintRestore.c),
         // try to load PLR info from file in order to restore the print from the failed point.
         // It finally disables print restore flag (one shot flag) for the next print.
-        // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
+        // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function).
         powerFailedInitData();
 
         if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
@@ -457,7 +457,7 @@ bool printStart(void)
   // we assume infoPrinting is clean, so we need to set only the needed attributes
   infoPrinting.printing = true;
 
-  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT)) // PLR continue printing, CAN NOT use start gcode
+  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
@@ -466,11 +466,11 @@ bool printStart(void)
     // notify the print as started (infoHost.status set to "HOST_STATUS_PRINTING")
     infoHost.status = HOST_STATUS_RESUMING;
 
-    request_M24(0);                              // start print from onboard media
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from onboard media
+    request_M24(0);                              // start print from onboard media
   }
 
-  initPrintSummary();  // init print summary as last (it requires infoFile is properly set)
+  initPrintSummary();  // init print summary as last (it requires infoFile to be properly set)
 
   return true;
 }
@@ -517,26 +517,24 @@ void printAbort(void)
   if (!infoPrinting.printing) return;
 
   loopDetected = true;
+  setRunoutAlarmFalse();
+  clearCmdQueue();
 
   switch (infoFile.source)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      clearCmdQueue();
+      printAbortCease();
       break;
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      // several M108 are sent to Marlin because consecutive blocking operations
-      // such as heating bed, extruder may defer processing of M524
-      breakAndContinue();
-      breakAndContinue();
-      breakAndContinue();
-      breakAndContinue();
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      loopPopup();  // trigger the immediate draw of the above popup
 
       if (infoMachineSettings.firmwareType != FW_REPRAPFW)
       {
-        request_M524();
+        handleEmergencyCmd("M524\n");
       }
       else  // if RepRap
       {
@@ -546,23 +544,30 @@ void printAbort(void)
         request_M0();  // M524 is not supported in RepRap firmware
       }
 
-      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+      while (isHostPrinting())
+      {
+        // M108 is sent to Marlin because consecutive blocking operations
+        // such as heating bed, extruder may defer processing of M524.
+        // If there's any ongoing blocking command, "M108" will take that
+        // out from the closed loop and a response will be received from
+        // that command. Than another "M108" will be sent to unlock a next
+        // possible blocking command.
+        // This way enough "M108" will be sent to unlock all possible blocking
+        // command(s) (ongoing or enqueued) but not too much and not too fast
+        // one after another to overload/overrun the serial communication.
+        if (infoHost.rx_ok[SERIAL_PORT] == true)
+          sendEmergencyCmd("M108\n");
 
-      // wait until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintPause()
-      loopProcessToCondition(&isHostPrinting);
-
+        loopProcess();
+      }
       break;
 
-    case FS_REMOTE_HOST:  // nothing to do
-      loopDetected = false;
-      return;
+    default:
+      break;
   }
 
   if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_CANCEL_PRINT))
     sendPrintCodes(2);
-
-  printComplete();
-  infoPrinting.aborted = true;
 
   loopDetected = false;
 }
@@ -596,7 +601,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           popupReminder(DIALOG_TYPE_ALERT, LABEL_PAUSE, LABEL_PAUSE);
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause is originated from TFT
         {
           coordinateGetAll(&tmp);
 
@@ -629,7 +634,7 @@ bool printPause(bool isPause, PAUSE_TYPE pauseType)
         {
           breakAndContinue();  // clear the queue and send a break and continue
         }
-        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause originated from TFT
+        else if (pauseType == PAUSE_NORMAL)  // send command only if the pause is originated from TFT
         {
           if (isCoorRelative == true)    mustStoreCmd("G90\n");
           if (isExtrudeRelative == true) mustStoreCmd("M82\n");
@@ -710,7 +715,7 @@ bool isRemoteHostPrinting(void)
   return (infoPrinting.printing && infoFile.source == FS_REMOTE_HOST) ? true : false;
 }
 
-void setPrintAbort(void)
+void printAbortCease(void)
 {
   // in case of printing from Marlin Mode (infoPrinting.printing set to "false"),
   // always force infoHost.status to "HOST_STATUS_IDLE"
@@ -794,7 +799,7 @@ void loopPrintFromTFT(void)
         break;
       }
 
-      if (read_char == ';')  // if a comment was found, exit from loop. Otherwise (empty line found), continue parsing the next line
+      if (read_char == ';')  // if a comment was found then exit from loop, otherwise (empty line found) continue parsing the next line
         break;
     }
     else if (read_char == ' ' && gcode_count == 0)  // ignore initial ' ' space bytes
