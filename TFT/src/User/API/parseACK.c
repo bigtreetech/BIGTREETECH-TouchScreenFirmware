@@ -338,7 +338,7 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
-    setPrintAbort();
+    printAbortCease();
   }
   else if (ack_seen(":prompt_begin "))
   {
@@ -355,12 +355,12 @@ void hostActionCommands(void)
       setPrintResume(HOST_STATUS_RESUMING);
 
       hostAction.prompt_show = false;
-      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      sendEmergencyCmd("M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
     else if (ack_continue_seen("Reheating"))
     {
       hostAction.prompt_show = false;
-      Serial_Puts(SERIAL_PORT, "M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
+      sendEmergencyCmd("M876 S0\n");  // auto-respond to a prompt request that is not shown on the TFT
     }
   }
   else if (ack_seen(":prompt_button "))
@@ -664,7 +664,7 @@ void parseACK(void)
     // parse and store M23, select SD file
     else if (infoMachineSettings.onboardSD == ENABLED && ack_starts_with("File opened:"))
     {
-      // NOTE: this block is not reached in case of printing from onboard media because printStart() will call
+      // NOTE: this block is not reached in case of printing from onboard media because printStartPrepare() will call
       //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
 
       // parse file name.
@@ -698,7 +698,7 @@ void parseACK(void)
           if (ack_continue_seen("byte"))  // received "SD printing byte"
             setPrintProgressData(ack_value(), ack_second_value());
           else  // received "Not SD printing"
-            setPrintAbort();
+            printAbortCease();
         }
       }
       // parse and store M24, printing from (remote) onboard media completed
@@ -975,6 +975,47 @@ void parseACK(void)
 
         if (ack_continue_seen("H"))
           setMpcFilHeatCapacity(index, ack_value());
+      }
+    }
+    // parse and store input shaping parameters (only for Marlin)
+    else if (ack_starts_with("M593") && infoMachineSettings.firmwareType == FW_MARLIN)
+    {
+      // M593 accepts its parameters in any order,
+      // if both X and Y axis are missing than the rest
+      // of the parameters are referring to each axis
+
+      enum
+      {
+        SET_NONE = 0B00,
+        SET_X = 0B01,
+        SET_Y = 0B10,
+        SET_BOTH = 0B11
+      } setAxis = SET_NONE;
+
+      float pValue;
+
+      if (ack_seen("X")) setAxis |= SET_X;
+      if (ack_seen("Y")) setAxis |= SET_Y;
+      if (setAxis == SET_NONE) setAxis = SET_BOTH;
+
+      if (ack_seen("F"))
+      {
+        pValue = ack_value();
+
+        if (setAxis & SET_X)
+            setParameter(P_INPUT_SHAPING, 0, pValue);
+        if (setAxis & SET_Y)
+            setParameter(P_INPUT_SHAPING, 2, pValue);
+      }
+
+      if (ack_seen("D"))
+      {
+        pValue = ack_value();
+
+        if (setAxis & SET_X)
+            setParameter(P_INPUT_SHAPING, 1, pValue);
+        if (setAxis & SET_Y)
+            setParameter(P_INPUT_SHAPING, 3, pValue);
       }
     }
     // parse and store Delta configuration / Delta tower angle (M665) and Delta endstop adjustments (M666)
@@ -1306,18 +1347,18 @@ void parseACK(void)
 
 void parseRcvGcode(void)
 {
-  for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)  // scan all the supplementary serial ports
+  for (SERIAL_PORT_INDEX portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)  // scan all the supplementary serial ports
   {
     // forward data only if serial port is enabled
-    if (infoSettings.serial_port[i] > 0
+    if (infoSettings.serial_port[portIndex] > 0
         #ifdef SERIAL_DEBUG_PORT
-          && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data from serial debug port
         #endif
         )
     {
-      while (syncL2CacheFromL1(serialPort[i].port))  // if some data are retrieved from L1 to L2 cache
+      while (syncL2CacheFromL1(serialPort[portIndex].port))  // if some data are retrieved from L1 to L2 cache
       {
-        storeCmdFromUART(i, dmaL2Cache);
+        handleCmd(dmaL2Cache, portIndex);
       }
     }
   }

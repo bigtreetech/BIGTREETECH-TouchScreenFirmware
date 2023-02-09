@@ -95,24 +95,9 @@ uint8_t getPrintProgress(void);
 void setPrintRunout(bool runout);
 bool getPrintRunout(void);
 
-//
-// commented because NOT externally invoked
-//
-//void shutdown(void);
-//void shutdownLoop(void);
-//void shutdownStart(void);  // start auto shutdown after a print successfully completed
-//void initPrintSummary(void);
-//void preparePrintSummary(void);
-//void sendPrintCodes(uint8_t index);
-
-void printSetUpdateWaiting(bool isWaiting);           // called in interfaceCmd.c
-void updatePrintUsedFilament(void);                   // called in PrintingMenu.c
-void clearInfoPrint(void);                            // called in PrintingMenu.c
-
-//
-// commented because NOT externally invoked
-//
-//void printComplete(void);                           // print complete
+void printSetUpdateWaiting(bool isWaiting);  // called in interfaceCmd.c
+void updatePrintUsedFilament(void);          // called in PrintingMenu.c
+void clearInfoPrint(void);                   // called in PrintingMenu.c
 
 // start print originated or handled by remote host
 // (e.g. print started from remote onboard media or hosted by remote host)
@@ -120,10 +105,10 @@ bool printRemoteStart(const char * filename);
 
 // start print originated or handled by TFT
 // (e.g. print started from TFT's GUI or hosted by TFT)
-bool printStart(void);                                // it also sends start gcode
+bool printStartPrepare(void);                // it also sends start gcode
 
-void printEnd(void);                                  // it also sends end gcode
-void printAbort(void);                                // it also sends cancel gcode
+void printEnd(void);                         // it also sends end gcode
+void printAbort(void);                       // it also sends cancel gcode
 bool printPause(bool isPause, PAUSE_TYPE pauseType);
 
 bool isPrinting(void);
@@ -137,7 +122,7 @@ bool isRemoteHostPrinting(void);
 // used for print originated or handled by remote host
 // (e.g. print started from (remote) onboard media or hosted by remote host)
 //
-void setPrintAbort(void);
+void printAbortCease(void);
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
 void setPrintResume(HOST_STATUS hostStatus);
 
