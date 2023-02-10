@@ -174,15 +174,15 @@ extern "C" {
 
 // TFT Media, Onboard Media, Filament Runout Process Commands / Status / Info
 #define LANG_KEY_TFT_SD                       "label_tft_sd:"
-#define LANG_KEY_TFT_SD_READ_ERROR            "label_tft_sd_read_error:"
 #define LANG_KEY_TFT_SD_INSERTED              "label_tft_sd_inserted:"
 #define LANG_KEY_TFT_SD_REMOVED               "label_tft_sd_removed:"
 #define LANG_KEY_TFT_SD_NOT_DETECTED          "label_tft_sd_not_detected:"
+#define LANG_KEY_TFT_SD_READ_ERROR            "label_tft_sd_read_error:"
 #define LANG_KEY_TFT_USB                      "label_tft_usb:"
-#define LANG_KEY_TFT_USB_READ_ERROR           "label_tft_usb_read_error:"
 #define LANG_KEY_TFT_USB_INSERTED             "label_tft_usb_inserted:"
 #define LANG_KEY_TFT_USB_REMOVED              "label_tft_usb_removed:"
 #define LANG_KEY_TFT_USB_NOT_DETECTED         "label_tft_usb_not_detected:"
+#define LANG_KEY_TFT_USB_READ_ERROR           "label_tft_usb_read_error:"
 #define LANG_KEY_ONBOARD_SD                   "label_onboard_sd:"
 #define LANG_KEY_ONBOARD_USB                  "label_onboard_usb:"
 #define LANG_KEY_ONBOARD_SD_READ_ERROR        "label_onboard_sd_read_error:"
