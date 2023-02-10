@@ -46,13 +46,13 @@ void getColdTemperature(void)
 
     if (hotendCurrentTemp < MAX_COLD_TEMP)
     {
-      coldTemperature = hotendCurrentTemp;
+      coldTemperature += hotendCurrentTemp;
       divider++;
     }
 
     if (bedCurrentTemp < MAX_COLD_TEMP)
     {
-      coldTemperature = bedCurrentTemp;
+      coldTemperature += bedCurrentTemp;
       divider++;
     }
 
