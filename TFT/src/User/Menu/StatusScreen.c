@@ -265,7 +265,7 @@ static inline void toggleTool(void)
 
     // switch bed/chamber index
     if (infoSettings.chamber_en == 1)
-      currentBCIndex = (currentBCIndex + 1) % 2;
+      TOGGLE_BIT(currentBCIndex, 0);
 
     // increment fan index
     if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
@@ -277,7 +277,7 @@ static inline void toggleTool(void)
     }
 
     // switch speed/flow
-    currentSpeedID = (currentSpeedID + 1) % 2;
+    TOGGLE_BIT(currentSpeedID, 0);
     drawStatus();
 
     // gcode queries must be call after drawStatus
