@@ -52,7 +52,6 @@ void _setDialogCancelTextLabel(int16_t index);
 
 void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
                     const uint8_t * no);
-//void popupReminder(DIALOG_TYPE type, uint8_t* title, uint8_t* msg);
 void menuDialog(void);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
@@ -96,10 +95,10 @@ void loopPopup(void);
  * @param title title of the message box
  * @param msg the body of the message/reminder to be displayed
  */
-#define popupSplash(_type, _title, _msg)                  \
-  {                                                         \
+#define popupSplash(_type, _title, _msg)                 \
+  {                                                      \
     setDialogText(_title, _msg, LABEL_NULL, LABEL_NULL); \
-    showDialog(_type, NULL, NULL, NULL);                    \
+    showDialog(_type, NULL, NULL, NULL);                 \
   }
 
 

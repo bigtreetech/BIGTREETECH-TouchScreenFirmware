@@ -50,8 +50,6 @@ void menuEmulatorFontColor(void)
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
   {
@@ -92,7 +90,7 @@ void menuEmulatorFontColor(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuEmulatorBGColor(void)
@@ -101,8 +99,6 @@ void menuEmulatorBGColor(void)
   LISTITEM totalItems[LCD_COLOR_COUNT];
   uint16_t curIndex = KEY_IDLE;
   uint8_t curItem = 0;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   // fill items
   for (uint8_t i = 0; i < COUNT(totalItems); i++)
@@ -144,7 +140,7 @@ void menuEmulatorBGColor(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 void menuMarlinModeSettings(void)
@@ -175,8 +171,6 @@ void menuMarlinModeSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   listViewCreate(title, marlinModeitems, COUNT(marlinModeitems), NULL, true, NULL, NULL);
 
   while (MENU_IS(menuMarlinModeSettings))
@@ -194,13 +188,13 @@ void menuMarlinModeSettings(void)
         break;
 
       case 2:
-        infoSettings.marlin_fullscreen = (infoSettings.marlin_fullscreen + 1) % 2;
+        TOGGLE_BIT(infoSettings.marlin_fullscreen, 0);
         marlinModeitems[2].icon = iconToggle[infoSettings.marlin_fullscreen];
         listViewRefreshItem(curIndex);
         break;
 
       case 3:
-        infoSettings.marlin_show_title = (infoSettings.marlin_show_title + 1) % 2;
+        TOGGLE_BIT(infoSettings.marlin_show_title, 0);
         marlinModeitems[3].icon = iconToggle[infoSettings.marlin_show_title];
         listViewRefreshItem(curIndex);
         break;
@@ -218,7 +212,7 @@ void menuMarlinModeSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #endif  // ST7920_EMULATOR
@@ -304,8 +298,6 @@ void menuUISettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   setDynamicTextValue(0, (char *)itemNotificationType[infoSettings.ack_notification]);
   setDynamicTextValue(1, (char *)itemSortBy[infoSettings.files_sort_by]);
   uiItems[2].icon = iconToggle[infoSettings.files_list_mode];
@@ -341,32 +333,32 @@ void menuUISettings(void)
         break;
 
       case 2:
-        infoSettings.files_list_mode = (infoSettings.files_list_mode + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.files_list_mode, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.files_list_mode];
         break;
 
       case 3:
-        infoSettings.filename_extension = (infoSettings.filename_extension + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.filename_extension, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.filename_extension];
         break;
 
       case 4:
-        infoSettings.fan_percentage = (infoSettings.fan_percentage + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.fan_percentage, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.fan_percentage];
         break;
 
       case 5:
-        infoSettings.persistent_info = (infoSettings.persistent_info + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.persistent_info, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.persistent_info];
         break;
 
       case 6:
-        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.terminal_ack, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.terminal_ack];
         break;
 
       case 7:
-        infoSettings.led_always_on = (infoSettings.led_always_on + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.led_always_on, 0);
         uiItems[curIndex].icon = iconToggle[infoSettings.led_always_on];
         break;
 
@@ -379,7 +371,7 @@ void menuUISettings(void)
 
         #ifdef LCD_LED_PWM_CHANNEL
           case 9:
-            infoSettings.knob_led_idle = (infoSettings.knob_led_idle + 1) % ITEM_TOGGLE_NUM;
+            TOGGLE_BIT(infoSettings.knob_led_idle, 0);
             uiItems[curIndex].icon = iconToggle[infoSettings.knob_led_idle];
             break;
         #endif  // LCD_LED_PWM_CHANNEL
@@ -395,7 +387,7 @@ void menuUISettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #ifdef BUZZER_PIN
@@ -412,8 +404,6 @@ void menuSoundSettings(void)
   };
 
   uint16_t curIndex = KEY_IDLE;
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   for (uint8_t i = 0; i < SOUND_TYPE_COUNT; i++)
   {
@@ -436,7 +426,7 @@ void menuSoundSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }  // menuSoundSettings
 
 #endif  // BUZZER_PIN
@@ -456,8 +446,6 @@ void menuBrightnessSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
   char tempstr[8];
-
-  backupCurrentSettings();  // backup current Settings data if not already backed up
 
   sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
   setDynamicTextValue(0, tempstr);
@@ -512,7 +500,7 @@ void menuBrightnessSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }
 
 #endif  // LCD_LED_PWM_CHANNEL
@@ -554,8 +542,6 @@ void menuScreenSettings(void)
 
   uint16_t curIndex = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   menuDrawPage(&screenSettingsItems);
 
   while (MENU_IS(menuScreenSettings))
@@ -564,7 +550,7 @@ void menuScreenSettings(void)
     switch (curIndex)
     {
       case KEY_ICON_0:
-        infoSettings.rotated_ui = !infoSettings.rotated_ui;
+        TOGGLE_BIT(infoSettings.rotated_ui, 0);
         LCD_RefreshDirection(infoSettings.rotated_ui);
         TSC_Calibration();
         menuDrawPage(&screenSettingsItems);
@@ -616,5 +602,5 @@ void menuScreenSettings(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }

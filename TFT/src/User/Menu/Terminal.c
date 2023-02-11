@@ -582,13 +582,13 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          storeCmd("%s\n", gcodeBuf);
-
           if (saveEnabled == true)  // avoid saving again a gcode called from gcode history table
           {
             strcpy(keyboardData->gcodeTable[saveGcodeIndex], gcodeBuf);  // save gcode to history table
             saveGcodeIndex = (saveGcodeIndex + 1) % MAX_GCODE_COUNT;     // move to next save index in the gcode history table
           }
+
+          handleCmd(strcat(gcodeBuf, "\n"));
         }
 
         keyboardData->gcodeIndex = saveGcodeIndex;  // save and update gcode index
@@ -596,7 +596,7 @@ static inline void menuKeyboardView(void)
         break;
 
       case GKEY_ABC_123:
-        numpad = !numpad;
+        TOGGLE_BIT(numpad, 0);
         drawKeyboard();
         break;
 
@@ -856,7 +856,7 @@ void menuTerminalWindow(void)
         break;
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal
-        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.terminal_ack, 0);
         terminalDrawButton(TERM_TOGGLE_ACK, false);
         break;
 

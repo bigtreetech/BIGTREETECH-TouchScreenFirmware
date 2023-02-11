@@ -30,8 +30,6 @@ void menuManualLeveling(void)
 
   KEY_VALUES key_num = KEY_IDLE;
 
-  backupCurrentSettings();  // backup current Settings data if not already backed up
-
   manualLevelingItems.items[KEY_ICON_3] = itemSubmenu[curSubmenu_index];
 
   menuDrawPage(&manualLevelingItems);
@@ -106,5 +104,5 @@ void menuManualLeveling(void)
     loopProcess();
   }
 
-  storeCurrentSettings();  // store new Settings data to FLASH, if changed, and release backed up Settings data
+  saveSettings();  // Save settings
 }

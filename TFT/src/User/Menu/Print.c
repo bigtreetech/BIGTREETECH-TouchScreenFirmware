@@ -164,8 +164,8 @@ bool printPageItemSelected(uint16_t index)
       char temp_info[FILE_NUM + 50];
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
 
-      // confirm file selction
-      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL, startPrint, exitFolder, NULL);
+      // confirm file selection
+      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL, printStart, exitFolder, NULL);
 
       hasUpdate = false;
     }

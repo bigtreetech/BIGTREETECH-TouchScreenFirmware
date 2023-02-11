@@ -63,6 +63,7 @@ void menuZOffset(void)
     {ICON_01_MM,                   LABEL_01_MM},
     {ICON_RESET_VALUE,             LABEL_RESET},
     {ICON_EEPROM_SAVE,             LABEL_SAVE},
+    {ICON_BABYSTEP,                LABEL_SHIM},
     {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
   };
 
@@ -214,8 +215,15 @@ void menuZOffset(void)
               popupDialog(DIALOG_TYPE_QUESTION, zOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             break;
 
-          // unlock XY axis
+          // set level Z pos (shim)
           case 3:
+            infoSettings.level_z_pos = editFloatValue(LEVELING_Z_POS_MIN, LEVELING_Z_POS_MAX,
+                                                      LEVELING_Z_POS_DEFAULT, infoSettings.level_z_pos);
+            zOffsetDraw(offsetGetStatus(), now);
+            break;
+
+          // unlock XY axis
+          case 4:
             if (!offsetGetStatus())
               zOffsetNotifyError(false);
             else
@@ -250,4 +258,6 @@ void menuZOffset(void)
 
     loopProcess();
   }
+
+  saveSettings();  // Save settings
 }

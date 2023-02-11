@@ -1232,7 +1232,7 @@
  *   Options: [ENGLISH,    CHINESE,  RUSSIAN,     JAPANESE,   ARMENIAN,  GERMAN,        CZECH,
  *             SPANISH,    FRENCH,   PORTUGUESE,  ITALIAN,    POLISH,    SLOVAK,        DUTCH,
  *             HUNGARIAN,  TURKISH,  GREEK,       SLOVENIAN,  CATALAN,   TRAD_CHINESE,  UKRAINIAN,
- *             BRAZIL]
+ *             BRAZIL,     CROATIAN]
  */
 #define SYSTEM_LANGUAGE ENGLISH  // Default: ENGLISH
 
@@ -1271,7 +1271,7 @@
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
-#define BUZZER_FREQUENCY_HZ          10000  // in Hz (20Hz to 60000Hz). Default: 10000
+#define BUZZER_FREQUENCY_HZ          10548  // in Hz (20Hz to 60000Hz). Default: 10548 (musical note "E")
 
 /**
  * Buzzer Stop Level

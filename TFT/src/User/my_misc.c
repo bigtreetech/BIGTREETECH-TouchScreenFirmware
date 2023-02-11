@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#define CRC_POLY 0xA001
+
 uint8_t inRange(int cur, int tag , int range)
 {
   if ((cur <= tag + range) && (cur >= tag - range))
@@ -16,6 +18,29 @@ uint8_t inRange(int cur, int tag , int range)
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+// Calculate CRC16 checksum
+uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
+{
+  uint16_t crc = 0xFFFF;
+  uint32_t i;
+  for (i = 0; i < length; i++)
+  {
+    crc = (crc ^ data[i]) & 0xFFFF;
+    for (uint8_t j = 0; j < 8; j++)
+    {
+      if (crc & 1)
+      {
+        crc = (crc >> 1) ^ CRC_POLY;
+      }
+      else
+      {
+        crc = crc >> 1;
+      }
+    }
+  }
+  return crc;
 }
 
 // string convert to uint8, MSB

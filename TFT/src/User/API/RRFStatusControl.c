@@ -49,7 +49,7 @@ void rrfStatusSet(char status)
 
           case 'B':
             if (was_printing)
-              setPrintAbort();
+              printAbortCease();
             break;
         }
         break;
