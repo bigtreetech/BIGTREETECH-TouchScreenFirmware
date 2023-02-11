@@ -669,7 +669,7 @@ void parseACK(void)
       // parse and store M24, printing from (remote) onboard media completed
       else if (ack_seen("Done printing file"))  // if printing from (remote) onboard media
       {
-        printEnd();
+        endPrint();
       }
     }
 
