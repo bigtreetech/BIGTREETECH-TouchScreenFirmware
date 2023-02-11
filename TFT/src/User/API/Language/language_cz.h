@@ -59,6 +59,7 @@
     #define STRING_HOTEND_PID             "PID trysky"
     #define STRING_BED_PID                "PID podložky"
     #define STRING_STEALTH_CHOP           "TMC Tichý režim"
+    #define STRING_INPUT_SHAPING          "Input Shaping"
     #define STRING_DELTA_CONFIGURATION    "Delta konfigurace"
     #define STRING_DELTA_TOWER_ANGLE      "Úhel věže"
     #define STRING_DELTA_DIAGONAL_ROD     "Diagonální tyč"
