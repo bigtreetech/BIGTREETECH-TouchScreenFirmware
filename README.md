@@ -118,9 +118,9 @@ the following options must be enabled in Marlin firmware.
 `BABYSTEPPING` (in Configuration_adv.h)<br>
 `AUTO_REPORT_TEMPERATURES` (in Configuration_adv.h)<br>
 `AUTO_REPORT_POSITION` (in Configuration_adv.h)<br>
+`EXTENDED_CAPABILITIES_REPORT` (in Configuration_adv.h)<br>
 `M115_GEOMETRY_REPORT` (in Configuration_adv.h)<br>
 `M114_DETAIL` (in Configuration_adv.h)<br>
-`EXTENDED_CAPABILITIES_REPORT` (in Configuration_adv.h)<br>
 `REPORT_FAN_CHANGE` (in Configuration_adv.h)<br>
 
 **Options to support printing from onboard media:**
