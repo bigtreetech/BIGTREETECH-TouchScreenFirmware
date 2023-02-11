@@ -542,8 +542,8 @@ void abortPrint(void)
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      // force the transmission of M524 (queue is enabled and empty so the gcode can be sent rapidly)
-      // to abort the print followed by the reception of the "ok" ACK message.
+      // force the transmission of M524 (queue is enabled and empty so the gcode can be sent rapidly even without the need
+      // to send it as an emergency command) to abort the print followed by the reception of the "ok" ACK message.
       // Finally, forward the print cancel action to all the remote hosts (also TFT) to notify the print cancelation
       // followed by the execution of the post print cancel tasks provided at the end of this function
       //
@@ -552,7 +552,6 @@ void abortPrint(void)
       //
       if (infoMachineSettings.firmwareType != FW_REPRAPFW)
       {
-        //sendEmergencyCmd("M524\n");
         request_M524();
       }
       else  // if RepRap
