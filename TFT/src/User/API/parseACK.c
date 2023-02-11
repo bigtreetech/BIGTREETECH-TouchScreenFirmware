@@ -498,6 +498,8 @@ void parseACK(void)
     if (ack_starts_with("ok"))  // handle "ok" response
     { // it is checked first (and not later on) because it is the most frequent response during printing
       infoHost.wait = false;
+
+      // if regular "ok\n" response or ADVANCED_OK response (Marlin) (e.g. "ok N10 P15 B3\n")
       if ((ack_cache[ack_index] == '\n') || (ack_continue_seen("P") && ack_continue_seen("B")))
         goto parse_end;  // there's nothing else to check for
     }
