@@ -304,7 +304,7 @@
     #define STRING_P_OFFSET               "P Offset"
     #define STRING_H_OFFSET               "H Offset"
     #define STRING_DISTANCE               "Od okraje"
-    #define STRING_SHIM                   "Shim"
+    #define STRING_SHIM                   "Měrka"
     #define STRING_LOAD_UNLOAD            "Vysunout/Zavést"
     #define STRING_LOAD_UNLOAD_SHORT      "Vysunout"
     #define STRING_TOUCHSCREEN_ADJUST     "Kalibrovat"
