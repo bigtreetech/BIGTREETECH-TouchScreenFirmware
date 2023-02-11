@@ -72,7 +72,7 @@ void storeEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     do
     {
       loopProcess();
@@ -143,7 +143,7 @@ bool storeCmd(const char * format, ...)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -165,7 +165,7 @@ void mustStoreCmd(const char * format, ...)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -215,7 +215,7 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -235,7 +235,7 @@ void mustStoreCacheCmd(const char * format, ...)
 {
   if (cmdCache.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -802,7 +802,7 @@ void sendQueueCmd(void)
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
                 {
                   writing_mode = TFT_WRITING;
-                  reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
+                  setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
                 }
 
                 sendCmd(true, avoid_terminal);
@@ -811,7 +811,7 @@ void sendQueueCmd(void)
               else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
               {
                 writing_mode = ONBOARD_WRITING;
-                reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
+                setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
               }
             }
             break;
