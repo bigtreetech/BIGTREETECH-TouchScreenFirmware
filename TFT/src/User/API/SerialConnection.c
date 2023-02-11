@@ -197,7 +197,7 @@ void Serial_GetFromUART(void)
     {
       while (Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)  // if some data have been retrieved
       {
-        storeCmdFromUART(portIndex, cmd);
+        handleCmd(cmd, portIndex);
       }
     }
   }

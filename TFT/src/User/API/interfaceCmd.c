@@ -25,8 +25,8 @@ typedef enum
   ONBOARD_WRITING
 } WRITING_MODE;
 
-GCODE_QUEUE cmdQueue;              // Command queue where commands to be sent are stored
-GCODE_QUEUE cmdCache;              // only when heatHasWaiting() is false the cmd in this cache will move to cmdQueue queue
+GCODE_QUEUE cmdQueue;              // command queue where commands to be sent are stored
+GCODE_QUEUE cmdCache;              // only when heatHasWaiting() returns "false" the cmd in this cache will move to cmdQueue queue
 char * cmd_ptr;
 uint8_t cmd_len;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
@@ -47,11 +47,9 @@ bool isNotEmptyCmdQueue(void)
 
 bool isEnqueued(const CMD cmd)
 {
-  uint8_t i = 0;
-
-  while (i < infoCmd.count)
+  for (int i = 0; i < cmdQueue.count; i++)
   {
-    if (strcmp(cmd, infoCmd.queue[(infoCmd.index_r + i++) % CMD_QUEUE_SIZE].gcode) == 0)
+    if (strcmp(cmd, cmdQueue.queue[(cmdQueue.index_r + i) % CMD_QUEUE_SIZE].gcode) == 0)
       return true;
   }
 
@@ -67,49 +65,56 @@ bool isWritingMode(void)
 
 // Store an emergency command in the front of the command queue
 // so it is sent as soon as possible to the printer.
-// The command parameter must be a clear command, not formatted
-void storeEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+// The command parameter must be a clear command, not formatted.
+void storeEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 {
   if (emergencyCmd[0] == '\0') return;
 
-  if (infoCmd.count >= CMD_QUEUE_SIZE)
+  if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
     do
     {
       loopProcess();
-    } while (infoCmd.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the queue in case the queue is currently full
+    } while (cmdQueue.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the queue in case the queue is currently full
   }
 
-  infoCmd.index_r = (infoCmd.index_r + CMD_QUEUE_SIZE - 1) % CMD_QUEUE_SIZE;
-  strcpy(infoCmd.queue[infoCmd.index_r].gcode, emergencyCmd);
-  infoCmd.queue[infoCmd.index_r].port_index = portIndex;
-  infoCmd.count++;
+  cmdQueue.index_r = (cmdQueue.index_r + CMD_QUEUE_SIZE - 1) % CMD_QUEUE_SIZE;
+  strcpy(cmdQueue.queue[cmdQueue.index_r].gcode, emergencyCmd);
+  cmdQueue.queue[cmdQueue.index_r].port_index = portIndex;
+  cmdQueue.count++;
 }
 
-// Send emergency command now
-// The command parameter must be a clear command, not formatted
-// Note: make sure that the printer can receive the command
-void sendEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+// Send emergency command now.
+// The command parameter must be a clear command, not formatted.
+//
+// NOTE: Make sure that the printer can receive the command.
+//
+void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 {
+  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
+    // dump serial data sent to debug port
+    Serial_Put(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Put(SERIAL_DEBUG_PORT, ">>");
+    Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
+  #endif
+
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    Serial_Puts(SERIAL_PORT, emergencyCmd);
+    Serial_Put(SERIAL_PORT, emergencyCmd);
   else
-    rrfSendCmd(cmd_ptr);
+    rrfSendCmd(emergencyCmd);
 
   setCurrentAckSrc(portIndex);
 
   if (MENU_IS(menuTerminal))
-  {
     terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
-  }
 }
 
-// Handles emmergency command
-// It sends it immediately if the printer has emergency parser
-// otherwise puts it first in the command queue
-// The command parameter must be a clear command, not formatted
-void handleEmergencyCmd(const char * emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+// Handles emmergency command.
+// It sends it immediately if the printer has emergency parser,
+// otherwise puts it first in the command queue.
+// The command parameter must be a clear command, not formatted.
+void handleEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 {
   if (infoMachineSettings.emergencyParser == 0)
     storeEmergencyCmd(emergencyCmd, portIndex);
@@ -204,7 +209,7 @@ void mustStoreScript(const char * format, ...)
 // Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
-bool storeCmdFromUART(SERIAL_PORT_INDEX portIndex, const CMD cmd)
+bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
   if (cmd[0] == 0) return false;
 
@@ -258,28 +263,62 @@ void clearCmdQueue(void)
   cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
   cmdCache.count = cmdCache.index_w = cmdCache.index_r = 0;
   heatSetUpdateWaiting(false);
-  printSetUpdateWaiting(false);
+  setPrintUpdateWaiting(false);
 }
 
-// Get the data of the next to be sent command in infoCmd
+// Strip out any leading space from the passed command.
+// Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command.
+char * stripCmd(char ** cmdPtr)
+{
+  char * strPtr = *cmdPtr;
+
+  // skip leading spaces
+  while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
+
+  // save pointer to skipped spaces
+  *cmdPtr = strPtr;                          // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
+
+  // skip N[-0-9] (line number) if included in the command line
+  if (*strPtr == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28*46\n" -> "G28*46\n"
+  {
+    strPtr += 2;                             // skip N[-0-9]
+    while (NUMERIC(*strPtr)) strPtr++;       // skip [0-9]*
+    while (*strPtr == ' ') strPtr++;         // skip [ ]*
+  }
+
+  return strPtr;
+}
+
+// Get the data of the next to be sent command in cmdQueue
 // and return "true" if sent from TFT, otherwise "false".
 static inline bool getCmd(void)
 {
   cmd_ptr = &cmdQueue.queue[cmdQueue.index_r].gcode[0];          // gcode
-  cmd_len = strlen(cmd_ptr);                                     // length of gcode
   cmd_port_index = cmdQueue.queue[cmdQueue.index_r].port_index;  // index of serial port originating the gcode
-  cmd_base_index = cmd_index = 0;
 
-  return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return true
+  // strip out any leading space from the passed command.
+  // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
+  //
+  // set cmd_base_index with index of gcode command
+  //
+  cmd_base_index = stripCmd(&cmd_ptr) - cmd_ptr;                 // e.g. "N1   G28*46\n" -> "G28*46\n"
+
+  // set cmd_index with index of gcode value
+  cmd_index = cmd_base_index + 1;                                // e.g. "G28*46\n" -> "28*46\n"
+
+  cmd_len = strlen(cmd_ptr);                                     // length of gcode
+
+  return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return "true"
 }
 
-// Purge gcode cmd or send it to the printer and then remove it from infoCmd queue.
+// Purge gcode cmd or send it to the printer and then remove it from cmdQueue queue.
 bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
-  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 &&  // if TFT is in listening mode and FW type was already detected,
-      infoMachineSettings.firmwareType != FW_NOT_DETECTED)                  // purge the command
+  // if TFT is in listening mode and FW type was already detected, purge the command
+  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 &&
+      infoMachineSettings.firmwareType != FW_NOT_DETECTED)
     purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
@@ -314,72 +353,46 @@ bool sendCmd(bool purge, bool avoidTerminal)
   cmdQueue.count--;
   cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
 
-  return !purge;  // return true if command was sent. Otherwise, return false
+  return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
 
-// Check if the received gcode is an emergency one or not
-// (M108, M112, M410, M524, M876) and parse it accordingly
-void handleCmd(char * cmd, const SERIAL_PORT_INDEX portIndex)
+// Check if the received gcode is an emergency command or not
+// (M108, M112, M410, M524, M876) and parse it accordingly.
+void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
-  char * strPtr;
+  // strip out any leading space from the passed command.
+  // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
+  //
+  char * strPtr = stripCmd(&cmd);  // e.g. "  N1   G28*46\n" -> "G28*46\n"
 
-  while (cmd[0] == ' ') cmd++;  // remove leading space
-  strPtr = cmd;
+  // check if the received gcode is an emergency command and parse it accordingly
 
-  // skip N[-0-9] (line number) if included in the command line
-  if (strPtr[0] == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28 XY\n" -> "G28 XY\n"
+  if (strPtr[0] == 'M')
   {
-    strPtr += 2;                               // skip N[-0-9]
-    while (NUMERIC(strPtr[0])) strPtr++;       // skip [0-9]*
-    while (strPtr[0] == ' ') strPtr++;         // skip [ ]*
-  }
-
-  if ((strPtr[0] == 'M') && NUMERIC(strPtr[1]))
-  {
-    switch ((uint16_t)strtod(&strPtr[1], NULL))
+    switch (strtol(&strPtr[1], NULL, 10))
     {
       case 108:  // M108
       case 112:  // M112
       case 410:  // M410
       case 876:  // M876
         sendEmergencyCmd(cmd, portIndex);
-        break;
+        return;
 
       case 524:  // M524
-        if (isPrinting())
-        {
-          if (portIndex == PORT_1)  // from terminal
-          {
-            if (infoFile.source == FS_ONBOARD_MEDIA)
-              printAbort();
-          }
-          else
-          {
-            if (infoFile.source != FS_REMOTE_HOST)
-            {
-              printAbort();
-              Serial_Puts(serialPort[portIndex].port, "ok\n");
-            }
-          }
-        }
-        else
-        {
-          storeEmergencyCmd(cmd, portIndex);
-        }
-        break;
+        abortPrint();
 
-      default:
-        if (cmd[0] != '\0')
-          while(!storeCmdFromUART(portIndex, cmd))
-          {
-            loopProcess();
-          }
-        break;
+        if (portIndex != PORT_1)  // if gcode is not generated from TFT
+          Serial_Forward(portIndex, "ok\n");
+        return;
     }
   }
-  else if (cmd[0] != '\0')
+
+  // the received gcode is not an emergency command.
+  // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
+
+  if (cmd[0] != '\0')
   {
-    while(!storeCmdFromUART(portIndex, cmd))
+    while (!storeCmdFromUART(cmd, portIndex))
     {
       loopProcess();
     }
@@ -468,7 +481,7 @@ bool initRemoteTFT()
 
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
-  // cmd_index was set by cmd_seen_from function
+  // cmd_index was set by cmd_seen_from() function
   strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
   stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
 
@@ -538,7 +551,7 @@ void writeRemoteTFT()
   // "cmd_ptr" = "N2 G29*56\n"
   // "cmd_ptr" = "N3 M29*66\n"
 
-  // if M29, stop writing mode. cmd_index (used by cmd_value function) was set by sendQueueCmd function
+  // if M29, stop writing mode. cmd_index (used by cmd_value() function) was set by sendQueueCmd() function
   if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*66\n" -> "M29*66\n"
   {
     f_close(&file);
@@ -557,7 +570,7 @@ void writeRemoteTFT()
 
     f_write(&file, cmd, strlen(cmd), &br);
 
-    // "\n" is always removed by stripChecksum function even if there is no checksum, so we need to write it on file separately
+    // "\n" is always removed by stripChecksum() function even if there is no checksum, so we need to write it on file separately
     f_write(&file, "\n", 1, &br);
     f_sync(&file);
   }
@@ -594,29 +607,10 @@ void syncTargetTemp(uint8_t index)
 // Parse and send gcode cmd in cmdQueue queue.
 void sendQueueCmd(void)
 {
-  if (infoHost.wait == true || infoCmd.count == 0) return;
+  if (infoHost.wait == true || cmdQueue.count == 0) return;
 
-  bool avoid_terminal = false;  // flag to avoid or not showing the command on terminal
-  bool cmd_emergency = false;   // emergency command flag (M108, M112, M410, M524, M876)
-  bool fromTFT = getCmd();      // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
-  char * strPtr = cmd_ptr;      // cmd_ptr was set by getCmd function
-
-  // skip leading spaces
-  while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
-
-  // skip N[-0-9] (line number) if included in the command line
-  if (*strPtr == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28*46\n" -> "G28*46\n"
-  {
-    strPtr += 2;                             // skip N[-0-9]
-    while (NUMERIC(*strPtr)) ++strPtr;       // skip [0-9]*
-    while (*strPtr == ' ') ++strPtr;         // skip [ ]*
-  }
-
-  // set cmd_base_index with index of gcode command
-  cmd_base_index = strPtr - cmd_ptr;         // e.g. "  N1   G28*46\n" -> "G28*46\n"
-
-  // set cmd_index with index of gcode value
-  cmd_index = cmd_base_index + 1;            // e.g. "G28*46\n" -> "28*46\n"
+  bool avoid_terminal = false;
+  bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
 
   if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
   {
@@ -635,7 +629,7 @@ void sendQueueCmd(void)
       if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
         writing_mode = NO_WRITING;
 
-      if (sendCmd(false, avoid_terminal) && !cmd_emergency)  // if the command was sent and it's not an emergency type
+      if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
         infoHost.wait = infoHost.connected;
     }
 
@@ -656,7 +650,7 @@ void sendQueueCmd(void)
             if (infoFile.source < FS_ONBOARD_MEDIA)
             {
               sendCmd(true, avoid_terminal);
-              printPause(true, PAUSE_M0);
+              pausePrint(true, PAUSE_M0);
               return;
             }
           }
@@ -723,21 +717,22 @@ void sendQueueCmd(void)
           case 24:  // M24
             if (!fromTFT)
             {
-              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to FS_ONBOARD_MEDIA_REMOTE
-              //       by the startRemotePrint function called in parseAck.c during M23 ACK parsing
+              // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to
+              //       FS_ONBOARD_MEDIA_REMOTE by the startPrintingFromRemoteHost() function called in parseAck.c
+              //       during M23 ACK parsing
 
               if (infoFile.source < FS_ONBOARD_MEDIA)  // if a file was selected from TFT media with M23
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause()
-                Serial_Forward(cmd_port_index, "ok\n");
+                // case the function loopProcess() is invoked by the following function pausePrint()
                 sendCmd(true, avoid_terminal);
 
                 if (!isPrinting())  // if not printing, start a new print and open Printing menu
-                  startPrint();
+                  startPrinting();
                 else                // if printing, resume the print, in case it is paused, or continue to print
-                  printPause(false, PAUSE_NORMAL);
+                  pausePrint(false, PAUSE_NORMAL);
 
+                Serial_Forward(cmd_port_index, "ok\n");
                 return;
               }
             }
@@ -748,18 +743,18 @@ void sendQueueCmd(void)
           case 524:  // M524
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT media
+              if (isPrintingFromTFT())  // if printing from TFT media
               {
                 // firstly purge the gcode to avoid a possible reprocessing or infinite nested loop in
-                // case the function loopProcess() is invoked by the following function printPause() / printAbort()
-                Serial_Forward(cmd_port_index, "ok\n");
+                // case the function loopProcess() is invoked by the following function pausePrint() / abortPrint()
                 sendCmd(true, avoid_terminal);
 
                 if (cmd_value() != 524)            // if M25 or M125
-                  printPause(true, PAUSE_NORMAL);
+                  pausePrint(true, PAUSE_NORMAL);
                 else                               // if M524
-                  printAbort();
+                  abortPrint();
 
+                Serial_Forward(cmd_port_index, "ok\n");
                 return;
               }
             }
@@ -774,7 +769,7 @@ void sendQueueCmd(void)
 
             if (!fromTFT)
             {
-              if (isTFTPrinting())  // if printing from TFT media
+              if (isPrintingFromTFT())  // if printing from TFT media
               {
                 char buf[55];
 
@@ -795,7 +790,7 @@ void sendQueueCmd(void)
             }
             else
             {
-              printSetUpdateWaiting(false);
+              setPrintUpdateWaiting(false);
             }
             break;
 
@@ -908,7 +903,7 @@ void sendQueueCmd(void)
 
         #else  // not SERIAL_PORT_2
           case 27:  // M27
-            printSetUpdateWaiting(false);
+            setPrintUpdateWaiting(false);
             break;
         #endif  // SERIAL_PORT_2
 
@@ -921,7 +916,7 @@ void sendQueueCmd(void)
 
           if (cmd_seen('R'))
           {
-            setPrintRemainingTime((cmd_value() * 60));
+            setPrintRemainingTime(cmd_value() * 60);
             setTimeFromSlicer(true);  // disable parsing remaning time from gcode comments
 
             if (getPrintProgressSource() < PROG_TIME && infoSettings.prog_source == 1)
@@ -987,14 +982,6 @@ void sendQueueCmd(void)
           fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
           break;
 
-        case 108:  // M108
-        case 112:  // M112
-        case 410:  // M410
-        case 524:  // M524
-        case 876:  // M876
-          cmd_emergency = (infoMachineSettings.emergencyParser);
-          break;
-
         case 109:  // M109
           if (fromTFT)
           {
@@ -1023,7 +1010,7 @@ void sendQueueCmd(void)
           if (cmd_seen_from(cmd_base_index, "Time Left"))  // parsing printing time left
           {
             // format: Time Left <XX>h<YY>m<ZZ>s (e.g. Time Left 02h04m06s)
-            parsePrintRemainingTime(&cmd_ptr[cmd_index]);  // cmd_index was set by cmd_seen_from function
+            parsePrintRemainingTime(&cmd_ptr[cmd_index]);  // cmd_index was set by cmd_seen_from() function
             setTimeFromSlicer(true);
           }
           else if (cmd_seen_from(cmd_base_index, "Layer Left"))  // parsing printing layer left
@@ -1053,23 +1040,6 @@ void sendQueueCmd(void)
 
             if (MENU_IS_NOT(menuStatus))
               addToast(DIALOG_TYPE_INFO, (char *)msgText);
-          }
-          break;
-
-        case 155:  // M155
-          if (rrfStatusIsMacroBusy())
-          {
-            sendCmd(true, avoid_terminal);
-            return;
-          }
-
-          if (fromTFT)
-          {
-            heatSetUpdateWaiting(false);
-
-            if (cmd_seen('S'))
-              heatSyncUpdateSeconds(cmd_value());
-
           }
           break;
 
@@ -1352,7 +1322,7 @@ void sendQueueCmd(void)
             if (GET_BIT(infoSettings.general_settings, INDEX_EMULATED_M600) == 1)
             {
               sendCmd(true, avoid_terminal);
-              printPause(true, PAUSE_NORMAL);
+              pausePrint(true, PAUSE_NORMAL);
               return;
             }
           }
@@ -1553,6 +1523,6 @@ void sendQueueCmd(void)
       break;
   }  // end parsing cmd
 
-  if (sendCmd(false, avoid_terminal) && !cmd_emergency)  // if command was sent and it's not an emergency type
+  if (sendCmd(false, avoid_terminal) == true)  // if command was sent
     infoHost.wait = infoHost.connected;
 }  // sendQueueCmd

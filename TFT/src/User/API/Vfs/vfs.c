@@ -48,7 +48,7 @@ bool mountFS(void)
       return mountUSBDisk();
 
     case FS_ONBOARD_MEDIA:
-      if (isHostPrinting())
+      if (isPrintingFromHost())
         return true;  // no mount while printing
       else
         return mountGcodeSDCard();

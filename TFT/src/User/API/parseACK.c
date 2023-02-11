@@ -273,11 +273,11 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
-    startRemotePrint(NULL);  // start print and open Printing menu
+    startPrintingFromRemoteHost(NULL);  // start print originated and hosted by remote host and open Printing menu
   }
   else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
-    printEnd();
+    endPrint();
   }
   else if (ack_seen(":pause") || ack_seen(":paused"))
   {
@@ -300,7 +300,7 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
-    printAbortCease();
+    setPrintAbort();
   }
   else if (ack_seen(":prompt_begin "))
   {
@@ -626,8 +626,9 @@ void parseACK(void)
     // parse and store M23, select SD file
     else if (infoMachineSettings.onboardSD == ENABLED && ack_starts_with("File opened:"))
     {
-      // NOTE: this block is not reached in case of printing from onboard media because printStartPrepare() will call
-      //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
+      // NOTE: this block is not reached in case of printing from onboard media because startPrint() in Printing.c will
+      //       call request_M23_M36() that will be managed in parseAck() by the block "Onboard media response handling"
+      //       provided at the beginning of this funtion
 
       // parse file name.
       // Format: "File opened: <file name> Size: <YYYY>" (e.g. "File opened: 1A29A~1.GCO Size: 6974")
@@ -642,7 +643,9 @@ void parseACK(void)
       memcpy(file_name, ack_cache + start_index, path_len);
       file_name[path_len] = '\0';
 
-      startRemotePrint(file_name);  // start print and open Printing menu
+      // start print originated by remote host but hosted by onboard
+      // (print from remote onboard media) and open Printing menu
+      startPrintingFromRemoteHost(file_name);
     }
     else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE))
     {
@@ -660,7 +663,7 @@ void parseACK(void)
           if (ack_continue_seen("byte"))  // received "SD printing byte"
             setPrintProgressData(ack_value(), ack_second_value());
           else  // received "Not SD printing"
-            printAbortCease();
+            setPrintAbort();
         }
       }
       // parse and store M24, printing from (remote) onboard media completed
@@ -853,11 +856,13 @@ void parseACK(void)
     }
     // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
     else if (ack_starts_with("M92 ") || ack_starts_with("M201") || ack_starts_with("M203"))  // "M92 " to not trigger if "M928" received
-      {
-      PARAMETER_NAME param = P_STEPS_PER_MM;
+    {
+      PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
 
+      // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+      // instead of optimizing performance (code typically not executed during a print)
       if (ack_starts_with("M201")) param = P_MAX_ACCELERATION;
-      else if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
+      if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
 
       if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
       if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
@@ -1016,7 +1021,7 @@ void parseACK(void)
     }
     else if (ack_seen("driver mode:"))
     {
-      bool isStealthChop = ack_continue_seen("stealthChop");
+      float isStealthChop = ack_continue_seen("stealthChop");  // boolean type value also casted to float type
       STEPPER_INDEX stepperIndex = 0;
 
       if (ack_seen("X")) stepperIndex = STEPPER_INDEX_X;
@@ -1042,10 +1047,12 @@ void parseACK(void)
     // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
     else if (ack_starts_with("M906") || ack_starts_with("M913") || ack_starts_with("M914"))
     {
-      PARAMETER_NAME param = P_CURRENT;
+      PARAMETER_NAME param = P_CURRENT;  // default value
 
+      // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+      // instead of optimizing performance (code typically not executed during a print)
       if (ack_starts_with("M913")) param = P_HYBRID_THRESHOLD;
-      else if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
+      if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
 
       int8_t stepperIndex = (ack_seen("I")) ? ack_value() : 0;
 

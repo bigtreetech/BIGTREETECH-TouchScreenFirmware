@@ -1005,7 +1005,7 @@ void menuTerminal(void)
   KEYBOARD_DATA keybData = {{'\0'}, 0};
   TERMINAL_DATA termData = {{terminalBuf}, MAX_PAGE_COUNT, 0, 0, 0, 0, MAX_TERMINAL_BUF_SIZE, 0, SRC_TERMINAL_COUNT};
 
-  if (isPrinting() || isHostPrinting())  // display only 1 page if printing
+  if (isPrinting() || isPrintingFromHost())  // display only 1 page if printing
   {
     termData.bufSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termData.maxPageCount = 1;

@@ -165,7 +165,8 @@ bool printPageItemSelected(uint16_t index)
       sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
 
       // confirm file selection
-      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL, printStart, exitFolder, NULL);
+      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL,
+                  startPrinting, exitFolder, NULL);
 
       hasUpdate = false;
     }
@@ -467,6 +468,6 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!isHostPrinting())  // prevent reset if printing from other source
+  if (!isPrintingFromHost())  // prevent reset if printing from other source
     resetInfoFile();
 }

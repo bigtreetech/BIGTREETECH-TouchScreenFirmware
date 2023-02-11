@@ -236,7 +236,7 @@ void FIL_FE_CheckRunout(void)
   if (!getPrintRunout() && !getRunoutAlarm())
     return;
 
-  if (printPause(true, PAUSE_NORMAL) && !getRunoutAlarm())  // If not printing, printPause() function will always fail
+  if (pausePrint(true, PAUSE_NORMAL) && !getRunoutAlarm())  // If not printing, pausePrint() function will always fail
   {                                                         // so no useless error message is displayed
     setRunoutAlarmTrue();
     popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_NULL, setRunoutAlarmFalse, NULL, NULL);
