@@ -194,7 +194,7 @@ void saveSettings(void)
   uint32_t curCRC = calculateCRC16((uint8_t*)&infoSettings + sizeof(infoSettings.CRC_checksum),
                                       sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 
-  if (curCRC != infoSettings.CRC_checksum)  // save to Flash only if CRC does not match
+  if (curCRC != infoSettings.CRC_checksum) // save to Flash only if CRC does not match
   {
     infoSettings.CRC_checksum = curCRC;
     storePara();
@@ -231,7 +231,7 @@ void initMachineSettings(void)
 
 void setupMachine(FW_TYPE fwType)
 {
-  if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // avoid repeated calls caused by manually sending M115 in terminal menu
+  if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // Avoid repeated calls caused by manually sending M115 in terminal menu
     return;
 
   if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)  // if TFT in listening mode, display a reminder message

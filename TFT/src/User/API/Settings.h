@@ -167,7 +167,6 @@ typedef enum
 typedef struct
 {
   uint16_t CRC_checksum;
-
   // General Settings
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
   uint8_t  general_settings;  // emulated M600 / emulated M109-M190 / file comment parsing toggles (Bit Values)
@@ -374,10 +373,10 @@ void initSettings(void);
 // Save settings to Flash only if CRC does not match
 void saveSettings(void);
 
-// Init machine settings data with default values
+// Init Machine settings data with default values
 void initMachineSettings(void);
 
-// Setup machine settings
+// setup machine setting
 void setupMachine(FW_TYPE fwType);
 
 float flashUsedPercentage(void);

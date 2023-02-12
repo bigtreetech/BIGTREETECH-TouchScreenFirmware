@@ -11,14 +11,14 @@ extern "C" {
 
 #define CMD_MAX_SIZE 100  // including ending character '\0'
 
-#define storeEmergencyCmd(...)         _storeEmergencyCmd(__VA_ARGS__, PORT_1)
-#define _storeEmergencyCmd(a, b, ...)  storeEmergencyCmd(a, b)
-#define sendEmergencyCmd(...)          _sendEmergencyCmd(__VA_ARGS__, PORT_1)
-#define _sendEmergencyCmd(a, b, ...)   sendEmergencyCmd(a, b)
-#define handleEmergencyCmd(...)        _handleEmergencyCmd(__VA_ARGS__, PORT_1)
+#define sendEmergencyCmd(...) _sendEmergencyCmd(__VA_ARGS__, PORT_1)
+#define _sendEmergencyCmd(a, b, ...) sendEmergencyCmd(a, b)
+#define storeEmergencyCmd(...) _storeEmergencyCmd(__VA_ARGS__, PORT_1)
+#define _storeEmergencyCmd(a, b, ...) storeEmergencyCmd(a, b)
+#define handleEmergencyCmd(...) _handleEmergencyCmd(__VA_ARGS__, PORT_1)
 #define _handleEmergencyCmd(a, b, ...) handleEmergencyCmd(a, b)
-#define handleCmd(...)                 _handleCmd(__VA_ARGS__, PORT_1)
-#define _handleCmd(a, b, ...)          handleCmd(a, b)
+#define handleCmd(...) _handleCmd(__VA_ARGS__, PORT_1)
+#define _handleCmd(a, b, ...) handleCmd(a, b)
 
 typedef char CMD[CMD_MAX_SIZE];
 
