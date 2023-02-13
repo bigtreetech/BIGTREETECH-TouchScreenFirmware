@@ -56,7 +56,7 @@ float babyMblOffsetSetValue(float value)
 // Get current Z offset value for MBL bl type
 float babyMblOffsetGetValue(void)
 {
-  return getParameter(P_MBL_OFFSET, 0);
+  return infoParameters.MblOffset[0];
 }
 
 void menuBabystep(void)

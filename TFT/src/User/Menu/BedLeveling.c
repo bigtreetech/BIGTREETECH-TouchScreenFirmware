@@ -3,7 +3,7 @@
 
 void blUpdateState(MENUITEMS * menu)
 {
-  if (getParameter(P_ABL_STATE, 0) == ENABLED)
+  if (infoParameters.ABLState[0] == ENABLED)
   {
     menu->items[3].icon = ICON_LEVELING_ON;
     menu->items[3].label.index = LABEL_BL_ENABLE;
@@ -74,7 +74,7 @@ void menuBedLeveling(void)
 
   if (index3And4Support)
   {
-    levelStateOld = getParameter(P_ABL_STATE, 0);
+    levelStateOld = infoParameters.ABLState[0];
     blUpdateState(&bedLevelingItems);  // update icon & label 3
 
     bedLevelingItems.items[4].icon = ICON_Z_FADE;
@@ -123,7 +123,7 @@ void menuBedLeveling(void)
       case KEY_ICON_3:
         if (index3And4Support)
         {
-          if (getParameter(P_ABL_STATE, 0) == ENABLED)
+          if (infoParameters.ABLState[0] == ENABLED)
             storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
           else
             storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
@@ -134,9 +134,9 @@ void menuBedLeveling(void)
       {
         if (index3And4Support)
         {
-          float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
+          float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, infoParameters.ABLState[1]);
 
-          if (val != getParameter(P_ABL_STATE, 1))
+          if (val != infoParameters.ABLState[1])
             storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 Z%.2f\n" : "M376 H%.2f\n", val);
 
           menuDrawPage(&bedLevelingItems);
@@ -170,9 +170,9 @@ void menuBedLeveling(void)
         break;
     }
 
-    if (index3And4Support && levelStateOld != getParameter(P_ABL_STATE, 0))
+    if (index3And4Support && levelStateOld != infoParameters.ABLState[0])
     {
-      levelStateOld = getParameter(P_ABL_STATE, 0);
+      levelStateOld = infoParameters.ABLState[0];
 
       blUpdateState(&bedLevelingItems);
       menuDrawItem(&bedLevelingItems.items[3], 3);

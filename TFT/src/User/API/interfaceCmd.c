@@ -1076,16 +1076,16 @@ void sendQueueCmd(void)
 
         case 200:  // M200 filament diameter
         {
-          if (cmd_seen('S')) setParameter(P_FILAMENT_DIAMETER, 0, cmd_float());
+          if (cmd_seen('S')) infoParameters.FilamentSetting[0] = cmd_float();
 
           uint8_t i = (cmd_seen('T')) ? cmd_value() : 0;
 
-          if (cmd_seen('D')) setParameter(P_FILAMENT_DIAMETER, 1 + i, cmd_float());
+          if (cmd_seen('D')) infoParameters.FilamentSetting[1 + i] = cmd_float();
 
           if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
           {
             // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
-            setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
+            infoParameters.FilamentSetting[0] = infoParameters.FilamentSetting[1] > 0.01f ? 1 : 0;
           }
           break;
         }
@@ -1112,17 +1112,17 @@ void sendQueueCmd(void)
         }
 
         case 204:  // M204 acceleration (units/s2)
-          if (cmd_seen('P')) setParameter(P_ACCELERATION, 0, cmd_float());
-          if (cmd_seen('R')) setParameter(P_ACCELERATION, 1, cmd_float());
-          if (cmd_seen('T')) setParameter(P_ACCELERATION, 2, cmd_float());
+          if (cmd_seen('P')) infoParameters.Acceleration[0] = cmd_float();
+          if (cmd_seen('R')) infoParameters.Acceleration[1] = cmd_float();
+          if (cmd_seen('T')) infoParameters.Acceleration[2] = cmd_float();
           break;
 
         case 205:  // M205 advanced settings
-          if (cmd_seen('X')) setParameter(P_JERK, AXIS_INDEX_X, cmd_float());
-          if (cmd_seen('Y')) setParameter(P_JERK, AXIS_INDEX_Y, cmd_float());
-          if (cmd_seen('Z')) setParameter(P_JERK, AXIS_INDEX_Z, cmd_float());
-          if (cmd_seen('E')) setParameter(P_JERK, AXIS_INDEX_E0, cmd_float());
-          if (cmd_seen('J')) setParameter(P_JUNCTION_DEVIATION, 0, cmd_float());
+          if (cmd_seen('X')) infoParameters.Jerk[AXIS_INDEX_X] = cmd_float();
+          if (cmd_seen('Y')) infoParameters.Jerk[AXIS_INDEX_Y] = cmd_float();
+          if (cmd_seen('Z')) infoParameters.Jerk[AXIS_INDEX_Z] = cmd_float();
+          if (cmd_seen('E')) infoParameters.Jerk[AXIS_INDEX_E0] = cmd_float();
+          if (cmd_seen('J')) infoParameters.JunctionDeviation[0] = cmd_float();
           break;
 
         case 206:  // M206 home offset
@@ -1163,7 +1163,7 @@ void sendQueueCmd(void)
         }
 
         case 209:  // M209 auto retract
-          if (cmd_seen('S')) setParameter(P_AUTO_RETRACT, 0, cmd_float());
+          if (cmd_seen('S')) infoParameters.AutoRetract[0] = cmd_float();
           break;
 
         case 220:  // M220
@@ -1224,7 +1224,7 @@ void sendQueueCmd(void)
 
         case 376:  // M376 (Reprap FW)
           if (infoMachineSettings.firmwareType == FW_REPRAPFW && cmd_seen('H'))
-            setParameter(P_ABL_STATE, 1, cmd_float());
+            infoParameters.ABLState[1] = cmd_float();
           break;
 
         case 292:  // M292
@@ -1269,9 +1269,9 @@ void sendQueueCmd(void)
               pValue = cmd_float();
 
               if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 0, pValue);
+                infoParameters.InputShaping[0] = pValue;
               if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 2, pValue);
+                infoParameters.InputShaping[2] = pValue;
             }
 
             if (cmd_seen('D'))
@@ -1279,9 +1279,9 @@ void sendQueueCmd(void)
               pValue = cmd_float();
 
               if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 1, pValue);
+                infoParameters.InputShaping[1] = pValue;
               if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 3, pValue);
+                infoParameters.InputShaping[3] = pValue;
             }
           }
         }
@@ -1296,9 +1296,9 @@ void sendQueueCmd(void)
           if (stepperIndex < 0)
             stepperIndex = 0;
 
-          if (cmd_seen('X')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_X + stepperIndex, isStealthChop);
-          if (cmd_seen('Y')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Y + stepperIndex, isStealthChop);
-          if (cmd_seen('Z')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_Z + stepperIndex, isStealthChop);
+          if (cmd_seen('X')) infoParameters.StealthChop[STEPPER_INDEX_X + stepperIndex] = isStealthChop;
+          if (cmd_seen('Y')) infoParameters.StealthChop[STEPPER_INDEX_Y + stepperIndex] = isStealthChop;
+          if (cmd_seen('Z')) infoParameters.StealthChop[STEPPER_INDEX_Z + stepperIndex] = isStealthChop;
 
           stepperIndex = (cmd_seen('T')) ? cmd_value() : 0;
 
@@ -1307,7 +1307,7 @@ void sendQueueCmd(void)
           if (stepperIndex < 0)
             stepperIndex = 0;
 
-          if (cmd_seen('E')) setParameter(P_STEALTH_CHOP, STEPPER_INDEX_E0 + stepperIndex, isStealthChop);
+          if (cmd_seen('E')) infoParameters.StealthChop[STEPPER_INDEX_E0 + stepperIndex] = isStealthChop;
           break;
         }
 
@@ -1335,13 +1335,13 @@ void sendQueueCmd(void)
 
           if (param < P_DELTA_ENDSTOP)  // options not supported by M666
           {
-            if (cmd_seen('H')) setParameter(P_DELTA_CONFIGURATION, 0, cmd_float());
-            if (cmd_seen('S')) setParameter(P_DELTA_CONFIGURATION, 1, cmd_float());
-            if (cmd_seen('R')) setParameter(P_DELTA_CONFIGURATION, 2, cmd_float());
-            if (cmd_seen('L')) setParameter(P_DELTA_CONFIGURATION, 3, cmd_float());
-            if (cmd_seen('A')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, cmd_float());
-            if (cmd_seen('B')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, cmd_float());
-            if (cmd_seen('C')) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, cmd_float());
+            if (cmd_seen('H')) infoParameters.DeltaConfiguration[0] = cmd_float();
+            if (cmd_seen('S')) infoParameters.DeltaConfiguration[1] = cmd_float();
+            if (cmd_seen('R')) infoParameters.DeltaConfiguration[2] = cmd_float();
+            if (cmd_seen('L')) infoParameters.DeltaConfiguration[3] = cmd_float();
+            if (cmd_seen('A')) infoParameters.DeltaDiagonalRod[AXIS_INDEX_X] = cmd_float();
+            if (cmd_seen('B')) infoParameters.DeltaDiagonalRod[AXIS_INDEX_Y] = cmd_float();
+            if (cmd_seen('C')) infoParameters.DeltaDiagonalRod[AXIS_INDEX_Z] = cmd_float();
           }
 
           if (cmd_seen('X')) setParameter(param, AXIS_INDEX_X, cmd_float());
@@ -1363,7 +1363,7 @@ void sendQueueCmd(void)
           uint8_t i = 0;
 
           if (cmd_seen('T')) i = cmd_value();
-          if (cmd_seen('K')) setParameter(P_LIN_ADV, i, cmd_float());
+          if (cmd_seen('K')) infoParameters.LinAdvance[i] = cmd_float();
           break;
         }
 
@@ -1447,7 +1447,7 @@ void sendQueueCmd(void)
                 uint8_t v = cmd_value();
 
                 if (v == 1 || v == 2)
-                  setParameter(P_ABL_STATE, 0, v & 1U);  // value will be 1 if v == 1, 0 if v == 2
+                  infoParameters.ABLState[0] = v & 1U;  // value will be 1 if v == 1, 0 if v == 2
               }
             }
             #if BED_LEVELING_TYPE == 4  // if UBL

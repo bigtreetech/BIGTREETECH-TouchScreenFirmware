@@ -16,7 +16,7 @@ static float origAblState = DISABLED;
 void probeHeightEnable(void)
 {
   origEndstopsState = infoMachineSettings.softwareEndstops;
-  origAblState = getParameter(P_ABL_STATE, 0);
+  origAblState = infoParameters.ABLState[0];
 
   if (origEndstopsState == ENABLED)  // if software endstops is enabled, disable it temporary
   {

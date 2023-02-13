@@ -215,7 +215,7 @@ void menuNewExtruderESteps(void)
   float now = measured_length = REMAINING_LEN;
   float old_esteps, new_esteps;  // get the value of the E-steps
 
-  old_esteps = getParameter(P_STEPS_PER_MM, E_AXIS);  // get the value of the E-steps
+  old_esteps = infoParameters.StepsPerMM[E_AXIS];  // get the value of the E-steps
 
   newExtruderESteps.items[KEY_ICON_5] = itemMoveLen[extStep_index];
 

@@ -90,7 +90,7 @@ float coordinateGetExtruderActual(void)
 
 void coordinateSetExtruderActualSteps(float steps)
 {
-  curPosition.axis[E_AXIS] = extruderPostion = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
+  curPosition.axis[E_AXIS] = extruderPostion = steps / infoParameters.StepsPerMM[E_AXIS];
 }
 
 float coordinateGetAxisActual(AXIS axis)

@@ -200,10 +200,10 @@ void ParseACKJsonParser::value(const char *value)
     case resp:
       if (strstr(value, (char *)"Steps/"))       //parse M92
       {
-        if ((value = strstr(value, (char *)"X: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X,  atoi(value + 3));
-        if ((value = strstr(value, (char *)"Y: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y,  atoi(value + 3));
-        if ((value = strstr(value, (char *)"Z: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z,  atoi(value + 3));
-        if ((value = strstr(value, (char *)"E: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0, atoi(value + 3));
+        if ((value = strstr(value, (char *)"X: ")) != NULL ) infoParameters.StepsPerMM[AXIS_INDEX_X] = atoi(value + 3);
+        if ((value = strstr(value, (char *)"Y: ")) != NULL ) infoParameters.StepsPerMM[AXIS_INDEX_Y] = atoi(value + 3);
+        if ((value = strstr(value, (char *)"Z: ")) != NULL ) infoParameters.StepsPerMM[AXIS_INDEX_Z] = atoi(value + 3);
+        if ((value = strstr(value, (char *)"E: ")) != NULL ) infoParameters.StepsPerMM[AXIS_INDEX_E0] = atoi(value + 3);
       }
       else if ((string_start = strstr(value, (char *)"RepRapFirmware")) != NULL)    // parse M115
       {

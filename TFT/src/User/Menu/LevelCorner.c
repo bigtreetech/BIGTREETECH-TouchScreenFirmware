@@ -11,8 +11,8 @@ int16_t origLevelEdge = -1;
 uint8_t getLevelEdgeMin(void)
 {
   // min edge limit for the probe with probe offset set in parseACK.c
-  return MAX(ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_X)),
-             ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y))) + 1;
+  return MAX(ABS((int16_t)infoParameters.ProbeOffset[AXIS_INDEX_X]),
+             ABS((int16_t)infoParameters.ProbeOffset[AXIS_INDEX_Y])) + 1;
 }
 
 uint8_t getLevelEdgeDefault(void)

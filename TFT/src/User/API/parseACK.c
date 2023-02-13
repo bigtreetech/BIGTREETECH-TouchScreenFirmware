@@ -821,15 +821,15 @@ void parseACK(void)
     // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
     else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
     {
-      setParameter(P_MBL_OFFSET, 0, ack_value());
+      infoParameters.MblOffset[0] = ack_value();
     }
     // parse and store M290 (Probe Offset) or M503 (M851), probe offset value (e.g. from Babystep menu) and
     // X an Y probe offset for LevelCorner position limit
     else if (ack_seen("Probe Offset") || ack_starts_with("M851"))
     {
-      if (ack_seen("X")) setParameter(P_PROBE_OFFSET, AXIS_INDEX_X, ack_value());
-      if (ack_seen("Y")) setParameter(P_PROBE_OFFSET, AXIS_INDEX_Y, ack_value());
-      if (ack_seen("Z") || (ack_seen("Z:"))) setParameter(P_PROBE_OFFSET, AXIS_INDEX_Z, ack_value());
+      if (ack_seen("X")) infoParameters.ProbeOffset [AXIS_INDEX_X] = ack_value();
+      if (ack_seen("Y")) infoParameters.ProbeOffset [AXIS_INDEX_Y] = ack_value();
+      if (ack_seen("Z") || (ack_seen("Z:"))) infoParameters.ProbeOffset [AXIS_INDEX_Z] = ack_value();
     }
     // parse G29 (ABL) + M118, ABL completed message (ABL, BBL, UBL) (e.g. from ABL menu)
     else if (ack_seen("ABL Completed"))
@@ -875,16 +875,16 @@ void parseACK(void)
     // parse and store filament diameter
     else if (ack_starts_with("M200"))
     {
-      if (ack_starts_with("M200 S") || ack_seen("D0")) setParameter(P_FILAMENT_DIAMETER, 0, ack_value());
+      if (ack_starts_with("M200 S") || ack_seen("D0")) infoParameters.FilamentSetting[0] = ack_value();
 
       uint8_t i = (ack_seen("T")) ? ack_value() : 0;
 
-      if (ack_seen("D")) setParameter(P_FILAMENT_DIAMETER, 1 + i, ack_value());
+      if (ack_seen("D")) infoParameters.FilamentSetting[1 + i] = ack_value();
 
       if (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE)
       {
         // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
-        setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
+        infoParameters.FilamentSetting[0] =  infoParameters.FilamentSetting[1] > 0.01f ? 1 : 0;
       }
     }
     // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
@@ -908,18 +908,18 @@ void parseACK(void)
     // parse and store acceleration (units/s2)
     else if (ack_starts_with("M204 P"))
     {
-                         setParameter(P_ACCELERATION, 0, ack_value());
-      if (ack_seen("R")) setParameter(P_ACCELERATION, 1, ack_value());
-      if (ack_seen("T")) setParameter(P_ACCELERATION, 2, ack_value());
+                         infoParameters.Acceleration[0] = ack_value();
+      if (ack_seen("R")) infoParameters.Acceleration[1] = ack_value();
+      if (ack_seen("T")) infoParameters.Acceleration[2] = ack_value();
     }
     // parse and store advanced settings
     else if (ack_starts_with("M205"))
     {
-      if (ack_seen("X")) setParameter(P_JERK, AXIS_INDEX_X, ack_value());
-      if (ack_seen("Y")) setParameter(P_JERK, AXIS_INDEX_Y, ack_value());
-      if (ack_seen("Z")) setParameter(P_JERK, AXIS_INDEX_Z, ack_value());
-      if (ack_seen("E")) setParameter(P_JERK, AXIS_INDEX_E0, ack_value());
-      if (ack_seen("J")) setParameter(P_JUNCTION_DEVIATION, 0, ack_value());
+      if (ack_seen("X")) infoParameters.Jerk[AXIS_INDEX_X] = ack_value();
+      if (ack_seen("Y")) infoParameters.Jerk[AXIS_INDEX_Y] = ack_value();
+      if (ack_seen("Z")) infoParameters.Jerk[AXIS_INDEX_Z] = ack_value();
+      if (ack_seen("E")) infoParameters.Jerk[AXIS_INDEX_E0] = ack_value();
+      if (ack_seen("J")) infoParameters.JunctionDeviation[0] = ack_value();
     }
     // parse and store home offset (M206) and hotend offset (M218)
     else if (ack_starts_with("M206 X") || ack_starts_with("M218 T1 X"))
@@ -951,7 +951,7 @@ void parseACK(void)
     // parse and store auto retract
     else if (ack_starts_with("M209 S"))
     {
-      setParameter(P_AUTO_RETRACT, 0, ack_value());
+      infoParameters.AutoRetract[0] = ack_value();
     }
     // parse and store hotend PID (M301), bed PID (M304)
     else if (ack_starts_with("M301") || ack_starts_with("M304"))
@@ -1002,9 +1002,9 @@ void parseACK(void)
         pValue = ack_value();
 
         if (setAxis & SET_X)
-            setParameter(P_INPUT_SHAPING, 0, pValue);
+            infoParameters.InputShaping[0] = pValue;
         if (setAxis & SET_Y)
-            setParameter(P_INPUT_SHAPING, 2, pValue);
+            infoParameters.InputShaping[2] = pValue;
       }
 
       if (ack_seen("D"))
@@ -1012,9 +1012,9 @@ void parseACK(void)
         pValue = ack_value();
 
         if (setAxis & SET_X)
-            setParameter(P_INPUT_SHAPING, 1, pValue);
+            infoParameters.InputShaping[1] = pValue;
         if (setAxis & SET_Y)
-            setParameter(P_INPUT_SHAPING, 3, pValue);
+            infoParameters.InputShaping[3] = pValue;
       }
     }
     // parse and store Delta configuration / Delta tower angle (M665) and Delta endstop adjustments (M666)
@@ -1028,13 +1028,13 @@ void parseACK(void)
 
       if (param < P_DELTA_ENDSTOP)  // options not supported by M666
       {
-        if (ack_seen("H")) setParameter(P_DELTA_CONFIGURATION, 0, ack_value());
-        if (ack_seen("S")) setParameter(P_DELTA_CONFIGURATION, 1, ack_value());
-        if (ack_seen("R")) setParameter(P_DELTA_CONFIGURATION, 2, ack_value());
-        if (ack_seen("L")) setParameter(P_DELTA_CONFIGURATION, 3, ack_value());
-        if (ack_seen("A")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_X, ack_value());
-        if (ack_seen("B")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Y, ack_value());
-        if (ack_seen("C")) setParameter(P_DELTA_DIAGONAL_ROD, AXIS_INDEX_Z, ack_value());
+        if (ack_seen("H")) infoParameters.DeltaConfiguration[0] = ack_value();
+        if (ack_seen("S")) infoParameters.DeltaConfiguration[1] = ack_value();
+        if (ack_seen("R")) infoParameters.DeltaConfiguration[2] = ack_value();
+        if (ack_seen("L")) infoParameters.DeltaConfiguration[3] = ack_value();
+        if (ack_seen("A")) infoParameters.DeltaDiagonalRod[AXIS_INDEX_X] = ack_value();
+        if (ack_seen("B")) infoParameters.DeltaDiagonalRod[AXIS_INDEX_Y] = ack_value();
+        if (ack_seen("C")) infoParameters.DeltaDiagonalRod[AXIS_INDEX_Z] = ack_value();
       }
 
       if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
@@ -1044,8 +1044,8 @@ void parseACK(void)
     // parse and store ABL on/off state & Z fade value on M503
     else if (ack_starts_with("M420 S"))
     {
-                                  setParameter(P_ABL_STATE, 0, ack_value());
-      if (ack_continue_seen("Z")) setParameter(P_ABL_STATE, 1, ack_value());
+                                  infoParameters.ABLState[0] = ack_value();
+      if (ack_continue_seen("Z")) infoParameters.ABLState[1] = ack_value();
     }
     // parse and store TMC stepping mode
     else if (ack_seen("Driver stepping mode:"))  // poll stelthchop settings separately
@@ -1068,14 +1068,14 @@ void parseACK(void)
           stepperIndex += ack_value() - 1;
       }
 
-      setParameter(P_STEALTH_CHOP, stepperIndex, isStealthChop);
+      infoParameters.StealthChop[stepperIndex] = isStealthChop;
     }
     // parse and store linear advance factor
     else if (ack_starts_with("M900"))
     {
       uint8_t i = (ack_seen("T")) ? ack_value() : 0;
 
-      if (ack_seen("K")) setParameter(P_LIN_ADV, i, ack_value());
+      if (ack_seen("K")) infoParameters.LinAdvance[i] = ack_value();
     }
     // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
     else if (ack_starts_with("M906") || ack_starts_with("M913") || ack_starts_with("M914"))
@@ -1271,16 +1271,16 @@ void parseACK(void)
       // parse and store M420 V1 T1 or M420 Sxx, ABL state (e.g. from Bed Leveling menu)
       else if (ack_continue_seen("Bed Leveling"))
       {
-        setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
+        infoParameters.ABLState[0] = ack_continue_seen("ON") ? ENABLED : DISABLED;
       }
       else if (ack_continue_seen("Fade Height"))
       {
-        setParameter(P_ABL_STATE, 1, ack_value());
+        infoParameters.ABLState[1] = ack_value();
       }
       // newer Marlin (e.g. 2.0.9.3) returns this ACK for M900 command
       else if (ack_continue_seen("Advance K="))
       {
-        setParameter(P_LIN_ADV, heatGetCurrentTool(), ack_value());
+        infoParameters.LinAdvance[heatGetCurrentTool()] = ack_value();
       }
       else if (!processKnownEcho())  // if no known echo was found and processed, then popup the echo message
       {
@@ -1296,15 +1296,15 @@ void parseACK(void)
       // parse and store volumetric extrusion M200 response of Smoothieware
       else if (ack_seen("Volumetric extrusion is disabled"))
       {
-        setParameter(P_FILAMENT_DIAMETER, 0, 0);
-        setParameter(P_FILAMENT_DIAMETER, 1, 0.0f);
+        infoParameters.FilamentSetting[0] = 0;
+        infoParameters.FilamentSetting[1] = 0.0f;
       }
       // parse and store volumetric extrusion M200 response of Smoothieware
       else if (ack_seen("Filament Diameter:"))
       {
-        setParameter(P_FILAMENT_DIAMETER, 1, ack_value());
+        infoParameters.FilamentSetting[1] = ack_value();
         // filament_diameter > 0.01 to enable volumetric extrusion. Otherwise (<= 0.01), disable volumetric extrusion
-        setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
+        infoParameters.FilamentSetting[0] =  infoParameters.FilamentSetting[1] > 0.01f ? 1 : 0;
       }
     }
 
