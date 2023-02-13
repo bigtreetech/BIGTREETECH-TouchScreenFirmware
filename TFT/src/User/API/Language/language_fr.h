@@ -59,6 +59,7 @@
     #define STRING_HOTEND_PID             "PID Buse"
     #define STRING_BED_PID                "PID Plateau"
     #define STRING_STEALTH_CHOP           "StealthChop TMC"
+    #define STRING_INPUT_SHAPING          "Input Shaping"
     #define STRING_DELTA_CONFIGURATION    "Réglages Delta"
     #define STRING_DELTA_TOWER_ANGLE      "Corrections d'angle des tours"
     #define STRING_DELTA_DIAGONAL_ROD     "Ajustements Diagonal Rod"
