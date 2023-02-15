@@ -95,10 +95,10 @@ void loopPopup(void);
  * @param title title of the message box
  * @param msg the body of the message/reminder to be displayed
  */
-#define popupSplash(_type, _title, _msg)                  \
-  {                                                         \
+#define popupSplash(_type, _title, _msg)                 \
+  {                                                      \
     setDialogText(_title, _msg, LABEL_NULL, LABEL_NULL); \
-    showDialog(_type, NULL, NULL, NULL);                    \
+    showDialog(_type, NULL, NULL, NULL);                 \
   }
 
 

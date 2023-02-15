@@ -13,10 +13,6 @@ bool getHostDialog(void);
 void setCurrentAckSrc(SERIAL_PORT_INDEX portIndex);
 void parseACK(void);
 
-#ifdef SERIAL_PORT_2
-  void parseRcvGcode(void);
-#endif
-
 #ifdef __cplusplus
 }
 #endif

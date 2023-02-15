@@ -46,13 +46,13 @@ void getColdTemperature(void)
 
     if (hotendCurrentTemp < MAX_COLD_TEMP)
     {
-      coldTemperature = hotendCurrentTemp;
+      coldTemperature += hotendCurrentTemp;
       divider++;
     }
 
     if (bedCurrentTemp < MAX_COLD_TEMP)
     {
-      coldTemperature = bedCurrentTemp;
+      coldTemperature += bedCurrentTemp;
       divider++;
     }
 
@@ -99,7 +99,7 @@ void LED_CheckEvent(void)
   }
   else
   {
-    if (!isTFTPrinting() || heatingDone)  // if not printng from TFT media or if heating is finished, nothing to do
+    if (!isPrintingFromTFT() || heatingDone)  // if not printng from TFT media or if heating is finished, nothing to do
       return;
 
     if (!nextUpdate())  // if not time for a new update, nothing to do

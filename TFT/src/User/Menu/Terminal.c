@@ -596,7 +596,7 @@ static inline void menuKeyboardView(void)
         break;
 
       case GKEY_ABC_123:
-        numpad = !numpad;
+        TOGGLE_BIT(numpad, 0);
         drawKeyboard();
         break;
 
@@ -856,7 +856,7 @@ void menuTerminalWindow(void)
         break;
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal
-        infoSettings.terminal_ack = (infoSettings.terminal_ack + 1) % ITEM_TOGGLE_NUM;
+        TOGGLE_BIT(infoSettings.terminal_ack, 0);
         terminalDrawButton(TERM_TOGGLE_ACK, false);
         break;
 
@@ -1005,7 +1005,7 @@ void menuTerminal(void)
   KEYBOARD_DATA keybData = {{'\0'}, 0};
   TERMINAL_DATA termData = {{terminalBuf}, MAX_PAGE_COUNT, 0, 0, 0, 0, MAX_TERMINAL_BUF_SIZE, 0, SRC_TERMINAL_COUNT};
 
-  if (isPrinting() || isHostPrinting())  // display only 1 page if printing
+  if (isPrinting() || isPrintingFromHost())  // display only 1 page if printing
   {
     termData.bufSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termData.maxPageCount = 1;

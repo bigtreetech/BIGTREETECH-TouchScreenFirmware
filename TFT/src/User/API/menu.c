@@ -1092,7 +1092,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if (MENU_IS(menuPrinting))
           {
-            if (isPrinting() || isHostPrinting())
+            if (isPrinting() || isPrintingFromHost())
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
@@ -1248,9 +1248,9 @@ void loopBackEnd(void)
     parseComment();  // Parse comment from gcode file
   }
 
+  // Retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc...
   #ifdef SERIAL_PORT_2
-    // Parse the received gcode from other UART, such as ESP3D etc...
-    parseRcvGcode();
+    Serial_GetFromUART();
   #endif
 
   // Temperature monitor
