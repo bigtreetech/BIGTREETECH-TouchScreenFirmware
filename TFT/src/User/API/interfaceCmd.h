@@ -23,8 +23,6 @@ bool isNotEmptyCmdQueue(void);   // also usable as condition callback for loopPr
 bool isEnqueued(const CMD cmd);
 bool isWritingMode(void);
 
-void storeEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
-void handleEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
 bool storeCmd(const char * format, ...);
 void mustStoreCmd(const char * format, ...);
 void mustStoreScript(const char * format, ...);
@@ -32,8 +30,8 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex);
 void mustStoreCacheCmd(const char * format, ...);
 bool moveCacheToCmd(void);
 void clearCmdQueue(void);
-void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex);
+void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
 void sendQueueCmd(void);
 
 #ifdef __cplusplus

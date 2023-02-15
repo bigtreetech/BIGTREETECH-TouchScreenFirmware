@@ -498,33 +498,9 @@ void syncTargetTemp(uint8_t index)
   }
 }
 
-// Send emergency command now.
-// The command parameter must be a clear command, not formatted.
-//
-// NOTE: Make sure that the printer can receive the command.
-//
-void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
-{
-  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
-    // dump serial data sent to debug port
-    Serial_Put(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
-    Serial_Put(SERIAL_DEBUG_PORT, ">>");
-    Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
-  #endif
-
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    Serial_Put(SERIAL_PORT, emergencyCmd);
-  else
-    rrfSendCmd(emergencyCmd);
-
-  setCurrentAckSrc(portIndex);
-
-  if (MENU_IS(menuTerminal))
-    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
-}
-
 // Check if the received gcode is an emergency command or not
 // (M108, M112, M410, M524, M876) and parse it accordingly.
+// Otherwise, store the gcode on command queue.
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
   // strip out any leading space from the passed command.
@@ -564,6 +540,31 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
       loopProcess();
     }
   }
+}
+
+// Send emergency command now.
+// The command parameter must be a clear command, not formatted.
+//
+// NOTE: Make sure that the printer can receive the command.
+//
+void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+{
+  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
+    // dump serial data sent to debug port
+    Serial_Put(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Put(SERIAL_DEBUG_PORT, ">>");
+    Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
+  #endif
+
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    Serial_Put(SERIAL_PORT, emergencyCmd);
+  else
+    rrfSendCmd(emergencyCmd);
+
+  setCurrentAckSrc(portIndex);
+
+  if (MENU_IS(menuTerminal))
+    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
 }
 
 // Parse and send gcode cmd in cmdQueue queue.
