@@ -658,7 +658,7 @@ void parseACK(void)
       // parse and store M24, received "Done printing file" (printing from (remote) onboard media completed)
       if (ack_starts_with("Done"))
       {
-        printEnd();
+        endPrint();
       }
       // parse and store M27, received "SD printing byte" or "Not SD printing"
       else if (ack_seen("SD"))
