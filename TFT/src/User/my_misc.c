@@ -251,3 +251,39 @@ bool validateChecksum(char *str)
 
   return (checksum == value ? true : false);
 }
+
+const char *parseM118(char *str, bool *hasE, bool *hasA)
+{
+  stripChecksum(str);
+  str = (char *) stripHead(str);
+
+  *hasE = false;
+  *hasA = false;
+
+  for (uint8_t i = 3; i--;)
+  {
+    // A1, E1 and Pn are always parsed out
+    if (!(((str[0] == 'A' || str[0] == 'E') && str[1] == '1') || (str[0] == 'P' && NUMERIC(str[1]))))
+      break;
+
+    switch (str[0])
+    {
+      case 'A':
+        *hasA = true;
+        break;
+
+      case 'E':
+        *hasE = true;
+        break;
+    }
+
+    str += 2;
+
+    while (*str == ' ')
+    {
+      ++str;
+    }
+  }
+
+  return str;
+}

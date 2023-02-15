@@ -663,7 +663,7 @@ SD_Error SD_Init(void)
 
   /* SDIO Peripheral Low Level Init */
   //NVIC_Configuration();
- //Serial_Puts(0,"sd lowlevel\r\n");
+  //Serial_Put(0,"sd lowlevel\r\n");
   SD_LowLevel_Init();
 
   SDIO_DeInit();
@@ -673,7 +673,7 @@ SD_Error SD_Init(void)
   if (errorstatus != SD_OK)
   {
     /*!< CMD Response TimeOut (wait for CMDSENT flag) */
-  // Serial_Puts(0,"sd power on error\r\n");
+    //Serial_Put(0,"sd power on error\r\n");
     return(errorstatus);
   }
 
@@ -682,7 +682,7 @@ SD_Error SD_Init(void)
   if (errorstatus != SD_OK)
   {
     /*!< CMD Response TimeOut (wait for CMDSENT flag) */
-    // Serial_Puts(0,"sd init on error\r\n");
+    //Serial_Put(0,"sd init on error\r\n");
     return(errorstatus);
   }
 
@@ -712,7 +712,7 @@ SD_Error SD_Init(void)
   }
 if (errorstatus!=SD_OK)
 {
-  //Serial_Puts(0,"sd error\r\n");
+  //Serial_Put(0,"sd error\r\n");
 }
   return(errorstatus);
 }

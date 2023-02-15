@@ -27,8 +27,8 @@ void menuPrintRestore(void)
       {
         case KEY_POPUP_CONFIRM:
           powerFailedSetRestore(true);
-          CLOSE_MENU();  // close the menu first
-          printStart();  // start print and open Printing menu
+          CLOSE_MENU();     // close the menu first
+          startPrinting();  // start print and open Printing menu
           break;
 
         case KEY_POPUP_CANCEL:

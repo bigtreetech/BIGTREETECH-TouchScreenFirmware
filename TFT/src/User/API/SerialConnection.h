@@ -14,7 +14,8 @@ extern "C" {
 
 typedef enum
 {
-  ALL_PORTS = -1,
+  ALL_PORTS = -2,
+  SUP_PORTS = -1,
   PORT_1 = 0,
   #ifdef SERIAL_PORT_2
     PORT_2,
@@ -40,8 +41,40 @@ extern const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT];  // serial port (in
 extern const uint32_t baudrateValues[BAUDRATE_COUNT];         // baudrate values
 extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 
-void Serial_Init(SERIAL_PORT_INDEX port);    // index ALL_PORTS to apply to all serial ports (primary and supplementary)
-void Serial_DeInit(SERIAL_PORT_INDEX port);  // index ALL_PORTS to apply to all serial ports (primary and supplementary)
+// initialize the provided serial port/s, if enabled:
+//   - portIndex:
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
+void Serial_Init(SERIAL_PORT_INDEX portIndex);
+
+// deinitialize the provided serial port/s (even if not enabled):
+//   - portIndex:
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
+void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
+
+// forward a message to the provided serial port/s, if enabled:
+//   - portIndex:
+//     - ALL_PORTS: all serial ports (primary and supplementary)
+//     - SUP_PORTS: all supplementary serial ports
+//     - specific port index: specific serial port
+void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
+
+// retrieve a message from the provided serial port, if any:
+//   - portIndex: index of serial port where data are read from
+//   - buf: buffer where data are stored
+//   - bufSize: size of buffer (max number of bytes that can be stored in buf)
+//
+//   - return value: number of bytes stored in buf
+uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
+
+#ifdef SERIAL_PORT_2
+  // retrieve messages from all the enabled supplementary ports storing them
+  // in the command queue (in interfaceCmd.c) for further processing
+  void Serial_GetFromUART(void);
+#endif
 
 #ifdef __cplusplus
 }

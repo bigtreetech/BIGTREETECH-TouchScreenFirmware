@@ -149,30 +149,30 @@ static void initMenuPrinting(void)
   setTimeFromSlicer(false);
 }
 
-// start print originated or handled by remote host
+// start print originated and/or hosted (handled) by remote host
 // (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
-void startRemotePrint(const char * filename)
+void startPrintingFromRemoteHost(const char * filename)
 {
-  if (!printRemoteStart(filename))
+  if (!startPrintFromRemoteHost(filename))
     return;
 
-  // NOTE: call just before opening Printing menu because initMenuPrinting function will
-  //       call clearInfoFile function that will clear and free memory for file list
+  // NOTE: call just before opening Printing menu because initMenuPrinting() function will
+  //       call clearInfoFile() function that will clear and free memory for file list
   initMenuPrinting();
 
   infoMenu.cur = 1;  // clear menu buffer when Printing menu is activated by remote
   REPLACE_MENU(menuPrinting);
 }
 
-// start print originated or handled by TFT
-// (e.g. print started from TFT's GUI or hosted by TFT) and open Printing menu
-void printStart(void)
+// start print originated and/or hosted (handled) by TFT
+// (e.g. print started from onboard media or hosted by TFT) and open Printing menu
+void startPrinting(void)
 {
-  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by printStartPrepare function
+  bool printRestore = powerFailedGetRestore();  // temporary save print restore flag before it is cleared by startPrint() function
 
-  if (!printStartPrepare())
+  if (!startPrint())
   {
-    // in case the calling function is menuPrintFromSource,
+    // in case the calling function is menuPrintFromSource(),
     // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
     exitFolder();
 
@@ -185,8 +185,8 @@ void printStart(void)
   if (!printRestore && infoFile.fileCount == 0)  // if printing from remote TFT media
     infoMenu.cur = 0;                            // clear menu buffer
 
-  // NOTE: call just before opening Printing menu because initMenuPrinting function will
-  //       call clearInfoFile function that will clear and free memory for file list
+  // NOTE: call just before opening Printing menu because initMenuPrinting() function will
+  //       call clearInfoFile() function that will clear and free memory for file list
   initMenuPrinting();
 
   OPEN_MENU(menuPrinting);
@@ -694,12 +694,12 @@ void menuPrinting(void)
       case PS_KEY_6:
         if (lastPrinting == true)  // if printing
         { // Pause button
-          if (getHostDialog() || isRemoteHostPrinting())
+          if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
           else if (getPrintRunout())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_FILAMENT_RUNOUT));
           else
-            printPause(!isPaused(), PAUSE_NORMAL);
+            pausePrint(!isPaused(), PAUSE_NORMAL);
         }
         else
         { // Main button
@@ -718,15 +718,7 @@ void menuPrinting(void)
       case PS_KEY_9:
         if (lastPrinting == true)  // if printing
         { // Stop button
-          if (isRemoteHostPrinting())
-          {
-            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
-          }
-          else
-          {
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, printAbort, NULL, NULL);
-          }
-
+          popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, abortPrint, NULL, NULL);
         }
         else
         { // Back button

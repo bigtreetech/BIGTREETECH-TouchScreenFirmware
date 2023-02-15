@@ -64,7 +64,7 @@ extern "C" {
 void _putchar(char character);
 
 #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_GENERIC)
-  #define _putchar(n) Serial_Putchar(SERIAL_DEBUG_PORT, n)
+  #define _putchar(n) Serial_PutChar(SERIAL_DEBUG_PORT, n)
 #else
   #define _putchar(n)
 #endif

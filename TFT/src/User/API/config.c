@@ -2,7 +2,7 @@
 #include "includes.h"
 
 #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_CONFIG)  // To be used only when calling 'getConfigFromFile()' after boot process
-  #define PRINTDEBUG(x) Serial_Puts(SERIAL_DEBUG_PORT, x);
+  #define PRINTDEBUG(x) Serial_Put(SERIAL_DEBUG_PORT, x);
 #else
   #define PRINTDEBUG(x)
 #endif

@@ -78,6 +78,8 @@ void stripChecksum(char *str);           // strip out any trailing checksum that
 uint8_t getChecksum(char *str);
 bool validateChecksum(char *str);
 
+const char *parseM118(char *str, bool *hasE, bool *hasA);
+
 #ifdef __cplusplus
 }
 #endif

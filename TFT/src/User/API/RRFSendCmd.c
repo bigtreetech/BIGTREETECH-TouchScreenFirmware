@@ -9,7 +9,7 @@ static uint8_t checksum = 0;
 void sendCharAndChecksum(const char c)
 {
   checksum ^= c;
-  Serial_Putchar(SERIAL_PORT, c);
+  Serial_PutChar(SERIAL_PORT, c);
   n_sent++;
 }
 
@@ -19,19 +19,19 @@ void sendChar(const char c)
   {
     if (n_sent != 0)
     {
-      Serial_Putchar(SERIAL_PORT, '*');
+      Serial_PutChar(SERIAL_PORT, '*');
       char digit0 = checksum % 10 + '0';
       checksum /= 10;
       char digit1 = checksum % 10 + '0';
       checksum /= 10;
       if (checksum != 0)
       {
-        Serial_Putchar(SERIAL_PORT, checksum + '0');
+        Serial_PutChar(SERIAL_PORT, checksum + '0');
       }
-      Serial_Putchar(SERIAL_PORT, digit1);
-      Serial_Putchar(SERIAL_PORT, digit0);
+      Serial_PutChar(SERIAL_PORT, digit1);
+      Serial_PutChar(SERIAL_PORT, digit0);
     }
-    Serial_Putchar(SERIAL_PORT, c);
+    Serial_PutChar(SERIAL_PORT, c);
     n_sent = 0;
   }
   else

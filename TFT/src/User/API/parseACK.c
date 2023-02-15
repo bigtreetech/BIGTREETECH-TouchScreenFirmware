@@ -43,10 +43,10 @@ const char magic_echo[] = "echo:";
 const char magic_warning[] = "Warning:";  // RRF warning
 const char magic_message[] = "message";   // RRF message in Json format
 
-#define L2_CACHE_SIZE 512  // including ending character '\0'
+#define ACK_CACHE_SIZE 512  // including ending character '\0'
 
-char dmaL2Cache[L2_CACHE_SIZE];
-uint16_t dmaL2Cache_len;                    // length of data currently present in dmaL2Cache
+char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
+uint16_t ack_len;                           // length of data currently present in ack_cache
 uint16_t ack_index;
 SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
 bool hostDialog = false;
@@ -74,49 +74,11 @@ void setCurrentAckSrc(SERIAL_PORT_INDEX portIndex)
   ack_port_index = portIndex;
 }
 
-bool syncL2CacheFromL1(uint8_t port)
-{
-  if (infoHost.rx_ok[port] != true)  // if no data to read from L1 cache
-    return false;
-
-  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[port];  // make access to most used variables/attributes faster and also reducing the code
-  uint16_t * rIndex_ptr = &dmaL1Data_ptr->rIndex;          // make access to most used variables/attributes faster and also reducing the code
-  uint16_t * wIndex_ptr = &dmaL1Data_ptr->wIndex;          // make access to most used variables/attributes faster and also reducing the code
-
-  while (dmaL1Data_ptr->cache[*rIndex_ptr] == ' ' && *rIndex_ptr != *wIndex_ptr)  // remove leading empty space
-  {
-    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
-  }
-
-  if (*rIndex_ptr == *wIndex_ptr)  // if L1 cache is empty
-  {
-    infoHost.rx_ok[port] = false;  // mark the port as containing no more data
-
-    return false;
-  }
-
-  uint16_t i = 0;
-
-  while (i < (L2_CACHE_SIZE - 1) && *rIndex_ptr != *wIndex_ptr)  // retrieve data at most until L2 cache is full or L1 cache is empty
-  {
-    dmaL2Cache[i] = dmaL1Data_ptr->cache[*rIndex_ptr];
-    *rIndex_ptr = (*rIndex_ptr + 1) % dmaL1Data_ptr->cacheSize;
-
-    if (dmaL2Cache[i++] == '\n')  // if data end marker is found, exit from the loop
-      break;
-  }
-
-  dmaL2Cache_len = i;  // length of data in the cache
-  dmaL2Cache[i] = 0;   // end character
-
-  return true;
-}
-
 static bool ack_starts_with(const char * str)  // checks if the cache starts with the given parameter
 {
   uint16_t i = 0;
 
-  while (str[i] == dmaL2Cache[i])
+  while (str[i] == ack_cache[i])
   {
     if (str[++i] == '\0')
     {
@@ -134,9 +96,9 @@ static bool ack_seen(const char * str)
   // ("ack_index") next to the position where the found string ended
   uint16_t i;
 
-  for (ack_index = 0, i = 0; dmaL2Cache[ack_index] != '\0'; ack_index++, i = 0)
+  for (ack_index = 0, i = 0; ack_cache[ack_index] != '\0'; ack_index++, i = 0)
   {
-    while (str[i] == dmaL2Cache[ack_index + i])
+    while (str[i] == ack_cache[ack_index + i])
     {
       if (str[++i] == '\0')
       {
@@ -155,9 +117,9 @@ static bool ack_continue_seen(const char * str)
   uint16_t tmp_index;
   uint16_t i;
 
-  for (tmp_index = ack_index, i = 0; dmaL2Cache[tmp_index] != '\0'; tmp_index++, i = 0)
+  for (tmp_index = ack_index, i = 0; ack_cache[tmp_index] != '\0'; tmp_index++, i = 0)
   {
-    while (str[i] == dmaL2Cache[tmp_index + i])
+    while (str[i] == ack_cache[tmp_index + i])
     {
       if (str[++i] == '\0')
       {
@@ -172,13 +134,13 @@ static bool ack_continue_seen(const char * str)
 
 static float ack_value()
 {
-  return (strtod(&dmaL2Cache[ack_index], NULL));
+  return (strtod(&ack_cache[ack_index], NULL));
 }
 
 // read the value after "/", if any
 static float ack_second_value()
 {
-  char * secondValue = strchr(&dmaL2Cache[ack_index], '/');
+  char * secondValue = strchr(&ack_cache[ack_index], '/');
 
   if (secondValue != NULL)
     return (strtod(secondValue + 1, NULL));
@@ -188,20 +150,20 @@ static float ack_second_value()
 
 void ack_values_sum(float * data)
 {
-  while (((dmaL2Cache[ack_index] < '0') || (dmaL2Cache[ack_index] > '9')) && dmaL2Cache[ack_index] != '\n')
+  while (((ack_cache[ack_index] < '0') || (ack_cache[ack_index] > '9')) && ack_cache[ack_index] != '\n')
   {
     ack_index++;
   }
 
   *data += ack_value();
 
-  while ((((dmaL2Cache[ack_index] >= '0') && (dmaL2Cache[ack_index] <= '9')) ||
-          (dmaL2Cache[ack_index] == '.')) && (dmaL2Cache[ack_index] != '\n'))
+  while ((((ack_cache[ack_index] >= '0') && (ack_cache[ack_index] <= '9')) ||
+          (ack_cache[ack_index] == '.')) && (ack_cache[ack_index] != '\n'))
   {
     ack_index++;
   }
 
-  if (dmaL2Cache[ack_index] != '\n')
+  if (ack_cache[ack_index] != '\n')
     ack_values_sum(data);
 }
 
@@ -227,13 +189,13 @@ void ackPopupInfo(const char * info)
 
     // show notification based on notificaiton settings
     if (infoSettings.ack_notification == 1)
-      addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
+      addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)ack_cache + ack_index, show_dialog);
     else if (infoSettings.ack_notification == 2)
-      addToast(DIALOG_TYPE_INFO, dmaL2Cache);  // show toast notificaion if turned on
+      addToast(DIALOG_TYPE_INFO, ack_cache);  // show toast notificaion if turned on
   }
   else
   {
-    addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)dmaL2Cache + ack_index, show_dialog);
+    addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)ack_cache + ack_index, show_dialog);
   }
 }
 
@@ -244,7 +206,7 @@ bool processKnownEcho(void)
 
   for (i = 0; i < COUNT(knownEcho); i++)
   {
-    if (strstr(dmaL2Cache, knownEcho[i].msg))
+    if (strstr(ack_cache, knownEcho[i].msg))
     {
       isKnown = true;
       break;
@@ -261,12 +223,12 @@ bool processKnownEcho(void)
 
     if (knownEcho[i].notifyType == ECHO_NOTIFY_TOAST)
     {
-      addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+      addToast(DIALOG_TYPE_INFO, ack_cache);
     }
     else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
     {
       BUZZER_PLAY(SOUND_NOTIFY);
-      addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)dmaL2Cache + ack_index, true);
+      addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)ack_cache + ack_index, true);
     }
   }
 
@@ -282,7 +244,7 @@ void hostActionCommands(void)
     if (ack_continue_seen("Time Left"))  // parsing printing time left
     {
       // format: Time Left <XX>h<YY>m<ZZ>s (e.g. Time Left 02h04m06s)
-      parsePrintRemainingTime((char *)dmaL2Cache + ack_index);
+      parsePrintRemainingTime((char *)ack_cache + ack_index);
     }
     else if (ack_continue_seen("Layer Left"))  // parsing printing layer left
     {
@@ -297,25 +259,25 @@ void hostActionCommands(void)
     }
     else
     {
-      statusScreen_setMsg((uint8_t *)magic_echo, (uint8_t *)dmaL2Cache + index);  // always display the notification on status screen
+      statusScreen_setMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
 
       if (!ack_continue_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
         if (MENU_IS_NOT(menuStatus))  // don't show it when in menuStatus
-          addToast(DIALOG_TYPE_INFO, dmaL2Cache + index);
+          addToast(DIALOG_TYPE_INFO, ack_cache + index);
 
         if (infoSettings.notification_m117 == ENABLED)
-          addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)dmaL2Cache + index, false);
+          addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)ack_cache + index, false);
       }
     }
   }
   else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
   {
-    startRemotePrint(NULL);  // start print and open Printing menu
+    startPrintingFromRemoteHost(NULL);  // start print originated and hosted by remote host and open Printing menu
   }
   else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
   {
-    printEnd();
+    endPrint();
   }
   else if (ack_seen(":pause") || ack_seen(":paused"))
   {
@@ -338,11 +300,11 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":cancel"))  // to be added to Marlin abortprint routine
   {
-    printAbortCease();
+    setPrintAbort();
   }
   else if (ack_seen(":prompt_begin "))
   {
-    strcpy(hostAction.prompt_begin, dmaL2Cache + ack_index);
+    strcpy(hostAction.prompt_begin, ack_cache + ack_index);
     hostAction.button = 0;
     hostAction.prompt_show = true;
 
@@ -365,7 +327,7 @@ void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    strcpy(hostAction.prompt_button[hostAction.button++], dmaL2Cache + ack_index);
+    strcpy(hostAction.prompt_button[hostAction.button++], ack_cache + ack_index);
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
@@ -393,12 +355,12 @@ void hostActionCommands(void)
 
 void parseACK(void)
 {
-  while (syncL2CacheFromL1(SERIAL_PORT))  // if some data are retrieved from L1 to L2 cache
+  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
   {
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
-      Serial_Puts(SERIAL_DEBUG_PORT, "<<");
-      Serial_Puts(SERIAL_DEBUG_PORT, dmaL2Cache);
+      Serial_Put(SERIAL_DEBUG_PORT, "<<");
+      Serial_Put(SERIAL_DEBUG_PORT, ack_cache);
     #endif
 
     bool avoid_terminal = false;
@@ -464,11 +426,11 @@ void parseACK(void)
         if (requestCommandInfo.stream_handler != NULL)
         {
           clearRequestCommandInfo();  // unused if the streaming handler is involved
-          requestCommandInfo.stream_handler(dmaL2Cache);
+          requestCommandInfo.stream_handler(ack_cache);
         }
         else
         {
-          strcpy(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+          strcpy(requestCommandInfo.cmd_rev_buf, ack_cache);
         }
 
         BUZZER_PLAY(SOUND_ERROR);
@@ -483,7 +445,7 @@ void parseACK(void)
       if (requestCommandInfo.stream_handler != NULL)
       {
         clearRequestCommandInfo();  // unused if the streaming handler is involved
-        requestCommandInfo.stream_handler(dmaL2Cache);
+        requestCommandInfo.stream_handler(ack_cache);
 
         if (ack_seen(requestCommandInfo.stopMagic))
         {
@@ -491,9 +453,9 @@ void parseACK(void)
           requestCommandInfo.inResponse = false;
         }
       }
-      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(dmaL2Cache) < CMD_MAX_REV)
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(ack_cache) < CMD_MAX_REV)
       {
-        strcat(requestCommandInfo.cmd_rev_buf, dmaL2Cache);
+        strcat(requestCommandInfo.cmd_rev_buf, ack_cache);
 
         if (ack_seen(requestCommandInfo.stopMagic))
         {
@@ -517,7 +479,7 @@ void parseACK(void)
     /* RepRap response handle */
     if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
-      if (strchr(dmaL2Cache, '{') != NULL)
+      if (strchr(ack_cache, '{') != NULL)
         requestCommandInfo.inJson = true;
     }
 
@@ -526,7 +488,7 @@ void parseACK(void)
       if (ack_seen(magic_warning))
         ackPopupInfo(magic_warning);
       else
-        rrfParseACK(dmaL2Cache);
+        rrfParseACK(ack_cache);
 
       infoHost.wait = false;
       goto parse_end;
@@ -536,7 +498,9 @@ void parseACK(void)
     if (ack_starts_with("ok"))  // handle "ok" response
     { // it is checked first (and not later on) because it is the most frequent response during printing
       infoHost.wait = false;
-      if ((dmaL2Cache[ack_index] == '\n') || (ack_continue_seen("P") && ack_continue_seen("B")))  // regular "ok\n" response or ADVANCED_OK response (Marlin)
+
+      // if regular "ok\n" response or ADVANCED_OK response (Marlin) (e.g. "ok N10 P15 B3\n")
+      if ((ack_cache[ack_index] == '\n') || (ack_continue_seen("P") && ack_continue_seen("B")))
         goto parse_end;  // there's nothing else to check for
     }
 
@@ -664,8 +628,9 @@ void parseACK(void)
     // parse and store M23, select SD file
     else if (infoMachineSettings.onboardSD == ENABLED && ack_starts_with("File opened:"))
     {
-      // NOTE: this block is not reached in case of printing from onboard media because printStartPrepare() will call
-      //       request_M23_M36() that will be managed in parseAck() by the block "onboard media gcode command response"
+      // NOTE: this block is not reached in case of printing from onboard media because startPrint() in Printing.c will
+      //       call request_M23_M36() that will be managed in parseAck() by the block "Onboard media response handling"
+      //       provided at the beginning of this funtion
 
       // parse file name.
       // Format: "File opened: <file name> Size: <YYYY>" (e.g. "File opened: 1A29A~1.GCO Size: 6974")
@@ -677,10 +642,12 @@ void parseACK(void)
       uint16_t end_index = ack_continue_seen(end_string) ? (ack_index - strlen(end_string)) : start_index;
       uint16_t path_len = MIN(end_index - start_index, MAX_PATH_LEN - 1);
 
-      memcpy(file_name, dmaL2Cache + start_index, path_len);
+      memcpy(file_name, ack_cache + start_index, path_len);
       file_name[path_len] = '\0';
 
-      startRemotePrint(file_name);  // start print and open Printing menu
+      // start print originated by remote host but hosted by onboard
+      // (print from remote onboard media) and open Printing menu
+      startPrintingFromRemoteHost(file_name);
     }
     else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE))
     {
@@ -698,13 +665,13 @@ void parseACK(void)
           if (ack_continue_seen("byte"))  // received "SD printing byte"
             setPrintProgressData(ack_value(), ack_second_value());
           else  // received "Not SD printing"
-            printAbortCease();
+            setPrintAbort();
         }
       }
       // parse and store M24, printing from (remote) onboard media completed
       else if (ack_seen("Done printing file"))  // if printing from (remote) onboard media
       {
-        printEnd();
+        endPrint();
       }
     }
 
@@ -766,7 +733,7 @@ void parseACK(void)
       infoMachineSettings.softwareEndstops = ack_continue_seen("ON");
 
       if (curValue != infoMachineSettings.softwareEndstops)  // send a notification only if status is changed
-        addToast(DIALOG_TYPE_INFO, dmaL2Cache);
+        addToast(DIALOG_TYPE_INFO, ack_cache);
     }
     // parse M303, PID autotune finished message
     else if (ack_starts_with("PID Autotune finished"))
@@ -818,7 +785,7 @@ void parseACK(void)
     //
     else if (meshIsWaitingData())
     {
-      meshUpdateData(dmaL2Cache);  // update mesh data
+      meshUpdateData(ack_cache);  // update mesh data
     }
     // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
     else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
@@ -891,11 +858,13 @@ void parseACK(void)
     }
     // parse and store axis steps-per-unit (steps/mm) (M92), max acceleration (units/s2) (M201) and max feedrate (units/s) (M203)
     else if (ack_starts_with("M92 ") || ack_starts_with("M201") || ack_starts_with("M203"))  // "M92 " to not trigger if "M928" received
-      {
-      PARAMETER_NAME param = P_STEPS_PER_MM;
+    {
+      PARAMETER_NAME param = P_STEPS_PER_MM;  // default value
 
+      // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+      // instead of optimizing performance (code typically not executed during a print)
       if (ack_starts_with("M201")) param = P_MAX_ACCELERATION;
-      else if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
+      if (ack_starts_with("M203")) param = P_MAX_FEED_RATE;
 
       if (ack_seen("X")) setParameter(param, AXIS_INDEX_X, ack_value());
       if (ack_seen("Y")) setParameter(param, AXIS_INDEX_Y, ack_value());
@@ -1054,7 +1023,7 @@ void parseACK(void)
     }
     else if (ack_seen("driver mode:"))
     {
-      bool isStealthChop = ack_continue_seen("stealthChop");
+      float isStealthChop = ack_continue_seen("stealthChop");  // boolean type value also casted to float type
       STEPPER_INDEX stepperIndex = 0;
 
       if (ack_seen("X")) stepperIndex = STEPPER_INDEX_X;
@@ -1080,10 +1049,12 @@ void parseACK(void)
     // parse and store stepper motor current (M906), TMC hybrid threshold speed (M913) and TMC bump sensitivity (M914)
     else if (ack_starts_with("M906") || ack_starts_with("M913") || ack_starts_with("M914"))
     {
-      PARAMETER_NAME param = P_CURRENT;
+      PARAMETER_NAME param = P_CURRENT;  // default value
 
+      // using consecutive "if" instead of "if else if" on the following two lines just to reduce code
+      // instead of optimizing performance (code typically not executed during a print)
       if (ack_starts_with("M913")) param = P_HYBRID_THRESHOLD;
-      else if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
+      if (ack_starts_with("M914")) param = P_BUMPSENSITIVITY;
 
       int8_t stepperIndex = (ack_seen("I")) ? ack_value() : 0;
 
@@ -1134,7 +1105,7 @@ void parseACK(void)
     // parse M115 capability report
     else if (ack_seen("FIRMWARE_NAME:"))
     {
-      uint8_t * string = (uint8_t *)&dmaL2Cache[ack_index];
+      uint8_t * string = (uint8_t *)&ack_cache[ack_index];
       uint16_t string_start = ack_index;
       uint16_t string_end = string_start;
 
@@ -1156,7 +1127,7 @@ void parseACK(void)
 
       if (ack_seen("MACHINE_TYPE:"))
       {
-        string = (uint8_t *)&dmaL2Cache[ack_index];
+        string = (uint8_t *)&ack_cache[ack_index];
         string_start = ack_index;
 
         if (ack_seen("EXTRUDER_COUNT:"))
@@ -1308,59 +1279,27 @@ void parseACK(void)
 
   parse_end:
     if (!avoid_terminal && MENU_IS(menuTerminal))
-      terminalCache(dmaL2Cache, dmaL2Cache_len, ack_port_index, SRC_TERMINAL_ACK);
+      terminalCache(ack_cache, ack_len, ack_port_index, SRC_TERMINAL_ACK);
 
     #ifdef SERIAL_PORT_2
       if (ack_port_index == PORT_1)
       {
         if (infoHost.wait == false && !ack_starts_with("ok"))
-        { // if the ACK message is not related to a gcode originated by the TFT and
-          // it is not "ok", it is a spontaneous ACK message, so pass it to all the
-          // supplementary serial ports (since these messages came unrequested)
-          for (SERIAL_PORT_INDEX i = PORT_2; i < SERIAL_PORT_COUNT; i++)
-          {
-            // forward data only if serial port is enabled
-            if (infoSettings.serial_port[i] > 0
-                #ifdef SERIAL_DEBUG_PORT
-                  && serialPort[i].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
-                #endif
-                )
-              Serial_Puts(serialPort[i].port, dmaL2Cache);  // pass on the ACK message to the port
-          }
+        { // if the ACK message is not related to a gcode originated by the TFT and it is not "ok", it is a spontaneous
+          // ACK message so pass it to all the supplementary serial ports (since these messages came unrequested)
+          Serial_Forward(SUP_PORTS, ack_cache);
         }
       }
       else
       { // if the ACK message is related to a gcode originated by a supplementary serial port,
-        // forward the message to the supplementary serial port
-        Serial_Puts(serialPort[ack_port_index].port, dmaL2Cache);
+        // forward the message to that supplementary serial port
+        Serial_Forward(ack_port_index, ack_cache);
 
-        if (infoHost.wait == false)  // if "ok" has been received
-          ack_port_index = PORT_1;   // reset ACK port index to avoid wrong relaying (in case no more commands will
-                                     // be sent by interfaceCmd) of any successive spontaneous ACK message
+        // if "ok" has been received, reset ACK port index to avoid wrong relaying (in case no more commands will
+        // be sent by interfaceCmd) of any successive spontaneous ACK message
+        if (infoHost.wait == false)
+          ack_port_index = PORT_1;
       }
     #endif
   }
 }
-
-#ifdef SERIAL_PORT_2
-
-void parseRcvGcode(void)
-{
-  for (SERIAL_PORT_INDEX portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)  // scan all the supplementary serial ports
-  {
-    // forward data only if serial port is enabled
-    if (infoSettings.serial_port[portIndex] > 0
-        #ifdef SERIAL_DEBUG_PORT
-          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data from serial debug port
-        #endif
-        )
-    {
-      while (syncL2CacheFromL1(serialPort[portIndex].port))  // if some data are retrieved from L1 to L2 cache
-      {
-        handleCmd(dmaL2Cache, portIndex);
-      }
-    }
-  }
-}
-
-#endif
