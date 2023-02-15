@@ -90,7 +90,7 @@ void menuEmulatorFontColor(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 void menuEmulatorBGColor(void)
@@ -140,7 +140,7 @@ void menuEmulatorBGColor(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 void menuMarlinModeSettings(void)
@@ -212,7 +212,7 @@ void menuMarlinModeSettings(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 #endif  // ST7920_EMULATOR
@@ -387,7 +387,7 @@ void menuUISettings(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 #ifdef BUZZER_PIN
@@ -426,7 +426,7 @@ void menuSoundSettings(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }  // menuSoundSettings
 
 #endif  // BUZZER_PIN
@@ -500,7 +500,7 @@ void menuBrightnessSettings(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 #endif  // LCD_LED_PWM_CHANNEL
@@ -602,5 +602,5 @@ void menuScreenSettings(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }

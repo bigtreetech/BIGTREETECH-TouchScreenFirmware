@@ -29,7 +29,8 @@ void parseComment(void)
     case 'L':
     {
       if (strcmp(temp_char, "layer") == 0)
-      {  // check for "layer" keyword in comment (layer number or layer count)
+      {
+        // check for "layer" keyword in comment (layer number or layer count)
         temp_char = strtok(NULL, TOKEN_DELIMITERS);
         strlwr(temp_char);
 
@@ -49,7 +50,7 @@ void parseComment(void)
           setPrintLayerNumber(((temp_value == 0) || (getPrintLayerNumber() == temp_value)) ? temp_value + 1 : temp_value);
         }
       }
-    // continue here with "else if" for another token that starts with "l" or "L"
+      // continue here with "else if" for another token that starts with "l" or "L"
       break;
     }
 

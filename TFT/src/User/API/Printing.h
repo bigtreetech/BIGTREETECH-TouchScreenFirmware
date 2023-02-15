@@ -57,6 +57,7 @@ bool getRunoutAlarm(void);
 void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
+void abortAndTerminate(void);
 
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);

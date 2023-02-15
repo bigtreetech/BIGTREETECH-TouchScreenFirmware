@@ -20,7 +20,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-// Calculate CRC16 checksum
+// calculate CRC16 checksum
 uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
 {
   uint16_t crc = 0xFFFF;
@@ -43,8 +43,7 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
   return crc;
 }
 
-// string convert to uint8, MSB
-// "2C" to 0x2C
+// string convert to uint8, MSB ("2C" to 0x2C)
 uint8_t string_2_uint8_t(const uint8_t *string)
 {
   uint8_t rtv = 0;
@@ -66,8 +65,7 @@ uint8_t string_2_uint8_t(const uint8_t *string)
   return rtv;
 }
 
-// uint8 convert to string, MSB
-// 0x2C to "2C"
+// uint8 convert to string, MSB (0x2C to "2C")
 uint8_t *uint8_2_string(uint8_t num, uint8_t *string)
 {
   for (unsigned char i = 0; i < 2; i++)

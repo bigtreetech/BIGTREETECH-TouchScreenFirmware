@@ -546,7 +546,7 @@ void menuLEDColor(void)
 
   if (forceExit)
   {
-    saveSettings();  // Save settings
+    saveSettings();  // save settings
 
     if (forceLedOff)  // if LED is switched off, set (neopixel) LED light current color to OFF
       LED_SetColor(&ledOff, false);

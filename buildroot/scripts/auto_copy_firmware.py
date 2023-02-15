@@ -15,7 +15,6 @@ def copy_firmware(source, target, env):
         target_dir = "Copy to SD Card root directory to update"
     target_file_path = os.path.join(repo_path, target_dir, filename)
     shutil.copyfile(src_file_path, target_file_path)
-
     print("Done.")
 
 env.AddPostAction("buildprog", copy_firmware)

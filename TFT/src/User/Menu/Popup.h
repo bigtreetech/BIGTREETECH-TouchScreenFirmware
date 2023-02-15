@@ -41,7 +41,7 @@ void _setDialogCancelTextLabel(int16_t index);
                                                        uint8_t*: _setDialogCancelTextStr, \
                                                         default: _setDialogCancelTextLabel)(x)
 
-//set text from LABEL index or pointer (uint8_t*)
+// set text from LABEL index or pointer (uint8_t*)
 #define setDialogText(title, msg, oktext, canceltext) \
   {                                                   \
     setDialogTitle(title);                            \
@@ -50,8 +50,8 @@ void _setDialogCancelTextLabel(int16_t index);
     setDialogCancelText(canceltext);                  \
   }
 
-void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
-                    const uint8_t * no);
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context,
+                   const uint8_t * yes, const uint8_t * no);
 void menuDialog(void);
 void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
 void loopPopup(void);
@@ -100,7 +100,6 @@ void loopPopup(void);
     setDialogText(_title, _msg, LABEL_NULL, LABEL_NULL); \
     showDialog(_type, NULL, NULL, NULL);                 \
   }
-
 
 #ifdef __cplusplus
 }

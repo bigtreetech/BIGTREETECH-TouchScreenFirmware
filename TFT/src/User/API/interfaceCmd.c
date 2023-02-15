@@ -61,69 +61,6 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
-/* Emmergency command handling */
-
-// Store an emergency command in the front of the command queue
-// so it is sent as soon as possible to the printer.
-// The command parameter must be a clear command, not formatted.
-void storeEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
-{
-  if (emergencyCmd[0] == '\0') return;
-
-  if (cmdQueue.count >= CMD_QUEUE_SIZE)
-  {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
-    do
-    {
-      loopProcess();
-    } while (cmdQueue.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the queue in case the queue is currently full
-  }
-
-  cmdQueue.index_r = (cmdQueue.index_r + CMD_QUEUE_SIZE - 1) % CMD_QUEUE_SIZE;
-  strcpy(cmdQueue.queue[cmdQueue.index_r].gcode, emergencyCmd);
-  cmdQueue.queue[cmdQueue.index_r].port_index = portIndex;
-  cmdQueue.count++;
-}
-
-// Send emergency command now.
-// The command parameter must be a clear command, not formatted.
-//
-// NOTE: Make sure that the printer can receive the command.
-//
-void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
-{
-  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
-    // dump serial data sent to debug port
-    Serial_Put(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
-    Serial_Put(SERIAL_DEBUG_PORT, ">>");
-    Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
-  #endif
-
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    Serial_Put(SERIAL_PORT, emergencyCmd);
-  else
-    rrfSendCmd(emergencyCmd);
-
-  setCurrentAckSrc(portIndex);
-
-  if (MENU_IS(menuTerminal))
-    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
-}
-
-// Handles emmergency command.
-// It sends it immediately if the printer has emergency parser,
-// otherwise puts it first in the command queue.
-// The command parameter must be a clear command, not formatted.
-void handleEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
-{
-  if (infoMachineSettings.emergencyParser == 0)
-    storeEmergencyCmd(emergencyCmd, portIndex);
-  else
-    sendEmergencyCmd(emergencyCmd, portIndex);
-}
-
-/* end emergency command handling */
-
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
@@ -356,49 +293,6 @@ bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
 
-// Check if the received gcode is an emergency command or not
-// (M108, M112, M410, M524, M876) and parse it accordingly.
-void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
-{
-  // strip out any leading space from the passed command.
-  // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
-  //
-  char * strPtr = stripCmd(&cmd);  // e.g. "  N1   G28*46\n" -> "G28*46\n"
-
-  // check if the received gcode is an emergency command and parse it accordingly
-
-  if (strPtr[0] == 'M')
-  {
-    switch (strtol(&strPtr[1], NULL, 10))
-    {
-      case 108:  // M108
-      case 112:  // M112
-      case 410:  // M410
-      case 876:  // M876
-        sendEmergencyCmd(cmd, portIndex);
-        return;
-
-      case 524:  // M524
-        abortPrint();
-
-        if (portIndex != PORT_1)  // if gcode is not generated from TFT
-          Serial_Forward(portIndex, "ok\n");
-        return;
-    }
-  }
-
-  // the received gcode is not an emergency command.
-  // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
-
-  if (cmd[0] != '\0')
-  {
-    while (!storeCmdFromUART(cmd, portIndex))
-    {
-      loopProcess();
-    }
-  }
-}
-
 // Check the presence of the specified "keyword" string in the current gcode command
 // starting the search from index "index".
 static bool cmd_seen_from(uint8_t index, const char * keyword)
@@ -601,6 +495,74 @@ void syncTargetTemp(uint8_t index)
 
     if (temp != heatGetTargetTemp(index))
       heatSetTargetTemp(index, temp, FROM_CMD);
+  }
+}
+
+// Send emergency command now.
+// The command parameter must be a clear command, not formatted.
+//
+// NOTE: Make sure that the printer can receive the command.
+//
+void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
+{
+  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
+    // dump serial data sent to debug port
+    Serial_Put(SERIAL_DEBUG_PORT, serialPort[portIndex].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
+    Serial_Put(SERIAL_DEBUG_PORT, ">>");
+    Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
+  #endif
+
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+    Serial_Put(SERIAL_PORT, emergencyCmd);
+  else
+    rrfSendCmd(emergencyCmd);
+
+  setCurrentAckSrc(portIndex);
+
+  if (MENU_IS(menuTerminal))
+    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
+}
+
+// Check if the received gcode is an emergency command or not
+// (M108, M112, M410, M524, M876) and parse it accordingly.
+void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
+{
+  // strip out any leading space from the passed command.
+  // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
+  //
+  char * strPtr = stripCmd(&cmd);  // e.g. "  N1   G28*46\n" -> "G28*46\n"
+
+  // check if the received gcode is an emergency command and parse it accordingly
+
+  if (strPtr[0] == 'M')
+  {
+    switch (strtol(&strPtr[1], NULL, 10))
+    {
+      case 108:  // M108
+      case 112:  // M112
+      case 410:  // M410
+      case 876:  // M876
+        sendEmergencyCmd(cmd, portIndex);
+        return;
+
+      case 524:  // M524
+        abortPrint();
+
+        if (portIndex != PORT_1)  // if gcode is not generated from TFT
+          Serial_Forward(portIndex, "ok\n");
+        return;
+    }
+  }
+
+  // the received gcode is not an emergency command.
+  // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
+
+  if (cmd[0] != '\0')
+  {
+    while (!storeCmdFromUART(cmd, portIndex))
+    {
+      loopProcess();
+    }
   }
 }
 
@@ -1268,20 +1230,16 @@ void sendQueueCmd(void)
             {
               pValue = cmd_float();
 
-              if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 0, pValue);
-              if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 2, pValue);
+              if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 0, pValue);
+              if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 2, pValue);
             }
 
             if (cmd_seen('D'))
             {
               pValue = cmd_float();
 
-              if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 1, pValue);
-              if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 3, pValue);
+              if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 1, pValue);
+              if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 3, pValue);
             }
           }
         }
