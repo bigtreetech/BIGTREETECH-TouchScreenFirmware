@@ -649,29 +649,60 @@ void parseACK(void)
       // (print from remote onboard media) and open Printing menu
       startPrintingFromRemoteHost(file_name);
     }
-    else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE))
+    // parse and store M24, M27 and M73, if printing from (remote) onboard media
+    else if (infoMachineSettings.onboardSD == ENABLED && WITHIN(infoFile.source, FS_ONBOARD_MEDIA, FS_ONBOARD_MEDIA_REMOTE) &&
+             (ack_starts_with("Done printing file") || ack_seen("SD printing") || ack_starts_with("echo: M73")))
     {
-      // parse and store M27
-      if (ack_seen("SD printing"))  // received "SD printing byte" or "Not SD printing"
+      // NOTE FOR "M73": Required "SET_PROGRESS_MANUALLY" and "M73_REPORT" settings in Marlin
+
+      // parse and store M24, received "Done printing file" (printing from (remote) onboard media completed)
+      if (ack_starts_with("Done"))
+      {
+        endPrint();
+      }
+      // parse and store M27, received "SD printing byte" or "Not SD printing"
+      else if (ack_seen("SD"))
       {
         if (infoHost.status == HOST_STATUS_RESUMING)
           setPrintResume(HOST_STATUS_PRINTING);
-
-        if (infoHost.status == HOST_STATUS_PAUSING)
+        else if (infoHost.status == HOST_STATUS_PAUSING)
           setPrintPause(HOST_STATUS_PAUSED, PAUSE_EXTERNAL);
 
         if (infoHost.status == HOST_STATUS_PRINTING)
         {
           if (ack_continue_seen("byte"))  // received "SD printing byte"
+          {
+            // parse file data progress.
+            // Format: "SD printing byte <XXXX>/<YYYY>" (e.g. "SD printing byte 123/12345")
+            //
             setPrintProgressData(ack_value(), ack_second_value());
+          }
           else  // received "Not SD printing"
+          {
             setPrintAbort();
+          }
         }
       }
-      // parse and store M24, printing from (remote) onboard media completed
-      else if (ack_seen("Done printing file"))  // if printing from (remote) onboard media
+      // parse and store M73
+      else
       {
-        endPrint();
+        // parse progress percentage and remaining time.
+        // Format: "M73 Progress: <XX>%; Time left: <YY>m;" (e.g. "M73 Progress: 40%; Time left: 2m;")
+
+        if (ack_seen("Progress:"))
+        {
+          setPrintProgressSource(PROG_SLICER);
+          setPrintProgressPercentage(ack_value());
+        }
+
+        if (ack_seen("Time left:"))
+        {
+          setPrintRemainingTime(ack_value() * 60);
+          setTimeFromSlicer(true);  // disable parsing remaning time from gcode comments
+
+          if (getPrintProgressSource() < PROG_TIME && infoSettings.prog_source == 1)
+            setPrintProgressSource(PROG_TIME);
+        }
       }
     }
 
@@ -1210,7 +1241,7 @@ void parseACK(void)
       {
         infoMachineSettings.babyStepping = ack_value();
       }
-      else if (ack_continue_seen("BUILD_PERCENT:"))  // M73 support. Required "LCD_SET_PROGRESS_MANUALLY" in Marlin
+      else if (ack_continue_seen("BUILD_PERCENT:"))  // M73 support. Required "SET_PROGRESS_MANUALLY" in Marlin
       {
         infoMachineSettings.buildPercent = ack_value();
       }
