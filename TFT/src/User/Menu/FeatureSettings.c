@@ -47,7 +47,7 @@ typedef enum
   SKEY_START_GCODE_ENABLED,
   SKEY_END_GCODE_ENABLED,
   SKEY_CANCEL_GCODE_ENABLED,
-  SKEY_RESET_SETTINGS,        // keep reset always at the bottom of the settings menu list.
+  SKEY_RESET_SETTINGS,        // keep reset always at the bottom of the settings menu list
   SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
 

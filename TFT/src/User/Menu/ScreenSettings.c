@@ -147,7 +147,7 @@ void menuMarlinModeSettings(void)
 {
   LABEL title = {LABEL_MARLIN_MODE_SETTINGS};
   LISTITEM marlinModeitems[] = {
-  // icon                       ItemType          Item Title               item value text(only for custom value)
+  // icon                       item type         item title               item value text(only for custom value)
     {CHARICON_FONT_COLOR,       LIST_CUSTOMVALUE, LABEL_FONT_COLOR,        LABEL_CUSTOM},
     {CHARICON_BACKGROUND_COLOR, LIST_CUSTOMVALUE, LABEL_BG_COLOR,          LABEL_CUSTOM},
     {CHARICON_TOGGLE_ON,        LIST_TOGGLE,      LABEL_MARLIN_FULLSCREEN, LABEL_NULL},
@@ -277,7 +277,7 @@ void menuUISettings(void)
 {
   LABEL title = {LABEL_UI_SETTINGS};
   LISTITEM uiItems[] = {
-  // icon                ItemType          Item Title                  item value text(only for custom value)
+  // icon                item type         item title                  item value text(only for custom value)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_ACK_NOTIFICATION,     LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_FILES_SORT_BY,        LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE,      LABEL_FILES_LIST_MODE,      LABEL_NULL},
@@ -396,7 +396,7 @@ void menuSoundSettings(void)
 {
   LABEL title = {LABEL_SOUND};
   LISTITEM sounditems[] = {
-  // icon                ItemType     Item Title          item value text(only for custom value)
+  // icon                item type    item title          item value text(only for custom value)
     {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_TOUCH_SOUND,  LABEL_NULL},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_TOAST_SOUND,  LABEL_NULL},
     {CHARICON_TOGGLE_ON, LIST_TOGGLE, LABEL_ALERT_SOUND,  LABEL_NULL},
@@ -437,7 +437,7 @@ void menuBrightnessSettings(void)
 {
   LABEL title = {LABEL_LCD_BRIGHTNESS};
   LISTITEM brightnessitems[] = {
-  // icon                ItemType          Item Title                 item value text(only for custom value)
+  // icon                item type         item title                 item value text(only for custom value)
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_BRIGHTNESS,      LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_BRIGHTNESS, LABEL_DYNAMIC},
     {CHARICON_BLANK,     LIST_CUSTOMVALUE, LABEL_LCD_IDLE_TIME,       LABEL_DYNAMIC},

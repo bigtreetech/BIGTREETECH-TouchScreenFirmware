@@ -2,7 +2,7 @@
 #include "includes.h"
 
 #define ENDSTOP_CMD     "M211 S%d\n"
-#define ENDSTOP_CMD_RRF "M564 S%d H%d\n" // for RRF
+#define ENDSTOP_CMD_RRF "M564 S%d H%d\n"  // for RRF
 #define MOVE_Z_CMD      "G1 Z%.2f F%d\n"
 
 #define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000

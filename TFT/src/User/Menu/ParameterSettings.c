@@ -36,7 +36,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-// icon            ItemType    Item Title              item value text(only for custom value)
+// icon            item type   item title              item value text(only for custom value)
   {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
   {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},

@@ -38,7 +38,7 @@ typedef enum
   P_HYBRID_THRESHOLD,
   P_BUMPSENSITIVITY,
   P_MBL_OFFSET,
-  // Keep below items always at the end
+  // keep below items always at the end
   PARAMETERS_COUNT,
 } PARAMETER_NAME;
 
