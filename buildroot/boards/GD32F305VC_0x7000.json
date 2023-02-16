@@ -34,11 +34,11 @@
   "frameworks": [
     "spl"
   ],
-  "name": "GD32F305VC (96k RAM, 1024k Flash)",
+  "name": "GD32F305VC (64k RAM, 1024k Flash)",
   "upload": {
     "disable_flushing": false,
     "offset_address": "0x8007000",
-    "maximum_ram_size": 98304,
+    "maximum_ram_size": 65536,
     "maximum_size": 1015808,
     "protocol": "stlink",
     "protocols": [
