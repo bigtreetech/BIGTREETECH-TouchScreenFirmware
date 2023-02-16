@@ -47,31 +47,31 @@ void HD44780_BI11_ReturnHome(uint8_t cmd)
   HD44780.x = HD44780.y = 0;
 }
 
-//cmd : 1 << 2
+// cmd : 1 << 2
 void HD44780_BI12_EntryModeSet(uint8_t cmd)
 {
   HD44780_reg.bi.ems.reg = cmd;
 }
 
-//cmd : 1 << 3
+// cmd : 1 << 3
 void HD44780_BI13_DisplayControl(uint8_t cmd)
 {
   HD44780_reg.bi.dc.reg = cmd;
 }
 
-//cmd : 1 << 4
+// cmd : 1 << 4
 void HD44780_BI14_CursorDisplayControl(uint8_t cmd)
 {
   HD44780_reg.bi.cdsc.reg = cmd;
 }
 
-//cmd : 1 << 5
+// cmd : 1 << 5
 void HD44780_CI15_FunctionSet(uint8_t cmd)
 {
   HD44780_reg.fs.reg = cmd;
 }
 
-//cmd : 1 << 6
+// cmd : 1 << 6
 void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
 {
   HD44780_reg.bi.cgrama.reg = cmd;
@@ -82,7 +82,7 @@ void HD44780_BI16_SetCGRAMAddress(uint8_t cmd)
   HD44780_reg.data_type = HD44780_DATA_CGRAM;
 }
 
-//cmd : 1 << 7
+// cmd : 1 << 7
 void HD44780_BI17_SetDDRAMAddress(uint8_t cmd)
 {
   HD44780_reg.bi.ddrama.reg = cmd;
@@ -152,7 +152,7 @@ void HD44780_DispDDRAM(uint8_t data)
     }
   }
   else
-  { //font
+  { // font
     if (data < ' ' || data > '~') return;
     ex = HD44780.x * BYTE_WIDTH + BYTE_WIDTH - 1;
     ey = HD44780.y * BYTE_HEIGHT + BYTE_HEIGHT - 1;

@@ -22,11 +22,11 @@ typedef struct {
 typedef struct
 {
   // encode info
-  uint8_t  bytes;        // Number of bytes occupied by one character
-  uint32_t codePoint;    // Actual encoding index of characters
+  uint8_t  bytes;        // number of bytes occupied by one character
+  uint32_t codePoint;    // actual encoding index of characters
   // font info
-  uint8_t  pixelHeight;  // The pixel height of a character display
-  uint8_t  pixelWidth;   // The pixel width of a character display
+  uint8_t  pixelHeight;  // the pixel height of a character display
+  uint8_t  pixelWidth;   // the pixel width of a character display
   uint32_t bitMapAddr;   // the address of font bitmap in w25qxx
 } CHAR_INFO;
 

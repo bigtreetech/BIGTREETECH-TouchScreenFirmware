@@ -51,9 +51,8 @@
 #else
   #error "Error: invalid language defined"
 #endif
-//
-// Add new Keywords in Language.inc file Only
-//
+// add new keywords in Language.inc file only
+
 uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 const char *const default_pack[LABEL_NUM] = {
