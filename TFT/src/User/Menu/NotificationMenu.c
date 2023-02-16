@@ -44,7 +44,7 @@ void menuNotification(void)
 {
   LISTITEMS notificationItems = {
     LABEL_NOTIFICATIONS,
-    // icon            item type    item title    item value text(only for custom value)
+    // icon            item type   item title     item value text(only for custom value)
     {
       {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
       {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
