@@ -761,8 +761,8 @@ void parseACK(void)
     {
       char tmpMsg[100];
 
-      strcpy (tmpMsg, "Mean: ");
-      sprintf (&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
+      strcpy(tmpMsg, "Mean: ");
+      sprintf(&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
 
       if (ack_continue_seen("Min: "))
         sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
