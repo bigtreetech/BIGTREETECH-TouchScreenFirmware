@@ -732,8 +732,7 @@ void parseACK(void)
     {
       char tmpMsg[100];
 
-      strcpy (tmpMsg, "Mean: ");
-      sprintf (&tmpMsg[strlen(tmpMsg)], "%0.5f", ack_value());
+      sprintf(tmpMsg, "Mean: %0.5f", ack_value());
 
       if (ack_continue_seen("Min: "))
         sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
@@ -748,11 +747,12 @@ void parseACK(void)
     else if (ack_seen("Standard Deviation: "))
     {
       char tmpMsg[100];
+      char * dialogMsg = (char *)getDialogMsgStr();
 
-      if (memcmp((char *)getDialogMsgStr(), "Mean: ", 6) == 0)
+      if (memcmp(dialogMsg, "Mean: ", 6) == 0)
       {
         levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
-        sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", (char *)getDialogMsgStr(), ack_value());
+        sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", dialogMsg, ack_value());
 
         popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
       }
