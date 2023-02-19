@@ -87,7 +87,7 @@ void strscpy(char * destination, const char * source, size_t size)
     size--;
   }
 
-  destination[size] ='\0';
+  *destination = '\0';
 }
 
 // string convert to uint8, MSB

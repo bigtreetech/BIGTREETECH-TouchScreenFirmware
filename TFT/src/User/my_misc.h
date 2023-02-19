@@ -7,7 +7,6 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <string.h>
 
 // Menu Macros
@@ -65,7 +64,7 @@ extern "C" {
 
 #define strncpy(...) \
   do { \
-    _Pragma("GCC error \"Error: It is recommended to use strscpy() instead of strncpy().\""); \
+    _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strxcpy(), strwcpy() or strscpy().\""); \
   } while (0)
 
 uint8_t inRange(int cur, int tag , int range);

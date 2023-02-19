@@ -126,14 +126,12 @@ void menuDialog(void)
 
 void _setDialogTitleStr(uint8_t * str)
 {
-  popup_title[0] = '\0'; // clear dest in case str is empty
-  strscpy((char *)popup_title, (char *)str, sizeof(popup_title));
+  strxcpy((char *)popup_title, (char *)str, sizeof(popup_title));
 }
 
 void _setDialogMsgStr(uint8_t * str)
 {
-  popup_msg[0] = '\0'; // clear dest in case str is empty
-  strscpy((char *)popup_msg, (char *)str, sizeof(popup_msg));
+  strxcpy((char *)popup_msg, (char *)str, sizeof(popup_msg));
 }
 
 uint8_t *getDialogMsgStr()
@@ -143,42 +141,40 @@ uint8_t *getDialogMsgStr()
 
 void _setDialogOkTextStr(uint8_t * str)
 {
-  popup_ok[0] = '\0'; // clear dest in case str is empty
-  strscpy((char *)popup_ok, (char *)str, sizeof(popup_ok));
+  strxcpy((char *)popup_ok, (char *)str, sizeof(popup_ok));
 }
 
 void _setDialogCancelTextStr(uint8_t * str)
 {
-  popup_cancel[0] = '\0'; // clear dest in case str is empty
-  strscpy((char *)popup_cancel, (char *)str, sizeof(popup_cancel));
+  strxcpy((char *)popup_cancel, (char *)str, sizeof(popup_cancel));
 }
 
 void _setDialogTitleLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strscpy((char *)popup_title, (char *)tempstr, sizeof(popup_title));
+  strxcpy((char *)popup_title, (char *)tempstr, sizeof(popup_title));
 }
 
 void _setDialogMsgLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strscpy((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
+  strxcpy((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
 }
 
 void _setDialogOkTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strscpy((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
+  strxcpy((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
 }
 
 void _setDialogCancelTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strscpy((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
+  strxcpy((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
 }
 
 /**
