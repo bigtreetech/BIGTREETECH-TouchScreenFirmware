@@ -112,7 +112,8 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
     loopProcess();
   }
 
-  // remove any enqueued command coming from a supplementary serial port or TFT media, if printing from remote host or TFT media
+  // remove any enqueued command that could come from a supplementary serial port or TFT media
+  // (if printing from remote host or TFT media) during the loop above
   clearQueueAndRunoutAlarm();
 }
 
