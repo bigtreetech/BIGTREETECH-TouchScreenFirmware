@@ -4,20 +4,23 @@ from os import path
 
 def mks_encrypt_firmware(source, target, env):
     print("Encrypting MKS firmware...")
+    repo_path = os.path.realpath("")
     build_dir = env.subst('$BUILD_DIR')
-    filename = "/" + env['PROGNAME']
+    filename = env['PROGNAME'] + ".bin"
+    src_file_path = os.path.join(repo_path, build_dir, filename)
     build_flags = env.ParseFlags(env['BUILD_FLAGS'])
     flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
     target_dir = flags.get("BINARY_DIRECTORY")
     if target_dir == None:
         target_dir = "Copy to SD Card root directory to update"
-    sourceFile = build_dir + filename + ".bin"
-    destinationFile = target_dir + filename + "_encrypted" + ".bin"
+    target_filename = env['PROGNAME'] + "_encrypted" + ".bin"
+    target_file_path = os.path.join(repo_path, target_dir, target_filename)
+    target_build_file_path = os.path.join(repo_path, build_dir, target_filename)
 
-    if path.exists(sourceFile):
+    if path.exists(src_file_path):
         key = [163, 189, 173, 13, 65, 17, 187, 141, 220, 128, 45, 208, 210, 196, 155, 30, 38, 235, 227, 51, 74, 21, 228, 10, 179, 177, 60, 147, 187, 175, 247, 62]
-        localFile = open(sourceFile, 'rb')
-        resultFile = open(destinationFile, 'wb')
+        localFile = open(src_file_path, 'rb')
+        resultFile = open(target_build_file_path, 'wb')
         localFile.seek(0)
         chunk = localFile.read(320)
         if not chunk:
@@ -44,8 +47,10 @@ def mks_encrypt_firmware(source, target, env):
         resultFile.write(chunk)
         localFile.close()
         resultFile.close()
-        print("UNENCRYPTED MKS firmware file (rename to upload!): " + sourceFile)
-        print("ENCRYPTED MKS firmware file: " + destinationFile)
+        print("UNENCRYPTED MKS firmware file: " + filename)
+        print("ENCRYPTED MKS firmware file (rename to upload!): " + target_filename)
+
+        shutil.copyfile(target_build_file_path, target_file_path)
     else:
         print("ERROR: MKS firmware file not found!")
     print("Done.")
