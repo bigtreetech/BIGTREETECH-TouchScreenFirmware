@@ -59,19 +59,20 @@ extern "C" {
 #define MINUTES(t) (t % (60 * 60) / 60)  // minutes remaining to next hour
 #define SECONDS(t) (t % 60)              // seconds remaining to next minute
 
-#define strtod stringToDouble  // enable light weight string to double function without exponential support
+#define strtod strtod_ligth  // light weight strtod() function without exponential support
 
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 uint32_t calculateCRC16(const uint8_t *data, uint32_t length);  // calculate CRC16 checksum
 
-uint8_t string_2_uint8_t(const uint8_t *string);                             // string convert to uint8, MSB ("2C" to 0x2C)
-uint8_t *uint8_2_string(uint8_t num, uint8_t *string);                       // uint8 convert to string, MSB (0x2C to "2C")
-uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);    // string convert to uint32, MSB
-uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string);  // uint32 convert to string, MSB
-double stringToDouble(char *str, char **endptr);                             // convert string to double (without exponential support)
-void timeToString(char *buf, char *strFormat, uint32_t time);                // convert time to string with given formatting
+uint8_t string_2_uint8(const uint8_t *str);                               // string convert to uint8, MSB ("2C" to 0x2C)
+uint8_t *uint8_2_string(uint8_t num, uint8_t *str);                       // uint8 convert to string, MSB (0x2C to "2C")
+uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num);    // string convert to uint32, MSB
+uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str);  // uint32 convert to string, MSB
+void time_2_string(char *buf, char *str_format, uint32_t time);           // convert time to string with given formatting
+
+double strtod_ligth(char *str, char **endptr);  // light weight strtod() function without exponential support
 
 const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
