@@ -90,9 +90,9 @@ bool mountUSBDisk(void)
  */
 bool scanPrintFilesFatFs(void)
 {
-  FILINFO finfo;
   DIR dir;
-  uint32_t folderDate[FILE_NUM];
+  FILINFO finfo;
+  uint32_t folderDate[FOLDER_NUM];
   uint32_t fileDate[FILE_NUM];
 
   clearInfoFile();
