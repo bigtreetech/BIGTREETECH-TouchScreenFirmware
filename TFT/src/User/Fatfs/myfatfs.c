@@ -154,9 +154,7 @@ bool Get_NewestGcode(const TCHAR* path)
       if (nextdirpath == NULL)
         break;
 
-      strcpy(nextdirpath, path);
-      strcat(nextdirpath, "/");
-      strcat(nextdirpath, finfo.fname);
+      sprintf(nextdirpath, "%s/%s", path, finfo.fname);
 
       status |= Get_NewestGcode(nextdirpath);
       free(nextdirpath);
@@ -176,9 +174,8 @@ bool Get_NewestGcode(const TCHAR* path)
       if (len + strlen(finfo.fname) + 2 > MAX_PATH_LEN)
         break;
 
-      strcpy(infoFile.path, path);
-      strcat(infoFile.path, "/");
-      strcat(infoFile.path, finfo.fname);
+      sprintf(infoFile.path, "%s/%s", path, finfo.fname);
+
       status = 1;
     }
   }

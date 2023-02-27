@@ -37,8 +37,7 @@ bool powerFailedGetRestore(void)
 
 void powerFailedSetDriverSource(void)
 {
-  strcpy(powerFailedFileName, getFS());
-  strcat(powerFailedFileName, BREAK_POINT_FILE);
+  sprintf(powerFailedFileName, "%s%s", getFS(), BREAK_POINT_FILE);
 }
 
 bool powerFailedInitData(void)
