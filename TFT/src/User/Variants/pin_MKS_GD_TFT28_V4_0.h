@@ -28,12 +28,12 @@
 // SERIAL_PORT_X: communicating with other controllers (OctoPrint, ESP3D, other UART Touch Screen etc...)
 #ifndef SERIAL_PORT
   #define SERIAL_PORT   _USART2  // default USART port
-  #define SERIAL_PORT_2 _USART1
-  #define SERIAL_PORT_3 _USART3
+  #define SERIAL_PORT_2 _USART3
+  #define SERIAL_PORT_3 _USART1
   #define USART2_TX_PIN PD5
   #define USART2_RX_PIN PD6
-  // #define USART3_TX_PIN PD8
-  // #define USART3_RX_PIN PD9
+  #define USART3_TX_PIN PD8
+  #define USART3_RX_PIN PD9
   #define SERIAL_PORT_4 _UART4
 #endif
 
