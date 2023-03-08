@@ -1,6 +1,12 @@
 #ifndef _PIN_MKS_GD_TFT28_V4_0_H_  // modify to actual filename !!!
 #define _PIN_MKS_GD_TFT28_V4_0_H_  // modify to actual filename !!!
 
+// MCU type (STM32F10x, STM32F2xx, STM32F4xx, gd32f20x, gd32f30x)
+#ifndef MCU_TYPE
+  #define MCU_TYPE
+  #include "gd32f30x.h"
+#endif
+
 // Update folder for fonts and icons
 #ifndef UPDATE_DIR
   #define UPDATE_DIR "TFT28"
@@ -11,20 +17,24 @@
   #define HARDWARE_VERSION "GD_TFT28_V4.0"
 #endif
 
-#ifndef TFTLCD_DRIVER
-  // Works
-  #define TFTLCD_DRIVER HX8558
-  #define TFTLCD_DRIVER_SPEED 0x10     // SSD1963 needs slower speed
-  // Wrong render
-  // #define TFTLCD_DRIVER HX8558
-  // White screen
-  // #define TFTLCD_DRIVER ILI9325
-  // Crash
-  // #define TFTLCD_DRIVER       (ILI9488 | NT35310 | ST7796S)
-  // #define TFTLCD_DRIVER_SPEED 0x03
-  // Reversed
-  // #define TFTLCD_DRIVER       ST7789
-  // #define TFTLCD_DRIVER_SPEED 0x05
+// USB Disk support
+#ifndef USB_FLASH_DRIVE_SUPPORT
+  #define USB_FLASH_DRIVE_SUPPORT
+  #define USE_USB_FS
+  #define USE_USB_OTG_FS
+#endif
+
+// SERIAL_PORT:   communicating with host (Marlin, RRF etc...)
+// SERIAL_PORT_X: communicating with other controllers (OctoPrint, ESP3D, other UART Touch Screen etc...)
+#ifndef SERIAL_PORT
+  #define SERIAL_PORT   _USART2  // default USART port
+  #define SERIAL_PORT_2 _USART1
+  #define SERIAL_PORT_3 _USART3
+  #define USART2_TX_PIN PD5
+  #define USART2_RX_PIN PD6
+  // #define USART3_TX_PIN PD8
+  // #define USART3_RX_PIN PD9
+  #define SERIAL_PORT_4 _UART4
 #endif
 
 #include "pin_MKS_TFT32_V1_4.h"
