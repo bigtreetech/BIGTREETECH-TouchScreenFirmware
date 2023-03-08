@@ -2,47 +2,40 @@
 #include "variants.h"  // for USART1_TX_PIN etc...
 #include "GPIO_Init.h"
 
-// USART1 default pins config
+// USART1 (GD USART0) default pins config
 #ifndef USART1_TX_PIN
   #define USART1_TX_PIN PA9
 #endif
 #ifndef USART1_RX_PIN
   #define USART1_RX_PIN PA10
 #endif
-// USART2 default pins config
+// USART2 (GD USART1) default pins config
 #ifndef USART2_TX_PIN
   #define USART2_TX_PIN PA2
 #endif
 #ifndef USART2_RX_PIN
   #define USART2_RX_PIN PA3
 #endif
-// USART3 default pins config
+// USART3 (GD USART2) default pins config
 #ifndef USART3_TX_PIN
   #define USART3_TX_PIN PB10
 #endif
 #ifndef USART3_RX_PIN
   #define USART3_RX_PIN PB11
 #endif
-// UART4 default pins config
+// UART4 (GD UART3) default pins config
 #ifndef UART4_TX_PIN
   #define UART4_TX_PIN  PC10
 #endif
 #ifndef UART4_RX_PIN
   #define UART4_RX_PIN  PC11
 #endif
-// UART5 default pins config
+// UART5 (GD UART4) default pins config
 #ifndef UART5_TX_PIN
   #define UART5_TX_PIN  PC12
 #endif
 #ifndef UART5_RX_PIN
   #define UART5_RX_PIN  PD2
-#endif
-// USART6 default pins config
-#ifndef USART6_TX_PIN
-  #define USART6_TX_PIN PG14
-#endif
-#ifndef USART6_RX_PIN
-  #define USART6_RX_PIN PG9
 #endif
 
 static rcu_periph_reset_enum rcu_uart_rst[_UART_CNT] = {
@@ -51,7 +44,6 @@ static rcu_periph_reset_enum rcu_uart_rst[_UART_CNT] = {
   RCU_USART2RST,
   RCU_UART3RST,
   RCU_UART4RST,
-  //RCU_USART5RST,
 };
 
 static rcu_periph_enum rcu_uart_en[_UART_CNT] = {
@@ -60,7 +52,6 @@ static rcu_periph_enum rcu_uart_en[_UART_CNT] = {
   RCU_USART2,
   RCU_UART3,
   RCU_UART4,
-  //RCU_USART5,
 };
 
 static uint32_t const uart[_UART_CNT] = {
@@ -69,11 +60,10 @@ static uint32_t const uart[_UART_CNT] = {
   USART2,   // TX--PB10 RX--PB11
   UART3,    // TX--PC10 RX--PC11
   UART4,    // TX--PC12 RX--PD2
-  //USART5
-  };  // TX--PG14 RX--PG9  //error
+};
 
-static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN, USART6_TX_PIN};  // TX
-static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN, USART6_RX_PIN};  // RX
+static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN};  // TX
+static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN};  // RX
 
 void UART_GPIO_Init(uint8_t port)
 {

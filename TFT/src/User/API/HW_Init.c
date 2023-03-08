@@ -44,7 +44,8 @@ void HW_Init(void)
 
   #if defined(MKS_TFT) && !defined (MKS_TFT35_V1_0) // not used by MKS_TFT35_V1_0
     #if defined (GD32F3XX)
-      rcu_apb2_clock_config(CK_APB2);
+      rcu_periph_clock_enable(RCU_AF);
+      gpio_pin_remap_config(GPIO_USART1_REMAP, ENABLE);
     #else
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
       GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
