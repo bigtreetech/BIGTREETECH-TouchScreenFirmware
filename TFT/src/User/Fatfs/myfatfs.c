@@ -129,59 +129,6 @@ bool scanPrintFilesFatFs(void)
   return true;
 }
 
-bool Get_NewestGcode(const TCHAR* path)
-{
-  uint32_t date = 0;
-  FILINFO finfo;
-  uint16_t len = 0;
-  DIR dirs;
-  char status = 0;
-
-  if (f_opendir(&dirs, path) != FR_OK)
-    return false;
-
-  len = strlen(path);
-  while (f_readdir(&dirs, &finfo) == FR_OK)
-  {
-    if (finfo.fname[0] == 0)
-      break;
-    if ((finfo.fattrib & AM_HID) != 0)
-      continue;
-
-    if ((finfo.fattrib & AM_DIR) == AM_DIR)
-    {
-      char *nextdirpath = malloc(len + strlen(finfo.fname) + 2);
-      if (nextdirpath == NULL)
-        break;
-
-      sprintf(nextdirpath, "%s/%s", path, finfo.fname);
-
-      status |= Get_NewestGcode(nextdirpath);
-      free(nextdirpath);
-      nextdirpath = NULL;
-    }
-    else
-    {
-      if (strstr(finfo.fname, ".gcode") == NULL)
-        continue;
-      if (((finfo.fdate << 16) | finfo.ftime) < date)
-        continue;
-
-      date = (finfo.fdate << 16) | finfo.ftime;
-
-      resetInfoFile();
-
-      if (len + strlen(finfo.fname) + 2 > MAX_PATH_LEN)
-        break;
-
-      sprintf(infoFile.path, "%s/%s", path, finfo.fname);
-
-      status = 1;
-    }
-  }
-  return status;
-}
-
 bool f_file_exists(const TCHAR* path)
 {
   FIL tmp;
