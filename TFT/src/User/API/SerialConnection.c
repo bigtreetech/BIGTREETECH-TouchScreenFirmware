@@ -112,7 +112,6 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
     Serial_Put(SERIAL_DEBUG_PORT, msg);
   #endif
 
-  uint16_t msgLen = MENU_IS(menuTerminal ? strlen(msg) : 0);  // retrieve message lenght if Terminal menu is currently displayed
   uint8_t portCount = SERIAL_PORT_COUNT;                      // by default, select all the serial ports
 
   if (portIndex == ALL_PORTS)         // if ALL_PORTS, forward the message to all the enabled serial ports
@@ -132,12 +131,8 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
           && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
         #endif
         )
-    {
       Serial_Put(serialPort[portIndex].port, msg);  // pass on the message to the port
 
-      if (msgLen != 0)  // if Terminal menu is currently displayed
-        terminalCache(msg, msgLen, portIndex, SRC_TERMINAL_GCODE);
-    }
   }
 }
 

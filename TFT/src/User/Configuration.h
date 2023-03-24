@@ -1368,6 +1368,13 @@
 #define TERMINAL_KEYBOARD_LAYOUT 0  // Default: 0
 
 /**
+ * Suppress/allow terminal cache during keyboard view
+ *  - uncomment to disable terminal cache during keyboard view
+ *  - comment it to enable terminal cache during keyboard view
+ */
+#define TERMINAL_KEYBOARD_VIEW_SUPPRESS_ACK  // Default: uncommented (cache suppressed)
+
+/**
  * Progress Bar Color (Printing menu)
  * The color of the progress bar during print.
  *   Options: [Orange: 0, Yellow: 1, Red: 2, Green: 3, Blue: 4, Cyan: 5, Magenta: 6, Purple: 7, Lime: 8, Gray: 9]
