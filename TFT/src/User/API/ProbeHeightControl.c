@@ -102,10 +102,9 @@ void probeHeightAbsolute(void)
 }
 
 // Change probe height
-void probeHeightMove(float unit, int8_t direction)
+void probeHeightMove(float unit)
 {
-  storeCmd(MOVE_Z_CMD, unit * direction,
-           infoSettings.level_feedrate[FEEDRATE_Z]);
+  storeCmd(MOVE_Z_CMD, unit, infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
 // Query for new coordinates

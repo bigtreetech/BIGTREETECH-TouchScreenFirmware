@@ -41,10 +41,7 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
   action_prepareItem = prepareItem_action;
   curPageIndexSource = curPage;
 
-  if (curPage != NULL)
-    curPageIndex = *curPage;
-  else
-    curPageIndex = 0;
+  curPageIndex = (curPage == NULL) ? 0 : *curPage;
 
   listViewSetCurPage(curPageIndex);
   menuDrawListPage(&listItems);

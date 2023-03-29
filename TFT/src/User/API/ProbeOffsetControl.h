@@ -27,7 +27,7 @@ float probeOffsetGetValue(void);
 float probeOffsetResetValue(void);
 
 // Update Z offset value
-float probeOffsetUpdateValue(float unit, int8_t direction);
+float probeOffsetUpdateValue(float unit);
 
 #ifdef __cplusplus
 }

@@ -1434,7 +1434,7 @@ void sendQueueCmd(void)
 
         case 28:  // G28
           coordinateSetKnown(true);
-          babystepReset();
+          babystepSetValue(BABYSTEP_DEFAULT_VALUE);  // reset babystep
           if (infoMachineSettings.leveling != BL_DISABLED)
             storeCmd("M420\n");  // check bed leveling state
           break;
