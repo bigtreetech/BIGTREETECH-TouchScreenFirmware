@@ -1,12 +1,6 @@
 #include "Fan.h"
 #include "includes.h"
 
-const ITEM itemFan[2] = {
-  // icon                        label
-  {ICON_FAN,                     LABEL_FAN},
-  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
-};
-
 static uint8_t fan_index = 0;
 
 void menuFan(void)
@@ -35,9 +29,15 @@ void menuFan(void)
   lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
   if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
-    fanItems.items[KEY_ICON_4] = itemFan[0];
+  {
+    fanItems.items[KEY_ICON_4].icon = ICON_FAN;
+    fanItems.items[KEY_ICON_4].label.index = LABEL_FAN;
+  }
   else
-    fanItems.items[KEY_ICON_4] = itemFan[1];
+  {
+    fanItems.items[KEY_ICON_4].icon = ICON_FAN_HALF_SPEED;
+    fanItems.items[KEY_ICON_4].label.index = LABEL_HALF;
+  }
 
   menuDrawPage(&fanItems);
   fanReDraw(fan_index, true);

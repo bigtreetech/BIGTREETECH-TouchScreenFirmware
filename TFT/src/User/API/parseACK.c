@@ -805,7 +805,7 @@ void parseACK(void)
       else
       {
         caseLightSetState(true);
-        caseLightSetBrightness(ack_value());
+        caseLightSetPercent(ack_value());
       }
     }
     // parse and store M420 V1 T1, mesh data (e.g. from Mesh Editor menu)

@@ -309,12 +309,12 @@ void menuStatus(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        heatSetCurrentIndex(-1);  // set last used hotend index
+        heatSetCurrentIndex(LAST_NOZZLE);  // preselect last selected nozzle for "Heat" menu
         OPEN_MENU(menuHeat);
         break;
 
       case KEY_ICON_1:
-        heatSetCurrentIndex(-2);  // set last used bed index
+        heatSetCurrentIndex(BED);  // preselect the bed for "Heat" menu
         OPEN_MENU(menuHeat);
         break;
 

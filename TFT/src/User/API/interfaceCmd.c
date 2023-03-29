@@ -1219,7 +1219,7 @@ void sendQueueCmd(void)
             caseLightSetState(cmd_value() > 0);
 
           if (cmd_seen('P'))
-            caseLightSetBrightness(cmd_value());
+            caseLightSetPercent(cmd_value());
           break;
 
         case 376:  // M376 (Reprap FW)
