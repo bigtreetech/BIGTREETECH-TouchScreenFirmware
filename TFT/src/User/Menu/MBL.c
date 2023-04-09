@@ -84,10 +84,10 @@ void mblNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_MBL);
 
-  if (!isStarted)
-    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
-  else
+  if (isStarted)
     sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_ON));
+  else
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
