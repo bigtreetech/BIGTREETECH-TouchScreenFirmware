@@ -217,7 +217,7 @@ bool addFile(bool isFile, const char * shortName, const char * longName)
   if (sName == NULL)  // in case of error, exit
     return false;
 
-  strncpy(sName, shortName, sNameLen);  // copy to "sName" and set to NULL the flag for filename extension check, if any
+  strxcpy(sName, shortName, sNameLen);  // copy to "sName" and set to NULL the flag for filename extension check, if any
 
   //
   // get long name, if any
@@ -237,7 +237,7 @@ bool addFile(bool isFile, const char * shortName, const char * longName)
       return false;
     }
 
-    strncpy(lName, longName, lNameLen);  // copy to "lName" and set to NULL the flag for filename extension check, if any
+    strxcpy(lName, longName, lNameLen);  // copy to "lName" and set to NULL the flag for filename extension check, if any
   }
 
   //
@@ -357,7 +357,7 @@ bool getPrintTitle(char * buf, uint8_t len)
     return false;
   }
 
-  strncpy(buf, getFS(), len);  // set source and set the flag for filename extension check
+  strxcpy(buf, getFS(), len);  // set source and set the flag for filename extension check
   strcat(buf, strPtr);         // append filename
   hideExtension(buf);          // hide filename extension if filename extension feature is disabled
 

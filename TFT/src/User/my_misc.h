@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 // Menu Macros
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
@@ -61,11 +62,19 @@ extern "C" {
 
 #define strtod stringToDouble  // enable light weight string to double function without exponential support
 
+#define strncpy(...) \
+  do { \
+    _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strxcpy(), strwcpy() or strscpy().\""); \
+  } while (0)
+
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 uint32_t calculateCRC16(const uint8_t *data, uint32_t length);  // Calculate CRC16 checksum
 
+void strxcpy(char * destination, const char * source, size_t num);
+void strwcpy(char * destination, const char * source, size_t num);
+void strscpy(char * destination, const char * source, size_t num);
 uint8_t string_2_uint8_t(const uint8_t *string);
 uint8_t *uint8_2_string(uint8_t num, uint8_t *string);
 uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num);
