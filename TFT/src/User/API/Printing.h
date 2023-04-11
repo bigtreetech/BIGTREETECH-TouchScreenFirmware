@@ -58,6 +58,12 @@ void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
+//
+// commented because NOT externally invoked
+//
+//void abortAndTerminate(void);
+//void loopBreakToCondition(CONDITION_CALLBACK condCallback);
+
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);
 
@@ -130,11 +136,11 @@ bool isPrinting(void);                // return "true" in case a print is ongoin
 bool isPaused(void);                  // return "true" in case a print is paused
 bool isAborted(void);                 // return "true" in case a print is aborted/canceled
 bool isPrintingFromTFT(void);         // return "true" in case a print hosted (handled) by TFT is ongoing
-bool isPrintingFromHost(void);        // return "true" in case a print hosted (handled) by onboard (host) is ongoing
+bool isPrintingFromOnboard(void);     // return "true" in case a print hosted (handled) by onboard (Marlin) is ongoing
 bool isPrintingFromRemoteHost(void);  // return "true" in case a print hosted (handled) by remote host is ongoing
 
 //
-// used for print hosted (handled) by onboard or remote host
+// used for print hosted (handled) by onboard (Marlin) or remote host
 // (e.g. print started from (remote) onboard media or hosted by remote host)
 //
 void setPrintAbort(void);

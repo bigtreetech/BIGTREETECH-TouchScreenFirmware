@@ -468,6 +468,6 @@ void menuPrint(void)
   }
 
 selectEnd:
-  if (!isPrintingFromHost())  // prevent reset if printing from other source
+  if (!isPrintingFromOnboard())  // prevent reset if printing from other source
     resetInfoFile();
 }
