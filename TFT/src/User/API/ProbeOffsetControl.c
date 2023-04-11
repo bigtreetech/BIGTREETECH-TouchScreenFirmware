@@ -84,6 +84,7 @@ float probeOffsetResetValue(void)
   {
     sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, PROBE_Z_OFFSET_DEFAULT_VALUE);  // set Z probe offset value
     mustStoreCmd("G1 Z%.2f\n", PROBE_Z_OFFSET_DEFAULT_VALUE - z_offset_value);     // move nozzle
+
     z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
   }
 
