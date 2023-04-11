@@ -235,7 +235,7 @@ void setupMachine(FW_TYPE fwType)
     return;
 
   if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)  // if TFT in listening mode, display a reminder message
-    reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
+    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
 
   infoMachineSettings.firmwareType = fwType;
 

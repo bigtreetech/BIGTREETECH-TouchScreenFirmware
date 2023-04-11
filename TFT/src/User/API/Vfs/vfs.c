@@ -387,7 +387,7 @@ void loopVolumeSource(void)
                                                     {LABEL_TFT_USB_REMOVED, LABEL_TFT_USB_INSERTED}};
 
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
+      setReminderMsg(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_VOL_CHANGE);
     }
   }
 }
