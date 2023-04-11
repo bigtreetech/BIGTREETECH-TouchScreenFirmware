@@ -66,6 +66,7 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
+
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
@@ -85,7 +86,7 @@ bool storeCmd(const char * format, ...)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
@@ -107,7 +108,7 @@ void mustStoreCmd(const char * format, ...)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -157,11 +158,11 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     return false;
   }
 
-  strncpy(cmdQueue.queue[cmdQueue.index_w].gcode, cmd, CMD_MAX_SIZE);
+  strxcpy(cmdQueue.queue[cmdQueue.index_w].gcode, cmd, CMD_MAX_SIZE);
 
   cmdQueue.queue[cmdQueue.index_w].port_index = portIndex;
   cmdQueue.index_w = (cmdQueue.index_w + 1) % CMD_QUEUE_SIZE;
@@ -177,7 +178,7 @@ void mustStoreCacheCmd(const char * format, ...)
 {
   if (cmdCache.count >= CMD_QUEUE_SIZE)
   {
-    reminderMessage(LABEL_BUSY, SYS_STATUS_BUSY);
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
     loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
   }
 
@@ -770,7 +771,7 @@ void sendQueueCmd(void)
                 if (openRemoteTFT(true))  // if file was successfully open, switch to TFT writing mode
                 {
                   writing_mode = TFT_WRITING;
-                  reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
+                  setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
                 }
 
                 sendCmd(true, avoid_terminal);
@@ -779,7 +780,7 @@ void sendQueueCmd(void)
               else  // if it's a request to onboard media, switch to onboard writing mode and forward the command to onboard
               {
                 writing_mode = ONBOARD_WRITING;
-                reminderMessage(LABEL_LISTENING, SYS_STATUS_LISTENING);
+                setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
               }
             }
             break;
@@ -851,7 +852,7 @@ void sendQueueCmd(void)
             bool hasE, hasA;
 
             // make a copy to work on
-            strncpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+            strxcpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
             // retrieve message text and flags of M118 gcode
             msgText = parseM118(rawMsg, &hasE, &hasA);
@@ -998,7 +999,7 @@ void sendQueueCmd(void)
             const char * msgText;
 
             // make a copy to work on
-            strncpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+            strxcpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
             // retrieve message text
             stripChecksum(rawMsg);
@@ -1403,7 +1404,8 @@ void sendQueueCmd(void)
         case 28:  // G28
           coordinateSetKnown(true);
           babystepReset();
-          storeCmd("M420\n");  // check bed leveling state
+          if (infoMachineSettings.leveling != BL_DISABLED)
+            storeCmd("M420\n");  // check bed leveling state
           break;
 
         #if BED_LEVELING_TYPE > 0  // if bed leveling is enabled

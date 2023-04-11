@@ -26,7 +26,7 @@ static inline void Serial_InitPrimary(void)
 {
   infoHost.connected = infoHost.wait = false;
   infoHost.status = HOST_STATUS_IDLE;
-  reminderMessage(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
+  setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
 
   Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }

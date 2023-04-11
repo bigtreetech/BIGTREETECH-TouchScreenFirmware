@@ -202,25 +202,19 @@ void drawStatus(void)
 
 void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
 {
-  strncpy(msgTitle, (char *)title, sizeof(msgTitle));
-  strncpy(msgBody, (char *)msg, sizeof(msgBody));
+  strxcpy(msgTitle, (char *)title, sizeof(msgTitle));
+  strxcpy(msgBody, (char *)msg, sizeof(msgBody));
   msgNeedRefresh = true;
 }
 
 void statusScreen_setReady(void)
 {
-  strncpy(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
+  strxcpy(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
 
   if (infoHost.connected == false)
-  {
-    strncpy(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
-  }
+    strxcpy(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   else
-  {
-    strncpy(msgBody, (char *)machine_type, sizeof(msgBody));
-    strcat(msgBody, " ");
-    strcat(msgBody, (char *)textSelect(LABEL_READY));
-  }
+    snprintf(msgBody, sizeof(msgBody), "%s %s", (char *)machine_type, (char *)textSelect(LABEL_READY));
 
   msgNeedRefresh = true;
 }

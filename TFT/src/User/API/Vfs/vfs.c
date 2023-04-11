@@ -185,6 +185,81 @@ char * isSupportedFile(const char * filename)
   return extPos;
 }
 
+// add a file name or folder name to file list
+bool addFile(bool isFile, const char * shortName, const char * longName)
+{
+  if (isFile == true)  // if file
+  {
+    // if file list is full or filename doesn't provide a supported filename extension
+    if (infoFile.fileCount >= FILE_NUM || isSupportedFile(shortName) == NULL)
+      return false;
+  }
+  else  // if folder
+  {
+    if (infoFile.folderCount >= FOLDER_NUM)  // if folder list is full
+      return false;
+  }
+
+  // "+ 2": space for terminating null character and the flag for filename extension check
+  // "+ 1": space for terminating null character
+  uint8_t extraLen = isFile ? 2 : 1;
+  char * sName;
+  char * lName = NULL;  // initialize to NULL in case long filename is not provided
+
+  //
+  // get short name
+  //
+
+  uint8_t sNameLen = strlen(shortName) + extraLen;
+
+  sName = malloc(sNameLen);
+
+  if (sName == NULL)  // in case of error, exit
+    return false;
+
+  strxcpy(sName, shortName, sNameLen);  // copy to "sName" and set to NULL the flag for filename extension check, if any
+
+  //
+  // get long name, if any
+  //
+
+  if (longName != NULL)  // if long filename is provided
+  {
+    uint8_t lNameLen = strlen(longName) + extraLen;
+
+    lName = malloc(lNameLen);
+
+    if (lName == NULL)  // in case of error, free the buffer allocated for "sName" and exit
+    {
+      if (sName != NULL)
+        free(sName);
+
+      return false;
+    }
+
+    strxcpy(lName, longName, lNameLen);  // copy to "lName" and set to NULL the flag for filename extension check, if any
+  }
+
+  //
+  // copy to destination
+  //
+
+  if (isFile)
+  {
+    infoFile.file[infoFile.fileCount] = sName;
+    infoFile.longFile[infoFile.fileCount] = lName;
+    infoFile.fileCount++;
+  }
+  else
+  {
+    infoFile.folder[infoFile.folderCount] = sName;
+    infoFile.longFolder[infoFile.folderCount] = lName;
+    infoFile.folderCount++;
+  }
+
+  return true;
+}
+
 // return the long folder name if exists, otherwise the short one
 char * getFoldername(uint8_t index)
 {
@@ -211,7 +286,7 @@ char * hideExtension(char * filename)
 
     // if filename provides a supported filename extension then
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-    if (extPos != NULL && filename[strlen(filename) + 1] == 0)
+    if (extPos != NULL && filename[strlen(filename) + 1] == '\0')
       filename[extPos - filename] = 0;  // temporary hide filename extension
   }
 
@@ -223,7 +298,7 @@ char * restoreExtension(char * filename)
   if (infoSettings.filename_extension == 0)  // if filename extension is disabled
   {
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-    if (filename[strlen(filename) + 1] != 0)
+    if (filename[strlen(filename) + 1] != '\0')
       filename[strlen(filename)] = '.';  // restore filename extension
   }
 
@@ -282,7 +357,7 @@ bool getPrintTitle(char * buf, uint8_t len)
     return false;
   }
 
-  strncpy(buf, getFS(), len);  // set source and set the flag for filename extension check
+  strxcpy(buf, getFS(), len);  // set source and set the flag for filename extension check
   strcat(buf, strPtr);         // append filename
   hideExtension(buf);          // hide filename extension if filename extension feature is disabled
 
@@ -312,7 +387,7 @@ void loopVolumeSource(void)
                                                     {LABEL_TFT_USB_REMOVED, LABEL_TFT_USB_INSERTED}};
 
       volumeSrcStatus[i] = (*volumeInserted[i])();
-      volumeReminderMessage(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_NORMAL);
+      setReminderMsg(labelSDStates[i][volumeSrcStatus[i]], SYS_STATUS_VOL_CHANGE);
     }
   }
 }

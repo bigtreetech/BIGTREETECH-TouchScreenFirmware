@@ -214,7 +214,7 @@ bool processKnownEcho(void)
   }
 
   // display the busy indicator
-  busyIndicator(SYS_STATUS_BUSY);
+  drawBusySign();
 
   if (isKnown)
   {

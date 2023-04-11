@@ -278,16 +278,13 @@ void shutdown(void)
 
 void shutdownLoop(void)
 {
-  bool tempIsLower = true;
-
   for (uint8_t i = NOZZLE0; i < infoSettings.hotend_count; i++)
   {
     if (heatGetCurrentTemp(i) >= infoSettings.auto_shutdown_temp)
-      tempIsLower = false;
+      return;
   }
 
-  if (tempIsLower)
-    shutdown();
+  shutdown();
 }
 
 void shutdownStart(void)
