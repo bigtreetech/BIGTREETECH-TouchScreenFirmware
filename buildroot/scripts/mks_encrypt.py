@@ -4,20 +4,19 @@ from os import path
 
 def mks_encrypt_firmware(source, target, env):
     print("Encrypting MKS firmware...")
+    repo_path = os.path.realpath("")
     build_dir = env.subst('$BUILD_DIR')
-    filename = "/" + env['PROGNAME']
-    build_flags = env.ParseFlags(env['BUILD_FLAGS'])
-    flags = {k: v for (k, v) in build_flags.get("CPPDEFINES")}
-    target_dir = flags.get("BINARY_DIRECTORY")
-    if target_dir == None:
-        target_dir = "Copy to SD Card root directory to update"
-    sourceFile = build_dir + filename + ".bin"
-    destinationFile = target_dir + filename + "_encrypted" + ".bin"
+    filename = env['PROGNAME'] + ".bin"
+    filename_unencrypted = filename + "_unencrypted"
+    src_file_path = os.path.join(repo_path, build_dir, filename)
+    src_file_path_unencrypted = os.path.join(repo_path, build_dir, filename_unencrypted)
 
-    if path.exists(sourceFile):
+    shutil.move(src_file_path, src_file_path_unencrypted)
+
+    if path.exists(src_file_path_unencrypted):
         key = [163, 189, 173, 13, 65, 17, 187, 141, 220, 128, 45, 208, 210, 196, 155, 30, 38, 235, 227, 51, 74, 21, 228, 10, 179, 177, 60, 147, 187, 175, 247, 62]
-        localFile = open(sourceFile, 'rb')
-        resultFile = open(destinationFile, 'wb')
+        localFile = open(src_file_path_unencrypted, 'rb')
+        resultFile = open(src_file_path, 'wb')
         localFile.seek(0)
         chunk = localFile.read(320)
         if not chunk:
@@ -44,8 +43,8 @@ def mks_encrypt_firmware(source, target, env):
         resultFile.write(chunk)
         localFile.close()
         resultFile.close()
-        print("UNENCRYPTED MKS firmware file (rename to upload!): " + sourceFile)
-        print("ENCRYPTED MKS firmware file: " + destinationFile)
+        print("UNENCRYPTED MKS firmware file (rename to upload!): " + filename_unencrypted)
+        print("ENCRYPTED MKS firmware file: " + filename)
     else:
         print("ERROR: MKS firmware file not found!")
     print("Done.")

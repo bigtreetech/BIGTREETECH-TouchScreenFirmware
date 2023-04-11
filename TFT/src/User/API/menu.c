@@ -555,9 +555,18 @@ static const LABEL *curTitle = NULL;
 static const GUI_RECT *curRect = NULL;  // current menu layout grid
 static uint16_t curRectCount = 0;       // current menu layout rect count
 
-static REMINDER reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_DISCONNECTED, LABEL_UNCONNECTED};
-static REMINDER volumeReminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, 0, SYS_STATUS_IDLE, LABEL_NULL};
-static REMINDER busySign = {{LCD_WIDTH - 5, 0, LCD_WIDTH, 5}, 0, SYS_STATUS_BUSY, LABEL_BUSY};
+static struct { GUI_RECT rect;
+                SYS_STATUS status;
+                uint16_t inf;
+                uint32_t time;
+              } reminder = {{0, 0, LCD_WIDTH, TITLE_END_Y}, SYS_STATUS_DISCONNECTED, LABEL_UNCONNECTED, 0};
+
+static struct { uint16_t x;
+                uint16_t y;
+                uint8_t r;
+                SYS_STATUS status;
+                uint32_t time;
+              } busySign = {LCD_WIDTH - 3, 3, 3, SYS_STATUS_BUSY, 0};
 
 MENUITEMS *getCurMenuItems(void)
 {
@@ -658,116 +667,89 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
   #endif
 }
 
-void reminderMessage(int16_t inf, SYS_STATUS status)
+void drawReminderMsg(void)
+{
+  uint16_t msgRectOffset = (LCD_WIDTH - GUI_StrPixelWidth(reminder.inf)) / 2 - BYTE_WIDTH;
+
+  GUI_SetBkColor(infoSettings.title_bg_color);
+  GUI_SetColor(reminder.status == SYS_STATUS_VOL_CHANGE ? infoSettings.status_color : infoSettings.reminder_color);
+
+  // if possible, set clear space around the reminder message for more readability
+  if (msgRectOffset > 0)
+    GUI_ClearRect(reminder.rect.x0 + msgRectOffset, reminder.rect.y0, reminder.rect.x1 - msgRectOffset, reminder.rect.y1);
+
+  GUI_DispStringInPrect(&reminder.rect, reminder.inf);
+  GUI_RestoreColorDefault();
+}
+
+void setReminderMsg(int16_t inf, SYS_STATUS status)
 {
   if (toastRunning()) return;
+
+  LCD_WAKE();
+
+  // if there's already another reminder than redraw first a reminderless title
+  if (reminder.status != SYS_STATUS_IDLE)
+  {
+    reminder.status = SYS_STATUS_IDLE;
+    menuDrawTitle();
+  }
 
   reminder.inf = inf;
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 
-  if (menuType != MENU_TYPE_FULLSCREEN)
+  if (menuType != MENU_TYPE_FULLSCREEN) drawReminderMsg();
+}
+
+void loopReminderManage(void)
+{
+  if (reminder.status == SYS_STATUS_IDLE || OS_GetTimeMs() < reminder.time) return;
+
+  if (infoHost.connected == false)
   {
-    GUI_SetColor(infoSettings.reminder_color);
-    GUI_SetBkColor(infoSettings.title_bg_color);
-    GUI_DispStringInPrect(&reminder.rect, reminder.inf);
-    GUI_RestoreColorDefault();
+    if (reminder.status == SYS_STATUS_DISCONNECTED)  // no change, return
+      return;
+    else
+      setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
+  }
+  else if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
+  {
+    if (reminder.status == SYS_STATUS_LISTENING)  // no change, return
+      return;
+    else
+      setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // set reminder for TFT in listening mode
+  }
+  else if (isFullCmdQueue())
+  {
+    if (reminder.status == SYS_STATUS_BUSY)  // no change, return
+      return;
+    else
+      setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);  // set reminder for busy status
+  }
+  else
+  { // clear status message
+    reminder.status = SYS_STATUS_IDLE;
+    menuDrawTitle();
   }
 }
 
-void volumeReminderMessage(int16_t inf, SYS_STATUS status)
+void drawBusySign(void)
 {
-  LCD_WAKE();
-
-  if (toastRunning()) return;
-
-  volumeReminder.inf = inf;
-  volumeReminder.status = status;
-  volumeReminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
-
-  if (menuType != MENU_TYPE_FULLSCREEN)
-  {
-    GUI_SetColor(infoSettings.status_color);
-    GUI_SetBkColor(infoSettings.title_bg_color);
-    GUI_DispStringInPrect(&volumeReminder.rect, volumeReminder.inf);
-    GUI_RestoreColorDefault();
-  }
-}
-
-void busyIndicator(SYS_STATUS status)
-{
-  if (status == SYS_STATUS_BUSY)
+  if (busySign.status != SYS_STATUS_BUSY)
   {
     GUI_SetColor(MENU_BUSY_DOT_COLOR);
-    GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0) / 2);
+    GUI_FillCircle(busySign.x, busySign.y, busySign.r);
     GUI_SetColor(infoSettings.font_color);
+    busySign.status = SYS_STATUS_BUSY;
   }
-  busySign.status = status;
   busySign.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
-}
-
-void loopReminderClear(void)
-{
-  switch (reminder.status)
-  {
-    case SYS_STATUS_IDLE:
-      return;
-
-    case SYS_STATUS_BUSY:
-      if (isFullCmdQueue())
-        return;
-      break;
-
-    case SYS_STATUS_DISCONNECTED:
-      if (infoHost.connected == false)
-        return;
-      break;
-
-    case SYS_STATUS_LISTENING:
-      if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
-        return;
-      break;
-
-    case SYS_STATUS_NORMAL:
-      if (OS_GetTimeMs() < reminder.time)
-        return;
-      break;
-
-    default:
-      return;
-  }
-
-  reminder.status = SYS_STATUS_IDLE;  // Clear status message
-  menuDrawTitle();
-}
-
-void loopVolumeReminderClear(void)
-{
-  if (volumeReminder.status != SYS_STATUS_NORMAL)
-  {
-    return;
-  }
-  else if (OS_GetTimeMs() < volumeReminder.time)
-  {
-    return;
-  }
-
-  volumeReminder.status = SYS_STATUS_IDLE;  // Clear status message
-  menuDrawTitle();
 }
 
 void loopBusySignClear(void)
 {
-  switch (busySign.status)
-  {
-    case SYS_STATUS_IDLE:
-      return;
-
-    case SYS_STATUS_BUSY:
-     if (OS_GetTimeMs() < busySign.time)
-        return;
-     break;
-  }
+  if (busySign.status == SYS_STATUS_IDLE || OS_GetTimeMs() < busySign.time)
+    return;
 
   busySign.status = SYS_STATUS_IDLE;  // clear busy signal status
 
@@ -776,21 +758,14 @@ void loopBusySignClear(void)
   else
   {
     GUI_SetColor(infoSettings.title_bg_color);
-    GUI_FillCircle(busySign.rect.x0, (busySign.rect.y1 - busySign.rect.y0) / 2, (busySign.rect.x1-busySign.rect.x0)/2);
+    GUI_FillCircle(busySign.x, busySign.y, busySign.r);
     GUI_SetColor(infoSettings.font_color);
   }
 }
 
 void notificationDot(void)
 {
-  if (hasNotification())
-  {
-    GUI_SetColor(infoSettings.font_color);
-  }
-  else
-  {
-    GUI_SetColor(infoSettings.title_bg_color);
-  }
+  GUI_SetColor(hasNotification() ? infoSettings.font_color : infoSettings.title_bg_color);
   GUI_FillCircle(3, 3, 3);
   GUI_RestoreColorDefault();
 }
@@ -842,16 +817,9 @@ void menuDrawTitle(void)
 
   // show notification dot
   notificationDot();
-  GUI_SetBkColor(infoSettings.bg_color);
 
   // draw reminder/storage status
-  if (reminder.status != SYS_STATUS_IDLE)
-  {
-    GUI_SetColor(infoSettings.reminder_color);
-    GUI_SetBkColor(infoSettings.title_bg_color);
-    GUI_DispStringInPrect(&reminder.rect, reminder.inf);
-    GUI_RestoreColorDefault();
-  }
+  if (reminder.status != SYS_STATUS_IDLE) drawReminderMsg();
 }
 
 // Draw the entire interface
@@ -1092,7 +1060,7 @@ KEY_VALUES menuKeyGetValue(void)
           }
           else if (MENU_IS(menuPrinting))
           {
-            if (isPrinting() || isPrintingFromHost())
+            if (isPrinting() || isPrintingFromOnboard())
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS), rect_of_keyPS);
             else
               tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_keyPS_end), rect_of_keyPS_end);
@@ -1328,8 +1296,7 @@ void loopFrontEnd(void)
   loopToast();
 
   // If there is a message in the status bar, timed clear
-  loopReminderClear();
-  loopVolumeReminderClear();
+  loopReminderManage();
 
   // Busy Indicator clear
   loopBusySignClear();

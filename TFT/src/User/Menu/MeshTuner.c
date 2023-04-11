@@ -9,9 +9,9 @@ static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 //  probeHeightEnable();  // temporary disable software endstops and save ABL state
 
   // Z offset gcode sequence start
-  mustStoreCmd("G42 I%d J%d\n", col, row);  // move nozzle to X and Y coordinates corresponding to the column and row in the bed leveling mesh grid
-  probeHeightStart(value, false);           // lower nozzle to provided absolute Z point
-  probeHeightRelative();                    // set relative position mode
+  mustStoreCmd("G42 I%d J%d F%d\n", col, row, infoSettings.level_feedrate[FEEDRATE_XY]);  // move nozzle to X and Y coordinates corresponding to the column and row in the bed leveling mesh grid
+  probeHeightStart(value, false);                                                         // lower nozzle to provided absolute Z point
+  probeHeightRelative();                                                                  // set relative position mode
 }
 
 // Reset mesh point
@@ -108,13 +108,13 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
       // decrease Z height
       case KEY_ICON_0:
       case KEY_DECREASE:
-        probeHeightMove(unit, -1);
+        probeHeightMove(-unit);
         break;
 
       // increase Z height
       case KEY_ICON_3:
       case KEY_INCREASE:
-        probeHeightMove(unit, 1);
+        probeHeightMove(unit);
         break;
 
       // change unit
@@ -128,7 +128,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
       // reset Z height
       case KEY_ICON_5:
-        probeHeightMove(curValue.axis[Z_AXIS] - (value + shim), -1);
+        probeHeightMove((value + shim) - curValue.axis[Z_AXIS]);
         break;
 
       // return new Z height

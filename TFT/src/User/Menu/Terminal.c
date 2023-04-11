@@ -26,12 +26,6 @@ typedef struct
 
 typedef enum
 {
-  KEYBOARD_VIEW = 0,
-  TERMINAL_WINDOW,
-} TERMINAL_VIEW;
-
-typedef enum
-{
   GKEY_PREV = 0,
   GKEY_NEXT,
   GKEY_CLEAR,
@@ -316,7 +310,12 @@ const uint16_t fontSrcColor[3][3] = {
 KEYBOARD_DATA * keyboardData;
 TERMINAL_DATA * terminalData;
 char * terminalBuf;
-TERMINAL_VIEW curView = KEYBOARD_VIEW;
+
+enum
+{
+  KEYBOARD_VIEW = 0,
+  TERMINAL_VIEW,
+} curView = KEYBOARD_VIEW;
 
 bool numpad =
   #if defined(KB_TYPE_QWERTY)
@@ -588,11 +587,12 @@ static inline void menuKeyboardView(void)
             saveGcodeIndex = (saveGcodeIndex + 1) % MAX_GCODE_COUNT;     // move to next save index in the gcode history table
           }
 
-          handleCmd(strcat(gcodeBuf, "\n"));
+          strcpy(&gcodeBuf[nowIndex], "\n");
+          handleCmd(gcodeBuf);
         }
 
         keyboardData->gcodeIndex = saveGcodeIndex;  // save and update gcode index
-        curView = TERMINAL_WINDOW;
+        curView = TERMINAL_VIEW;
         break;
 
       case GKEY_ABC_123:
@@ -666,6 +666,12 @@ static inline void saveGcodeTerminalCache(const char * str, uint16_t strLen)
 
 void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX portIndex, TERMINAL_SRC src)
 {
+
+  #ifdef TERMINAL_KEYBOARD_VIEW_SUPPRESS_ACK
+    if (curView == KEYBOARD_VIEW)
+      return;
+  #endif
+
   char * srcId[SRC_TERMINAL_COUNT] = {"\5", "\6"};
 
   // copy string source identifier
@@ -821,7 +827,7 @@ static inline void terminalDrawMenu(void)
   terminalDrawPageNumber();
 }
 
-void menuTerminalWindow(void)
+void menuTerminalView(void)
 {
   #define CURSOR_START_X (terminalAreaRect[0].x0 + CURSOR_H_OFFSET)
 
@@ -837,7 +843,7 @@ void menuTerminalWindow(void)
 
   terminalDrawMenu();
 
-  while (curView == TERMINAL_WINDOW)
+  while (curView == TERMINAL_VIEW)
   {
     if (MENU_IS_NOT(menuTerminal))
       break;
@@ -1005,7 +1011,7 @@ void menuTerminal(void)
   KEYBOARD_DATA keybData = {{'\0'}, 0};
   TERMINAL_DATA termData = {{terminalBuf}, MAX_PAGE_COUNT, 0, 0, 0, 0, MAX_TERMINAL_BUF_SIZE, 0, SRC_TERMINAL_COUNT};
 
-  if (isPrinting() || isPrintingFromHost())  // display only 1 page if printing
+  if (isPrinting() || isPrintingFromOnboard())  // display only 1 page if printing
   {
     termData.bufSize = (LCD_WIDTH / BYTE_WIDTH * LCD_HEIGHT / BYTE_HEIGHT);
     termData.maxPageCount = 1;
@@ -1025,9 +1031,6 @@ void menuTerminal(void)
 
   while (MENU_IS(menuTerminal))
   {
-    if (curView == KEYBOARD_VIEW)
-      menuKeyboardView();
-    else if (curView == TERMINAL_WINDOW)
-      menuTerminalWindow();
+    (curView == KEYBOARD_VIEW) ?  menuKeyboardView() : menuTerminalView();
   }
 }

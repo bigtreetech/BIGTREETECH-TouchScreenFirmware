@@ -6,16 +6,8 @@ static float babystep_value = BABYSTEP_DEFAULT_VALUE;
 #define BABYSTEP_CMD     "M290 Z%.2f\n"
 #define BABYSTEP_CMD_SMW "G43.2 Z%.2f\n"
 
-// Reset only babystep value to default value
-float babystepReset(void)
-{
-  babystep_value = BABYSTEP_DEFAULT_VALUE;
-
-  return babystep_value;
-}
-
 // Set current babystep value
-void babystepSetValue(float value)
+void babystepSetValue(const float value)
 {
   babystep_value = value;
 }
@@ -29,63 +21,46 @@ float babystepGetValue(void)
 // Reset babystep value to default value
 float babystepResetValue(void)
 {
-  if (babystep_value == BABYSTEP_DEFAULT_VALUE)  // if already default value, nothing to do
-    return babystep_value;
-
-  char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
-  int step_count;
-  float last_unit;
-  float processed_baby_step = 0.0f;
-  int8_t neg = 1;
-
-  if (babystep_value < 0.0f)
-    neg = -1;
-
-  step_count = (babystep_value * neg) / BABYSTEP_MAX_STEP;
-
-  for (; step_count > 0; step_count--)
+  if (babystep_value != BABYSTEP_DEFAULT_VALUE)  // if already default value, nothing to do
   {
-    mustStoreCmd(babyStepCmd, -(BABYSTEP_MAX_STEP * neg));
-    processed_baby_step += BABYSTEP_MAX_STEP;
-  }
+    char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
+    uint32_t step_count;
+    float last_unit;
+    int8_t direction = 1;
 
-  last_unit = (babystep_value * neg) - processed_baby_step;
-  if (last_unit > 0.0f)
-  {
-    mustStoreCmd(babyStepCmd, -(last_unit * neg));
-    processed_baby_step += last_unit;
-  }
+    if (babystep_value > BABYSTEP_DEFAULT_VALUE)
+      direction = -1;
 
-  babystep_value -= (processed_baby_step * neg);
+    step_count = ((BABYSTEP_DEFAULT_VALUE - babystep_value) * direction) / BABYSTEP_MAX_STEP;
+
+    for (; step_count > 0; step_count--)
+    {
+      mustStoreCmd(babyStepCmd, BABYSTEP_MAX_STEP * direction);
+    }
+
+    last_unit = (BABYSTEP_DEFAULT_VALUE - babystep_value) - (BABYSTEP_MAX_STEP * step_count * direction);
+    if (last_unit != 0.0f)
+    {
+      mustStoreCmd(babyStepCmd, last_unit);
+    }
+
+    babystep_value = BABYSTEP_DEFAULT_VALUE;
+  }
 
   return babystep_value;
 }
 
 // Update babystep value
-float babystepUpdateValue(float unit, int8_t direction)
+float babystepUpdateValue(float unit)
 {
-  char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
-  float diff;
+  unit = NOBEYOND(BABYSTEP_MIN_VALUE, babystep_value + unit, BABYSTEP_MAX_VALUE) - babystep_value;
 
-  if (direction < 0)
+  if (unit != 0)
   {
-    if (babystep_value <= BABYSTEP_MIN_VALUE)
-      return babystep_value;
+    babystep_value += unit;
 
-    diff = babystep_value - BABYSTEP_MIN_VALUE;
+    mustStoreCmd((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD, unit);
   }
-  else
-  {
-    if (babystep_value >= BABYSTEP_MAX_VALUE)
-      return babystep_value;
-
-    diff = BABYSTEP_MAX_VALUE - babystep_value;
-  }
-
-  unit = ((diff > unit) ? unit : diff) * direction;
-  babystep_value += unit;
-
-  mustStoreCmd(babyStepCmd, unit);
 
   return babystep_value;
 }

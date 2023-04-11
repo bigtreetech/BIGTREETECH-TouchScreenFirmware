@@ -71,12 +71,13 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
       {
         drawCharIcon(rect, CENTER, curitem->icon, true, infoSettings.list_button_bg_color);
       }
-      else if (curitem->icon == CHARICON_BLANK && curitem->titlelabel.index != LABEL_NULL)
+      else if (curitem->titlelabel.index != LABEL_NULL)
       {
         GUI_SetBkColor(infoSettings.list_button_bg_color);
         GUI_ClearPrect(rect);
         GUI_DispStringInPrect(rect, curitem->titlelabel.index);
       }
+
       if (pressed)
       {
         GUI_SetColor(LI_KEY_PRESSED_COLOR);
@@ -185,10 +186,7 @@ void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state)
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
   GUI_SetColor(charIconColor[iconchar_state]);
 
-  if (iconchar_state == CHARICON_TOGGLE_OFF)
-    _GUI_DispString(sx, sy, IconCharSelect(CHARICON_TOGGLE_SWITCH));
-  else
-    _GUI_DispString(sx + BYTE_HEIGHT, sy, IconCharSelect(CHARICON_TOGGLE_SWITCH));
+  _GUI_DispString(sx + (iconchar_state == CHARICON_TOGGLE_OFF ? 0 : BYTE_HEIGHT), sy, IconCharSelect(CHARICON_TOGGLE_SWITCH));
 
   GUI_RestoreColorDefault();
 }

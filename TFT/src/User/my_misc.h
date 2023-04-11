@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 // Menu Macros
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
@@ -61,6 +62,11 @@ extern "C" {
 
 #define strtod strtod_ligth  // light weight strtod() function without exponential support
 
+#define strncpy(...) \
+  do { \
+    _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strxcpy(), strwcpy() or strscpy().\""); \
+  } while (0)
+
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
@@ -73,6 +79,9 @@ uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str);  // uin
 void time_2_string(char *buf, char *str_format, uint32_t time);           // convert time to string with given formatting
 
 double strtod_ligth(char *str, char **endptr);  // light weight strtod() function without exponential support
+void strxcpy(char * destination, const char * source, size_t num);
+void strwcpy(char * destination, const char * source, size_t num);
+void strscpy(char * destination, const char * source, size_t num);
 
 const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string

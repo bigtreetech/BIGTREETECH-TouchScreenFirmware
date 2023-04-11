@@ -3,28 +3,34 @@
 
 #define CASE_LIGHT_UPDATE_TIME 1000  // 1 seconds is 1000
 
-// Icons list for Case Light
-const ITEM itemCaseLight[2] = {
-  // icon                        label
-  {ICON_RGB_OFF,                 LABEL_OFF},
-  {ICON_RGB_WHITE,               LABEL_ON},
-};
+static uint8_t caseLightPercent = 0;
+static bool caseLightState;
 
-static uint8_t curUnit_index = 1;
-
-static inline void updateCaseLightIcon(MENUITEMS * curmenu, bool state)
+static void updateCaseLightIcon(MENUITEMS * curmenu, const bool state)
 {
-  curmenu->items[KEY_ICON_5] = itemCaseLight[state ? 1 : 0];
+  curmenu->items[KEY_ICON_5].icon = state ? ICON_RGB_WHITE : ICON_RGB_OFF;
+  curmenu->items[KEY_ICON_5].label.index = state ? LABEL_ON : LABEL_OFF;
 }
 
-void caseLightBrightnessReDraw()
+void caseLightPercentReDraw(void)
 {
   char tempstr[20];
 
-  sprintf(tempstr, "  %d%%  ", caseLightGetBrightnessPercent());
+  sprintf(tempstr, "  %d%%  ", caseLightPercent);
   setFontSize(FONT_SIZE_LARGE);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
   setFontSize(FONT_SIZE_NORMAL);
+}
+
+void caseLightSetPercent(uint8_t brightness)
+{
+  brightness = NOBEYOND(0, brightness, 255);
+  caseLightPercent = (brightness * 100.0f) / 255 + 0.5f;
+}
+
+void caseLightSetState(const bool state)
+{
+  caseLightState = state;
 }
 
 void menuCaseLight(void)
@@ -47,19 +53,26 @@ void menuCaseLight(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool currentCaseLightState = caseLightGetState();
-  bool previousCaseLightState = currentCaseLightState;
-  uint8_t currentCaseLightBrightness = caseLightGetBrightness();
-  uint8_t previousCaseLightBrightness = currentCaseLightBrightness;
-  bool sendingNeeded = false;
+  uint8_t requestedCLpercent = caseLightPercent;
+  uint8_t requestedCLstate = caseLightState;
+  static uint8_t percent_index = 1;
 
-  storeCmd("M355\n");  // retrieve the case light's state and brightness. Value will be compared in while loop
+  enum
+  {
+    SEND_NOTHING =     0B0000,
+    DO_SEND_PERCENT =  0B0001,
+    NOT_SEND_PERCENT = 0B1110,
+    DO_SEND_STATE =    0B0010,
+    NOT_SEND_STATE =   0B1101,
+  } sendingNeeded = SEND_NOTHING;
 
-  caseLightItems.items[KEY_ICON_4] = itemPercent[curUnit_index];
-  updateCaseLightIcon(&caseLightItems, currentCaseLightState);
+  caseLightItems.items[KEY_ICON_4] = itemPercent[percent_index];
+  updateCaseLightIcon(&caseLightItems, caseLightState);
 
   menuDrawPage(&caseLightItems);
-  caseLightBrightnessReDraw();
+  caseLightPercentReDraw();
+
+  mustStoreCmd("M355\n");
 
   while (MENU_IS(menuCaseLight))
   {
@@ -70,26 +83,27 @@ void menuCaseLight(void)
       // decrease case light
       case KEY_ICON_0:
       case KEY_DECREASE:
-        caseLightSetBrightnessPercent(- percentSteps[curUnit_index]);
-        break;
-
       // increase case light
       case KEY_ICON_3:
       case KEY_INCREASE:
-        caseLightSetBrightnessPercent(+ percentSteps[curUnit_index]);
+        requestedCLpercent = (key_num == KEY_ICON_3 || key_num == KEY_INCREASE) ?
+                            NOBEYOND(0, requestedCLpercent + percentSteps[percent_index], 100) :
+                            NOBEYOND(0, requestedCLpercent - percentSteps[percent_index], 100);
+        sendingNeeded |= DO_SEND_PERCENT;
         break;
 
       // change unit
       case KEY_ICON_4:
-        curUnit_index = (curUnit_index + 1) % ITEM_PERCENT_STEPS_NUM;
+        percent_index = (percent_index + 1) % ITEM_PERCENT_STEPS_NUM;
 
-        caseLightItems.items[key_num] = itemPercent[curUnit_index];
+        caseLightItems.items[key_num] = itemPercent[percent_index];
         menuDrawItem(&caseLightItems.items[key_num], key_num);
         break;
 
       // switch on/off case light
       case KEY_ICON_5:
-        caseLightSetState(!currentCaseLightState);
+        TOGGLE_BIT(requestedCLstate, 0);
+        sendingNeeded |= DO_SEND_STATE;
         break;
 
       case KEY_ICON_7:
@@ -100,32 +114,37 @@ void menuCaseLight(void)
         break;
     }
 
-    currentCaseLightState = caseLightGetState();
-    if (previousCaseLightState != currentCaseLightState)  // dynamically change the light on/off icon based on the current state
+    if (requestedCLpercent != caseLightPercent)
     {
-      previousCaseLightState = currentCaseLightState;
+      if (sendingNeeded & DO_SEND_PERCENT)
+        caseLightPercent = requestedCLpercent;
+      else
+        requestedCLpercent = caseLightPercent;
 
-      updateCaseLightIcon(&caseLightItems, currentCaseLightState);
+      caseLightPercentReDraw();
+    }
+
+    if (requestedCLstate != caseLightState)
+    {
+      if (sendingNeeded & DO_SEND_STATE)
+        caseLightState = requestedCLstate;
+      else
+        requestedCLstate = caseLightState;
+
+      updateCaseLightIcon(&caseLightItems, caseLightState);
       menuDrawItem(&caseLightItems.items[KEY_ICON_5], KEY_ICON_5);
-
-      sendingNeeded = true;
     }
 
-    currentCaseLightBrightness = caseLightGetBrightness();
-    if (previousCaseLightBrightness != currentCaseLightBrightness)
+    if (sendingNeeded & DO_SEND_PERCENT)
     {
-      previousCaseLightBrightness = currentCaseLightBrightness;
-
-      caseLightBrightnessReDraw();
-
-      sendingNeeded = true;
+      if (storeCmd("M355 P%d\n", requestedCLpercent * 255U / 100))
+        sendingNeeded &= NOT_SEND_PERCENT;
     }
 
-    if (sendingNeeded && nextScreenUpdate(CASE_LIGHT_UPDATE_TIME))
+    if (sendingNeeded & DO_SEND_STATE)
     {
-      storeCmd("M355 S%d P%d\n", currentCaseLightState ? 1 : 0, currentCaseLightBrightness);
-
-      sendingNeeded = false;
+      if (storeCmd("M355 S%d\n", requestedCLstate))
+        sendingNeeded &= NOT_SEND_STATE;
     }
 
     loopProcess();

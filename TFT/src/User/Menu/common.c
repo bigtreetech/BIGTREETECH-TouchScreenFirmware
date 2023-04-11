@@ -11,7 +11,6 @@ uint8_t currentTool = NOZZLE0;
 uint8_t currentBCIndex = 0;
 uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
-static uint32_t lastTime = 0;
 
 // Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
@@ -105,7 +104,9 @@ const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
 // Use this for timed screen updates in menu loops only
 bool nextScreenUpdate(uint32_t duration)
 {
+  static uint32_t lastTime = 0;
   uint32_t curTime = OS_GetTimeMs();
+
   if (curTime > (lastTime + duration))
   {
     lastTime = curTime;

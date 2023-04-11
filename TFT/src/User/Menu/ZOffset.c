@@ -95,12 +95,12 @@ void menuZOffset(void)
   KEY_VALUES key_num = KEY_IDLE;
   float now, z_offset;
   float unit;
-  void (* offsetEnable)(float);                // enable Z offset
-  void (* offsetDisable)(void);                // disable Z offset
-  bool (* offsetGetStatus)(void);              // get current status
-  float (* offsetGetValue)(void);              // get current Z offset
-  float (* offsetResetValue)(void);            // reset current Z offset
-  float (* offsetUpdateValue)(float, int8_t);  // update current Z offset
+  void (* offsetEnable)(float);        // enable Z offset
+  void (* offsetDisable)(void);        // disable Z offset
+  bool (* offsetGetStatus)(void);      // get current status
+  float (* offsetGetValue)(void);      // get current Z offset
+  float (* offsetResetValue)(void);    // reset current Z offset
+  float (* offsetUpdateValue)(float);  // update current Z offset
 
   if (probeOffsetMenu)
   { // use Probe Offset menu
@@ -148,7 +148,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetUpdateValue(unit, -1);
+          z_offset = offsetUpdateValue(-unit);
         break;
 
       case KEY_INFOBOX:
@@ -164,7 +164,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetUpdateValue(unit, 1);
+          z_offset = offsetUpdateValue(unit);
         break;
 
       // enable/disable Z offset change
@@ -253,7 +253,7 @@ void menuZOffset(void)
 
       // reset babystep every time Z offset is changed otherwise the set babystep value
       // will not be aligned with the new Z offset
-      babystepReset();
+      babystepSetValue(BABYSTEP_DEFAULT_VALUE);
     }
 
     loopProcess();

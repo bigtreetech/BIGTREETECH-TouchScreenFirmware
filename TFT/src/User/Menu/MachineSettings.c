@@ -122,15 +122,17 @@ void menuMachineSettings(void)
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    ITEM no_custom = { ICON_NULL, LABEL_NULL };
-    machineSettingsItems.items[2] = no_custom;
+    machineSettingsItems.items[2].icon = ICON_NULL;
+    machineSettingsItems.items[2].label.index = LABEL_NULL;
   }
 
   KEY_VALUES curIndex = KEY_IDLE;
-  const ITEM itemCaseLight = {ICON_CASE_LIGHT, LABEL_CASE_LIGHT};
 
   if (infoMachineSettings.caseLightsBrightness == ENABLED)
-    machineSettingsItems.items[KEY_ICON_6] = itemCaseLight;
+  {
+    machineSettingsItems.items[KEY_ICON_6].icon = ICON_CASE_LIGHT;
+    machineSettingsItems.items[KEY_ICON_6].label.index = LABEL_CASE_LIGHT;
+  }
 
   menuDrawPage(&machineSettingsItems);
 

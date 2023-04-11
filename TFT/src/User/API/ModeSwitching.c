@@ -74,7 +74,7 @@ void Mode_CheckSwitching(void)
     return;
 
   // do not change mode if printing from any source or is already waiting mode selection
-  if (isPrinting() || isPrintingFromHost() || modeSwitching)
+  if (isPrinting() || isPrintingFromOnboard() || modeSwitching)
     return;
 
   if (MENU_IS(menuMode))
