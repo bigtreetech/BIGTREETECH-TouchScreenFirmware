@@ -108,13 +108,13 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
       // decrease Z height
       case KEY_ICON_0:
       case KEY_DECREASE:
-        probeHeightMove(unit, -1);
+        probeHeightMove(-unit);
         break;
 
       // increase Z height
       case KEY_ICON_3:
       case KEY_INCREASE:
-        probeHeightMove(unit, 1);
+        probeHeightMove(unit);
         break;
 
       // change unit
@@ -128,7 +128,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
 
       // reset Z height
       case KEY_ICON_5:
-        probeHeightMove(curValue.axis[Z_AXIS] - (value + shim), -1);
+        probeHeightMove((value + shim) - curValue.axis[Z_AXIS]);
         break;
 
       // return new Z height

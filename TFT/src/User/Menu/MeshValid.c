@@ -1,24 +1,24 @@
 #include "MeshValid.h"
 #include "includes.h"
 
+const MENUITEMS meshValidItems = {
+  // title
+  LABEL_MESH_VALID,
+  // icon             label
+  {
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_PREHEAT,    LABEL_NULL},
+    {ICON_NULL,       LABEL_NULL},
+    {ICON_BACK,       LABEL_BACK},
+  }
+};
+
 void menuMeshValid(void)
 {
-  MENUITEMS meshValidItems = {
-    // title
-    LABEL_MESH_VALID,
-    // icon             label
-    {
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_PREHEAT,    LABEL_NULL},
-      {ICON_NULL,       LABEL_NULL},
-      {ICON_BACK,       LABEL_BACK},
-    }
-  };
-
   KEY_VALUES key_num;
   PREHEAT_STORE preheatStore;
 

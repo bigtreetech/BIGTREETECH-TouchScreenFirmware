@@ -1188,7 +1188,7 @@ void sendQueueCmd(void)
             caseLightSetState(cmd_value() > 0);
 
           if (cmd_seen('P'))
-            caseLightSetBrightness(cmd_value());
+            caseLightSetPercent(cmd_value());
           break;
 
         case 376:  // M376 (Reprap FW)
@@ -1403,7 +1403,7 @@ void sendQueueCmd(void)
 
         case 28:  // G28
           coordinateSetKnown(true);
-          babystepReset();
+          babystepSetValue(BABYSTEP_DEFAULT_VALUE);  // reset babystep
           if (infoMachineSettings.leveling != BL_DISABLED)
             storeCmd("M420\n");  // check bed leveling state
           break;

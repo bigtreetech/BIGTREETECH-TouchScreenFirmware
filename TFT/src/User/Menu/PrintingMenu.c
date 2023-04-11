@@ -79,18 +79,11 @@ enum
   ICON_POS_SPD,
 };
 
-const ITEM itemIsPause[2] = {
-  // icon                        label
-  {ICON_PAUSE,                   LABEL_PAUSE},
-  {ICON_RESUME,                  LABEL_RESUME},
-};
-
-const ITEM itemIsPrinting[3] = {
-  // icon                        label
-  {ICON_NULL,                    LABEL_NULL},
-  {ICON_MAINMENU,                LABEL_MAIN_SCREEN},
-  {ICON_BACK,                    LABEL_BACK},
-};
+static inline void setPauseResumeIcon(MENUITEMS * curmenu, bool paused)
+{
+  curmenu->items[KEY_ICON_4].icon = paused ? ICON_RESUME : ICON_PAUSE;
+  curmenu->items[KEY_ICON_4].label.index = paused ? LABEL_RESUME : LABEL_PAUSE;
+}
 
 static void setLayerHeightText(char * layer_height_txt)
 {
@@ -527,15 +520,22 @@ void menuPrinting(void)
 
   if (lastPrinting == true)
   {
-    printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+    setPauseResumeIcon(&printingItems, lastPause);
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
   }
   else  // returned to this menu after print was done or aborted
   {
-    printingItems.items[KEY_ICON_4] = itemIsPrinting[1];  // Main Screen
-    printingItems.items[KEY_ICON_5] = itemIsPrinting[0];  // Background
-    printingItems.items[KEY_ICON_6] = itemIsPrinting[0];  // Background
-    printingItems.items[KEY_ICON_7] = itemIsPrinting[2];  // Back
+    // Main Screen
+    printingItems.items[KEY_ICON_4].icon = ICON_MAINMENU;
+    printingItems.items[KEY_ICON_4].label.index = LABEL_MAIN_SCREEN;
+    // Background
+    printingItems.items[KEY_ICON_5].icon = ICON_NULL;
+    printingItems.items[KEY_ICON_5].label.index = LABEL_NULL;
+    printingItems.items[KEY_ICON_6].icon = ICON_NULL;
+    printingItems.items[KEY_ICON_6].label.index = LABEL_NULL;
+    // Back
+    printingItems.items[KEY_ICON_7].icon = ICON_BACK;
+    printingItems.items[KEY_ICON_7].label.index = LABEL_BACK;
   }
 
   printingItems.title.address = title;
@@ -639,7 +639,7 @@ void menuPrinting(void)
     if (lastPause != isPaused())
     {
       lastPause = isPaused();
-      printingItems.items[KEY_ICON_4] = itemIsPause[lastPause];
+      setPauseResumeIcon(&printingItems, lastPause);
       menuDrawItem(&printingItems.items[KEY_ICON_4], KEY_ICON_4);
     }
 
@@ -662,12 +662,12 @@ void menuPrinting(void)
     switch (key_num)
     {
       case PS_KEY_0:
-        heatSetCurrentIndex(-1);  // set last used hotend index
+        heatSetCurrentIndex(LAST_NOZZLE);  // preselect last selected nozzle for "Heat" menu
         OPEN_MENU(menuHeat);
         break;
 
       case PS_KEY_1:
-        heatSetCurrentIndex(-2);  // set last used bed index
+        heatSetCurrentIndex(BED);  // preselect the bed for "Heat" menu
         OPEN_MENU(menuHeat);
         break;
 

@@ -6,14 +6,6 @@ static float babystep_value = BABYSTEP_DEFAULT_VALUE;
 #define BABYSTEP_CMD     "M290 Z%.2f\n"
 #define BABYSTEP_CMD_SMW "G43.2 Z%.2f\n"
 
-// Reset only babystep value to default value
-float babystepReset(void)
-{
-  babystep_value = BABYSTEP_DEFAULT_VALUE;
-
-  return babystep_value;
-}
-
 // Set current babystep value
 void babystepSetValue(const float value)
 {
@@ -59,30 +51,16 @@ float babystepResetValue(void)
 }
 
 // Update babystep value
-float babystepUpdateValue(float unit, const int8_t direction)
+float babystepUpdateValue(float unit)
 {
-  char * babyStepCmd = (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD;
-  float diff;
+  unit = NOBEYOND(BABYSTEP_MIN_VALUE, babystep_value + unit, BABYSTEP_MAX_VALUE) - babystep_value;
 
-  if (direction < 0)
+  if (unit != 0)
   {
-    if (babystep_value <= BABYSTEP_MIN_VALUE)
-      return babystep_value;
+    babystep_value += unit;
 
-    diff = babystep_value - BABYSTEP_MIN_VALUE;
+    mustStoreCmd((infoMachineSettings.firmwareType == FW_SMOOTHIEWARE) ? BABYSTEP_CMD_SMW : BABYSTEP_CMD, unit);
   }
-  else
-  {
-    if (babystep_value >= BABYSTEP_MAX_VALUE)
-      return babystep_value;
-
-    diff = BABYSTEP_MAX_VALUE - babystep_value;
-  }
-
-  unit = ((diff > unit) ? unit : diff) * direction;
-  babystep_value += unit;
-
-  mustStoreCmd(babyStepCmd, unit);
 
   return babystep_value;
 }

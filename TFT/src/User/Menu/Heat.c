@@ -2,18 +2,11 @@
 #include "includes.h"
 
 static uint8_t tool_index = NOZZLE0;
-static uint8_t last_hotend_index = NOZZLE0;
-static uint8_t last_bed_index = BED;
-static uint8_t degreeSteps_index = 1;
+static uint8_t last_nozzle_index = NOZZLE0;
 
-void heatSetCurrentIndex(int8_t index)
+void heatSetCurrentIndex(uint8_t index)
 {
-  if (index >= 0)  // set specific tool
-    tool_index = (uint8_t)(index);
-  else if (index == -1)  // set last used hotend index
-    tool_index = last_hotend_index;
-  else  // set last used bed index
-    tool_index = last_bed_index;
+  tool_index = (index == LAST_NOZZLE) ? last_nozzle_index : index;
 }
 
 void menuHeat(void)
@@ -35,6 +28,7 @@ void menuHeat(void)
     }
   };
 
+  static uint8_t degreeSteps_index = 1;
   KEY_VALUES key_num = KEY_IDLE;
   int16_t lastCurrent = heatGetCurrentTemp(tool_index);
   int16_t lastTarget = heatGetTargetTemp(tool_index);
@@ -122,10 +116,8 @@ void menuHeat(void)
     loopProcess();
   }
 
-  if (tool_index < BED)
-    last_hotend_index = tool_index;  // save last used hotend index
-  else
-    last_bed_index = tool_index;  // save last used bed index
+  if (WITHIN(tool_index, NOZZLE0, NOZZLE5))
+    last_nozzle_index = tool_index;  // save last used hotend index
 
   // Set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)

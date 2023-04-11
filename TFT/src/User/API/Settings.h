@@ -53,8 +53,9 @@ extern "C" {
 #define DISABLED  0
 #define ENABLED   1
 #define AUTO      2
-#define HIGH      1
 #define LOW       0
+#define HIGH      1
+#define UNDEFINED 3
 
 enum
 {

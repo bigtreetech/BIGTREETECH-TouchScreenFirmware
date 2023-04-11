@@ -138,13 +138,13 @@ void menuBabystep(void)
       // decrease babystep / Z offset
       case KEY_ICON_0:
       case KEY_DECREASE:
-        babystep = babystepUpdateValue(unit, -1);
+        babystep = babystepUpdateValue(-unit);
         break;
 
       // increase babystep / Z offset
       case KEY_ICON_3:
       case KEY_INCREASE:
-        babystep = babystepUpdateValue(unit, 1);
+        babystep = babystepUpdateValue(unit);
         break;
 
       // save to EEPROM and apply Z offset

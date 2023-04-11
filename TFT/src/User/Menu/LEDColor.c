@@ -147,11 +147,11 @@ static inline uint8_t ledEditComponentValue(uint8_t index)
   return ledColor[realIndex] = editIntValue(LED_MIN_VALUE, LED_MAX_VALUE, ledColor[realIndex], ledColor[realIndex]);
 }
 
-uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit, int8_t direction)
+uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit)
 {
   uint8_t realIndex = ledGetComponentIndex(index);
 
-  return ledColor[realIndex] = NOBEYOND(LED_MIN_VALUE, ledColor[realIndex] + (int16_t) (direction * unit), LED_MAX_VALUE);
+  return ledColor[realIndex] = NOBEYOND(LED_MIN_VALUE, ledColor[realIndex] + unit, LED_MAX_VALUE);
 }
 
 uint8_t ledGetControlIndex(uint8_t keyNum)
@@ -375,11 +375,11 @@ void menuLEDColorCustom(void)
 
       // use rotary encoder to update LED component value
       case LED_KEY_INCREASE:
-        curValue = ledUpdateComponentValue(ledIndex, 1, 1);
+        curValue = ledUpdateComponentValue(ledIndex, 1);
         break;
 
       case LED_KEY_DECREASE:
-        curValue = ledUpdateComponentValue(ledIndex, 1, -1);
+        curValue = ledUpdateComponentValue(ledIndex, -1);
         break;
 
       case LED_KEY_IDLE:
@@ -404,12 +404,12 @@ void menuLEDColorCustom(void)
 
           // decrease LED component value
           case 2:
-            curValue = ledUpdateComponentValue(ledIndex, 1, -1);
+            curValue = ledUpdateComponentValue(ledIndex, -1);
             break;
 
           // increase LED component value
           case 3:
-            curValue = ledUpdateComponentValue(ledIndex, 1, 1);
+            curValue = ledUpdateComponentValue(ledIndex, 1);
             break;
 
           default:

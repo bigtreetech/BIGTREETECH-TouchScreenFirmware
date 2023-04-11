@@ -4,7 +4,6 @@
 void loadNotificationItems(void)
 {
   LISTITEMS * itemlist = getCurListItems();
-  uint8_t n = 0;
 
   for (uint8_t i = 0; i < MAX_MSG_COUNT; i++)
   {
@@ -28,7 +27,6 @@ void loadNotificationItems(void)
       }
 
       itemlist->items[i].titlelabel.address = tempNotify->text;
-      n++;
     }
     else
     {
@@ -37,7 +35,6 @@ void loadNotificationItems(void)
 
     menuDrawListItem(&itemlist->items[i], i);
   }
-  //return n;
 }
 
 void menuNotification(void)

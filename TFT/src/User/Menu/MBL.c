@@ -84,10 +84,10 @@ void mblNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_MBL);
 
-  if (!isStarted)
-    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
-  else
+  if (isStarted)
     sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_ON));
+  else
+    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
@@ -184,7 +184,7 @@ void menuMBL(void)
         if (!mblRunning)
           mblNotifyError(false);
         else
-          probeHeightMove(unit, -1);
+          probeHeightMove(-unit);
         break;
 
       case KEY_INFOBOX:
@@ -200,7 +200,7 @@ void menuMBL(void)
         if (!mblRunning)
           mblNotifyError(false);
         else
-          probeHeightMove(unit, 1);
+          probeHeightMove(unit);
         break;
 
       // change unit
@@ -217,7 +217,7 @@ void menuMBL(void)
         if (!mblRunning)
           mblNotifyError(false);
         else
-          probeHeightMove(curValue.axis[Z_AXIS], -1);
+          probeHeightMove(-curValue.axis[Z_AXIS]);
         break;
 
       // start MBL or move to next mesh point

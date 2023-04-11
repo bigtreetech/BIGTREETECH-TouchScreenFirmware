@@ -70,32 +70,29 @@ const char *const lang_key_list[LABEL_NUM] =
   #undef X_WORD
 };
 
-uint8_t *textSelect(uint16_t sel)
-{
-  switch (infoSettings.language)
-  {
-    case LANG_DEFAULT:
-      return (uint8_t *)default_pack[sel];
-    case LANG_FLASH:
-      loadLabelText(tempLabelString, sel);
-      return tempLabelString;
-    default:
-      return NULL;
-  }
-}
-
 uint32_t getLabelFlashAddr(uint16_t index)
 {
   if (index > LABEL_NULL) return LANGUAGE_ADDR;
   return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
 }
 
-bool loadLabelText(uint8_t* buf, uint16_t index)
+uint8_t *textSelect(uint16_t index)
+{
+  switch (infoSettings.language)
+  {
+    case LANG_DEFAULT:
+      return (uint8_t *)default_pack[index];
+    case LANG_FLASH:
+      W25Qxx_ReadBuffer(tempLabelString, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+      return tempLabelString;
+    default:
+      return NULL;
+  }
+}
+
+bool loadLabelText(uint8_t * buf, uint16_t index)
 {
   if (index >= LABEL_NUM) return false;
-  if (infoSettings.language == LANG_FLASH)
-    W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
-  else
-    memcpy(buf, textSelect(index), sizeof(tempLabelString));
+  memcpy(buf, textSelect(index), sizeof(tempLabelString));
   return true;
 }

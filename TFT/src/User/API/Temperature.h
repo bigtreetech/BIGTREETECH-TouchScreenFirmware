@@ -39,6 +39,7 @@ enum
   BED = MAX_HOTEND_COUNT,
   CHAMBER,
   INVALID_HEATER,
+  LAST_NOZZLE,
 };
 
 typedef struct

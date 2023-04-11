@@ -1,9 +1,9 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-void blUpdateState(MENUITEMS * menu)
+void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
 {
-  if (getParameter(P_ABL_STATE, 0) == ENABLED)
+  if (bedLevelState == ENABLED)
   {
     menu->items[3].icon = ICON_LEVELING_ON;
     menu->items[3].label.index = LABEL_BL_ENABLE;
@@ -48,8 +48,8 @@ void menuBedLeveling(void)
   };
 
   KEY_VALUES key_num = KEY_IDLE;
-  bool index3And4Support = (infoMachineSettings.firmwareType == FW_MARLIN || infoMachineSettings.firmwareType == FW_REPRAPFW);
-  int8_t levelStateOld = -1;
+  uint8_t levelStateOld = UNDEFINED;
+  uint8_t levelStateNew = UNDEFINED;
 
   switch (infoMachineSettings.leveling)
   {
@@ -72,10 +72,10 @@ void menuBedLeveling(void)
       break;
   }
 
-  if (index3And4Support)
+  if (infoMachineSettings.firmwareType == FW_MARLIN || infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    levelStateOld = getParameter(P_ABL_STATE, 0);
-    blUpdateState(&bedLevelingItems);  // update icon & label 3
+    levelStateOld = levelStateNew = getParameter(P_ABL_STATE, 0);
+    blUpdateState(&bedLevelingItems, levelStateNew);  // update icon & label 3
 
     bedLevelingItems.items[4].icon = ICON_Z_FADE;
     bedLevelingItems.items[4].label.index = LABEL_ABL_Z;
@@ -121,18 +121,15 @@ void menuBedLeveling(void)
         break;
 
       case KEY_ICON_3:
-        if (index3And4Support)
-        {
-          if (getParameter(P_ABL_STATE, 0) == ENABLED)
-            storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");
-          else
-            storeCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");
-        }
+        if (levelStateNew != UNDEFINED) storeCmd((levelStateNew == ENABLED) ?
+          (infoMachineSettings.firmwareType == FW_MARLIN ? "M420 S0\n" : "G29 S2\n") :
+          (infoMachineSettings.firmwareType == FW_MARLIN ? "M420 S1\n" : "G29 S1\n"));
+
         break;
 
       case KEY_ICON_4:
       {
-        if (index3And4Support)
+        if (levelStateNew != UNDEFINED)
         {
           float val = editFloatValue(Z_FADE_MIN_VALUE, Z_FADE_MAX_VALUE, 0.0f, getParameter(P_ABL_STATE, 1));
 
@@ -170,12 +167,17 @@ void menuBedLeveling(void)
         break;
     }
 
-    if (index3And4Support && levelStateOld != getParameter(P_ABL_STATE, 0))
+    if (levelStateNew != UNDEFINED)  // it's Marlin or Reprap FW
     {
-      levelStateOld = getParameter(P_ABL_STATE, 0);
+      levelStateNew = getParameter(P_ABL_STATE, 0);
 
-      blUpdateState(&bedLevelingItems);
-      menuDrawItem(&bedLevelingItems.items[3], 3);
+      if (levelStateOld != levelStateNew)  // check for bed leveling On/Off change
+      {
+        levelStateOld = levelStateNew;
+
+        blUpdateState(&bedLevelingItems, levelStateOld);  // update icon & label 3
+        menuDrawItem(&bedLevelingItems.items[3], 3);
+      }
     }
 
     loopProcess();

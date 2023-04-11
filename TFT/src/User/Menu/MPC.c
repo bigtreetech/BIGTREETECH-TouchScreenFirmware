@@ -2,24 +2,39 @@
 #include "includes.h"
 
 #define DEF_HEATER_POWER      40
-#define DEF_FIL_HEAT_CAPACITY 0.0046
+#define DEF_FIL_HEAT_CAPACITY 0.0046f
 #define MPC_PARAM_ITEMS_COUNT 2
 
-typedef struct
+static struct
 {
   uint8_t heater_power;
   float fil_heat_capcity;
-} MPC_PARAM;
+} mpcParameter[MAX_HOTEND_COUNT] = {0};
 
-typedef struct
+static struct
 {
   MPC_STATUS status;
   MPC_RESULT result;
-} MPC_TUNING;
+} mpcTuning = {DONE, NO_RESULT};
 
 static uint8_t curTool_index = NOZZLE0;
-static MPC_TUNING mpcTuning = {DONE, NO_RESULT};
-static MPC_PARAM mpcParameter[MAX_HOTEND_COUNT] = {0};
+
+// 1 title, ITEM_PER_PAGE items (icon + label)
+const MENUITEMS mpcItems = {
+  // title
+  LABEL_MPC_TITLE,
+  // icon                          label
+  {
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NOZZLE,                  LABEL_NOZZLE},
+    {ICON_PARAMETER,               LABEL_PARAMETER_SETTINGS},
+    {ICON_RESUME,                  LABEL_START},
+    {ICON_BACK,                    LABEL_BACK},
+  }
+};
 
 void displayValues()
 {
@@ -68,10 +83,10 @@ void menuSetMpcParam(void)
         {
           tmpVal = numPadInt((uint8_t *)"1 ~ 255", mpcParameter[curTool_index].heater_power, DEF_HEATER_POWER, false);
 
-          if (tmpVal < 1 || tmpVal > 255)
-            BUZZER_PLAY(SOUND_ERROR);
-          else
+          if (WITHIN(tmpVal, 1, 255))
             break;
+          else
+            BUZZER_PLAY(SOUND_ERROR);
         } while (true);
 
         mpcParameter[curTool_index].heater_power = tmpVal;
@@ -88,10 +103,10 @@ void menuSetMpcParam(void)
         {
           tmpVal = numPadFloat((uint8_t *)"0.001 ~ 0.1", mpcParameter[curTool_index].fil_heat_capcity, DEF_FIL_HEAT_CAPACITY, false);
 
-          if (tmpVal < 0.001 || tmpVal > 0.1)
-            BUZZER_PLAY(SOUND_ERROR);
-          else
+          if (WITHIN(tmpVal, 0.001f, 0.1f))
             break;
+          else
+            BUZZER_PLAY(SOUND_ERROR);
         } while (true);
 
         mpcParameter[curTool_index].fil_heat_capcity = tmpVal;
@@ -154,23 +169,6 @@ bool hasMPC(void)
 
 void menuMPC(void)
 {
-  // 1 title, ITEM_PER_PAGE items (icon + label)
-  const MENUITEMS mpcItems = {
-    // title
-    LABEL_MPC_TITLE,
-    // icon                          label
-    {
-      {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
-      {ICON_NOZZLE,                  LABEL_NOZZLE},
-      {ICON_PARAMETER,               LABEL_PARAMETER_SETTINGS},
-      {ICON_RESUME,                  LABEL_START},
-      {ICON_BACK,                    LABEL_BACK},
-    }
-  };
-
   KEY_VALUES key_num = KEY_IDLE;
 
   menuDrawPage(&mpcItems);
