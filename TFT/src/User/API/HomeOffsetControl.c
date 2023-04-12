@@ -56,10 +56,11 @@ float homeOffsetGetValue(void)
 // Reset Z offset value to default value
 float homeOffsetResetValue(void)
 {
-  if (z_offset_value != HOME_Z_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
+  if (z_offset_value != HOME_Z_OFFSET_DEFAULT_VALUE)  // if not default value
   {
     sendParameterCmd(P_HOME_OFFSET, AXIS_INDEX_Z, HOME_Z_OFFSET_DEFAULT_VALUE);  // set Z home offset value
     mustStoreCmd("G1 Z%.2f\n", z_offset_value - HOME_Z_OFFSET_DEFAULT_VALUE);    // move nozzle
+
     z_offset_value = HOME_Z_OFFSET_DEFAULT_VALUE;
   }
 
