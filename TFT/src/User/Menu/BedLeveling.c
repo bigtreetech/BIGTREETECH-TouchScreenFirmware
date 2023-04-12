@@ -123,8 +123,8 @@ void menuBedLeveling(void)
       case KEY_ICON_3:
         if (levelStateNew != UNDEFINED)
           storeCmd((levelStateNew == ENABLED) ?
-                   (infoMachineSettings.firmwareType == FW_MARLIN ? "M420 S0\n" : "G29 S2\n") :
-                   (infoMachineSettings.firmwareType == FW_MARLIN ? "M420 S1\n" : "G29 S1\n"));
+                   (infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n") :
+                   (infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n"));
 
         break;
 
