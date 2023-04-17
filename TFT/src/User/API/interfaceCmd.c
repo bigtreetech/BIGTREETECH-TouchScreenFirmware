@@ -66,7 +66,6 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
-
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
