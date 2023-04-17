@@ -182,7 +182,7 @@ void clearCmdQueue(void)
 
 // Strip out any leading space from the passed command.
 // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command.
-char * stripCmd(char ** cmdPtr)
+static char * stripCmd(char ** cmdPtr)
 {
   char * strPtr = *cmdPtr;
 
@@ -330,7 +330,7 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
-bool initRemoteTFT()
+static bool initRemoteTFT()
 {
   // examples:
   //
@@ -363,7 +363,7 @@ bool initRemoteTFT()
   return true;
 }
 
-bool openRemoteTFT(bool writingMode)
+static bool openRemoteTFT(bool writingMode)
 {
   bool open = false;
 
@@ -415,7 +415,7 @@ bool openRemoteTFT(bool writingMode)
   return open;
 }
 
-void writeRemoteTFT()
+static void writeRemoteTFT()
 {
   // examples:
   //
@@ -450,7 +450,7 @@ void writeRemoteTFT()
   Serial_Forward(cmd_port_index, "ok\n");
 }
 
-void setWaitHeating(uint8_t index)
+static void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
   {
@@ -463,7 +463,7 @@ void setWaitHeating(uint8_t index)
   }
 }
 
-void syncTargetTemp(uint8_t index)
+static void syncTargetTemp(uint8_t index)
 {
   uint16_t temp;
 

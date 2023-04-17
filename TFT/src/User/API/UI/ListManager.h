@@ -14,9 +14,6 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t max_items, uint16_t 
                     void (*prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos));
 
 void listViewSetTitle(LABEL title);
-void listViewSetCurPage(uint8_t cur_page);
-bool listViewPreviousPage(void);
-bool listViewNextPage(void);
 void listViewRefreshPage(void);
 void listViewRefreshMenu(void);
 void listViewRefreshItem(uint16_t item);

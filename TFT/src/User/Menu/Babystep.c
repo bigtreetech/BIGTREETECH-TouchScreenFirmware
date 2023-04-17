@@ -3,7 +3,7 @@
 
 static uint8_t moveLenSteps_index = 0;
 
-void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHeader)
+static void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHeader)
 {
   if (drawHeader)
   {

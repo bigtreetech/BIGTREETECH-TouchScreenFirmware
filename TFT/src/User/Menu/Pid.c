@@ -21,7 +21,7 @@ void pidUpdateStatus(PID_STATUS status)
   pidStatus = status;
 }
 
-uint8_t checkFirstValidPID(void)
+static uint8_t checkFirstValidPID(void)
 {
   uint8_t tool = 0;
 
@@ -36,7 +36,7 @@ uint8_t checkFirstValidPID(void)
   return tool;
 }
 
-void pidRun(void)
+static void pidRun(void)
 {
   uint8_t tool = checkFirstValidPID();
 
@@ -57,7 +57,7 @@ static inline void pidStart(void)
   pidRun();
 }
 
-void pidResultAction(void)
+static void pidResultAction(void)
 {
   if (pidStatus == PID_TIMEOUT)
   {

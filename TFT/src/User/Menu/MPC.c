@@ -41,7 +41,7 @@ const MENUITEMS mpcItems = {
   }
 };
 
-void mpcDisplayValues(void)
+static void mpcDisplayValues(void)
 {
   char tmpStr[15];
   MPC_Parameter * parameter = &mpcParameter[curTool_index];

@@ -11,7 +11,7 @@ static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
 static bool loadRequested = false;
 
-void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
+static void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
 {
   char tempstr[20];
 

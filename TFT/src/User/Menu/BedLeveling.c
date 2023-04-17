@@ -1,7 +1,7 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
+static void __attribute__ ((noinline)) blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
 {
   if (bedLevelState == ENABLED)
   {

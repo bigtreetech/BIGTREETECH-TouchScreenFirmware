@@ -8,7 +8,7 @@ float levelCornerPosition[LEVELING_POINT_COUNT] = {0};
 
 int16_t origLevelEdge = -1;
 
-uint8_t getLevelEdgeMin(void)
+static uint8_t getLevelEdgeMin(void)
 {
   // min edge limit for the probe with probe offset set in parseACK.c
   int16_t maxXedge = getParameter(P_PROBE_OFFSET, AXIS_INDEX_X) + getParameter(P_HOME_OFFSET, AXIS_INDEX_X);
@@ -20,24 +20,24 @@ uint8_t getLevelEdgeMin(void)
   return MAX(maxXedge, maxYedge) + 1;
 }
 
-uint8_t getLevelEdgeDefault(void)
+static uint8_t getLevelEdgeDefault(void)
 {
   return MAX(origLevelEdge, getLevelEdgeMin());
 }
 
-void setLevelEdgeMin(void)
+static void setLevelEdgeMin(void)
 {
   infoSettings.level_edge = getLevelEdgeMin();
 }
 
 // draw values under icons
-void refreshValue(MENUITEMS * levelItems, uint8_t index)
+static void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
   sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
-void checkRefreshValue(MENUITEMS * levelItems)
+static void checkRefreshValue(MENUITEMS * levelItems)
 {
   LEVELING_POINT levelingPoint = levelingGetProbedPoint();
 
@@ -51,7 +51,7 @@ void checkRefreshValue(MENUITEMS * levelItems)
 }
 
 // show M48 on icon
-void drawProbeAccuracyIcon(MENUITEMS * levelItems)
+static void drawProbeAccuracyIcon(MENUITEMS * levelItems)
 {
   uint8_t index = 4;
   GUI_POINT loc;

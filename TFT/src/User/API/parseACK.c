@@ -152,7 +152,7 @@ static float ack_second_value()
     return -0.5;
 }
 
-void ack_values_sum(float * data)
+static void ack_values_sum(float * data)
 {
   while (((ack_cache[ack_index] < '0') || (ack_cache[ack_index] > '9')) && ack_cache[ack_index] != '\n')
   {
@@ -171,7 +171,7 @@ void ack_values_sum(float * data)
     ack_values_sum(data);
 }
 
-void ackPopupInfo(const char * info)
+static void ackPopupInfo(const char * info)
 {
   bool show_dialog = true;
 
@@ -203,7 +203,7 @@ void ackPopupInfo(const char * info)
   }
 }
 
-bool processKnownEcho(void)
+static bool processKnownEcho(void)
 {
   bool isKnown = false;
   uint8_t i;
@@ -239,7 +239,7 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-void hostActionCommands(void)
+static void __attribute__ ((noinline)) hostActionCommands(void)
 {
   if (ack_seen(":notification "))
   {

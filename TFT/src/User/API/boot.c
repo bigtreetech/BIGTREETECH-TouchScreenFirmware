@@ -133,6 +133,35 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   return BMP_SUCCESS;
 }
 
+void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
+{
+  char * stat_txt;
+  char error_txt[30];
+
+  GUI_SetColor(infoSettings.reminder_color);
+  GUI_ClearPrect(&labelFailedRect);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
+
+  switch (bmpState)
+  {
+    case BMP_INVALIDFILE:
+      stat_txt = "BMP file not valid ";
+      break;
+    case BMP_NOT24BIT:
+      stat_txt = "Format is not 24Bit";
+      break;
+    case BMP_NOTFOUND:
+    default:
+      stat_txt = "BMP file not found ";
+      break;
+  }
+
+  sprintf(error_txt, "Error: %s", stat_txt);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)error_txt);
+  GUI_RestoreColorDefault();
+  Delay_ms(1000);  // give some time to the user to read failed icon name.
+}
+
 static inline bool updateIcon(char * rootDir)
 {
   uint16_t found = 0;
@@ -208,36 +237,7 @@ static inline bool updateIcon(char * rootDir)
     return false;
 }
 
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
-{
-  char * stat_txt;
-  char error_txt[30];
-
-  GUI_SetColor(infoSettings.reminder_color);
-  GUI_ClearPrect(&labelFailedRect);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
-
-  switch (bmpState)
-  {
-    case BMP_INVALIDFILE:
-      stat_txt = "BMP file not valid ";
-      break;
-    case BMP_NOT24BIT:
-      stat_txt = "Format is not 24Bit";
-      break;
-    case BMP_NOTFOUND:
-    default:
-      stat_txt = "BMP file not found ";
-      break;
-  }
-
-  sprintf(error_txt, "Error: %s", stat_txt);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)error_txt);
-  GUI_RestoreColorDefault();
-  Delay_ms(1000);  // give some time to the user to read failed icon name.
-}
-
-bool updateFont(char * font, uint32_t addr)
+static bool updateFont(char * font, uint32_t addr)
 {
   uint8_t progress = 0;
   UINT rnum = 0;

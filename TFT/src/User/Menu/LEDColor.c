@@ -130,7 +130,7 @@ const char * const ledString[LED_COLOR_COMPONENT_COUNT] = {"R", "G", "B", "W", "
 uint8_t ledPage = 0;
 uint8_t ledIndex = 0;
 
-uint8_t ledGetComponentIndex(uint8_t index)
+static uint8_t ledGetComponentIndex(uint8_t index)
 {
   return ledPage * PAGE_ITEMS + index;
 }
@@ -147,24 +147,24 @@ static inline uint8_t ledEditComponentValue(uint8_t index)
   return ledColor[realIndex] = editIntValue(LED_MIN_VALUE, LED_MAX_VALUE, ledColor[realIndex], ledColor[realIndex]);
 }
 
-uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit)
+static uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit)
 {
   uint8_t realIndex = ledGetComponentIndex(index);
 
   return ledColor[realIndex] = NOBEYOND(LED_MIN_VALUE, ledColor[realIndex] + unit, LED_MAX_VALUE);
 }
 
-uint8_t ledGetControlIndex(uint8_t keyNum)
+static uint8_t ledGetControlIndex(uint8_t keyNum)
 {
   return (keyNum - (LED_KEY_OK + 1)) / 4;
 }
 
-uint8_t ledGetControlSubIndex(uint8_t keyNum)
+static uint8_t ledGetControlSubIndex(uint8_t keyNum)
 {
   return (keyNum - (LED_KEY_OK + 1)) % 4;
 }
 
-uint16_t ledGetComponentRGBColor(uint8_t component, uint8_t index)
+static uint16_t ledGetComponentRGBColor(uint8_t component, uint8_t index)
 {
   LED_COLOR led = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  // component RGB color in RGB 565 16 bit format
 
@@ -182,7 +182,7 @@ static inline void ledDrawPageNumber(void)
   drawStandardValue(&ledPageRect, VALUE_STRING, &tempstr, FONT_SIZE_LARGE, LC_CTRL_FONT_COLOR, LC_CTRL_BG_COLOR, 1, true);
 }
 
-void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
+static void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
 {
   GUI_RECT rect, rect2;
   uint16_t bgColorFocus;
@@ -248,7 +248,7 @@ void ledDrawButton(uint8_t index, uint8_t isPressed)
   }
 }
 
-void ledDrawKeyboard(void)
+static void ledDrawKeyboard(void)
 {
   // draw horizontal button borders
   GUI_SetColor(LC_KB_BORDER_COLOR);

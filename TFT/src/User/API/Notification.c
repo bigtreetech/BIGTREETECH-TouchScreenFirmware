@@ -39,7 +39,7 @@ bool toastRunning(void)
 }
 
 // check if any new notification is available
-bool toastAvailable(void)
+static bool toastAvailable(void)
 {
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
   {

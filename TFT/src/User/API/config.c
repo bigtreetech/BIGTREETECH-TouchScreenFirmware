@@ -40,109 +40,71 @@ uint8_t customcode_index = 0;
 uint8_t customcode_good[CUSTOM_GCODES_COUNT];
 bool scheduleRotate = false;
 
-bool getConfigFromFile(char * configPath)
+static void drawProgressPage(uint8_t * title)
 {
-  if (f_file_exists(configPath) == false)
-  {
-    PRINTDEBUG("configFile not found\n");
-    return false;
-  }
-
-  CUSTOM_GCODES tempCustomGcodes;
-  PRINT_GCODES tempPrintCodes;
-  STRINGS_STORE tempStringStore;
-  PREHEAT_STORE tempPreheatStore;
-
-  configCustomGcodes = &tempCustomGcodes;
-  configPrintGcodes = &tempPrintCodes;
-  configStringsStore = &tempStringStore;
-  configPreheatStore = &tempPreheatStore;
-  customcode_index = 0;
-  foundkeys = 0;
-
-  char cur_line_buffer[LINE_MAX_CHAR];
-  cur_line = cur_line_buffer;
-
-  drawProgressPage((uint8_t*)"Updating Configuration...");
-
-  if (readConfigFile(configPath, parseConfigLine, LINE_MAX_CHAR))
-  {
-    // store custom codes count
-    configCustomGcodes->count = customcode_index;
-
-    PRINTDEBUG("\nCustom gcode stored at 1:");
-    PRINTDEBUG(configCustomGcodes->gcode[1]);
-    if (scheduleRotate)
-    {
-      LCD_RefreshDirection(infoSettings.rotated_ui);
-      TSC_Calibration();
-    }
-    storePara();  // TODO: The touch sign will also be written if the touch calibration data is invalid
-    saveConfig();
-    PRINTDEBUG("config saved\n");
-    return true;
-  }
-  else
-  {
-    PRINTDEBUG("configFile save failed\n");
-    return false;
-  }
+  GUI_Clear(BLACK);
+  GUI_DispString(2, 2, title);
+  GUI_FillRectColor(rectTitleline.x0, rectTitleline.y0, rectTitleline.x1, rectTitleline.y1, BLUE);
+  GUI_DrawPrect(&rectProgressframe);
 }
 
-bool getLangFromFile(char * rootDir)
+static void drawProgress(void)
 {
-  bool success = false;
-  foundkeys = 0;
-  DIR d;
-  FILINFO f;
-  FRESULT r = f_findfirst(&d, &f, rootDir, "language_*.ini");
-
-  f_closedir(&d);
-  if (r != FR_OK)
-    return false;
-
-  char langpath[256];
-  sprintf(langpath, "%s/%s", rootDir, f.fname);
-
-  if (!f_file_exists(langpath))
-    return false;
-
-  char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
-  cur_line = cur_line_buffer;
-
-  drawProgressPage((uint8_t*)f.fname);
-
-  // erase part of flash to be rewritten
-  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE); i++)
-  {
-    W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
-  }
-
-  success = readConfigFile(langpath, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
-
-  if (foundkeys != LABEL_NUM)
-  {
-    showError(CSTAT_FILE_INVALID);
-    success = false;
-  }
-  else
-  {  // rename file if update was successful
-    if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))
-    {  // language exists
-      char newlangpath[256];
-      sprintf(newlangpath, "%s/%s.CUR", rootDir, f.fname);
-
-      if (f_file_exists(newlangpath))
-      {  // old language also exists
-        f_unlink(newlangpath);
-      }
-      f_rename(langpath, newlangpath);
-    }
-  }
-  return success;
+  char tempstr[50];
+  sprintf(tempstr, "Total keywords found: %d", foundkeys);
+  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
+  uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
+  GUI_FillRect(rectProgressframe.x0, rectProgressframe.y0, p, rectProgressframe.y1);
 }
 
-bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen)
+static void showError(CONFIG_STATS stat)
+{
+  char *ttl;
+  char *txt;
+  char tempstr[50];
+
+  GUI_SetBkColor(BLACK);
+  GUI_SetColor(RED);
+  GUI_ClearPrect(&recterrortxt);
+  GUI_DrawPrect(&recterror);
+
+  switch (stat)
+  {
+    case CSTAT_INVALID_VALUE:
+      GUI_SetColor(ORANGE);
+      ttl = "Invalid Value(s) in:";
+      txt = cur_line;
+      break;
+
+    case CSTAT_UNKNOWN_KEYWORD:
+      ttl = "Invalid Keyword:";
+      txt = cur_line;
+      break;
+
+    case CSTAT_FILE_NOTOPEN:
+      ttl = "Error:";
+      sprintf(tempstr, "Unable to open %s", CONFIG_FILE_PATH);
+      txt = tempstr;
+      break;
+
+    case CSTAT_STORAGE_LOW:
+      ttl = "Write Error:";
+      txt = "Config size is larger than allocated size";
+      break;
+
+    case CSTAT_FILE_INVALID:
+    default:
+      ttl = "Error:";
+      txt = "Invalid config File";
+      break;
+  }
+  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t*)ttl);
+  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t*)txt);
+  GUI_SetColor(WHITE);
+  Delay_ms(5000);
+}
+
+static bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen)
 {
   bool comment_mode = false;
   bool comment_space = true;
@@ -234,22 +196,8 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
   }
 }
 
-// check if the value is within min and max limits
-bool inLimit(int val, int min, int max)
-{
-  if (val < min || val > max)
-  {
-    showError(CSTAT_INVALID_VALUE);
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
-
 // check if config keyword exits in the buffer line
-bool key_seen(const char * keyStr)
+static bool key_seen(const char * keyStr)
 {
   uint16_t i;
   for (c_index = 0, i = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != '\0'; c_index++, i = 0)
@@ -267,7 +215,7 @@ bool key_seen(const char * keyStr)
 }
 
 // check if config keyword exits with a full matching in the buffer line
-bool param_seen(const char * keyStr)
+static bool param_seen(const char * keyStr)
 {
   bool found = key_seen(keyStr);
   if (found)
@@ -280,6 +228,52 @@ bool param_seen(const char * keyStr)
     }
   }
   return found;
+}
+
+// check if the value is within min and max limits
+static bool inLimit(int val, int min, int max)
+{
+  if (val < min || val > max)
+  {
+    showError(CSTAT_INVALID_VALUE);
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+// parse keywords from line read from language file
+static void parseLangLine(void)
+{
+  for (int i = 0; i < LABEL_NUM; i++)
+  {
+    if (key_seen(lang_key_list[i]))
+    {
+      PRINTDEBUG("\n");
+      PRINTDEBUG((char *)lang_key_list[i]);
+      uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
+      uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
+      int bytelen = strlen((char *)pchr);
+
+      if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
+      {
+        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
+        char check[MAX_LANG_LABEL_LENGTH];
+        W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
+          showError(CSTAT_SPI_WRITE_FAIL);
+      }
+      else
+      {
+        showError(CSTAT_INVALID_VALUE);
+      }
+      foundkeys++;
+      return;
+    }
+  }
+  showError(CSTAT_UNKNOWN_KEYWORD);
 }
 
 // Get the int after config keyword.
@@ -298,7 +292,7 @@ static int valid_intValue(int min, int max, int defaultVal)
 }
 
 // Treat all values other than 0 as 1.
-int8_t getOnOff(void)
+static int8_t getOnOff(void)
 {
   if (config_int() == 0)
     return 0;
@@ -354,200 +348,8 @@ static inline void config_set_color(uint16_t *color_src)
   }
 }
 
-// check keywords in the config line in buffer
-void parseConfigLine(void)
-{
-  for (uint16_t i = 0; i < CONFIG_COUNT; i++)
-  {
-    if (param_seen(config_keywords[i]))
-    {
-      PRINTDEBUG("\n");
-      PRINTDEBUG((char *)config_keywords[i]);
-      parseConfigKey(i);
-      foundkeys++;
-      return;
-    }
-  }
-  showError(CSTAT_UNKNOWN_KEYWORD);
-}
-
-// parse keywords from line read from language file
-void parseLangLine(void)
-{
-  for (int i = 0; i < LABEL_NUM; i++)
-  {
-    if (key_seen(lang_key_list[i]))
-    {
-      PRINTDEBUG("\n");
-      PRINTDEBUG((char *)lang_key_list[i]);
-      uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
-      uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
-      int bytelen = strlen((char *)pchr);
-
-      if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
-      {
-        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
-        char check[MAX_LANG_LABEL_LENGTH];
-        W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
-        if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
-          showError(CSTAT_SPI_WRITE_FAIL);
-      }
-      else
-      {
-        showError(CSTAT_INVALID_VALUE);
-      }
-      foundkeys++;
-      return;
-    }
-  }
-  showError(CSTAT_UNKNOWN_KEYWORD);
-}
-
-void saveConfig(void)
-{
-  writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
-  writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
-  writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
-  writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
-
-  #ifdef CONFIG_DEBUG
-    CUSTOM_GCODES tempgcode;  // = NULL;
-    uint8_t * data_r = (uint8_t *)&tempgcode;
-
-    W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
-    PRINTDEBUG("\nread done");
-    PRINTDEBUG("\nread from flash:");
-    PRINTDEBUG(tempgcode.gcode[1]);
-  #endif
-}
-
-void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
-{
-  // do not proceed if data size is larger than reserved max size.
-  if (numBytes > maxSize)
-  {
-    PRINTDEBUG("\nwrite error\n");
-    showError(CSTAT_STORAGE_LOW);
-    return;
-  }
-  int sectorCount = maxSize / W25QXX_SECTOR_SIZE;
-
-  // erase part of flash to be rewritten
-  for (int i = 0; i < sectorCount; i++)
-  {
-    W25Qxx_EraseSector(addr + (i * W25QXX_SECTOR_SIZE));
-  }
-  Delay_ms(100);  // give time for spi flash to settle
-  W25Qxx_WriteBuffer(dataBytes, addr, numBytes);  // write data to spi flash
-  Delay_ms(100);  // give time for spi flash to settle
-}
-
-// Reset & store config settings
-void resetConfig(void)
-{
-  CUSTOM_GCODES tempCG;
-  STRINGS_STORE tempST;
-  PRINT_GCODES tempPC;
-  PREHEAT_STORE tempPH;
-
-  // restore custom gcode presets
-  int n = 0;
-  for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
-  {
-    if (default_custom_enabled[i] == 1)
-    {
-      strcpy(tempCG.gcode[n],cgList[i]);
-      strcpy(tempCG.name[n],cgNames[i]);
-      n++;
-    }
-  }
-  tempCG.count = n;
-
-  // restore strings store
-  strcpy(tempST.marlin_title, MARLIN_TITLE);
-
-  for (int i = 0; i < PREHEAT_COUNT; i++)
-  {
-    strcpy(tempPH.preheat_name[i], preheatNames[i]);
-  }
-
-  // restore print gcodes
-  strcpy(tempPC.start_gcode, START_GCODE);
-  strcpy(tempPC.end_gcode, END_GCODE);
-  strcpy(tempPC.cancel_gcode, CANCEL_GCODE);
-
-  // write restored config
-  writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
-  writeConfig((uint8_t *)&tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
-  writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
-}
-
-void drawProgressPage(uint8_t * title)
-{
-  GUI_Clear(BLACK);
-  GUI_DispString(2, 2, title);
-  GUI_FillRectColor(rectTitleline.x0, rectTitleline.y0, rectTitleline.x1, rectTitleline.y1, BLUE);
-  GUI_DrawPrect(&rectProgressframe);
-}
-
-void drawProgress(void)
-{
-  char tempstr[50];
-  sprintf(tempstr, "Total keywords found: %d", foundkeys);
-  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
-  uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
-  GUI_FillRect(rectProgressframe.x0, rectProgressframe.y0, p, rectProgressframe.y1);
-}
-
-void showError(CONFIG_STATS stat)
-{
-  char *ttl;
-  char *txt;
-  char tempstr[50];
-
-  GUI_SetBkColor(BLACK);
-  GUI_SetColor(RED);
-  GUI_ClearPrect(&recterrortxt);
-  GUI_DrawPrect(&recterror);
-
-  switch (stat)
-  {
-    case CSTAT_INVALID_VALUE:
-      GUI_SetColor(ORANGE);
-      ttl = "Invalid Value(s) in:";
-      txt = cur_line;
-      break;
-
-    case CSTAT_UNKNOWN_KEYWORD:
-      ttl = "Invalid Keyword:";
-      txt = cur_line;
-      break;
-
-    case CSTAT_FILE_NOTOPEN:
-      ttl = "Error:";
-      sprintf(tempstr, "Unable to open %s", CONFIG_FILE_PATH);
-      txt = tempstr;
-      break;
-
-    case CSTAT_STORAGE_LOW:
-      ttl = "Write Error:";
-      txt = "Config size is larger than allocated size";
-      break;
-
-    case CSTAT_FILE_INVALID:
-    default:
-      ttl = "Error:";
-      txt = "Invalid config File";
-      break;
-  }
-  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t*)ttl);
-  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t*)txt);
-  GUI_SetColor(WHITE);
-  Delay_ms(5000);
-}
-
 // parse the keyword values in the buffer
-void parseConfigKey(uint16_t index)
+static void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
@@ -1160,4 +962,202 @@ void parseConfigKey(uint16_t index)
     default:
       break;
   }
+}
+
+// check keywords in the config line in buffer
+static void parseConfigLine(void)
+{
+  for (uint16_t i = 0; i < CONFIG_COUNT; i++)
+  {
+    if (param_seen(config_keywords[i]))
+    {
+      PRINTDEBUG("\n");
+      PRINTDEBUG((char *)config_keywords[i]);
+      parseConfigKey(i);
+      foundkeys++;
+      return;
+    }
+  }
+  showError(CSTAT_UNKNOWN_KEYWORD);
+}
+
+static void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
+{
+  // do not proceed if data size is larger than reserved max size.
+  if (numBytes > maxSize)
+  {
+    PRINTDEBUG("\nwrite error\n");
+    showError(CSTAT_STORAGE_LOW);
+    return;
+  }
+  int sectorCount = maxSize / W25QXX_SECTOR_SIZE;
+
+  // erase part of flash to be rewritten
+  for (int i = 0; i < sectorCount; i++)
+  {
+    W25Qxx_EraseSector(addr + (i * W25QXX_SECTOR_SIZE));
+  }
+  Delay_ms(100);  // give time for spi flash to settle
+  W25Qxx_WriteBuffer(dataBytes, addr, numBytes);  // write data to spi flash
+  Delay_ms(100);  // give time for spi flash to settle
+}
+
+static void saveConfig(void)
+{
+  writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
+  writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
+
+  #ifdef CONFIG_DEBUG
+    CUSTOM_GCODES tempgcode;  // = NULL;
+    uint8_t * data_r = (uint8_t *)&tempgcode;
+
+    W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+    PRINTDEBUG("\nread done");
+    PRINTDEBUG("\nread from flash:");
+    PRINTDEBUG(tempgcode.gcode[1]);
+  #endif
+}
+
+// Reset & store config settings
+void resetConfig(void)
+{
+  CUSTOM_GCODES tempCG;
+  STRINGS_STORE tempST;
+  PRINT_GCODES tempPC;
+  PREHEAT_STORE tempPH;
+
+  // restore custom gcode presets
+  int n = 0;
+  for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
+  {
+    if (default_custom_enabled[i] == 1)
+    {
+      strcpy(tempCG.gcode[n],cgList[i]);
+      strcpy(tempCG.name[n],cgNames[i]);
+      n++;
+    }
+  }
+  tempCG.count = n;
+
+  // restore strings store
+  strcpy(tempST.marlin_title, MARLIN_TITLE);
+
+  for (int i = 0; i < PREHEAT_COUNT; i++)
+  {
+    strcpy(tempPH.preheat_name[i], preheatNames[i]);
+  }
+
+  // restore print gcodes
+  strcpy(tempPC.start_gcode, START_GCODE);
+  strcpy(tempPC.end_gcode, END_GCODE);
+  strcpy(tempPC.cancel_gcode, CANCEL_GCODE);
+
+  // write restored config
+  writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
+  writeConfig((uint8_t *)&tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+}
+
+bool getConfigFromFile(char * configPath)
+{
+  if (f_file_exists(configPath) == false)
+  {
+    PRINTDEBUG("configFile not found\n");
+    return false;
+  }
+
+  CUSTOM_GCODES tempCustomGcodes;
+  PRINT_GCODES tempPrintCodes;
+  STRINGS_STORE tempStringStore;
+  PREHEAT_STORE tempPreheatStore;
+
+  configCustomGcodes = &tempCustomGcodes;
+  configPrintGcodes = &tempPrintCodes;
+  configStringsStore = &tempStringStore;
+  configPreheatStore = &tempPreheatStore;
+  customcode_index = 0;
+  foundkeys = 0;
+
+  char cur_line_buffer[LINE_MAX_CHAR];
+  cur_line = cur_line_buffer;
+
+  drawProgressPage((uint8_t*)"Updating Configuration...");
+
+  if (readConfigFile(configPath, parseConfigLine, LINE_MAX_CHAR))
+  {
+    // store custom codes count
+    configCustomGcodes->count = customcode_index;
+
+    PRINTDEBUG("\nCustom gcode stored at 1:");
+    PRINTDEBUG(configCustomGcodes->gcode[1]);
+    if (scheduleRotate)
+    {
+      LCD_RefreshDirection(infoSettings.rotated_ui);
+      TSC_Calibration();
+    }
+    storePara();  // TODO: The touch sign will also be written if the touch calibration data is invalid
+    saveConfig();
+    PRINTDEBUG("config saved\n");
+    return true;
+  }
+  else
+  {
+    PRINTDEBUG("configFile save failed\n");
+    return false;
+  }
+}
+
+bool getLangFromFile(char * rootDir)
+{
+  bool success = false;
+  foundkeys = 0;
+  DIR d;
+  FILINFO f;
+  FRESULT r = f_findfirst(&d, &f, rootDir, "language_*.ini");
+
+  f_closedir(&d);
+  if (r != FR_OK)
+    return false;
+
+  char langpath[256];
+  sprintf(langpath, "%s/%s", rootDir, f.fname);
+
+  if (!f_file_exists(langpath))
+    return false;
+
+  char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
+  cur_line = cur_line_buffer;
+
+  drawProgressPage((uint8_t*)f.fname);
+
+  // erase part of flash to be rewritten
+  for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE); i++)
+  {
+    W25Qxx_EraseSector(LANGUAGE_ADDR + (i * W25QXX_SECTOR_SIZE));
+  }
+
+  success = readConfigFile(langpath, parseLangLine, MAX_LANG_LABEL_LENGTH + 100);
+
+  if (foundkeys != LABEL_NUM)
+  {
+    showError(CSTAT_FILE_INVALID);
+    success = false;
+  }
+  else
+  {  // rename file if update was successful
+    if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))
+    {  // language exists
+      char newlangpath[256];
+      sprintf(newlangpath, "%s/%s.CUR", rootDir, f.fname);
+
+      if (f_file_exists(newlangpath))
+      {  // old language also exists
+        f_unlink(newlangpath);
+      }
+      f_rename(langpath, newlangpath);
+    }
+  }
+  return success;
 }

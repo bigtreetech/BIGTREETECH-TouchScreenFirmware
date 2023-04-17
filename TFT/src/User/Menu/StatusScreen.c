@@ -75,7 +75,7 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
-void drawStatus(void)
+static void drawStatus(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
   char tempstr[45];
@@ -219,7 +219,7 @@ void statusScreen_setReady(void)
   msgNeedRefresh = true;
 }
 
-void drawStatusScreenMsg(void)
+static void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
