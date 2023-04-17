@@ -31,7 +31,7 @@ void meshDraw(uint16_t col, uint16_t row, COORDINATE *val)
   char tempstr[24], tempstr2[24], tempstr3[24];
 
   if (infoMachineSettings.leveling == BL_MBL)
-    sprintf(tempstr2, "I:%d J:%d ZO:%.3f", col, row, infoParameters.MblOffset[0]);  // temp string
+    sprintf(tempstr2, "I:%d J:%d ZO:%.3f", col, row, getParameter(P_MBL_OFFSET, 0));  // temp string
   else
     sprintf(tempstr2, "I:%d J:%d ZH:%.3f", col, row, val->axis[Z_AXIS] - infoSettings.level_z_pos);  // temp string
 

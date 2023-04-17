@@ -1202,8 +1202,8 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
-  // Get gcode command from the file to be printed
-  loopPrintFromTFT();  // handle a print from TFT media, if any
+  // Handle a print from TFT media, if any
+  loopPrintFromTFT();
 
   // Parse and send gcode commands in the queue
   sendQueueCmd();
@@ -1211,10 +1211,9 @@ void loopBackEnd(void)
   // Parse the received slave response information
   parseACK();
 
+  // Parse comment from gcode file
   if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
-  {
-    parseComment();  // Parse comment from gcode file
-  }
+    parseComment();
 
   // Retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc...
   #ifdef SERIAL_PORT_2
@@ -1223,55 +1222,63 @@ void loopBackEnd(void)
 
   // Temperature monitor
   loopCheckHeater();
+
   // Fan speed monitor
   loopFan();
+
   // Speed & flow monitor
   loopSpeed();
 
+  // Buzzer handling
   #ifdef BUZZER_PIN
-    // Buzzer handling
     loopBuzzer();
   #endif
 
+  // Handle a print from (remote) onboard media, if any
   if (infoMachineSettings.onboardSD == ENABLED)
-  {
-    loopPrintFromOnboard();  // handle a print from (remote) onboard media, if any
-  }
+    loopPrintFromOnboard();
 
+  // Handle USB communication
   #ifdef USB_FLASH_DRIVE_SUPPORT
     USB_LoopProcess();
   #endif
 
+  // Check filament runout status
   #ifdef FIL_RUNOUT_PIN
     FIL_BE_CheckRunout();
   #endif
 
+  // Check changes in encoder steps
   #if LCD_ENCODER_SUPPORT
     #ifdef HAS_EMULATOR
       if (MENU_IS_NOT(menuMarlinMode))
     #endif
     {
-      LCD_Enc_CheckSteps();  // check change in encoder steps
+      LCD_Enc_CheckSteps();
     }
   #endif
 
+  // Check mode switching
   #ifdef HAS_EMULATOR
     Mode_CheckSwitching();
   #endif
 
+  // Handle screenshot capture
   #ifdef SCREEN_SHOT_TO_SD
     loopScreenShot();
   #endif
 
+  // Check if Back is pressed and held
   #ifdef SMART_HOME
-    // check if Back is pressed and held
     loopCheckBackPress();
   #endif
 
+  // Check LCD screen dimming
   #ifdef LCD_LED_PWM_CHANNEL
     LCD_CheckDimming();
   #endif
 
+  // Check LED Event
   if (GET_BIT(infoSettings.general_settings, INDEX_EVENT_LED) == 1)
     LED_CheckEvent();
 
@@ -1284,17 +1291,21 @@ void loopFrontEnd(void)
 {
   // Check if volume source (SD/USB) insert
   loopVolumeSource();
+
   // Loop to check and run toast messages
   loopToast();
+
   // If there is a message in the status bar, timed clear
   loopReminderManage();
+
   // Busy Indicator clear
   loopBusySignClear();
+
   // Check update temperature status
   loopTemperatureStatus();
 
+  // Loop for filament runout detection
   #ifdef FIL_RUNOUT_PIN
-    // Loop for filament runout detection
     FIL_FE_CheckRunout();
   #endif
 

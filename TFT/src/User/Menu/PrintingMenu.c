@@ -230,7 +230,7 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         if ((getPrintRemainingTime() == 0) || (progDisplayType != ELAPSED_REMAINING))
           snprintf(tempstrTop, 9, "%d%%      ", getPrintProgress());
         else
-          timeToString(tempstrTop, TIME_FORMAT_STR, getPrintTime());
+          time_2_string(tempstrTop, TIME_FORMAT_STR, getPrintTime());
         break;
 
       case ICON_POS_Z:
@@ -287,9 +287,9 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_TIM:
         if ((getPrintRemainingTime() == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
-          timeToString(tempstrBottom, TIME_FORMAT_STR, getPrintTime());
+          time_2_string(tempstrBottom, TIME_FORMAT_STR, getPrintTime());
         else
-          timeToString(tempstrBottom, TIME_FORMAT_STR, getPrintRemainingTime());
+          time_2_string(tempstrBottom, TIME_FORMAT_STR, getPrintRemainingTime());
         break;
 
       case ICON_POS_Z:
@@ -440,7 +440,7 @@ void printSummaryPopup(void)
   char showInfo[300];
   char tempstr[60];
 
-  timeToString(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
+  time_2_string(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 
   if (isAborted() == true)
   {

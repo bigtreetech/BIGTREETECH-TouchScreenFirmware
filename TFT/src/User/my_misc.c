@@ -19,7 +19,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-// Calculate CRC16 checksum
+// calculate CRC16 checksum
 uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
 {
   uint16_t crc = 0xFFFF;
@@ -42,9 +42,8 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
   return crc;
 }
 
-// string convert to uint8, MSB
-// "2C" to 0x2C
-uint8_t string_2_uint8_t(const uint8_t *string)
+// string convert to uint8, MSB ("2C" to 0x2C)
+uint8_t string_2_uint8(const uint8_t *str)
 {
   uint8_t rtv = 0;
 
@@ -52,12 +51,12 @@ uint8_t string_2_uint8_t(const uint8_t *string)
   {
     rtv <<= 4;
 
-    if (string[i] >= '0' && string[i] <= '9')
-      rtv |= string[i] - '0';
-    else if (string[i] >= 'A' && string[i] <= 'F')
-      rtv |= string[i] - 'A' + 0xA;
-    else if (string[i] >= 'a' && string[i] <= 'f')
-      rtv |= string[i] - 'a' + 0xA;
+    if (str[i] >= '0' && str[i] <= '9')
+      rtv |= str[i] - '0';
+    else if (str[i] >= 'A' && str[i] <= 'F')
+      rtv |= str[i] - 'A' + 0xA;
+    else if (str[i] >= 'a' && str[i] <= 'f')
+      rtv |= str[i] - 'a' + 0xA;
     else
       rtv |= 0;
   }
@@ -65,63 +64,62 @@ uint8_t string_2_uint8_t(const uint8_t *string)
   return rtv;
 }
 
-// uint8 convert to string, MSB
-// 0x2C to "2C"
-uint8_t *uint8_2_string(uint8_t num, uint8_t *string)
+// uint8 convert to string, MSB (0x2C to "2C")
+uint8_t *uint8_2_string(uint8_t num, uint8_t *str)
 {
   for (unsigned char i = 0; i < 2; i++)
   {
     uint8_t _4bits = (num & 0xF0) >> 4;
 
     if (_4bits <= 9)
-      string[i] = _4bits + '0';
+      str[i] = _4bits + '0';
     else if (_4bits >= 0xA && _4bits <= 0xF)
-      string[i] = _4bits - 0xA + 'A';
+      str[i] = _4bits - 0xA + 'A';
     else
-      string[i] = 'F';
+      str[i] = 'F';
 
     num <<= 4;
   }
 
-  return string;
+  return str;
 }
 
 // string convert to uint32, MSB
-uint32_t string_2_uint32(const uint8_t *string, const uint8_t bytes_num)
+uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num)
 {
   uint32_t rtv = 0;
 
   for (uint8_t i = 0; i < bytes_num; i++)
   {
     rtv <<= 8;
-    rtv |= string_2_uint8_t(string + 2 * i);
+    rtv |= string_2_uint8(str + 2 * i);
   }
 
   return rtv;
 }
 
 // uint32 convert to string, MSB
-uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string)
+uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str)
 {
   for (uint8_t i = 0; i < bytes_num; i++)
   {
     uint8_t bit = (bytes_num - i - 1) * 8;
     uint8_t _8bits = (num & (0xFF << bit)) >> bit;
 
-    uint8_2_string(_8bits, string + 2 * i);
+    uint8_2_string(_8bits, str + 2 * i);
   }
 
-  return string;
+  return str;
 }
 
 // convert time to string with given formatting
-void timeToString(char *buf, char *strFormat, uint32_t time)
+void time_2_string(char *buf, char *str_format, uint32_t time)
 {
   uint8_t hour = HOURS(time);
   uint8_t min = MINUTES(time);
   uint8_t sec = SECONDS(time);
 
-  sprintf(buf, strFormat, hour, min, sec);
+  sprintf(buf, str_format, hour, min, sec);
 }
 
 // light weight strtod() function without exponential support.

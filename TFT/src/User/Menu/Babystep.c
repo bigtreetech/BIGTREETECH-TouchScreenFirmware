@@ -151,10 +151,11 @@ void menuBabystep(void)
       case KEY_ICON_4:
         if (infoMachineSettings.EEPROM == 1)
         {
-          // set new Z offset
-          // Required if current Z offset is not changed applying babystep
-          // changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          // set new Z offset.
+          // Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          //
           orig_z_offset = offsetSetValue(new_z_offset);
+
           popupDialog(DIALOG_TYPE_QUESTION, babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
         }
         break;
@@ -173,9 +174,9 @@ void menuBabystep(void)
 
         if (infoMachineSettings.firmwareType != FW_REPRAPFW)
         {
-          // set new Z offset
-          // Required if current Z offset is not changed applying babystep
-          // changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          // set new Z offset.
+          // Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+          //
           if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
             orig_z_offset = offsetSetValue(new_z_offset - babystep + orig_babystep);
           else  // if HomeOffset
@@ -197,19 +198,18 @@ void menuBabystep(void)
     {
       if (now_z_offset != z_offset || WITHIN(babystep, orig_babystep - 0.005f, orig_babystep + 0.005f))
       {
-        // if current Z offset is changed applying babystep changes
-        // (e.g. BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
-        // or babystep is almost the same as the initial one,
-        // we don't force Z offset change
+        // if current Z offset is changed applying babystep changes (e.g. BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+        // or babystep is almost the same as the initial one, we don't force Z offset change
+        //
         new_z_offset = now_z_offset = z_offset;
 
         force_z_offset = false;
       }
       else if (WITHIN(z_offset, orig_z_offset - 0.005f, orig_z_offset + 0.005f))
       {
-        // if current Z offset is not changed applying babystep changes
-        // (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
+        // if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW),
         // we force Z offset change
+        //
         if (infoMachineSettings.zProbe == ENABLED || infoMachineSettings.leveling == BL_MBL)
           new_z_offset = z_offset + babystep - orig_babystep;
         else  // if HomeOffset
@@ -226,8 +226,8 @@ void menuBabystep(void)
   }
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    // set new Z offset
-    // Required if current Z offset is not changed applying babystep
-    // changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+    // set new Z offset.
+    // Required if current Z offset is not changed applying babystep changes (e.g. no BABYSTEP_ZPROBE_OFFSET is set in Marlin FW)
+    //
     offsetSetValue(new_z_offset);
 }

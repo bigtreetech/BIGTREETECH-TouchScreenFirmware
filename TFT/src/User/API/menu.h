@@ -12,7 +12,7 @@ extern "C" {
 #define IDLE_TOUCH 0xFFFF
 
 #define ITEM_PER_PAGE     8
-#define PS_TOUCH_OFFSET   2  // printing screen icon index offset for touch input
+#define PS_TOUCH_OFFSET   2                            // printing screen icon index offset for touch input
 #define MENU_RECT_COUNT   (ITEM_PER_PAGE * 2 + 1)      // 8 items + title bar
 #define SS_RECT_COUNT     (ITEM_PER_PAGE * 2 + 1 + 1)  // 8 items + title bar + infobox
 #define TM_RECT_COUNT     (ITEM_PER_PAGE * 2 + 1 + 1)  // 8 items + title bar + tempbox

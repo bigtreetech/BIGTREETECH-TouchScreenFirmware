@@ -86,7 +86,7 @@ static FONT_BITMAP font[] = {
   },
 };
 
-//set Large font
+// set Large font
 void setFontSize(uint16_t size)
 {
   fontSize = size;

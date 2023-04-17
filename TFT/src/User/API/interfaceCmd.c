@@ -66,7 +66,6 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
-
 // Common store cmd.
 void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
@@ -1237,20 +1236,16 @@ void sendQueueCmd(void)
             {
               pValue = cmd_float();
 
-              if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 0, pValue);
-              if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 2, pValue);
+              if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 0, pValue);
+              if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 2, pValue);
             }
 
             if (cmd_seen('D'))
             {
               pValue = cmd_float();
 
-              if (setAxis & SET_X)
-                  setParameter(P_INPUT_SHAPING, 1, pValue);
-              if (setAxis & SET_Y)
-                  setParameter(P_INPUT_SHAPING, 3, pValue);
+              if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 1, pValue);
+              if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 3, pValue);
             }
           }
         }

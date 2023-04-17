@@ -259,5 +259,5 @@ void menuZOffset(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }

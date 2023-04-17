@@ -386,7 +386,10 @@ bool model_Process_Base64PNG(FIL *gcodeFile, void *user_data, pngle_draw_callbac
     goto pngle_new_failed;
 
   pngle_set_draw_callback(pngle, draw_callback);
-  if (done_callback) pngle_set_done_callback(pngle, done_callback);
+
+  if (done_callback)
+    pngle_set_done_callback(pngle, done_callback);
+
   pngle_set_user_data(pngle, user_data);
 
   int remain = 0;
@@ -592,10 +595,10 @@ bool model_DecodeToFlash(char *gcode)
   if (model_DecodeToFlash_Classic(&gcodeFile, addr))
     return true;
 
-#if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
-  if (model_DecodeToFlash_Base64PNG(&gcodeFile, addr))
-    return true;
-#endif
+  #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
+    if (model_DecodeToFlash_Base64PNG(&gcodeFile, addr))
+      return true;
+  #endif
 
   return false;
 }

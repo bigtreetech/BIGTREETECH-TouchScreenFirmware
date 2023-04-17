@@ -16,7 +16,7 @@ void updateListeningMode(MENUITEMS * menu)
   }
 }
 
-// Set uart pins to input, free uart
+// set uart pins to input, free uart
 void menuDisconnect(void)
 {
   GUI_Clear(infoSettings.bg_color);
@@ -75,8 +75,8 @@ void menuBaudrate(void)
   {
     curIndex = listViewGetSelectedIndex();
 
-    if (curIndex < size && curIndex != curItem)
-    {  // has changed
+    if (curIndex < size && curIndex != curItem)  // if changed
+    {
       totalItems[curItem].icon = CHARICON_UNCHECKED;
       listViewRefreshItem(curItem);  // refresh unchecked status
       curItem = curIndex;
@@ -91,7 +91,7 @@ void menuBaudrate(void)
     loopProcess();
   }
 
-  saveSettings();  // Save settings
+  saveSettings();  // save settings
 }
 
 void menuSerialPorts(void)

@@ -13,7 +13,7 @@ typedef enum
   #define X_CHAR(NAME) CHARICON_##NAME ,
   #include "CharIcon.inc"
   #undef  X_CHAR
-  //keep below items always at the end
+  // keep below items always at the end
   CHARICON_NUM,
   CHARICON_NULL
 } CHAR_ICON;

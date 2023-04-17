@@ -36,7 +36,7 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-// icon            ItemType    Item Title              item value text(only for custom value)
+// icon            item type   item title              item value text(only for custom value)
   {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
   {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
   {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},
@@ -177,9 +177,8 @@ void menuShowParameter(void)
     {
       case KEY_BACK:
         if (memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-        {
           parametersChanged = true;
-        }
+
         CLOSE_MENU();
         break;
 
@@ -214,6 +213,7 @@ void menuShowParameter(void)
       if (oldval[i] != newVal)
       {
         oldval[i] = newVal;
+
         listViewRefreshItem(i);
       }
     }
@@ -271,8 +271,9 @@ void menuParameterSettings(void)
       case KEY_BACK:
         if (parametersChanged && infoMachineSettings.EEPROM == 1)
         {
-          popupDialog(DIALOG_TYPE_QUESTION, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
           parametersChanged = false;
+
+          popupDialog(DIALOG_TYPE_QUESTION, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
         }
         else
         {
@@ -287,9 +288,11 @@ void menuParameterSettings(void)
         if (curIndex < enabledParameterCount)
         {
           curParameter = getEnabledParameter(curIndex);
+
           if (curParameter < PARAMETERS_COUNT)
           {
             mustStoreCmd("M503 S0\n");
+
             OPEN_MENU(menuShowParameter);
           }
           break;
@@ -298,10 +301,12 @@ void menuParameterSettings(void)
         else if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
         {
           uint8_t curIndex_e = (curIndex - enabledParameterCount);
+
           if (curIndex_e == P_SAVE_SETTINGS)
           {
-            popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             parametersChanged = false;
+
+            popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             break;
           }
           else if (curIndex_e == P_RESET_SETTINGS)
