@@ -69,11 +69,16 @@
   #include "pin_MKS_TFT32_V1_4.h"
 #elif defined(MKS_TFT35_V1_0)
   #include "pin_MKS_TFT35_V1_0.h"
+#elif defined(MKS_TFT32L_V3_0)
+  #include "pin_MKS_TFT32L_V3_0.h" 
 #endif
 
 #define LCD_ENCODER_SUPPORT (defined(LCD_ENCA_PIN) && defined(LCD_ENCB_PIN) && defined(LCD_BTN_PIN))
 #define ENC_ACTIVE_SIGNAL (defined(LCD_ENC_EN_PIN) && defined(ST7920_EMULATOR) && defined(LCD_ENCODER_SUPPORT))
-#define HAS_EMULATOR (defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR))
+
+#if (defined(ST7920_EMULATOR) || defined(LCD2004_EMULATOR))
+  #define HAS_EMULATOR
+#endif
 
 #define LCD_DRIVER_IS(n)  ((TFTLCD_DRIVER) == (n))
 #define LCD_DRIVER_HAS(n) (((TFTLCD_DRIVER) & (n)) == (n))

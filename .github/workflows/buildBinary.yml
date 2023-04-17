@@ -114,6 +114,9 @@ jobs:
       - name: Build MKS TFT35 V1.0
         run: platformio run --environment MKS_TFT35_V1_0
 
+      - name: Build MKS TFT32L V3.0
+        run: platformio run --environment MKS_TFT32L_V3_0
+
       - name: Remove Old Binaries
         run: find "Copy to SD Card root directory to update/" -name '*.bin' -print -delete
 
