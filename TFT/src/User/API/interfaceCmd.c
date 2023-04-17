@@ -162,7 +162,7 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
     return false;
   }
 
-  strxcpy(cmdQueue.queue[cmdQueue.index_w].gcode, cmd, CMD_MAX_SIZE);
+  strncpy_no_pad(cmdQueue.queue[cmdQueue.index_w].gcode, cmd, CMD_MAX_SIZE);
 
   cmdQueue.queue[cmdQueue.index_w].port_index = portIndex;
   cmdQueue.index_w = (cmdQueue.index_w + 1) % CMD_QUEUE_SIZE;
@@ -852,7 +852,7 @@ void sendQueueCmd(void)
             bool hasE, hasA;
 
             // make a copy to work on
-            strxcpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+            strncpy_no_pad(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
             // retrieve message text and flags of M118 gcode
             msgText = parseM118(rawMsg, &hasE, &hasA);
@@ -999,7 +999,7 @@ void sendQueueCmd(void)
             const char * msgText;
 
             // make a copy to work on
-            strxcpy(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
+            strncpy_no_pad(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
             // retrieve message text
             stripChecksum(rawMsg);
@@ -1404,6 +1404,7 @@ void sendQueueCmd(void)
         case 28:  // G28
           coordinateSetKnown(true);
           babystepSetValue(BABYSTEP_DEFAULT_VALUE);  // reset babystep
+
           if (infoMachineSettings.leveling != BL_DISABLED)
             storeCmd("M420\n");  // check bed leveling state
           break;

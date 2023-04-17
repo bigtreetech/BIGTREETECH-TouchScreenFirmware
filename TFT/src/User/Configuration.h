@@ -1369,8 +1369,8 @@
 
 /**
  * Suppress/allow terminal cache during keyboard view
- *  - uncomment to disable terminal cache during keyboard view
- *  - comment it to enable terminal cache during keyboard view
+ * Uncomment to disable terminal cache during keyboard view.
+ * Comment to enable terminal cache during keyboard view.
  */
 #define TERMINAL_KEYBOARD_VIEW_SUPPRESS_ACK  // Default: uncommented (cache suppressed)
 

@@ -1,9 +1,8 @@
-#include <stdlib.h>  // first to avoid conflicts with strtod function
+#include <stdlib.h>  // first to avoid conflicts with strtod() function
 
 #include "my_misc.h"
 #include "printf/printf.h"
 #include <stddef.h>
-#include <string.h>
 
 #define CRC_POLY 0xA001
 
@@ -41,53 +40,6 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
     }
   }
   return crc;
-}
-
-/*
- * - always copy num-1 characters from source to destination
- *   regardless of null terminating character found in source
- * - destination always ends with '\0'
- */
-void strxcpy(char * destination, const char * source, size_t num)
-{
-  num -= !!num;
-
-  memcpy(destination, source, num);
-  destination[num] ='\0';
-}
-
-/*
- * - copy source to destination but no more than width-1 characters
- * - if null terminating character found in source the rest is padded with 0
- * - destination always ends with '\0'
- */
-void strwcpy(char * destination, const char * source, size_t width)
-{
-  width -= !!width;
-  while (width > 1 && *source != '\0')
-  {
-    *destination++ = *source++;
-    width--;
-  }
-
-  memset(destination, '\0', width);
-}
-
-/*
- * - copy source to destination but no more than size-1 characters
- * - if null terminating character found in source the copy stops there
- * - destination always ends with '\0'
- */
-void strscpy(char * destination, const char * source, size_t size)
-{
-  size -= !!size;
-  while (size > 1 && *source != '\0')
-  {
-    *destination++ = *source++;
-    size--;
-  }
-
-  *destination = '\0';
 }
 
 // string convert to uint8, MSB
@@ -162,8 +114,19 @@ uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *string)
   return string;
 }
 
-// convert string to double (without exponential support)
-double stringToDouble(char *str, char **endptr)
+// convert time to string with given formatting
+void timeToString(char *buf, char *strFormat, uint32_t time)
+{
+  uint8_t hour = HOURS(time);
+  uint8_t min = MINUTES(time);
+  uint8_t sec = SECONDS(time);
+
+  sprintf(buf, strFormat, hour, min, sec);
+}
+
+// light weight strtod() function without exponential support.
+// Convert string to double (without exponential support)
+double strtod_ligth(char *str, char **endptr)
 {
   char *p = str;
   double val = 0.0;
@@ -213,14 +176,44 @@ double stringToDouble(char *str, char **endptr)
   return val * sign;
 }
 
-// convert time to string with given formatting
-void timeToString(char *buf, char *strFormat, uint32_t time)
+// light weight and safe strncpy() function with padding:
+// - copy "src" to "dest" for a maximum of "n-1" characters
+// - if null terminating character is found in "src" the rest in "dest" is padded with '\0'
+// - "dest" always ends with '\0'
+void strncpy_pad(char *dest, const char *src, size_t n)
 {
-  uint8_t hour = HOURS(time);
-  uint8_t min = MINUTES(time);
-  uint8_t sec = SECONDS(time);
+  // if "src" is not NULL, proceed first with the copy.
+  // Otherwise, proceed only padding "dest" with '\0'
+  if (src != NULL)
+  {
+    while (n > 1 && *src != '\0')
+    {
+      *dest++ = *src++;
+      n--;
+    }
+  }
 
-  sprintf(buf, strFormat, hour, min, sec);
+  memset(dest, '\0', n);  // NOTE: safe even in case value 0 was passed for "n" (memset() function will do nothing)
+}
+
+// light weight and safe strncpy() function without padding:
+// - copy "src" to "dest" for a maximum of "n-1" characters
+// - if null terminating character is found in "src" the copy stops there
+// - "dest" always ends with '\0'
+void strncpy_no_pad(char *dest, const char *src, size_t n)
+{
+  // if "src" is not NULL, proceed with the copy
+  if (src != NULL)
+  {
+    while (n > 1 && *src != '\0')
+    {
+      *dest++ = *src++;
+      n--;
+    }
+  }
+
+  if (n != 0)  // safe in case value 0 was passed for "n"
+    *dest = '\0';
 }
 
 // strip out any leading " ", "/" or ":" character that might be in the string
