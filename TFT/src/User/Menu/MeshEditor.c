@@ -24,29 +24,29 @@ typedef struct
   float oriData[MESH_GRID_SIZE];  // data grid of original Z height
   float curData[MESH_GRID_SIZE];  // data grid of current Z height
 
-  uint16_t dataSize;               // number of data present in the data grid
-  uint16_t colsNum;                // number of points per X axis (number of columns in the data grid)
-  uint16_t rowsNum;                // number of points per Y axis (number of rows in the data grid)
+  uint16_t dataSize;              // number of data present in the data grid
+  uint16_t colsNum;               // number of points per X axis (number of columns in the data grid)
+  uint16_t rowsNum;               // number of points per Y axis (number of rows in the data grid)
 
-  uint16_t index;                  // current index in the data grid
-  uint16_t col;                    // current column in the data grid
-  uint16_t row;                    // current row in the data grid
+  uint16_t index;                 // current index in the data grid
+  uint16_t col;                   // current column in the data grid
+  uint16_t row;                   // current row in the data grid
 
-  float valueMin;                  // minimum data value in the data grid
-  float valueMax;                  // maximum data value in the data grid
-  float valueDelta;                // valueMax - valueMin
+  float valueMin;                 // minimum data value in the data grid
+  float valueMax;                 // maximum data value in the data grid
+  float valueDelta;               // valueMax - valueMin
 
-  uint16_t rStart;                 // RGB red component for drawing the minimum data value in the data grid
-  uint16_t gStart;                 // RGB green component for drawing the minimum data value in the data grid
-  uint16_t bStart;                 // RGB blue component for drawing the minimum data value in the data grid
-  uint16_t rEnd;                   // RGB green component for drawing the maximum data value in the data grid
-  uint16_t gEnd;                   // RGB red component for drawing the maximum data value in the data grid
-  uint16_t bEnd;                   // RGB blue component for drawing the maximum data value in the data grid
-  int16_t rDelta;                  // rEnd - rStart
-  int16_t gDelta;                  // gEnd - gStart
-  int16_t bDelta;                  // bEnd - bStart
+  uint16_t rStart;                // RGB red component for drawing the minimum data value in the data grid
+  uint16_t gStart;                // RGB green component for drawing the minimum data value in the data grid
+  uint16_t bStart;                // RGB blue component for drawing the minimum data value in the data grid
+  uint16_t rEnd;                  // RGB green component for drawing the maximum data value in the data grid
+  uint16_t gEnd;                  // RGB red component for drawing the maximum data value in the data grid
+  uint16_t bEnd;                  // RGB blue component for drawing the maximum data value in the data grid
+  int16_t rDelta;                 // rEnd - rStart
+  int16_t gDelta;                 // gEnd - gStart
+  int16_t bDelta;                 // bEnd - bStart
 
-  MESH_DATA_STATUS status;         // current status of oriData/data
+  MESH_DATA_STATUS status;        // current status of oriData/curData
   uint8_t parsedRows;
 
   uint8_t colsToSkip;
@@ -239,11 +239,11 @@ const struct
   const bool rowsInverted;
   const char *const echoMsg;
 } meshDataFormat[] = {
-/* columns to skip, rows to skip, rows inverted, bed leveling data type    */
-  {             1,            4,          true,  "Mesh Bed Level data:"},            // MBL
-  {             0,            2,         false,  "Bed Topography Report for CSV:"},  // UBL
-  {             1,            2,          true,  "Bilinear Leveling Grid:"},         // ABL Bilinear
-  {             0,            1,          true,  "Bed Level Correction Matrix:"},    // ABL Linear or 3-Point
+  // columns to skip, rows to skip, rows inverted, bed leveling data type
+  {                1,            4,          true, "Mesh Bed Level data:"},            // MBL
+  {                0,            2,         false, "Bed Topography Report for CSV:"},  // UBL
+  {                1,            2,          true, "Bilinear Leveling Grid:"},         // ABL Bilinear
+  {                0,            1,          true, "Bed Level Correction Matrix:"},    // ABL Linear or 3-Point
 };
 
 const char * meshErrorMsg[] = {"Invalid mesh"};  // list of possible error responses to "M420 V1 T1" command
@@ -275,7 +275,9 @@ void meshInitData(void)
 
 static inline void meshAllocData(void)
 {
-  if (meshData == NULL)  // if data already exist (e.g. when the menu is reloaded), continue to use the existing data
+  // if data doesn't already exist (e.g. when the menu is loaded for the first time), initialize data.
+  // Otherwise, if data already exist (e.g. when the menu is reloaded), continue to use the existing data
+  if (meshData == NULL)
   {
     meshData = (MESH_DATA *) malloc(sizeof(MESH_DATA));
     meshInitData();
@@ -393,7 +395,7 @@ static inline uint16_t meshGetRealRow(void)
 
 static inline void meshSetValue(void)
 {
-  storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetRealRow(), meshData->oriData[meshData->index]);
+  storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetRealRow(), meshData->curData[meshData->index]);
 }
 
 static inline void meshUpdateValueMinMax(void)
@@ -690,7 +692,6 @@ void meshUpdateData(char *dataRow)
     return;
   }
 
-
   if (!failed)
   {
     uint16_t count;
@@ -815,11 +816,11 @@ void menuMeshEditor(void)
 
       case ME_KEY_SAVE:
         meshSave();
-        memcpy(meshData->curData, meshData->oriData, sizeof(meshData->oriData));
+        memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));
         break;
 
       case ME_KEY_OK:
-        if (memcmp(meshData->curData, meshData->oriData, sizeof(meshData->oriData)))
+        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))
           meshSave();
 
         meshDeallocData();

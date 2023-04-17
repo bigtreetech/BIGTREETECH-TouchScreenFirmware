@@ -122,21 +122,12 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
-// set print title according to print originator (remote or local to TFT)
-static void setPrintTitle(void)
-{
-  char * fileName = getPrintFilename();
-
-  hideExtension(fileName);  // hide filename extension if filename extension feature is disabled
-  snprintf(title, MAX_TITLE_LEN, "%s%s", getFS(), fileName);
-  restoreExtension(fileName);  // restore filename extension if filename extension feature is disabled
-}
-
 // initialize printing info before opening Printing menu
 static void initMenuPrinting(void)
 {
-  setPrintTitle();  // set print title according to print originator (remote or local to TFT)
-  clearInfoFile();  // as last, clear and free memory for file list
+  getPrintTitle(title, MAX_TITLE_LEN);  // get print title according to print originator (remote or local to TFT)
+  clearInfoFile();                      // as last, clear and free memory for file list
+
   progDisplayType = infoSettings.prog_disp_type;
 
   // layer number can be parsed only when TFT reads directly the G-code file

@@ -211,7 +211,7 @@ bool f_remove_full_dir(const TCHAR* path)
   char dirBuffer[BUFFER_SIZE];
   FILINFO tmpInfo;
 
-  strxcpy(dirBuffer, path, BUFFER_SIZE);
+  strncpy_no_pad(dirBuffer, path, BUFFER_SIZE);
   if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK)
   {
     return true;

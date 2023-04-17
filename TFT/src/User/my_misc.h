@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <string.h>
+#include <string.h>  // for size_t
 
 // Menu Macros
 #define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
@@ -64,7 +64,7 @@ extern "C" {
 
 #define strncpy(...) \
   do { \
-    _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strxcpy(), strwcpy() or strscpy().\""); \
+    _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strncpy_pad() or strncpy_no_pad()\""); \
   } while (0)
 
 uint8_t inRange(int cur, int tag , int range);
@@ -78,10 +78,9 @@ uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num);    // str
 uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str);  // uint32 convert to string, MSB
 void time_2_string(char *buf, char *str_format, uint32_t time);           // convert time to string with given formatting
 
-double strtod_ligth(char *str, char **endptr);  // light weight strtod() function without exponential support
-void strxcpy(char * destination, const char * source, size_t num);
-void strwcpy(char * destination, const char * source, size_t num);
-void strscpy(char * destination, const char * source, size_t num);
+double strtod_ligth(char *str, char **endptr);               // light weight strtod() function without exponential support
+void strncpy_pad(char *dest, const char *src, size_t n);     // light weight and safe strncpy() function with padding
+void strncpy_no_pad(char *dest, const char *src, size_t n);  // light weight and safe strncpy() function without padding
 
 const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string

@@ -26,6 +26,12 @@ typedef struct
 
 typedef enum
 {
+  KEYBOARD_VIEW = 0,
+  TERMINAL_VIEW
+} TERMINAL_WINDOW;
+
+typedef enum
+{
   GKEY_PREV = 0,
   GKEY_NEXT,
   GKEY_CLEAR,
@@ -310,12 +316,7 @@ const uint16_t fontSrcColor[3][3] = {
 KEYBOARD_DATA * keyboardData;
 TERMINAL_DATA * terminalData;
 char * terminalBuf;
-
-enum
-{
-  KEYBOARD_VIEW = 0,
-  TERMINAL_VIEW,
-} curView = KEYBOARD_VIEW;
+TERMINAL_WINDOW curView = KEYBOARD_VIEW;
 
 bool numpad =
   #if defined(KB_TYPE_QWERTY)
@@ -666,7 +667,6 @@ static inline void saveGcodeTerminalCache(const char * str, uint16_t strLen)
 
 void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX portIndex, TERMINAL_SRC src)
 {
-
   #ifdef TERMINAL_KEYBOARD_VIEW_SUPPRESS_ACK
     if (curView == KEYBOARD_VIEW)
       return;
