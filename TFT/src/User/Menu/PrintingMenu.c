@@ -122,11 +122,19 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
+// set the print title according to the print originator (remote or local to TFT)
+static void setPrintTitle(void)
+{
+  snprintf(title, MAX_TITLE_LEN, "%s%s%c", getFS(), getPrintFilename(), '\0');
+
+  hideExtension(title);
+}
+
 // initialize printing info before opening Printing menu
 static void initMenuPrinting(void)
 {
-  getPrintTitle(title, MAX_TITLE_LEN);  // get print title according to print originator (remote or local to TFT)
-  clearInfoFile();                      // as last, clear and free memory for file list
+  setPrintTitle();  // set the print title according to the print originator (remote or local to TFT)
+  clearInfoFile();  // as last, clear and free memory for file list
 
   progDisplayType = infoSettings.prog_disp_type;
 

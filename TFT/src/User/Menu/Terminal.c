@@ -26,12 +26,6 @@ typedef struct
 
 typedef enum
 {
-  KEYBOARD_VIEW = 0,
-  TERMINAL_VIEW
-} TERMINAL_WINDOW;
-
-typedef enum
-{
   GKEY_PREV = 0,
   GKEY_NEXT,
   GKEY_CLEAR,
@@ -316,7 +310,12 @@ const uint16_t fontSrcColor[3][3] = {
 KEYBOARD_DATA * keyboardData;
 TERMINAL_DATA * terminalData;
 char * terminalBuf;
-TERMINAL_WINDOW curView = KEYBOARD_VIEW;
+
+enum
+{
+  KEYBOARD_VIEW = 0,
+  TERMINAL_VIEW
+} curView = KEYBOARD_VIEW;
 
 bool numpad =
   #if defined(KB_TYPE_QWERTY)

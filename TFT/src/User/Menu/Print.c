@@ -85,8 +85,6 @@ void gocdeIconDraw(void)
   // draw gcode files
   for (; (baseIndex + i < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
   {
-    restoreFilenameExtension(baseIndex + i - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
-
     if (enterFolder(infoFile.file[baseIndex + i - infoFile.folderCount]) == false)  // always use short filename for file path
       break;
 
@@ -99,8 +97,7 @@ void gocdeIconDraw(void)
 
     exitFolder();
 
-    hideFilenameExtension(baseIndex + i - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[baseIndex + i - infoFile.folderCount]);  // always use short filename
+    normalNameDisp(&gcodeRect[i], (uint8_t *)hideExtension(infoFile.file[baseIndex + i - infoFile.folderCount]));  // always use short filename
   }
 
   // clear blank icons
@@ -126,7 +123,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFilenameExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+    setDynamicLabel(itemPos, hideExtension(getFilename(index - infoFile.folderCount)));  // hide filename extension if filename extension feature is disabled
   }
 }
 
@@ -150,7 +147,7 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFilenameExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
+    char * filename = restoreExtension(getFilename(infoFile.fileIndex));  // restore filename extension if filename extension feature is disabled
 
     if (infoHost.connected != true || enterFolder(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
