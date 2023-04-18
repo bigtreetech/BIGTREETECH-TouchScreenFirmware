@@ -14,9 +14,9 @@ void zOffsetNotifyError(bool isStarted)
     sprintf(tempMsg, "%s", textSelect(LABEL_HOME_OFFSET));
 
   if (!isStarted)
-    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_OFF));
+    sprintf(strchr(tempMsg, '\0'), " %s", textSelect(LABEL_OFF));
   else
-    sprintf(&tempMsg[strlen(tempMsg)], " %s", textSelect(LABEL_ON));
+    sprintf(strchr(tempMsg, '\0'), " %s", textSelect(LABEL_ON));
 
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
