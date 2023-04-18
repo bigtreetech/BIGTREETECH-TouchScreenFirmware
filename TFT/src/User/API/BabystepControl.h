@@ -8,7 +8,7 @@ extern "C" {
 #include <stdint.h>
 
 // Set current babystep value
-void babystepSetValue(float value);
+void babystepSetValue(const float value);
 
 // Get current babystep value
 float babystepGetValue(void);

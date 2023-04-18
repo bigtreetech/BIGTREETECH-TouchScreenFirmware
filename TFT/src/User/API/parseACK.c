@@ -764,11 +764,11 @@ void parseACK(void)
       sprintf(tmpMsg, "Mean: %0.5f", ack_value());
 
       if (ack_continue_seen("Min: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nMin: %0.5f", ack_value());
       if (ack_continue_seen("Max: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nMax: %0.5f", ack_value());
       if (ack_continue_seen("Range: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nRange: %0.5f", ack_value());
 
       popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
     }

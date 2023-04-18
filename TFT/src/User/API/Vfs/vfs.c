@@ -217,7 +217,7 @@ bool addFile(bool isFile, const char * shortName, const char * longName)
   if (sName == NULL)  // in case of error, exit
     return false;
 
-  strncpy_pad(sName, shortName, sNameLen);  // copy to "sName" and set to NULL the flag for filename extension check, if any
+  strxcpy(sName, shortName, sNameLen);  // copy to "sName" and set to NULL the flag for filename extension check, if any
 
   //
   // get long name, if any
@@ -237,7 +237,7 @@ bool addFile(bool isFile, const char * shortName, const char * longName)
       return false;
     }
 
-    strncpy_pad(lName, longName, lNameLen);  // copy to "lName" and set to NULL the flag for filename extension check, if any
+    strxcpy(lName, longName, lNameLen);  // copy to "lName" and set to NULL the flag for filename extension check, if any
   }
 
   //
@@ -286,8 +286,8 @@ char * hideExtension(char * filename)
 
     // if filename provides a supported filename extension then
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-    if (extPos != NULL && filename[strlen(filename) + 1] == '\0')
-      filename[extPos - filename] = 0;  // temporary hide filename extension
+    if (extPos != NULL && strchr(filename, '\0')[1] == '\0')
+      *extPos = 0;  // temporary hide filename extension
   }
 
   return filename;
@@ -357,7 +357,7 @@ bool getPrintTitle(char * buf, uint8_t len)
     return false;
   }
 
-  strncpy_pad(buf, getFS(), len);  // set source and set the flag for filename extension check
+  strxcpy(buf, getFS(), len);  // set source and set the flag for filename extension check
   strcat(buf, strPtr);             // append filename
   hideExtension(buf);              // hide filename extension if filename extension feature is disabled
 

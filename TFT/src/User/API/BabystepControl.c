@@ -7,7 +7,7 @@ static float babystep_value = BABYSTEP_DEFAULT_VALUE;
 #define BABYSTEP_CMD_SMW "G43.2 Z%.2f\n"
 
 // Set current babystep value
-void babystepSetValue(float value)
+void babystepSetValue(const float value)
 {
   babystep_value = value;
 }
