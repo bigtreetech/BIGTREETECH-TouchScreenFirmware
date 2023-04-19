@@ -11,8 +11,13 @@ int16_t origLevelEdge = -1;
 uint8_t getLevelEdgeMin(void)
 {
   // min edge limit for the probe with probe offset set in parseACK.c
-  return MAX(ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_X)),
-             ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y))) + 1;
+  int16_t maxXedge = infoParameters.ProbeOffset[AXIS_INDEX_X] + infoParameters.HomeOffset[AXIS_INDEX_X];
+  int16_t maxYedge = infoParameters.ProbeOffset[AXIS_INDEX_Y] + infoParameters.HomeOffset[AXIS_INDEX_Y];
+
+  maxXedge = ABS(maxXedge);
+  maxYedge = ABS(maxYedge);
+
+  return MAX(maxXedge, maxYedge) + 1;
 }
 
 uint8_t getLevelEdgeDefault(void)
@@ -104,9 +109,6 @@ void menuLevelCorner(void)
 
   if (origLevelEdge < 0)  // initialize leveling edge value to be used for leveling corner if not yet initialized (-1)
   {
-    mustStoreCmd(UNLOCK_STEPPER_CMD);  // disarm all steppers just to force initial homing
-    mustStoreCmd(LOCK_STEPPER_CMD);
-
     origLevelEdge = infoSettings.level_edge;          // save leveling edge value to restore after leveling corner completion
     infoSettings.level_edge = getLevelEdgeDefault();  // set leveling edge value for leveling corner
   }
@@ -162,23 +164,15 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_6:
-        for (int i = LEVEL_BOTTOM_LEFT; i < LEVELING_POINT_COUNT - 1; i++)
+        for (int i = LEVEL_BOTTOM_LEFT; i <= LEVEL_TOP_LEFT; i++)
         {
-          levelingProbePoint(i);
-
-          while (isNotEmptyCmdQueue())  // wait for the communication to be clean
-          {
-            loopProcess();
-
-            checkRefreshValue(&levelCornerItems);
-          }
+          levelingProbePoint(i);  // it uses "mustStoreCmd()" which waits for the command queue to have an empty slot
+          loopProcess();
         }
 
         break;
 
       case KEY_ICON_7:
-        mustStoreCmd(UNLOCK_STEPPER_CMD);
-
         infoSettings.level_edge = origLevelEdge;  // restore original leveling edge value
         origLevelEdge = -1;
         CLOSE_MENU();

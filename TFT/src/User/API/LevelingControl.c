@@ -10,12 +10,18 @@ typedef struct XY_coord
 LEVELING_POINT probedPoint = LEVEL_NO_POINT;  // last probed point or LEVEL_NO_POINT in case of no new updates
 float probedZ = 0.0f;                         // last Z offset measured by probe
 
+int16_t setCoordValue(AXIS axis, ALIGN_POSITION align)
+{
+  return ((align == LEFT || align == BOTTOM) ? infoSettings.machine_size_min[axis] + infoSettings.level_edge
+                                             : infoSettings.machine_size_max[axis] - infoSettings.level_edge) - infoParameters.HomeOffset[axis];
+}
+
 void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
 {
-  int16_t x_left = ((infoSettings.machine_size_min[X_AXIS] < 0) ? 0 : infoSettings.machine_size_min[X_AXIS]) + infoSettings.level_edge;
-  int16_t x_right = infoSettings.machine_size_max[X_AXIS] - infoSettings.level_edge;
-  int16_t y_bottom = ((infoSettings.machine_size_min[Y_AXIS] < 0) ? 0 : infoSettings.machine_size_min[Y_AXIS]) + infoSettings.level_edge;
-  int16_t y_top = infoSettings.machine_size_max[Y_AXIS] - infoSettings.level_edge;
+  int16_t x_left = setCoordValue(X_AXIS, LEFT);
+  int16_t x_right = setCoordValue(X_AXIS, RIGHT);
+  int16_t y_bottom = setCoordValue(Y_AXIS, LEFT);
+  int16_t y_top = setCoordValue(Y_AXIS, RIGHT);
 
   if (GET_BIT(infoSettings.inverted_axis, X_AXIS))
   { // swap left and right
