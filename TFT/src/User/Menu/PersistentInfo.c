@@ -1,6 +1,11 @@
 #include "PersistentInfo.h"
 #include "includes.h"
 
+// global Info
+#define GLOBALICON_WIDTH    (BYTE_WIDTH * 2)
+#define GLOBALICON_HEIGHT   GLOBALICON_WIDTH
+#define GLOBALICON_INTERVAL 2
+
 // check current menu to avoid display info
 bool temperatureStatusValid(void)
 {

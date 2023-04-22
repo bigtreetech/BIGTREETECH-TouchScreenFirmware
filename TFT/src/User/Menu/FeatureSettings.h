@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-void resetSettings(void);
 void menuFeatureSettings(void);
 
 #ifdef __cplusplus

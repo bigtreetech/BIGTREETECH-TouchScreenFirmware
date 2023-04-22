@@ -51,6 +51,13 @@ typedef enum
   SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
 
+void resetSettings(void)
+{
+  initSettings();
+  storePara();
+  popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
+}
+
 // perform action on button press
 void updateFeatureSettings(uint8_t item_index)
 {
@@ -197,13 +204,6 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
     }
   }
 }  // loadFeatureSettings
-
-void resetSettings(void)
-{
-  initSettings();
-  storePara();
-  popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
-}
 
 void menuFeatureSettings(void)
 {

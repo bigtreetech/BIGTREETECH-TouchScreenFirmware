@@ -1,6 +1,12 @@
 #include "Fan.h"
 #include "includes.h"
 
+typedef struct
+{
+  uint8_t cur;
+  uint8_t set;
+} LASTFAN;
+
 static uint8_t fan_index = 0;
 
 void menuFan(void)

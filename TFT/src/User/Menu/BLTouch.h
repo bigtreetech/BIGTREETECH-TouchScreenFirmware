@@ -12,7 +12,9 @@ typedef enum
   HS_DISABLED
 } BLT_HS_MODE;
 
+// called by parseAck() to notify BLTouch mode status
 void setHSmode(BLT_HS_MODE hsMode);
+
 void menuBLTouch(void);
 
 #ifdef __cplusplus

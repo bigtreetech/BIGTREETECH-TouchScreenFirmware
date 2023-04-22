@@ -1,6 +1,12 @@
 #include "Speed.h"
 #include "includes.h"
 
+typedef struct
+{
+  uint8_t cur;
+  uint8_t set;
+} LASTSPEED;
+
 const ITEM itemPercentType[SPEED_NUM] = {
   // icon                        label
   {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
