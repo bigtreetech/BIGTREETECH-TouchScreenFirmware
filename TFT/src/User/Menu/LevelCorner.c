@@ -11,8 +11,8 @@ int16_t origLevelEdge = -1;
 uint8_t getLevelEdgeMin(void)
 {
   // min edge limit for the probe with probe offset set in parseACK.c
-  int16_t maxXedge = infoParameters.ProbeOffset[AXIS_INDEX_X] + infoParameters.HomeOffset[AXIS_INDEX_X];
-  int16_t maxYedge = infoParameters.ProbeOffset[AXIS_INDEX_Y] + infoParameters.HomeOffset[AXIS_INDEX_Y];
+  int16_t maxXedge = getParameter(P_PROBE_OFFSET, AXIS_INDEX_X) + getParameter(P_HOME_OFFSET, AXIS_INDEX_X);
+  int16_t maxYedge = getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y) + getParameter(P_HOME_OFFSET, AXIS_INDEX_Y);
 
   maxXedge = ABS(maxXedge);
   maxYedge = ABS(maxYedge);
@@ -166,8 +166,15 @@ void menuLevelCorner(void)
       case KEY_ICON_6:
         for (int i = LEVEL_BOTTOM_LEFT; i <= LEVEL_TOP_LEFT; i++)
         {
-          levelingProbePoint(i);  // it uses "mustStoreCmd()" which waits for the command queue to have an empty slot
-          loopProcess();
+          levelingProbePoint(i);
+
+          // following loop needed to guarantee the value for each point beeing probed is updated at least one time on the menu
+          while (isNotEmptyCmdQueue())
+          {
+            loopProcess();
+
+            checkRefreshValue(&levelCornerItems);
+          }
         }
 
         break;

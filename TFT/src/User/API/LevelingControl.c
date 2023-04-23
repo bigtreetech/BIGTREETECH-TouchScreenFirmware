@@ -20,8 +20,8 @@ void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
 {
   int16_t x_left = setCoordValue(X_AXIS, LEFT);
   int16_t x_right = setCoordValue(X_AXIS, RIGHT);
-  int16_t y_bottom = setCoordValue(Y_AXIS, LEFT);
-  int16_t y_top = setCoordValue(Y_AXIS, RIGHT);
+  int16_t y_bottom = setCoordValue(Y_AXIS, BOTTOM);
+  int16_t y_top = setCoordValue(Y_AXIS, TOP);
 
   if (GET_BIT(infoSettings.inverted_axis, X_AXIS))
   { // swap left and right
