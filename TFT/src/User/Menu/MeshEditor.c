@@ -10,6 +10,14 @@
 #define MESH_LINE_EDGE_DISTANCE    4
 
 // data structures
+typedef struct
+{
+  const uint8_t colsToSkip;
+  const uint8_t rowsToSkip;
+  const bool rowsInverted;
+  const char *const echoMsg;
+} MESH_DATA_FORMAT;
+
 typedef enum
 {
   ME_DATA_IDLE = 0,
@@ -232,13 +240,7 @@ const char *const meshKeyString[ME_KEY_NUM] = {
   "\u02C5",  // DOWN
 };
 
-const struct
-{
-  const uint8_t colsToSkip;
-  const uint8_t rowsToSkip;
-  const bool rowsInverted;
-  const char *const echoMsg;
-} meshDataFormat[] = {
+const MESH_DATA_FORMAT meshDataFormat[] = {
   // columns to skip, rows to skip, rows inverted, bed leveling data type
   {                1,            4,          true, "Mesh Bed Level data:"},            // MBL
   {                0,            2,         false, "Bed Topography Report for CSV:"},  // UBL
@@ -533,17 +535,17 @@ static inline void meshDrawButton(const uint8_t index, const uint8_t isPressed)
 
   if (isPressed)
   {
-    if (index == ME_KEY_EDIT)
-      color = MESH_FONT_COLOR;
-    else
+    if (index != ME_KEY_EDIT)
       color = MESH_BORDER_COLOR;
+    else
+      color = MESH_FONT_COLOR;
   }
   else
   {
-    if (index == ME_KEY_EDIT)
-      color = MESH_BORDER_COLOR;
-    else
+    if (index != ME_KEY_EDIT)
       color = MESH_BG_COLOR;
+    else
+      color = MESH_BORDER_COLOR;
   }
 
   drawBorder(&meshKeyRect[index], color, 1);
@@ -778,7 +780,8 @@ void meshUpdateData(char *dataRow)
     snprintf(tempMsg, MAX_STRING_LENGTH, "%s\n-> %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
-    CLOSE_MENU();  // trigger exit from mesh editor menu
+    // trigger exit from mesh editor menu. It avoids to loop in case of persistent error
+    CLOSE_MENU();
   }
 }
 
