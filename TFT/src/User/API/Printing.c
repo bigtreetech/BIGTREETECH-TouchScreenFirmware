@@ -49,33 +49,35 @@ bool getRunoutAlarm(void)
   return filamentRunoutAlarm;
 }
 
-void clearQueueAndRunoutAlarm(void)
+void clearQueueAndMore(void)
 {
   clearCmdQueue();
   setRunoutAlarmFalse();
+  heatSetUpdateWaiting(false);
+  setPrintUpdateWaiting(false);
 }
 
 void breakAndContinue(void)
 {
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
   sendEmergencyCmd("M108\n");
 }
 
 void resumeAndPurge(void)
 {
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
   sendEmergencyCmd("M876 S0\n");
 }
 
 void resumeAndContinue(void)
 {
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
   sendEmergencyCmd("M876 S1\n");
 }
 
 void abortAndTerminate(void)
 {
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
@@ -114,7 +116,7 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
 
   // remove any enqueued command that could come from a supplementary serial port or TFT media
   // (if printing from remote host or TFT media) during the loop above
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
 }
 
 void setPrintExpectedTime(uint32_t expectedTime)
@@ -566,7 +568,7 @@ void abortPrint(void)
 
   loopDetected = true;
 
-  clearQueueAndRunoutAlarm();
+  clearQueueAndMore();
 
   switch (infoFile.source)
   {

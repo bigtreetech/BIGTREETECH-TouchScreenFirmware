@@ -199,13 +199,11 @@ bool moveCacheToCmd(void)
   return true;
 }
 
-// Clear all gcode cmd in cmdQueue queue when printing is aborted.
+// Clear all gcode cmd in cmdQueue queue.
 void clearCmdQueue(void)
 {
   cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
   cmdCache.count = cmdCache.index_w = cmdCache.index_r = 0;
-  heatSetUpdateWaiting(false);
-  setPrintUpdateWaiting(false);
 }
 
 // Strip out any leading space from the passed command.

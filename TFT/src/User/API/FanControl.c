@@ -13,8 +13,15 @@ static uint8_t needSetFanSpeed = 0;
 static bool ctrlFanQueryWait = false;
 static uint32_t nextCtrlFanTime = 0;
 
+void fanResetSpeed(void)
+{
+  needSetFanSpeed = 0;
+  memset(setFanSpeed, 0, sizeof(setFanSpeed));
+  memset(curFanSpeed, 0, sizeof(curFanSpeed));
+}
+
 // Check whether the index is a valid fan index.
-bool fanIsValid(uint8_t index)
+bool fanIsValid(const uint8_t index)
 {
   if (index >= infoSettings.fan_count && index < MAX_COOLING_FAN_COUNT)  // invalid cooling fan index
     return false;
@@ -26,45 +33,43 @@ bool fanIsValid(uint8_t index)
     return true;
 }
 
-void fanSetSpeed(uint8_t i, uint8_t speed)
+void fanSetSpeed(const uint8_t i, const uint8_t speed)
 {
   SET_BIT_VALUE(needSetFanSpeed, i, fanGetCurSpeed(i) != speed);
   setFanSpeed[i] = speed;
 }
 
-uint8_t fanGetSetSpeed(uint8_t i)
+uint8_t fanGetSetSpeed(const uint8_t i)
 {
   return setFanSpeed[i];
 }
 
-void fanSetPercent(uint8_t i, uint8_t percent)
+void fanSetPercent(const uint8_t i, const uint8_t percent)
 {
-  percent = NOBEYOND(0, percent, 100);
-  fanSetSpeed(i, (percent * infoSettings.fan_max[i]) / 100);
+  fanSetSpeed(i, (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100);
 }
 
-uint8_t fanGetSetPercent(uint8_t i)
+uint8_t fanGetSetPercent(const uint8_t i)
 {
   return (setFanSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
-void fanSetCurSpeed(uint8_t i, uint8_t speed)
+void fanSetCurSpeed(const uint8_t i, const uint8_t speed)
 {
   curFanSpeed[i] = speed;
 }
 
-uint8_t fanGetCurSpeed(uint8_t i)
+uint8_t fanGetCurSpeed(const uint8_t i)
 {
   return curFanSpeed[i];
 }
 
-void fanSetCurPercent(uint8_t i, uint8_t percent)
+void fanSetCurPercent(const uint8_t i, const uint8_t percent)
 {
-  percent = NOBEYOND(0, percent, 100);
-  curFanSpeed[i] = (percent * infoSettings.fan_max[i]) / 100;
+  curFanSpeed[i] = (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100;
 }
 
-uint8_t fanGetCurPercent(uint8_t i)
+uint8_t fanGetCurPercent(const uint8_t i)
 {
   return (curFanSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
@@ -85,7 +90,7 @@ void loopFan(void)
   }
 }
 
-void ctrlFanQuerySetWait(bool wait)
+void ctrlFanQuerySetWait(const bool wait)
 {
   ctrlFanQueryWait = wait;
 }
