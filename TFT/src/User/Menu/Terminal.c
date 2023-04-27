@@ -630,6 +630,7 @@ static inline void menuKeyboardView(void)
       lastIndex = nowIndex;  // update gcode size
       gcodeBuf[nowIndex] = '\0';
       drawGcodeText(gcodeBuf);
+
       if (*gcodeBuf == '\0')  // text area empty
       {
         for (uint8_t i = 0; i < GKEY_SEND; i++)  // draw text box keys

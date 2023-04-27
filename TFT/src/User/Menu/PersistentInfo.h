@@ -5,12 +5,7 @@
 extern "C" {
 #endif
 
-#include "menu.h"
-
-// Global Info
-#define GLOBALICON_WIDTH    (BYTE_WIDTH * 2)
-#define GLOBALICON_HEIGHT   GLOBALICON_WIDTH
-#define GLOBALICON_INTERVAL 2
+#include <stdint.h>
 
 void loopTemperatureStatus(void);
 int16_t drawTemperatureStatus(void);

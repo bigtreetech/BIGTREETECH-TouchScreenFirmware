@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include <stdint.h>
-#include "menu.h"
 #include "Settings.h"
 
 void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redrawIcon);

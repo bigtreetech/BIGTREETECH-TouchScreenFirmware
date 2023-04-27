@@ -10,6 +10,14 @@
 #define MESH_LINE_EDGE_DISTANCE    4
 
 // data structures
+typedef struct
+{
+  const uint8_t colsToSkip;
+  const uint8_t rowsToSkip;
+  const bool rowsInverted;
+  const char *const echoMsg;
+} MESH_DATA_FORMAT;
+
 typedef enum
 {
   ME_DATA_IDLE = 0,
@@ -232,13 +240,7 @@ const char *const meshKeyString[ME_KEY_NUM] = {
   "\u02C5",  // DOWN
 };
 
-const struct
-{
-  const uint8_t colsToSkip;
-  const uint8_t rowsToSkip;
-  const bool rowsInverted;
-  const char *const echoMsg;
-} meshDataFormat[] = {
+const MESH_DATA_FORMAT meshDataFormat[] = {
   // columns to skip, rows to skip, rows inverted, bed leveling data type
   {                1,            4,          true, "Mesh Bed Level data:"},            // MBL
   {                0,            2,         false, "Bed Topography Report for CSV:"},  // UBL
@@ -250,7 +252,7 @@ const char * meshErrorMsg[] = {"Invalid mesh"};  // list of possible error respo
 
 static MESH_DATA *meshData = NULL;
 
-void meshInitData(void)
+static inline void meshInitData(void)
 {
   if (meshData == NULL)
     return;
@@ -270,7 +272,7 @@ void meshInitData(void)
   meshData->gDelta = meshData->gEnd - meshData->gStart;
   meshData->bDelta = meshData->bEnd - meshData->bStart;
 
-  // meshData->status = ME_DATA_IDLE;  // left here for code understanding, init done already by memset()
+  // meshData->status = ME_DATA_IDLE;  // init already done by memset() (ME_DATA_IDLE is 0 as the value used by memset())
 }
 
 static inline void meshAllocData(void)
@@ -357,29 +359,39 @@ void meshSaveCallback(void)
     menuUBLSave();
   else if (infoMachineSettings.leveling != BL_DISABLED)
     saveEepromSettings();
+
+  if (meshData != NULL)
+    memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));  // align data only after save confirmation
 }
 
-void meshUpdateIndex(MESH_KEY_VALUES key_num)
+static inline void meshUpdateIndex(MESH_KEY_VALUES key_num)
 {
   switch (key_num)
   {
     case ME_KEY_UP:
-       meshData->row = (meshData->rowsNum + meshData->row - 1) % meshData->rowsNum;
-       break;
+      meshData->row = (meshData->rowsNum + meshData->row - 1) % meshData->rowsNum;
+      break;
 
     case ME_KEY_DOWN:
-       meshData->row = (meshData->row + 1) % meshData->rowsNum;
-       break;
+      meshData->row = (meshData->row + 1) % meshData->rowsNum;
+      break;
 
     case ME_KEY_PREV:
     case ME_KEY_DECREASE:
-       meshData->col = (meshData->colsNum + meshData->col - 1) % meshData->colsNum;
-       break;
-
     case ME_KEY_NEXT:
     case ME_KEY_INCREASE:
-       meshData->col = (meshData->col + 1) % meshData->colsNum;
-       break;
+    {
+      uint16_t index;
+
+      if (key_num == ME_KEY_PREV || key_num == ME_KEY_DECREASE)
+        index = meshData->index > 0 ? meshData->index - 1 : meshData->dataSize - 1;
+      else
+        index = meshData->index < meshData->dataSize - 1 ? meshData->index + 1 : 0;
+
+      meshData->col = index % meshData->colsNum;
+      meshData->row = index / meshData->colsNum;
+      break;
+    }
 
     default:
       break;
@@ -388,34 +400,52 @@ void meshUpdateIndex(MESH_KEY_VALUES key_num)
   meshData->index = meshData->row * meshData->colsNum + meshData->col;
 }
 
-static inline uint16_t meshGetRealRow(void)
+uint16_t meshGetJ(void)
 {
-  return meshData->rowsInverted ? (meshData->rowsNum - 1) - meshData->row : meshData->row;
+  // J index (independent by data format) to be used by G42 (mesh tuner menu) and M421 (meshSetValue() function).
+  // Bed's top left point -> J = max row index
+  // Bed's bottom left point -> J = 0
+  return (meshData->rowsNum - 1) - meshData->row;
 }
 
 static inline void meshSetValue(void)
 {
-  storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetRealRow(), meshData->curData[meshData->index]);
+  storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetJ(), meshData->curData[meshData->index]);
 }
 
 static inline void meshUpdateValueMinMax(void)
 {
-  meshData->valueMin = meshData->valueMax = 0;
+  float value;
+  bool isValueChanged = true;  // initialized to "true" just to set meshData->valueDelta at least one time
+
+  meshData->valueMin = meshData->valueMax = meshData->curData[0];  // init initial min/max values
 
   for (uint16_t i = 0; i < meshData->dataSize; i++)
   {
-    if(meshData->curData[i] < meshData->valueMin)
-      meshData->valueMin = meshData->curData[i];
-    if(meshData->curData[i] > meshData->valueMax)
-      meshData->valueMax = meshData->curData[i];
-  }
+    value = meshData->curData[i];
+    isValueChanged = false;
 
-  meshData->valueDelta = meshData->valueMax - meshData->valueMin;
+    if (value < meshData->valueMin)
+    {
+      meshData->valueMin = value;
+
+      isValueChanged = true;
+    }
+    else if (value > meshData->valueMax)
+    {
+      meshData->valueMax = value;
+
+      isValueChanged = true;
+    }
+
+    if (isValueChanged)
+      meshData->valueDelta = meshData->valueMax - meshData->valueMin;
+  }
 }
 
 uint16_t mapRGBdata(uint16_t * rgbStart, int16_t * rgbDelta, float * valueDiff, float * valueDelta)
 {
-  return *rgbStart + *valueDiff * *rgbDelta / *valueDelta;
+  return *rgbStart + (*valueDiff * *rgbDelta) / *valueDelta;
 }
 
 uint16_t meshGetRGBColor(const float value)
@@ -496,7 +526,7 @@ void meshDrawInfo(const bool drawMinMax)
   drawStandardValue(&meshInfoRect[ME_INFO_CUR], VALUE_FLOAT, &meshData->curData[meshData->index], FONT_SIZE_LARGE, MESH_FONT_COLOR, MESH_BORDER_COLOR, 4, true);
 }
 
-void meshDrawButton(const uint8_t index, const uint8_t isPressed)
+static inline void meshDrawButton(const uint8_t index, const uint8_t isPressed)
 {
   if (index >= ME_KEY_NUM)
     return;
@@ -505,17 +535,17 @@ void meshDrawButton(const uint8_t index, const uint8_t isPressed)
 
   if (isPressed)
   {
-    if (index == ME_KEY_EDIT)
-      color = MESH_FONT_COLOR;
-    else
+    if (index != ME_KEY_EDIT)
       color = MESH_BORDER_COLOR;
+    else
+      color = MESH_FONT_COLOR;
   }
   else
   {
-    if (index == ME_KEY_EDIT)
-      color = MESH_BORDER_COLOR;
-    else
+    if (index != ME_KEY_EDIT)
       color = MESH_BG_COLOR;
+    else
+      color = MESH_BORDER_COLOR;
   }
 
   drawBorder(&meshKeyRect[index], color, 1);
@@ -524,14 +554,14 @@ void meshDrawButton(const uint8_t index, const uint8_t isPressed)
   GUI_SetColor(MESH_FONT_COLOR);
 }
 
-void meshDrawKeyboard(void)
+static inline void meshDrawKeyboard(void)
 {
   // draw buttons
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
   for (uint8_t i = 0; i < ME_KEY_NUM; i++)
   {
-    if (i > ME_KEY_EDIT)                                   // if not a unicode string
+    if (i > ME_KEY_EDIT)  // if not a unicode string
       drawStandardValue(&meshKeyRect[i], VALUE_STRING, meshKeyString[i], FONT_SIZE_LARGE, MESH_FONT_COLOR, MESH_BG_COLOR, 3, true);
   }
 
@@ -557,11 +587,11 @@ void meshDrawMenu(void)
   GUI_SetColor(MESH_BORDER_COLOR);
 
   // draw area borders
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_GRID]);              // draw grid area borders
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_INFO]);              // draw info area borders
-  GUI_DrawPrect(&meshAreaRect[ME_AREA_KEY]);               // draw key borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_GRID]);     // draw grid area borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_INFO]);     // draw info area borders
+  GUI_DrawPrect(&meshAreaRect[ME_AREA_KEY]);      // draw key borders
   #ifdef PORTRAIT_MODE
-    GUI_DrawPrect(&meshAreaRect[ME_AREA_ARROW]);           // draw arrow area borders
+    GUI_DrawPrect(&meshAreaRect[ME_AREA_ARROW]);  // draw arrow area borders
   #endif
 
   // draw value area borders (outer)
@@ -587,7 +617,7 @@ void meshSave(void)
     popupDialog(DIALOG_TYPE_QUESTION, (uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, meshSaveCallback, NULL, NULL);
 }
 
-bool meshIsWaitingFirstData(void)
+static inline bool meshIsWaitingFirstData(void)
 { // just avoid to merge on the same "if" statement a check on NULL value and an access
   // to attributes of the data structure meshData due to different compiler optimization
   // settings (that could evaluate all the conditions in the "if" statement, causing a crash)
@@ -607,7 +637,7 @@ bool meshIsWaitingData(void)
   if (meshData == NULL)  // if mesh editor is not running
     return false;
 
-  if (meshData->status == ME_DATA_FULL || meshData->status == ME_DATA_FAILED)  // is not waiting for data
+  if (meshData->status == ME_DATA_FULL || meshData->status == ME_DATA_FAILED)  // if not waiting for data
     return false;
 
   return true;
@@ -645,7 +675,7 @@ uint16_t meshParseDataRow(char *dataRow, float *dataGrid, const uint16_t maxCoun
   return count;
 }
 
-void processGridData(void)
+static inline void processGridData(void)
 {
   if (meshData->rowsInverted)  // store grid data with the rows in inverse order
   {
@@ -668,7 +698,7 @@ void meshUpdateData(char *dataRow)
 {
   bool failed = false;
 
-  if (meshIsWaitingFirstData())  // if waiting mesh type/format data
+  if (meshIsWaitingFirstData())  // if waiting for mesh type/format data
   {
     meshData->parsedRows++;
 
@@ -681,6 +711,7 @@ void meshUpdateData(char *dataRow)
       if (processKnownDataFormat(dataRow))  // if known data format, change state to EMPTY to enable the mesh parsing
       {
         meshData->status = ME_DATA_EMPTY;
+
         meshData->parsedRows = 1;
       }
 
@@ -698,11 +729,12 @@ void meshUpdateData(char *dataRow)
 
     if (meshData->status == ME_DATA_EMPTY)  // if data grid is empty, parse the data row and set the data grid columns number
     {
-      count = meshParseDataRow(dataRow, meshData->oriData, MESH_GRID_MAX_POINTS_X);
+      count = meshParseDataRow(dataRow, &(meshData->oriData[0]), MESH_GRID_MAX_POINTS_X);
 
       if (count > 0)  // if number of columns in the parsed data row is at least 1, set the data grid columns number
       {
         meshData->status = ME_DATA_WAITING;
+
         meshData->colsNum = count;
         meshData->rowsNum = 1;
       }
@@ -711,7 +743,8 @@ void meshUpdateData(char *dataRow)
     {
       count = meshParseDataRow(dataRow, &(meshData->oriData[meshData->rowsNum * meshData->colsNum]), meshData->colsNum);
 
-      if (count == meshData->colsNum)  // if number of columns in the parsed data row matches the data grid columns number, update the data grid rows number
+      // if number of columns in the parsed data row matches the data grid columns number, update the data grid rows number
+      if (count == meshData->colsNum)
       {
         meshData->rowsNum++;
       }
@@ -719,9 +752,10 @@ void meshUpdateData(char *dataRow)
 
     meshData->parsedRows++;
 
+    // if zero columns are read or maximun rows numnber or maximum parsed rows number is reached
     if ((meshData->rowsNum >= 1 && count == 0) ||
       meshData->rowsNum == MESH_GRID_MAX_POINTS_Y ||
-      meshData->parsedRows >= MESH_MAX_PARSED_ROWS)  // if zero columns are read or maximun rows numnber or maximum parsed rows number is reached
+      meshData->parsedRows >= MESH_MAX_PARSED_ROWS)
     {
       if (meshData->colsNum == 0 || meshData->rowsNum == 0)  // if mesh grid is smaller than a 1x1 matrix, data grid is marked as failed
       {
@@ -743,10 +777,11 @@ void meshUpdateData(char *dataRow)
 
     meshData->status = ME_DATA_FAILED;
 
-    CLOSE_MENU();  // trigger exit from mesh editor menu
-
     snprintf(tempMsg, MAX_STRING_LENGTH, "%s\n-> %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
+
+    // trigger exit from mesh editor menu. It avoids to loop in case of persistent error
+    CLOSE_MENU();
   }
 }
 
@@ -794,7 +829,7 @@ void menuMeshEditor(void)
         if (coordinateIsKnown() == false)
           probeHeightHome();  // home, disable ABL and raise nozzle
 
-        meshData->curData[curIndex] = menuMeshTuner(meshData->col, meshGetRealRow(), meshData->curData[curIndex]);
+        meshData->curData[curIndex] = menuMeshTuner(meshData->col, meshGetJ(), meshData->curData[curIndex]);
         meshSetValue();
 
         meshDrawMenu();
@@ -816,11 +851,10 @@ void menuMeshEditor(void)
 
       case ME_KEY_SAVE:
         meshSave();
-        memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));
         break;
 
       case ME_KEY_OK:
-        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))
+        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // if data changed
           meshSave();
 
         meshDeallocData();
