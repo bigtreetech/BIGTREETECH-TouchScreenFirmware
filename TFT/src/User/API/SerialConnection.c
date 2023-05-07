@@ -176,7 +176,7 @@ uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
   //
   // NOTES:
   //   - this scenario typically happens when the TFT receives a burst of messages (e.g. the output for "M420 V1 T1").
-  //     The first fully received message (terminated by "\n") triggers the L1 cache as available
+  //     The first fully received message (terminated by "\n") is enough to trigger the L1 cache as available
   //     (infoHost.rx_ok[portIndex] set to "true") for reading
   //   - it is more safe to leave the following code line commented out just to avoid any possibility the
   //     L1 cache's interrupt handler is receiving (and triggering L1 cache as available) in the meanwhile
