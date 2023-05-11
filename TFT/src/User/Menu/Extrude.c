@@ -129,7 +129,13 @@ void menuExtrude(void)
     if (extrLength != 0)
     {
       if (curExtruder_index != heatGetCurrentTool())
+      {
         mustStoreCmd("%s\n", tool_change[curExtruder_index]);
+
+        // set the tool index now (don't wait for the T0/T1 response, which comes too late)
+        // just to allow warmupNozzle() function checks the temperature for the selected tool
+        heatSetCurrentTool(curExtruder_index);
+      }
 
       switch (warmupNozzle())
       {

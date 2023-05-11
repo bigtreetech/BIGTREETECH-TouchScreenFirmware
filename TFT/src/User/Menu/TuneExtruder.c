@@ -238,7 +238,13 @@ void menuTuneExtruder(void)
     if (loadRequested == true)
     {
       if (tool_index != heatGetCurrentTool())
+      {
         mustStoreCmd("%s\n", tool_change[tool_index]);
+
+        // set the tool index now (don't wait for the T0/T1 response, which comes too late)
+        // just to allow warmupNozzle() function checks the temperature for the selected tool
+        heatSetCurrentTool(tool_index);
+      }
 
       switch (warmupNozzle())
       {
