@@ -65,6 +65,8 @@ typedef struct
   uint8_t toolIndex;
 } HEATER;
 
+extern const char *const toolChange[];
+extern const char *const extruderDisplayID[];
 extern const char *const heaterID[];
 extern const char *const heatDisplayID[];
 extern const char *const heatShortID[];
