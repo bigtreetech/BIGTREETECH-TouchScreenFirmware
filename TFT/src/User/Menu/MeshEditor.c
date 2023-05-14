@@ -786,6 +786,7 @@ void meshUpdateData(char * dataRow)
 void menuMeshEditor(void)
 {
   MESH_KEY_VALUES key_num = ME_KEY_IDLE;
+  bool forceExit = false;
   uint16_t oldIndex;
   uint16_t curIndex;
 
@@ -852,10 +853,8 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_OK:
-        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // if data changed
-          meshSave();
+        forceExit = true;
 
-        meshDeallocData();
         CLOSE_MENU();
         break;
 
@@ -875,6 +874,14 @@ void menuMeshEditor(void)
     }
 
     loopProcess();
+  }
+
+  if (forceExit)
+  {
+    if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // check for changes
+      meshSave();
+
+    meshDeallocData();  // finally, deallocate mesh data (meshData no more accessible)
   }
 
   // restore default
