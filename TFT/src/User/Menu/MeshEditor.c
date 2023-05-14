@@ -360,7 +360,7 @@ void meshSaveCallback(void)
   else if (infoMachineSettings.leveling != BL_DISABLED)
     saveEepromSettings();
 
-  if (meshData != NULL)
+  if (meshData != NULL)  // if data have not been released (e.g. data are released when mesh editor menu is forced to exit)
     memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));  // align data only after save confirmation
 }
 
@@ -771,11 +771,12 @@ void meshUpdateData(char * dataRow)
 
   if (failed)
   {
-    char tempMsg[MAX_STRING_LENGTH];
-
     meshData->status = ME_DATA_FAILED;
 
+    char tempMsg[MAX_STRING_LENGTH];
+
     snprintf(tempMsg, MAX_STRING_LENGTH, "%s\n-> %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
+
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
     // trigger exit from mesh editor menu. It avoids to loop in case of persistent error
