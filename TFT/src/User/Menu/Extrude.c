@@ -16,7 +16,7 @@ void menuExtrude(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_LOAD,                    LABEL_LOAD},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_HEAT,                    LABEL_HEAT},
       {ICON_E_5_MM,                  LABEL_5_MM},
       {ICON_NORMAL_SPEED,            LABEL_NORMAL},
       {ICON_BACK,                    LABEL_BACK},
@@ -27,8 +27,12 @@ void menuExtrude(void)
   float extrLength = 0.0f;
   float extrAmount = 0.0f;
 
-  extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
-  extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
+  if (infoSettings.ext_count > 1)
+  {
+    extrudeItems.items[KEY_ICON_4].icon = ICON_NOZZLE;
+    extrudeItems.items[KEY_ICON_4].label.index = LABEL_NOZZLE;
+  }
+
   extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
   extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
