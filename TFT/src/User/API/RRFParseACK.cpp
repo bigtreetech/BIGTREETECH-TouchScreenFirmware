@@ -152,7 +152,7 @@ void ParseACKJsonParser::value(const char *value)
       speedSetCurPercent(0, strtod((char *)value, NULL));
       break;
     case efactor:
-      if (index == heatGetCurrentTool())
+      if (index == heatGetToolIndex())
       {
         speedSetCurPercent(1, strtod((char *)value, NULL));
       }

@@ -46,7 +46,7 @@ void loopSpeed(void)
 
     if (GET_BIT(needSetPercent, i) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))
+      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetToolIndex()))
       {
         SET_BIT_OFF(needSetPercent, i);
       }

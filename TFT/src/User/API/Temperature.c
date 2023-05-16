@@ -1,13 +1,13 @@
 #include "Temperature.h"
 #include "includes.h"
 
-const char *const toolChange[]                    = TOOL_CHANGE;
-const char *const extruderDisplayID[]             = EXTRUDER_ID;
-const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
-const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
-const char *const heatShortID[MAX_HEATER_COUNT]   = HEAT_SHORT_ID;
-const char *const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
-const char *const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
+const char * const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
+const char * const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
+const char * const heatShortID[MAX_HEATER_COUNT]   = HEAT_SHORT_ID;
+const char * const heatCmd[MAX_HEATER_COUNT]       = HEAT_CMD;
+const char * const heatWaitCmd[MAX_HEATER_COUNT]   = HEAT_WAIT_CMD;
+const char * const extruderDisplayID[]             = EXTRUDER_ID;
+const char * const toolChange[]                    = TOOL_CHANGE;
 
 static HEATER  heater = {{}, NOZZLE0};
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
@@ -19,7 +19,7 @@ uint32_t nextHeatCheckTime = 0;
 
 #define AUTOREPORT_TIMEOUT (nextHeatCheckTime + 3000)  // update interval + 3 second grace period
 
-// Verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
+// verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
 static uint8_t heaterIndexFix(uint8_t index)
 {
   if (index == BED && infoSettings.bed_en)  // Bed
@@ -37,7 +37,7 @@ static uint8_t heaterIndexFix(uint8_t index)
   return INVALID_HEATER;  // Invalid heater
 }
 
-// Set target temperature
+// set target temperature
 void heatSetTargetTemp(uint8_t index, int16_t temp, TEMP_SOURCE tempSource)
 {
   index = heaterIndexFix(index);
@@ -74,7 +74,7 @@ void heatSetTargetTemp(uint8_t index, int16_t temp, TEMP_SOURCE tempSource)
   }
 }
 
-// Get target temperature
+// get target temperature
 uint16_t heatGetTargetTemp(uint8_t index)
 {
   index = heaterIndexFix(index);
@@ -85,7 +85,7 @@ uint16_t heatGetTargetTemp(uint8_t index)
   return heater.T[index].target;
 }
 
-// Set current temperature
+// set current temperature
 void heatSetCurrentTemp(uint8_t index, int16_t temp)
 {
   index = heaterIndexFix(index);
@@ -99,7 +99,7 @@ void heatSetCurrentTemp(uint8_t index, int16_t temp)
     updateNextHeatCheckTime();  // set next timeout for temperature auto-report
 }
 
-// Get current temperature
+// get current temperature
 int16_t heatGetCurrentTemp(uint8_t index)
 {
   index = heaterIndexFix(index);
@@ -110,7 +110,7 @@ int16_t heatGetCurrentTemp(uint8_t index)
   return heater.T[index].current;
 }
 
-// Disable all heaters/hotends
+// disable all heaters/hotends
 void heatCoolDown(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
@@ -119,13 +119,13 @@ void heatCoolDown(void)
   }
 }
 
-// Is heating waiting to heat up
+// is heating waiting to heat up
 bool heatGetIsWaiting(uint8_t index)
 {
   return (heater.T[index].waiting == true);
 }
 
-// Check all heater if there is a heater waiting to be waited
+// check all heater if there is a heater waiting to be waited
 bool heatHasWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
@@ -137,7 +137,7 @@ bool heatHasWaiting(void)
   return false;
 }
 
-// Set heater waiting status
+// set heater waiting status
 void heatSetIsWaiting(uint8_t index, bool isWaiting)
 {
   index = heaterIndexFix(index);
@@ -163,28 +163,37 @@ void heatClearIsWaiting(void)
   heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 
-// Set current Tool (Extruder)
-void heatSetCurrentTool(uint8_t tool)
+// set current tool (extruder)
+// used when tool change command is from TFT
+bool heatSetTool(const uint8_t toolIndex)
 {
-  if (tool >= infoSettings.ext_count)
-    return;
+  if (storeCmd("%s\n", toolChange[toolIndex]))
+  {
+    heater.toolIndex = toolIndex;
+    return true;
+  }
 
-  heater.toolIndex = tool;
+  return false;
 }
 
-// Get current Tool (Extruder)
-uint8_t heatGetCurrentTool(void)
+void heatSetToolIndex(const uint8_t toolIndex)
+{
+  heater.toolIndex = toolIndex;
+}
+
+// get current Tool (extruder)
+uint8_t heatGetToolIndex(void)
 {
   return heater.toolIndex;
 }
 
-// Get current hotend index in arry T[]
+// get current hotend index in arry T[]
 uint8_t heatGetCurrentHotend(void)
 {
   return (infoSettings.hotend_count == 1) ? NOZZLE0 : heater.toolIndex;
 }
 
-// Check whether the index is a valid heater index.
+// check whether the index is a valid heater index.
 bool heaterDisplayIsValid(uint8_t index)
 {
   if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
@@ -199,7 +208,7 @@ bool heaterDisplayIsValid(uint8_t index)
   return true;
 }
 
-// Set temperature update time interval
+// set temperature update time interval
 void heatSetUpdateSeconds(uint8_t seconds)
 {
   if (heat_update_seconds == seconds)
@@ -211,19 +220,19 @@ void heatSetUpdateSeconds(uint8_t seconds)
     heat_update_waiting = storeCmd("M155 S%u\n", heatGetUpdateSeconds());
 }
 
-// Get query temperature seconds
+// get query temperature seconds
 uint8_t heatGetUpdateSeconds(void)
 {
   return heat_update_seconds;
 }
 
-// Set query temperature seconds
+// set query temperature seconds
 void heatSyncUpdateSeconds(uint8_t seconds)
 {
   heat_update_seconds = seconds;
 }
 
-// Set whether we need to query the current temperature
+// set whether we need to query the current temperature
 void heatSetUpdateWaiting(bool isWaiting)
 {
   heat_update_waiting = isWaiting;

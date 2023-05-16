@@ -98,7 +98,7 @@ bool FIL_NormalRunoutDetect(void)
   else
   {
     bool pinState = false;
-    uint8_t toolNum = heatGetCurrentTool();
+    uint8_t toolNum = heatGetToolIndex();
 
     switch (toolNum)
     {

@@ -142,7 +142,7 @@ void menuSetMpcParam(void)
 
 void mpcStart(void)
 {
-  if (storeCmd("%s\n", toolChange[curTool_index]))
+  if (heatSetTool(curTool_index))
   {
     if (storeCmd("M306 T S%u\n", mpcParameter[curTool_index].method))
     {

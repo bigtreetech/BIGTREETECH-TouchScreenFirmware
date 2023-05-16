@@ -201,7 +201,7 @@ void powerFailedCache(uint32_t offset)
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
-    infoBreakPoint.tool = heatGetCurrentTool();
+    infoBreakPoint.tool = heatGetToolIndex();
 
     for (uint8_t i = 0; i < infoSettings.fan_count; i++)
     {

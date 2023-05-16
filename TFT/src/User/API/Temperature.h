@@ -65,13 +65,13 @@ typedef struct
   uint8_t toolIndex;
 } HEATER;
 
-extern const char *const toolChange[];
-extern const char *const extruderDisplayID[];
-extern const char *const heaterID[];
-extern const char *const heatDisplayID[];
-extern const char *const heatShortID[];
-extern const char *const heatCmd[];
-extern const char *const heatWaitCmd[];
+extern const char * const heaterID[];
+extern const char * const heatDisplayID[];
+extern const char * const heatShortID[];
+extern const char * const heatCmd[];
+extern const char * const heatWaitCmd[];
+extern const char * const extruderDisplayID[];
+extern const char * const toolChange[];
 
 void heatSetTargetTemp(uint8_t index, int16_t temp, TEMP_SOURCE tempSource);
 uint16_t heatGetTargetTemp(uint8_t index);
@@ -84,8 +84,9 @@ bool heatHasWaiting(void);
 void heatSetIsWaiting(uint8_t index, bool isWaiting);
 void heatClearIsWaiting(void);
 
-void heatSetCurrentTool(uint8_t tool);
-uint8_t heatGetCurrentTool(void);
+bool heatSetTool(const uint8_t tool);
+void heatSetToolIndex(const uint8_t toolIndex);
+uint8_t heatGetToolIndex(void);
 uint8_t heatGetCurrentHotend(void);
 bool heaterDisplayIsValid(uint8_t index);
 
