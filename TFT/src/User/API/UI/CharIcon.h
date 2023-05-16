@@ -21,7 +21,6 @@ typedef enum
 extern const uint16_t charIconColor[CHARICON_NUM];
 
 uint8_t * IconCharSelect(uint8_t sel);
-char * IconChar(uint8_t sel);
 void drawCharIcon(const GUI_RECT * rect, ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color);
 
 #ifdef __cplusplus

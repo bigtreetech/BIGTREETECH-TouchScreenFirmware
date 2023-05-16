@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Isključivanje..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Pričekajte da temperatura hotenda bude niža od %d℃"
     #define STRING_POWER_FAILED           "Nastaviti s ispisom?"
-    #define STRING_PROCESS_RUNNING        "Proces se već izvodi!"
     #define STRING_PROCESS_COMPLETED      "Proces završen!"
     #define STRING_PROCESS_ABORTED        "Proces prekinut!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Podesi"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC auto"
+    #define STRING_MPC_METHOD             "Metoda:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID auto"
     #define STRING_TUNE_START_INFO        "Automatsko podešavanje može potrajati neko vrijeme.\nNastaviti?"

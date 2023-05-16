@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Spegnimento..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Attendere che la temperatura dell'hotend sia inferiore a %d℃" // Wait for the temperature of hotend to be lower than 48℃
     #define STRING_POWER_FAILED           "Vuoi continuare la stampa?"
-    #define STRING_PROCESS_RUNNING        "Processo in corso! Attendere il completamento"
     #define STRING_PROCESS_COMPLETED      "Processo completato!"
     #define STRING_PROCESS_ABORTED        "Processo annullato!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Regola"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "Autoregolazione MPC"
+    #define STRING_MPC_METHOD             "Metodo:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Autoregolazione PID"
     #define STRING_TUNE_START_INFO        "Partirà l'autoregolazione. Può richiedere diversi minuti.\nContinuare?"

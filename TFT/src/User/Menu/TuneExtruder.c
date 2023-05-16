@@ -125,10 +125,7 @@ static inline void extrudeFilament(void)
   mustStoreCmd("M92\n");
   setParameter(P_STEPS_PER_MM, E_AXIS, 0.0f);  // reset E-steps value
 
-  while (getParameter(P_STEPS_PER_MM, E_AXIS) == 0.0f)  // wait until E-steps is updated
-  {
-    loopProcess();
-  }
+  TASK_LOOP_WHILE(getParameter(P_STEPS_PER_MM, E_AXIS) == 0.0f)  // wait until E-steps is updated
 
   // Home extruder and set absolute positioning
   mustStoreScript("G28\nG90\n");

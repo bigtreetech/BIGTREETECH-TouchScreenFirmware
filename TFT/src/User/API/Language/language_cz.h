@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Vypínám se..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Čekám na zchladnutí trysky pod %d℃" // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "Obnovit tisk?"
-    #define STRING_PROCESS_RUNNING        "Probíhá proces!"
     #define STRING_PROCESS_COMPLETED      "Proces dokončen!"
     #define STRING_PROCESS_ABORTED        "Proces přerušen!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Kalibrace"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC autokalibrace"
+    #define STRING_MPC_METHOD             "Metoda:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autokalibrace"
     #define STRING_TUNE_START_INFO        "Spuštěna kalibrace vytápění. Bude to chvíli trvat.\nPokračovat?"

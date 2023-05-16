@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Zamykanie..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Poczekaj, aż temperatura głowicy będzie niższa niż %d℃"
     #define STRING_POWER_FAILED           "Kontynuować drukowanie?"
-    #define STRING_PROCESS_RUNNING        "Przetwarzanie uruchomione!"
     #define STRING_PROCESS_COMPLETED      "Zakończono przetwarzanie!"
     #define STRING_PROCESS_ABORTED        "Przerwano przetwarzanie!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Dostrajanie"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "Autodostrajanie MPC"
+    #define STRING_MPC_METHOD             "Metoda:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Autodostrajanie PID"
     #define STRING_TUNE_START_INFO        "Autodostrajanie może zająć trochę czasu do zakończenia.\nKontynuować?"

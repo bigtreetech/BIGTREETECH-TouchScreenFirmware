@@ -539,12 +539,8 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
   // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
 
   if (cmd[0] != '\0')
-  {
-    while (!storeCmdFromUART(cmd, portIndex))
-    {
-      loopProcess();
-    }
-  }
+    TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex))
+
 }
 
 // Send emergency command now.

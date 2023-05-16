@@ -169,12 +169,7 @@ void menuLevelCorner(void)
           levelingProbePoint(i);
 
           // following loop needed to guarantee the value for each point beeing probed is updated at least one time on the menu
-          while (isNotEmptyCmdQueue())
-          {
-            loopProcess();
-
-            checkRefreshValue(&levelCornerItems);
-          }
+          TASK_LOOP_WHILE(isNotEmptyCmdQueue(), checkRefreshValue(&levelCornerItems))
         }
 
         break;
