@@ -1331,6 +1331,25 @@ void parseACK(void)
         setParameter(P_FILAMENT_DIAMETER, 0, getParameter(P_FILAMENT_DIAMETER, 1) > 0.01f ? 1 : 0);
       }
     }
+    // check for motherboard reset (external, software, etc)
+    else if (ack_seen("Reset"))
+    {
+      if (ack_seen("External") || ack_seen("Software") || ack_seen("Watchdog") || ack_seen("Brown out"))
+      {
+        /*
+         * Proceed to reset the command queue, host status, fan speeds and load default machine settings.
+         * These functions will also trigger the query of temperatures which together with the resets
+         * done will also trigger the query of the motherboard capabilities and settings. It is necessary
+         * to do so because after the motherboard reset things might have changed (ex. FW update by M997).
+         */
+
+        clearCmdQueue();
+        memset(&infoHost, 0, sizeof(infoHost));
+        initMachineSettings();
+        fanResetSpeed();
+        setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
+      }
+    }
 
   parse_end:
     if (!avoid_terminal && MENU_IS(menuTerminal))
