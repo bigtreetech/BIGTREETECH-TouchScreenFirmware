@@ -67,6 +67,15 @@ extern "C" {
     _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strncpy_pad() or strncpy_no_pad()\""); \
   } while (0)
 
+// call processes from the argument and than loopProcess() while condition is true
+// tasks from argument must be separated by ";" ("TASK_LOOP_WHILE(condition, task1(); task2(); ...))
+#define TASK_LOOP_WHILE(condition, ...)  \
+        while(condition)                 \
+        {                                \
+          __VA_ARGS__;                   \
+          loopProcess();                 \
+        }
+
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 

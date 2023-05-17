@@ -22,15 +22,7 @@ void menuCustom(void)
 
   listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);
 
-  while (MENU_IS(menuCustom))
-  {
-    curIndex = listViewGetSelectedIndex();
-
-    if (curIndex < customcodes.count)
-      mustStoreScript(customcodes.gcode[curIndex]);
-
-    loopProcess();
-  }
+  TASK_LOOP_WHILE(MENU_IS(menuCustom), curIndex = listViewGetSelectedIndex(); if (curIndex < customcodes.count) mustStoreScript(customcodes.gcode[curIndex]))
 }
 
 #ifdef QUICK_EEPROM_BUTTON

@@ -168,7 +168,6 @@ extern "C" {
 #define LANG_KEY_SHUTTING_DOWN                "label_shutting_down:"
 #define LANG_KEY_WAIT_TEMP_SHUT_DOWN          "label_wait_temp_shut_down:"
 #define LANG_KEY_POWER_FAILED                 "label_power_failed:" //Question Sign
-#define LANG_KEY_PROCESS_RUNNING              "label_process_running:"
 #define LANG_KEY_PROCESS_COMPLETED            "label_process_completed:"
 #define LANG_KEY_PROCESS_ABORTED              "label_process_aborted:"
 
@@ -343,6 +342,7 @@ extern "C" {
 #define LANG_KEY_TUNING                       "label_tuning:"
 #define LANG_KEY_MPC                          "label_mpc:"
 #define LANG_KEY_MPC_TITLE                    "label_mpc_title:"
+#define LANG_KEY_MPC_METHOD                   "label_mpc_method:"
 #define LANG_KEY_PID                          "label_pid:"
 #define LANG_KEY_PID_TITLE                    "label_pid_title:"
 #define LANG_KEY_TUNE_START_INFO              "label_tune_start_info:"

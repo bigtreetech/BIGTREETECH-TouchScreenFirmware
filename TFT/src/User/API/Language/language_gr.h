@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Απενεργοποίηση..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Περιμένετε για την θερμοκρασία του hotend να πέσει χαμηλότερα απο %d℃" // The length of the info line is 24 characters, so the "temperatureof" will automatically be divided into "temperature of..."
     #define STRING_POWER_FAILED           "Συνέχεια εκτύπωσης;"
-    #define STRING_PROCESS_RUNNING        "Process already running!"
     #define STRING_PROCESS_COMPLETED      "Process completed!"
     #define STRING_PROCESS_ABORTED        "Process aborted!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Tuning"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC autotune"
+    #define STRING_MPC_METHOD             "Mέθoδoς:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
     #define STRING_TUNE_START_INFO        "Autotune may take some time to complete.\nContinue?"

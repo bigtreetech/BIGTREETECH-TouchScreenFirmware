@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "正在关机..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "喷头温度正在降温，等待低于%d℃后自动关机" // 喷头温度正在降温，等待低于50℃后自动关机
     #define STRING_POWER_FAILED           "是否继续打印?"
-    #define STRING_PROCESS_RUNNING        "正在运行,请稍后"
     #define STRING_PROCESS_COMPLETED      "处理已完成!"
     #define STRING_PROCESS_ABORTED        "处理已被中断!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "调整"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC自动整定"
+    #define STRING_MPC_METHOD             "方法:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID自动整定"
     #define STRING_TUNE_START_INFO        "开始自动整定,需要几分钟来完成,是否继续?"

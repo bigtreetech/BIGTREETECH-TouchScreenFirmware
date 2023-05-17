@@ -260,10 +260,7 @@ void request_M98(const char * filename)
   mustStoreCmd(command);
 
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
-  while (isEnqueued(command))
-  {
-    loopProcess();
-  }
+  TASK_LOOP_WHILE(isEnqueued(command))
 
   rrfStatusQueryFast();
 

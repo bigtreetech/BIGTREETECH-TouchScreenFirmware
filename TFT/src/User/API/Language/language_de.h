@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Fahre herunter..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Warte bis Düsentemperatur unter\n%d℃ fällt." // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "Druck fortsetzen?" //Question Sign
-    #define STRING_PROCESS_RUNNING        "Prozess läuft bereits!"
     #define STRING_PROCESS_COMPLETED      "Prozess fertiggestellt!"
     #define STRING_PROCESS_ABORTED        "Prozess abgebrochen!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Justage"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC autotune"
+    #define STRING_MPC_METHOD             "Methode:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
     #define STRING_TUNE_START_INFO        "Autotune dauert einige Zeit.\nWeitermachen?"

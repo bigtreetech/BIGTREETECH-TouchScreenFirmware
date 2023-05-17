@@ -98,19 +98,12 @@ void abortAndTerminate(void)
 
 void loopBreakToCondition(CONDITION_CALLBACK condCallback)
 {
-  while (condCallback())
-  {
-    // M108 is sent to Marlin because consecutive blocking operations such as heating bed, extruder may defer processing of other gcodes.
-    // If there's any ongoing blocking command, "M108" will take that out from the closed loop and a response will be received
-    // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
-    // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
-    // not too fast one after another to overload/overrun the serial communication
-    //
-    if (infoHost.rx_ok[SERIAL_PORT] == true)
-      sendEmergencyCmd("M108\n");
-
-    loopProcess();
-  }
+  // M108 is sent to Marlin because consecutive blocking operations such as heating bed, extruder may defer processing of other gcodes.
+  // If there's any ongoing blocking command, "M108" will take that out from the closed loop and a response will be received
+  // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
+  // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
+  // not too fast one after another to overload/overrun the serial communication
+  TASK_LOOP_WHILE(condCallback(), if (infoHost.rx_ok[SERIAL_PORT] == true) sendEmergencyCmd("M108\n"))
 
   // remove any enqueued command that could come from a supplementary serial port or TFT media
   // (if printing from remote host or TFT media) during the loop above

@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Afsluiten..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Wacht tot de temperatuur van de spuitkop lager dan %d℃ is" // Wait for the temperature of hotend to be lower than 50℃
     #define STRING_POWER_FAILED           "Verder met printen?"
-    #define STRING_PROCESS_RUNNING        "Process bezig!"
     #define STRING_PROCESS_COMPLETED      "Process voltooid!"
     #define STRING_PROCESS_ABORTED        "Process geannuleerd!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Tuning"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC autotune"
+    #define STRING_MPC_METHOD             "Metode:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID autotune"
     #define STRING_TUNE_START_INFO        "Autotune zal starten. Dit kan een paar minuten duren.\nDoorgaan?"

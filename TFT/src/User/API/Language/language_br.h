@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Desligar ..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Espere que a temperatura do hotend seja inferior a %d℃"
     #define STRING_POWER_FAILED           "Continuar imprimindo?"
-    #define STRING_PROCESS_RUNNING        "Processo em andamento! Aguarde a conclusão"
     #define STRING_PROCESS_COMPLETED      "Processo concluído!"
     #define STRING_PROCESS_ABORTED        "Processo cancelado!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Ajuste"// TRADUZIR MELHOR
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "Auto Ajuste do MPC"
+    #define STRING_MPC_METHOD             "Método:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "Auto Ajuste do PID"
     #define STRING_TUNE_START_INFO        "O Auto Ajuste começará. Isso pode demorar. \nContinua?"

@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Kapatılıyor..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Kafa sıcaklığının %d ℃ altına inmesini bekleyiniz." // The length of the info line is 24 characters, so the "temperatureof" will automatically be divided into "temperature of..."
     #define STRING_POWER_FAILED           "Baskı sürdürülsün mü?" //Question Sign
-    #define STRING_PROCESS_RUNNING        "Proses zaten çalışıyor!"
     #define STRING_PROCESS_COMPLETED      "Proses tamamlandı!"
     #define STRING_PROCESS_ABORTED        "Proses durduruldu!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Ayar"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC oto. ayar"
+    #define STRING_MPC_METHOD             "Yöntem:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID oto. ayar"
     #define STRING_TUNE_START_INFO        "Oto. ayarlama zaman alabilir.\nDevam?"

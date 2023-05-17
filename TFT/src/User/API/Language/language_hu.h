@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Leállítás..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Várd meg a fej visszahűlését.%d℃"
     #define STRING_POWER_FAILED           "Folytatod a nyomtatást?"
-    #define STRING_PROCESS_RUNNING        "Folyamat fut!"
     #define STRING_PROCESS_COMPLETED      "Folyamat befejezve!"
     #define STRING_PROCESS_ABORTED        "Folyamat megszakítva!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Hangolás"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC önhangolás"
+    #define STRING_MPC_METHOD             "Módszer:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID önhangolás"
     #define STRING_TUNE_START_INFO        "Az  önhangolása elindul. Percekig is eltarthat.\nFolytatod?"

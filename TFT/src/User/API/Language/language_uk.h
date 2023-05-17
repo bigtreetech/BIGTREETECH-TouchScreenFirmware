@@ -161,7 +161,6 @@
     #define STRING_SHUTTING_DOWN          "Вимикаю ..."
     #define STRING_WAIT_TEMP_SHUT_DOWN    "Дочекайтеся, поки температура сопла не буде нижче за %d℃" // Wait for the temperature of hotend to be lower than 50 ℃
     #define STRING_POWER_FAILED           "Продовжити друк?"
-    #define STRING_PROCESS_RUNNING        "Йде процес!"
     #define STRING_PROCESS_COMPLETED      "Процес завершений!"
     #define STRING_PROCESS_ABORTED        "Процес перерваний!"
 
@@ -336,6 +335,7 @@
     #define STRING_TUNING                 "Налагодження"
     #define STRING_MPC                    "MPC"
     #define STRING_MPC_TITLE              "MPC автоналаштування"
+    #define STRING_MPC_METHOD             "метод:"
     #define STRING_PID                    "PID"
     #define STRING_PID_TITLE              "PID автоналаштування"
     #define STRING_TUNE_START_INFO        "Зараз буде почато автоналаштування, це займе деякий час. Продовжити?"
