@@ -1,6 +1,8 @@
 #include "Temperature.h"
 #include "includes.h"
 
+const char *const toolChange[]                    = TOOL_CHANGE;
+const char *const extruderDisplayID[]             = EXTRUDER_ID;
 const char *const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
 const char *const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
 const char *const heatShortID[MAX_HEATER_COUNT]   = HEAT_SHORT_ID;

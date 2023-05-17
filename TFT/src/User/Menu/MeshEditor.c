@@ -15,7 +15,7 @@ typedef struct
   const uint8_t colsToSkip;
   const uint8_t rowsToSkip;
   const bool rowsInverted;
-  const char *const echoMsg;
+  const char * const echoMsg;
 } MESH_DATA_FORMAT;
 
 typedef enum
@@ -163,32 +163,32 @@ const GUI_RECT meshGridRect = {MESH_GRID_X0, MESH_GRID_Y0, MESH_GRID_X0 + MESH_G
 
 const GUI_RECT meshInfoRect[ME_INFO_NUM] = {
 #ifdef KEYBOARD_ON_LEFT
-  {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// min value
-  {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// max value
-  {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// original value
+  {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // min value
+  {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // max value
+  {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // original value
 #else
-  {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// min value
-  {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// max value
-  {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},// original value
+  {MESH_INFO_X0 + 0 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // min value
+  {MESH_INFO_X0 + 1 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // max value
+  {MESH_INFO_X0 + 2 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 0 * MESH_INFO_HEIGHT, MESH_INFO_X0 + 3 * MESH_INFO_WIDTH, MESH_INFO_Y0 + 1 * MESH_INFO_HEIGHT},  // original value
 #endif
 
   // current value
 #ifdef PORTRAIT_MODE
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // current value
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},          // current value
 #else
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},        // current value
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},          // current value
 #endif
 };
 
 const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
 #ifdef PORTRAIT_MODE
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // SAVE
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},        // RESET
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT},        // HOME
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},          // SAVE
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},          // OK
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},          // RESET
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT},          // HOME
 
   // current value
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // current value
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},          // current value
 
   // arrow keys
   {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 0 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT},  // UP
@@ -197,25 +197,25 @@ const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
   {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 3 * MESH_ARROW_HEIGHT},  // DOWN
 #else
   #ifdef KEYBOARD_ON_LEFT
-    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},      // SAVE
-    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},      // OK
-    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},      // RESET
-    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},      // HOME
+    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // SAVE
+    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
+    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // RESET
+    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // HOME
   #else
-    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},      // SAVE
-    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},      // OK
-    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},      // RESET
-    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},      // HOME
+    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // SAVE
+    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 0 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT},        // OK
+    {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // RESET
+    {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 1 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT},        // HOME
   #endif
 
   // current value
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},        // EDIT
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 2 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT},          // EDIT
 
   // arrow keys
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT},        // UP
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // PREV
-  {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},        // NEXT
-  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 6 * MESH_KEY_HEIGHT},        // DOWN
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 3 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT},          // UP
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},          // PREV
+  {MESH_KEY_X0 + 1 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 4 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT},          // NEXT
+  {MESH_KEY_X0 + 0 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 5 * MESH_KEY_HEIGHT, MESH_KEY_X0 + 2 * MESH_KEY_WIDTH, MESH_KEY_Y0 + 6 * MESH_KEY_HEIGHT},          // DOWN
 #endif
 };
 
@@ -228,7 +228,7 @@ const GUI_RECT meshAreaRect[ME_AREA_NUM] = {
 #endif
 };
 
-const char *const meshKeyString[ME_KEY_NUM] = {
+const char * const meshKeyString[ME_KEY_NUM] = {
   "\u08A7",  // SAVE
   "\u0894",  // OK
   "\u08A5",  // RESET
@@ -250,7 +250,7 @@ const MESH_DATA_FORMAT meshDataFormat[] = {
 
 const char * meshErrorMsg[] = {"Invalid mesh"};  // list of possible error responses to "M420 V1 T1" command
 
-static MESH_DATA *meshData = NULL;
+static MESH_DATA * meshData = NULL;
 
 static inline void meshInitData(void)
 {
@@ -263,11 +263,11 @@ static inline void meshInitData(void)
   uint16_t rgbEnd = infoSettings.mesh_max_color;    // RGB color in RGB 565 16 bit format
 
   meshData->rStart = (rgbStart >> 11) & 0b0000000000011111;
-  meshData->gStart = (rgbStart >> 5) & 0b0000000000111111;
-  meshData->bStart = (rgbStart) & 0b0000000000011111;
-  meshData->rEnd = (rgbEnd >> 11) & 0b0000000000011111;
-  meshData->gEnd = (rgbEnd >> 5) & 0b0000000000111111;
-  meshData->bEnd = (rgbEnd) & 0b0000000000011111;
+  meshData->gStart = (rgbStart >> 5)  & 0b0000000000111111;
+  meshData->bStart = (rgbStart)       & 0b0000000000011111;
+  meshData->rEnd =   (rgbEnd >> 11)   & 0b0000000000011111;
+  meshData->gEnd =   (rgbEnd >> 5)    & 0b0000000000111111;
+  meshData->bEnd =   (rgbEnd)         & 0b0000000000011111;
   meshData->rDelta = meshData->rEnd - meshData->rStart;
   meshData->gDelta = meshData->gEnd - meshData->gStart;
   meshData->bDelta = meshData->bEnd - meshData->bStart;
@@ -299,7 +299,7 @@ void meshDeallocData(void)
   }
 }
 
-static inline bool processKnownErrorMessage(const char *dataRow)
+static inline bool processKnownErrorMessage(const char * dataRow)
 {
   uint8_t dataCount = COUNT(meshErrorMsg);
 
@@ -312,7 +312,7 @@ static inline bool processKnownErrorMessage(const char *dataRow)
   return false;
 }
 
-static inline bool processKnownDataFormat(const char *dataRow)
+static inline bool processKnownDataFormat(const char * dataRow)
 {
   uint8_t dataCount = COUNT(meshDataFormat);
 
@@ -360,11 +360,11 @@ void meshSaveCallback(void)
   else if (infoMachineSettings.leveling != BL_DISABLED)
     saveEepromSettings();
 
-  if (meshData != NULL)
+  if (meshData != NULL)  // if data have not been released (e.g. data are released when mesh editor menu is forced to exit)
     memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));  // align data only after save confirmation
 }
 
-static inline void meshUpdateIndex(MESH_KEY_VALUES key_num)
+static inline void meshUpdateIndex(const MESH_KEY_VALUES key_num)
 {
   switch (key_num)
   {
@@ -408,42 +408,40 @@ uint16_t meshGetJ(void)
   return (meshData->rowsNum - 1) - meshData->row;
 }
 
-static inline void meshSetValue(void)
+bool meshSetValue(const float value)
 {
-  storeCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetJ(), meshData->curData[meshData->index]);
+  if (meshData->curData[meshData->index] != value)  // if mesh value is changed
+  {
+    meshData->curData[meshData->index] = value;  // set new mesh value
+
+    mustStoreCmd("M421 I%d J%d Z%.3f\n", meshData->col, meshGetJ(), value);  // send new mesh value
+
+    return true;
+  }
+
+  return false;
 }
 
 static inline void meshUpdateValueMinMax(void)
 {
   float value;
-  bool isValueChanged = true;  // initialized to "true" just to set meshData->valueDelta at least one time
 
   meshData->valueMin = meshData->valueMax = meshData->curData[0];  // init initial min/max values
 
   for (uint16_t i = 0; i < meshData->dataSize; i++)
   {
     value = meshData->curData[i];
-    isValueChanged = false;
 
     if (value < meshData->valueMin)
-    {
       meshData->valueMin = value;
-
-      isValueChanged = true;
-    }
     else if (value > meshData->valueMax)
-    {
       meshData->valueMax = value;
-
-      isValueChanged = true;
-    }
-
-    if (isValueChanged)
-      meshData->valueDelta = meshData->valueMax - meshData->valueMin;
   }
+
+  meshData->valueDelta = meshData->valueMax - meshData->valueMin;
 }
 
-uint16_t mapRGBdata(uint16_t * rgbStart, int16_t * rgbDelta, float * valueDiff, float * valueDelta)
+uint16_t mapRGBdata(const uint16_t * rgbStart, const int16_t * rgbDelta, const float * valueDiff, const float * valueDelta)
 {
   return *rgbStart + (*valueDiff * *rgbDelta) / *valueDelta;
 }
@@ -643,14 +641,14 @@ bool meshIsWaitingData(void)
   return true;
 }
 
-uint16_t meshParseDataRow(char *dataRow, float *dataGrid, const uint16_t maxCount)
+uint16_t meshParseDataRow(char * dataRow, float * dataGrid, const uint16_t maxCount)
 {
   if (meshData->parsedRows < meshData->rowsToSkip)
     return 0;
 
   uint16_t count;
-  char *curPtr;
-  char *nextPtr;
+  char * curPtr;
+  char * nextPtr;
   float value;
 
   count = 0;
@@ -694,7 +692,7 @@ static inline void processGridData(void)
   }
 }
 
-void meshUpdateData(char *dataRow)
+void meshUpdateData(char * dataRow)
 {
   bool failed = false;
 
@@ -773,11 +771,12 @@ void meshUpdateData(char *dataRow)
 
   if (failed)
   {
-    char tempMsg[MAX_STRING_LENGTH];
-
     meshData->status = ME_DATA_FAILED;
 
+    char tempMsg[MAX_STRING_LENGTH];
+
     snprintf(tempMsg, MAX_STRING_LENGTH, "%s\n-> %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
+
     popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
 
     // trigger exit from mesh editor menu. It avoids to loop in case of persistent error
@@ -788,6 +787,7 @@ void meshUpdateData(char *dataRow)
 void menuMeshEditor(void)
 {
   MESH_KEY_VALUES key_num = ME_KEY_IDLE;
+  bool forceExit = false;
   uint16_t oldIndex;
   uint16_t curIndex;
 
@@ -829,17 +829,15 @@ void menuMeshEditor(void)
         if (coordinateIsKnown() == false)
           probeHeightHome();  // home, disable ABL and raise nozzle
 
-        meshData->curData[curIndex] = menuMeshTuner(meshData->col, meshGetJ(), meshData->curData[curIndex]);
-        meshSetValue();
+        // call mesh tuner menu and set current mesh value, if changed
+        meshSetValue(menuMeshTuner(meshData->col, meshGetJ(), meshData->curData[curIndex]));
 
         meshDrawMenu();
         break;
 
       case ME_KEY_RESET:
-        if (meshData->curData[curIndex] != meshData->oriData[curIndex])
+        if (meshSetValue(meshData->oriData[curIndex]))  // set current mesh value to original value, if changed
         {
-          meshData->curData[curIndex] = meshData->oriData[curIndex];
-
           meshDrawGrid();
           meshDrawInfo(true);
         }
@@ -850,14 +848,14 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_SAVE:
+        // we unconditionally allow to save the meshes on EEPROM (e.g. just in case we previously edited some
+        // meshes but we closed the mesh editor menu refusing to save)
         meshSave();
         break;
 
       case ME_KEY_OK:
-        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // if data changed
-          meshSave();
+        forceExit = true;
 
-        meshDeallocData();
         CLOSE_MENU();
         break;
 
@@ -877,6 +875,14 @@ void menuMeshEditor(void)
     }
 
     loopProcess();
+  }
+
+  if (forceExit)
+  {
+    if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // check for changes
+      meshSave();
+
+    meshDeallocData();  // finally, deallocate mesh data (meshData no more accessible)
   }
 
   // restore default

@@ -136,6 +136,7 @@ void menuMove(void)
   while (MENU_IS(menuMove))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       #ifdef ALTERNATIVE_MOVE_MENU
@@ -146,7 +147,9 @@ void menuMove(void)
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
           moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
+
           menuDrawItem(&moveItems.items[key_num], key_num);
+
           amount = moveLenSteps[item_moveLen_index];
           break;
 
@@ -163,7 +166,10 @@ void menuMove(void)
         case KEY_ICON_3:
           item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
           moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
+
           menuDrawItem(&moveItems.items[key_num], key_num);
+
+          amount = moveLenSteps[item_moveLen_index];
           break;
 
         case KEY_ICON_4: storeMoveCmd(X_AXIS, -amount); break;  // X move decrease if no invert

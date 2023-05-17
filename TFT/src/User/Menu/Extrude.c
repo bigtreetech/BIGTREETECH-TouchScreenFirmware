@@ -1,8 +1,6 @@
 #include "Extrude.h"
 #include "includes.h"
 
-const char *const extruderDisplayID[] = EXTRUDER_ID;
-const char *const tool_change[] = TOOL_CHANGE;
 static uint8_t curExtruder_index = 0;
 static uint8_t extlenSteps_index = 1;
 static uint8_t itemSpeed_index = 1;
@@ -18,7 +16,7 @@ void menuExtrude(void)
       {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_LOAD,                    LABEL_LOAD},
-      {ICON_NULL,                    LABEL_NULL},
+      {ICON_HEAT,                    LABEL_HEAT},
       {ICON_E_5_MM,                  LABEL_5_MM},
       {ICON_NORMAL_SPEED,            LABEL_NORMAL},
       {ICON_BACK,                    LABEL_BACK},
@@ -29,8 +27,12 @@ void menuExtrude(void)
   float extrLength = 0.0f;
   float extrAmount = 0.0f;
 
-  extrudeItems.items[KEY_ICON_4].icon = (infoSettings.ext_count > 1) ? ICON_NOZZLE : ICON_HEAT;
-  extrudeItems.items[KEY_ICON_4].label.index = (infoSettings.ext_count > 1) ? LABEL_NOZZLE : LABEL_HEAT;
+  if (infoSettings.ext_count > 1)
+  {
+    extrudeItems.items[KEY_ICON_4].icon = ICON_NOZZLE;
+    extrudeItems.items[KEY_ICON_4].label.index = LABEL_NOZZLE;
+  }
+
   extrudeItems.items[KEY_ICON_5] = itemExtLenSteps[extlenSteps_index];
   extrudeItems.items[KEY_ICON_6] = itemSpeed[itemSpeed_index];
 
@@ -70,6 +72,7 @@ void menuExtrude(void)
 
       case KEY_INFOBOX:
         extrLength = editFloatValue(0 - extlenSteps[COUNT(extlenSteps) - 1], extlenSteps[COUNT(extlenSteps) - 1], 0, 0);
+
         extruderReDraw(curExtruder_index, extrAmount, true);
         break;
 
@@ -82,11 +85,13 @@ void menuExtrude(void)
         if (infoSettings.ext_count > 1)
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
+
           extruderReDraw(curExtruder_index, extrAmount, true);
         }
         else
         {
           heatSetCurrentIndex(curExtruder_index);  // preselect current nozzle for "Heat" menu
+
           OPEN_MENU(menuHeat);
           menuHeat();  // call from here to retain E axis parameters
 
@@ -117,9 +122,11 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_7:
-        COOLDOWN_TEMPERATURE();
-        CLOSE_MENU();
         eAxisBackup.handled = false;  // exiting from Extrude menu, trigger E axis parameters restore
+
+        COOLDOWN_TEMPERATURE();
+
+        CLOSE_MENU();
         break;
 
       default:
@@ -129,7 +136,13 @@ void menuExtrude(void)
     if (extrLength != 0)
     {
       if (curExtruder_index != heatGetCurrentTool())
-        mustStoreCmd("%s\n", tool_change[curExtruder_index]);
+      {
+        mustStoreCmd("%s\n", toolChange[curExtruder_index]);
+
+        // set the tool index now (don't wait for the T0/T1 response, which comes too late)
+        // just to allow warmupNozzle() function checks the temperature for the selected tool
+        heatSetCurrentTool(curExtruder_index);
+      }
 
       switch (warmupNozzle())
       {
@@ -144,13 +157,13 @@ void menuExtrude(void)
         case HEATED:
           if (storeCmd("G1 E%.5f F%d\n", extrLength, infoSettings.ext_speed[itemSpeed_index]))
           {
+            if (isPrinting() && isPaused())
+              setExtrusionDuringPause(true);
+
             extrAmount += extrLength;
             extrLength = 0;
+
             extruderReDraw(curExtruder_index, extrAmount, false);
-            if (isPrinting() && isPaused())
-            {
-              setExtrusionDuringPause(true);
-            }
           }
           break;
       }
@@ -165,10 +178,10 @@ void menuExtrude(void)
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);
 
     if (eAxisBackup.relative == false)
-      mustStoreCmd("M82\n");  // Set extruder to absolute
+      mustStoreCmd("M82\n");  // set extruder to absolute
   }
 
-  // Set slow update time if not waiting for target temperature
+  // set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

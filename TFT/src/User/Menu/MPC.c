@@ -41,7 +41,7 @@ void displayValues()
   char tmpStr[15];
 
   setFontSize(FONT_SIZE_LARGE);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tool_change[curTool_index]);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)toolChange[curTool_index]);
   setFontSize(FONT_SIZE_NORMAL);
 
   snprintf(tmpStr, 10, "P: %d W  ", mpcParameter[curTool_index].heater_power);
@@ -127,7 +127,7 @@ void menuSetMpcParam(void)
 
 void mpcStart(void)
 {
-  if (storeCmd("%s\n", tool_change[curTool_index]))
+  if (storeCmd("%s\n", toolChange[curTool_index]))
   {
     if (storeCmd("M306 T\n"))
     {

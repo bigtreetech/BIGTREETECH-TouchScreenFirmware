@@ -74,7 +74,7 @@ bool powerFailedInitData(void)
     }
   }
 
-  mustStoreCacheCmd("%s\n", tool_change[infoBreakPoint.tool]);
+  mustStoreCacheCmd("%s\n", toolChange[infoBreakPoint.tool]);
 
   for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber infoCacheCmd.queue[0 - 1]
   {

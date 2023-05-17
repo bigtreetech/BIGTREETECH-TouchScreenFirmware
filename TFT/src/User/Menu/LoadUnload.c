@@ -70,16 +70,18 @@ void menuLoadUnload(void)
     {
       switch (key_num)
       {
-        case KEY_ICON_0:  // Unload
+        case KEY_ICON_0:  // unload
           lastCmd = UNLOAD_REQUESTED;
           break;
 
-        case KEY_ICON_3:  // Load
+        case KEY_ICON_3:  // load
           lastCmd = LOAD_REQUESTED;
           break;
 
         case KEY_INFOBOX:  // edit nozzle temp
         {
+          lastCmd = NONE;
+
           int16_t actTarget = heatGetTargetTemp(tool_index);
           int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
 
@@ -87,34 +89,38 @@ void menuLoadUnload(void)
             heatSetTargetTemp(tool_index, val, FROM_GUI);
 
           temperatureReDraw(tool_index, NULL, true);
-          lastCmd = NONE;
           break;
         }
 
         case KEY_ICON_4:  // nozzle select
+          lastCmd = NONE;
           tool_index = (tool_index + 1) % infoSettings.hotend_count;
 
           temperatureReDraw(tool_index, NULL, true);
-          lastCmd = NONE;
           break;
 
         case KEY_ICON_5:  // heat menu
-          heatSetCurrentIndex(tool_index);  // preselect current nozzle for "Heat" menu
-          OPEN_MENU(menuHeat);
-          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
+          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+
+          heatSetCurrentIndex(tool_index);  // preselect current nozzle for "Heat" menu
+
+          OPEN_MENU(menuHeat);
           break;
 
         case KEY_ICON_6:  // cool down nozzle
-          heatCoolDown();
           lastCmd = NONE;
+
+          heatCoolDown();
           break;
 
         case KEY_ICON_7:  // back
-          COOLDOWN_TEMPERATURE();
           lastCmd = NONE;
-          CLOSE_MENU();
           eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)
+
+          COOLDOWN_TEMPERATURE();
+
+          CLOSE_MENU();
           break;
 
         default:
@@ -125,7 +131,13 @@ void menuLoadUnload(void)
       if ((lastCmd == UNLOAD_REQUESTED) || (lastCmd == LOAD_REQUESTED))
       {
         if (tool_index != heatGetCurrentTool())
-          mustStoreCmd("%s\n", tool_change[tool_index]);
+        {
+          mustStoreCmd("%s\n", toolChange[tool_index]);
+
+          // set the tool index now (don't wait for the T0/T1 response, which comes too late)
+          // just to allow warmupNozzle() function checks the temperature for the selected tool
+          heatSetCurrentTool(tool_index);
+        }
 
         switch (warmupNozzle())
         {
@@ -139,26 +151,25 @@ void menuLoadUnload(void)
           case HEATED:
             if (lastCmd == UNLOAD_REQUESTED)
             { // unload
+              lastCmd = UNLOAD_STARTED;
+
               if (infoMachineSettings.firmwareType != FW_REPRAPFW)
                 mustStoreCmd("M702\n");
               else
                 request_M98("sys/unload.g");
-
-              lastCmd = UNLOAD_STARTED;
             }
             else  // LOAD_REQUESTED
             { // load
+              lastCmd = LOAD_STARTED;
+
               if (infoMachineSettings.firmwareType != FW_REPRAPFW)
                 mustStoreCmd("M701\n");
               else
                 request_M98("sys/load.g");
+            }
 
-              lastCmd = LOAD_STARTED;
-            }
             if (isPrinting() && isPaused())
-            {
               setExtrusionDuringPause(true);
-            }
          }
       }
     }
@@ -167,11 +178,9 @@ void menuLoadUnload(void)
   }
 
   if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
-  {
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
-  }
 
-  // Set slow update time if not waiting for target temperature
+  // set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
