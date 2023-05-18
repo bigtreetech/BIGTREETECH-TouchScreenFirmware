@@ -131,7 +131,7 @@ bool nextScreenUpdate(uint32_t duration)
   }
 #endif
 
-void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
+void drawBorder(const GUI_RECT * rect, uint16_t color, uint16_t edgeDistance)
 {
   //uint16_t origColor = GUI_GetColor();
 
@@ -142,7 +142,7 @@ void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
   //GUI_SetColor(origColor);
 }
 
-void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistance)
+void drawBackground(const GUI_RECT * rect, uint16_t bgColor, uint16_t edgeDistance)
 {
   //uint16_t origBgColor = GUI_GetBkColor();
 
@@ -153,7 +153,7 @@ void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistanc
   //GUI_SetBkColor(origBgColor);
 }
 
-void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, uint16_t font,
+void drawStandardValue(const GUI_RECT * rect, VALUE_TYPE valType, const void * val, uint16_t font,
                        uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
 {
   uint16_t origColor = GUI_GetColor();
