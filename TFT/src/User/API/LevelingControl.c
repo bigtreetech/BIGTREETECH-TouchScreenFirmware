@@ -30,7 +30,8 @@ void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
     x_right = temp;
   }
 
-  if (GET_BIT(infoSettings.inverted_axis, Y_AXIS))  // leveling Y axis
+  // leveling Y axis (E_AXIS -> index for param "inverted_axis LY<x>" in "config.ini")
+  if (GET_BIT(infoSettings.inverted_axis, E_AXIS))
   { // swap bottom and top
     int16_t temp = y_bottom;
     y_bottom = y_top;

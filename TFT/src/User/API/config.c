@@ -860,7 +860,9 @@ void parseConfigKey(uint16_t index)
       if (key_seen("X")) SET_BIT_VALUE(infoSettings.inverted_axis, X_AXIS, getOnOff());
       if (key_seen("Y")) SET_BIT_VALUE(infoSettings.inverted_axis, Y_AXIS, getOnOff());
       if (key_seen("Z")) SET_BIT_VALUE(infoSettings.inverted_axis, Z_AXIS, getOnOff());
-      if (key_seen("LY")) SET_BIT_VALUE(infoSettings.inverted_axis, E_AXIS, getOnOff());  // leveling Y axis
+
+      // leveling Y axis (E_AXIS -> index for param "inverted_axis LY<x>" in "config.ini")
+      if (key_seen("LY")) SET_BIT_VALUE(infoSettings.inverted_axis, E_AXIS, getOnOff());
       break;
 
     case C_INDEX_PROBING_Z_OFFSET:
