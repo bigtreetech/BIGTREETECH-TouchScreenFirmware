@@ -108,7 +108,7 @@ void mustStoreCmd(const char * format, ...)
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
+    TASK_LOOP_WHILE(cmdQueue.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the command queue in case it is currently full
   }
 
   va_list va;
@@ -178,7 +178,7 @@ void mustStoreCacheCmd(const char * format, ...)
   if (cmdCache.count >= CMD_QUEUE_SIZE)
   {
     setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
+    TASK_LOOP_WHILE(cmdCache.count >= CMD_QUEUE_SIZE);  // wait for a free slot in the cache queue in case it is currently full
   }
 
   va_list va;
