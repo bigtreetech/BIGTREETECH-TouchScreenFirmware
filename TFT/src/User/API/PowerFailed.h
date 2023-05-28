@@ -25,7 +25,7 @@ bool powerFailedGetRestore(void);          // get the value of current print res
 bool powerFailedInitData(void);
 
 bool powerFailedExist(void);
-bool powerFailedCreate(char *path) ;
+void powerFailedCreate(char *path) ;
 void powerFailedCache(uint32_t offset);
 void powerFailedClose(void);
 void powerFailedDelete(void);

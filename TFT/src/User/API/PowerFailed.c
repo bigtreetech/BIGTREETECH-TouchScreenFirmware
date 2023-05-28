@@ -153,17 +153,17 @@ bool powerFailedExist(void)
   return true;
 }
 
-bool powerFailedCreate(char *path)
+void powerFailedCreate(char *path)
 {
   UINT br;
 
   powerFailedSetDriverSource();
 
   create_ok = false;
-  if (!infoSettings.plr) return false;                    // if PLR is disabled
-  if (infoFile.source >= FS_ONBOARD_MEDIA) return false;  // onboard media not supported now
+  if (!infoSettings.plr) return;                    // if PLR is disabled
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // onboard media not supported now
 
-  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
+  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return;
 
   f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
   uint8_t model_icon = isPrintModelIcon();
@@ -172,7 +172,6 @@ bool powerFailedCreate(char *path)
   f_sync(&fpPowerFailed);
 
   create_ok = true;
-  return true;
 }
 
 void powerFailedCache(uint32_t offset)

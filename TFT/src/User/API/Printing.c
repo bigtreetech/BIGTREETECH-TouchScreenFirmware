@@ -441,7 +441,7 @@ bool startPrintFromRemoteHost(const char * filename)
 
 bool startPrint(void)
 {
-  bool printRestore = false;
+  bool printRestoring = false;
 
   // always clean infoPrinting first and then set the needed attributes
   clearInfoPrint();
@@ -472,14 +472,14 @@ bool startPrint(void)
         // try to load PLR info from file in order to restore the print from the failed point.
         // It finally disables print restore flag (one shot flag) for the next print.
         // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
-        powerFailedInitData();
-
-        if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
+        if (powerFailedInitData())
         {
-          printRestore = true;
-          powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
+          printRestoring = true;
+          powerFailedlSeek(&infoPrinting.file);  // set the printing file to the backed up position
         }
-      }
+
+        powerFailedCreate(infoFile.path);  // if PLR feature is enabled, open a new PLR file
+     }
 
       break;
 
@@ -499,7 +499,7 @@ bool startPrint(void)
   infoPrinting.printing = true;
 
   // execute pre print start tasks
-  if (!printRestore && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
+  if (!printRestoring && GET_BIT(infoSettings.send_gcodes, SEND_GCODES_START_PRINT))  // PLR continue printing, CAN NOT use start gcode
     sendPrintCodes(0);
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
