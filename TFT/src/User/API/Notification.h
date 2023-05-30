@@ -23,13 +23,6 @@ extern "C" {
 typedef struct
 {
   DIALOG_TYPE style;
-  uint8_t isNew;
-  char text[TOAST_MSG_LENGTH];
-} TOAST;
-
-typedef struct
-{
-  DIALOG_TYPE style;
   char title[MAX_MSG_TITLE_LENGTH];
   char text[MAX_MSG_LENGTH];
 } NOTIFICATION;

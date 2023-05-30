@@ -200,21 +200,21 @@ void drawStatus(void)
   GUI_RestoreColorDefault();
 }
 
-void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
+void statusScreenSetMsg(const uint8_t *title, const uint8_t *msg)
 {
   strscpy(msgTitle, (char *)title, sizeof(msgTitle));
   strscpy(msgBody, (char *)msg, sizeof(msgBody));
   msgNeedRefresh = true;
 }
 
-void statusScreen_setReady(void)
+void statusScreenSetReady(void)
 {
   strscpy(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
 
   if (infoHost.connected == false)
     strscpy(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   else
-    snprintf(msgBody, sizeof(msgBody), "%s %s", (char *)machine_type, (char *)textSelect(LABEL_READY));
+    snprintf(msgBody, sizeof(msgBody), "%s %s", machine_type, (char *)textSelect(LABEL_READY));
 
   msgNeedRefresh = true;
 }
@@ -296,7 +296,7 @@ void menuStatus(void)
   {
     if (infoHost.connected != lastConnectionStatus)
     {
-      statusScreen_setReady();
+      statusScreenSetReady();
       lastConnectionStatus = infoHost.connected;
     }
 

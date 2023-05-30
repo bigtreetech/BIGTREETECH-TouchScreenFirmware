@@ -5,9 +5,9 @@
                                                          moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
                                                          moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
                                                        } while(0)
-#define X_MOVE_GCODE "G1 X%.2f F%d\n"
-#define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
-#define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
+#define X_MOVE_GCODE "G0 X%.2f F%d\n"
+#define Y_MOVE_GCODE "G0 Y%.2f F%d\n"
+#define Z_MOVE_GCODE "G0 Z%.2f F%d\n"
 #define GANTRY_UPDATE_DELAY 500  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
@@ -47,7 +47,7 @@ void drawXYZ(void)
   GUI_SetColor(infoSettings.font_color);
 }
 
-void updateGantry(void)
+static void updateGantry(void)
 {
   if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
   {
@@ -168,7 +168,6 @@ void menuMove(void)
           moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
 
           menuDrawItem(&moveItems.items[key_num], key_num);
-
           amount = moveLenSteps[item_moveLen_index];
           break;
 

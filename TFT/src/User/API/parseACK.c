@@ -262,7 +262,7 @@ void hostActionCommands(void)
     }
     else
     {
-      statusScreen_setMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
+      statusScreenSetMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
 
       if (!ack_continue_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
@@ -882,6 +882,12 @@ void parseACK(void)
       if (ack_continue_seen("Z: "))
         levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
     }
+    // parse G30 coordinate unreachable message
+    else if (ack_seen("Z Probe Past Bed"))
+    {
+      levelingSetProbedPoint(infoSettings.machine_size_max[1] + 1, infoSettings.machine_size_max[2] + 1, 0);  // cancel waiting for coordinates
+      BUZZER_PLAY(SOUND_ERROR);
+    }
     #if DELTA_PROBE_TYPE != 0
       // parse and store Delta calibration settings
       else if (ack_seen("Calibration OK"))
@@ -1160,7 +1166,7 @@ void parseACK(void)
     // parse M115 capability report
     else if (ack_seen("FIRMWARE_NAME:"))
     {
-      uint8_t * string = (uint8_t *)&ack_cache[ack_index];
+      char * string = &ack_cache[ack_index];
       uint16_t string_start = ack_index;
       uint16_t string_end = string_start;
 
@@ -1182,7 +1188,7 @@ void parseACK(void)
 
       if (ack_seen("MACHINE_TYPE:"))
       {
-        string = (uint8_t *)&ack_cache[ack_index];
+        string = &ack_cache[ack_index];
         string_start = ack_index;
 
         if (ack_seen("EXTRUDER_COUNT:"))
@@ -1193,7 +1199,7 @@ void parseACK(void)
           string_end = ack_index - sizeof("EXTRUDER_COUNT:");
         }
 
-        infoSetMachineType(string, string_end - string_start);  // set firmware name
+        infoSetMachineType(string, string_end - string_start);  // set printer name
       }
     }
     else if (ack_starts_with("Cap:"))

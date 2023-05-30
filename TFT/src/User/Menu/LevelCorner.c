@@ -1,7 +1,7 @@
 #include "LevelCorner.h"
 #include "includes.h"
 
-const uint8_t valIconIndex[LEVELING_POINT_COUNT] = {4, 5, 1, 0, 3};
+const uint8_t valIconIndex[LEVELING_POINT_COUNT] = {KEY_ICON_4, KEY_ICON_5, KEY_ICON_1, KEY_ICON_0, KEY_ICON_3};
 
 // buffer current Z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
 float levelCornerPosition[LEVELING_POINT_COUNT] = {0};
@@ -35,19 +35,6 @@ void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
   sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
-}
-
-void checkRefreshValue(MENUITEMS * levelItems)
-{
-  LEVELING_POINT levelingPoint = levelingGetProbedPoint();
-
-  if (levelingPoint != LEVEL_NO_POINT)
-  {
-    levelCornerPosition[levelingPoint] = levelingGetProbedZ();
-    refreshValue(levelItems, levelingPoint);
-
-    levelingResetProbedPoint();  // reset to check for new updates
-  }
 }
 
 // show M48 on icon
@@ -129,11 +116,25 @@ void menuLevelCorner(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        levelingProbePoint(LEVEL_TOP_LEFT);
-        break;
-
       case KEY_ICON_1:
-        levelingProbePoint(LEVEL_TOP_RIGHT);
+      case KEY_ICON_4:
+      case KEY_ICON_5:
+      case KEY_ICON_6:
+        for (int lvlPoint = LEVEL_BOTTOM_LEFT; lvlPoint <= LEVEL_TOP_LEFT; lvlPoint++)
+        {
+          if (key_num < KEY_ICON_6 && key_num != valIconIndex[lvlPoint])
+            continue;
+
+          levelingProbePoint(lvlPoint);
+
+          // wait until point probing is executed
+          TASK_LOOP_WHILE(levelingGetProbedPoint() == LEVEL_NO_POINT);
+
+          levelCornerPosition[lvlPoint] = levelingGetProbedZ();
+          refreshValue(&levelCornerItems, lvlPoint);
+          levelingResetProbedPoint();  // reset to check for new updates
+        }
+
         break;
 
       case KEY_ICON_2:
@@ -155,25 +156,6 @@ void menuLevelCorner(void)
         drawProbeAccuracyIcon(&levelCornerItems);
         break;
 
-      case KEY_ICON_4:
-        levelingProbePoint(LEVEL_BOTTOM_LEFT);
-        break;
-
-      case KEY_ICON_5:
-        levelingProbePoint(LEVEL_BOTTOM_RIGHT);
-        break;
-
-      case KEY_ICON_6:
-        for (int i = LEVEL_BOTTOM_LEFT; i <= LEVEL_TOP_LEFT; i++)
-        {
-          levelingProbePoint(i);
-
-          // following loop needed to guarantee the value for each point beeing probed is updated at least one time on the menu
-          TASK_LOOP_WHILE(isNotEmptyCmdQueue(), checkRefreshValue(&levelCornerItems))
-        }
-
-        break;
-
       case KEY_ICON_7:
         infoSettings.level_edge = origLevelEdge;  // restore original leveling edge value
         origLevelEdge = -1;
@@ -185,7 +167,5 @@ void menuLevelCorner(void)
     }
 
     loopProcess();
-
-    checkRefreshValue(&levelCornerItems);
   }
 }
