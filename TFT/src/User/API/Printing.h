@@ -58,12 +58,6 @@ void breakAndContinue(void);
 void resumeAndPurge(void);
 void resumeAndContinue(void);
 
-//
-// commented because NOT externally invoked
-//
-//void abortAndTerminate(void);
-//void loopBreakToCondition(CONDITION_CALLBACK condCallback);
-
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);
 

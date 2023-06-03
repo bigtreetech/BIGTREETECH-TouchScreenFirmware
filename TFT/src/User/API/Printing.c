@@ -75,19 +75,13 @@ void resumeAndContinue(void)
   sendEmergencyCmd("M876 S1\n");
 }
 
-void abortAndTerminate(void)
+static void sendPrintAbortCmd(void)
 {
   clearQueueAndMore();
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
-    // clear the command queue and send the M524 gcode immediately if there is an already pending gcode waiting for an ACK message.
-    // Otherwise, store the gcode on command queue to send it waiting for its related ACK message
-    //
-    if (isPendingCmd())
-      sendEmergencyCmd("M524\n");
-    else
-      mustStoreCmd("M524\n");
+    sendEmergencyCmd("M524\n");
   }
   else  // if RepRap
   {
@@ -98,18 +92,39 @@ void abortAndTerminate(void)
   }
 }
 
-void loopBreakToCondition(CONDITION_CALLBACK condCallback)
+void breakHost(void)
 {
-  // M108 is sent to Marlin because consecutive blocking operations such as heating bed, extruder may defer processing of other gcodes.
-  // If there's any ongoing blocking command, "M108" will take that out from the closed loop and a response will be received
-  // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
-  // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
-  // not too fast one after another to overload/overrun the serial communication
+  switch (infoFile.source)
+  {
+    case FS_REMOTE_HOST:
+      // - forward a print cancel notification to all hosts (so also the one handling the print) asking to cancel the print
+      // - the host handling the print should respond to this notification with "M118 P0 A1 action:cancel" that will
+      //   trigger setPrintAbort() in parseACK() once the following loop does its job (stopping all blocking operations)
+      mustStoreCmd("M118 P0 A1 action:notification remote cancel\n");
+      break;
+
+    case FS_TFT_SD:
+    case FS_TFT_USB:
+      infoHost.status = HOST_STATUS_ABORTING;
+
+    case FS_ONBOARD_MEDIA:
+    case FS_ONBOARD_MEDIA_REMOTE:
+      // triggers setPrintAbort() in parseACK() once the following loop does its job (stopping all blocking operations)
+      mustStoreCmd("M118 P0 A1 action:cancel\n");
+      break;
+  }
+
+  // M108 is sent to Marlin because consecutive blocking operations such as heating bed, heating extruder
+  // may defer processing of other gcodes. If there's any ongoing blocking command, "M108" will take that
+  // out from the closed loop and a response will be received from such a blocking command.
+  //
+  // This will unlock all possible blocking command(s) (ongoing or enqueued) but not too much
+  // and not too fast one after another to overload/overrun the serial communication.
 
   uint16_t rIndex_old = -1;  // out of band value -1 will guarantee the beginning of M108 transmission loop
   uint16_t rIndex;
 
-  TASK_LOOP_WHILE(condCallback(),
+  TASK_LOOP_WHILE(infoHost.status != HOST_STATUS_IDLE,
                   if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
                     sendEmergencyCmd("M108\n");
@@ -571,36 +586,20 @@ void abortPrint(void)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      loopBreakToCondition(&isPendingCmd);  // break a pending gcode waiting for an ACK message, if any
-      setPrintAbort();                      // finalize the print abort
+      setPrintAbort();
+      breakHost();
       break;
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
       popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
       loopPopup();  // trigger the immediate draw of the above popup
-
-      // clear the command queue and send the M524 gcode immediately if there is an already pending gcode waiting for an ACK message.
-      // Otherwise, store the gcode on command queue to send it waiting for its related ACK message.
-      // Furthermore, forward the print cancel action to all hosts (also TFT) to notify the print cancelation
-      //
-      // NOTE: the print cancel action received by the TFT always guarantees the invokation of setPrintAbort() in parseAck.c
-      //       to finalize the print (e.g. stats) in case the ACK messages "Not SD printing" and/or "//action:cancel"
-      //       are not received from Marlin
-      //
-      abortAndTerminate();
-      mustStoreCmd("M118 P0 A1 action:cancel\n");
-
-      // loop on break until infoHost.status is set to "HOST_STATUS_IDLE" by setPrintAbort() in parseAck.c
-      loopBreakToCondition(&isPrintingFromOnboard);
+      sendPrintAbortCmd();
+      breakHost();
       break;
 
     case FS_REMOTE_HOST:
-      loopBreakToCondition(&isPendingCmd);  // break a pending gcode waiting for an ACK message, if any
-
-      // forward a print cancel notification to all hosts (so also the one handling the print) asking to cancel the print
-      mustStoreCmd("M118 P0 A1 action:notification remote cancel\n");
-
+      breakHost();
       loopDetected = false;  // finally, remove lock and exit
       return;
   }
