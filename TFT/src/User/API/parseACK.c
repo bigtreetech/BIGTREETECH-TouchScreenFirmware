@@ -1347,6 +1347,7 @@ void parseACK(void)
         memset(&infoHost, 0, sizeof(infoHost));
         initMachineSettings();
         fanResetSpeed();
+        coordinateSetKnown(false);
         setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
       }
     }
