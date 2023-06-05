@@ -66,22 +66,14 @@ bool powerFailedInitData(void)
 
   setPrintModelIcon(model_icon);
 
-  for (uint8_t i = 0; i < infoSettings.fan_count; i++)
-  {
-    if (infoBreakPoint.fan[i] != 0)
-    {
-      mustStoreCacheCmd(fanCmd[i], infoBreakPoint.fan[i]);
-    }
-  }
+  mustStoreCacheCmd("%s\n", toolChange[infoBreakPoint.tool]);  // infoCacheCmd.queue[0]
 
-  mustStoreCacheCmd("%s\n", toolChange[infoBreakPoint.tool]);
-
-  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber infoCacheCmd.queue[0 - 1]
+  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber infoCacheCmd.queue[1 - 2]
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
-  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle infoCacheCmd.queue[2 - 7]
+  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle infoCacheCmd.queue[3 - 8]
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
@@ -97,38 +89,47 @@ bool powerFailedInitData(void)
     if (infoBreakPoint.pause)
       z_raised += infoSettings.pause_z_raise;
 
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);                 // infoCacheCmd.queue[8]
-    mustStoreCacheCmd("G0 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);  // infoCacheCmd.queue[9]
-    if (infoSettings.plr_home)                                                                // infoCacheCmd.queue[10 - 11]
+    mustStoreCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);
+    mustStoreCmd("G0 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+    if (infoSettings.plr_home)
     {
-      mustStoreCacheCmd("G28\n");
-      mustStoreCacheCmd("G0 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+      mustStoreCmd("G28\n");
+      mustStoreCmd("G0 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
     }
     else
     {
-      mustStoreCacheCmd("G28 R0 XY\n");
+      mustStoreCmd("G28 R0 XY\n");
     }
 
-
-    mustStoreCacheCmd("G1 E30 F300\n");                                      // infoCacheCmd.queue[12]
-    mustStoreCacheCmd("G1 E-%.5f F4800\n", infoSettings.pause_retract_len);  // infoCacheCmd.queue[13]
+    mustStoreCacheCmd("M83\n");                                              // infoCacheCmd.queue[9]
+    mustStoreCacheCmd("G1 E30 F300\n");                                      // infoCacheCmd.queue[10]
+    mustStoreCacheCmd("G1 E-%.5f F4800\n", infoSettings.pause_retract_len);  // infoCacheCmd.queue[11]
     mustStoreCacheCmd("G0 X%.3f Y%.3f Z%.3f F3000\n",
                       infoBreakPoint.axis[X_AXIS],
                       infoBreakPoint.axis[Y_AXIS],
-                      infoBreakPoint.axis[Z_AXIS]);                          // infoCacheCmd.queue[14]
-    mustStoreCacheCmd("G1 E%.5f F4800\n", infoSettings.resume_purge_len);    // infoCacheCmd.queue[15]
-    mustStoreCacheCmd("G92 E%.5f\n", infoBreakPoint.axis[E_AXIS]);           // infoCacheCmd.queue[16]
-    mustStoreCacheCmd("G0 F%d\n", infoBreakPoint.feedrate);                  // infoCacheCmd.queue[17]
+                      infoBreakPoint.axis[Z_AXIS]);                          // infoCacheCmd.queue[12]
+    mustStoreCacheCmd("G1 E%.5f F4800\n", infoSettings.resume_purge_len);    // infoCacheCmd.queue[13]
+    mustStoreCacheCmd("G92 E%.5f\n", infoBreakPoint.axis[E_AXIS]);           // infoCacheCmd.queue[14]
+    mustStoreCacheCmd("G0 F%d\n", infoBreakPoint.feedrate);                  // infoCacheCmd.queue[15]
 
     // G90/91 sets the extruder also, so keep these two in this order
     //
-    mustStoreCacheCmd(infoBreakPoint.relative == true ? "G91\n" : "G90\n");    // infoCacheCmd.queue[18]
-    mustStoreCacheCmd(infoBreakPoint.relative_e == true ? "M83\n" : "M82\n");  // infoCacheCmd.queue[19]
+    mustStoreCacheCmd(infoBreakPoint.relative == true ? "G91\n" : "G90\n");  // infoCacheCmd.queue[16]
+    if (infoBreakPoint.relative_e == false) mustStoreCacheCmd("M82\n");      // infoCacheCmd.queue[17]
 
-    // End of cache
-    // The length of the gcode stored in the cache should be less than max length = 20
-    // Otherwise, if there are M109/M190/M191 blocking the queue, it will cause "Busy processing, please wait..." and bring bad user experience
   }
+
+  for (uint8_t i = 0; i < infoSettings.fan_count; i++)
+  {
+    if (infoBreakPoint.fan[i] != 0)
+    {
+      mustStoreCmd(fanCmd[i], infoBreakPoint.fan[i]);
+    }
+  }
+
+  // end of cache
+  // The length of the gcode stored in the cache should be less than max length (=20)
+  // otherwise it will cause "Busy processing, please wait..." and TFT freeze.
 
   f_close(&fp);
   return true;
