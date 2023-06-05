@@ -308,12 +308,12 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
 // set the hotend to the minimum extrusion temperature if user selected "OK"
 void heatToMinTemp(void)
 {
-  heatSetTargetTemp(heatGetCurrentTool(), infoSettings.min_ext_temp, FROM_GUI);
+  heatSetTargetTemp(heatGetToolIndex(), infoSettings.min_ext_temp, FROM_GUI);
 }
 
 NOZZLE_STATUS warmupNozzle(void)
 {
-  uint8_t toolIndex = heatGetCurrentTool();
+  uint8_t toolIndex = heatGetToolIndex();
 
   if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
   {
