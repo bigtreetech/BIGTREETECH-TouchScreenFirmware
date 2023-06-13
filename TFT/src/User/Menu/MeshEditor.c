@@ -184,8 +184,8 @@ const GUI_RECT meshKeyRect[ME_KEY_NUM] = {
 
   // arrow keys
   {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 0 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT},  // UP
-  {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 1 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT},  // PREV
-  {MESH_ARROW_X0 + 1 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT},  // NEXT
+  {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 1 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT},  // LEFT
+  {MESH_ARROW_X0 + 1 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 1 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT},  // RIGHT
   {MESH_ARROW_X0 + 0 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 2 * MESH_ARROW_HEIGHT, MESH_ARROW_X0 + 2 * MESH_ARROW_WIDTH, MESH_ARROW_Y0 + 3 * MESH_ARROW_HEIGHT},  // DOWN
 #else
   #ifdef KEYBOARD_ON_LEFT
@@ -362,7 +362,7 @@ void meshSaveCallback(void)
     memcpy(meshData->oriData, meshData->curData, sizeof(meshData->oriData)); // sync mesh data
 }
 
-static void meshUpdateIndex(MESH_KEY_VALUES key_num)
+static void meshUpdateIndex(const MESH_KEY_VALUES key_num)
 {
   switch (key_num)
   {
@@ -403,7 +403,7 @@ static bool meshSetValue(const float newMeshData)
 {
   if (meshData->curData[meshData->index] != newMeshData)
   {
-    mustStoreCmd("M421 I%d J%d Z%.3f\n", (meshData->rowsNum - 1) - meshData->row, newMeshData);  // (meshData->rowsNum - 1) - meshData->row -> real row in eeprom
+    mustStoreCmd("M421 I%d J%d Z%.3f\n", meshData->col, (meshData->rowsNum - 1) - meshData->row, newMeshData);  // (meshData->rowsNum - 1) - meshData->row -> real row in eeprom
     meshData->curData[meshData->index] = newMeshData;
     return true;
   }
@@ -417,9 +417,9 @@ static void meshUpdateValueMinMax(void)
 
   for (uint16_t i = 0; i < meshData->dataSize; i++)
   {
-    if(meshData->curData[i] < meshData->valueMin)
+    if (meshData->curData[i] < meshData->valueMin)
       meshData->valueMin = meshData->curData[i];
-    else if(meshData->curData[i] > meshData->valueMax)
+    else if (meshData->curData[i] > meshData->valueMax)
       meshData->valueMax = meshData->curData[i];
   }
 
@@ -769,11 +769,10 @@ void meshUpdateData(char * dataRow)
 void menuMeshEditor(void)
 {
   MESH_KEY_VALUES key_num = ME_KEY_IDLE;
-  uint16_t oldIndex;
   uint16_t curIndex;
 
   meshAllocData();  // allocates and initialize mesh data if not already allocated and initialized
-  oldIndex = curIndex = meshData->index;
+  curIndex = meshData->index;
 
   mustStoreCmd("M420 V1 T1\n");  // retrieve the mesh data
 
@@ -804,17 +803,20 @@ void menuMeshEditor(void)
       case ME_KEY_RIGHT:
       case ME_KEY_INCREASE:
         meshUpdateIndex(key_num);
+        meshDrawGridCell(curIndex, true);  // draw point with old index
+        curIndex = meshData->index;
+        meshDrawGridCell(curIndex, true);  // draw point with new index
+        meshDrawInfo(false);
         break;
 
       case ME_KEY_EDIT:
-        {
-          if (coordinateIsKnown() == false)
-            probeHeightHome();  // home, disable ABL and raise nozzle
+        if (coordinateIsKnown() == false)
+          probeHeightHome();  // home, disable ABL and raise nozzle
 
-          meshSetValue(menuMeshTuner(meshData->col, (meshData->rowsNum - 1) - meshData->row, meshData->curData[curIndex]));  // (meshData->rowsNum - 1) - meshData->row -> real row in eeprom
+        // call mesh tuner menu and set current mesh value, if changed
+        meshSetValue(menuMeshTuner(meshData->col, (meshData->rowsNum - 1) - meshData->row, meshData->curData[curIndex]));  // (meshData->rowsNum - 1) - meshData->row -> real row in eeprom
 
-          meshDrawMenu();
-        }
+        meshDrawMenu();
         break;
 
       case ME_KEY_RESET:
@@ -833,33 +835,19 @@ void menuMeshEditor(void)
         meshSave();  // save mesh changes to eeprom (if eeprom exists)
         break;
 
+      case ME_KEY_OK:
+        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->oriData)))
+          meshSave();  // save mesh changes to eeprom (if eeprom exists)
+
+        meshDeallocData();
+        CLOSE_MENU();
+        break;
+
       default:
         break;
     }
 
-    if (key_num == ME_KEY_OK)
-    {
-      if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->oriData)))
-        meshSave();  // save mesh changes to eeprom (if eeprom exists)
-
-      meshDeallocData();
-      CLOSE_MENU();
-    }
-    else
-    {
-      if (curIndex != meshData->index)
-      {
-        curIndex = meshData->index;
-
-        meshDrawGridCell(oldIndex, true);  // draw point with old index
-        meshDrawGridCell(curIndex, true);  // draw point with new index
-        meshDrawInfo(false);
-
-        oldIndex = curIndex;
-      }
-
-      loopProcess();
-    }
+    loopProcess();
   }
 
   // restore default
