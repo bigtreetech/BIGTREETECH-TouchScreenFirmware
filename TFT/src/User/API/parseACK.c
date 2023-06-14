@@ -927,6 +927,12 @@ void parseACK(void)
       if (ack_continue_seen("Z: "))
         levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
     }
+    // parse G30 coordinate unreachable message
+    else if (ack_seen("Z Probe Past Bed"))
+    {
+      levelingSetProbedPoint(-1, -1, 0);  // cancel waiting for coordinates
+      BUZZER_PLAY(SOUND_ERROR);
+    }
     #if DELTA_PROBE_TYPE != 0
       // parse and store Delta calibration settings
       else if (ack_seen("Calibration OK"))

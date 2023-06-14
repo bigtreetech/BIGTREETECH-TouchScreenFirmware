@@ -37,7 +37,7 @@ void refreshValue(MENUITEMS * levelItems, uint8_t index)
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
-void checkRefreshValue(MENUITEMS * levelItems)
+bool checkRefreshValue(MENUITEMS * levelItems)
 {
   LEVELING_POINT levelingPoint = levelingGetProbedPoint();
 
@@ -47,7 +47,11 @@ void checkRefreshValue(MENUITEMS * levelItems)
     refreshValue(levelItems, levelingPoint);
 
     levelingResetProbedPoint();  // reset to check for new updates
+
+    return true;
   }
+
+  return false;
 }
 
 // show M48 on icon
@@ -169,7 +173,7 @@ void menuLevelCorner(void)
           levelingProbePoint(i);
 
           // following loop needed to guarantee the value for each point beeing probed is updated at least one time on the menu
-          TASK_LOOP_WHILE(isNotEmptyCmdQueue(), checkRefreshValue(&levelCornerItems));
+          TASK_LOOP_WHILE(!checkRefreshValue(&levelCornerItems))
         }
 
         break;
