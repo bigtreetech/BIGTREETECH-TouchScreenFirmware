@@ -134,7 +134,6 @@ the following options must be enabled in Marlin firmware.
 **Options to support dialog with host:**
 
 `EMERGENCY_PARSER` (in Configuration_adv.h)<br>
-`SERIAL_FLOAT_PRECISION 4` (in Configuration_adv.h)<br>
 `HOST_ACTION_COMMANDS` (in Configuration_adv.h)<br>
 `HOST_PROMPT_SUPPORT` (in Configuration_adv.h)<br>
 `HOST_STATUS_NOTIFICATIONS` (in Configuration_adv.h)<br>
