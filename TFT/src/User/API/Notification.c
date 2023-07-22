@@ -6,8 +6,12 @@
 const GUI_RECT toastRect = {START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TOAST_Y_PAD, LCD_WIDTH - START_X, TITLE_END_Y - TOAST_Y_PAD};
 const GUI_RECT toastIconRect = {START_X, TOAST_Y_PAD, START_X + TITLE_END_Y - (TOAST_Y_PAD * 2), TITLE_END_Y - TOAST_Y_PAD};
 
-// toast notification variables
-static TOAST toastlist[TOAST_MSG_COUNT];
+static struct
+{
+  DIALOG_TYPE style;
+  uint8_t isNew;
+  char text[TOAST_MSG_LENGTH];
+} toastlist[TOAST_MSG_COUNT];
 
 static uint8_t nextToastIndex = 0;   // next index to store new toast
 static uint8_t curToastDisplay = 0;  // current toast notification being displayed
@@ -24,11 +28,9 @@ void addToast(DIALOG_TYPE style, char * text)
 {
   LCD_WAKE();
 
-  TOAST t;
-  strncpy_no_pad(t.text, text, TOAST_MSG_LENGTH);
-  t.style = style;
-  t.isNew = true;
-  toastlist[nextToastIndex] = t;
+  strncpy_no_pad(toastlist[nextToastIndex].text, text, TOAST_MSG_LENGTH);
+  toastlist[nextToastIndex].style = style;
+  toastlist[nextToastIndex].isNew = true;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
 }
 
@@ -41,7 +43,7 @@ bool toastRunning(void)
 // check if any new notification is available
 static bool toastAvailable(void)
 {
-  for (int i = 0; i < TOAST_MSG_COUNT; i++)
+  for (uint8_t i = 0; i < TOAST_MSG_COUNT; i++)
   {
     if (toastlist[i].isNew == true)
       return true;
@@ -62,28 +64,34 @@ void drawToast(bool redraw)
 
     // draw icon
     uint8_t *icon;
-    uint8_t cursound;
-    if (toastlist[curToastDisplay].style == DIALOG_TYPE_ERROR)
+    SOUND cursound;
+
+    switch (toastlist[curToastDisplay].style)
     {
-      GUI_SetColor(NOTIF_ICON_ERROR_BG_COLOR);
-      icon = IconCharSelect(CHARICON_ERROR);
-      cursound = SOUND_ERROR;
-    }
-    else if (toastlist[curToastDisplay].style == DIALOG_TYPE_SUCCESS)
-    {
-      GUI_SetColor(NOTIF_ICON_SUCCESS_BG_COLOR);
-      icon = IconCharSelect(CHARICON_OK_ROUND);
-      cursound = SOUND_SUCCESS;
-    }
-    else
-    {
-      GUI_SetColor(NOTIF_ICON_INFO_BG_COLOR);
-      icon = IconCharSelect(CHARICON_INFO);
-      cursound = SOUND_TOAST;
+      case DIALOG_TYPE_ERROR:
+        GUI_SetColor(NOTIF_ICON_ERROR_BG_COLOR);
+        icon = IconCharSelect(CHARICON_ERROR);
+        cursound = SOUND_ERROR;
+        break;
+
+      case DIALOG_TYPE_SUCCESS:
+        GUI_SetColor(NOTIF_ICON_SUCCESS_BG_COLOR);
+        icon = IconCharSelect(CHARICON_OK_ROUND);
+        cursound = SOUND_SUCCESS;
+        break;
+
+      default:
+        GUI_SetColor(NOTIF_ICON_INFO_BG_COLOR);
+        icon = IconCharSelect(CHARICON_INFO);
+        cursound = SOUND_TOAST;
+        break;
     }
 
-    if (cursound >= 0 && !redraw)
-      BUZZER_PLAY(cursound);
+    if (!redraw)  // if notification is new
+    {
+      BUZZER_PLAY(cursound);  // play sound
+      nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);  // set new timer
+    }
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
     GUI_FillPrect(&toastIconRect);
@@ -99,10 +107,6 @@ void drawToast(bool redraw)
     // set current toast notification as old/completed
     toastlist[curToastDisplay].isNew = false;
 
-    // set new timer if notification is new
-    if (!redraw)
-      nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);
-
     GUI_RestoreColorDefault();
   }
 }
@@ -110,10 +114,7 @@ void drawToast(bool redraw)
 // check and control toast notification display
 void loopToast(void)
 {
-  if (getMenuType() == MENU_TYPE_FULLSCREEN)
-    return;
-
-  if (OS_GetTimeMs() > nextToastTime)
+  if (getMenuType() != MENU_TYPE_FULLSCREEN && OS_GetTimeMs() > nextToastTime)
   {
     if (toastAvailable())
     {
@@ -130,17 +131,14 @@ void loopToast(void)
 }
 
 // add new message to notification queue
-void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog)
+void addNotification(DIALOG_TYPE style, char *title, char *text, bool draw_dialog)
 {
   LCD_WAKE();
 
-  if (nextMsgIndex > MAX_MSG_COUNT - 1)
+  if (nextMsgIndex >= MAX_MSG_COUNT)
   {
     // remove oldest message and move all messages up one step
-    for (int i = 0; i < MAX_MSG_COUNT - 1; i++)
-    {
-      memcpy(&msglist[i], &msglist[i + 1], sizeof(NOTIFICATION));
-    }
+    memmove(msglist, &msglist[1],  (MAX_MSG_COUNT - 1) * (sizeof(NOTIFICATION)));
     nextMsgIndex = MAX_MSG_COUNT - 1;
   }
 
@@ -148,18 +146,17 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   msglist[nextMsgIndex].style = style;
   strncpy_no_pad(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
   strncpy_no_pad(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
+  nextMsgIndex++;
 
-  if (ShowDialog && MENU_IS_NOT(menuNotification))
-    popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);
-
-  if (nextMsgIndex < MAX_MSG_COUNT) nextMsgIndex += 1;  //(nextMsgIndex + 1) % MAX_MSG_COUNT;
+  if (draw_dialog && MENU_IS_NOT(menuNotification))
+    popupReminder(style, (uint8_t *)title, (uint8_t *)text);
 
   if (notificationHandler != NULL)
     notificationHandler();
 
   notificationDot();
 
-  statusScreen_setMsg((uint8_t *)title, (uint8_t *)text);
+  statusScreenSetMsg((uint8_t *)title, (uint8_t *)text);
 }
 
 // replay a notification
@@ -172,7 +169,7 @@ void replayNotification(uint8_t index)
 // retrieve a stored notification
 NOTIFICATION *getNotification(uint8_t index)
 {
-  if (strlen(msglist[index].title) > 0 && strlen(msglist[index].text) > 0)
+  if (msglist[index].title[0] != '\0' && msglist[index].text[0] != '\0')
     return &msglist[index];
   else
     return NULL;
@@ -180,10 +177,7 @@ NOTIFICATION *getNotification(uint8_t index)
 
 bool hasNotification(void)
 {
-  if (nextMsgIndex == 0)
-   return false;
-  else
-    return true;
+  return (nextMsgIndex != 0);
 }
 
 void clearNotification(void)
@@ -191,11 +185,11 @@ void clearNotification(void)
   nextMsgIndex = 0;
   for (int i = 0; i < MAX_MSG_COUNT; i++)
   {
-    msglist[i].text[0] = 0;
-    msglist[i].title[0] = 0;
+    msglist[i].text[0] = '\0';
+    msglist[i].title[0] = '\0';
   }
   notificationDot();
-  statusScreen_setReady();
+  statusScreenSetReady();
 }
 
 // check if pressed on titlebar area

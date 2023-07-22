@@ -971,7 +971,7 @@ void sendQueueCmd(void)
             stripChecksum(rawMsg);
             msgText = stripHead(rawMsg);
 
-            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)msgText);
+            statusScreenSetMsg((uint8_t *)"M117", (uint8_t *)msgText);
 
             if (MENU_IS_NOT(menuStatus))
               addToast(DIALOG_TYPE_INFO, (char *)msgText);
