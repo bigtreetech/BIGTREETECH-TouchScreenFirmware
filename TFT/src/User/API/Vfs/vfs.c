@@ -175,14 +175,11 @@ bool isRootFolder(void)
 }
 
 // check if filename provides a supported filename extension
-char * isSupportedFile(const char * filename)
+static char * isSupportedFile(const char * filename)
 {
   char * extPos = strrchr(filename, '.');  // check last "." in the name where extension is supposed to start
 
-  if (extPos != NULL && extPos[1] != 'g' && extPos[1] != 'G')
-    extPos = NULL;
-
-  return extPos;
+  return (extPos != NULL && (extPos[1] == 'g' || extPos[1] == 'G')) ? extPos : NULL;
 }
 
 // add a file name or folder name to file list
@@ -270,7 +267,7 @@ char * getFoldername(uint8_t index)
 }
 
 // return the long file name if exists, otherwise the short one
-char * getFilename(uint8_t index)
+char * getFilename(uint16_t index)
 {
   if (infoFile.longFile[index] != NULL)
     return infoFile.longFile[index];
@@ -280,14 +277,13 @@ char * getFilename(uint8_t index)
 
 char * hideExtension(char * filename)
 {
-  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
+  if (infoSettings.filename_extension == 0 && strchr(filename, '\0')[1] == '\0')  // if showing the filename extension is disabled and extension not already hidden
   {
     char * extPos = isSupportedFile(filename);
 
     // if filename provides a supported filename extension then
-    // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-    if (extPos != NULL && strchr(filename, '\0')[1] == '\0')
-      *extPos = 0;  // temporary hide filename extension
+    if (extPos != NULL)
+      *extPos = '\0';  // temporary hide filename extension
   }
 
   return filename;
@@ -295,37 +291,14 @@ char * hideExtension(char * filename)
 
 char * restoreExtension(char * filename)
 {
-  if (infoSettings.filename_extension == 0)  // if filename extension is disabled
+  if (infoSettings.filename_extension == 0)  // if showing the filename extension is disabled
   {
+    char * extPos = strchr(filename, '\0');
+
     // check extra byte for filename extension check. If 0, no filename extension was previously hidden
-    if (filename[strlen(filename) + 1] != '\0')
-      filename[strlen(filename)] = '.';  // restore filename extension
+    if (extPos[1] != '\0')
+      *extPos = '.';  // restore filename extension
   }
-
-  return filename;
-}
-
-// hide the extension of the file name and return a pointer to that file name
-// (the long one if exists, otherwise the short one).
-// The hide of the extension is not temporary so do not forget to restore it afterwards!
-char * hideFilenameExtension(uint8_t index)
-{
-  char * filename = hideExtension(infoFile.file[index]);
-
-  if (infoFile.longFile[index] != NULL)
-    filename = hideExtension(infoFile.longFile[index]);
-
-  return filename;
-}
-
-// restore the extension of the file name and return a pointer to that file name
-// (the long one if exists, otherwise the short one)
-char * restoreFilenameExtension(uint8_t index)
-{
-  char * filename = restoreExtension(infoFile.file[index]);
-
-  if (infoFile.longFile[index] != NULL)
-    filename = restoreExtension(infoFile.longFile[index]);
 
   return filename;
 }
@@ -340,28 +313,6 @@ char * getPrintFilename(void)
     return getPathTail();       // skip path information
 
   return getFilename(infoFile.fileIndex);
-}
-
-// get print title according to print originator (remote or local to TFT)
-bool getPrintTitle(char * buf, uint8_t len)
-{
-  // example: "SD:/test/cap2.gcode" -> "SD:cap2.gcode"
-
-  char * strPtr = getPrintFilename();
-
-  // "+ 2": space for terminating null character and the flag for filename extension check
-  if (strlen(getFS()) + strlen(strPtr) + 2 > len)
-  {
-    *buf = '\0';  // set buffer to empty string
-
-    return false;
-  }
-
-  strxcpy(buf, getFS(), len);  // set source and set the flag for filename extension check
-  strcat(buf, strPtr);             // append filename
-  hideExtension(buf);              // hide filename extension if filename extension feature is disabled
-
-  return true;
 }
 
 // volume exist detect

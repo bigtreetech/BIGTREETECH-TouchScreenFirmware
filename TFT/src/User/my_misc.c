@@ -45,10 +45,12 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
 /*
  * - always copy num-1 characters from source to destination
  *   regardless of null terminating character found in source
+ * - destination always ends with '\0'
+ *
+ * Note:
  * - to avoid overflows, the size of "destination" should be at least "num" bytes
  *   and the size of "source" should be at least "num-1" bytes, in both cases
  *   including the '\0' terminal character
- * - destination always ends with '\0'
  */
 void strxcpy(char * destination, const char * source, size_t num)
 {
@@ -62,6 +64,9 @@ void strxcpy(char * destination, const char * source, size_t num)
  * - copy source to destination but no more than width-1 characters
  * - if null terminating character found in source the rest is padded with 0
  * - destination always ends with '\0'
+ * Note:
+ * - to avoid overflows, the size of "destination" should be at least
+ *   "width" bytes, including the '\0' terminal character
  */
 void strwcpy(char * destination, const char * source, size_t width)
 {
@@ -79,6 +84,10 @@ void strwcpy(char * destination, const char * source, size_t width)
  * - copy source to destination but no more than size-1 characters
  * - if null terminating character found in source the copy stops there
  * - destination always ends with '\0'
+ * Note:
+ * - to avoid overflows, the dimension of "destination" should be
+ *   at least the "size" bytes or the size of "source", which one
+ *   is smaller (including the '\0' terminal character)
  */
 void strscpy(char * destination, const char * source, size_t size)
 {
@@ -245,10 +254,8 @@ void stripChecksum(char *str)
   // "/test/cap2.gcode  *36\n\0" -> "/test/cap2.gcode"
   // "/test/cap2.gcode  \n\0" -> "/test/cap2.gcode"
 
-  char *strPtr = strrchr(str, '*');  // e.g. "/test/cap2.gcode  *36\n\0" -> "*36\n\0"
-
-  if (strPtr == NULL)
-    strPtr = str + strlen(str);      // e.g. "/test/cap2.gcode  \n\0" -> "\0"
+  char *strPtr = strrchr(str, '*');
+  if (strPtr == NULL) strPtr = strchr(str, '\0');
 
   while (strPtr != str)
   {
@@ -264,6 +271,7 @@ void stripChecksum(char *str)
     }
   }
 
+  // Add the null terminator to remove any trailing unwanted characters
   // e.g. "  *36\n\0" -> "\0 *36\n\0"
   // e.g. "  \n\0" -> "\0 \n\0"
   //

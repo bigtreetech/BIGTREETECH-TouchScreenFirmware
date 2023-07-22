@@ -303,7 +303,7 @@ void initPrintSummary(void)
   infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0, false};
 
   // save print filename (short or long filename)
-  sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintFilename());
+  strscpy(infoPrintSummary.name, getPrintFilename(), SUMMARY_NAME_LEN);
 }
 
 void preparePrintSummary(void)
