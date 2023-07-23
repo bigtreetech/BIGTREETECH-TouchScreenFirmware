@@ -26,7 +26,6 @@ typedef enum
 } WRITING_MODE;
 
 GCODE_QUEUE cmdQueue;              // command queue where commands to be sent are stored
-GCODE_QUEUE cmdCache;              // only when heatHasWaiting() returns "false" the cmd in this cache will move to cmdQueue queue
 char * cmd_ptr;
 uint8_t cmd_len;
 SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
@@ -108,7 +107,7 @@ void mustStoreCmd(const char * format, ...)
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
+    TASK_LOOP_WHILE(isFullCmdQueue());  // wait for a free slot in the queue in case the queue is currently full
   }
 
   va_list va;
@@ -170,40 +169,10 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
   return true;
 }
 
-// Store gcode cmd to cmdCache queue.
-// This command will be moved to cmdQueue queue by loopPrintFromTFT() -> moveCacheToCmd().
-// This function is used only to restore the printing status after a power failed.
-void mustStoreCacheCmd(const char * format, ...)
-{
-  if (cmdCache.count >= CMD_QUEUE_SIZE)
-  {
-    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
-    loopProcessToCondition(&isFullCmdQueue);  // wait for a free slot in the queue in case the queue is currently full
-  }
-
-  va_list va;
-  va_start(va, format);
-  commonStoreCmd(&cmdCache, format, va);
-  va_end(va);
-}
-
-// Move gcode cmd from cmdCache to cmdQueue queue.
-bool moveCacheToCmd(void)
-{
-  if (cmdQueue.count >= CMD_QUEUE_SIZE || cmdCache.count == 0) return false;
-
-  storeCmd("%s", cmdCache.queue[cmdCache.index_r].gcode);
-  cmdCache.count--;
-  cmdCache.index_r = (cmdCache.index_r + 1) % CMD_QUEUE_SIZE;
-
-  return true;
-}
-
 // Clear all gcode cmd in cmdQueue queue.
 void clearCmdQueue(void)
 {
   cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
-  cmdCache.count = cmdCache.index_w = cmdCache.index_r = 0;
 }
 
 // Strip out any leading space from the passed command.
@@ -537,8 +506,7 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
   // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
 
   if (cmd[0] != '\0')
-    TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex))
-
+    TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex));
 }
 
 // Send emergency command now.
@@ -1481,7 +1449,6 @@ void sendQueueCmd(void)
     case 'T':
       heatSetToolIndex(cmd_value());
       break;
-
   }  // end parsing cmd
 
   if (sendCmd(false, avoid_terminal) == true)  // if command was sent

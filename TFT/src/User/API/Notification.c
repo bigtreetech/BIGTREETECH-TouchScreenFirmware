@@ -145,7 +145,7 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   }
 
   // store message
-  msglist[nextMsgIndex].style  = style;
+  msglist[nextMsgIndex].style = style;
   strncpy_no_pad(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
   strncpy_no_pad(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
 

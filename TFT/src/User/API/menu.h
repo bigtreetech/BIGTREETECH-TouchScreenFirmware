@@ -215,7 +215,7 @@ void menuDummy(void);
 void loopBackEnd(void);
 void loopFrontEnd(void);
 void loopProcess(void);
-void loopProcessToCondition(CONDITION_CALLBACK condCallback);
+void loopProcessAndGUI(void);
 
 #ifdef __cplusplus
 }

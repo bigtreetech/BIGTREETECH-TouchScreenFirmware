@@ -1336,12 +1336,10 @@ void parseACK(void)
     {
       if (ack_seen("External") || ack_seen("Software") || ack_seen("Watchdog") || ack_seen("Brown out"))
       {
-        /*
-         * Proceed to reset the command queue, host status, fan speeds and load default machine settings.
-         * These functions will also trigger the query of temperatures which together with the resets
-         * done will also trigger the query of the motherboard capabilities and settings. It is necessary
-         * to do so because after the motherboard reset things might have changed (ex. FW update by M997).
-         */
+        // Proceed to reset the command queue, host status, fan speeds and load default machine settings.
+        // These functions will also trigger the query of temperatures which together with the resets
+        // done will also trigger the query of the motherboard capabilities and settings. It is necessary
+        // to do so because after the motherboard reset things might have changed (ex. FW update by M997).
 
         clearCmdQueue();
         memset(&infoHost, 0, sizeof(infoHost));

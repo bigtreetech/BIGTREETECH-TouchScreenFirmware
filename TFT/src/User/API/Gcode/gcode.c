@@ -3,9 +3,9 @@
 
 REQUEST_COMMAND_INFO requestCommandInfo = {0};
 
-bool isWaitingResponse(void)
+void waitResponse(void)
 {
-  return (!requestCommandInfo.done);
+  TASK_LOOP_WHILE(!requestCommandInfo.done);
 }
 
 bool requestCommandInfoIsRunning(void)
@@ -51,7 +51,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean before requestCommand
+  TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean before requestCommand
 
   requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
@@ -78,7 +78,7 @@ bool request_M21(void)
   mustStoreCmd((infoMachineSettings.multiVolume == ENABLED) ? ((infoFile.onboardSource == BOARD_SD) ? "M21 S\n" : "M21 U\n") : "M21\n");
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  waitResponse();
 
   clearRequestCommandInfo();
 
@@ -100,7 +100,7 @@ char * request_M20(void)
     mustStoreCmd("M20\n");
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  waitResponse();
 
   //clearRequestCommandInfo();  // shall be call after copying the buffer ...
   return requestCommandInfo.cmd_rev_buf;
@@ -126,7 +126,7 @@ char * request_M33(const char * filename)
     mustStoreCmd("M33 %s\n", filename);
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  waitResponse();
 
   //clearRequestCommandInfo();  // shall be call after copying the buffer
   return requestCommandInfo.cmd_rev_buf;
@@ -178,7 +178,7 @@ long request_M23_M36(const char * filename)
   }
 
   // Wait for response
-  loopProcessToCondition(&isWaitingResponse);
+  waitResponse();
 
   if (requestCommandInfo.inError)
   {
@@ -260,12 +260,12 @@ void request_M98(const char * filename)
   mustStoreCmd(command);
 
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
-  TASK_LOOP_WHILE(isEnqueued(command))
+  TASK_LOOP_WHILE(isEnqueued(command));
 
   rrfStatusQueryFast();
 
   // Wait for macro to complete
-  loopProcessToCondition(&rrfStatusIsBusy);
+  TASK_LOOP_WHILE(rrfStatusIsBusy());
 
   rrfStatusQueryNormal();
 }
@@ -278,5 +278,5 @@ void request_M20_rrf(const char * nextdir, bool with_ts, FP_STREAM_HANDLER handl
 
   mustStoreCmd("M20 S%d P\"/%s\"\n", with_ts ? 3 : 2, nextdir);
 
-  loopProcessToCondition(&isWaitingResponse);
+  waitResponse();
 }

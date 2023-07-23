@@ -15,21 +15,22 @@ bool powerFailedGetRestore(void);          // get the value of current print res
 
 // called in Printing.c
 
+bool powerFailedInitRestore(void);  // initialize print restore, if any, if not already initialized (one shot flag)
+
 /**
- * initialize PLR info.
+ * load PLR info.
  * If print restore flag was enabled (e.g. by powerFailedSetRestore function called in PrintRestore.c),
- * try to load PLR info from file in order to restore the print from the failed point.
+ * try to load PLR info from file in order to restore the print from the failed point (setting the offset
+ * on print file to the backed up layer).
  * It finally disables print restore flag (one shot flag) for the next print.
  * The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
  */
-bool powerFailedInitData(void);
+bool powerFailedLoad(FIL *print_fp);
 
 bool powerFailedExist(void);
-bool powerFailedCreate(char *path) ;
+void powerFailedCreate(char *path);
 void powerFailedCache(uint32_t offset);
-void powerFailedClose(void);
 void powerFailedDelete(void);
-bool powerFailedlSeek(FIL *fp);
 
 #ifdef __cplusplus
 }

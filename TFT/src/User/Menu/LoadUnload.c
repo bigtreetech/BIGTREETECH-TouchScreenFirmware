@@ -35,7 +35,7 @@ void menuLoadUnload(void)
 
   if (eAxisBackup.handled == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+    TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
     eAxisBackup.coordinate = coordinateGetAxis(E_AXIS);
     eAxisBackup.handled = true;

@@ -18,9 +18,9 @@ extern "C" {
 
 typedef char CMD[CMD_MAX_SIZE];
 
-bool isPendingCmd(void);         // also usable as condition callback for loopProcessToCondition()
-bool isFullCmdQueue(void);       // also usable as condition callback for loopProcessToCondition()
-bool isNotEmptyCmdQueue(void);   // also usable as condition callback for loopProcessToCondition()
+bool isPendingCmd(void);
+bool isFullCmdQueue(void);
+bool isNotEmptyCmdQueue(void);
 bool isEnqueued(const CMD cmd);
 bool isWritingMode(void);
 
@@ -28,8 +28,6 @@ bool storeCmd(const char * format, ...);
 void mustStoreCmd(const char * format, ...);
 void mustStoreScript(const char * format, ...);
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex);
-void mustStoreCacheCmd(const char * format, ...);
-bool moveCacheToCmd(void);
 void clearCmdQueue(void);
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex);
 void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
