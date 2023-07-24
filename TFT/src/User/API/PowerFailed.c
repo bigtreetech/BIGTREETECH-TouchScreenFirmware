@@ -66,14 +66,14 @@ bool powerFailedLoad(FIL *print_fp)
   if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK)
     return false;
 
-  if (f_lseek(&fp, MAX_PATH_LEN)                                    == FR_OK)
+  if (f_lseek(&fp, MAX_PATH_LEN) == FR_OK)
   {
-    if (f_read(&fp, &model_icon, 1, &br)                            == FR_OK)
+    if (f_read(&fp, &model_icon, 1, &br) == FR_OK)
     {
       if (f_read(&fp, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
       {
         // set offset on print file once infoBreakPoint was successfully read
-        if (f_lseek(print_fp, infoBreakPoint.offset)                == FR_OK)
+        if (f_lseek(print_fp, infoBreakPoint.offset) == FR_OK)
         {
           load_ok = true;
           restore_ok = true;
@@ -189,11 +189,11 @@ void powerFailedCreate(char *path)
   if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)
     return;
 
-  if (f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br)                          == FR_OK)
+  if (f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br) == FR_OK)
   {
     uint8_t model_icon = isPrintModelIcon();
 
-    if (f_write(&fpPowerFailed, &model_icon, 1, &br)                            == FR_OK)
+    if (f_write(&fpPowerFailed, &model_icon, 1, &br) == FR_OK)
     {
       // if PLR file not loaded, initilaize data. Otherwise use loaded data
       // so also powerFailedInitRestore() function can be used
@@ -202,7 +202,7 @@ void powerFailedCreate(char *path)
 
       if (f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
       {
-        if (f_sync(&fpPowerFailed)                                              == FR_OK)
+        if (f_sync(&fpPowerFailed) == FR_OK)
         {
           create_ok = true;
         }
