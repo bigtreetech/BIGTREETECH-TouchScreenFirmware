@@ -451,14 +451,10 @@ uint16_t meshGetRGBColor(const float value)
   if (meshData->valueDelta == 0)
     return (meshData->rStart << 11) | (meshData->gStart << 5) | (meshData->bStart);
 
-  float valueDiff;
-  uint16_t r, g, b;
-
-  valueDiff = value - meshData->valueMin;
-
-  r = mapRGBdata(&meshData->rStart, &meshData->rDelta, &valueDiff, &meshData->valueDelta);
-  g = mapRGBdata(&meshData->gStart, &meshData->gDelta, &valueDiff, &meshData->valueDelta);
-  b = mapRGBdata(&meshData->bStart, &meshData->bDelta, &valueDiff, &meshData->valueDelta);
+  float valueDiff = value - meshData->valueMin;
+  uint16_t r = mapRGBdata(&meshData->rStart, &meshData->rDelta, &valueDiff, &meshData->valueDelta);
+  uint16_t g = mapRGBdata(&meshData->gStart, &meshData->gDelta, &valueDiff, &meshData->valueDelta);
+  uint16_t b = mapRGBdata(&meshData->bStart, &meshData->bDelta, &valueDiff, &meshData->valueDelta);
 
   return (r << 11) | (g << 5) | (b);
 }
@@ -787,12 +783,10 @@ void meshUpdateData(char * dataRow)
 void menuMeshEditor(void)
 {
   MESH_KEY_VALUES key_num = ME_KEY_IDLE;
-  bool forceExit = false;
-  uint16_t oldIndex;
   uint16_t curIndex;
 
   meshAllocData();  // allocates and initialize mesh data if not already allocated and initialized
-  oldIndex = curIndex = meshData->index;
+  curIndex = meshData->index;
 
   mustStoreCmd("M420 V1 T1\n");  // retrieve the mesh data
 
@@ -823,6 +817,11 @@ void menuMeshEditor(void)
       case ME_KEY_NEXT:
       case ME_KEY_INCREASE:
         meshUpdateIndex(key_num);
+
+        meshDrawGridCell(curIndex, true);  // draw point with old index
+        curIndex = meshData->index;        // update current index with new index
+        meshDrawGridCell(curIndex, true);  // draw point with new index
+        meshDrawInfo(false);
         break;
 
       case ME_KEY_EDIT:
@@ -854,7 +853,10 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_OK:
-        forceExit = true;
+        if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // check for changes
+          meshSave();
+
+        meshDeallocData();  // finally, deallocate mesh data (meshData no more accessible)
 
         CLOSE_MENU();
         break;
@@ -863,26 +865,7 @@ void menuMeshEditor(void)
         break;
     }
 
-    if (curIndex != meshData->index)
-    {
-      curIndex = meshData->index;
-
-      meshDrawGridCell(oldIndex, true);  // draw point with old index
-      meshDrawGridCell(curIndex, true);  // draw point with new index
-      meshDrawInfo(false);
-
-      oldIndex = curIndex;
-    }
-
     loopProcess();
-  }
-
-  if (forceExit)
-  {
-    if (memcmp(meshData->oriData, meshData->curData, sizeof(meshData->curData)))  // check for changes
-      meshSave();
-
-    meshDeallocData();  // finally, deallocate mesh data (meshData no more accessible)
   }
 
   // restore default

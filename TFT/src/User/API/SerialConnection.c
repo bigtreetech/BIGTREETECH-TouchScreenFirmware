@@ -112,7 +112,7 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
     Serial_Put(SERIAL_DEBUG_PORT, msg);
   #endif
 
-  uint8_t portCount = SERIAL_PORT_COUNT;                      // by default, select all the serial ports
+  uint8_t portCount = SERIAL_PORT_COUNT;  // by default, select all the serial ports
 
   if (portIndex == ALL_PORTS)         // if ALL_PORTS, forward the message to all the enabled serial ports
     portIndex = PORT_1;
