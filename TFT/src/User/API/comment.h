@@ -6,7 +6,6 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include <stdint.h>
 
 #define COMMENT_MAX_CHAR 100
 
