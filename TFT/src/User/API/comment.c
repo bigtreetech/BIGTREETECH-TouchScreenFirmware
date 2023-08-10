@@ -22,6 +22,16 @@ char * getNextToken(char * str)
   return token;
 }
 
+char * getNextTokenValue(uint32_t * token_value)
+{
+  char * token = strtok(NULL, TOKEN_DELIMITERS);
+
+  if (token != NULL)  // if a token was retrieved, convert the token string to value
+    *token_value = strtoul(token, NULL, 0);
+
+  return token;
+}
+
 void parseComment(void)
 {
   if (gCodeCommentLine[0] == '\0')
@@ -46,10 +56,8 @@ void parseComment(void)
         {
           if (strcmp(token, "count") == 0)  // check if next word is "count"
           {
-            if ((token = getNextToken(NULL)) != NULL)
+            if (getNextTokenValue(&token_value) != NULL)  // get the layer number
             {
-              token_value = strtoul(token, NULL, 0);
-
               if (token_value != 0)
                 setPrintLayerCount(token_value);
             }
@@ -72,10 +80,8 @@ void parseComment(void)
         {
           if (strcmp(token, "elapsed") == 0 && getPrintExpectedTime() > 0)  // check if next word is "elapsed"
           {
-            if ((token = getNextToken(NULL)) != NULL)
+            if (getNextTokenValue(&token_value) != NULL)  // get the elapsed time in seconds
             {
-              token_value = strtoul(token, NULL, 0);  // get the elapsed time in seconds
-
               setPrintRemainingTime(getPrintExpectedTime() - token_value);
             }
           }
@@ -99,10 +105,8 @@ void parseComment(void)
         {
           if (strcmp(token, "time") == 0)  // check if next word is "time"
           {
-            if ((token = getNextToken(NULL)) != NULL)
+            if (getNextTokenValue(&token_value) != NULL)  // get the remaining time in seconds
             {
-              token_value = strtoul(token, NULL, 0);  // get the remaining time in seconds
-
               setPrintRemainingTime(token_value);
 
               if (getPrintProgressSource() < PROG_TIME && infoSettings.prog_source == 1)
