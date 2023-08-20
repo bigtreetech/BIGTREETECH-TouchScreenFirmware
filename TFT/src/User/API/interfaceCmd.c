@@ -593,9 +593,10 @@ void sendQueueCmd(void)
 
       if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
       {
-        if (infoHost.connected && infoHost.tx_slots > 0)  // if connected and tx slots available
+        if (infoHost.tx_slots > 0)  // if available tx slots
           infoHost.tx_slots--;
-        else  // if not connected or no tx slots available
+
+        if (infoHost.tx_slots == 0)  // if no more tx slots available
           infoHost.wait = infoHost.connected;
       }
     }
@@ -1490,9 +1491,10 @@ void sendQueueCmd(void)
 
   if (sendCmd(false, avoid_terminal) == true)  // if command was sent
   {
-    if (infoHost.connected && infoHost.tx_slots > 0)  // if connected and tx slots available
+    if (infoHost.tx_slots > 0)  // if available tx slots
       infoHost.tx_slots--;
-    else  // if not connected or no tx slots available
+
+    if (infoHost.tx_slots == 0)  // if no more tx slots available
       infoHost.wait = infoHost.connected;
   }
 }  // sendQueueCmd
