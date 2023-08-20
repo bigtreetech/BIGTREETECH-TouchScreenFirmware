@@ -145,6 +145,10 @@ the following options must be enabled in Marlin firmware.
 `SET_PROGRESS_MANUALLY` (in Configuration_adv.h)<br>
 `M73_REPORT` (in Configuration_adv.h)<br>
 
+**Options to support ADVANCED_OK with host:**
+
+`ADVANCED_OK` (in Configuration_adv.h)<br>
+
 **Options to support M600 with host & (Un)Load menu:**
 
 `Options to support dialog with host` (as pre requisite)<br>

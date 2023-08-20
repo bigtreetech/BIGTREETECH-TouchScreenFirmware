@@ -62,6 +62,12 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 //     - specific port index: specific serial port
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
+// retrieve the number of bytes available on the provided serial port:
+//   - portIndex: index of serial port
+//
+//   - return value: number of bytes available on serial port
+uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex);
+
 // retrieve a message from the provided serial port, if any:
 //   - portIndex: index of serial port where data are read from
 //   - buf: buffer where data are stored

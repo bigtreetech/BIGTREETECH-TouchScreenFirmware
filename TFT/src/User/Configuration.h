@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20220518
+#define CONFIG_VERSION 20230820
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -40,6 +40,25 @@
 #define SP_2 0  // Default: 0
 #define SP_3 0  // Default: 0
 #define SP_4 0  // Default: 0
+
+/**
+ * Advanced OK
+ * Used/effective only in case "ADVANCED_OK" is also enabled in Configuration_adv.h in Marlin firmware.
+ * If enabled, the TFT will support the ADVANCED_OK feature eventually enabled in Marlin firmware.
+ * It means that the TFT will use the available TX G-code slots indication provided by the mainboard
+ * to schedule the transmission of multiple G-codes, if any, for a maximum of the given indication.
+ * If disabled, the TFT will support, independenly from the ADVANCED_OK feature configured in Marlin
+ * firmware, the transmission of a single G-code per time waiting for the related ACK message from
+ * the mainboard before proceeding with the next G-code transmission, if any.
+ *
+ * NOTES:
+ *   - Enable it in case ADVANCED_OK feature is enabled in Marlin firmware.
+ *   - Disable it (preferably) in case ADVANCED_OK feature is disabled in Marlin firmware or
+ *     if ADVANCED_OK feature is not requested/needed by the user.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define ADVANCED_OK 0  // Default: 0
 
 /**
  * Emulated M600
@@ -687,7 +706,7 @@
  * Z Steppers Auto-Alignment (ABL)
  * It allows to align multiple Z stepper motors using a bed probe by probing one position per stepper.
  * Enable this setting to show an icon in ABL menu allowing to run G34 command (it requires
- * Z_STEPPER_AUTO_ALIGN enabled in Configuration_adv.h in Marlin firmware).
+ * "Z_STEPPER_AUTO_ALIGN" enabled in Configuration_adv.h in Marlin firmware).
  *
  * NOTE: Only for Marlin printers with one stepper driver per Z stepper motor and no Z timing belt.
  *
@@ -1204,7 +1223,7 @@
 
 /**
  * M701, M702: Marlin Filament Load / Unload G-codes Support
- * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented.
+ * "FILAMENT_LOAD_UNLOAD_GCODES" option on Marlin configuration_adv.h need to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
 #define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)

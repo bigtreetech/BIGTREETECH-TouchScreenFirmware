@@ -592,7 +592,12 @@ void sendQueueCmd(void)
         writing_mode = NO_WRITING;
 
       if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
-        infoHost.wait = infoHost.connected;
+      {
+        if (infoHost.connected && infoHost.tx_slots > 0)  // if connected and tx slots available
+          infoHost.tx_slots--;
+        else  // if not connected or no tx slots available
+          infoHost.wait = infoHost.connected;
+      }
     }
 
     return;
@@ -1481,9 +1486,13 @@ void sendQueueCmd(void)
     case 'T':
       heatSetToolIndex(cmd_value());
       break;
-
   }  // end parsing cmd
 
   if (sendCmd(false, avoid_terminal) == true)  // if command was sent
-    infoHost.wait = infoHost.connected;
+  {
+    if (infoHost.connected && infoHost.tx_slots > 0)  // if connected and tx slots available
+      infoHost.tx_slots--;
+    else  // if not connected or no tx slots available
+      infoHost.wait = infoHost.connected;
+  }
 }  // sendQueueCmd
