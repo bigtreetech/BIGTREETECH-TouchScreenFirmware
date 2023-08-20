@@ -47,7 +47,7 @@
  * If enabled, the TFT will support the ADVANCED_OK feature eventually enabled in Marlin firmware.
  * It means that the TFT will use the available TX G-code slots indication provided by the mainboard
  * to schedule the transmission of multiple G-codes, if any, for a maximum of the given indication.
- * If disabled, the TFT will support, independenly from the ADVANCED_OK feature configured in Marlin
+ * If disabled, the TFT will support, independently from the ADVANCED_OK feature configured in Marlin
  * firmware, the transmission of a single G-code per time waiting for the related ACK message from
  * the mainboard before proceeding with the next G-code transmission, if any.
  *
