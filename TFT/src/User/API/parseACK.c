@@ -787,22 +787,23 @@ void parseACK(void)
     // Tuning parsed responses
     //----------------------------------------
 
-    // parse and store build volume size
-    else if (ack_seen("work:"))
+    // parse and store soft endstops (M211)
+    else if (GET_BIT(infoMachineSettings.softwareEndstops, 1))  // check "M211 seen" flag
     {
-      if (ack_continue_seen("min:"))
+      if (ack_seen("Min:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        // check endstop minimum values
+        if (ack_continue_seen("X")) infoSettings.endstop_min[X_AXIS] = ack_value();
+        if (ack_continue_seen("Y")) infoSettings.endstop_min[Y_AXIS] = ack_value();
+        if (ack_continue_seen("Z")) infoSettings.endstop_min[Z_AXIS] = ack_value();
+
+        // check endstop maximum values
+        if (ack_continue_seen("X")) infoSettings.endstop_max[X_AXIS] = ack_value();
+        if (ack_continue_seen("Y")) infoSettings.endstop_max[Y_AXIS] = ack_value();
+        if (ack_continue_seen("Z")) infoSettings.endstop_max[Z_AXIS] = ack_value();
       }
 
-      if (ack_continue_seen("max:"))
-      {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
-      }
+      SET_BIT_OFF(infoMachineSettings.softwareEndstops, 1);  // clear "M211 seen" flag
     }
     // parse M48, repeatability test
     else if (ack_starts_with("Mean:"))
@@ -811,22 +812,22 @@ void parseACK(void)
 
       sprintf(tmpMsg, "Mean: %0.5f", ack_value());
 
-      if (ack_continue_seen("Min: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
-      if (ack_continue_seen("Max: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
-      if (ack_continue_seen("Range: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
+      if (ack_continue_seen("Min:"))
+        sprintf(strchr(tmpMsg, '\0'), "\nMin: %0.5f", ack_value());
+      if (ack_continue_seen("Max:"))
+        sprintf(strchr(tmpMsg, '\0'), "\nMax: %0.5f", ack_value());
+      if (ack_continue_seen("Range:"))
+        sprintf(strchr(tmpMsg, '\0'), "\nRange: %0.5f", ack_value());
 
       popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
     }
     // parse M48, standard deviation
-    else if (ack_seen("Standard Deviation: "))
+    else if (ack_seen("Standard Deviation:"))
     {
       char tmpMsg[100];
       char * dialogMsg = (char *)getDialogMsgStr();
 
-      if (memcmp(dialogMsg, "Mean: ", 6) == 0)
+      if (memcmp(dialogMsg, "Mean:", 5) == 0)
       {
         levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
         sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", dialogMsg, ack_value());
@@ -838,10 +839,12 @@ void parseACK(void)
     else if (ack_starts_with("M211") || ack_seen("Soft endstops"))
     {
       uint8_t curValue = infoMachineSettings.softwareEndstops;
-      infoMachineSettings.softwareEndstops = ack_continue_seen("ON");
+      SET_BIT_VALUE(infoMachineSettings.softwareEndstops, 0, ack_continue_seen("ON"));  // set ON/Off bit
 
       if (curValue != infoMachineSettings.softwareEndstops)  // send a notification only if status is changed
         addToast(DIALOG_TYPE_INFO, ack_cache);
+
+      SET_BIT_ON(infoMachineSettings.softwareEndstops, 1);  // set "M211 seen" flag
     }
     // parse M303, PID autotune finished message
     else if (ack_starts_with("PID Autotune finished"))
@@ -922,13 +925,20 @@ void parseACK(void)
     else if (ack_seen("Bed X:"))
     {
       float x = ack_value();
-      float y = 0;
 
       if (ack_continue_seen("Y:"))
-        y = ack_value();
+      {
+        float y = ack_value();
 
-      if (ack_continue_seen("Z:"))
-        levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
+        if (ack_continue_seen("Z:"))
+          levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
+      }
+    }
+    // parse G30 coordinate unreachable message
+    else if (ack_seen("Z Probe Past Bed"))
+    {
+      levelingSetProbedPoint(-1, -1, 0);  // cancel waiting for coordinates
+      BUZZER_PLAY(SOUND_ERROR);
     }
     #if DELTA_PROBE_TYPE != 0
       // parse and store Delta calibration settings

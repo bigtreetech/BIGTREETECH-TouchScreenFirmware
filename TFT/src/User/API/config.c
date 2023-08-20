@@ -774,17 +774,21 @@ void parseConfigKey(uint16_t index)
       if (key_seen("CtI:")) SET_VALID_INT_VALUE(infoSettings.fan_max[7], MIN_FAN_SPEED, MAX_FAN_SPEED);
       break;
 
-    case C_INDEX_SIZE_MIN:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.machine_size_min[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+    case C_INDEX_ENDSTOP_MIN:
+      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.endstop_min[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.endstop_min[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.endstop_min[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
       break;
 
-    case C_INDEX_SIZE_MAX:
-      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
-      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.machine_size_max[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+    case C_INDEX_ENDSTOP_MAX:
+      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.endstop_max[X_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.endstop_max[Y_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
+      if (key_seen("Z")) SET_VALID_INT_VALUE(infoSettings.endstop_max[Z_AXIS], MIN_SIZE_LIMIT, MAX_SIZE_LIMIT);
       break;
+
+    case C_INDEX_BED_SIZE:
+      if (key_seen("X")) SET_VALID_INT_VALUE(infoSettings.bed_size[X_AXIS], 0, MAX_SIZE_LIMIT);
+      if (key_seen("Y")) SET_VALID_INT_VALUE(infoSettings.bed_size[Y_AXIS], 0, MAX_SIZE_LIMIT);
 
     case C_INDEX_XY_SPEED:
       if (key_seen("S")) SET_VALID_INT_VALUE(infoSettings.xy_speed[0], MIN_SPEED_LIMIT, MAX_SPEED_LIMIT);

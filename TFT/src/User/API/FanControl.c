@@ -27,7 +27,7 @@ bool fanIsValid(const uint8_t index)
     return false;
   else if (!infoSettings.ctrl_fan_en && index >= MAX_COOLING_FAN_COUNT)  // controller cooling fan is disabled
     return false;
-  else if (index >= (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT))  // invalid controller cooling fan index (not active/idle)
+  else if (index >= (MAX_COOLING_FAN_COUNT + MAX_CTRL_FAN_COUNT))  // invalid controller cooling fan index (not active/idle)
     return false;
   else
     return true;

@@ -62,7 +62,8 @@ void windowReDrawButton(uint8_t position, uint8_t pressed)
 void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
                    const uint8_t * no)
 {
-  window.type = type;  // window.type is used by GUI_DrawWindow() function so it must be set before the function invokation
+  TSC_ReDrawIcon = windowReDrawButton;
+  window.type = type;
 
   if (btn != NULL)
   {
@@ -90,8 +91,6 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
 
     setMenuType(MENU_TYPE_SPLASH);
   }
-
-  TSC_ReDrawIcon = windowReDrawButton;
 }
 
 void menuDialog(void)

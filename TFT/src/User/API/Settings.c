@@ -157,8 +157,13 @@ void initSettings(void)
 
   for (int i = 0; i < AXIS_NUM; i++)  // x, y, z
   {
-    infoSettings.machine_size_min[i]  = default_size_min[i];
-    infoSettings.machine_size_max[i]  = default_size_max[i];
+    infoSettings.endstop_min[i]  = default_size_min[i];
+    infoSettings.endstop_max[i]  = default_size_max[i];
+  }
+
+  for (int i = 0; i < AXIS_NUM - 1; i++)  // x, y
+  {
+    infoSettings.bed_size[i] = default_size_max[i];
   }
 
   for (int i = 0; i < SPEED_COUNT; i++)

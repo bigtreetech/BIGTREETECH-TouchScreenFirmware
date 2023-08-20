@@ -801,7 +801,7 @@ void sendQueueCmd(void)
               Serial_Forward(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
               Serial_Forward(cmd_port_index, buf);
-              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
+              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CTRL_FAN_COUNT : 0);
               Serial_Forward(cmd_port_index, buf);
               Serial_Forward(cmd_port_index, "ok\n");
 

@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20230929
+#define CONFIG_VERSION 20231001
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -491,11 +491,11 @@
 #define FAN_MAX {255, 255, 255, 255, 255, 255, 255, 255}  // Default: {255, 255, 255, 255, 255, 255, 255, 255}
 
 /**
- * Machine Size / Build Area
- * The TFT will auto-detect the machine size (min and max) in Marlin firmware (requires
- * enabling "M115_GEOMETRY_REPORT" in Configuration_adv.h in Marlin firmware).
- *   Format: [size_min: X<minimum distance> Y<minimum distance> Z<minimum distance>]
- *           [size_max: X<maximum distance> Y<maximum distance> Z<maximum distance>]
+ * Motion limits
+ * This sets the minimum and maximum motion limits. The TFT can autodetect it from an M211 respone.
+ * For this "MIN/MAX_SOFTWARE_ENDSTOPS" must be enabled in Marlin's "Configuration.h".
+ *   Format: [pos_min: X<minimum coordinate> Y<minimum coordinate> Z<minimum coordinate>]
+ *           [pos_max: X<maximum coordinate> Y<maximum coordinate> Z<maximum coordinate>]
  *   Unit: [distance in mm]
  *   Value range: [min: -2000, max: 2000]
  */
@@ -1117,7 +1117,7 @@
  * Monitoring Debug
  * Uncomment/Enable to monitor/show system resources usage in Monitoring menu.
  */
-#define DEBUG_MONITORING  // Default: commented (disabled)
+//#define DEBUG_MONITORING  // Default: commented (disabled)
 
 /**
  * Generic Debug
@@ -1431,7 +1431,7 @@
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
-#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
+//#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
  * Live Text Common Color Layout (Status Screen menu)
