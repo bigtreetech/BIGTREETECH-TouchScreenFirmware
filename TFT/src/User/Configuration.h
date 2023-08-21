@@ -45,13 +45,17 @@
  * TX Slots
  * Maximum number of G-code TX slots used by the TFT for the communication with the printer.
  *
- * NOTE: You can set this parameter to a value bigger than 1 in case you want to support a sort of
- *       static "ADVANCED_OK" feature but you have to set it according to the following key requirements:
- *       - a value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
- *       - "RX_BUFFER_SIZE" properly configured in Configuration_adv.h in Marlin firmware.
- *         To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffers. By default this is 96 * 4 bytes
- *         so you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that
- *         will be enough, but more is better/safer.
+ * NOTES:
+ *   - You can set this setting to a value bigger than 1 in case you want to support a sort of
+ *     static "ADVANCED_OK" feature but you have to set it according to the following key requirements:
+ *     - a value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
+ *     - "RX_BUFFER_SIZE" properly configured in Configuration_adv.h in Marlin firmware.
+ *       To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffer. By default this is 96 * 4 bytes
+ *       so you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that
+ *       will be enough, but more is better/safer.
+ *   - Typically, a value of 2 is enough to keep the printer busy most of the time while preventing
+ *     buffer overruns on RX buffer. Thus, 2 is the suggested value in case users want to enable the
+ *     static ADVANCED_OK feature allowed by this setting.
  *
  *   Value range: [min: 1, max: 16]
  */
@@ -891,7 +895,7 @@
  *
  * NOTE: Error messages from printer will always play the error sound.
  *
- * Parameters:
+ * Settings:
  *   touch_sound:  Enable/disable this to control touch feedback sound.
  *   toast_sound:  Enable/disable this to control all toast notification sounds.
  *   alert_sound:  Enable/disable this to control all popup and alert sounds
