@@ -47,28 +47,28 @@
  *
  * NOTE: You can set this parameter to a value bigger than 1 in case you want to support a sort of
  *       static "ADVANCED_OK" feature but you have to set it according to the following key requirements:
- *       - a value not bigger than "BUFSIZE" configured in Marlin's Configuration_adv.h.
- *       - "RX_BUFFER_SIZE" properly configured in Marlin's Configuration_adv.h.
+ *       - a value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
+ *       - "RX_BUFFER_SIZE" properly configured in Configuration_adv.h in Marlin firmware.
  *         To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffers. By default this is 96 * 4 bytes
  *         so you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that
  *         will be enough, but more is better/safer.
  *
- *   Value range: [min: 1, max: 255]
+ *   Value range: [min: 1, max: 16]
  */
 #define TX_SLOTS 1  // Default: 1
 
 /**
  * Advanced OK
  * Used/effective only in case "ADVANCED_OK" is also enabled in Configuration_adv.h in Marlin firmware.
- * If enabled, the TFT will support the ADVANCED_OK feature eventually enabled in Marlin firmware.
- * It means that the TFT will use the available G-code TX slots indication provided by the mainboard
- * to schedule the transmission of multiple G-codes, if any, for a maximum of the given indication.
- * If disabled, the TFT will support, independently from the ADVANCED_OK feature configured in Marlin
- * firmware, the transmission of G-codes according to the configured "TX_SLOTS" setting.
+ * If enabled and ADVANCED_OK feature enabled in Marlin firmware, the TFT will use the available G-code
+ * TX slots indication provided by the mainboard to schedule the transmission of multiple G-codes,
+ * if any, for a maximum of the given indication.
+ * If disabled or ADVANCED_OK feature disabled in Marlin firmware, the TFT will support the transmission
+ * of G-codes according to the configured "TX_SLOTS" setting.
  *
  * NOTES:
  *   - Enable it in case ADVANCED_OK feature is enabled in Marlin firmware.
- *   - Disable it (preferably) in case ADVANCED_OK feature is disabled in Marlin firmware or
+ *   - Disable it in case ADVANCED_OK feature is disabled in Marlin firmware or
  *     if ADVANCED_OK feature is not requested/needed by the user.
  *
  *   Options: [disable: 0, enable: 1]
@@ -1238,7 +1238,7 @@
 
 /**
  * M701, M702: Marlin Filament Load / Unload G-codes Support
- * "FILAMENT_LOAD_UNLOAD_GCODES" option on Marlin configuration_adv.h need to be uncommented.
+ * "FILAMENT_LOAD_UNLOAD_GCODES" option in Configuration_adv.h in Marlin fw needs to be uncommented.
  * Adds a submenu to the movement menu for selecting load and unload actions.
  */
 #define LOAD_UNLOAD_M701_M702  // Default: uncommented (enabled)
