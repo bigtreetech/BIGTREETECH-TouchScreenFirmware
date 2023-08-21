@@ -578,27 +578,20 @@ void sendQueueCmd(void)
   {
     if (fromTFT)  // ignore any command from TFT media
     {
-      sendCmd(true, avoid_terminal);
+      sendCmd(true, avoid_terminal);  // skip the command
     }
     else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
     {
       writeRemoteTFT();
 
-      sendCmd(true, avoid_terminal);
+      sendCmd(true, avoid_terminal);  // skip the command
     }
     else  // otherwise, if the command is from remote to onboard media
     {
       if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
         writing_mode = NO_WRITING;
 
-      if (sendCmd(false, avoid_terminal) == true)  // if the command was sent
-      {
-        if (infoHost.tx_slots > 0)  // if available tx slots
-          infoHost.tx_slots--;
-
-        if (infoHost.tx_slots == 0)  // if no more tx slots available
-          infoHost.wait = infoHost.connected;
-      }
+      goto send_cmd;  // send the command
     }
 
     return;
@@ -1489,6 +1482,7 @@ void sendQueueCmd(void)
       break;
   }  // end parsing cmd
 
+send_cmd:
   if (sendCmd(false, avoid_terminal) == true)  // if command was sent
   {
     if (infoHost.tx_slots > 0)  // if available tx slots

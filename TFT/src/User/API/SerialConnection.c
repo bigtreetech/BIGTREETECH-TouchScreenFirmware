@@ -26,7 +26,7 @@ static inline void Serial_InitPrimary(void)
 {
   setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
 
-  infoHost.tx_slots = DEFAULT_TX_SLOTS;
+  infoHost.tx_slots = infoSettings.tx_slots;
   infoHost.wait = infoHost.connected = false;
   infoHost.status = HOST_STATUS_IDLE;
 

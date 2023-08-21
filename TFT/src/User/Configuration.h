@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20230820
+#define CONFIG_VERSION 20230821
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -42,14 +42,29 @@
 #define SP_4 0  // Default: 0
 
 /**
+ * TX Slots
+ * Maximum number of G-code TX slots used by the TFT for the communication with the printer.
+ *
+ * NOTE: You can set this parameter to a value bigger than 1 in case you want to support a sort of
+ *       static "ADVANCED_OK" feature but you have to set it according to the following key requirements:
+ *       - a value not bigger than "BUFSIZE" configured in Marlin's Configuration_adv.h.
+ *       - "RX_BUFFER_SIZE" properly configured in Marlin's Configuration_adv.h.
+ *         To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffers. By default this is 96 * 4 bytes
+ *         so you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that
+ *         will be enough, but more is better/safer.
+ *
+ *   Value range: [min: 1, max: 255]
+ */
+#define TX_SLOTS 1  // Default: 1
+
+/**
  * Advanced OK
  * Used/effective only in case "ADVANCED_OK" is also enabled in Configuration_adv.h in Marlin firmware.
  * If enabled, the TFT will support the ADVANCED_OK feature eventually enabled in Marlin firmware.
- * It means that the TFT will use the available TX G-code slots indication provided by the mainboard
+ * It means that the TFT will use the available G-code TX slots indication provided by the mainboard
  * to schedule the transmission of multiple G-codes, if any, for a maximum of the given indication.
  * If disabled, the TFT will support, independently from the ADVANCED_OK feature configured in Marlin
- * firmware, the transmission of a single G-code per time waiting for the related ACK message from
- * the mainboard before proceeding with the next G-code transmission, if any.
+ * firmware, the transmission of G-codes according to the configured "TX_SLOTS" setting.
  *
  * NOTES:
  *   - Enable it in case ADVANCED_OK feature is enabled in Marlin firmware.

@@ -23,6 +23,7 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void initSettings(void)
 {
 // General Settings
+  infoSettings.tx_slots               = TX_SLOTS;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
                                          (ADVANCED_OK << INDEX_ADVANCED_OK) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |

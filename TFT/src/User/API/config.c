@@ -560,6 +560,10 @@ void parseConfigKey(uint16_t index)
       if (key_seen("P4:")) SET_VALID_INT_VALUE(infoSettings.serial_port[3], 0, BAUDRATE_COUNT - 1);
       break;
 
+    case C_INDEX_TX_SLOTS:
+      SET_VALID_INT_VALUE(infoSettings.tx_slots, 1, 255);
+      break;
+
     case C_INDEX_ADVANCED_OK:
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
