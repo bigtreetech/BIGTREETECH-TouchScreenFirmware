@@ -70,7 +70,7 @@ void Serial_DMA_Config(uint8_t port)
 
 void Serial_ClearData(uint8_t port)
 {
-  dmaL1Data[port].rIndex = dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize = 0;
+  dmaL1Data[port].wIndex = dmaL1Data[port].rIndex = dmaL1Data[port].flag = dmaL1Data[port].cacheSize = 0;
 
   if (dmaL1Data[port].cache != NULL)
   {

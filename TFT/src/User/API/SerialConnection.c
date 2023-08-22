@@ -149,7 +149,7 @@ uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex)
 uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
 {
   // if port index is out of range or no data to read from L1 cache
-  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || dmaL1Data[portIndex].rIndex == dmaL1Data[portIndex].wIndex)
+  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || dmaL1Data[portIndex].flag == dmaL1Data[portIndex].wIndex)
     return 0;
 
   DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[portIndex];
@@ -172,15 +172,18 @@ uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
 
     if (buf[i++] == '\n')  // if data end marker is found
     {
-      buf[i] = '\0';                   // end character
-      dmaL1Data_ptr->rIndex = rIndex;  // update queue's index
+      buf[i] = '\0';                                         // end character
+      dmaL1Data_ptr->flag = dmaL1Data_ptr->rIndex = rIndex;  // update queue's custom flag and reading index with rIndex
 
       return i;  // return the number of bytes stored in buf
     }
   }
 
   // if here, a partial message is present on the L1 cache (message not terminated by "\n").
-  // We temporary skip the message until it is fully received
+  // We temporary skip the message until it is fully received updating also dmaL1Data_ptr->flag to
+  // prevent to read again (multiple times) the same partial message on next function invokation
+
+  dmaL1Data_ptr->flag = wIndex;  // update queue's custom flag with wIndex
 
   return 0;  // return the number of bytes stored in buf
 }
