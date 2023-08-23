@@ -8,8 +8,9 @@
 typedef struct
 {
   char *cache;
-  uint16_t wIndex;
-  uint16_t rIndex;
+  uint16_t wIndex;  // writing index
+  uint16_t rIndex;  // reading index
+  uint16_t flag;    // custom flag (for custom usage by the application)
   uint16_t cacheSize;
 } DMA_CIRCULAR_BUFFER;
 
