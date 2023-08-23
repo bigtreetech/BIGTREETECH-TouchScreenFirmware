@@ -415,9 +415,9 @@ void parseACK(void)
         storeCmd("M115\n");  // as last command to identify the FW type!
       }
 
-      infoHost.tx_slots = infoSettings.tx_slots;
-      infoHost.connected = true;
       requestCommandInfo.inJson = false;
+
+      initInfoHost(true);  // re-initialize infoHost when connected
     }
 
     //----------------------------------------
@@ -451,6 +451,7 @@ void parseACK(void)
         }
 
         BUZZER_PLAY(SOUND_ERROR);
+
         goto parse_end;
       }
 
@@ -487,8 +488,12 @@ void parseACK(void)
         ackPopupInfo(magic_error);
       }
 
-      infoHost.wait = false;
       requestCommandInfo.inJson = false;
+
+      // if command is completed with "ok" used as stop magic keyword, proceed with "ok" response handling, if any
+      if (requestCommandInfo.done && ack_starts_with("ok"))
+        goto parse_ok;
+
       goto parse_end;
     }
 
@@ -509,8 +514,8 @@ void parseACK(void)
       else
         rrfParseACK(ack_cache);
 
-      infoHost.wait = false;
-      goto parse_end;
+      // proceed with regular "ok\n" response handling to update nfoHost.tx_slots and infoHost.tx_count
+      goto handle_ok;
     }
 
     //----------------------------------------
@@ -520,13 +525,18 @@ void parseACK(void)
     // it is checked first (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("ok"))
     {
-      infoHost.wait = false;
 
+    parse_ok:
       // if regular "ok\n" response
       if (ack_cache[ack_index] == '\n')
       {
-        // ADVANCED_OK not enabled or supported (e.g. not Marlin), 1 buffer just became available
+
+      handle_ok:
+        // ADVANCED_OK disabled or not supported (e.g. not Marlin), 1 buffer just became available
         infoHost.tx_slots = MIN(infoHost.tx_slots + 1, infoSettings.tx_slots);
+
+        if (infoHost.tx_count > 0)
+          infoHost.tx_count--;
 
         goto parse_end;  // there's nothing else to check for
       }
@@ -535,11 +545,17 @@ void parseACK(void)
       if (ack_continue_seen("P") && ack_continue_seen("B"))
       {
         // set infoHost.tx_slots also according to ADVANCED_OK feature enabled/disabled on TFT
-        infoHost.tx_slots = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 1 ?
-                            ack_value() : MIN(infoHost.tx_slots + 1, infoSettings.tx_slots);
+        infoHost.tx_slots = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0 ?
+                            MIN(infoHost.tx_slots + 1, infoSettings.tx_slots) : ack_value();
+
+        if (infoHost.tx_count > 0)
+          infoHost.tx_count--;
 
         goto parse_end;  // there's nothing else to check for
       }
+
+      // if here, there's nothing to do
+      goto parse_end;
     }
 
     //----------------------------------------
@@ -1352,12 +1368,10 @@ void parseACK(void)
     {
       if (ack_seen("External") || ack_seen("Software") || ack_seen("Watchdog") || ack_seen("Brown out"))
       {
-        /*
-         * Proceed to reset the command queue, host status, fan speeds and load default machine settings.
-         * These functions will also trigger the query of temperatures which together with the resets
-         * done will also trigger the query of the motherboard capabilities and settings. It is necessary
-         * to do so because after the motherboard reset things might have changed (ex. FW update by M997).
-         */
+        // Proceed to reset the command queue, host status, fan speeds and load default machine settings.
+        // These functions will also trigger the query of temperatures which together with the resets
+        // done will also trigger the query of the motherboard capabilities and settings. It is necessary
+        // to do so because after the motherboard reset things might have changed (ex. FW update by M997).
 
         clearCmdQueue();
         memset(&infoHost, 0, sizeof(infoHost));
@@ -1375,7 +1389,7 @@ void parseACK(void)
     #ifdef SERIAL_PORT_2
       if (ack_port_index == PORT_1)
       {
-        if (infoHost.wait == false && !ack_starts_with("ok"))
+        if (infoHost.tx_count == 0 && !ack_starts_with("ok"))
         { // if the ACK message is not related to a gcode originated by the TFT and it is not "ok", it is a spontaneous
           // ACK message so pass it to all the supplementary serial ports (since these messages came unrequested)
           Serial_Forward(SUP_PORTS, ack_cache);
@@ -1386,9 +1400,9 @@ void parseACK(void)
         // forward the message to that supplementary serial port
         Serial_Forward(ack_port_index, ack_cache);
 
-        // if "ok" has been received, reset ACK port index to avoid wrong relaying (in case no more commands will
-        // be sent by interfaceCmd) of any successive spontaneous ACK message
-        if (infoHost.wait == false)
+        // if no pending gcode (all "ok" have been received), reset ACK port index to avoid wrong relaying (in case no
+        // more commands will be sent by interfaceCmd) of any successive spontaneous ACK message
+        if (infoHost.tx_count == 0)
           ack_port_index = PORT_1;
       }
     #endif

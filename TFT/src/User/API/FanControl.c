@@ -98,7 +98,7 @@ void ctrlFanQuerySetWait(const bool wait)
 // query for controller fan only
 void ctrlFanQuery(void)
 {
-  if (infoHost.connected && !infoHost.wait && !ctrlFanQueryWait && infoSettings.ctrl_fan_en)
+  if (infoHost.connected && infoHost.tx_slots != 0 && !ctrlFanQueryWait && infoSettings.ctrl_fan_en)
   {
     ctrlFanQueryWait = storeCmd("M710\n");
   }

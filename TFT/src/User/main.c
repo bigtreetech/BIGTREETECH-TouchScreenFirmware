@@ -5,6 +5,14 @@ MENU infoMenu;     // Menu structure
 HOST infoHost;     // Information interaction with Marlin
 CLOCKS mcuClocks;  // System clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_Timer2
 
+void initInfoHost(bool isConnected)
+{
+  infoHost.tx_slots = infoSettings.tx_slots;
+  infoHost.tx_count = 0;
+  infoHost.connected = isConnected;
+  infoHost.status = HOST_STATUS_IDLE;
+}
+
 int main(void)
 {
   SystemClockInit();

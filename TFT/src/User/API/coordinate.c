@@ -120,7 +120,7 @@ void coordinateQuerySetWait(bool wait)
  */
 void coordinateQuery(uint8_t seconds)
 {
-  if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
+  if (infoHost.connected && infoHost.tx_slots != 0 && !coordinateQueryWait)
   {
     if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled
     {

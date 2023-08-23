@@ -5,7 +5,7 @@
 #include "variants.h"  // for uint32_t etc...
 #include "uart.h"
 
-typedef struct
+typedef volatile struct  // precautionally declared as volatile due to access from interrupt handler and main thread
 {
   char *cache;
   uint16_t wIndex;  // writing index

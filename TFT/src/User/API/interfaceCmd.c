@@ -37,7 +37,7 @@ FIL file;
 
 bool isPendingCmd(void)
 {
-  return infoHost.wait;
+  return (infoHost.tx_count != 0);
 }
 
 bool isFullCmdQueue(void)
@@ -47,7 +47,7 @@ bool isFullCmdQueue(void)
 
 bool isNotEmptyCmdQueue(void)
 {
-  return (cmdQueue.count != 0 || infoHost.wait == true);
+  return (cmdQueue.count != 0 || infoHost.tx_count != 0);  // if queue not empty or pending command
 }
 
 bool isEnqueued(const CMD cmd)
@@ -537,8 +537,7 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
   // If not an empty gcode, we can loop on the following storeCmdFromUART() function to store the gcode on cmdQueue
 
   if (cmd[0] != '\0')
-    TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex))
-
+    TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex));
 }
 
 // Send emergency command now.
@@ -569,7 +568,7 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 // Parse and send gcode cmd in cmdQueue queue.
 void sendQueueCmd(void)
 {
-  if (infoHost.wait == true || cmdQueue.count == 0) return;
+  if (infoHost.tx_slots == 0 || cmdQueue.count == 0) return;
 
   bool avoid_terminal = false;
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
@@ -1488,7 +1487,6 @@ send_cmd:
     if (infoHost.tx_slots > 0)  // if available tx slots
       infoHost.tx_slots--;
 
-    if (infoHost.tx_slots == 0)  // if no more tx slots available
-      infoHost.wait = infoHost.connected;
+    infoHost.tx_count++;  // increase pending commands tx count
   }
 }  // sendQueueCmd

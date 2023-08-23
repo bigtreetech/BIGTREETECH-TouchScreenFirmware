@@ -32,7 +32,7 @@ typedef enum
 typedef struct
 {
   uint8_t tx_slots;    // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  bool wait;           // whether wait for Marlin's response
+  uint8_t tx_count;    // keep track of pending gcode tx count
   bool connected;      // whether have connected to Marlin
   HOST_STATUS status;  // whether the host is busy in printing execution. (USB serial printing and gcode print from onboard)
 } HOST;
@@ -47,6 +47,8 @@ typedef struct
 extern MENU infoMenu;
 extern HOST infoHost;
 extern CLOCKS mcuClocks;
+
+void initInfoHost(bool isConnected);
 
 #ifdef __cplusplus
 }
