@@ -49,6 +49,7 @@ extern HOST infoHost;
 extern CLOCKS mcuClocks;
 
 void initInfoHost(bool isConnected);
+void handleOkAck(void);
 
 #ifdef __cplusplus
 }

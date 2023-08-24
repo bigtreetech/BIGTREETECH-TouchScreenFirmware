@@ -1484,9 +1484,12 @@ void sendQueueCmd(void)
 send_cmd:
   if (sendCmd(false, avoid_terminal) == true)  // if command was sent
   {
-    if (infoHost.tx_slots > 0)  // if available tx slots
-      infoHost.tx_slots--;
-
-    infoHost.tx_count++;  // increase pending commands tx count
+    // decrease the number of available tx slots and increase the pending commands tx count
+    //
+    // NOTE: no need to check infoHost.tx_slots > 0 before decreasing infoHost.tx_slots because the check
+    //       infoHost.tx_slots == 0 was already performed at the beginning of sendQueueCmd() function
+    //
+    infoHost.tx_slots--;
+    infoHost.tx_count++;
   }
 }  // sendQueueCmd

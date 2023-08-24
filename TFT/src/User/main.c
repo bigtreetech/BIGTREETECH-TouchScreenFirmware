@@ -13,6 +13,15 @@ void initInfoHost(bool isConnected)
   infoHost.status = HOST_STATUS_IDLE;
 }
 
+void handleOkAck(void)
+{
+  // 1 buffer just became available
+  infoHost.tx_slots = MIN(infoHost.tx_slots + 1, infoSettings.tx_slots);
+
+  if (infoHost.tx_count > 0)
+    infoHost.tx_count--;
+}
+
 int main(void)
 {
   SystemClockInit();

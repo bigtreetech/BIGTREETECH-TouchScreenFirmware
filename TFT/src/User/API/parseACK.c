@@ -421,7 +421,7 @@ void parseACK(void)
     }
 
     //----------------------------------------
-    // Onboard media response handling
+    // Onboard media response handling (response requested by the use of setRequestCommandInfo() function)
     //----------------------------------------
 
     if (requestCommandInfo.inWaitResponse)
@@ -492,23 +492,22 @@ void parseACK(void)
 
       if (requestCommandInfo.done)  // if command parsing is completed
       {
-        // if RepRap, proceed with regular "ok\n" response handling to update nfoHost.tx_slots and infoHost.tx_count.
-        // Otherwise (e.g. Marlin), if "ok" is used as stop magic keyword, proceed with "ok" response handling, if any
+        // if RepRap or "ok" (e.g. in Marlin) is used as stop magic keyword,
+        // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
         //
-        if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-          goto handle_ok;
-        else if (ack_starts_with("ok"))
-          goto parse_ok;
+        if (infoMachineSettings.firmwareType == FW_REPRAPFW || ack_starts_with("ok"))
+          handleOkAck();
       }
 
       goto parse_end;
     }
 
     //----------------------------------------
-    // RepRap response handling
+    // RepRap response handling (response NOT requested by the use of setRequestCommandInfo() function)
     //----------------------------------------
 
-    if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
+    // check for a possible json response and eventually parse and process it
+    else if (!requestCommandInfo.inWaitResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
       if (strchr(ack_cache, '{') != NULL)
         requestCommandInfo.inJson = true;
@@ -521,8 +520,10 @@ void parseACK(void)
       else
         rrfParseACK(ack_cache);
 
-      // proceed with regular "ok\n" response handling to update nfoHost.tx_slots and infoHost.tx_count
-      goto handle_ok;
+      // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
+      handleOkAck();
+
+      goto parse_end;
     }
 
     //----------------------------------------
@@ -532,37 +533,25 @@ void parseACK(void)
     // it is checked first (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("ok"))
     {
+      // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
+      handleOkAck();
 
-    parse_ok:
-      // if regular "ok\n" response
+      // if regular OK response ("ok\n"), nothing else to do
       if (ack_cache[ack_index] == '\n')
-      {
+        goto parse_end;
 
-      handle_ok:
-        // ADVANCED_OK disabled or not supported (e.g. not Marlin), 1 buffer just became available
-        infoHost.tx_slots = MIN(infoHost.tx_slots + 1, infoSettings.tx_slots);
-
-        if (infoHost.tx_count > 0)
-          infoHost.tx_count--;
-
-        goto parse_end;  // there's nothing else to check for
-      }
-
-      // if ADVANCED_OK response (Marlin) (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin
+      // if ADVANCED_OK response (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin
       if (ack_continue_seen("P") && ack_continue_seen("B"))
       {
-        // set infoHost.tx_slots also according to ADVANCED_OK feature enabled/disabled on TFT
-        infoHost.tx_slots = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0 ?
-                            MIN(infoHost.tx_slots + 1, infoSettings.tx_slots) : ack_value();
+        // update infoHost.tx_slots only if ADVANCED_OK feature on TFT is enabled
+        if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 1)
+          infoHost.tx_slots = ack_value();
 
-        if (infoHost.tx_count > 0)
-          infoHost.tx_count--;
-
-        goto parse_end;  // there's nothing else to check for
+        goto parse_end;  // nothing else to do
       }
 
-      // if here, there's nothing to do
-      goto parse_end;
+      // if here, it is a temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
+      // Continue applying the next matching patterns to parse and handle the response
     }
 
     //----------------------------------------
@@ -1375,10 +1364,10 @@ void parseACK(void)
     {
       if (ack_seen("External") || ack_seen("Software") || ack_seen("Watchdog") || ack_seen("Brown out"))
       {
-        // Proceed to reset the command queue, host status, fan speeds and load default machine settings.
+        // proceed to reset the command queue, host status, fan speeds and load default machine settings.
         // These functions will also trigger the query of temperatures which together with the resets
         // done will also trigger the query of the motherboard capabilities and settings. It is necessary
-        // to do so because after the motherboard reset things might have changed (ex. FW update by M997).
+        // to do so because after the motherboard reset things might have changed (ex. FW update by M997)
 
         clearCmdQueue();
         memset(&infoHost, 0, sizeof(infoHost));
