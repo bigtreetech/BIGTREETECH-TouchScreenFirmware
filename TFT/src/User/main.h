@@ -48,8 +48,8 @@ extern MENU infoMenu;
 extern HOST infoHost;
 extern CLOCKS mcuClocks;
 
-void initInfoHost(bool isConnected);
-void handleOkAck(void);
+void InfoHost_Init(bool isConnected);
+void InfoHost_HandleOkAck(void);
 
 #ifdef __cplusplus
 }

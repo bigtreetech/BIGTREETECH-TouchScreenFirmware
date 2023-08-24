@@ -417,7 +417,7 @@ void parseACK(void)
 
       requestCommandInfo.inJson = false;
 
-      initInfoHost(true);  // re-initialize infoHost when connected
+      InfoHost_Init(true);  // re-initialize infoHost when connected
     }
 
     //----------------------------------------
@@ -493,10 +493,10 @@ void parseACK(void)
       if (requestCommandInfo.done)  // if command parsing is completed
       {
         // if RepRap or "ok" (e.g. in Marlin) is used as stop magic keyword,
-        // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
+        // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
         //
         if (infoMachineSettings.firmwareType == FW_REPRAPFW || ack_starts_with("ok"))
-          handleOkAck();
+          InfoHost_HandleOkAck();
       }
 
       goto parse_end;
@@ -520,8 +520,8 @@ void parseACK(void)
       else
         rrfParseACK(ack_cache);
 
-      // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
-      handleOkAck();
+      // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
+      InfoHost_HandleOkAck();
 
       goto parse_end;
     }
@@ -533,8 +533,8 @@ void parseACK(void)
     // it is checked first (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("ok"))
     {
-      // proceed with regular OK response ("ok\n") handling to update nfoHost.tx_slots and infoHost.tx_count
-      handleOkAck();
+      // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
+      InfoHost_HandleOkAck();
 
       // if regular OK response ("ok\n"), nothing else to do
       if (ack_cache[ack_index] == '\n')

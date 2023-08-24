@@ -26,7 +26,7 @@ static inline void Serial_InitPrimary(void)
 {
   setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
 
-  initInfoHost(false);  // initialize infoHost when disconnected
+  InfoHost_Init(false);  // initialize infoHost when disconnected
 
   Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
