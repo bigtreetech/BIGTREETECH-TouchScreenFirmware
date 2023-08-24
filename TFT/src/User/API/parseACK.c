@@ -471,7 +471,7 @@ void parseACK(void)
           requestCommandInfo.inResponse = false;
         }
       }
-      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(ack_cache) < CMD_MAX_REV)
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + ack_len < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, ack_cache);
 
@@ -490,9 +490,16 @@ void parseACK(void)
 
       requestCommandInfo.inJson = false;
 
-      // if command is completed with "ok" used as stop magic keyword, proceed with "ok" response handling, if any
-      if (requestCommandInfo.done && ack_starts_with("ok"))
-        goto parse_ok;
+      if (requestCommandInfo.done)  // if command parsing is completed
+      {
+        // if RepRap, proceed with regular "ok\n" response handling to update nfoHost.tx_slots and infoHost.tx_count.
+        // Otherwise (e.g. Marlin), if "ok" is used as stop magic keyword, proceed with "ok" response handling, if any
+        //
+        if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+          goto handle_ok;
+        else if (ack_starts_with("ok"))
+          goto parse_ok;
+      }
 
       goto parse_end;
     }
