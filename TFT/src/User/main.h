@@ -10,13 +10,14 @@ extern "C" {
 #include "variants.h"  // for RCC_ClocksTypeDef
 #include "uart.h"      // for _UART_CNT
 
-#define MAX_MENU_DEPTH 10        // Max sub menu depth
+#define MAX_MENU_DEPTH 10  // max sub menu depth
+
 typedef void (* FP_MENU)(void);
 
 typedef struct
 {
-  FP_MENU menu[MAX_MENU_DEPTH];  // Menu function buffer
-  uint8_t cur;                   // Current menu index in buffer
+  FP_MENU menu[MAX_MENU_DEPTH];  // menu function buffer
+  uint8_t cur;                   // current menu index in buffer
 } MENU;
 
 typedef enum
@@ -30,10 +31,9 @@ typedef enum
 
 typedef struct
 {
-  bool wait;              // Whether wait for Marlin's response
-  bool rx_ok[_UART_CNT];  // Whether receive Marlin's response or get gcode by other UART (ESP3D/OctoPrint)
-  bool connected;         // Whether have connected to Marlin
-  HOST_STATUS status;     // Whether the host is busy in printing execution. (USB serial printing and gcode print from onboard)
+  bool wait;           // whether wait for Marlin's response
+  bool connected;      // whether have connected to Marlin
+  HOST_STATUS status;  // whether the host is busy in printing execution. (USB serial printing and gcode print from onboard)
 } HOST;
 
 typedef struct

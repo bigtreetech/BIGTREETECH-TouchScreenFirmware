@@ -105,7 +105,7 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
   // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
   // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
   // not too fast one after another to overload/overrun the serial communication
-  TASK_LOOP_WHILE(condCallback(), if (infoHost.rx_ok[SERIAL_PORT] == true) sendEmergencyCmd("M108\n"))
+  TASK_LOOP_WHILE(condCallback(), if (Serial_Available(SERIAL_PORT) != 0) sendEmergencyCmd("M108\n"));
 
   // remove any enqueued command that could come from a supplementary serial port or TFT media
   // (if printing from remote host or TFT media) during the loop above

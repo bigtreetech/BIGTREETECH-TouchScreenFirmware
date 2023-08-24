@@ -112,7 +112,7 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
     Serial_Put(SERIAL_DEBUG_PORT, msg);
   #endif
 
-  uint8_t portCount = SERIAL_PORT_COUNT;                      // by default, select all the serial ports
+  uint8_t portCount = SERIAL_PORT_COUNT;  // by default, select all the serial ports
 
   if (portIndex == ALL_PORTS)         // if ALL_PORTS, forward the message to all the enabled serial ports
     portIndex = PORT_1;
@@ -136,55 +136,52 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
   }
 }
 
+uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex)
+{
+  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1))
+    return 0;
+
+  return (dmaL1Data[portIndex].cacheSize + dmaL1Data[portIndex].wIndex - dmaL1Data[portIndex].rIndex) % dmaL1Data[portIndex].cacheSize;
+}
+
 uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
 {
   // if port index is out of range or no data to read from L1 cache
-  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || !infoHost.rx_ok[portIndex])
+  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || dmaL1Data[portIndex].flag == dmaL1Data[portIndex].wIndex)
     return 0;
 
-  // make access to dinamically changed (by L1 cache's interrupt handler) variables/attributes faster and also reducing the code
   DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[portIndex];
-  uint16_t * wIndex_ptr = &dmaL1Data_ptr->wIndex;
 
-  // L1 cache's reading index (not dinamically changed (by L1 cache's interrupt handler) variables/attributes)
+  // make a static access to dynamically changed (by L1 cache's interrupt handler) variables/attributes
+  uint16_t wIndex = dmaL1Data_ptr->wIndex;
+
+  // L1 cache's reading index (not dynamically changed (by L1 cache's interrupt handler) variables/attributes)
   uint16_t rIndex = dmaL1Data_ptr->rIndex;
 
-  while (dmaL1Data_ptr->cache[rIndex] == ' ' && rIndex != *wIndex_ptr)  // remove leading empty space, if any
+  while (dmaL1Data_ptr->cache[rIndex] == ' ' && rIndex != wIndex)  // remove leading empty space, if any
   {
     rIndex = (rIndex + 1) % dmaL1Data_ptr->cacheSize;
   }
 
-  for (uint16_t i = 0; i < (bufSize - 1) && rIndex != *wIndex_ptr; )  // retrieve data until buf is full or L1 cache is empty
+  for (uint16_t i = 0; i < (bufSize - 1) && rIndex != wIndex; )  // retrieve data until buf is full or L1 cache is empty
   {
     buf[i] = dmaL1Data_ptr->cache[rIndex];
     rIndex = (rIndex + 1) % dmaL1Data_ptr->cacheSize;
 
     if (buf[i++] == '\n')  // if data end marker is found
     {
-      buf[i] = '\0';                   // end character
-      dmaL1Data_ptr->rIndex = rIndex;  // update queue's index
-
-      if (rIndex == dmaL1Data_ptr->wIndex)  // if L1 cache is empty, mark the port as containing no more data
-        infoHost.rx_ok[portIndex] = false;
+      buf[i] = '\0';                                         // end character
+      dmaL1Data_ptr->flag = dmaL1Data_ptr->rIndex = rIndex;  // update queue's custom flag and reading index with rIndex
 
       return i;  // return the number of bytes stored in buf
     }
   }
 
   // if here, a partial message is present on the L1 cache (message not terminated by "\n").
-  // We temporary skip the message until it is fully received
-  //
-  // NOTES:
-  //   - this scenario typically happens when the TFT receives a burst of messages (e.g. the output for "M420 V1 T1").
-  //     The first fully received message (terminated by "\n") is enough to trigger the L1 cache as available
-  //     (infoHost.rx_ok[portIndex] set to "true") for reading
-  //   - it is more safe to leave the following code line commented out just to avoid any possibility the
-  //     L1 cache's interrupt handler is receiving (and triggering L1 cache as available) in the meanwhile
-  //     (more safe to perform an active polling on the next invokation of this function than the possibility
-  //     to not be able to read the message (if infoHost.rx_ok[portIndex] is found set to "false") until a
-  //     next message (if any) becomes available)
-  //
-//  infoHost.rx_ok[portIndex] = false;  // mark the port as containing no more (or partial) data
+  // We temporary skip the message until it is fully received updating also dmaL1Data_ptr->flag to
+  // prevent to read again (multiple times) the same partial message on next function invokation
+
+  dmaL1Data_ptr->flag = wIndex;  // update queue's custom flag with wIndex
 
   return 0;  // return the number of bytes stored in buf
 }
