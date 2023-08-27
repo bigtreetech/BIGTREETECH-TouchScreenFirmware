@@ -28,7 +28,7 @@ void InfoHost_HandleOkAck(int16_t tx_slots)
     infoHost.tx_slots = infoSettings.tx_slots >= infoHost.tx_count ? infoSettings.tx_slots - infoHost.tx_count : 1;
   else if (tx_slots > 0)   // if ADVANCED_OK is enabled on both TFT and Marlin, use the value provided by Marlin
     infoHost.tx_slots = tx_slots;
-  else                     // increment current value (used for temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n"))
+  else                     // increment current value (used for generic OK response handling (e.g. temperature response)
     infoHost.tx_slots++;
 }
 
