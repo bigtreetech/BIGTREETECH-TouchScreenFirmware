@@ -43,37 +43,38 @@
 
 /**
  * TX Slots
+ * Used/effective only in case "ADVANCED_OK" is also enabled.
  * Maximum number of G-code TX slots used by the TFT for the communication with the printer.
  *
  * NOTES:
- *   - You can set this setting to a value bigger than 1 in case you want to support a sort of
- *     static "ADVANCED_OK" feature but you have to set it according to the following key requirements:
+ *   - It requires "ADVANCED_OK" to be enabled.
+ *   - This setting allows a sort of static "ADVANCED_OK" feature implementation on TFT side just in
+ *     case "ADVANCED_OK" feature is disabled in Marlin firmware. You have to set it according to the
+ *     following key requirements:
  *     - a value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
  *     - "RX_BUFFER_SIZE" properly configured in Configuration_adv.h in Marlin firmware.
- *       To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffer. By default this is 96 * 4 bytes
- *       so you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that
- *       will be enough, but more is better/safer.
+ *       To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffer. By default this is 96 * 4 bytes so
+ *       you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that will
+ *       be enough, but more is better/safer.
  *   - Typically, a value of 2 is enough to keep the printer busy most of the time while preventing
- *     buffer overruns on RX buffer. Thus, 2 is the suggested value in case users want to enable the
+ *     buffer overruns on RX buffer. Thus, 2 is the suggested value in case users want to use the
  *     static ADVANCED_OK feature allowed by this setting.
  *
- *   Value range: [min: 1, max: 16]
+ *   Value range: [min: 2, max: 16]
  */
 #define TX_SLOTS 1  // Default: 1
 
 /**
  * Advanced OK
- * Used/effective only in case "ADVANCED_OK" is also enabled in Configuration_adv.h in Marlin firmware.
- * If enabled and ADVANCED_OK feature enabled in Marlin firmware, the TFT will use the available G-code
- * TX slots indication provided by the mainboard to schedule the transmission of multiple G-codes,
- * if any, for a maximum of the given indication.
- * If disabled or ADVANCED_OK feature disabled in Marlin firmware, the TFT will support the transmission
- * of G-codes according to the configured "TX_SLOTS" setting.
+ * If enabled:
+ * - if "ADVANCED_OK" feature is enabled in Configuration_adv.h in Marlin firmware, the TFT will use
+ *   the available G-code TX slots indication provided by the mainboard to schedule the transmission
+ *   of multiple G-codes, if any, for a maximum of the given indication.
+ * - if "ADVANCED_OK" feature is disabled in Configuration_adv.h in Marlin firmware, the TFT will
+ *   support the transmission of G-codes according to the configured "TX_SLOTS" setting.
+ * If disabled, the TFT will provide the standard transmission logic based on one G-code per time.
  *
- * NOTES:
- *   - Enable it in case ADVANCED_OK feature is enabled in Marlin firmware.
- *   - Disable it in case ADVANCED_OK feature is disabled in Marlin firmware or
- *     if ADVANCED_OK feature is not requested/needed by the user.
+ * NOTE: Disable it in case no ADVANCED_OK feature is requested/needed by the user.
  *
  *   Options: [disable: 0, enable: 1]
  */

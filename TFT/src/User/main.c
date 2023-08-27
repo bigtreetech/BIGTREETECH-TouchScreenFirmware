@@ -7,19 +7,29 @@ CLOCKS mcuClocks;  // System clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_T
 
 void InfoHost_Init(bool isConnected)
 {
-  infoHost.tx_slots = infoSettings.tx_slots;
+  infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
   infoHost.connected = isConnected;
   infoHost.status = HOST_STATUS_IDLE;
 }
 
-void InfoHost_HandleOkAck(void)
+void InfoHost_HandleOkAck(int16_t tx_slots)
 {
-  // 1 buffer just became available
-  infoHost.tx_slots = MIN(infoHost.tx_slots + 1, infoSettings.tx_slots);
-
   if (infoHost.tx_count > 0)
     infoHost.tx_count--;
+
+  // NOTE: the following code always allows to align infoHost.tx_slots even in case of switching ON/OFF
+  //       the ADVANCED_OK feature on TFT and/or in case infoHost.tx_slots is beeing also managed by
+  //       Marlin (if ADVANCED_OK is enabled in Marlin firmware)
+  //
+  if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0)  // if ADVANCED_OK is disabled on TFT
+    infoHost.tx_slots = 1;
+  else if (tx_slots == 0)  // if ADVANCED_OK is enabled only on TFT, use the value for the static ADVANCED_OK provided by TFT
+    infoHost.tx_slots = infoSettings.tx_slots >= infoHost.tx_count ? infoSettings.tx_slots - infoHost.tx_count : 1;
+  else if (tx_slots > 0)   // if ADVANCED_OK is enabled on both TFT and Marlin, use the value provided by Marlin
+    infoHost.tx_slots = tx_slots;
+  else                     // increment current value (used for temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n"))
+    infoHost.tx_slots++;
 }
 
 int main(void)

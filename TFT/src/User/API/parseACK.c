@@ -493,10 +493,10 @@ void parseACK(void)
       if (requestCommandInfo.done)  // if command parsing is completed
       {
         // if RepRap or "ok" (e.g. in Marlin) is used as stop magic keyword,
-        // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
+        // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
         //
         if (infoMachineSettings.firmwareType == FW_REPRAPFW || ack_starts_with("ok"))
-          InfoHost_HandleOkAck();
+          InfoHost_HandleOkAck(-1);
       }
 
       goto parse_end;
@@ -520,8 +520,8 @@ void parseACK(void)
       else
         rrfParseACK(ack_cache);
 
-      // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
-      InfoHost_HandleOkAck();
+      // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
+      InfoHost_HandleOkAck(-1);
 
       goto parse_end;
     }
@@ -533,25 +533,26 @@ void parseACK(void)
     // it is checked first (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("ok"))
     {
-      // proceed with regular OK response ("ok\n") handling to update infoHost.tx_slots and infoHost.tx_count
-      InfoHost_HandleOkAck();
-
-      // if regular OK response ("ok\n"), nothing else to do
+      // if regular OK response ("ok\n")
       if (ack_cache[ack_index] == '\n')
-        goto parse_end;
+      {
+        InfoHost_HandleOkAck(0);
+
+        goto parse_end;  // nothing else to do
+      }
 
       // if ADVANCED_OK response (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin
       if (ack_continue_seen("P") && ack_continue_seen("B"))
       {
-        // update infoHost.tx_slots only if ADVANCED_OK feature on TFT is enabled
-        if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 1)
-          infoHost.tx_slots = ack_value();
+        InfoHost_HandleOkAck(ack_value());
 
         goto parse_end;  // nothing else to do
       }
 
       // if here, it is a temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
-      // Continue applying the next matching patterns to parse and handle the response
+      // Proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
+      // and then continue applying the next matching patterns to handle the temperature response
+      InfoHost_HandleOkAck(-1);
     }
 
     //----------------------------------------
