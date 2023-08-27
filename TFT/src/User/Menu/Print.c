@@ -56,7 +56,7 @@ const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ
 
 static bool list_mode = true;
 
-void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
+void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 {
   if (name == NULL)
     return;
@@ -68,6 +68,11 @@ void normalNameDisp(const GUI_RECT *rect, uint8_t *name)
 }
 
 // update files menu in icon mode
+//
+// NOTES:
+//   - icon mode menu is an option available only for browsing files from TFT SD card / TFT USB disk.
+//     It is not available for browsing files from onboard media
+//   - only short (not long) folder names and filenames are available browsing files from TFT SD card / TFT USB disk
 void gocdeIconDraw(void)
 {
   ITEM curItem = {ICON_NULL, LABEL_NULL};
@@ -79,15 +84,16 @@ void gocdeIconDraw(void)
   {
     curItem.icon = ICON_FOLDER;
     menuDrawItem(&curItem, i);
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.folder[baseIndex + i]);  // always use short folder name
+    normalNameDisp(&gcodeRect[i], (uint8_t *)getFoldername(baseIndex + i));  // display folder name
   }
 
   // draw gcode files
   for (; (baseIndex + i < infoFile.folderCount + infoFile.fileCount) && (i < NUM_PER_PAGE); i++)
   {
-    restoreFilenameExtension(baseIndex + i - infoFile.folderCount);  // restore filename extension if filename extension feature is disabled
-
-    if (enterFolder(infoFile.file[baseIndex + i - infoFile.folderCount]) == false)  // always use short filename for file path
+    // in order to properly access the file (e.g. for print thumbnail preview, printing etc.), FQDN short (not long)
+    // filename (filename extension must be restored, if previously hidden) must be used for the file path
+    //
+    if (enterFolder(restoreFilenameExtension(baseIndex + i - infoFile.folderCount)) == false)
       break;
 
     // if model preview bmp exists, display bmp directly without writing to flash
@@ -99,8 +105,8 @@ void gocdeIconDraw(void)
 
     exitFolder();
 
-    hideFilenameExtension(baseIndex + i - infoFile.folderCount);  // hide filename extension if filename extension feature is disabled
-    normalNameDisp(&gcodeRect[i], (uint8_t*)infoFile.file[baseIndex + i - infoFile.folderCount]);  // always use short filename
+    // display filename hiding filename extension if filename extension feature is disabled
+    normalNameDisp(&gcodeRect[i], (uint8_t *)hideFilenameExtension(baseIndex + i - infoFile.folderCount));
   }
 
   // clear blank icons
@@ -119,14 +125,16 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->icon = CHARICON_FOLDER;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, getFoldername(index));  // display short or long folder name
+    setDynamicLabel(itemPos, (char *)getFoldername(index));  // display short or long folder name
   }
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     item->icon = CHARICON_FILE;
     item->itemType = LIST_LABEL;
     item->titlelabel.index = LABEL_DYNAMIC;
-    setDynamicLabel(itemPos, hideFilenameExtension(index - infoFile.folderCount));  // hide filename extension if filename extension feature is disabled
+
+    // display short or long filename hiding filename extension if filename extension feature is disabled
+    setDynamicLabel(itemPos, (char *)hideFilenameExtension(index - infoFile.folderCount));
   }
 }
 
@@ -137,7 +145,10 @@ bool printPageItemSelected(uint16_t index)
 
   if (index < infoFile.folderCount)  // folder
   {
-    if (enterFolder(infoFile.folder[index]) == false)  // always use short folder name for file path
+    // in order to properly access the folder (e.g. for browsing its files and folders), short (not long)
+    // folder name must be used for the file path
+    //
+    if (enterFolder(infoFile.folder[index]) == false)
     {
       hasUpdate = false;
     }
@@ -150,9 +161,14 @@ bool printPageItemSelected(uint16_t index)
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
     infoFile.fileIndex = index - infoFile.folderCount;
-    char * filename = restoreFilenameExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
-    if (infoHost.connected != true || enterFolder(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
+    // restore filename extension if filename extension feature is disabled
+    const char * filename = restoreFilenameExtension(infoFile.fileIndex);
+
+    // in order to properly access the file (e.g. for print thumbnail preview, printing etc.), FQDN short (not long)
+    // filename (filename extension must be restored, if previously hidden) must be used for the file path
+    //
+    if (infoHost.connected == false || enterFolder(infoFile.file[infoFile.fileIndex]) == false)
     {
       hasUpdate = false;
     }
@@ -207,14 +223,14 @@ void menuPrintFromSource(void)
 
     if (list_mode != true)
     {
-      printIconItems.title.address = (uint8_t*)infoFile.path;
+      printIconItems.title.address = (uint8_t *)infoFile.path;
       menuDrawPage(&printIconItems);
     }
   }
   else
   {
     if (infoFile.source == FS_ONBOARD_MEDIA)  // error when the filesystem selected from TFT media not available
-      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t*)requestCommandInfo.cmd_rev_buf);
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
 
