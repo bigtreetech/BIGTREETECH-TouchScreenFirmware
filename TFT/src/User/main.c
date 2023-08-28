@@ -24,11 +24,11 @@ void InfoHost_HandleOkAck(int16_t tx_slots)
   //
   if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0)  // if ADVANCED_OK is disabled on TFT
     infoHost.tx_slots = 1;
-  else if (tx_slots == 0)  // if ADVANCED_OK is enabled only on TFT, use the value for the static ADVANCED_OK provided by TFT
+  else if (tx_slots == -1)  // if ADVANCED_OK is enabled only on TFT, use the value for the static ADVANCED_OK provided by TFT
     infoHost.tx_slots = infoSettings.tx_slots >= infoHost.tx_count ? infoSettings.tx_slots - infoHost.tx_count : 1;
-  else if (tx_slots > 0)   // if ADVANCED_OK is enabled on both TFT and Marlin, use the value provided by Marlin
+  else if (tx_slots >= 0)   // if ADVANCED_OK is enabled on both TFT and Marlin, use the value provided by Marlin
     infoHost.tx_slots = tx_slots;
-  else                     // increment current value (used for generic OK response handling (e.g. temperature response)
+  else                      // if < -2 (generic OK response handling (e.g. temperature response)), increment the current value
     infoHost.tx_slots++;
 }
 
