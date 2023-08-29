@@ -29,6 +29,12 @@ typedef enum
   HOST_STATUS_PAUSING
 } HOST_STATUS;
 
+typedef enum
+{
+  HOST_SLOTS_GENERIC_OK = -2,
+  HOST_SLOTS_REGULAR_OK,
+} HOST_SLOTS;
+
 typedef struct
 {
   uint8_t tx_slots;    // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
@@ -49,6 +55,12 @@ extern HOST infoHost;
 extern CLOCKS mcuClocks;
 
 void InfoHost_Init(bool isConnected);
+
+// handle OK response:
+//   - tx_slots (used/effective only in case "advanced_ok" configuration setting is also enabled in TFT):
+//     - HOST_SLOTS_GENERIC_OK: to increase infoHost.tx_slots and decrease infoHost.tx_count by 1 respectively
+//     - HOST_SLOTS_REGULAR_OK: to handle static ADVANCED_OK
+//     - >= 0: to handle Marlin ADVANCED_OK
 void InfoHost_HandleOkAck(int16_t tx_slots);
 
 #ifdef __cplusplus

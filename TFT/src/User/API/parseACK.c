@@ -496,7 +496,7 @@ void parseACK(void)
         // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
         //
         if (infoMachineSettings.firmwareType == FW_REPRAPFW || ack_starts_with("ok"))
-          InfoHost_HandleOkAck(-2);
+          InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
       }
 
       goto parse_end;
@@ -521,7 +521,7 @@ void parseACK(void)
         rrfParseACK(ack_cache);
 
       // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
-      InfoHost_HandleOkAck(-2);
+      InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
 
       goto parse_end;
     }
@@ -536,7 +536,7 @@ void parseACK(void)
       // if regular OK response ("ok\n")
       if (ack_cache[ack_index] == '\n')
       {
-        InfoHost_HandleOkAck(-1);
+        InfoHost_HandleOkAck(HOST_SLOTS_REGULAR_OK);
 
         goto parse_end;  // nothing else to do
       }
@@ -552,7 +552,7 @@ void parseACK(void)
       // if here, it is a temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
       // Proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
       // and then continue applying the next matching patterns to handle the temperature response
-      InfoHost_HandleOkAck(-2);
+      InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
     }
 
     //----------------------------------------
