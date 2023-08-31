@@ -1114,6 +1114,12 @@
  */
 
 /**
+ * Monitoring Debug
+ * Uncomment/Enable to monitor/show system resources usage in Monitoring menu.
+ */
+#define DEBUG_MONITORING  // Default: commented (disabled)
+
+/**
  * Generic Debug
  * Uncomment/Enable to enable arbitrary debug serial communication to SERIAL_DEBUG_PORT defined in board specific Pin_xx.h file.
  */
