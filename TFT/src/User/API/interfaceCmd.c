@@ -47,7 +47,7 @@ bool isFullCmdQueue(void)
 
 bool isNotEmptyCmdQueue(void)
 {
-  return (cmdQueue.count != 0 || infoHost.tx_count != 0);  // if queue not empty or pending command
+  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if queue not empty or no available gcode tx slot
 }
 
 bool isEnqueued(const CMD cmd)
