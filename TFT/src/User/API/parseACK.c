@@ -1371,7 +1371,7 @@ void parseACK(void)
         // to do so because after the motherboard reset things might have changed (ex. FW update by M997)
 
         clearCmdQueue();
-        memset(&infoHost, 0, sizeof(infoHost));
+        InfoHost_Init(false);
         initMachineSettings();
         fanResetSpeed();
         coordinateSetKnown(false);
