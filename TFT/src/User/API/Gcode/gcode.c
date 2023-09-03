@@ -60,6 +60,33 @@ static void resetRequestCommandInfo(
   requestCommandInfo.inError = false;
 }
 
+void detectAdvancedOk(void)
+{
+  resetRequestCommandInfo("ok",   // The magic to identify the start
+                          "ok",   // The magic to identify the stop
+                          NULL,   // The first magic to identify the error response
+                          NULL,   // The second error magic
+                          NULL);  // The third error magic
+
+  mustStoreCmd("M105\n");
+
+  // Wait for response
+  loopProcessToCondition(&isWaitingResponse);
+
+  uint8_t cmd_index = 0;
+
+  while (requestCommandInfo.cmd_rev_buf[cmd_index] != '\0')
+  {
+    if (requestCommandInfo.cmd_rev_buf[cmd_index++] == 'B')
+    {
+      if (strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10) != 0)
+        infoSettings.tx_slots = strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10);
+    }
+  }
+
+  clearRequestCommandInfo();
+}
+
 /**
  * Send M21 command and wait for response
  *

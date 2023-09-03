@@ -418,6 +418,10 @@ void parseACK(void)
       requestCommandInfo.inJson = false;
 
       InfoHost_Init(true);  // re-initialize infoHost when connected
+
+      // NOTE: only after InfoHost_Init() function was invoked when connected,
+      //       detect the presence of Marlin ADVANCED_OK feature (if any) and its command queue size
+      detectAdvancedOk();
     }
 
     //----------------------------------------

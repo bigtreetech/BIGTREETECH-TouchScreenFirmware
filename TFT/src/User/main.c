@@ -31,8 +31,8 @@ void InfoHost_HandleOkAck(int16_t tx_slots)
     //
     if (infoHost.tx_slots == 0)
     {
-
     handle_error:
+
       #ifdef DEBUG_MONITORING
         BUZZER_PLAY(SOUND_ERROR);
 
@@ -63,34 +63,54 @@ void InfoHost_HandleOkAck(int16_t tx_slots)
   //
 
   // if ADVANCED_OK is disabled in TFT
+  //
   if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0)
   {
     infoHost.tx_slots = 1;
   }
   // if ADVANCED_OK is enabled in TFT but not in Marlin, use the value for the static ADVANCED_OK provided by TFT
+  //
   else if (tx_slots == HOST_SLOTS_REGULAR_OK)
   {
+  handle_static_ok:
+
     // the following check should always be matched unless a bug is present in the TFT code or in the mainboard reply
+    //
     if (infoSettings.tx_slots >= infoHost.tx_count)
       infoHost.tx_slots = infoSettings.tx_slots - infoHost.tx_count;
     // in case of bug, reset infoSettings.tx_slots and infoHost.tx_count to try to avoid a possible TFT freeze
+    //
     else
       goto handle_error;
   }
   // if ADVANCED_OK is enabled in both TFT and Marlin, use the value provided by Marlin
+  //
   else if (tx_slots >= 0)
   {
-    // the following check should always be matched unless:
-    // - printing from onboard media (tx_slots is always reported as 0 by Marlin)
-    // - a bug is present in the TFT code or in the mainboard reply
+    // the following check should always be matched unless the mainboard reply
+    // is out of synch with the current pending gcodes (it happens sometimes)
     //
-    if (tx_slots != 0 || infoHost.tx_count != 0)
-      infoHost.tx_slots = tx_slots;
-    // reset infoSettings.tx_slots to try to avoid a possible TFT freeze
+    if (infoSettings.tx_slots >= tx_slots + infoHost.tx_count)
+    {
+      // if printing from onboard media tx_slots is always reported as 0 by Marlin even if there are no pending gcodes so
+      // just set infoHost.tx_slots to 1 to allow the transmission of one gcode per time avoiding a possible TFT freeze
+      //
+      if (tx_slots != 0 || infoHost.tx_count != 0)
+        infoHost.tx_slots = tx_slots;
+      // if printing from onboard media
+      //
+      else
+        infoHost.tx_slots = 1;
+    }
+    // in case of the mainboard reply is out of synch with the current pending gcodes
+    //
     else
-      infoHost.tx_slots = 1;
+    {
+      goto handle_static_ok;
+    }
   }
   // if generic OK response handling (e.g. temperature response), increment the current value
+  //
   else
   {
     infoHost.tx_slots++;
