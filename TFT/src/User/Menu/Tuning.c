@@ -17,11 +17,7 @@ void menuTuning(void)
         {ICON_NULL,                    LABEL_NULL},
       #endif
       {ICON_NULL,                    LABEL_NULL},
-      #ifdef DEBUG_MONITORING
-        {ICON_SCREEN_INFO,             LABEL_SCREEN_INFO},
-      #else
-        {ICON_NULL,                    LABEL_NULL},
-      #endif
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -92,12 +88,6 @@ void menuTuning(void)
         #endif
 
         break;
-
-      #ifdef DEBUG_MONITORING
-        case KEY_ICON_5:
-          OPEN_MENU(menuMonitoring);
-          break;
-      #endif
 
       case KEY_ICON_7:
         CLOSE_MENU();
