@@ -540,7 +540,7 @@ void parseACK(void)
       // if regular OK response ("ok\n")
       if (ack_cache[ack_index] == '\n')
       {
-        InfoHost_HandleOkAck(HOST_SLOTS_REGULAR_OK);
+        InfoHost_HandleOkAck(infoSettings.tx_slots);
 
         goto parse_end;  // nothing else to do
       }

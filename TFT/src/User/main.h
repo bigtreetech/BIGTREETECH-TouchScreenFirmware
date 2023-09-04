@@ -31,16 +31,16 @@ typedef enum
 
 typedef enum
 {
-  HOST_SLOTS_GENERIC_OK = -2,
-  HOST_SLOTS_REGULAR_OK,
+  HOST_SLOTS_GENERIC_OK = -1,
 } HOST_SLOTS;
 
 typedef struct
 {
-  uint8_t tx_slots;    // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  uint8_t tx_count;    // keep track of pending gcode tx count
-  bool connected;      // whether have connected to Marlin
-  HOST_STATUS status;  // whether the host is busy in printing execution. (USB serial printing and gcode print from onboard)
+  uint8_t target_tx_slots;  // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_slots;         // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_count;         // keep track of pending gcode tx count
+  bool connected;           // whether have connected to Marlin
+  HOST_STATUS status;       // whether the host is busy in printing execution. (USB serial printing and gcode print from onboard)
 } HOST;
 
 typedef struct
@@ -58,9 +58,8 @@ void InfoHost_Init(bool isConnected);
 
 // handle OK response:
 //   - tx_slots (used/effective only in case "advanced_ok" configuration setting is also enabled in TFT):
-//     - HOST_SLOTS_GENERIC_OK: to increase infoHost.tx_slots and decrease infoHost.tx_count by 1 respectively
-//     - HOST_SLOTS_REGULAR_OK: to handle static ADVANCED_OK
-//     - >= 0: to handle Marlin ADVANCED_OK
+//     - < 0 (HOST_SLOTS_GENERIC_OK): to increase infoHost.tx_slots up to current target and decrease infoHost.tx_count by 1
+//     - >= 0: to handle static ADVANCED_OK and Marlin ADVANCED_OK
 void InfoHost_HandleOkAck(int16_t tx_slots);
 
 #ifdef __cplusplus
