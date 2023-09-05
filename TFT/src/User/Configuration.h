@@ -62,7 +62,7 @@
  *
  *   Value range: [min: 2, max: 16]
  */
-#define TX_SLOTS 1  // Default: 1
+#define TX_SLOTS 2  // Default: 1
 
 /**
  * Advanced OK
