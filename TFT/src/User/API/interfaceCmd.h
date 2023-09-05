@@ -18,7 +18,7 @@ extern "C" {
 
 typedef char CMD[CMD_MAX_SIZE];
 
-// used by Monitoring menu available in Tuning menu only
+// used by Monitoring menu available in Notification menu only
 // if DEBUG_MONITORING is enabled in Configuration.h
 uint8_t getQueueCount(void);
 
