@@ -39,13 +39,17 @@ void InfoHost_HandleOkAck(int16_t target_tx_slots)
   //
   else if (target_tx_slots >= 0)
   {
+    // UPPER LIMITER
+    //
     // the following check is matched in case:
     // - ADVANCED_OK is enabled in TFT. infoSettings.tx_slots for static ADVANCED_OK configured in TFT is used
-    // - ADVANCED_OK is enabled in Marlin but the mainboard reply (target_tx_slots) is out of sync with the current pending
-    //   gcodes (it happens sometimes). infoSettings.tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
+    // - ADVANCED_OK is enabled in Marlin but the mainboard reply (target_tx_slots) is out of sync (above) with the current
+    //   pending gcodes (it happens sometimes). infoSettings.tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
     //
     if (target_tx_slots + infoHost.tx_count >= infoSettings.tx_slots)
       infoHost.tx_slots = infoSettings.tx_slots - infoHost.tx_count;
+    //
+    // LOWER LIMITER (only for Marlin ADVANCED_OK)
     //
     // if printing from onboard media target_tx_slots is always reported as 0 by Marlin even if there are no pending gcodes
     // so just set infoHost.tx_slots to 1 to allow the transmission of one gcode per time avoiding a possible TFT freeze
@@ -62,7 +66,11 @@ void InfoHost_HandleOkAck(int16_t target_tx_slots)
   //
   else
   {
-    if (infoHost.tx_slots < infoHost.target_tx_slots)
+    // UPPER AND LOWER LIMITER
+    //
+    // limit the current value up to current target or to 1 if current target was set to 0 and there are no more pending gcodes
+    //
+    if (infoHost.tx_slots < infoHost.target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
       infoHost.tx_slots++;
   }
 }
