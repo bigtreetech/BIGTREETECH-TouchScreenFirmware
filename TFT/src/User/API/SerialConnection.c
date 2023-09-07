@@ -136,12 +136,12 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
   }
 }
 
-uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex)
+uint16_t Serial_GetReadingIndex(SERIAL_PORT_INDEX portIndex)
 {
   if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1))
     return 0;
 
-  return (dmaL1Data[portIndex].cacheSize + dmaL1Data[portIndex].wIndex - dmaL1Data[portIndex].rIndex) % dmaL1Data[portIndex].cacheSize;
+  return dmaL1Data[portIndex].rIndex;
 }
 
 uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)

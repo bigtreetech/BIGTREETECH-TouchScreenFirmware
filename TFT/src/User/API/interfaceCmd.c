@@ -105,7 +105,7 @@ bool storeCmd(const char * format, ...)
 // Store gcode cmd to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed
-// and it will for wait the queue to be able to store the command.
+// and it will wait for the queue to be able to store the command.
 void mustStoreCmd(const char * format, ...)
 {
   if (format[0] == 0) return;
