@@ -132,17 +132,14 @@ uint32_t getPrintExpectedTime(void)
   return infoPrinting.expectedTime;
 }
 
-void updatePrintTime(uint32_t osTime)
+void updatePrintTime(void)
 {
-  if (osTime % 1000 == 0)
+  if (infoPrinting.printing && !infoPrinting.paused)
   {
-    if (infoPrinting.printing && !infoPrinting.paused)
-    {
-      infoPrinting.elapsedTime++;
+    infoPrinting.elapsedTime++;
 
-      if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
-        infoPrinting.remainingTime--;
-    }
+    if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
+      infoPrinting.remainingTime--;
   }
 }
 
