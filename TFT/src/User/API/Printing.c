@@ -132,7 +132,7 @@ uint32_t getPrintExpectedTime(void)
   return infoPrinting.expectedTime;
 }
 
-void updatePrintTime(void)
+void updatePrintTime(void)  // Handle in interrupt
 {
   if (infoPrinting.printing && !infoPrinting.paused)
   {
