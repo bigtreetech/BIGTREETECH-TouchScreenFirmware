@@ -667,6 +667,11 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
   #endif
 }
 
+SYS_STATUS getReminderStatus(void)
+{
+  return reminder.status;
+}
+
 void drawReminderMsg(void)
 {
   uint16_t msgRectOffset = (LCD_WIDTH - GUI_StrPixelWidth(reminder.inf)) / 2 - BYTE_WIDTH;
