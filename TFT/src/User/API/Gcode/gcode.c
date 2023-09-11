@@ -68,7 +68,7 @@ void detectAdvancedOk(void)
                           NULL,   // The second error magic
                           NULL);  // The third error magic
 
-  mustStoreCmd("M105\n");
+  mustStoreCmd("M107\n");
 
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
