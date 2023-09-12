@@ -68,7 +68,8 @@ void detectAdvancedOk(void)
                           NULL,   // The second error magic
                           NULL);  // The third error magic
 
-  mustStoreCmd("M107\n");
+  // send any gcode replied by the mainboard with a regular OK response ("ok\n") or an ADVANCED_OK response (e.g. "ok N10 P15 B3\n")
+  mustStoreCmd("M220\n");
 
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);

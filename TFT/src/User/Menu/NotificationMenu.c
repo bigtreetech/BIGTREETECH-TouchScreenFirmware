@@ -52,7 +52,7 @@ void menuNotification(void)
       #ifdef DEBUG_MONITORING
         {CHARICON_BLANK, LIST_LABEL, LABEL_INFO,    LABEL_NULL},
       #else
-        {CHARICON_BACK,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
+        {CHARICON_NULL,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
       #endif
       {CHARICON_BACK,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
     }
