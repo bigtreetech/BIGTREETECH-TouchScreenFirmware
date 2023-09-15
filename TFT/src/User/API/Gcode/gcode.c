@@ -62,6 +62,15 @@ static void resetRequestCommandInfo(
 
 void detectAdvancedOk(void)
 {
+  // backup the configured ADVANCED_OK setting
+  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);
+
+  // temporary disable the ADVANCED_OK feature (if enabled) just to allow the TFT to send only one gcode
+  // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
+  SET_BIT_OFF(infoSettings.general_settings, INDEX_ADVANCED_OK);
+
+  TASK_LOOP_WHILE(isPendingCmd() && isNotEmptyCmdQueue());  // wait for the communication to be clean
+
   resetRequestCommandInfo("ok",   // The magic to identify the start
                           "ok",   // The magic to identify the stop
                           NULL,   // The first magic to identify the error response
@@ -89,6 +98,9 @@ void detectAdvancedOk(void)
   }
 
   clearRequestCommandInfo();
+
+  // restore the configured ADVANCED_OK setting
+  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);
 }
 
 /**
