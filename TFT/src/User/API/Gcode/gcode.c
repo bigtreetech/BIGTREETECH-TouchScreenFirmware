@@ -62,8 +62,8 @@ static void resetRequestCommandInfo(
 
 void detectAdvancedOk(void)
 {
-  // backup the configured ADVANCED_OK setting
-  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);
+  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);  // backup the configured ADVANCED_OK setting
+  uint8_t cmd_index = 0;
 
   // temporary disable the ADVANCED_OK feature (if enabled) just to allow the TFT to send only one gcode
   // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
@@ -83,8 +83,6 @@ void detectAdvancedOk(void)
   // Wait for response
   loopProcessToCondition(&isWaitingResponse);
 
-  uint8_t cmd_index = 0;
-
   while (requestCommandInfo.cmd_rev_buf[cmd_index] != '\0')
   {
     if (requestCommandInfo.cmd_rev_buf[cmd_index++] == 'B')
@@ -99,8 +97,7 @@ void detectAdvancedOk(void)
 
   clearRequestCommandInfo();
 
-  // restore the configured ADVANCED_OK setting
-  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);
+  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);  // restore the configured ADVANCED_OK setting
 }
 
 /**
