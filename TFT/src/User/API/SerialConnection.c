@@ -1,21 +1,26 @@
 #include "SerialConnection.h"
 #include "includes.h"
 
-#define SERIAL_PORT_QUEUE_SIZE   NOBEYOND(512, RAM_SIZE * 64, 4096)
-#define SERIAL_PORT_2_QUEUE_SIZE 512
-#define SERIAL_PORT_3_QUEUE_SIZE 512
-#define SERIAL_PORT_4_QUEUE_SIZE 512
+#define SERIAL_PORT_RX_QUEUE_SIZE   NOBEYOND(512, RAM_SIZE * 64, 4096)
+#define SERIAL_PORT_2_RX_QUEUE_SIZE 512
+#define SERIAL_PORT_3_RX_QUEUE_SIZE 512
+#define SERIAL_PORT_4_RX_QUEUE_SIZE 512
+
+#define SERIAL_PORT_TX_QUEUE_SIZE    CMD_MAX_SIZE
+#define SERIAL_PORT_2_TX_QUEUE_SIZE  CMD_MAX_SIZE
+#define SERIAL_PORT_3_TX_QUEUE_SIZE  CMD_MAX_SIZE
+#define SERIAL_PORT_4_TX_QUEUE_SIZE  CMD_MAX_SIZE
 
 const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
-  {SERIAL_PORT, SERIAL_PORT_QUEUE_SIZE, "", "1 - Printer"},
+  {SERIAL_PORT    , SERIAL_PORT_RX_QUEUE_SIZE  , SERIAL_PORT_TX_QUEUE_SIZE  , "" , "1 - Printer"},
   #ifdef SERIAL_PORT_2
-    {SERIAL_PORT_2, SERIAL_PORT_2_QUEUE_SIZE, "2", "2 - WIFI"},
+    {SERIAL_PORT_2, SERIAL_PORT_2_RX_QUEUE_SIZE, SERIAL_PORT_2_TX_QUEUE_SIZE, "2", "2 - WiFi"},
   #endif
   #ifdef SERIAL_PORT_3
-    {SERIAL_PORT_3, SERIAL_PORT_3_QUEUE_SIZE, "3", "3 - UART3"},
+    {SERIAL_PORT_3, SERIAL_PORT_3_RX_QUEUE_SIZE, SERIAL_PORT_3_TX_QUEUE_SIZE, "3", "3 - UART3"},
   #endif
   #ifdef SERIAL_PORT_4
-    {SERIAL_PORT_4, SERIAL_PORT_4_QUEUE_SIZE, "4", "4 - UART4"}
+    {SERIAL_PORT_4, SERIAL_PORT_4_RX_QUEUE_SIZE, SERIAL_PORT_4_TX_QUEUE_SIZE, "4", "4 - UART4"}
   #endif
 };
 
@@ -26,7 +31,7 @@ static inline void Serial_InitPrimary(void)
 {
   InfoHost_Init(false);  // initialize infoHost when disconnected
 
-  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
+  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSizeRX, serialPort[PORT_1].cacheSizeTX, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
 
 static inline void Serial_DeInitPrimary(void)
@@ -53,7 +58,7 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex)
           // Disable the serial port when it is not in use and/or not connected to a device (floating) to
           // avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
           if (infoSettings.serial_port[portIndex] > 0)  // if serial port is enabled
-            Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSize,
+            Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSizeRX, serialPort[portIndex].cacheSizeTX,
                           baudrateValues[infoSettings.serial_port[portIndex]]);
         }
       }
@@ -64,7 +69,7 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex)
     {
       if (infoSettings.serial_port[portIndex] > 0)  // if serial port is enabled
       {
-        Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSize,
+        Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSizeRX, serialPort[portIndex].cacheSizeTX,
                       baudrateValues[infoSettings.serial_port[portIndex]]);
       }
     }
@@ -138,16 +143,16 @@ uint16_t Serial_GetReadingIndex(SERIAL_PORT_INDEX portIndex)
   if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1))
     return 0;
 
-  return dmaL1Data[portIndex].rIndex;
+  return dmaL1DataRX[portIndex].rIndex;
 }
 
 uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)
 {
   // if port index is out of range or no data to read from L1 cache
-  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || dmaL1Data[portIndex].flag == dmaL1Data[portIndex].wIndex)
+  if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1) || dmaL1DataRX[portIndex].flag == dmaL1DataRX[portIndex].wIndex)
     return 0;
 
-  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1Data[portIndex];
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1DataRX[portIndex];
 
   // make a static access to dynamically changed (by L1 cache's interrupt handler) variables/attributes
   uint16_t wIndex = dmaL1Data_ptr->wIndex;
