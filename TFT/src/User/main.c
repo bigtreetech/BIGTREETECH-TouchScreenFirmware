@@ -11,7 +11,19 @@ void InfoHost_Init(bool isConnected)
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
   infoHost.connected = isConnected;
+  infoHost.listeningMode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()
   infoHost.status = HOST_STATUS_IDLE;
+
+  if (!isConnected)
+    setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
+}
+
+void InfoHost_UpdateListeningMode(void)
+{
+  infoHost.listeningMode = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1);
+
+  if (infoHost.listeningMode)
+    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // if TFT in listening mode, display a reminder message
 }
 
 void InfoHost_HandleOkAck(int16_t target_tx_slots)

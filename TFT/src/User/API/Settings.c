@@ -237,9 +237,6 @@ void setupMachine(FW_TYPE fwType)
   if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // avoid repeated calls caused by manually sending M115 in terminal menu
     return;
 
-  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)  // if TFT in listening mode, display a reminder message
-    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
-
   infoMachineSettings.firmwareType = fwType;
 
   #if BED_LEVELING_TYPE > 1  // if not disabled and not auto-detect

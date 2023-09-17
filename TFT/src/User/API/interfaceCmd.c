@@ -261,9 +261,8 @@ bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
-  // if TFT is in listening mode and FW type was already detected, purge the command
-  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 &&
-      infoMachineSettings.firmwareType != FW_NOT_DETECTED)
+  // if TFT is in listening mode, purge the command
+  if (infoHost.listeningMode)
     purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)

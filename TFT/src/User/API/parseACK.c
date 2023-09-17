@@ -415,13 +415,25 @@ void parseACK(void)
         storeCmd("M115\n");  // as last command to identify the FW type!
       }
 
+      // 1) store on command queue the above gcodes to detect printer info
+      // 2) re-initialize infoHost when connected to avoid this code branch is executed again
+      // 3) set requestCommandInfo.inJson to "false" and detect the presence of Marlin ADVANCED_OK
+      //    feature (if any) and its command queue size
+      // 4) finally, set listening mode flag according to its last state stored in flash
+      //
+      // NOTES:
+      //   - 3) is applied only after all gcodes in 1) have been sent and their responses received and processed
+      //   - InfoHost_UpdateListeningMode() must always be invoked as last due to no gcode could be sent in case
+      //     listening mode is enabled (e.g. a TFT freeze will occur in case detectAdvancedOk() is invoked after
+      //     InfoHost_UpdateListeningMode())
+
+      InfoHost_Init(true);
+
       requestCommandInfo.inJson = false;
 
-      InfoHost_Init(true);  // re-initialize infoHost when connected
-
-      // NOTE: only after requestCommandInfo.inJson was set to "false" and InfoHost_Init(true) function was invoked,
-      //       detect the presence of Marlin ADVANCED_OK feature (if any) and its command queue size
       detectAdvancedOk();
+
+      InfoHost_UpdateListeningMode();
     }
 
     //----------------------------------------
@@ -1379,7 +1391,6 @@ void parseACK(void)
         initMachineSettings();
         fanResetSpeed();
         coordinateSetKnown(false);
-        setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
       }
     }
 
