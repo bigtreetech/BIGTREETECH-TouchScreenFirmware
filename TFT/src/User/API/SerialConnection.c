@@ -130,7 +130,6 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
         #endif
         )
       Serial_Put(serialPort[portIndex].port, msg);  // pass on the message to the port
-
   }
 }
 
