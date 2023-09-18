@@ -62,7 +62,7 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 //     - specific port index: specific serial port
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
-// Retrieve the next reading index in the message queue of the provided serial port:
+// retrieve the next reading index in the message queue of the provided serial port:
 //   - portIndex: index of serial port
 //
 //   - return value: next reading index
