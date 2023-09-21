@@ -262,7 +262,7 @@ bool sendCmd(bool purge, bool avoidTerminal)
   char * purgeStr = "[Purged] ";
 
   // if TFT is in listening mode, purge the command
-  if (infoHost.listeningMode)
+  if (infoHost.listening_mode)
     purge = true;
 
   #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)

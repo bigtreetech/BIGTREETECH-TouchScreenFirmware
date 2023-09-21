@@ -713,7 +713,7 @@ void loopReminderManage(void)
     else
       setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
   }
-  else if (infoHost.listeningMode == true || isWritingMode() == true)
+  else if (infoHost.listening_mode == true || isWritingMode() == true)
   {
     if (reminder.status == SYS_STATUS_LISTENING)  // no change, return
       return;
@@ -1202,6 +1202,8 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
+  UPD_SCAN_RATE();  // debug monitoring KPI
+
   // Handle a print from TFT media, if any
   loopPrintFromTFT();
 
