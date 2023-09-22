@@ -1220,6 +1220,14 @@ void loopBackEnd(void)
     Serial_GetFromUART();
   #endif
 
+  // Handle USB communication
+  #ifdef USB_FLASH_DRIVE_SUPPORT
+    USB_LoopProcess();
+  #endif
+
+  if ((bePriorityCounter++ % BE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
+    return;
+
   // Temperature monitor
   loopCheckHeater();
 
@@ -1237,11 +1245,6 @@ void loopBackEnd(void)
   // Handle a print from (remote) onboard media, if any
   if (infoMachineSettings.onboardSD == ENABLED)
     loopPrintFromOnboard();
-
-  // Handle USB communication
-  #ifdef USB_FLASH_DRIVE_SUPPORT
-    USB_LoopProcess();
-  #endif
 
   // Check filament runout status
   #ifdef FIL_RUNOUT_PIN
@@ -1316,6 +1319,10 @@ void loopFrontEnd(void)
 void loopProcess(void)
 {
   loopBackEnd();
+
+  if ((fePriorityCounter++ % FE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
+    return;
+
   loopFrontEnd();
 }
 

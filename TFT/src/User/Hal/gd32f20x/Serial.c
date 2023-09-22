@@ -1,8 +1,24 @@
 #include "Serial.h"
 #include "includes.h"  // for infoHost
 
-// dma rx buffer
-DMA_CIRCULAR_BUFFER dmaL1Data[_UART_CNT] = {0};
+// set this line to "true" to enable serial IDLE interrupt. IDLE interrupt is no more needed, so always set this macro to "false"
+#define RX_IDLE_INTERRUPT false
+
+// uncomment this line to use TX DMA based serial writing. Otherwise only TX interrupt based serial writing will be used
+//#define TX_DMA_WRITE
+
+// uncomment this line to use compact code (less code) instead of fast code
+#define USE_COMPACT_CODE
+
+#ifndef USE_COMPACT_CODE
+  // uncomment this line to use inline copy (fast code) instead of memcpy() (less code)
+  #define USE_INLINE_COPY
+#endif
+
+//#define DEFAULT_WRITE  // old unbuffered TX serial writing (just for comparison with new TX solutions)
+
+DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA RX buffer
+DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA TX buffer
 
 // Config for USART Channel
 //USART1 RX DMA2 Channel4 Steam2/5
@@ -35,32 +51,33 @@ void Serial_DMAClearFlag(uint8_t port)
   switch(port)
   {
     case _USART1: DMA_INTC(DMA0) = (0x0F << 12); break;
-    case _USART2: DMA_INTC(DMA0) = (0x0F << 20);  break;
+    case _USART2: DMA_INTC(DMA0) = (0x0F << 20); break;
     case _USART3: DMA_INTC(DMA0) = (0x0F << 8);  break;
-    case _UART4:  DMA_INTC(DMA1) = (0x0F << 8); break;
+    case _UART4:  DMA_INTC(DMA1) = (0x0F << 8);  break;
     case _UART5:  DMA_INTC(DMA1) = (0x0F << 4);  break;
-    case _USART6: DMA_INTC(DMA1) = (0x0F << 20);  break;
+    case _USART6: DMA_INTC(DMA1) = (0x0F << 20); break;
   }
 }
 
 void Serial_DMA_Config(uint8_t port)
 {
   const SERIAL_CFG * cfg = &Serial[port];
+
   rcu_periph_clock_enable(cfg->dma_rcc);
 
-  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) &= ~(1<<0);   // Disable DMA
+  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) &= ~(1<<0);  // Disable DMA
   Serial_DMAClearFlag(port);
-  USART_CTL2(cfg->uart) |= 1<<6;                        // DMA enable receiver
+  USART_CTL2(cfg->uart) |= 1<<6;                            // DMA enable receiver
 
   DMA_CHPADDR(cfg->dma_stream, cfg->dma_channel) = (uint32_t)(&USART_DATA(cfg->uart));
-  DMA_CHMADDR(cfg->dma_stream, cfg->dma_channel) = (uint32_t)(dmaL1Data[port].cache);
-  DMA_CHCNT(cfg->dma_stream, cfg->dma_channel) = dmaL1Data[port].cacheSize;
+  DMA_CHMADDR(cfg->dma_stream, cfg->dma_channel) = (uint32_t)(dmaL1DataRX[port].cache);
+  DMA_CHCNT(cfg->dma_stream, cfg->dma_channel) = dmaL1DataRX[port].cacheSize;
 
   // DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) = cfg->dma_channel << 25;
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 3<<12;  // Priority level: Very high
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 0<<10;  // Memory data size: 8
-  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 0<<8;  // Peripheral data size: 8
-  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 1<<7;  // Memory increment mode
+  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 0<<8;   // Peripheral data size: 8
+  DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 1<<7;   // Memory increment mode
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 0<<6;   // Peripheral not increment mode
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 1<<5;   // Circular mode enabled
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channel) |= 0<<4;   // Data transfer direction: Peripheral-to-memory
@@ -69,24 +86,36 @@ void Serial_DMA_Config(uint8_t port)
 
 void Serial_ClearData(uint8_t port)
 {
-  dmaL1Data[port].wIndex = dmaL1Data[port].rIndex = dmaL1Data[port].flag = dmaL1Data[port].cacheSize = 0;
+  dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].cacheSize = 0;
 
-  if (dmaL1Data[port].cache != NULL)
+  if (dmaL1DataRX[port].cache != NULL)
   {
-    free(dmaL1Data[port].cache);
-    dmaL1Data[port].cache = NULL;
+    free(dmaL1DataRX[port].cache);
+    dmaL1DataRX[port].cache = NULL;
+  }
+
+  dmaL1DataTX[port].wIndex = dmaL1DataTX[port].rIndex = dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize = 0;
+
+  if (dmaL1DataTX[port].cache != NULL)
+  {
+    free(dmaL1DataTX[port].cache);
+    dmaL1DataTX[port].cache = NULL;
   }
 }
 
-void Serial_Config(uint8_t port, uint16_t cacheSize, uint32_t baudrate)
+void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uint32_t baudrate)
 {
   Serial_ClearData(port);
 
-  dmaL1Data[port].cacheSize = cacheSize;
-  dmaL1Data[port].cache = malloc(cacheSize);
-  while (!dmaL1Data[port].cache);              // malloc failed
+  dmaL1DataRX[port].cacheSize = cacheSizeRX;
+  dmaL1DataRX[port].cache = malloc(cacheSizeRX);
+  while (!dmaL1DataRX[port].cache);               // malloc failed, blocking!
 
-  UART_Config(port, baudrate, USART_INT_IDLE);  // IDLE interrupt
+  dmaL1DataTX[port].cacheSize = cacheSizeTX;
+  dmaL1DataTX[port].cache = malloc(cacheSizeTX);
+  while (!dmaL1DataTX[port].cache);               // malloc failed, blocking!
+
+  UART_Config(port, baudrate, USART_IT_IDLE, RX_IDLE_INTERRUPT);  // configure serial line with or without IDLE interrupt
   Serial_DMA_Config(port);
 }
 
@@ -99,15 +128,43 @@ void Serial_DeConfig(uint8_t port)
   UART_DeConfig(port);
 }
 
+uint16_t Serial_GetReadingIndex(uint8_t port)
+{
+  return dmaL1DataRX[port].rIndex;
+}
+
+uint16_t Serial_GetWritingIndex(uint8_t port)
+{
+  return dmaL1DataRX[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channel);
+}
+
+void Serial_PutChar(uint8_t port, const char ch)
+{
+  while ((USART_STAT0(Serial[port].uart) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
+  USART_DATA(Serial[port].uart) = (uint8_t) ch;
+}
+
+void Serial_Put(uint8_t port, const char * msg)
+{
+  while (*msg)
+  {
+    while ((USART_STAT0(Serial[port].uart) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
+    USART_DATA(Serial[port].uart) = ((uint16_t)*msg++ & (uint16_t)0x01FF);
+  }
+}
+
+// ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
+#if IDLE_INTERRUPT == true  // RX serial IDLE interrupt
   if ((USART_STAT0(Serial[port].uart) & (1<<4)) != 0)
   {
-    USART_STAT0(Serial[port].uart);  // Clear interrupt flag
+    USART_STAT0(Serial[port].uart);  // clear interrupt flag
     USART_DATA(Serial[port].uart);
 
-    dmaL1Data[port].wIndex = dmaL1Data[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channel);
+    dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channel);
   }
+#endif
 }
 
 void USART0_IRQHandler(void)
@@ -138,19 +195,4 @@ void UART4_IRQHandler(void)
 void USART5_IRQHandler(void)
 {
   USART_IRQHandler(_USART6);
-}
-
-void Serial_Put(uint8_t port, const char *s)
-{
-  while (*s)
-  {
-    while ((USART_STAT0(Serial[port].uart) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
-    USART_DATA(Serial[port].uart) = ((uint16_t)*s++ & (uint16_t)0x01FF);
-  }
-}
-
-void Serial_PutChar(uint8_t port, const char ch)
-{
-  while ((USART_STAT0(Serial[port].uart) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
-  USART_DATA(Serial[port].uart) = (uint8_t) ch;
 }

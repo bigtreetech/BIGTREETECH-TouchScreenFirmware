@@ -43,10 +43,8 @@ const char magic_echo[] = "echo:";
 const char magic_warning[] = "Warning:";  // RRF warning
 const char magic_message[] = "message";   // RRF message in Json format
 
-#define ACK_CACHE_SIZE 512  // including ending character '\0'
-
 char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
-uint16_t ack_len;                           // length of data currently present in ack_cache
+uint16_t ack_len;                           // length of data present in ack_cache without the terminating null character '\0'
 uint16_t ack_index;
 SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
 bool hostDialog = false;
@@ -469,7 +467,7 @@ void parseACK(void)
           requestCommandInfo.inResponse = false;
         }
       }
-      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(ack_cache) < CMD_MAX_REV)
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + (ack_len + 1) < CMD_MAX_REV)  // +1 is for the terminating null character '\0'
       {
         strcat(requestCommandInfo.cmd_rev_buf, ack_cache);
 

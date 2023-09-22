@@ -10,6 +10,10 @@ extern "C" {
 #include "variants.h"  // for SERIAL_PORT_2 etc.
 #include "uart.h"      // for _UART_CNT etc.
 
+// size of buffer where read ACK messages are stored (including terminating null character '\0').
+// Use a power of 2 for performance reasons!
+#define ACK_CACHE_SIZE NOBEYOND(256, 512, 512)
+
 #define BAUDRATE_COUNT 10
 
 typedef enum
@@ -27,12 +31,13 @@ typedef enum
     PORT_4,
   #endif
   SERIAL_PORT_COUNT
-} SERIAL_PORT_INDEX;  // serial port index for all enabled serial ports (This is not actual physical port number)
+} SERIAL_PORT_INDEX;  // serial port index for all enabled serial ports (this is not the actual physical serial port number)
 
 typedef struct
 {
   uint8_t port;             // physical port (e.g. _USART1) related to serial port (e.g. 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc...)
-  uint16_t cacheSize;       // queue size for sending/receiving data to/from the port
+  uint16_t cacheSizeRX;     // buffer size for receiving data from the serial port
+  uint16_t cacheSizeTX;     // buffer size for sending data to the serial port
   const char * const id;    // serial port ID (e.g. "" for SERIAL_PORT, "2" for SERIAL_PORT_2 etc...)
   const char * const desc;  // serial port description (e.g. "1 - Printer" for SERIAL_PORT, "2 - WIFI" for SERIAL_PORT_2 etc...)
 } SERIAL_PORT_INFO;         // serial port info
@@ -60,21 +65,16 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 //     - ALL_PORTS: all serial ports (primary and supplementary)
 //     - SUP_PORTS: all supplementary serial ports
 //     - specific port index: specific serial port
+//   - msg: message to send
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
-// retrieve the number of bytes available on the provided serial port:
-//   - portIndex: index of serial port
-//
-//   - return value: number of bytes available on serial port
-uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex);
-
-// retrieve a message from the provided serial port, if any:
-//   - portIndex: index of serial port where data are read from
+// retrieve a message from the provided physical serial port:
+//   - port: physical serial port where data are read from
 //   - buf: buffer where data are stored
 //   - bufSize: size of buffer (max number of bytes that can be stored in buf)
 //
 //   - return value: number of bytes stored in buf
-uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize);
+uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize);
 
 #ifdef SERIAL_PORT_2
   // retrieve messages from all the enabled supplementary ports storing them
