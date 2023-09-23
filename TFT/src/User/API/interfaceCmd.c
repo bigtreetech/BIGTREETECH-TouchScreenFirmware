@@ -1486,7 +1486,11 @@ void sendQueueCmd(void)
   }  // end parsing cmd
 
 send_cmd:
-  if (sendCmd(false, avoid_terminal) == true)  // if command was sent
+  // if command was sent:
+  //   - if TFT is connected, update tx slots and tx count
+  //   - if TFT is not connected, consider the command as an out of band message
+  //
+  if (sendCmd(false, avoid_terminal) == true && infoHost.connected == true)
   {
     // decrease the number of available tx slots and increase the pending commands tx count
     //
