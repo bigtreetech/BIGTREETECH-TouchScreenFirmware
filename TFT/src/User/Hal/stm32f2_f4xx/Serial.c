@@ -8,7 +8,7 @@
 //#define TX_DMA_WRITE
 
 // uncomment this line to use compact code (less code) instead of fast code
-//#define USE_COMPACT_CODE
+#define USE_COMPACT_CODE
 
 #ifndef USE_COMPACT_CODE
   // uncomment this line to use inline copy (fast code) instead of memcpy() (less code)
