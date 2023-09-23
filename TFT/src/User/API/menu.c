@@ -1211,10 +1211,6 @@ void loopBackEnd(void)
   // Parse the received slave response information
   parseACK();
 
-  // Parse comment from gcode file
-  if (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1)  // if file comment parsing is enabled
-    parseComment();
-
   // Retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc...
   #ifdef SERIAL_PORT_2
     Serial_GetFromUART();

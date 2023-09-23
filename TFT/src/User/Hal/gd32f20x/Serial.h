@@ -14,7 +14,16 @@ typedef struct
   uint16_t cacheSize;
 } DMA_CIRCULAR_BUFFER;
 
+typedef struct
+{
+  uint32_t uart;
+  rcu_periph_enum dma_rcc;
+  uint8_t dma_channel;
+  uint32_t dma_stream;
+} SERIAL_CFG;
+
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];
+extern const SERIAL_CFG Serial[_UART_CNT];
 
 void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uint32_t baudrate);
 void Serial_DeConfig(uint8_t port);
@@ -23,14 +32,20 @@ void Serial_DeConfig(uint8_t port);
 //   - port: index of serial port
 //
 //   - return value: next reading index
-uint16_t Serial_GetReadingIndex(uint8_t port);
+static inline uint16_t Serial_GetReadingIndex(uint8_t port)
+{
+  return dmaL1DataRX[port].rIndex;
+}
 
 // retrieve the next writing index in the message queue of the provided serial port
 // based on Interrupt/DMA status while writing serial data in the background
 //   - port: index of serial port
 //
 //   - return value: next writing index
-uint16_t Serial_GetWritingIndex(uint8_t port);
+static inline uint16_t Serial_GetWritingIndex(uint8_t port)
+{
+  return dmaL1DataRX[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channel);
+}
 
 // send character to a uart port. TX interrupt based serial writing is always used even if TX DMA based serial writing is enabled
 void Serial_PutChar(uint8_t port, const char ch);

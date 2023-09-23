@@ -4,13 +4,13 @@
 // uncomment this line to use inline copy (fast code) instead of memcpy() (less code)
 #define USE_INLINE_COPY
 
-#define SERIAL_PORT_RX_QUEUE_SIZE   NOBEYOND(ACK_CACHE_SIZE, RAM_SIZE * 64, 4 * ACK_CACHE_SIZE)
-#define SERIAL_PORT_2_RX_QUEUE_SIZE ACK_CACHE_SIZE
-#define SERIAL_PORT_3_RX_QUEUE_SIZE ACK_CACHE_SIZE
-#define SERIAL_PORT_4_RX_QUEUE_SIZE ACK_CACHE_SIZE
+#define SERIAL_PORT_RX_QUEUE_SIZE   NOBEYOND(ACK_CACHE_SIZE, RAM_SIZE * 64, 4096)  // ACK messages reading queue from mainboard
+#define SERIAL_PORT_2_RX_QUEUE_SIZE 512
+#define SERIAL_PORT_3_RX_QUEUE_SIZE 512
+#define SERIAL_PORT_4_RX_QUEUE_SIZE 512
 
-// make TX queue size simmetric to ACK messages queue size
-#define SERIAL_PORT_TX_QUEUE_SIZE   ACK_CACHE_SIZE
+// make TX queue size simmetric to ACK messages queue size for all supplementary serial ports
+#define SERIAL_PORT_TX_QUEUE_SIZE   256             // gcodes writing queue to mainboard
 #define SERIAL_PORT_2_TX_QUEUE_SIZE ACK_CACHE_SIZE
 #define SERIAL_PORT_3_TX_QUEUE_SIZE ACK_CACHE_SIZE
 #define SERIAL_PORT_4_TX_QUEUE_SIZE ACK_CACHE_SIZE

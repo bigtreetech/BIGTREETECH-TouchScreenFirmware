@@ -906,6 +906,9 @@ void loopPrintFromTFT(void)
         }
       }
     }
+
+    if (comment_parsing)  // parse comment from gcode file
+      parseComment();
   }
 
   if (gcode_count == 0)

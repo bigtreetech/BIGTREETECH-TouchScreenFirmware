@@ -21,17 +21,7 @@ DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA RX buffer
 DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA TX buffer
 
 // Config for USART Channel
-typedef struct
-{
-  USART_TypeDef *uart;
-  uint32_t dma_rcc;
-  uint8_t dma_channel;
-  DMA_Stream_TypeDef *dma_streamRX;
-  DMA_Stream_TypeDef *dma_streamTX;
-  volatile uint32_t txBytes[_UART_CNT];
-} SERIAL_CFG;
-
-static SERIAL_CFG Serial[_UART_CNT] = {
+SERIAL_CFG Serial[_UART_CNT] = {
 // USART   DMA1 or DMA2         Channel RX_STREAM     TX_STREAM
   {USART1, RCC_AHB1Periph_DMA2, 4,      DMA2_Stream2, DMA2_Stream7 },
   {USART2, RCC_AHB1Periph_DMA1, 4,      DMA1_Stream5, DMA1_Stream6 },
@@ -186,6 +176,8 @@ void Serial_ClearData(uint8_t port)
     free(dmaL1DataTX[port].cache);
     dmaL1DataTX[port].cache = NULL;
   }
+
+  Serial[port].txBytes[port] = 0;
 }
 
 void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uint32_t baudrate)
@@ -200,8 +192,6 @@ void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uin
   dmaL1DataTX[port].cache = malloc(cacheSizeTX);
   while (!dmaL1DataTX[port].cache);               // malloc failed, blocking!
 
-  Serial[port].txBytes[port] = 0;
-
   UART_Config(port, baudrate, USART_IT_IDLE, RX_IDLE_INTERRUPT);  // configure serial line with or without IDLE interrupt
   Serial_DMA_Config(port);
 }
@@ -215,16 +205,6 @@ void Serial_DeConfig(uint8_t port)
 
   Serial_DMAClearInterruptFlagsRX(port);
   UART_DeConfig(port);
-}
-
-uint16_t Serial_GetReadingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].rIndex;
-}
-
-uint16_t Serial_GetWritingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
 }
 
 #ifdef DEFAULT_WRITE  // unbuffered TX serial writing
@@ -411,7 +391,7 @@ void Serial_PutChar(uint8_t port, const char ch)
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
-#if IDLE_INTERRUPT == true  // RX serial IDLE interrupt
+#if RX_IDLE_INTERRUPT == true  // RX serial IDLE interrupt
   if ((Serial[port].uart->SR & USART_FLAG_IDLE) != 0)  // RX: check for serial IDLE interrupt
   {
     //Serial[port].uart->SR;  // already done in the guard above
@@ -420,6 +400,8 @@ void USART_IRQHandler(uint8_t port)
     dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
   }
 #endif
+
+#ifndef DEFAULT_WRITE
 
   // TX interrupt based serial writing
   //
@@ -455,6 +437,8 @@ void USART_IRQHandler(uint8_t port)
     }
     // else: more data is coming, wait for next Transfer Complete (TC) interrupt
   }
+#endif
+
 #endif
 }
 

@@ -21,14 +21,7 @@ DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA RX buffer
 DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA TX buffer
 
 // Config for USART Channel
-typedef struct
-{
-  USART_TypeDef *uart;
-  uint32_t dma_rcc;
-  DMA_Channel_TypeDef *dma_chanel;
-} SERIAL_CFG;
-
-static const SERIAL_CFG Serial[_UART_CNT] = {
+const SERIAL_CFG Serial[_UART_CNT] = {
   {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5},
   {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
   {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3},
@@ -98,16 +91,6 @@ void Serial_DeConfig(uint8_t port)
   UART_DeConfig(port);
 }
 
-uint16_t Serial_GetReadingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].rIndex;
-}
-
-uint16_t Serial_GetWritingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].cacheSize - Serial[port].dma_chanel->CNDTR;
-}
-
 void Serial_PutChar(uint8_t port, const char ch)
 {
   while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
@@ -126,7 +109,7 @@ void Serial_Put(uint8_t port, const char * msg)
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
-#if IDLE_INTERRUPT == true  // RX serial IDLE interrupt
+#if RX_IDLE_INTERRUPT == true  // RX serial IDLE interrupt
   if ((Serial[port].uart->SR & USART_FLAG_IDLE) != 0)  // RX: check for serial IDLE interrupt
   {
     //Serial[port].uart->SR;  // already done in the guard above

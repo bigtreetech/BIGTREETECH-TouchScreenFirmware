@@ -21,23 +21,7 @@ DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA RX buffer
 DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA TX buffer
 
 // Config for USART Channel
-//USART1 RX DMA2 Channel4 Steam2/5
-//USART2 RX DMA1 Channel4 Steam5
-//USART3 RX DMA1 Channel4 Steam1
-//UART4  RX DMA1 Channel4 Steam2
-//UART5  RX DMA1 Channel4 Steam0
-//USART6 RX DMA2 Channel5 Steam1/2
-
-// Config for USART Channel
-typedef struct
-{
-  uint32_t uart;
-  rcu_periph_enum dma_rcc;
-  uint8_t dma_channel;
-  uint32_t dma_stream;
-} SERIAL_CFG;
-
-static const SERIAL_CFG Serial[_UART_CNT] = {
+const SERIAL_CFG Serial[_UART_CNT] = {
   {USART0, RCU_DMA0, 4, DMA0},
   {USART1, RCU_DMA0, 5, DMA0},
   {USART2, RCU_DMA0, 2, DMA0},
@@ -128,16 +112,6 @@ void Serial_DeConfig(uint8_t port)
   UART_DeConfig(port);
 }
 
-uint16_t Serial_GetReadingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].rIndex;
-}
-
-uint16_t Serial_GetWritingIndex(uint8_t port)
-{
-  return dmaL1DataRX[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channel);
-}
-
 void Serial_PutChar(uint8_t port, const char ch)
 {
   while ((USART_STAT0(Serial[port].uart) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
@@ -156,7 +130,7 @@ void Serial_Put(uint8_t port, const char * msg)
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
-#if IDLE_INTERRUPT == true  // RX serial IDLE interrupt
+#if RX_IDLE_INTERRUPT == true  // RX serial IDLE interrupt
   if ((USART_STAT0(Serial[port].uart) & (1<<4)) != 0)
   {
     USART_STAT0(Serial[port].uart);  // clear interrupt flag
