@@ -91,6 +91,8 @@ void Serial_DeConfig(uint8_t port)
   UART_DeConfig(port);
 }
 
+#ifdef DEFAULT_WRITE  // unbuffered TX serial writing
+
 void Serial_PutChar(uint8_t port, const char ch)
 {
   while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
@@ -106,6 +108,107 @@ void Serial_Put(uint8_t port, const char * msg)
   }
 }
 
+#else  // use TX interrupt based serial writing
+
+void Serial_PutChar(uint8_t port, const char ch)
+{
+  // wait for enough free buffer in TX cache to store all data
+  while (((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex)
+  {
+  }
+
+  dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = ch;
+  dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;
+
+  Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+}
+
+void Serial_Put(uint8_t port, const char * msg)
+{
+#ifdef USE_COMPACT_CODE  // less code
+  while (*msg)
+  {
+    // blocking! wait for buffer to become available
+    while (((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) { };
+
+    dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = *msg++;
+    dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;
+
+    Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+  }
+#else  // fast code
+  // NOTE: used 32 bit variables for performance reasons (in particular for data copy)
+
+  DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1DataTX[port];
+  char * cache = dmaL1Data_ptr->cache;
+  uint32_t cacheSize = dmaL1Data_ptr->cacheSize;
+  uint32_t wIndex = dmaL1Data_ptr->wIndex;
+  uint32_t msgSize = strlen(msg);
+
+  // if cache size is not enough to store the data, skip the data copy
+  //
+  // NOTE: the following check should never be matched if cache has a proper size.
+  //       If so, the check could be commented out just to improve performance. Just keep it to make the code more robust
+  //
+  if ((cacheSize - 1) < msgSize)
+    return;
+
+  // wait for enough free buffer in TX cache to store all data.
+  // Used dmaL1Data_ptr->rIndex dynamically changed by TX cache's interrupt handler
+  //
+  // NOTE: -1 is needed because full cache usage will introduce a conflict on rIndex and wIndex
+  //       (wIndex == rIndex will indicate an empty cache or a full cache)
+  //
+  while ((((cacheSize - 1) - wIndex + dmaL1Data_ptr->rIndex) % cacheSize) < msgSize)
+  {
+  }
+
+  uint32_t maxIndex;
+
+  // if data is one chunk only, store data on upper part of circular cache
+  if ((cacheSize - wIndex) >= msgSize)
+  {
+  #ifdef USE_INLINE_COPY
+    maxIndex = wIndex + msgSize;
+
+    while (wIndex < maxIndex)
+    {
+      cache[wIndex++] = *(msg++);
+    }
+  #else
+    memcpy(&cache[wIndex], msg, msgSize);
+  #endif
+  }
+  else  // data at end and beginning of cache
+  {
+  #ifdef USE_INLINE_COPY
+    while (wIndex < cacheSize)
+    {
+      cache[wIndex++] = *(msg++);
+    }
+
+    wIndex = 0;
+    maxIndex = msgSize - (cacheSize - dmaL1Data_ptr->wIndex);  // used dmaL1Data_ptr->wIndex and not wIndex
+
+    while (wIndex < maxIndex)
+    {
+      cache[wIndex++] = *(msg++);
+    }
+  #else
+    memcpy(&cache[wIndex], msg, cacheSize - wIndex);
+    memcpy(cache, &msg[cacheSize - wIndex], msgSize - (cacheSize - wIndex));
+  #endif
+  }
+
+  // update queue's writing index with next index
+  dmaL1Data_ptr->wIndex = (dmaL1Data_ptr->wIndex + msgSize) % cacheSize;
+
+  Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+#endif  // USE_COMPACT_CODE
+}
+
+#endif
+
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
@@ -118,6 +221,24 @@ void USART_IRQHandler(uint8_t port)
     dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_chanel->CNDTR;
   }
 #endif
+
+#ifndef DEFAULT_WRITE  // TX interrupt based serial writing
+
+  if ((Serial[port].uart->SR & USART_FLAG_TXE) != 0)  // TX: check for TXE interrupt
+  {
+    if (dmaL1DataTX[port].rIndex == dmaL1DataTX[port].wIndex)  // no more data?
+    {
+      Serial[port].uart->CR1 &= ~USART_FLAG_TXE;               // disable TXE interrupt
+    }
+    else
+    {
+      Serial[port].uart->DR = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];       // write next available character
+
+      dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;  // increase reading index
+    }
+  }
+
+#endif  // DEFAULT_WRITE
 }
 
 void USART1_IRQHandler(void)

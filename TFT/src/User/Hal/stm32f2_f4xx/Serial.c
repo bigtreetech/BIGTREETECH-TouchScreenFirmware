@@ -5,7 +5,7 @@
 #define RX_IDLE_INTERRUPT false
 
 // uncomment this line to use TX DMA based serial writing. Otherwise only TX interrupt based serial writing will be used
-//#define TX_DMA_WRITE
+#define TX_DMA_WRITE
 
 // uncomment this line to use compact code (less code) instead of fast code
 #define USE_COMPACT_CODE
@@ -122,7 +122,7 @@ void Serial_DMA_Config(uint8_t port)
   cfg->dma_streamRX->M0AR = (uint32_t)(dmaL1DataRX[port].cache);  // destination RX data (sram)
   cfg->dma_streamRX->NDTR = dmaL1DataRX[port].cacheSize;          // buffer size RX
 
-  cfg->dma_streamRX->CR   = cfg->dma_channel << 25;               // channel selection
+  cfg->dma_streamRX->CR   = cfg->dma_channel << 25;               // channel selection RX
   cfg->dma_streamTX->CR   = cfg->dma_channel << 25;               // channel selection TX
 
   if (port == SERIAL_PORT)  // main serial port has highest priority, writing before reading
@@ -215,7 +215,16 @@ void Serial_PutChar(uint8_t port, const char ch)
   Serial[port].uart->DR = (uint8_t) ch;
 }
 
-#else  // use TX interrupt based serial writing
+void Serial_Put(uint8_t port, const char * msg)
+{
+  while (*msg)
+  {
+    while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    Serial[port].uart->DR = ((uint16_t)*msg++ & (uint16_t)0x01FF);
+  }
+}
+
+#elif !defined(TX_DMA_WRITE)  // TX interrupt based serial writing
 
 void Serial_PutChar(uint8_t port, const char ch)
 {
@@ -229,21 +238,6 @@ void Serial_PutChar(uint8_t port, const char ch)
 
   Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
 }
-
-#endif
-
-#ifdef DEFAULT_WRITE  // unbuffered TX serial writing
-
-void Serial_Put(uint8_t port, const char * msg)
-{
-  while (*msg)
-  {
-    while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
-    Serial[port].uart->DR = ((uint16_t)*msg++ & (uint16_t)0x01FF);
-  }
-}
-
-#elif !defined(TX_DMA_WRITE)  // TX interrupt based serial writing
 
 void Serial_Put(uint8_t port, const char * msg)
 {
@@ -342,38 +336,16 @@ void Serial_Send_TX(uint8_t port)
 
   Serial[port].dma_streamTX->M0AR = (uint32_t)(&dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex]);  // start address TX data
   Serial_DMAClearInterruptFlagsTX(port);                         // clear DMA TX interrupt flags
-  Serial[port].uart->CR1 |= (1<<6);                              // enable Transfer Complete (TX) serial Interrupt
+  Serial[port].uart->CR1 |= USART_FLAG_TC;                       // enable Transfer Complete (TX) serial Interrupt
   Serial[port].dma_streamTX->NDTR = Serial[port].txBytes[port];  // no. bytes to transfer
   Serial[port].dma_streamTX->CR |= 1<<0;                         // enable TX DMA
 }
 
-void Serial_Put(uint8_t port, const char * msg)
-{
-  while (*msg)
-  {
-    // setup TX DMA, if no '\n' yet, but buffer is full AND DMA is not in progress already (waiting for Transfer Complete interrupt)
-    if ((((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) &&
-        ((Serial[port].uart->CR1 & (1<<6)) == 0))
-      Serial_Send_TX(port);
-
-    // wait until space becomes available, blocking!
-    while (((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) { }
-
-    dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = *msg;                                 // copy character to cache
-    dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
-
-    if ((*msg == '\n') && ((Serial[port].uart->CR1 & (1<<6)) == 0))
-      Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
-
-    msg++;  // let the compiler optimize this, no need to do it manually!
-  }
-}
-/*
 void Serial_PutChar(uint8_t port, const char ch)
 {
   // setup TX DMA, if no '\n' yet, but buffer is full AND DMA is not in progress already (waiting for Transfer Complete interrupt)
   if ((((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) &&
-      ((Serial[port].uart->CR1 & (1<<6)) == 0))
+      ((Serial[port].uart->CR1 & USART_FLAG_TC) == 0))
     Serial_Send_TX(port);
 
   // wait until space becomes available, blocking!
@@ -382,10 +354,32 @@ void Serial_PutChar(uint8_t port, const char ch)
   dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = ch;                                   // copy character to cache
   dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
 
-  if ((ch == '\n') && ((Serial[port].uart->CR1 & (1<<6)) == 0))
+  if ((ch == '\n') && ((Serial[port].uart->CR1 & USART_FLAG_TC) == 0))
     Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
 }
-*/
+
+void Serial_Put(uint8_t port, const char * msg)
+{
+  while (*msg)
+  {
+    // setup TX DMA, if no '\n' yet, but buffer is full AND DMA is not in progress already (waiting for Transfer Complete interrupt)
+    if ((((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) &&
+        ((Serial[port].uart->CR1 & USART_FLAG_TC) == 0))
+      Serial_Send_TX(port);
+
+    // wait until space becomes available, blocking!
+    while (((dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize) == dmaL1DataTX[port].rIndex) { }
+
+    dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = *msg;                                 // copy character to cache
+    dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
+
+    if ((*msg == '\n') && ((Serial[port].uart->CR1 & USART_FLAG_TC) == 0))
+      Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
+
+    msg++;  // let the compiler optimize this, no need to do it manually!
+  }
+}
+
 #endif
 
 // ISR, serial interrupt handler
@@ -403,13 +397,13 @@ void USART_IRQHandler(uint8_t port)
 
 #ifndef DEFAULT_WRITE
 
-  // TX interrupt based serial writing
-  //
+#ifndef TX_DMA_WRITE  // TX interrupt based serial writing
+
   if ((Serial[port].uart->SR & USART_FLAG_TXE) != 0)  // TX: check for TXE interrupt
   {
     if (dmaL1DataTX[port].rIndex == dmaL1DataTX[port].wIndex)  // no more data?
     {
-      Serial[port].uart->CR1 &= ~USART_FLAG_TXE;               // clear TXE interrupt bit
+      Serial[port].uart->CR1 &= ~USART_FLAG_TXE;               // disable TXE interrupt
     }
     else
     {
@@ -419,10 +413,11 @@ void USART_IRQHandler(uint8_t port)
     }
   }
 
-#ifdef TX_DMA_WRITE  // TX DMA based serial writing
-  if ((Serial[port].uart->SR & (1<<6)) != 0)  // TX: check for Transfer Complete (TC)
+#else  // TX DMA based serial writing
+
+  if ((Serial[port].uart->SR & USART_FLAG_TC) != 0)  // TX: check for Transfer Complete (TC)
   {
-    Serial[port].uart->SR &= ~(1<<6);  // clear Transfer Complete (TC) bit
+    Serial[port].uart->SR &= ~USART_FLAG_TC;         // clear Transfer Complete (TC) bit
 
     // NOTE: the ISR is sometimes called while DMA is still active, so check NDTR status!
     if (Serial[port].dma_streamTX->NDTR == 0)  // sending is complete
@@ -433,13 +428,14 @@ void USART_IRQHandler(uint8_t port)
       if (dmaL1DataTX[port].wIndex != dmaL1DataTX[port].rIndex)  // is more data available?
         Serial_Send_TX(port);                                    // continue sending data
       else                                                       // removed causes double line transfers
-        Serial[port].uart->CR1 &= ~(1<<6);                       // disable Transfer Complete (TC) interrupt, nothing more to do
+        Serial[port].uart->CR1 &= ~USART_FLAG_TC;                // disable Transfer Complete (TC) interrupt, nothing more to do
     }
     // else: more data is coming, wait for next Transfer Complete (TC) interrupt
   }
-#endif
 
-#endif
+#endif  // TX_DMA_WRITE
+
+#endif  // DEFAULT_WRITE
 }
 
 void USART1_IRQHandler(void)

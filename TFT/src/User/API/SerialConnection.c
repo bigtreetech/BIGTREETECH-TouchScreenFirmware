@@ -9,11 +9,10 @@
 #define SERIAL_PORT_3_RX_QUEUE_SIZE 512
 #define SERIAL_PORT_4_RX_QUEUE_SIZE 512
 
-// make TX queue size simmetric to ACK messages queue size for all supplementary serial ports
-#define SERIAL_PORT_TX_QUEUE_SIZE   256             // gcodes writing queue to mainboard
-#define SERIAL_PORT_2_TX_QUEUE_SIZE ACK_CACHE_SIZE
-#define SERIAL_PORT_3_TX_QUEUE_SIZE ACK_CACHE_SIZE
-#define SERIAL_PORT_4_TX_QUEUE_SIZE ACK_CACHE_SIZE
+#define SERIAL_PORT_TX_QUEUE_SIZE   256  // gcodes writing queue to mainboard
+#define SERIAL_PORT_2_TX_QUEUE_SIZE 128
+#define SERIAL_PORT_3_TX_QUEUE_SIZE 128
+#define SERIAL_PORT_4_TX_QUEUE_SIZE 128
 
 const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   {SERIAL_PORT    , SERIAL_PORT_RX_QUEUE_SIZE  , SERIAL_PORT_TX_QUEUE_SIZE  , "" , "1 - Printer"},
