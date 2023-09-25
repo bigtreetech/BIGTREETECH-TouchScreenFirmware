@@ -203,6 +203,7 @@ bool moveCacheToCmd(void)
 void clearCmdQueue(void)
 {
   cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
+  cmdCache.count = cmdCache.index_w = cmdCache.index_r = 0;
 }
 
 // Strip out any leading space from the passed command.
