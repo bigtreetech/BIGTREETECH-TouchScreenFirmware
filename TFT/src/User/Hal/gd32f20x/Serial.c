@@ -99,7 +99,7 @@ void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uin
   dmaL1DataTX[port].cache = malloc(cacheSizeTX);
   while (!dmaL1DataTX[port].cache);                          // malloc failed, blocking!
 
-  UART_Config(port, baudrate, USART_IT_IDLE, IDLE_LINE_IT);  // configure serial line with or without IDLE Line interrupt
+  UART_Config(port, baudrate, USART_INT_IDLE, IDLE_LINE_IT);  // configure serial line with or without IDLE Line interrupt
   Serial_DMA_Config(port);
 }
 
