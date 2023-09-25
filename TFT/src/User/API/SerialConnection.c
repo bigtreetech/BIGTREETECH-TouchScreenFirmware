@@ -17,7 +17,7 @@
 const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   {SERIAL_PORT    , SERIAL_PORT_RX_QUEUE_SIZE  , SERIAL_PORT_TX_QUEUE_SIZE  , "" , "1 - Printer"},
   #ifdef SERIAL_PORT_2
-    {SERIAL_PORT_2, SERIAL_PORT_2_RX_QUEUE_SIZE, SERIAL_PORT_2_TX_QUEUE_SIZE, "2", "2 - Wifi"},
+    {SERIAL_PORT_2, SERIAL_PORT_2_RX_QUEUE_SIZE, SERIAL_PORT_2_TX_QUEUE_SIZE, "2", "2 - WiFi"},
   #endif
   #ifdef SERIAL_PORT_3
     {SERIAL_PORT_3, SERIAL_PORT_3_RX_QUEUE_SIZE, SERIAL_PORT_3_TX_QUEUE_SIZE, "3", "3 - UART3"},
@@ -150,8 +150,8 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
   // wIndex: update L1 cache's writing index (dynamically changed (by L1 cache's interrupt handler) variables/attributes)
   //         and make a static access (32 bit) to it to speedup performance on this function
   //
-  uint32_t wIndex = dmaL1DataRX[port].wIndex = Serial_GetWritingIndex(port);  // get the latest wIndex
-  uint32_t flag = dmaL1DataRX[port].flag;                                     // get the current flag position
+  uint32_t wIndex = dmaL1DataRX[port].wIndex = Serial_GetWritingIndexRX(port);  // get the latest wIndex
+  uint32_t flag = dmaL1DataRX[port].flag;                                       // get the current flag position
 
   if (flag == wIndex)  // if no data to read from L1 cache, nothing to do
     return 0;

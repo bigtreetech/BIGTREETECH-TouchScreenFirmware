@@ -110,7 +110,7 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
   uint16_t rIndex;
 
   TASK_LOOP_WHILE(condCallback(),
-                  if ((rIndex = Serial_GetReadingIndex(SERIAL_PORT)) != rIndex_old)
+                  if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
                     sendEmergencyCmd("M108\n");
                     rIndex_old = rIndex;

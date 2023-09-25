@@ -7,7 +7,7 @@
 
 typedef struct
 {
-  char *cache;
+  char * cache;
   volatile uint16_t wIndex;  // writing index. Precautionally declared as volatile due to access from interrupt handler and main thread
   volatile uint16_t rIndex;  // reading index. Precautionally declared as volatile due to access from interrupt handler and main thread
   uint16_t flag;             // custom flag (for custom usage by the application)
@@ -16,12 +16,12 @@ typedef struct
 
 typedef struct
 {
-  USART_TypeDef *uart;
+  USART_TypeDef * uart;
   uint32_t dma_rcc;
   uint8_t dma_channel;
-  DMA_Stream_TypeDef *dma_streamRX;
-  DMA_Stream_TypeDef *dma_streamTX;
-  volatile uint32_t txBytes[_UART_CNT];
+  DMA_Stream_TypeDef * dma_streamRX;
+  DMA_Stream_TypeDef * dma_streamTX;
+  volatile uint32_t txBytes;
 } SERIAL_CFG;
 
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];
@@ -30,29 +30,29 @@ extern SERIAL_CFG Serial[_UART_CNT];
 void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uint32_t baudrate);
 void Serial_DeConfig(uint8_t port);
 
-// retrieve the next reading index in the message queue of the provided serial port:
+// retrieve the next reading index in the RX message queue of the provided serial port:
 //   - port: index of serial port
 //
 //   - return value: next reading index
-static inline uint16_t Serial_GetReadingIndex(uint8_t port)
+static inline uint16_t Serial_GetReadingIndexRX(uint8_t port)
 {
   return dmaL1DataRX[port].rIndex;
 }
 
-// retrieve the next writing index in the message queue of the provided serial port
-// based on Interrupt/DMA status while writing serial data in the background
+// retrieve the next writing index in the RX message queue of the provided serial port
+// based on Interrupt/DMA status while writing serial data in the background:
 //   - port: index of serial port
 //
 //   - return value: next writing index
-static inline uint16_t Serial_GetWritingIndex(uint8_t port)
+static inline uint16_t Serial_GetWritingIndexRX(uint8_t port)
 {
   return dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
 }
 
-// send character to a uart port. TX interrupt based serial writing is always used even if TX DMA based serial writing is enabled
+// send character to a uart port
 void Serial_PutChar(uint8_t port, const char ch);
 
-// send a zero terminated message to uart port. TX interrupt based serial writing is used if TX DMA based serial writing is disabled
+// send a zero terminated message to uart port
 void Serial_Put(uint8_t port, const char * msg);
 
 #endif

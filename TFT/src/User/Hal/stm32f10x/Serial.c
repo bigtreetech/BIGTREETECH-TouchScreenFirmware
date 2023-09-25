@@ -1,8 +1,8 @@
 #include "Serial.h"
-#include "includes.h"  // for infoHost
+#include "includes.h"
 
-// set this line to "true" to enable serial IDLE interrupt. IDLE interrupt is no more needed, so always set this macro to "false"
-#define RX_IDLE_INTERRUPT false
+// set this line to "true" to enable IDLE Line interrupt. It is no more needed, so always set this macro to "false"
+#define IDLE_LINE_IT false
 
 // uncomment this line to use TX DMA based serial writing. Otherwise only TX interrupt based serial writing will be used
 //#define TX_DMA_WRITE
@@ -20,7 +20,7 @@
 DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA RX buffer
 DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA TX buffer
 
-// Config for USART Channel
+// config for USART channel
 const SERIAL_CFG Serial[_UART_CNT] = {
   {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5},
   {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
@@ -73,13 +73,13 @@ void Serial_Config(uint8_t port, uint16_t cacheSizeRX, uint16_t cacheSizeTX, uin
 
   dmaL1DataRX[port].cacheSize = cacheSizeRX;
   dmaL1DataRX[port].cache = malloc(cacheSizeRX);
-  while (!dmaL1DataRX[port].cache);               // malloc failed, blocking!
+  while (!dmaL1DataRX[port].cache);                          // malloc failed, blocking!
 
   dmaL1DataTX[port].cacheSize = cacheSizeTX;
   dmaL1DataTX[port].cache = malloc(cacheSizeTX);
-  while (!dmaL1DataTX[port].cache);               // malloc failed, blocking!
+  while (!dmaL1DataTX[port].cache);                          // malloc failed, blocking!
 
-  UART_Config(port, baudrate, USART_IT_IDLE, RX_IDLE_INTERRUPT);  // configure serial line with or without IDLE interrupt
+  UART_Config(port, baudrate, USART_IT_IDLE, IDLE_LINE_IT);  // configure serial line with or without IDLE Line interrupt
   Serial_DMA_Config(port);
 }
 
@@ -87,7 +87,7 @@ void Serial_DeConfig(uint8_t port)
 {
   Serial_ClearData(port);
 
-  Serial[port].dma_chanel->CCR &= ~(1<<0);  // Disable DMA
+  Serial[port].dma_chanel->CCR &= ~(1<<0);  // disable DMA
   UART_DeConfig(port);
 }
 
@@ -95,7 +95,7 @@ void Serial_DeConfig(uint8_t port)
 
 void Serial_PutChar(uint8_t port, const char ch)
 {
-  while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+  while ((Serial[port].uart->SR & USART_SR_TC) == (uint16_t)RESET);
   Serial[port].uart->DR = (uint8_t) ch;
 }
 
@@ -103,7 +103,7 @@ void Serial_Put(uint8_t port, const char * msg)
 {
   while (*msg)
   {
-    while ((Serial[port].uart->SR & USART_FLAG_TC) == (uint16_t)RESET);
+    while ((Serial[port].uart->SR & USART_SR_TC) == (uint16_t)RESET);
     Serial[port].uart->DR = ((uint16_t)*msg++ & (uint16_t)0x01FF);
   }
 }
@@ -120,7 +120,7 @@ void Serial_PutChar(uint8_t port, const char ch)
   dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = ch;
   dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;
 
-  Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+  Serial[port].uart->CR1 |= USART_CR1_TXEIE;  // set TXE interrupt bit to start the serial transfer
 }
 
 void Serial_Put(uint8_t port, const char * msg)
@@ -134,7 +134,7 @@ void Serial_Put(uint8_t port, const char * msg)
     dmaL1DataTX[port].cache[dmaL1DataTX[port].wIndex] = *msg++;
     dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;
 
-    Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+    Serial[port].uart->CR1 |= USART_CR1_TXEIE;  // set TXE interrupt bit to start the serial transfer
   }
 #else  // fast code
   // NOTE: used 32 bit variables for performance reasons (in particular for data copy)
@@ -203,7 +203,7 @@ void Serial_Put(uint8_t port, const char * msg)
   // update queue's writing index with next index
   dmaL1Data_ptr->wIndex = (dmaL1Data_ptr->wIndex + msgSize) % cacheSize;
 
-  Serial[port].uart->CR1 |= USART_FLAG_TXE;  // set TXE interrupt bit to start the serial transfer
+  Serial[port].uart->CR1 |= USART_CR1_TXEIE;  // set TXE interrupt bit to start the serial transfer
 #endif  // USE_COMPACT_CODE
 }
 
@@ -212,10 +212,10 @@ void Serial_Put(uint8_t port, const char * msg)
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
-#if RX_IDLE_INTERRUPT == true  // RX serial IDLE interrupt
-  if ((Serial[port].uart->SR & USART_FLAG_IDLE) != 0)  // RX: check for serial IDLE interrupt
+#if IDLE_LINE_IT == true  // IDLE Line interrupt
+  if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt
   {
-    //Serial[port].uart->SR;  // already done in the guard above
+    Serial[port].uart->SR;                               // clear IDLE Line bit
     Serial[port].uart->DR;
 
     dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_chanel->CNDTR;
@@ -224,11 +224,11 @@ void USART_IRQHandler(uint8_t port)
 
 #ifndef DEFAULT_WRITE  // TX interrupt based serial writing
 
-  if ((Serial[port].uart->SR & USART_FLAG_TXE) != 0)  // TX: check for TXE interrupt
+  if ((Serial[port].uart->SR & USART_SR_TXE) != 0)             // check for TXE interrupt
   {
     if (dmaL1DataTX[port].rIndex == dmaL1DataTX[port].wIndex)  // no more data?
     {
-      Serial[port].uart->CR1 &= ~USART_FLAG_TXE;               // disable TXE interrupt
+      Serial[port].uart->CR1 &= ~USART_CR1_TXEIE;              // disable TXE interrupt
     }
     else
     {
