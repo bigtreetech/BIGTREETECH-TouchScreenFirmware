@@ -212,9 +212,8 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
     }
 
     rIndex = 0;
-    uint32_t maxIndex = bufSize - (cacheSize - dmaL1Data_ptr->rIndex);  // used dmaL1Data_ptr->rIndex and not rIndex
 
-    while (rIndex < maxIndex)
+    while (rIndex <= flag)
     {
       *(buf++) = cache[rIndex++];
     }

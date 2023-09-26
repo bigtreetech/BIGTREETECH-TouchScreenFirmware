@@ -34,8 +34,8 @@ SERIAL_CFG Serial[_UART_CNT] = {
 // clear all DMA RX and TX interrupt flags for a serial port
 void Serial_DMAClearITflags(uint8_t port)
 {
-  // Channel to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
-  // Channel to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
+  // Stream # to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
+  // Stream # to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
 
   switch (port)  // DMA low/high interrupt Control Register (DMA_LIFCR/DMA_HIFCR)
   {
@@ -74,8 +74,8 @@ void Serial_DMAClearITflags(uint8_t port)
 // clear all DMA RX interrupt flags for a given serial port
 void Serial_DMAClearITflagsRX(uint8_t port)
 {
-  // Channel to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
-  // Channel to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
+  // Stream # to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
+  // Stream # to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
 
   switch (port)  // DMA low/high interrupt Control Register (DMA_LIFCR/DMA_HIFCR)
   {
@@ -108,8 +108,8 @@ void Serial_DMAClearITflagsRX(uint8_t port)
 // clear all DMA TX interrupt flags for a given serial port
 void Serial_DMAClearITflagsTX(uint8_t port)
 {
-  // Channel to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
-  // Channel to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
+  // Stream # to bits: Low  0: 0-5, 1: 6-11, 2: 16-21, 3: 22-27
+  // Stream # to bits: High 4: 0-5, 5: 6-11, 6: 16-21, 7: 22-27
 
   switch (port)  // DMA low/high interrupt Control Register (DMA_LIFCR/DMA_HIFCR)
   {

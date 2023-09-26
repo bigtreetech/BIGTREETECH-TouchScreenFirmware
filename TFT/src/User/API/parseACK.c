@@ -358,6 +358,8 @@ void parseACK(void)
 {
   while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
   {
+    UPD_RX_KPIS(ack_len);  // debug monitoring KPI
+
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Put(SERIAL_DEBUG_PORT, "<<");

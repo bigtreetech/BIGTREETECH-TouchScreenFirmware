@@ -278,6 +278,8 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
+    UPD_TX_KPIS(cmd_len);  // debug monitoring KPI
+
     if (infoMachineSettings.firmwareType != FW_REPRAPFW)
       Serial_Put(SERIAL_PORT, cmd_ptr);
     else
