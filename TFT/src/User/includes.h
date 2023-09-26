@@ -128,6 +128,7 @@
 #include "MeshEditor.h"
 #include "MeshTuner.h"
 #include "MeshValid.h"
+#include "Monitoring.h"
 #include "More.h"
 #include "Move.h"
 #include "NotificationMenu.h"

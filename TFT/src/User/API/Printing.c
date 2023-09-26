@@ -105,7 +105,17 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
   // from that command. Than another "M108" will be sent to unlock a next possible blocking command.
   // This way enough "M108" will be sent to unlock all possible blocking command(s) (ongoing or enqueued) but not too much and
   // not too fast one after another to overload/overrun the serial communication
-  TASK_LOOP_WHILE(condCallback(), if (Serial_Available(SERIAL_PORT) != 0) sendEmergencyCmd("M108\n"));
+
+  uint16_t rIndex_old = -1;  // out of band value -1 will guarantee the beginning of M108 transmission loop
+  uint16_t rIndex;
+
+  TASK_LOOP_WHILE(condCallback(),
+                  if ((rIndex = Serial_GetReadingIndex(SERIAL_PORT)) != rIndex_old)
+                  {
+                    sendEmergencyCmd("M108\n");
+                    rIndex_old = rIndex;
+                  }
+                 );
 
   // remove any enqueued command that could come from a supplementary serial port or TFT media
   // (if printing from remote host or TFT media) during the loop above
@@ -122,17 +132,14 @@ uint32_t getPrintExpectedTime(void)
   return infoPrinting.expectedTime;
 }
 
-void updatePrintTime(uint32_t osTime)
+void updatePrintTime(void)
 {
-  if (osTime % 1000 == 0)
+  if (infoPrinting.printing && !infoPrinting.paused)
   {
-    if (infoPrinting.printing && !infoPrinting.paused)
-    {
-      infoPrinting.elapsedTime++;
+    infoPrinting.elapsedTime++;
 
-      if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
-        infoPrinting.remainingTime--;
-    }
+    if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
+      infoPrinting.remainingTime--;
   }
 }
 

@@ -10,6 +10,7 @@ extern "C" {
 
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 #define LANG_KEY_LANGUAGE                     "label_language:"
+#define LANG_KEY_ADVANCED_OK                  "label_advanced_ok:"
 #define LANG_KEY_EMULATED_M600                "label_emulated_m600:"
 #define LANG_KEY_EMULATED_M109_M190           "label_emulated_m109_m190:"
 #define LANG_KEY_EVENT_LED                    "label_event_led:"

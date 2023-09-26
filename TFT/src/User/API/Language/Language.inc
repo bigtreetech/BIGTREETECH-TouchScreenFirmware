@@ -10,6 +10,7 @@
 
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 X_WORD (LANGUAGE)
+X_WORD (ADVANCED_OK)
 X_WORD (EMULATED_M600)
 X_WORD (EMULATED_M109_M190)
 X_WORD (EVENT_LED)

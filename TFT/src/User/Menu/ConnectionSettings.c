@@ -5,15 +5,9 @@ SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
 void updateListeningMode(MENUITEMS * menu)
 {
-  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)
-  {
-    menu->items[4].label.index = LABEL_OFF;
-    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
-  }
-  else
-  {
-    menu->items[4].label.index = LABEL_ON;
-  }
+  menu->items[4].label.index = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1) ? LABEL_OFF : LABEL_ON;
+
+  InfoHost_UpdateListeningMode();  // update listening mode
 }
 
 // set uart pins to input, free uart
