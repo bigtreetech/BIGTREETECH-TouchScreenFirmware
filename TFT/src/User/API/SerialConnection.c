@@ -24,9 +24,7 @@ const char * const baudrateNames[BAUDRATE_COUNT] = {"OFF", "2400", "9600", "1920
 
 static inline void Serial_InitPrimary(void)
 {
-  infoHost.connected = infoHost.wait = false;
-  infoHost.status = HOST_STATUS_IDLE;
-  setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);
+  InfoHost_Init(false);  // initialize infoHost when disconnected
 
   Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSize, baudrateValues[infoSettings.serial_port[PORT_1]]);
 }
@@ -132,16 +130,15 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
         #endif
         )
       Serial_Put(serialPort[portIndex].port, msg);  // pass on the message to the port
-
   }
 }
 
-uint16_t Serial_Available(SERIAL_PORT_INDEX portIndex)
+uint16_t Serial_GetReadingIndex(SERIAL_PORT_INDEX portIndex)
 {
   if (!WITHIN(portIndex, PORT_1, SERIAL_PORT_COUNT - 1))
     return 0;
 
-  return (dmaL1Data[portIndex].cacheSize + dmaL1Data[portIndex].wIndex - dmaL1Data[portIndex].rIndex) % dmaL1Data[portIndex].cacheSize;
+  return dmaL1Data[portIndex].rIndex;
 }
 
 uint16_t Serial_Get(SERIAL_PORT_INDEX portIndex, char * buf, uint16_t bufSize)

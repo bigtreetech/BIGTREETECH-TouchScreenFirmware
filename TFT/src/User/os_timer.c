@@ -41,14 +41,13 @@ void TIMER6_IRQHandler(void)
 
     os_counter++;
 
-    updatePrintTime(os_counter);
+    if (os_counter % 1000 == 0)
+    {
+      updatePrintTime();
+      AVG_SCAN_RATE();  // debug monitoring KPI
+    }
 
     loopTouchScreen();
-
-    if (os_counter == (uint32_t)(~0))
-    {
-      os_counter = 0;
-    }
   }
 }
 #else
@@ -60,14 +59,13 @@ void TIM7_IRQHandler(void)
 
     os_counter++;
 
-    updatePrintTime(os_counter);
+    if (os_counter % 1000 == 0)
+    {
+      updatePrintTime();
+      AVG_SCAN_RATE();  // debug monitoring KPI
+    }
 
     loopTouchScreen();
-
-    if (os_counter == (uint32_t)(~0))
-    {
-      os_counter = 0;
-    }
   }
 }
 #endif
@@ -82,11 +80,11 @@ uint32_t OS_GetTimeMs(void)
  * task: task structure to be filled
  * time_ms:
  */
-void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function, void *para)
+void OS_TaskInit(OS_TASK *task_t, uint32_t time_ms, FP_TASK function, void *para)
 {
-  task->time_ms = time_ms;
-  task->task = function;
-  task->para = para;
+  task_t->time_ms = time_ms;
+  task_t->task = function;
+  task_t->para = para;
 }
 
 void OS_TaskLoop(OS_TASK *task_t)

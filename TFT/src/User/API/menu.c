@@ -667,6 +667,11 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
   #endif
 }
 
+SYS_STATUS getReminderStatus(void)
+{
+  return reminder.status;
+}
+
 void drawReminderMsg(void)
 {
   uint16_t msgRectOffset = (LCD_WIDTH - GUI_StrPixelWidth(reminder.inf)) / 2 - BYTE_WIDTH;
@@ -713,7 +718,7 @@ void loopReminderManage(void)
     else
       setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
   }
-  else if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1 || isWritingMode() == true)
+  else if (infoHost.listening_mode == true || isWritingMode() == true)
   {
     if (reminder.status == SYS_STATUS_LISTENING)  // no change, return
       return;
@@ -1202,6 +1207,8 @@ void loopCheckBackPress(void)
 // Non-UI background loop tasks
 void loopBackEnd(void)
 {
+  UPD_SCAN_RATE();  // debug monitoring KPI
+
   // Handle a print from TFT media, if any
   loopPrintFromTFT();
 

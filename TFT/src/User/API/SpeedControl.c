@@ -62,8 +62,8 @@ void speedQuerySetWait(bool wait)
 }
 
 void speedQuery(void)
-{
-  if (infoHost.connected && !infoHost.wait && !speedQueryWait && infoMachineSettings.firmwareType != FW_REPRAPFW)
+{ // following conditions ordered by importance
+  if (!speedQueryWait && infoHost.tx_slots != 0 && infoHost.connected && infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
     speedQueryWait = storeCmd("M220\n");
 

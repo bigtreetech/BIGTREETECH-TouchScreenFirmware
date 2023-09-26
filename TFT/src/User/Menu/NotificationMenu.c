@@ -49,7 +49,11 @@ void menuNotification(void)
       {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
       {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
       {CHARICON_BLANK, LIST_LABEL, LABEL_CLEAR,   LABEL_NULL},
-      {CHARICON_NULL,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
+      #ifdef DEBUG_MONITORING
+        {CHARICON_BLANK, LIST_LABEL, LABEL_INFO,    LABEL_NULL},
+      #else
+        {CHARICON_NULL,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
+      #endif
       {CHARICON_BACK,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
     }
   };
@@ -75,6 +79,12 @@ void menuNotification(void)
         clearNotification();
         loadNotificationItems();
         break;
+
+      #ifdef DEBUG_MONITORING
+        case KEY_ICON_6:
+          OPEN_MENU(menuMonitoring);
+          break;
+      #endif
 
       case KEY_ICON_7:
         CLOSE_MENU();

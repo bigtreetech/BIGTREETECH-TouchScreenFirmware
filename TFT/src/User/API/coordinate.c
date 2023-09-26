@@ -119,8 +119,8 @@ void coordinateQuerySetWait(bool wait)
  *                 for auto query if available in marlin.
  */
 void coordinateQuery(uint8_t seconds)
-{
-  if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
+{ // following conditions ordered by importance
+  if (!coordinateQueryWait && infoHost.tx_slots != 0 && infoHost.connected)
   {
     if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled
     {

@@ -51,7 +51,7 @@ void menuLoadUnload(void)
     key_num = menuKeyGetValue();
 
     // show reminder for process running if any button is pressed
-    if (infoHost.wait == true && key_num != KEY_IDLE)
+    if (isPendingCmd() && key_num != KEY_IDLE)
     {
       if ((lastCmd == UNLOAD_REQUESTED) || (lastCmd == UNLOAD_STARTED))
       { // unloading in progress
