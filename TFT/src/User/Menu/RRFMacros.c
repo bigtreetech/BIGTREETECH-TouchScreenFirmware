@@ -110,7 +110,7 @@ void menuCallMacro(void)
           }
           else if (key_num < infoFile.fileCount + infoFile.folderCount)  // gcode
           {
-            if (infoHost.connected != true)
+            if (infoHost.connected == false)
               break;
 
             if (enterFolder(infoFile.longFile[key_num - infoFile.folderCount]) == false)

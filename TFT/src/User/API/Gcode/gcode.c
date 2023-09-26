@@ -60,6 +60,46 @@ static void resetRequestCommandInfo(
   requestCommandInfo.inError = false;
 }
 
+void detectAdvancedOk(void)
+{
+  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);  // backup the configured ADVANCED_OK setting
+  uint8_t cmd_index = 0;
+
+  // temporary disable the ADVANCED_OK feature (if enabled) just to allow the TFT to send only one gcode
+  // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
+  SET_BIT_OFF(infoSettings.general_settings, INDEX_ADVANCED_OK);
+
+  TASK_LOOP_WHILE(isPendingCmd() && isNotEmptyCmdQueue());  // wait for the communication to be clean
+
+  resetRequestCommandInfo("ok",   // The magic to identify the start
+                          "ok",   // The magic to identify the stop
+                          NULL,   // The first magic to identify the error response
+                          NULL,   // The second error magic
+                          NULL);  // The third error magic
+
+  // send any gcode replied by the mainboard with a regular OK response ("ok\n") or an ADVANCED_OK response (e.g. "ok N10 P15 B3\n")
+  mustStoreCmd("M220\n");
+
+  // Wait for response
+  loopProcessToCondition(&isWaitingResponse);
+
+  while (requestCommandInfo.cmd_rev_buf[cmd_index] != '\0')
+  {
+    if (requestCommandInfo.cmd_rev_buf[cmd_index++] == 'B')
+    {
+      if (strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10) != 0)  // if different than 0
+      {
+        // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
+        infoHost.target_tx_slots = infoSettings.tx_slots = strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10);
+      }
+    }
+  }
+
+  clearRequestCommandInfo();
+
+  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);  // restore the configured ADVANCED_OK setting
+}
+
 /**
  * Send M21 command and wait for response
  *

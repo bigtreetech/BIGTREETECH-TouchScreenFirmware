@@ -3,6 +3,7 @@
 
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_LANGUAGE               "Polski"
+    #define STRING_ADVANCED_OK            "Advanced OK"
     #define STRING_EMULATED_M600          "Emulowane M600"
     #define STRING_EMULATED_M109_M190     "Emulowane M109 / M190"
     #define STRING_EVENT_LED              "Sygn. zdarzenia diodą LED"

@@ -18,6 +18,10 @@ extern "C" {
 
 typedef char CMD[CMD_MAX_SIZE];
 
+// used by Monitoring menu available in Notification menu only
+// if DEBUG_MONITORING is enabled in Configuration.h
+uint8_t getQueueCount(void);
+
 bool isPendingCmd(void);         // also usable as condition callback for loopProcessToCondition()
 bool isFullCmdQueue(void);       // also usable as condition callback for loopProcessToCondition()
 bool isNotEmptyCmdQueue(void);   // also usable as condition callback for loopProcessToCondition()

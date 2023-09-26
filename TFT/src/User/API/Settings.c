@@ -23,7 +23,10 @@ const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
 void initSettings(void)
 {
 // General Settings
-  infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) | (EMULATED_M600 << INDEX_EMULATED_M600) |
+  infoSettings.tx_slots               = TX_SLOTS;
+  infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
+                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
+                                         (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
                                          (EVENT_LED << INDEX_EVENT_LED) |
                                          (FILE_COMMENT_PARSING << INDEX_FILE_COMMENT_PARSING));
@@ -233,9 +236,6 @@ void setupMachine(FW_TYPE fwType)
 {
   if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // avoid repeated calls caused by manually sending M115 in terminal menu
     return;
-
-  if (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1)  // if TFT in listening mode, display a reminder message
-    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);
 
   infoMachineSettings.firmwareType = fwType;
 
