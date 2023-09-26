@@ -50,7 +50,7 @@ void menuMonitoring(void)
       sprintf(str, "%d   ", infoHost.tx_slots);
       GUI_DispString(18 * BYTE_WIDTH, ICON_START_Y + 2 * (BYTE_HEIGHT + 4), (uint8_t *)str);
 
-      sprintf(str, "  %d/%d  ", infoMonitoring.tx_cmd_rate, infoMonitoring.tx_bytes_rate);
+      sprintf(str, "%d/%d      ", infoMonitoring.tx_cmd_rate, infoMonitoring.tx_bytes_rate);
       GUI_DispString(18 * BYTE_WIDTH, ICON_START_Y + 3 * (BYTE_HEIGHT + 4), (uint8_t *)str);
 
       sprintf(str, "%d/%d      ", infoMonitoring.rx_ack_rate, infoMonitoring.rx_bytes_rate);
