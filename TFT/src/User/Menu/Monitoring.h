@@ -57,7 +57,7 @@ extern "C" {
   #define UPD_TX_KPIS(bytes)
   #define UPD_RX_KPIS(bytes)
   #define UPD_SCAN_RATE()
-  #define AVG_SCAN_RATE()
+  #define AVG_KPIS()
 #endif
 
 #ifdef __cplusplus
