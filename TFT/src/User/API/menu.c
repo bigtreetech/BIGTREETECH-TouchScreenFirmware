@@ -1236,11 +1236,6 @@ void loopBackEnd(void)
   // Speed & flow monitor
   loopSpeed();
 
-  // Buzzer handling
-  #ifdef BUZZER_PIN
-    loopBuzzer();
-  #endif
-
   // Handle a print from (remote) onboard media, if any
   if (infoMachineSettings.onboardSD == ENABLED)
     loopPrintFromOnboard();

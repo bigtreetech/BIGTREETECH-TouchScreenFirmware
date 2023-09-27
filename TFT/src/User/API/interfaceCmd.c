@@ -1150,7 +1150,7 @@ void sendQueueCmd(void)
               {
                 uint16_t ms = cmd_value();
 
-                Buzzer_TurnOn(hz, ms);
+                Buzzer_AddSound(hz, ms);
 
                 if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
                 {
