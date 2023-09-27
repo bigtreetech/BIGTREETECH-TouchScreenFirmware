@@ -152,7 +152,7 @@ bool printPageItemSelected(uint16_t index)
     infoFile.fileIndex = index - infoFile.folderCount;
     char * filename = restoreFilenameExtension(infoFile.fileIndex);  // restore filename extension if filename extension feature is disabled
 
-    if (infoHost.connected != true || enterFolder(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
+    if (infoHost.connected == false || enterFolder(infoFile.file[infoFile.fileIndex]) == false)  // always use short filename for file path
     {
       hasUpdate = false;
     }

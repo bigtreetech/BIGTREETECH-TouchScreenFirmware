@@ -62,6 +62,12 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 //     - specific port index: specific serial port
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
+// retrieve the next reading index in the message queue of the provided serial port:
+//   - portIndex: index of serial port
+//
+//   - return value: next reading index
+uint16_t Serial_GetReadingIndex(SERIAL_PORT_INDEX portIndex);
+
 // retrieve a message from the provided serial port, if any:
 //   - portIndex: index of serial port where data are read from
 //   - buf: buffer where data are stored

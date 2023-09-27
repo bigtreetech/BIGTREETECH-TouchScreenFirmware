@@ -11,15 +11,15 @@ extern "C" {
 #include "coordinate.h"  // for TOTAL_AXIS
 #include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
-// Config version support
-// change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
-// this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20220518
+// Config version support (format YYYYMMDD)
+// change if new elements/keywords are added/removed/changed in the Configuration.h
+// this number should match CONFIG_VERSION in Configuration.h
+#define CONFIG_SUPPPORT 20230821
 
-#define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20220518  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20230209  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20220712  // (YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20230821  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20230821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20230821  // (YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
@@ -71,6 +71,7 @@ enum
 typedef enum
 {
   INDEX_LISTENING_MODE = 0,
+  INDEX_ADVANCED_OK,
   INDEX_EMULATED_M600,
   INDEX_EMULATED_M109_M190,
   INDEX_EVENT_LED,
@@ -171,8 +172,9 @@ typedef struct
 
   // General Settings
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
-  uint8_t  general_settings;  // emulated M600 / emulated M109-M190 / file comment parsing toggles (Bit Values)
-
+  uint8_t  tx_slots;
+  uint8_t  general_settings;  // listening mode / advanced ok / emulated M600 /
+                              // emulated M109-M190 / event led / file comment parsing toggles (Bit Values)
   // UI Settings
   uint8_t  rotated_ui;
   uint8_t  language;

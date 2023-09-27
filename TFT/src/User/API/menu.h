@@ -172,6 +172,7 @@ extern const GUI_RECT rect_of_titleBar[1];
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
 
+SYS_STATUS getReminderStatus(void);
 void setReminderMsg(int16_t inf, SYS_STATUS status);
 void notificationDot(void);
 

@@ -20,7 +20,7 @@ void probeOffsetEnable(float shim)
   {
     levelingProbePoint(LEVEL_CENTER);  // probe center of bed
 
-    TASK_LOOP_WHILE(levelingGetProbedPoint() == LEVEL_NO_POINT)  // if probed Z is set, exit from loop and read probed Z
+    TASK_LOOP_WHILE(levelingGetProbedPoint() == LEVEL_NO_POINT);  // if probed Z is set, exit from loop and read probed Z
 
     probedZ = levelingGetProbedZ();
     levelingResetProbedPoint();  // reset to check for new updates

@@ -52,14 +52,13 @@ bool Touch_Enc_ReadBtn(uint16_t interval)
 
 uint8_t Touch_Enc_ReadPos(void)
 {
-  static uint32_t nowTime = 0;
   static bool move = false;
   static uint16_t sy;
   uint16_t ex, ey;
 
   ex = ey = 0;
 
-  if (!XPT2046_Read_Pen() && OS_GetTimeMs() >= nowTime)
+  if (!XPT2046_Read_Pen())
   {
     TS_Get_Coordinates(&ex, &ey);
 
@@ -97,7 +96,6 @@ uint8_t Touch_Enc_ReadPos(void)
   }
   else
   {
-    nowTime = OS_GetTimeMs();
     move = false;
     sy = ey = 0;
     modeSwitching = false;  // resume mode switching

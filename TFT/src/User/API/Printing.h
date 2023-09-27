@@ -67,7 +67,7 @@ void resumeAndContinue(void);
 void setPrintExpectedTime(uint32_t expectedTime);
 uint32_t getPrintExpectedTime(void);
 
-void updatePrintTime(uint32_t osTime);
+void updatePrintTime(void);  // WARNING, TIMER INTERRUPT ROUTINE CALLED ONCE A SECOND
 uint32_t getPrintTime(void);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx

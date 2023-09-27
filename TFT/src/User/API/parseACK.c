@@ -415,12 +415,29 @@ void parseACK(void)
         storeCmd("M115\n");  // as last command to identify the FW type!
       }
 
-      infoHost.connected = true;
+      // 1) store on command queue the above gcodes to detect printer info
+      // 2) re-initialize infoHost when connected to avoid this code branch is executed again
+      // 3) set requestCommandInfo.inJson to "false" and detect the presence of Marlin ADVANCED_OK
+      //    feature (if any) and its command queue size
+      // 4) finally, set listening mode flag according to its last state stored in flash
+      //
+      // NOTES:
+      //   - 3) is applied only after all gcodes in 1) have been sent and their responses received and processed
+      //   - InfoHost_UpdateListeningMode() must always be invoked as last due to no gcode could be sent in case
+      //     listening mode is enabled (e.g. a TFT freeze will occur in case detectAdvancedOk() is invoked after
+      //     InfoHost_UpdateListeningMode())
+
+      InfoHost_Init(true);
+
       requestCommandInfo.inJson = false;
+
+      detectAdvancedOk();
+
+      InfoHost_UpdateListeningMode();
     }
 
     //----------------------------------------
-    // Onboard media response handling
+    // Onboard media response handling (response requested by the use of setRequestCommandInfo() function)
     //----------------------------------------
 
     if (requestCommandInfo.inWaitResponse)
@@ -450,6 +467,7 @@ void parseACK(void)
         }
 
         BUZZER_PLAY(SOUND_ERROR);
+
         goto parse_end;
       }
 
@@ -469,7 +487,7 @@ void parseACK(void)
           requestCommandInfo.inResponse = false;
         }
       }
-      else if (strlen(requestCommandInfo.cmd_rev_buf) + strlen(ack_cache) < CMD_MAX_REV)
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + ack_len < CMD_MAX_REV)
       {
         strcat(requestCommandInfo.cmd_rev_buf, ack_cache);
 
@@ -486,16 +504,26 @@ void parseACK(void)
         ackPopupInfo(magic_error);
       }
 
-      infoHost.wait = false;
       requestCommandInfo.inJson = false;
+
+      if (requestCommandInfo.done)  // if command parsing is completed
+      {
+        // if RepRap or "ok" (e.g. in Marlin) is used as stop magic keyword,
+        // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
+        //
+        if (infoMachineSettings.firmwareType == FW_REPRAPFW || ack_starts_with("ok"))
+          InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
+      }
+
       goto parse_end;
     }
 
     //----------------------------------------
-    // RepRap response handling
+    // RepRap response handling (response NOT requested by the use of setRequestCommandInfo() function)
     //----------------------------------------
 
-    if (!requestCommandInfo.inWaitResponse && !requestCommandInfo.inResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
+    // check for a possible json response and eventually parse and process it
+    else if (!requestCommandInfo.inWaitResponse && infoMachineSettings.firmwareType == FW_REPRAPFW)
     {
       if (strchr(ack_cache, '{') != NULL)
         requestCommandInfo.inJson = true;
@@ -508,7 +536,9 @@ void parseACK(void)
       else
         rrfParseACK(ack_cache);
 
-      infoHost.wait = false;
+      // proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
+      InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
+
       goto parse_end;
     }
 
@@ -519,11 +549,26 @@ void parseACK(void)
     // it is checked first (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("ok"))
     {
-      infoHost.wait = false;
+      // if regular OK response ("ok\n")
+      if (ack_cache[ack_index] == '\n')
+      {
+        InfoHost_HandleOkAck(infoSettings.tx_slots);
 
-      // if regular "ok\n" response or ADVANCED_OK response (Marlin) (e.g. "ok N10 P15 B3\n")
-      if ((ack_cache[ack_index] == '\n') || (ack_continue_seen("P") && ack_continue_seen("B")))
-        goto parse_end;  // there's nothing else to check for
+        goto parse_end;  // nothing else to do
+      }
+
+      // if ADVANCED_OK response (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin
+      if (ack_continue_seen("P") && ack_continue_seen("B"))
+      {
+        InfoHost_HandleOkAck(ack_value());
+
+        goto parse_end;  // nothing else to do
+      }
+
+      // if here, it is a temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
+      // Proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
+      // and then continue applying the next matching patterns to handle the temperature response
+      InfoHost_HandleOkAck(HOST_SLOTS_GENERIC_OK);
     }
 
     //----------------------------------------
@@ -1336,19 +1381,16 @@ void parseACK(void)
     {
       if (ack_seen("External") || ack_seen("Software") || ack_seen("Watchdog") || ack_seen("Brown out"))
       {
-        /*
-         * Proceed to reset the command queue, host status, fan speeds and load default machine settings.
-         * These functions will also trigger the query of temperatures which together with the resets
-         * done will also trigger the query of the motherboard capabilities and settings. It is necessary
-         * to do so because after the motherboard reset things might have changed (ex. FW update by M997).
-         */
+        // proceed to reset the command queue, host status, fan speeds and load default machine settings.
+        // These functions will also trigger the query of temperatures which together with the resets
+        // done will also trigger the query of the motherboard capabilities and settings. It is necessary
+        // to do so because after the motherboard reset things might have changed (ex. FW update by M997)
 
         clearCmdQueue();
-        memset(&infoHost, 0, sizeof(infoHost));
+        InfoHost_Init(false);
         initMachineSettings();
         fanResetSpeed();
         coordinateSetKnown(false);
-        setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
       }
     }
 
@@ -1359,7 +1401,7 @@ void parseACK(void)
     #ifdef SERIAL_PORT_2
       if (ack_port_index == PORT_1)
       {
-        if (infoHost.wait == false && !ack_starts_with("ok"))
+        if (infoHost.tx_count == 0 && !ack_starts_with("ok"))
         { // if the ACK message is not related to a gcode originated by the TFT and it is not "ok", it is a spontaneous
           // ACK message so pass it to all the supplementary serial ports (since these messages came unrequested)
           Serial_Forward(SUP_PORTS, ack_cache);
@@ -1370,9 +1412,9 @@ void parseACK(void)
         // forward the message to that supplementary serial port
         Serial_Forward(ack_port_index, ack_cache);
 
-        // if "ok" has been received, reset ACK port index to avoid wrong relaying (in case no more commands will
-        // be sent by interfaceCmd) of any successive spontaneous ACK message
-        if (infoHost.wait == false)
+        // if no pending gcode (all "ok" have been received), reset ACK port index to avoid wrong relaying (in case no
+        // more commands will be sent by interfaceCmd) of any successive spontaneous ACK message
+        if (infoHost.tx_count == 0)
           ack_port_index = PORT_1;
       }
     #endif
