@@ -10,10 +10,6 @@ extern "C" {
 #include "variants.h"  // for SERIAL_PORT_2 etc.
 #include "uart.h"      // for _UART_CNT etc.
 
-// size of buffer where read ACK messages are stored (including terminating null character '\0').
-// Use a power of 2 for performance reasons!
-#define ACK_CACHE_SIZE NOBEYOND(256, 512, 512)
-
 #define BAUDRATE_COUNT 10
 
 typedef enum
@@ -60,13 +56,19 @@ void Serial_Init(SERIAL_PORT_INDEX portIndex);
 //     - specific port index: specific serial port
 void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 
-// forward a message to the provided serial port/s, if enabled:
+// forward a zero terminated message to the provided serial port/s, if enabled:
 //   - portIndex:
 //     - ALL_PORTS: all serial ports (primary and supplementary)
 //     - SUP_PORTS: all supplementary serial ports
 //     - specific port index: specific serial port
 //   - msg: message to send
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
+
+// test if a new message is available in the message queue of the provided physical serial port:
+//   - port: physical serial port where data availability is tested
+//
+//   - return value: "true" if a new message is available. "false" otherwise
+bool Serial_NewDataAvailable(uint8_t port);
 
 // retrieve a message from the provided physical serial port:
 //   - port: physical serial port where data are read from

@@ -1,58 +1,24 @@
-#include "RRFSendCmd.h"
-#include "Serial.h"
-#include <stdio.h>
+#include "includes.h"
 
-static uint8_t n_sent = 0;
 static uint32_t line_number = 0;
-static uint8_t checksum = 0;
 
-void sendCharAndChecksum(const char c)
+void rrfSendCmd(const char * cmd_ptr)
 {
-  checksum ^= c;
-  Serial_PutChar(SERIAL_PORT, c);
-  n_sent++;
-}
+  char rrfCmd[CMD_MAX_SIZE];
+  char * rrfCmd_ptr = rrfCmd;
+  uint8_t checksum = 0;
 
-void sendChar(const char c)
-{
-  if (c == '\n')
-  {
-    if (n_sent != 0)
-    {
-      Serial_PutChar(SERIAL_PORT, '*');
-      char digit0 = checksum % 10 + '0';
-      checksum /= 10;
-      char digit1 = checksum % 10 + '0';
-      checksum /= 10;
-      if (checksum != 0)
-      {
-        Serial_PutChar(SERIAL_PORT, checksum + '0');
-      }
-      Serial_PutChar(SERIAL_PORT, digit1);
-      Serial_PutChar(SERIAL_PORT, digit0);
-    }
-    Serial_PutChar(SERIAL_PORT, c);
-    n_sent = 0;
-  }
-  else
-  {
-    if (n_sent == 0)
-    {
-      char number[11];
-      checksum = 0;
-      sendCharAndChecksum('N');
-      snprintf(number, 11, "%lu", line_number++);
-      rrfSendCmd(number);
-      sendCharAndChecksum(' ');
-    }
-    sendCharAndChecksum(c);
-  }
-}
+  sprintf(rrfCmd, "N%lu %s", line_number++, cmd_ptr);
 
-void rrfSendCmd(const char* cmd_ptr)
-{
-  while (*cmd_ptr != 0)
+  // calculate checksum
+  while (*rrfCmd_ptr != '\n')
   {
-    sendChar(*cmd_ptr++);
+    checksum ^= *rrfCmd_ptr++;
   }
+
+  // add checksum and finalize formatting the RRF command
+  sprintf(rrfCmd_ptr, "*%u\n", checksum);
+
+  // send the command to the serial port
+  Serial_Put(SERIAL_PORT, rrfCmd);
 }

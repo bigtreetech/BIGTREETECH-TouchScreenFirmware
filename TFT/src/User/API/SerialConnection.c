@@ -1,18 +1,15 @@
 #include "SerialConnection.h"
 #include "includes.h"
 
-// uncomment this line to use inline copy (fast code) instead of memcpy() (less code)
-#define USE_INLINE_COPY
-
-#define SERIAL_PORT_RX_QUEUE_SIZE   NOBEYOND(ACK_CACHE_SIZE, RAM_SIZE * 64, 4096)  // ACK messages reading queue from mainboard
+#define SERIAL_PORT_RX_QUEUE_SIZE   NOBEYOND(256, RAM_SIZE * 64, 4096)  // ACK messages reading queue from mainboard
 #define SERIAL_PORT_2_RX_QUEUE_SIZE 512
 #define SERIAL_PORT_3_RX_QUEUE_SIZE 512
 #define SERIAL_PORT_4_RX_QUEUE_SIZE 512
 
 #define SERIAL_PORT_TX_QUEUE_SIZE   256  // gcodes writing queue to mainboard
-#define SERIAL_PORT_2_TX_QUEUE_SIZE 128
-#define SERIAL_PORT_3_TX_QUEUE_SIZE 128
-#define SERIAL_PORT_4_TX_QUEUE_SIZE 128
+#define SERIAL_PORT_2_TX_QUEUE_SIZE 256
+#define SERIAL_PORT_3_TX_QUEUE_SIZE 256
+#define SERIAL_PORT_4_TX_QUEUE_SIZE 256
 
 const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   {SERIAL_PORT    , SERIAL_PORT_RX_QUEUE_SIZE  , SERIAL_PORT_TX_QUEUE_SIZE  , "" , "1 - Printer"},
@@ -141,7 +138,7 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
   }
 }
 
-uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
+bool Serial_NewDataAvailable(uint8_t port)
 {
   // NOTE: used 32 bit variables for performance reasons (in particular for data copy)
 
@@ -161,18 +158,23 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
     flag = (flag + 1) % cacheSize;
   }
 
-  if (flag == wIndex)  // if "\n" was not found (message incomplete), update flag and exit
-  {
-    dmaL1DataRX[port].flag = flag;  // update queue's custom flag with flag (also equal to wIndex)
+  dmaL1DataRX[port].flag = flag;  // update queue's custom flag with flag
 
-    return 0;
-  }
+  // return "true" if "\n" was found (message complete), "False" otherwise
+  return (flag != wIndex);
+}
+
+uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
+{
+  // NOTE: used 32 bit variables for performance reasons (in particular for data copy)
 
   // rIndex: L1 cache's reading index (not dynamically changed (by L1 cache's interrupt handler) variables/attributes)
   //
   DMA_CIRCULAR_BUFFER * dmaL1Data_ptr = &dmaL1DataRX[port];
   char * cache = dmaL1Data_ptr->cache;
+  uint32_t cacheSize = dmaL1Data_ptr->cacheSize;
   uint32_t rIndex = dmaL1Data_ptr->rIndex;
+  uint32_t flag = dmaL1Data_ptr->flag;
 
   while (cache[rIndex] == ' ' && rIndex != flag)  // remove leading empty space, if any
   {
@@ -193,20 +195,14 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
   // if data is one chunk only, retrieve data from upper part of circular cache
   if (rIndex <= flag)
   {
-  #ifdef USE_INLINE_COPY
     while (rIndex <= flag)
     {
       *(buf++) = cache[rIndex++];
     }
-  #else
-    memcpy(buf, &cache[rIndex], msgSize);
-    buf += msgSize;
-  #endif
   }
   else  // data at end and beginning of cache
   {
-  #ifdef USE_INLINE_COPY
-    while (rIndex <= cacheSize)
+    while (rIndex < cacheSize)
     {
       *(buf++) = cache[rIndex++];
     }
@@ -217,13 +213,6 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
     {
       *(buf++) = cache[rIndex++];
     }
-  #else
-    memcpy(buf, &cache[rIndex], cacheSize - rIndex);
-    buf += cacheSize - rIndex;
-
-    memcpy(buf, cache, flag + 1);
-    buf += flag;
-  #endif
   }
 
   *buf = '\0';  // end character
@@ -250,7 +239,7 @@ void Serial_GetFromUART(void)
         #endif
         )
     {
-      while (Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)  // if some data have been retrieved
+      while (Serial_NewDataAvailable(serialPort[portIndex].port) && Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)
       {
         handleCmd(cmd, portIndex);
       }

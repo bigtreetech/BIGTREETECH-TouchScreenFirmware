@@ -43,6 +43,9 @@ const char magic_echo[] = "echo:";
 const char magic_warning[] = "Warning:";  // RRF warning
 const char magic_message[] = "message";   // RRF message in Json format
 
+// size of buffer where read ACK messages are stored (including terminating null character '\0')
+#define ACK_CACHE_SIZE 512
+
 char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
 uint16_t ack_len;                           // length of data present in ack_cache without the terminating null character '\0'
 uint16_t ack_index;
@@ -356,7 +359,7 @@ void hostActionCommands(void)
 
 void parseACK(void)
 {
-  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
+  while (Serial_NewDataAvailable(SERIAL_PORT) && (ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
   {
     UPD_RX_KPIS(ack_len);  // debug monitoring KPI
 
