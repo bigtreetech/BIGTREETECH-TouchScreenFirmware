@@ -6,7 +6,7 @@
 #include "uart.h"
 
 // uncomment this line to use TX DMA based serial writing. Otherwise, TX interrupt based serial writing will be used
-//#define TX_DMA_WRITE
+#define TX_DMA_WRITE
 
 typedef struct
 {
@@ -22,6 +22,7 @@ typedef struct
 {
   USART_TypeDef * uart;                 // uint32_t
   uint32_t dma_rcc;
+  DMA_TypeDef * dma_controller;
   DMA_Channel_TypeDef * dma_channelRX;
 #ifdef TX_DMA_WRITE
   DMA_Channel_TypeDef * dma_channelTX;

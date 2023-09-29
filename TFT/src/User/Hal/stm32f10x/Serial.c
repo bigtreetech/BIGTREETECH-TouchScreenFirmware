@@ -4,27 +4,68 @@
 // set this line to "true" to enable IDLE Line interrupt. It is no more needed, so always set this macro to "false"
 #define IDLE_LINE_IT false
 
+// DMA registers:
+//
+// CCR    DMA stream x configuration register
+// CNDTR  DMA stream x number of data register
+// CPAR   DMA stream x peripheral address register
+// CMAR   DMA stream x memory 0 address register
+//
+// ISR    DMA low interrupt status register
+// ISR    DMA high interrupt status register
+// IFCR   DMA low interrupt flag clear register
+// IFCR   DMA high interrupt flag clear register
+
 DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT] = {0};  // DMA / interrupt RX buffer
 DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT] = {0};  // DMA / interrupt TX buffer
 
 // config for USART DMA channels
 const SERIAL_CFG Serial[_UART_CNT] = {  // RM0008 Table 78-79
 #ifdef TX_DMA_WRITE
-// USART   TCC                 DMA Chan RX    DMA Chan TX
-  {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5, DMA1_Channel4},
-  {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6, DMA1_Channel7},
-  {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3, DMA1_Channel2},
-  {UART4,  RCC_AHBPeriph_DMA2, DMA2_Channel3, DMA2_Channel5},
-  {UART5,  -1,                 -1,            -1,          },  // UART5 don't support DMA
+// USART   TCC           DMAx  DMAx  RX Channel     TX Channel
+  {USART1, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel5, DMA1_Channel4},
+  {USART2, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel6, DMA1_Channel7},
+  {USART3, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel3, DMA1_Channel2},
+  {UART4,  RCC_AHBPeriph_DMA2, DMA2, DMA2_Channel3, DMA2_Channel5},
+  {UART5,  -1,                 -1,   -1,            -1           },  // UART5 don't support DMA
 #else
-// USART   TCC                 DMA Chan RX
-  {USART1, RCC_AHBPeriph_DMA1, DMA1_Channel5},
-  {USART2, RCC_AHBPeriph_DMA1, DMA1_Channel6},
-  {USART3, RCC_AHBPeriph_DMA1, DMA1_Channel3},
-  {UART4,  RCC_AHBPeriph_DMA2, DMA2_Channel3},
-  {UART5,  -1,                -1            },  // UART5 don't support DMA
+// USART   TCC           DMAx  DMAx  RX Channel
+  {USART1, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel5},
+  {USART2, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel6},
+  {USART3, RCC_AHBPeriph_DMA1, DMA1, DMA1_Channel3},
+  {UART4,  RCC_AHBPeriph_DMA2, DMA2, DMA2_Channel3},
+  {UART5,  -1,                 -1    -1,          },  // UART5 don't support DMA
 #endif
 };
+
+#ifdef TX_DMA_WRITE
+
+// clear all DMA interrupts TX for a serial port
+void Serial_DMAClearInterruptFlagsTX(uint8_t port)
+{
+  // clear 4 bits, shift = channel * 4
+
+  switch (port)
+  {
+    case _USART1:
+      Serial[port].dma_controller->IFCR = (0x0F << 16);
+      break;
+
+    case _USART2:
+      Serial[port].dma_controller->IFCR = (0x0F << 28);
+      break;
+
+    case _USART3:
+      Serial[port].dma_controller->IFCR = (0x0F << 8);
+      break;
+
+    case _UART4:
+      Serial[port].dma_controller->IFCR = (0x0F << 20);
+      break;
+  }
+}
+
+#endif
 
 void Serial_DMAConfig(uint8_t port)
 {
@@ -32,7 +73,7 @@ void Serial_DMAConfig(uint8_t port)
 
   RCC_AHBPeriphClockCmd(cfg->dma_rcc, ENABLE);                     // enable DMA clock
 
-  cfg->uart->CR3 |= (1<<6);                                        // DMA enable receiver (DMAR)
+  cfg->uart->CR3 |= (1<<6);                                        // enable DMA receiver (DMAR)
 
   cfg->dma_channelRX->CCR &= ~(1<<0);                              // RX disable DMA
 
@@ -56,9 +97,11 @@ void Serial_DMAConfig(uint8_t port)
   cfg->dma_channelRX->CCR |= (1<<0);                               // RX enable RX DMA
 
 #ifdef TX_DMA_WRITE  // TX DMA based serial writing
-  cfg->uart->CR3 |= (3<<6);                                        // DMA enable transmitter (DMAT) and receiver (DMAR)
+  cfg->uart->CR3 |= (3<<6);                                        // enable DMA transmitter (DMAT) and receiver (DMAR)
 
   cfg->dma_channelTX->CCR &= ~(1<<0);                              // TX disable DMA
+
+  Serial_DMAClearInterruptFlagsTX(port);                           // TX clear DMA interrupt flags
 
   cfg->dma_channelTX->CPAR = (uint32_t)(&cfg->uart->DR);           // TX peripheral address (usart)
   cfg->dma_channelTX->CCR = 0;                                     // TX clear control register
@@ -74,9 +117,6 @@ void Serial_DMAConfig(uint8_t port)
   cfg->dma_channelTX->CCR |= (1<<7);                               // TX memory increment mode
 //cfg->dma_channelTX->CCR |= (0<<6);                               // TX peripheral no increment mode
 //cfg->dma_channelTX->CCR |= (0<<5);                               // TX circular mode disabled
-
-// NOTE: it will be enabled later when needed
-//cfg->dma_channelTX->CCR |= (1<<4);                               // TX enable TX DMA Transfer Complete interrupt
 #endif
 }
 
@@ -124,6 +164,8 @@ void Serial_DeConfig(uint8_t port)
 
 #ifdef TX_DMA_WRITE
   Serial[port].dma_channelTX->CCR &= ~(1<<0);  // disable TX DMA
+
+  Serial_DMAClearInterruptFlagsTX(port);
 #endif
 
   UART_DeConfig(port);
@@ -140,9 +182,10 @@ void Serial_Send_TX(uint8_t port)
   else
     dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize - dmaL1DataTX[port].rIndex;                  // split transfer into 2 parts
 
-  Serial[port].dma_channelTX->CCR  &= ~(1<<0);                                                        // disable TX DMA
+  Serial[port].dma_channelTX->CCR &= ~(1<<0);                                                         // disable TX DMA
   Serial[port].dma_channelTX->CMAR = (uint32_t)(&dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex]);  // TX data start address
   Serial[port].dma_channelTX->CNDTR = dmaL1DataTX[port].flag;  // number of bytes to transfer
+  Serial_DMAClearInterruptFlagsTX(port);                       // clear DMA TX interrupt flags
   Serial[port].uart->CR1 |= USART_CR1_TCIE;                    // enable Transfer Complete (TC) serial interrupt
   Serial[port].dma_channelTX->CCR |= (1<<0);                   // enable TX DMA
 }
