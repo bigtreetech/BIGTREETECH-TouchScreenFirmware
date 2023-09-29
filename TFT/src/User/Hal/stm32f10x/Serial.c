@@ -93,6 +93,7 @@ void Serial_DMAConfig(uint8_t port)
   cfg->dma_channelRX->CCR |= (1<<7);                               // RX memory increment mode
 //cfg->dma_channelRX->CCR |= (0<<6);                               // RX peripheral no increment mode
   cfg->dma_channelRX->CCR |= (1<<5);                               // RX circular mode enabled
+//  cfg->dma_channelRX->CCR &= ~(1<<4);                            // RX data transfer direction: Peripheral-to-memory
 
   cfg->dma_channelRX->CCR |= (1<<0);                               // RX enable RX DMA
 
@@ -117,6 +118,7 @@ void Serial_DMAConfig(uint8_t port)
   cfg->dma_channelTX->CCR |= (1<<7);                               // TX memory increment mode
 //cfg->dma_channelTX->CCR |= (0<<6);                               // TX peripheral no increment mode
 //cfg->dma_channelTX->CCR |= (0<<5);                               // TX circular mode disabled
+  cfg->dma_channelTX->CCR |= (1<<4);                               // TX data transfer direction: Memory-to-Peripheral
 #endif
 }
 

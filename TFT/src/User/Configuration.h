@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20230821
+#define CONFIG_VERSION 20230929
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================

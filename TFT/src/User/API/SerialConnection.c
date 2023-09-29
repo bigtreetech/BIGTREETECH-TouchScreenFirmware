@@ -24,8 +24,10 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
   #endif
 };
 
-const uint32_t baudrateValues[BAUDRATE_COUNT] =    { 0,     2400,   9600,   19200,   38400,   57600,   115200,   250000,   500000,   1000000};
-const char * const baudrateNames[BAUDRATE_COUNT] = {"OFF", "2400", "9600", "19200", "38400", "57600", "115200", "250000", "500000", "1000000"};
+const uint32_t baudrateValues[BAUDRATE_COUNT] = {
+  0,     2400,   9600,   19200,   38400,   57600,   115200,   230400,   250000,   500000,   921600,   1000000};
+const char * const baudrateNames[BAUDRATE_COUNT] = {
+  "OFF", "2400", "9600", "19200", "38400", "57600", "115200", "230400", "250000", "500000", "921600", "1000000"};
 
 static inline void Serial_InitPrimary(void)
 {

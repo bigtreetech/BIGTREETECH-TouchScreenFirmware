@@ -10,7 +10,7 @@ extern "C" {
 #include "variants.h"  // for SERIAL_PORT_2 etc.
 #include "uart.h"      // for _UART_CNT etc.
 
-#define BAUDRATE_COUNT 10
+#define BAUDRATE_COUNT 12
 
 typedef enum
 {
