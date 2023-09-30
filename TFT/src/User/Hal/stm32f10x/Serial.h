@@ -20,7 +20,7 @@ typedef struct
 // config for USART DMA channels
 typedef struct
 {
-  USART_TypeDef * uart;                 // uint32_t
+  USART_TypeDef * uart;  // uint32_t
   uint32_t dma_rcc;
   DMA_TypeDef * dma_controller;
   DMA_Channel_TypeDef * dma_channelRX;

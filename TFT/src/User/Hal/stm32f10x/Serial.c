@@ -40,9 +40,11 @@ const SERIAL_CFG Serial[_UART_CNT] = {  // RM0008 Table 78-79
 
 #ifdef TX_DMA_WRITE
 
-// clear all DMA interrupts TX for a serial port
-void Serial_DMAClearInterruptFlagsTX(uint8_t port)
+// disable TX DMA and clear all interrupt flags for a serial port
+void Serial_DMA_DisableAndClearFlagsTX(uint8_t port)
 {
+  Serial[port].dma_channelTX->CCR &= ~(1<<0);  // disable TX DMA
+
   // clear 4 bits, shift = channel * 4
 
   switch (port)
@@ -67,19 +69,18 @@ void Serial_DMAClearInterruptFlagsTX(uint8_t port)
 
 #endif
 
-void Serial_DMAConfig(uint8_t port)
+void Serial_DMA_Config(uint8_t port)
 {
   const SERIAL_CFG * cfg = &Serial[port];
 
   RCC_AHBPeriphClockCmd(cfg->dma_rcc, ENABLE);                     // enable DMA clock
-
-  cfg->uart->CR3 |= (1<<6);                                        // enable DMA receiver (DMAR)
 
   cfg->dma_channelRX->CCR &= ~(1<<0);                              // RX disable DMA
 
   cfg->dma_channelRX->CPAR = (uint32_t)(&cfg->uart->DR);           // RX peripheral address (usart)
   cfg->dma_channelRX->CMAR = (uint32_t)(dmaL1DataRX[port].cache);  // RX destination address (memory)
   cfg->dma_channelRX->CNDTR = dmaL1DataRX[port].cacheSize;         // RX buffer size
+
   cfg->dma_channelRX->CCR = 0;                                     // RX clear control register
 
   // primary serial port priority at highest level (TX higher than RX)
@@ -93,18 +94,13 @@ void Serial_DMAConfig(uint8_t port)
   cfg->dma_channelRX->CCR |= (1<<7);                               // RX memory increment mode
 //cfg->dma_channelRX->CCR |= (0<<6);                               // RX peripheral no increment mode
   cfg->dma_channelRX->CCR |= (1<<5);                               // RX circular mode enabled
-//  cfg->dma_channelRX->CCR &= ~(1<<4);                            // RX data transfer direction: Peripheral-to-memory
-
-  cfg->dma_channelRX->CCR |= (1<<0);                               // RX enable RX DMA
+//cfg->dma_channelRX->CCR &= ~(1<<4);                              // RX data transfer direction: Peripheral-to-memory
 
 #ifdef TX_DMA_WRITE  // TX DMA based serial writing
-  cfg->uart->CR3 |= (3<<6);                                        // enable DMA transmitter (DMAT) and receiver (DMAR)
-
-  cfg->dma_channelTX->CCR &= ~(1<<0);                              // TX disable DMA
-
-  Serial_DMAClearInterruptFlagsTX(port);                           // TX clear DMA interrupt flags
+  Serial_DMA_DisableAndClearFlagsTX(port);                         // TX disable DMA and clear all interrupt flags
 
   cfg->dma_channelTX->CPAR = (uint32_t)(&cfg->uart->DR);           // TX peripheral address (usart)
+
   cfg->dma_channelTX->CCR = 0;                                     // TX clear control register
 
   // primary serial port priority at highest level (TX higher than RX)
@@ -119,7 +115,13 @@ void Serial_DMAConfig(uint8_t port)
 //cfg->dma_channelTX->CCR |= (0<<6);                               // TX peripheral no increment mode
 //cfg->dma_channelTX->CCR |= (0<<5);                               // TX circular mode disabled
   cfg->dma_channelTX->CCR |= (1<<4);                               // TX data transfer direction: Memory-to-Peripheral
+
+  cfg->uart->CR3 |= (1<<7);                                        // enable DMA transmitter (DMAT)
+//cfg->dma_channelTX->CCR |= (1<<0);                               // TX enable DMA, done later when needed
 #endif
+
+  cfg->uart->CR3 |= (1<<6);                                        // enable DMA receiver (DMAR)
+  cfg->dma_channelRX->CCR |= (1<<0);                               // RX enable DMA
 }
 
 void Serial_ClearData(uint8_t port)
@@ -155,7 +157,7 @@ void Serial_Config(uint8_t port, uint32_t cacheSizeRX, uint32_t cacheSizeTX, uin
 
   UART_Config(port, baudrate, USART_IT_IDLE, IDLE_LINE_IT);  // configure serial line with or without IDLE Line interrupt
 
-  Serial_DMAConfig(port);
+  Serial_DMA_Config(port);
 }
 
 void Serial_DeConfig(uint8_t port)
@@ -165,9 +167,7 @@ void Serial_DeConfig(uint8_t port)
   Serial[port].dma_channelRX->CCR &= ~(1<<0);  // disable RX DMA
 
 #ifdef TX_DMA_WRITE
-  Serial[port].dma_channelTX->CCR &= ~(1<<0);  // disable TX DMA
-
-  Serial_DMAClearInterruptFlagsTX(port);
+  Serial_DMA_DisableAndClearFlagsTX(port);     // disable TX DMA and clear all interrupt flags
 #endif
 
   UART_DeConfig(port);
@@ -181,15 +181,16 @@ void Serial_Send_TX(uint8_t port)
   // setup DMA transfer, and wait for serial Transfer Complete (TX) interrupt in ISR
   if (dmaL1DataTX[port].wIndex >= dmaL1DataTX[port].rIndex)
     dmaL1DataTX[port].flag = dmaL1DataTX[port].wIndex - dmaL1DataTX[port].rIndex;
-  else
-    dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize - dmaL1DataTX[port].rIndex;                  // split transfer into 2 parts
+  else  // split transfer into 2 parts
+    dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize - dmaL1DataTX[port].rIndex;
 
-  Serial[port].dma_channelTX->CCR &= ~(1<<0);                                                         // disable TX DMA
+  Serial_DMA_DisableAndClearFlagsTX(port);    // disable TX DMA and clear all interrupt flags
+
   Serial[port].dma_channelTX->CMAR = (uint32_t)(&dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex]);  // TX data start address
-  Serial[port].dma_channelTX->CNDTR = dmaL1DataTX[port].flag;  // number of bytes to transfer
-  Serial_DMAClearInterruptFlagsTX(port);                       // clear DMA TX interrupt flags
-  Serial[port].uart->CR1 |= USART_CR1_TCIE;                    // enable Transfer Complete (TC) serial interrupt
-  Serial[port].dma_channelTX->CCR |= (1<<0);                   // enable TX DMA
+  Serial[port].dma_channelTX->CNDTR = dmaL1DataTX[port].flag;                                         // number of bytes to transfer
+
+  Serial[port].uart->CR1 |= USART_CR1_TCIE;   // enable Transfer Complete (TC) serial interrupt
+  Serial[port].dma_channelTX->CCR |= (1<<0);  // enable TX DMA
 }
 
 void Serial_Put(uint8_t port, const char * msg)

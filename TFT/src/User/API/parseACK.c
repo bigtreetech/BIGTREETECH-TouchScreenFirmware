@@ -646,7 +646,7 @@ void parseACK(void)
       speedQuerySetWait(false);
     }
     // parse and store flow rate percentage
-    else if (ack_seen("Flow: "))
+    else if (ack_seen("Flow:"))
     {
       speedSetCurPercent(1, ack_value());
       speedQuerySetWait(false);
@@ -919,15 +919,15 @@ void parseACK(void)
       mblUpdateStatus(true);
     }
     // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
-    else if (ack_seen("Bed X: "))
+    else if (ack_seen("Bed X:"))
     {
       float x = ack_value();
       float y = 0;
 
-      if (ack_continue_seen("Y: "))
+      if (ack_continue_seen("Y:"))
         y = ack_value();
 
-      if (ack_continue_seen("Z: "))
+      if (ack_continue_seen("Z:"))
         levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
     }
     #if DELTA_PROBE_TYPE != 0
