@@ -1237,9 +1237,9 @@ void loopBackEnd(void)
   loopSpeed();
 
   // Buzzer handling
-  #ifdef BUZZER_PIN
-    loopBuzzer();
-  #endif
+  //#ifdef BUZZER_PIN
+  //  loopBuzzer(); // NOT NEEDED ANYMORE, USING EVENT TRIGGERING
+  //#endif
 
   // Handle a print from (remote) onboard media, if any
   if (infoMachineSettings.onboardSD == ENABLED)
