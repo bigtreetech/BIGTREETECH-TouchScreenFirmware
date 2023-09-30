@@ -33,7 +33,7 @@ void Serial_DMA_DisableAndClearFlagsRX(uint8_t port)
 {
   DMA_CHCTL(Serial[port].dma_stream, Serial[port].dma_channelRX) &= ~(1<<0);  // disable RX DMA
 
-  // Table 12.5.2, 4 bits per channel, shift = channel * 4
+  // table 12.5.2, 4 bits per channel, shift = channel * 4
 
   switch (port)
   {
@@ -70,7 +70,7 @@ void Serial_DMA_DisableAndClearFlagsTX(uint8_t port)
 {
   DMA_CHCTL(Serial[port].dma_stream, Serial[port].dma_channelTX) &= ~(1<<0);  // disable TX DMA
 
-  // Table 12.5.2, 4 bits per channel, shift = channel * 4
+  // table 12.5.2, 4 bits per channel, shift = channel * 4
 
   switch (port)
   {
@@ -114,6 +114,8 @@ void Serial_DMA_Config(uint8_t port)
   DMA_CHMADDR(cfg->dma_stream, cfg->dma_channelRX) = (uint32_t)(dmaL1DataRX[port].cache);    // RX destination address (memory)
   DMA_CHCNT(cfg->dma_stream, cfg->dma_channelRX) = (uint32_t)(dmaL1DataRX[port].cacheSize);  // RX buffer size
 
+  DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) = 0;           // RX clear control register
+
   // primary serial port priority at highest level (TX higher than RX)
   if (port == SERIAL_PORT)
     DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (2<<12);  // RX priority level: High
@@ -131,6 +133,8 @@ void Serial_DMA_Config(uint8_t port)
   Serial_DMA_DisableAndClearFlagsTX(port);                      // TX disable DMA and clear all interrupt flags
 
   DMA_CHPADDR(cfg->dma_stream, cfg->dma_channelTX) = (uint32_t)(&USART_DATA(cfg->uart));  // TX peripheral address (usart)
+
+  DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) = 0;           // TX clear control register
 
   // primary serial port priority at highest level (TX higher than RX)
   if (port == SERIAL_PORT)
