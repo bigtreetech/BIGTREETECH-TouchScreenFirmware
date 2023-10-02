@@ -5,7 +5,7 @@
 #include "variants.h"  // for uint32_t etc...
 #include "uart.h"
 
-// uncomment this line to use TX DMA based serial writing. Otherwise, TX interrupt based serial writing will be used
+// comment out this line to use TX interrupt based serial writing instead of TX DMA based serial writing
 #define TX_DMA_WRITE
 
 typedef struct

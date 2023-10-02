@@ -142,7 +142,7 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
 
 bool Serial_NewDataAvailable(uint8_t port)
 {
-  // NOTE: used 32 bit variables for performance reasons (in particular for data copy)
+  // NOTE: used 32 bit variables for performance reasons
 
   // wIndex: update L1 cache's writing index (dynamically changed (by L1 cache's interrupt handler) variables/attributes)
   //         and make a static access (32 bit) to it to speedup performance on this function
