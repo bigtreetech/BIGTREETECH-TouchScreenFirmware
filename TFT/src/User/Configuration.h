@@ -1315,8 +1315,8 @@
  * NOTE: Test audio output with the G-code:
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
-#define BUZZER_FREQUENCY_DURATION_MS    20  // in ms. Default: 20
-#define BUZZER_FREQUENCY_HZ          10548  // in Hz (20Hz to 60000Hz). Default: 10548 (musical note "E")
+#define BUZZER_FREQUENCY_DURATION_MS    10  // in ms. Default: 10
+#define BUZZER_FREQUENCY_HZ            100  // in Hz (100Hz to 8000Hz).
 
 /**
  * Buzzer Stop Level
