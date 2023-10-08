@@ -668,11 +668,12 @@ void parseACK(void)
     // parse M300 sound coming from the host, play on TFT
     else if (ack_seen("M300"))
     {
-      uint16_t hz = 260;  // default Marlin tone frequency: 260Hz
+      uint16_t hz = 260;   // default Marlin tone frequency: 260Hz
+      uint16_t ms = 1000;  // default Marlin tone duration: 1000ms
+
       if (ack_seen("S"))
         hz = ack_value();
 
-      uint16_t ms = 1000;  // default Marlin tone duration: 1000ms
       if (ack_seen("P"))
         ms = ack_value();
 

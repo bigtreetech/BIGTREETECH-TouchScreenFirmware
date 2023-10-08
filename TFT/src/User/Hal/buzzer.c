@@ -19,16 +19,13 @@ static BUZZER buzzer;
 
 void TIM3_Config(void)
 {
-
 #ifdef GD32F2XX
   rcu_periph_clock_enable(RCU_TIMER2);                                // enable timer clock
   TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;                              // disable timer
   TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;                             // clear update interrupt flag
   TIMER_DMAINTEN(TIMER2) |= TIMER_DMAINTEN_UPIE;                      // enable update interrupt
   TIMER_CAR(TIMER2) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 1 count = 1us
-
 #else
-
   NVIC_InitTypeDef NVIC_InitStructure;
 
   NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
@@ -62,7 +59,6 @@ void tone(uint16_t frequency, const uint16_t duration)
   TIMER_CTL0(TIMER2) |= TIMER_CTL0_CEN;                 // enable timer
   nvic_irq_enable(TIMER2_IRQn, 1U, 0U);                 // enable timer interrupt
 #else
-
   NVIC_DisableIRQ(TIM3_IRQn);                           // disable timer interrupt
   buzzer.toggles = 2 * (frequency * duration / 1000);   // 2 toggles per period
   TIM3->CR1 &= ~TIM_CR1_CEN;                            // disable timer
@@ -131,6 +127,7 @@ void TIM3_IRQHandler(void)  // ====== STM32FXX TIMER ISR ======
     }
   }
 }
+
 #endif
 
 void Buzzer_Config(void)
@@ -193,10 +190,14 @@ void loopBuzzer(void)
     uint16_t duration = buzzer.duration[buzzer.rIndex];
     buzzer.rIndex = (buzzer.rIndex + 1) % BUZZER_CACHE_SIZE;
 
-    if ((freq > SOUND_KEYPRESS))
+    if (freq > SOUND_KEYPRESS)
+    {
       tone(freq, duration);
+    }
     else
+    {
       Buzzer_play(freq);
+    }
   }
   else
   {

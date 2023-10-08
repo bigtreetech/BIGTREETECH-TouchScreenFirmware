@@ -1316,7 +1316,7 @@
  *       M300 S<frequency Hz> P<duration MilliSeconds>
  */
 #define BUZZER_FREQUENCY_DURATION_MS    10  // in ms. Default: 10
-#define BUZZER_FREQUENCY_HZ            100  // in Hz (100Hz to 8000Hz).
+#define BUZZER_FREQUENCY_HZ            100  // in Hz (100Hz to 8000Hz). Default: 100
 
 /**
  * Buzzer Stop Level
