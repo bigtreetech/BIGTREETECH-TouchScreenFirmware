@@ -122,11 +122,19 @@ static void setLayerNumberTxt(char * layer_number_txt)
   }
 }
 
+// set the print title according to the print originator (remote or local to TFT)
+static void setPrintTitle(void)
+{
+  snprintf(title, MAX_TITLE_LEN, "%s%s%c", getFS(), getPrintFilename(), '\0');
+
+  hideExtension(title);
+}
+
 // initialize printing info before opening Printing menu
 static void initMenuPrinting(void)
 {
-  getPrintTitle(title, MAX_TITLE_LEN);  // get print title according to print originator (remote or local to TFT)
-  clearInfoFile();                      // as last, clear and free memory for file list
+  setPrintTitle();  // set the print title according to the print originator (remote or local to TFT)
+  clearInfoFile();  // as last, clear and free memory for file list
 
   progDisplayType = infoSettings.prog_disp_type;
 
@@ -230,7 +238,7 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         if ((getPrintRemainingTime() == 0) || (progDisplayType != ELAPSED_REMAINING))
           snprintf(tempstrTop, 9, "%d%%      ", getPrintProgress());
         else
-          time_2_string(tempstrTop, TIME_FORMAT_STR, getPrintTime());
+          timeToString(tempstrTop, TIME_FORMAT_STR, getPrintTime());
         break;
 
       case ICON_POS_Z:
@@ -287,9 +295,9 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_TIM:
         if ((getPrintRemainingTime() == 0) || (progDisplayType == PERCENTAGE_ELAPSED))
-          time_2_string(tempstrBottom, TIME_FORMAT_STR, getPrintTime());
+          timeToString(tempstrBottom, TIME_FORMAT_STR, getPrintTime());
         else
-          time_2_string(tempstrBottom, TIME_FORMAT_STR, getPrintRemainingTime());
+          timeToString(tempstrBottom, TIME_FORMAT_STR, getPrintRemainingTime());
         break;
 
       case ICON_POS_Z:
@@ -440,7 +448,7 @@ void printSummaryPopup(void)
   char showInfo[300];
   char tempstr[60];
 
-  time_2_string(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
+  timeToString(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 
   if (isAborted() == true)
   {

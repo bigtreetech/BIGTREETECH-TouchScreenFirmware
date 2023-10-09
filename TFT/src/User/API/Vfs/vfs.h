@@ -65,13 +65,12 @@ bool addFile(bool isFile, const char * shortName, const char * longName);  // ad
 
 // called in Print.c
 char * getFoldername(uint8_t index);             // return the long folder name if exists, otherwise the short one
-char * getFilename(uint8_t index);               // return the long file name if exists, otherwise the short one
-char * hideFilenameExtension(uint8_t index);     // hide the extension of the file name and return a pointer to that file name
-char * restoreFilenameExtension(uint8_t index);  // restore the extension of the file name and return a pointer to that file name
+char * getFilename(uint16_t index);              // return the long file name if exists, otherwise the short one
+char * hideExtension(char * filename);           // hide the extension of the file name and return a pointer to that file name
+char * restoreExtension(char * filename);        // restore the extension of the file name and return a pointer to that file name
 
 // called in PrintingMenu.c
 char * getPrintFilename(void);                // get print filename according to print originator (remote or local to TFT)
-bool getPrintTitle(char * buf, uint8_t len);  // get print title according to print originator (remote or local to TFT)
 
 // called in menu.c
 bool volumeExists(uint8_t src);

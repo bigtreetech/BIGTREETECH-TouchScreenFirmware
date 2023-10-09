@@ -126,12 +126,12 @@ void menuDialog(void)
 
 void _setDialogTitleStr(uint8_t * str)
 {
-  strncpy_no_pad((char *)popup_title, (char *)str, sizeof(popup_title));
+  strscpy((char *)popup_title, (char *)str, sizeof(popup_title));
 }
 
 void _setDialogMsgStr(uint8_t * str)
 {
-  strncpy_no_pad((char *)popup_msg, (char *)str, sizeof(popup_msg));
+  strscpy((char *)popup_msg, (char *)str, sizeof(popup_msg));
 }
 
 uint8_t *getDialogMsgStr()
@@ -141,40 +141,40 @@ uint8_t *getDialogMsgStr()
 
 void _setDialogOkTextStr(uint8_t * str)
 {
-  strncpy_no_pad((char *)popup_ok, (char *)str, sizeof(popup_ok));
+  strscpy((char *)popup_ok, (char *)str, sizeof(popup_ok));
 }
 
 void _setDialogCancelTextStr(uint8_t * str)
 {
-  strncpy_no_pad((char *)popup_cancel, (char *)str, sizeof(popup_cancel));
+  strscpy((char *)popup_cancel, (char *)str, sizeof(popup_cancel));
 }
 
 void _setDialogTitleLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_title, (char *)tempstr, sizeof(popup_title));
+  strscpy((char *)popup_title, (char *)tempstr, sizeof(popup_title));
 }
 
 void _setDialogMsgLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
+  strscpy((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
 }
 
 void _setDialogOkTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
+  strscpy((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
 }
 
 void _setDialogCancelTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
   loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
+  strscpy((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
 }
 
 /**
