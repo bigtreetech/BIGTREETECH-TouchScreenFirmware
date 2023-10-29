@@ -801,14 +801,14 @@ void menuDrawTitle(void)
   }
 
   // draw title
-  uint8_t *titleString = labelGetAddress(curTitle);
+  uint8_t *titleString;
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   uint16_t start_x = 10;
   uint16_t end_x = drawTemperatureStatus();
 
   GUI_SetBkColor(infoSettings.title_bg_color);
 
-  if (titleString)
+  if ((titleString = labelGetAddress(curTitle)))
   {
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
     GUI_DispLenString(10, start_y, titleString, LCD_WIDTH - 20, true);

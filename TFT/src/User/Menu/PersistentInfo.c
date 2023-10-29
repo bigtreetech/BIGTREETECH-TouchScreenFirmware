@@ -112,7 +112,6 @@ int16_t drawTemperatureStatus(void)
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
 
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
-    GUI_StrPixelWidth(LABEL_10_PERCENT);
 
     GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
     x_offset -= GLOBALICON_INTERVAL;

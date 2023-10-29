@@ -81,17 +81,6 @@ enum
   ICON_NULL
 };
 
-// This List is Auto-Generated. Please add new icons in small_icon_list.inc only
-enum
-{
-  #define X_SMALLICON(NAME) SMALL_ICON_##NAME ,
-    #include "small_icon_list.inc"
-  #undef X_SMALLICON
-  // add new icons in small_icon_list.inc only
-  // Back ground sign
-  SMALL_ICON_NULL
-};
-
 typedef enum
 {
   BMP_SUCCESS,
@@ -112,8 +101,6 @@ typedef union
 } GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState);
-BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr);
 
 #ifdef __cplusplus
 }
