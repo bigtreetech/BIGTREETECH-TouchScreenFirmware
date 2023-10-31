@@ -385,8 +385,7 @@ void completePrint(void)
     case FS_TFT_SD:
     case FS_TFT_USB:
       f_close(&infoPrinting.file);
-      powerFailedClose();   // close PLR file
-      powerFailedDelete();  // delete PLR file
+      powerFailedDelete();  // close and delete PLR file, if any
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -474,18 +473,16 @@ bool startPrint(void)
         infoPrinting.cur = infoPrinting.file.fptr;
         setExtrusionDuringPause(false);
 
-        // initialize PLR info.
+        // load PLR info.
         // If print restore flag was enabled (e.g. by powerFailedSetRestore function called in PrintRestore.c),
-        // try to load PLR info from file in order to restore the print from the failed point.
+        // try to load PLR info from file in order to restore the print from the failed point (setting the offset
+        // on print file to the backed up layer).
         // It finally disables print restore flag (one shot flag) for the next print.
         // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
-        powerFailedInitData();
+        //
+        printRestore = powerFailedLoad(&infoPrinting.file);
 
-        if (powerFailedCreate(infoFile.path))    // if PLR feature is enabled, open a new PLR file
-        {
-          printRestore = true;
-          powerFailedlSeek(&infoPrinting.file);  // seek on PLR file
-        }
+        powerFailedCreate(infoFile.path);  // if PLR feature is enabled, open a new PLR file
       }
 
       break;
@@ -632,7 +629,7 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
     case FS_TFT_SD:
     case FS_TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
-        loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+        TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
       static COORDINATE tmp;
       bool isCoorRelative = coorGetRelative();
@@ -815,8 +812,14 @@ void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
   if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // if not printing from TFT media
-  if (heatHasWaiting() || isNotEmptyCmdQueue() || infoPrinting.paused) return;
-  if (moveCacheToCmd() == true) return;
+  if (infoPrinting.paused || heatHasWaiting() || isNotEmptyCmdQueue()) return;
+
+  // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:
+  //   - initialize print restore, if any, storing a set of commands on command queue
+  //   - retrieve next command from print file and store it on command queue
+
+  if (powerFailedInitRestore())  // initialize print restore, if any, if not already initialized (one shot flag)
+    return;
 
   powerFailedCache(infoPrinting.file.fptr);  // update Power-loss Recovery file
 

@@ -18,12 +18,14 @@ typedef struct
   bool     pause;
 } BREAK_POINT;
 
-BREAK_POINT  infoBreakPoint;
-char powerFailedFileName[256];
+BREAK_POINT infoBreakPoint;
+char powerFailedFileName[sizeof(BREAK_POINT_FILE) + 20 + 1];  // extra 20 chars for concatenation with string returned by getFS()
 FIL fpPowerFailed;
 
-static bool restore = false;  // print restore flag disabled by default
-static bool create_ok = false;
+static bool restore = false;     // print restore flag disabled by default
+static bool restore_ok = false;  // print restore initialization flag disabled by default
+static bool load_ok = false;     // PLR file loading flag disabled by default
+static bool create_ok = false;   // PLR file creation flag disabled by default
 
 void powerFailedSetRestore(bool allowed)
 {
@@ -40,12 +42,14 @@ void powerFailedSetDriverSource(void)
   sprintf(powerFailedFileName, "%s%s", getFS(), BREAK_POINT_FILE);
 }
 
-bool powerFailedInitData(void)
+bool powerFailedLoad(FIL *print_fp)
 {
-  memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
+  // set status flag status first
+  load_ok = false;
+  restore_ok = false;
 
-  if (!restore)  // if print restore flag is disabled, nothing more to do
-    return true;
+  // if print restore flag is disabled, nothing to do
+  if (!restore) return false;
 
   // disable print restore flag (one shot flag) for the next print.
   // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
@@ -53,38 +57,65 @@ bool powerFailedInitData(void)
 
   // try to load PLR info from file in order to restore the print from the failed point
 
-  FIL     fp;
-  UINT    br;
+  FIL fp;
+  UINT br;
   uint8_t model_icon;
 
   powerFailedSetDriverSource();
 
-  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
-  if (f_lseek(&fp, MAX_PATH_LEN)                                   != FR_OK) return false;
-  if (f_read(&fp, &model_icon, 1, &br)                             != FR_OK) return false;
-  if (f_read(&fp, &infoBreakPoint,  sizeof(infoBreakPoint), &br)   != FR_OK) return false;
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+    return false;
 
-  setPrintModelIcon(model_icon);
+  if (f_lseek(&fp, MAX_PATH_LEN) == FR_OK)
+  {
+    if (f_read(&fp, &model_icon, 1, &br) == FR_OK)
+    {
+      if (f_read(&fp, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
+      {
+        // set offset on print file once infoBreakPoint was successfully read
+        if (f_lseek(print_fp, infoBreakPoint.offset) == FR_OK)
+        {
+          load_ok = true;
+          restore_ok = true;
+        }
+      }
+    }
+  }
+
+  f_close(&fp);  // always close the file once it was successfully open before
+
+  if (load_ok)  // if the file was successfully open, set icon model
+    setPrintModelIcon(model_icon);
+
+  return load_ok;
+}
+
+bool powerFailedInitRestore(void)
+{
+  // if print restore initialization flag is disabled, nothing to do
+  if (!restore_ok) return false;
+
+  // disable print restore initialization flag (one shot flag) for the next print
+  restore_ok = false;
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     if (infoBreakPoint.fan[i] != 0)
-    {
-      mustStoreCacheCmd(fanCmd[i], infoBreakPoint.fan[i]);
-    }
+      mustStoreCmd(fanCmd[i], infoBreakPoint.fan[i]);
   }
 
-  mustStoreCacheCmd("%s\n", toolChange[infoBreakPoint.tool]);
+  mustStoreCmd("%s\n", toolChange[infoBreakPoint.tool]);
 
-  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber infoCacheCmd.queue[0 - 1]
+  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber
   {
     if (infoBreakPoint.target[i] != 0)
-      mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
+      mustStoreCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
-  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle infoCacheCmd.queue[2 - 7]
+
+  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle
   {
     if (infoBreakPoint.target[i] != 0)
-      mustStoreCacheCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
+      mustStoreCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
 
   if (infoBreakPoint.feedrate != 0)
@@ -97,98 +128,110 @@ bool powerFailedInitData(void)
     if (infoBreakPoint.pause)
       z_raised += infoSettings.pause_z_raise;
 
-    mustStoreCacheCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);  // infoCacheCmd.queue[8 - 11]
-    mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+    mustStoreCmd("G92 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + z_raised);
+    mustStoreCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+
     if (infoSettings.plr_home)
     {
-      mustStoreCacheCmd("G28\n");
-      mustStoreCacheCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
+      mustStoreCmd("G28\n");
+      mustStoreCmd("G1 Z%.3f\n", infoBreakPoint.axis[Z_AXIS] + infoSettings.plr_z_raise);
     }
     else
     {
-      mustStoreCacheCmd("G28 R0 XY\n");
+      mustStoreCmd("G28 R0 XY\n");
     }
 
-    mustStoreCacheCmd("M83\n");  // infoCacheCmd.queue[12 - 17]
-    mustStoreCacheCmd("G1 E30 F300\n");
-    mustStoreCacheCmd("G1 E-%.5f F4800\n", infoSettings.pause_retract_len);
-    mustStoreCacheCmd("G1 X%.3f Y%.3f Z%.3f F3000\n",
-                      infoBreakPoint.axis[X_AXIS],
-                      infoBreakPoint.axis[Y_AXIS],
-                      infoBreakPoint.axis[Z_AXIS]);
-    mustStoreCacheCmd("G1 E%.5f F4800\n", infoSettings.resume_purge_len);
-    mustStoreCacheCmd("G92 E%.5f\nG1 F%d\n", infoBreakPoint.axis[E_AXIS], infoBreakPoint.feedrate);
+    mustStoreCmd("M83\n");
+    mustStoreCmd("G1 E30 F300\n");
+    mustStoreCmd("G1 E-%.5f F4800\n", infoSettings.pause_retract_len);
+    mustStoreCmd("G1 X%.3f Y%.3f Z%.3f F3000\n", infoBreakPoint.axis[X_AXIS], infoBreakPoint.axis[Y_AXIS], infoBreakPoint.axis[Z_AXIS]);
+    mustStoreCmd("G1 E%.5f F4800\n", infoSettings.resume_purge_len);
+    mustStoreCmd("G92 E%.5f\nG1 F%d\n", infoBreakPoint.axis[E_AXIS], infoBreakPoint.feedrate);
+    mustStoreCmd(infoBreakPoint.relative ? "G91\n" : "G90\n");
 
-    if (infoBreakPoint.relative_e == false)  // infoCacheCmd.queue[18]
-    {
-      mustStoreCacheCmd("M82\n");
-    }
-
-    // infoCacheCmd.queue[19]  max length = 0 - 19.
-    if (infoBreakPoint.relative == true)
-    {
-      mustStoreCacheCmd("G91\n");
-    }
-    // End of cache
-    // The length of the gcode stored in the cache should be less than max length = 20
-    // Otherwise, if there are M109/M190/M191 blocking the queue, it will cause "Busy processing, please wait..." and bring bad user experience
+    if (infoBreakPoint.relative_e == false)
+      mustStoreCmd("M82\n");
   }
 
-  f_close(&fp);
   return true;
 }
 
 bool powerFailedExist(void)
 {
+  bool access_ok = false;
   FIL fp;
   UINT br;
 
   powerFailedSetDriverSource();
 
-  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK) return false;
-  if (f_read(&fp, infoFile.path, MAX_PATH_LEN, &br)                != FR_OK) return false;
-  if (f_close(&fp)                                                 != FR_OK) return false;
+  if (f_open(&fp, powerFailedFileName, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+    return false;
 
-  create_ok = true;
-  return true;
+  if (f_read(&fp, infoFile.path, MAX_PATH_LEN, &br) == FR_OK)
+    access_ok = true;
+
+  f_close(&fp);  // always close the file once it was successfully open before
+
+  return access_ok;
 }
 
-bool powerFailedCreate(char *path)
+void powerFailedCreate(char *path)
 {
+  powerFailedDelete();  // close and delete PLR file, if any, first
+
+  if (!infoSettings.plr) return;                    // if PLR is disabled
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // onboard media not supported now
+
   UINT br;
 
   powerFailedSetDriverSource();
 
-  create_ok = false;
-  if (!infoSettings.plr) return false;                    // if PLR is disabled
-  if (infoFile.source >= FS_ONBOARD_MEDIA) return false;  // onboard media not supported now
+  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK)
+    return;
 
-  if (f_open(&fpPowerFailed, powerFailedFileName, FA_OPEN_ALWAYS | FA_WRITE) != FR_OK) return false;
+  if (f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br) == FR_OK)
+  {
+    uint8_t model_icon = isPrintModelIcon();
 
-  f_write(&fpPowerFailed, path, MAX_PATH_LEN, &br);
-  uint8_t model_icon = isPrintModelIcon();
-  f_write(&fpPowerFailed, &model_icon, 1, &br);
-  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
-  f_sync(&fpPowerFailed);
+    if (f_write(&fpPowerFailed, &model_icon, 1, &br) == FR_OK)
+    {
+      // if PLR file not loaded, initilaize data. Otherwise use loaded data
+      // so also powerFailedInitRestore() function can be used
+      if (!load_ok)
+        memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
 
-  create_ok = true;
-  return true;
+      if (f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
+      {
+        if (f_sync(&fpPowerFailed) == FR_OK)
+        {
+          create_ok = true;
+        }
+      }
+    }
+  }
+
+  if (!create_ok)  // if PLR file was not properly opened and written, close it
+    f_close(&fpPowerFailed);
+
+  return;
 }
 
 void powerFailedCache(uint32_t offset)
 {
-  UINT br;
+  if (!create_ok) return;  // if PLR file not created
 
-  if (create_ok == false) return;
-  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // Z axis not changed
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // if Z axis not changed
   if (isNotEmptyCmdQueue()) return;
-  if (!isPaused())
-  { // not paused, update printing progress status.
+
+  if (!isPaused())  // if not paused, update printing progress status
+  {
     infoBreakPoint.offset = offset;
+
     for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
     {
       infoBreakPoint.axis[i] = coordinateGetAxisTarget(i);
     }
+
     infoBreakPoint.feedrate = coordinateGetFeedRate();
     infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
     infoBreakPoint.flow = speedGetCurPercent(1);   // Flow percent
@@ -197,45 +240,46 @@ void powerFailedCache(uint32_t offset)
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
+
     for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // Bed & Chamber
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
+
     infoBreakPoint.tool = heatGetToolIndex();
 
     for (uint8_t i = 0; i < infoSettings.fan_count; i++)
     {
       infoBreakPoint.fan[i] = fanGetCurSpeed(i);
     }
+
     infoBreakPoint.relative = coorGetRelative();
     infoBreakPoint.relative_e = eGetRelative();
   }
-  else if (infoBreakPoint.pause) return;  // paused and the pause state has been saved
+  else if (infoBreakPoint.pause)  // if paused and the pause state has been saved, nothing to do
+  {
+    return;
+  }
 
   infoBreakPoint.pause = isPaused();
 
+  UINT br;
+
   f_lseek(&fpPowerFailed, MAX_PATH_LEN + 1);  // infoFile.path + infoPrinting.model_icon
-  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(BREAK_POINT), &br);
+  f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br);
   f_sync(&fpPowerFailed);
-}
-
-void powerFailedClose(void)
-{
-  if (create_ok == false) return;
-
-  f_close(&fpPowerFailed);
 }
 
 void powerFailedDelete(void)
 {
-  if (create_ok == false) return;
+  if (create_ok)  // if PLR file is currently open and used, close it first
+  {
+    f_close(&fpPowerFailed);
 
-  f_unlink(powerFailedFileName);
-}
+    create_ok = false;
+  }
 
-bool powerFailedlSeek(FIL *fp)
-{
-  if (f_lseek(fp, infoBreakPoint.offset) != FR_OK) return false;
+  powerFailedSetDriverSource();
 
-  return true;
+  f_unlink(powerFailedFileName);  // delete the file
 }

@@ -33,7 +33,6 @@ void menuPrintRestore(void)
 
         case KEY_POPUP_CANCEL:
           powerFailedSetRestore(false);
-          // note: powerFailedExist function must be called first, otherwise powerFailedDelete will fail
           powerFailedDelete();
           // in case the calling function is menuPrintFromSource,
           // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message

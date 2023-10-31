@@ -1334,22 +1334,17 @@ void menuDummy(void)
   CLOSE_MENU();
 }
 
-void loopProcessToCondition(CONDITION_CALLBACK condCallback)
+void loopProcessAndGUI(void)
 {
   uint8_t curMenu = infoMenu.cur;
-  bool invokedUI = false;
 
-  while (condCallback())  // loop until the condition is no more satisfied
+  loopProcess();
+
+  if (infoMenu.cur != curMenu)  // if a user interaction is needed (e.g. dialog box), handle it
   {
-    loopProcess();
+    (*infoMenu.menu[infoMenu.cur])();  // handle user interaction
 
-    if (infoMenu.cur > curMenu)  // if a user interaction is needed (e.g. dialog box UI), handle it
-    {
-      invokedUI = true;
-      (*infoMenu.menu[infoMenu.cur])();
-    }
+    if (MENU_IS_NOT(menuDummy))  // avoid to nest menuDummy menu type
+      OPEN_MENU(menuDummy);      // load a dummy menu just to force the redraw of the underlying menu (caller menu)
   }
-
-  if (invokedUI)  // if a UI was invoked, load a dummy menu just to force the caller also to refresh its menu
-    OPEN_MENU(menuDummy);
 }

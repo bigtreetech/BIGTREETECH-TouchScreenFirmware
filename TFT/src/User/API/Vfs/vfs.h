@@ -64,13 +64,18 @@ bool isRootFolder(void);                                                   // ch
 bool addFile(bool isFile, const char * shortName, const char * longName);  // add a file name or folder name to file list
 
 // called in Print.c
-char * getFoldername(uint8_t index);             // return the long folder name if exists, otherwise the short one
-char * getFilename(uint8_t index);               // return the long file name if exists, otherwise the short one
-char * hideFilenameExtension(uint8_t index);     // hide the extension of the file name and return a pointer to that file name
-char * restoreFilenameExtension(uint8_t index);  // restore the extension of the file name and return a pointer to that file name
+const char * getFoldername(uint8_t index);  // return the long folder name if exists, otherwise the short one
+const char * getFilename(uint8_t index);    // return the long file name if exists, otherwise the short one
+
+// hide the extension of the file name and return a pointer to that file name (the long one if exists, otherwise the short one).
+// The hide of the extension is not temporary so do not forget to restore it afterwards!
+const char * hideFilenameExtension(uint8_t index);
+
+// restore the extension of the file name and return a pointer to that file name (the long one if exists, otherwise the short one)
+const char * restoreFilenameExtension(uint8_t index);
 
 // called in PrintingMenu.c
-char * getPrintFilename(void);                // get print filename according to print originator (remote or local to TFT)
+const char * getPrintFilename(void);          // get print filename according to print originator (remote or local to TFT)
 bool getPrintTitle(char * buf, uint8_t len);  // get print title according to print originator (remote or local to TFT)
 
 // called in menu.c
