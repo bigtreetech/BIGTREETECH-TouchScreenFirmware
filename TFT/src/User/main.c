@@ -1,9 +1,11 @@
 #include "main.h"
 #include "includes.h"
 
-MENU infoMenu;     // Menu structure
-HOST infoHost;     // Information interaction with Marlin
-CLOCKS mcuClocks;  // System clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_Timer2
+MENU infoMenu;               // Menu structure
+HOST infoHost;               // Information interaction with Marlin
+CLOCKS mcuClocks;            // System clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_Timer2
+uint32_t bePriorityCounter;  // Back end priority counter
+uint32_t fePriorityCounter;  // Front end priority counter
 
 void InfoHost_Init(bool isConnected)
 {

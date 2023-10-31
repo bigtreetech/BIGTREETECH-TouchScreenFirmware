@@ -43,10 +43,11 @@ const char magic_echo[] = "echo:";
 const char magic_warning[] = "Warning:";  // RRF warning
 const char magic_message[] = "message";   // RRF message in Json format
 
-#define ACK_CACHE_SIZE 512  // including ending character '\0'
+// size of buffer where read ACK messages are stored (including terminating null character '\0')
+#define ACK_CACHE_SIZE 512
 
 char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
-uint16_t ack_len;                           // length of data currently present in ack_cache
+uint16_t ack_len;                           // length of data present in ack_cache without the terminating null character '\0'
 uint16_t ack_index;
 SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
 bool hostDialog = false;
@@ -358,8 +359,10 @@ void hostActionCommands(void)
 
 void parseACK(void)
 {
-  while ((ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
+  while (Serial_NewDataAvailable(SERIAL_PORT) && (ack_len = Serial_Get(SERIAL_PORT, ack_cache, ACK_CACHE_SIZE)) != 0)  // if some data have been retrieved
   {
+    UPD_RX_KPIS(ack_len);  // debug monitoring KPI
+
     #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
       // dump raw serial data received to debug port
       Serial_Put(SERIAL_DEBUG_PORT, "<<");
@@ -487,7 +490,7 @@ void parseACK(void)
           requestCommandInfo.inResponse = false;
         }
       }
-      else if (strlen(requestCommandInfo.cmd_rev_buf) + ack_len < CMD_MAX_REV)
+      else if (strlen(requestCommandInfo.cmd_rev_buf) + (ack_len + 1) < CMD_MAX_REV)  // +1 is for the terminating null character '\0'
       {
         strcat(requestCommandInfo.cmd_rev_buf, ack_cache);
 
@@ -643,7 +646,7 @@ void parseACK(void)
       speedQuerySetWait(false);
     }
     // parse and store flow rate percentage
-    else if (ack_seen("Flow: "))
+    else if (ack_seen("Flow:"))
     {
       speedSetCurPercent(1, ack_value());
       speedQuerySetWait(false);
@@ -916,15 +919,15 @@ void parseACK(void)
       mblUpdateStatus(true);
     }
     // parse G30, feedback to get the 4 corners Z value returned by Marlin for LevelCorner menu
-    else if (ack_seen("Bed X: "))
+    else if (ack_seen("Bed X:"))
     {
       float x = ack_value();
       float y = 0;
 
-      if (ack_continue_seen("Y: "))
+      if (ack_continue_seen("Y:"))
         y = ack_value();
 
-      if (ack_continue_seen("Z: "))
+      if (ack_continue_seen("Z:"))
         levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
     }
     #if DELTA_PROBE_TYPE != 0
@@ -934,10 +937,14 @@ void parseACK(void)
         BUZZER_PLAY(SOUND_SUCCESS);
 
         if (infoMachineSettings.EEPROM == 1)
+        {
           popupDialog(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_EEPROM_SAVE_INFO,
                       LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+        }
         else
+        {
           popupReminder(DIALOG_TYPE_SUCCESS, LABEL_DELTA_CONFIGURATION, LABEL_PROCESS_COMPLETED);
+        }
       }
     #endif
 

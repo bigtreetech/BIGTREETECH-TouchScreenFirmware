@@ -85,11 +85,11 @@ void UART_GPIO_DeInit(uint8_t port)
   GPIO_InitSet(uart_rx[port], MGPIO_MODE_IPN, 0);
 }
 
-void UART_Protocol_Init(uint8_t port,uint32_t baud)
+void UART_Protocol_Init(uint8_t port, uint32_t baud)
 {
   USART_InitTypeDef USART_InitStructure;
 
-  *rcc_uart_en[port] |= rcc_uart_bit[port];
+  *rcc_uart_en[port] |= rcc_uart_bit[port];  // Enable clock
 
   USART_InitStructure.USART_BaudRate = baud;
   USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
@@ -102,7 +102,7 @@ void UART_Protocol_Init(uint8_t port,uint32_t baud)
   USART_Cmd(uart[port],ENABLE);
 }
 
-void UART_IRQ_Init(uint8_t port, uint16_t usart_it)
+void UART_IRQ_Init(uint8_t port, uint16_t usart_it, FunctionalState idle_interrupt)
 {
   uint32_t IRQ_Channel[_UART_CNT] = {USART1_IRQn, USART2_IRQn, USART3_IRQn, UART4_IRQn, UART5_IRQn};
 
@@ -113,15 +113,15 @@ void UART_IRQ_Init(uint8_t port, uint16_t usart_it)
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_Init(&NVIC_InitStructure);
 
-  USART_ITConfig(uart[port], usart_it, ENABLE);
+  USART_ITConfig(uart[port], usart_it, idle_interrupt);  // enable or disable serial line IDLE interrupt
   USART_ClearITPendingBit(uart[port], usart_it);
 }
 
-void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it)
+void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it, bool idle_interrupt)
 {
   UART_Protocol_Init(port, baud);
-  UART_IRQ_Init(port, usart_it);
-  UART_GPIO_Init(port);  // Finally, initialize IO, else will send 0xFF.
+  UART_IRQ_Init(port, usart_it, idle_interrupt ? ENABLE : DISABLE);
+  UART_GPIO_Init(port);  // After all initialization is completed, enable IO, otherwise a 0xFF will be sent automatically after power-on
 }
 
 void UART_DeConfig(uint8_t port)
@@ -129,7 +129,7 @@ void UART_DeConfig(uint8_t port)
   UART_GPIO_DeInit(port);
 
   *rcc_uart_rst[port] |= rcc_uart_bit[port];
-  *rcc_uart_rst[port] &= ~rcc_uart_bit[port];
+  *rcc_uart_rst[port] &= ~rcc_uart_bit[port];  // Reset clock
 }
 
 void UART_Write(uint8_t port, uint8_t d)
@@ -137,6 +137,7 @@ void UART_Write(uint8_t port, uint8_t d)
   while ((uart[port]->SR & USART_FLAG_TC) == (uint16_t)RESET);
   uart[port]->DR = ((uint16_t)d & (uint16_t)0x01FF);
 }
+
 void UART_Puts(uint8_t port, uint8_t *str)
 {
   while (*str)

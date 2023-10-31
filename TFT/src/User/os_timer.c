@@ -43,8 +43,9 @@ void TIMER6_IRQHandler(void)
 
     if (os_counter % 1000 == 0)
     {
+      AVG_KPIS();  // debug monitoring KPI
+
       updatePrintTime();
-      AVG_SCAN_RATE();  // debug monitoring KPI
     }
 
     loopTouchScreen();
@@ -61,8 +62,9 @@ void TIM7_IRQHandler(void)
 
     if (os_counter % 1000 == 0)
     {
+      AVG_KPIS();  // debug monitoring KPI
+
       updatePrintTime();
-      AVG_SCAN_RATE();  // debug monitoring KPI
     }
 
     loopTouchScreen();

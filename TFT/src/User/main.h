@@ -10,7 +10,9 @@ extern "C" {
 #include "variants.h"  // for RCC_ClocksTypeDef
 #include "uart.h"      // for _UART_CNT
 
-#define MAX_MENU_DEPTH 10  // max sub menu depth
+#define MAX_MENU_DEPTH      10  // max sub menu depth
+#define BE_PRIORITY_DIVIDER 16  // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
+#define FE_PRIORITY_DIVIDER 16  // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
 
 typedef void (* FP_MENU)(void);
 
@@ -54,6 +56,8 @@ typedef struct
 extern MENU infoMenu;
 extern HOST infoHost;
 extern CLOCKS mcuClocks;
+extern uint32_t bePriorityCounter;
+extern uint32_t fePriorityCounter;
 
 void InfoHost_Init(bool isConnected);
 void InfoHost_UpdateListeningMode(void);

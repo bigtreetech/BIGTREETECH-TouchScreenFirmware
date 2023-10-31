@@ -110,7 +110,7 @@ void loopBreakToCondition(CONDITION_CALLBACK condCallback)
   uint16_t rIndex;
 
   TASK_LOOP_WHILE(condCallback(),
-                  if ((rIndex = Serial_GetReadingIndex(SERIAL_PORT)) != rIndex_old)
+                  if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
                     sendEmergencyCmd("M108\n");
                     rIndex_old = rIndex;
@@ -310,7 +310,7 @@ void initPrintSummary(void)
   infoPrintSummary = (PRINT_SUMMARY){.name[0] = '\0', 0, 0, 0, 0, false};
 
   // save print filename (short or long filename)
-  sprintf(infoPrintSummary.name, "%." STRINGIFY(SUMMARY_NAME_LEN) "s", getPrintFilename());
+  strncpy_no_pad(infoPrintSummary.name, getPrintFilename(), SUMMARY_NAME_LEN);
 }
 
 void preparePrintSummary(void)
@@ -903,6 +903,9 @@ void loopPrintFromTFT(void)
         }
       }
     }
+
+    if (comment_parsing)  // parse comment from gcode file
+      parseComment();
   }
 
   if (gcode_count == 0)

@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20230821
+#define CONFIG_VERSION 20230929
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -30,11 +30,11 @@
  *                P2: WIFI    (e.g. ESP3D)
  *                P3: UART 3  (e.g. OctoPrint)
  *                P4: UART 4
- *   Value range: P1: [min: 1, max: 9]
- *                P2: [min: 0, max: 9]
- *                P3: [min: 0, max: 9]
- *                P4: [min: 0, max: 9]
- *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 250000: 7, 500000: 8, 1000000: 9]
+ *   Value range: P1: [min: 1, max: 11]
+ *                P2: [min: 0, max: 11]
+ *                P3: [min: 0, max: 11]
+ *                P4: [min: 0, max: 11]
+ *   Options: [OFF (port disabled): 0, 2400: 1, 9600: 2, 19200: 3, 38400: 4, 57600: 5, 115200: 6, 230400: 7, 250000: 8, 500000: 9, 921600: 10, 1000000: 11]
  */
 #define SP_1 6  // Default: 6
 #define SP_2 0  // Default: 0
@@ -1117,7 +1117,7 @@
  * Monitoring Debug
  * Uncomment/Enable to monitor/show system resources usage in Monitoring menu.
  */
-//#define DEBUG_MONITORING  // Default: commented (disabled)
+#define DEBUG_MONITORING  // Default: commented (disabled)
 
 /**
  * Generic Debug
@@ -1350,7 +1350,7 @@
  * Enable alternative Move Menu Buttons Layout matching the direction
  * of actual printer axis Update the icons from alternate icon folder.
  */
-#define ALTERNATIVE_MOVE_MENU  // Default: uncommented (enabled)
+//#define ALTERNATIVE_MOVE_MENU  // Default: uncommented (enabled)
 
 /**
  * Friendly Z Offset Language
@@ -1431,7 +1431,7 @@
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
-//#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
+#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
  * Live Text Common Color Layout (Status Screen menu)
