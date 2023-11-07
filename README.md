@@ -2,10 +2,10 @@
 
 # BigTreeTech TFT Touchscreen
 
-![GitHub](https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
+<a href="https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/github/license/bigtreetech/bigtreetech-TouchScreenFirmware.svg"></a>
 [![GitHub contributors](https://img.shields.io/github/contributors/bigtreetech/bigtreetech-TouchScreenFirmware.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/graphs/contributors)
-![GitHub Release Date](https://img.shields.io/github/release-date/bigtreetech/bigtreetech-TouchScreenFirmware.svg)
-[![Build Status](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/workflows/Build%20Test/badge.svg?branch=master)](https://github.com/bigtreetech/bigtreetech-TouchScreenFirmware/actions)
+<a href="https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/archive/refs/heads/master.zip"><img alt="release date" src="https://img.shields.io/github/last-commit/bigtreetech/BIGTREETECH-TouchScreenFirmware/master.svg?label=release%20date"></a>
+[![Build Binaries](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/actions/workflows/buildBinary.yml/badge.svg)](https://github.com/bigtreetech/BIGTREETECH-TouchScreenFirmware/actions/workflows/buildBinary.yml)
 
 Important information related to BigTreeTech's TFT touchscreen 3D printer controllers
 
