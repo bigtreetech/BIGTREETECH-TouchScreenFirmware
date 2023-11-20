@@ -99,7 +99,7 @@ void initSettings(void)
 
   infoSettings.probing_z_offset       = PROBING_Z_OFFSET;
   infoSettings.probing_z_raise        = PROBING_Z_RAISE;
-  infoSettings.z_steppers_alignment   = Z_STEPPER_ALIGNEMENT;
+  infoSettings.z_steppers_alignment   = Z_STEPPERS_ALIGNMENT;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR;
 
 // Power Supply Settings (only if connected to TFT controller)

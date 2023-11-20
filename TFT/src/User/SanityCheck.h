@@ -347,6 +347,10 @@ extern "C" {
   #endif
 #endif
 
+#ifdef Z_STEPPER_ALIGNEMENT
+  #error "Z_STEPPER_ALIGNEMENT is now Z_STEPPERS_ALIGNMENT."
+#endif
+
 #ifdef __cplusplus
 }
 #endif
