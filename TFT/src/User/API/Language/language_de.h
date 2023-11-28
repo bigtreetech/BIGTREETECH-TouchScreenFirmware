@@ -300,7 +300,7 @@
     #define STRING_ABL_SLOT_EEPROM        "Mesh im EEPROM speichern? (laden nach Neustart)"
     #define STRING_ABL_Z                  "Z Fade"
     #define STRING_LEVEL_CORNER           "L corner"
-    #define STRING_LEVEL_CORNER_INFO      "Der Kantenabstand liegt unter dem Sondenversatz X/Y und einige Zielpunkte könnten nicht erreichbar sein.\nMöchten Sie einen sicheren Flankenabstand verwenden?"
+    #define STRING_LEVEL_CORNER_INFO      "Der Kantenabstand liegt unter dem Sondenversatz X/Y und einige Zielpunkte könnten nicht erreichbar sein.\nMöchten Sie einen sicheren Kantenabstand verwenden?"
     #define STRING_P_OFFSET               "P Versatz"
     #define STRING_H_OFFSET               "H Versatz"
     #define STRING_DISTANCE               "Abstand"
