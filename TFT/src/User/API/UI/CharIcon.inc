@@ -104,5 +104,5 @@ X_CHAR (TOGGLE_SMALL_ON)
 X_CHAR (TOGGLE_SMALL_OFF)
 X_CHAR (TOGGLE_BODY)
 X_CHAR (TOGGLE_SWITCH)
-X_CHAR (TOGGLE_ON)        //only for toggle state detection
-X_CHAR (TOGGLE_OFF)       //only for toggle state detection
+X_CHAR (TOGGLE_ON)        // only for toggle state detection
+X_CHAR (TOGGLE_OFF)       // only for toggle state detection

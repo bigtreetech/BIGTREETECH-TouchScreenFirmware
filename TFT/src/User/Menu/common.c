@@ -11,9 +11,8 @@ uint8_t currentTool = NOZZLE0;
 uint8_t currentBCIndex = 0;
 uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
-static uint32_t lastTime = 0;
 
-//Icons list for tool change
+// Icons list for tool change
 const ITEM itemTool[MAX_HEATER_COUNT] =
 {
 // icon                          label
@@ -105,7 +104,9 @@ const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
 // Use this for timed screen updates in menu loops only
 bool nextScreenUpdate(uint32_t duration)
 {
+  static uint32_t lastTime = 0;
   uint32_t curTime = OS_GetTimeMs();
+
   if (curTime > (lastTime + duration))
   {
     lastTime = curTime;
@@ -130,7 +131,7 @@ bool nextScreenUpdate(uint32_t duration)
   }
 #endif
 
-void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
+void drawBorder(const GUI_RECT * rect, uint16_t color, uint16_t edgeDistance)
 {
   //uint16_t origColor = GUI_GetColor();
 
@@ -141,7 +142,7 @@ void drawBorder(const GUI_RECT *rect, uint16_t color, uint16_t edgeDistance)
   //GUI_SetColor(origColor);
 }
 
-void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistance)
+void drawBackground(const GUI_RECT * rect, uint16_t bgColor, uint16_t edgeDistance)
 {
   //uint16_t origBgColor = GUI_GetBkColor();
 
@@ -152,7 +153,7 @@ void drawBackground(const GUI_RECT *rect, uint16_t bgColor, uint16_t edgeDistanc
   //GUI_SetBkColor(origBgColor);
 }
 
-void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val, uint16_t font,
+void drawStandardValue(const GUI_RECT * rect, VALUE_TYPE valType, const void * val, uint16_t font,
                        uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor)
 {
   uint16_t origColor = GUI_GetColor();
@@ -203,11 +204,11 @@ void drawStandardValue(const GUI_RECT *rect, VALUE_TYPE valType, const void *val
 }
 
 // Show/draw a temperature in a standard menu
-void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
+void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(heatDisplayID[toolIndex], "ºC");
   }
@@ -221,11 +222,11 @@ void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool skipHeader)
 }
 
 // Show/draw fan in a standard menu
-void fanReDraw(uint8_t fanIndex, bool skipHeader)
+void fanReDraw(uint8_t fanIndex, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(fanID[fanIndex], (infoSettings.fan_percentage == 1) ? " % " : "PWM");
   }
@@ -239,11 +240,11 @@ void fanReDraw(uint8_t fanIndex, bool skipHeader)
 }
 
 // Show/draw extruder in a standard menu
-void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
+void extruderReDraw(uint8_t extruderIndex, float extrusion, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader(extruderDisplayID[extruderIndex], "mm");
   }
@@ -253,11 +254,11 @@ void extruderReDraw(uint8_t extruderIndex, float extrusion, bool skipHeader)
 }
 
 // Show/draw percentage in a standard menu
-void percentageReDraw(uint8_t itemIndex, bool skipHeader)
+void percentageReDraw(uint8_t itemIndex, bool drawHeader)
 {
   char tempstr[20];
 
-  if (!skipHeader)
+  if (drawHeader)
   {
     displayExhibitHeader((char *)textSelect((itemIndex == 0) ? LABEL_PERCENTAGE_SPEED : LABEL_PERCENTAGE_FLOW), "%");
   }
@@ -270,7 +271,7 @@ static void redrawMenu(MENU_TYPE menuType)
 { // used only when exiting from numpad
   if (menuType == MENU_TYPE_ICON)
     menuDrawPage(getCurMenuItems());
-  else if(menuType == MENU_TYPE_LISTVIEW)
+  else if (menuType == MENU_TYPE_LISTVIEW)
     listViewRefreshMenu();
 }
 
@@ -304,8 +305,16 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
   return NOBEYOND(minValue, val, maxValue);
 }
 
-NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
+// set the hotend to the minimum extrusion temperature if user selected "OK"
+void heatToMinTemp(void)
 {
+  heatSetTargetTemp(heatGetToolIndex(), infoSettings.min_ext_temp, FROM_GUI);
+}
+
+NOZZLE_STATUS warmupNozzle(void)
+{
+  uint8_t toolIndex = heatGetToolIndex();
+
   if (heatGetTargetTemp(toolIndex) < infoSettings.min_ext_temp)
   {
     if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
@@ -317,16 +326,14 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
       sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
-
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL);
-      showDialog(DIALOG_TYPE_ERROR, callback, NULL, NULL);
+      popupDialog(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL, heatToMinTemp, NULL, NULL);
 
       return COLD;
     }
     // temperature falling down to a target lower than the minimal extrusion temperature
     else
     { // contiunue with current temp but no lower than the minimum extruder temperature
-      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)));
+      heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)), FROM_GUI);
       return SETTLING;
     }
   }
@@ -342,8 +349,7 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
       strcat(tempMsg, "\n");
       strcat(tempMsg, tempStr);
 
-      setDialogText(LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_BACKGROUND);
-      showDialog(DIALOG_TYPE_ERROR, NULL, NULL, NULL);
+      popupReminder(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg);
       return COLD;
     }
   }
@@ -351,7 +357,9 @@ NOZZLE_STATUS warmupNozzle(uint8_t toolIndex, void (* callback)(void))
   return HEATED;
 }
 
-// user choice for disabling all heaters/hotends
+#ifdef SAFETY_ALERT
+
+// User choice for disabling all heaters/hotends
 void cooldownTemperature(void)
 {
   if (!isPrinting())
@@ -360,10 +368,11 @@ void cooldownTemperature(void)
     {
       if (heatGetTargetTemp(i) > 0)
       {
-        setDialogText(LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL);
-        showDialog(DIALOG_TYPE_QUESTION, heatCoolDown, NULL, NULL);
+        popupDialog(DIALOG_TYPE_QUESTION, LABEL_WARNING, LABEL_HEATERS_ON, LABEL_CONFIRM, LABEL_CANCEL, heatCoolDown, NULL, NULL);
         break;
       }
     }
   }
 }
+
+#endif  // SAFETY_ALERT

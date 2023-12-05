@@ -2,7 +2,7 @@
 #include "includes.h"
 
 #define ENDSTOP_CMD     "M211 S%d\n"
-#define ENDSTOP_CMD_RRF "M564 S%d H%d\n" // for RRF
+#define ENDSTOP_CMD_RRF "M564 S%d H%d\n"  // for RRF
 #define MOVE_Z_CMD      "G1 Z%.2f F%d\n"
 
 #define PROBE_UPDATE_DELAY 200  // 1 seconds is 1000
@@ -102,10 +102,9 @@ void probeHeightAbsolute(void)
 }
 
 // Change probe height
-void probeHeightMove(float unit, int8_t direction)
+void probeHeightMove(float unit)
 {
-  storeCmd(MOVE_Z_CMD, unit * direction,
-           infoSettings.level_feedrate[FEEDRATE_Z]);
+  storeCmd(MOVE_Z_CMD, unit, infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
 // Query for new coordinates

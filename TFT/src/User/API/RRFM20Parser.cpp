@@ -35,7 +35,7 @@
     ],
     "next": 0
   }
- */
+*/
 const TCHAR *skip_number(const TCHAR *value)
 {
   if (isdigit(*value))

@@ -5,13 +5,16 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
+// start print originated and/or hosted (handled) by remote host
+// (e.g. print started from remote onboard media or hosted by remote host) and open Printing menu
+void startPrintingFromRemoteHost(const char * filename);
 
-void menuBeforePrinting(void);
+// start print originated and/or hosted (handled) by TFT
+// (e.g. print started from onboard media or hosted by TFT) and open Printing menu
+void startPrinting(void);
+
+void printSummaryPopup(void);
 void menuPrinting(void);
-void printInfoPopup(void);
-
-extern bool hasFilamentData;
 
 #ifdef __cplusplus
 }

@@ -21,7 +21,7 @@ static void (*action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemP
  * @brief Set and innitialize list menu
  *
  * @param title Title of menu
- * @param items Preset list of items. Set to NUll if not used.
+ * @param items Preset list of items. Set to NULL if not used.
  * @param maxItems Maximum number of items possilbe in current list.
  * @param curPage Display this page index.
  * @param handleBackPress Set true to handle back button automatically.
@@ -41,10 +41,7 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
   action_prepareItem = prepareItem_action;
   curPageIndexSource = curPage;
 
-  if (curPage != NULL)
-    curPageIndex = *curPage;
-  else
-    curPageIndex = 0;
+  curPageIndex = (curPage == NULL) ? 0 : *curPage;
 
   listViewSetCurPage(curPageIndex);
   menuDrawListPage(&listItems);
@@ -54,7 +51,7 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
 void listViewSetTitle(LABEL title)
 {
   listItems.title = title;
-  menuDrawTitle(labelGetAddress(&listItems.title));
+  menuSetTitle(&listItems.title);
 }
 
 // Get current displayed pade index
@@ -86,15 +83,15 @@ void listViewSetCurPage(uint8_t curPage)
       }
       else
       {
-        listItems.items[i].icon = CHARICON_BACKGROUND;
+        listItems.items[i].icon = CHARICON_NULL;
       }
     }
   }
 
   // only 1 page or in first page, hide up button
-  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_BACKGROUND : CHARICON_PAGEUP;
+  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_NULL : CHARICON_PAGEUP;
   // only 1 page or in last page, hide down button
-  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_BACKGROUND : CHARICON_PAGEDOWN;
+  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_NULL : CHARICON_PAGEDOWN;
 
   listItems.items[7].icon = CHARICON_BACK;
 
@@ -166,7 +163,7 @@ void listViewRefreshItem(uint16_t item)
   }
   else
   {
-    listItems.items[cur_i].icon = CHARICON_BACKGROUND;
+    listItems.items[cur_i].icon = CHARICON_NULL;
   }
   menuDrawListItem(&listItems.items[cur_i], cur_i);
 }
@@ -183,7 +180,7 @@ uint16_t listViewGetSelectedIndex(void)
 
     if (cur_index < maxItemCount)
     {
-      if (totalItems[cur_index].icon != CHARICON_BACKGROUND)
+      if (totalItems[cur_index].icon != CHARICON_NULL)
         return cur_index;
       else
         return KEY_IDLE;

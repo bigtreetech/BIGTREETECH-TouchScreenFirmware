@@ -1,11 +1,11 @@
 #include "Fan.h"
 #include "includes.h"
 
-const ITEM itemFan[2] = {
-  // icon                        label
-  {ICON_FAN,                     LABEL_FAN},
-  {ICON_FAN_HALF_SPEED,          LABEL_HALF},
-};
+typedef struct
+{
+  uint8_t cur;
+  uint8_t set;
+} LASTFAN;
 
 static uint8_t fan_index = 0;
 
@@ -18,28 +18,14 @@ void menuFan(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_FAN ,                    LABEL_FAN},
       {ICON_FAN_FULL_SPEED,          LABEL_FULL},
       {ICON_STOP,                    LABEL_STOP},
       {ICON_BACK,                    LABEL_BACK},
     }
-  };
-
-  MENUITEMS laserItems = {
-  // title
-  LABEL_LASER,
-  // icon                       label
-   {{ICON_DEC,                  LABEL_DEC},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_BACKGROUND,           LABEL_BACKGROUND},
-    {ICON_INC,                  LABEL_INC},
-    {ICON_LASER_2 ,             LABEL_LASER_2},
-    {ICON_LASER_100,            LABEL_LASER_100},
-    {ICON_LASER_OFF,            LABEL_LASER_OFF},
-    {ICON_BACK,                 LABEL_BACK},}
   };
 
   KEY_VALUES key_num = KEY_IDLE;
@@ -49,24 +35,18 @@ void menuFan(void)
   lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
   if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
-    fanItems.items[KEY_ICON_4] = itemFan[0];
+  {
+    fanItems.items[KEY_ICON_4].icon = ICON_FAN;
+    fanItems.items[KEY_ICON_4].label.index = LABEL_FAN;
+  }
   else
-    fanItems.items[KEY_ICON_4] = itemFan[1];
+  {
+    fanItems.items[KEY_ICON_4].icon = ICON_FAN_HALF_SPEED;
+    fanItems.items[KEY_ICON_4].label.index = LABEL_HALF;
+  }
 
-<<<<<<< HEAD
-  if (infoSettings.laser_mode != 1)
-  {
-    menuDrawPage(&fanItems);
-  }
-  else
-  {
-    menuDrawPage(&laserItems);
-  }
-  fanSpeedReDraw(false);
-=======
   menuDrawPage(&fanItems);
-  fanReDraw(fan_index, false);
->>>>>>> btt_main/master
+  fanReDraw(fan_index, true);
 
   while (MENU_IS(menuFan))
   {
@@ -104,7 +84,8 @@ void menuFan(void)
             fanSetSpeed(fan_index, val);
         }
 
-        fanReDraw(fan_index, false);
+        lastFan.set = val;  // avoid unnecessary redraw of values
+        fanReDraw(fan_index, true);
         break;
       }
 
@@ -120,46 +101,29 @@ void menuFan(void)
         break;
 
       case KEY_ICON_4:
-<<<<<<< HEAD
-        if (infoSettings.laser_mode == 1)
-        {
-          fanSetSpeedPercent(curIndex, 2);
-        }
-        else
-        {
-          if (infoSettings.fan_count > 1)
-          {
-            curIndex = (curIndex + 1) % infoSettings.fan_count;
-            fanSpeedReDraw(false);
-          }
-          else
-          {
-            fanSetSpeed(curIndex, (infoSettings.fan_max[curIndex] + 1) / 2);
-          }
-=======
         if ((infoSettings.fan_count + infoSettings.ctrl_fan_en) > 1)
         {
           do
           {
-            fan_index = (fan_index + 1) % MAX_FAN_COUNT;
+            fan_index = (fan_index + 1) % MAX_FAN_COUNT;  // switch between fans
           } while (!fanIsValid(fan_index));
 
-          fanReDraw(fan_index, false);
+          fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));  // set initial desired speed to actual speed
+          lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};  // avoid unnecessary redraw of values
+          fanReDraw(fan_index, true);
         }
         else
         {
-          fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // 50%
-          fanReDraw(fan_index, true);
->>>>>>> btt_main/master
+          fanSetSpeed(fan_index, infoSettings.fan_max[fan_index] / 2);  // fan at half speed
         }
         break;
 
       case KEY_ICON_5:
-        fanSetSpeed(fan_index, infoSettings.fan_max[fan_index]);
+        fanSetSpeed(fan_index, infoSettings.fan_max[fan_index]);  // fan at maximum speed
         break;
 
       case KEY_ICON_6:
-        fanSetSpeed(fan_index, 0);
+        fanSetSpeed(fan_index, 0);  // stop fan
         break;
 
       case KEY_ICON_7:
@@ -171,10 +135,10 @@ void menuFan(void)
     }
 
     if ((lastFan.cur != fanGetCurSpeed(fan_index)) || (lastFan.set != fanGetSetSpeed(fan_index)))
-    {
+    { // refresh displayed values if actual or desired speed has changed
       lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};
 
-      fanReDraw(fan_index, true);
+      fanReDraw(fan_index, false);
     }
 
     loopProcess();

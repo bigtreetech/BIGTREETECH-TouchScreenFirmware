@@ -4,7 +4,6 @@
 void loadNotificationItems(void)
 {
   LISTITEMS * itemlist = getCurListItems();
-  uint8_t n = 0;
 
   for (uint8_t i = 0; i < MAX_MSG_COUNT; i++)
   {
@@ -28,32 +27,34 @@ void loadNotificationItems(void)
       }
 
       itemlist->items[i].titlelabel.address = tempNotify->text;
-      n++;
     }
     else
     {
-      itemlist->items[i].icon = CHARICON_BACKGROUND;
+      itemlist->items[i].icon = CHARICON_NULL;
     }
 
     menuDrawListItem(&itemlist->items[i], i);
   }
-  //return n;
 }
 
 void menuNotification(void)
 {
   LISTITEMS notificationItems = {
     LABEL_NOTIFICATIONS,
-    // icon                 ItemType    Item Title        item value text(only for custom value)
+    // icon            item type   item title     item value text(only for custom value)
     {
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_DYNAMIC,    LABEL_BACKGROUND},
-      {CHARICON_BLANK,      LIST_LABEL, LABEL_CLEAR,      LABEL_BACKGROUND},
-      {CHARICON_BACKGROUND, LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
-      {CHARICON_BACK,       LIST_LABEL, LABEL_BACKGROUND, LABEL_BACKGROUND},
+      {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
+      {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
+      {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
+      {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
+      {CHARICON_NULL,  LIST_LABEL, LABEL_DYNAMIC, LABEL_NULL},
+      {CHARICON_BLANK, LIST_LABEL, LABEL_CLEAR,   LABEL_NULL},
+      #ifdef DEBUG_MONITORING
+        {CHARICON_BLANK, LIST_LABEL, LABEL_INFO,    LABEL_NULL},
+      #else
+        {CHARICON_NULL,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
+      #endif
+      {CHARICON_BACK,  LIST_LABEL, LABEL_NULL,    LABEL_NULL},
     }
   };
 
@@ -78,6 +79,12 @@ void menuNotification(void)
         clearNotification();
         loadNotificationItems();
         break;
+
+      #ifdef DEBUG_MONITORING
+        case KEY_ICON_6:
+          OPEN_MENU(menuMonitoring);
+          break;
+      #endif
 
       case KEY_ICON_7:
         CLOSE_MENU();

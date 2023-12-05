@@ -18,10 +18,14 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
   LABEL_FWRECOVER,
   LABEL_RETRACT_AUTO,
   LABEL_HOTEND_OFFSET,
+  LABEL_HOTEND_PID,
+  LABEL_BED_PID,
   LABEL_ABL,
   LABEL_STEALTH_CHOP,
+  LABEL_INPUT_SHAPING,
   LABEL_DELTA_CONFIGURATION,
   LABEL_DELTA_TOWER_ANGLE,
+  LABEL_DELTA_DIAGONAL_ROD,
   LABEL_DELTA_ENDSTOP,
   LABEL_PROBE_OFFSET,
   LABEL_LIN_ADVANCE,
@@ -32,10 +36,10 @@ const LABEL parameterTypes[PARAMETERS_COUNT] = {
 };
 
 const LISTITEM eepromItems[P_SETTINGS_COUNT] = {
-// icon            ItemType    Item Title              item value text(only for custom value)
-  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_BACKGROUND},
-  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_BACKGROUND},
-  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_BACKGROUND},
+// icon            item type   item title              item value text(only for custom value)
+  {CHARICON_SAVE,  LIST_LABEL, LABEL_SETTINGS_SAVE,    LABEL_NULL},
+  {CHARICON_UNDO,  LIST_LABEL, LABEL_SETTINGS_RESTORE, LABEL_NULL},
+  {CHARICON_RESET, LIST_LABEL, LABEL_SETTINGS_RESET,   LABEL_NULL},
 };
 
 // Load elements for selected parameter
@@ -73,6 +77,14 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           parameterMainItem->titlelabel = junctionDeviationDisplayID[elementIndex];
           break;
 
+        case P_HOTEND_PID:
+          parameterMainItem->titlelabel.address = hotendPidDisplayID[elementIndex];
+          break;
+
+        case P_BED_PID:
+          parameterMainItem->titlelabel.address = bedPidDisplayID[elementIndex];
+          break;
+
         case P_FWRETRACT:
           parameterMainItem->titlelabel = retractDisplayID[elementIndex];
           break;
@@ -82,7 +94,7 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           break;
 
         case P_AUTO_RETRACT:
-          parameterMainItem->titlelabel = autoRetractDisplayID[elementIndex];
+          parameterMainItem->titlelabel.address = autoRetractDisplayID[elementIndex];
           break;
 
         case P_ABL_STATE:
@@ -93,12 +105,20 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
           parameterMainItem->titlelabel.address = stealthChopDisplayID[elementIndex];
           break;
 
+        case P_INPUT_SHAPING:
+          parameterMainItem->titlelabel.address = inputShapingDisplayID[elementIndex];
+          break;
+
         case P_DELTA_CONFIGURATION:
           parameterMainItem->titlelabel.address = deltaConfigurationDisplayID[elementIndex];
           break;
 
         case P_DELTA_TOWER_ANGLE:
           parameterMainItem->titlelabel.address = deltaTowerAngleDisplayID[elementIndex];
+          break;
+
+        case P_DELTA_DIAGONAL_ROD:
+          parameterMainItem->titlelabel.address = deltaDiagonalRodDisplayID[elementIndex];
           break;
 
         case P_DELTA_ENDSTOP:
@@ -125,12 +145,12 @@ void loadElements(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPos)
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
   {
-    parameterMainItem->icon = CHARICON_BACKGROUND;
+    parameterMainItem->icon = CHARICON_NULL;
   }
 }
 
@@ -157,9 +177,8 @@ void menuShowParameter(void)
     {
       case KEY_BACK:
         if (memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
-        {
           parametersChanged = true;
-        }
+
         CLOSE_MENU();
         break;
 
@@ -170,7 +189,7 @@ void menuShowParameter(void)
         if (elementIndex < getElementCount(curParameter))
         {
           VAL_TYPE val_type = getParameterValType(curParameter, elementIndex);
-          bool negative_val = val_type % 2;  // accept negative values only for val_types with negetive
+          bool negative_val = GET_BIT(val_type, 0);  // accept negative values only for val_types with negative
           float val = getParameter(curParameter, elementIndex);
 
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
@@ -194,6 +213,7 @@ void menuShowParameter(void)
       if (oldval[i] != newVal)
       {
         oldval[i] = newVal;
+
         listViewRefreshItem(i);
       }
     }
@@ -220,7 +240,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     }
     else
     {
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
     }
   }
   else
@@ -228,7 +248,7 @@ void loadParameters(LISTITEM * parameterMainItem, uint16_t index, uint8_t itemPo
     if (infoMachineSettings.EEPROM == 1 && index < totalItems)
       *parameterMainItem = eepromItems[(index - enabledParameterCount)];
     else
-      parameterMainItem->icon = CHARICON_BACKGROUND;
+      parameterMainItem->icon = CHARICON_NULL;
   }
 }
 
@@ -251,15 +271,16 @@ void menuParameterSettings(void)
       case KEY_BACK:
         if (parametersChanged && infoMachineSettings.EEPROM == 1)
         {
-          setDialogText(title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-          showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
           parametersChanged = false;
+
+          popupDialog(DIALOG_TYPE_QUESTION, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
         }
         else
         {
           psCurPage = 0;
-          CLOSE_MENU();
         }
+
+        CLOSE_MENU();
         break;
 
       default:
@@ -267,9 +288,11 @@ void menuParameterSettings(void)
         if (curIndex < enabledParameterCount)
         {
           curParameter = getEnabledParameter(curIndex);
+
           if (curParameter < PARAMETERS_COUNT)
           {
             mustStoreCmd("M503 S0\n");
+
             OPEN_MENU(menuShowParameter);
           }
           break;
@@ -278,23 +301,22 @@ void menuParameterSettings(void)
         else if (infoMachineSettings.EEPROM == 1 && curIndex < totalItems)
         {
           uint8_t curIndex_e = (curIndex - enabledParameterCount);
+
           if (curIndex_e == P_SAVE_SETTINGS)
           {
-            setDialogText(title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, saveEepromSettings, NULL, NULL);
             parametersChanged = false;
+
+            popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             break;
           }
           else if (curIndex_e == P_RESET_SETTINGS)
           {
-            setDialogText(LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, resetEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetEepromSettings, NULL, NULL);
             break;
           }
           else if (curIndex_e == P_RESTORE_SETTINGS)
           {
-            setDialogText(LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, restoreEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL, restoreEepromSettings, NULL, NULL);
             break;
           }
         }

@@ -2,11 +2,11 @@
 #include "includes.h"
 
 static uint8_t tool_index = NOZZLE0;
-static uint8_t degreeSteps_index = 1;
+static uint8_t last_nozzle_index = NOZZLE0;
 
 void heatSetCurrentIndex(uint8_t index)
 {
-  tool_index = index;
+  tool_index = (index == LAST_NOZZLE) ? last_nozzle_index : index;
 }
 
 void menuHeat(void)
@@ -18,8 +18,8 @@ void menuHeat(void)
     // icon                          label
     {
       {ICON_DEC,                     LABEL_DEC},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_INC,                     LABEL_INC},
       {ICON_NOZZLE,                  LABEL_NOZZLE},
       {ICON_5_DEGREE,                LABEL_5_DEGREE},
@@ -28,11 +28,13 @@ void menuHeat(void)
     }
   };
 
+  static uint8_t degreeSteps_index = 1;
   KEY_VALUES key_num = KEY_IDLE;
   int16_t lastCurrent = heatGetCurrentTemp(tool_index);
   int16_t lastTarget = heatGetTargetTemp(tool_index);
   int16_t actCurrent;
   int16_t actTarget;
+  int16_t setTarget;
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
@@ -40,35 +42,31 @@ void menuHeat(void)
   heatItems.items[KEY_ICON_5] = itemDegreeSteps[degreeSteps_index];
 
   menuDrawPage(&heatItems);
-  temperatureReDraw(tool_index, NULL, false);
+  temperatureReDraw(tool_index, NULL, true);
 
   while (MENU_IS(menuHeat))
   {
     actCurrent = heatGetCurrentTemp(tool_index);
-    actTarget = heatGetTargetTemp(tool_index);
+    actTarget = setTarget = heatGetTargetTemp(tool_index);
     key_num = menuKeyGetValue();
 
     switch (key_num)
     {
       case KEY_ICON_0:
       case KEY_DECREASE:
-        heatSetTargetTemp(tool_index, actTarget - degreeSteps[degreeSteps_index]);
+        setTarget -= degreeSteps[degreeSteps_index];
         break;
 
       case KEY_INFOBOX:
       {
-        int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
-
-        if (val != actTarget)
-          heatSetTargetTemp(tool_index, val);
-
-        temperatureReDraw(tool_index, NULL, false);
+        setTarget = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
+        temperatureReDraw(tool_index, NULL, true);
         break;
       }
 
       case KEY_ICON_3:
       case KEY_INCREASE:
-        heatSetTargetTemp(tool_index, actTarget + degreeSteps[degreeSteps_index]);
+        setTarget += degreeSteps[degreeSteps_index];
         break;
 
       case KEY_ICON_4:
@@ -80,7 +78,7 @@ void menuHeat(void)
         heatItems.items[key_num] = itemTool[tool_index];
 
         menuDrawItem(&heatItems.items[key_num], key_num);
-        temperatureReDraw(tool_index, NULL, false);
+        temperatureReDraw(tool_index, NULL, true);
         break;
 
       case KEY_ICON_5:
@@ -91,7 +89,7 @@ void menuHeat(void)
         break;
 
       case KEY_ICON_6:
-        heatSetTargetTemp(tool_index, 0);
+        heatSetTargetTemp(tool_index, 0, FROM_GUI);
         break;
 
       case KEY_ICON_7:
@@ -102,15 +100,24 @@ void menuHeat(void)
         break;
     }
 
+    if (setTarget != lastTarget)
+    {
+      heatSetTargetTemp(tool_index, setTarget, FROM_GUI);
+      actTarget = setTarget;
+    }
+
     if (lastCurrent != actCurrent || lastTarget != actTarget)
     {
       lastCurrent = actCurrent;
       lastTarget = actTarget;
-      temperatureReDraw(tool_index, NULL, true);
+      temperatureReDraw(tool_index, NULL, false);
     }
 
     loopProcess();
   }
+
+  if (WITHIN(tool_index, NOZZLE0, NOZZLE5))
+    last_nozzle_index = tool_index;  // save last used hotend index
 
   // Set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)

@@ -36,11 +36,11 @@
 #define SMALLICON_HEIGHT 55
 
 // Status Screen menu
-#define SSICON_COUNT             4
-#define SSICON_WIDTH             ICON_WIDTH
-#define SSICON_HEIGHT            ICON_HEIGHT
-#define SSICON_NAME_Y0           5
-#define SSICON_VAL_Y0            62
+#define SS_ICON_COUNT            4
+#define SS_ICON_WIDTH            ICON_WIDTH
+#define SS_ICON_HEIGHT           ICON_HEIGHT
+#define SS_ICON_NAME_Y0          5
+#define SS_ICON_VAL_Y0           62
 #define STATUS_MSG_ICON_XOFFSET  5
 #define STATUS_MSG_ICON_YOFFSET  3
 #define STATUS_MSG_TITLE_XOFFSET 5
@@ -49,8 +49,8 @@
 #define STATUS_MSG_BODY_BOTTOM   6
 #define STATUS_GANTRY_YOFFSET    4
 
-#define NAME_LARGE_FONT          FONT_SIZE_NORMAL
-#define VAL_LARGE_FONT           FONT_SIZE_NORMAL
+#define SS_ICON_TITLE_FONT_SIZE FONT_SIZE_NORMAL
+#define SS_ICON_VAL_FONT_SIZE   FONT_SIZE_NORMAL
 
 // Preheat menu
 #define PREHEAT_TITLE_Y 0
@@ -58,18 +58,18 @@
 #define PREHEAT_BED_Y   65
 
 // Printing menu
-#define PICON_LG_WIDTH  154
-#define PICON_SM_WIDTH  121
-#define PICON_HEIGHT    48
-#define PICON_SPACE_X   ((LCD_WIDTH - PICON_LG_WIDTH * 2 - PICON_SM_WIDTH - SPACE_X) / 2)
-#define PICON_SPACE_Y   ((ICON_HEIGHT + SPACE_Y - PICON_HEIGHT * 2) / 4)
-#define PICON_START_Y   (TITLE_END_Y + 5)
-#define PICON_TITLE_X   52
-#define PICON_TITLE_Y   0
-#define PICON_VAL_X     PICON_TITLE_X
-#define PICON_VAL_Y     (PICON_HEIGHT / 2)
-#define PICON_VAL_LG_EX 150
-#define PICON_VAL_SM_EX 117
+#define PS_ICON_LG_WIDTH  154
+#define PS_ICON_SM_WIDTH  121
+#define PS_ICON_HEIGHT    48
+#define PS_ICON_SPACE_X   ((LCD_WIDTH - PS_ICON_LG_WIDTH * 2 - PS_ICON_SM_WIDTH - SPACE_X) / 2)
+#define PS_ICON_SPACE_Y   ((ICON_HEIGHT + SPACE_Y - PS_ICON_HEIGHT * 2) / 4)
+#define PS_ICON_START_Y   (TITLE_END_Y + 5)
+#define PS_ICON_TITLE_X   52
+#define PS_ICON_TITLE_Y   0
+#define PS_ICON_VAL_X     PS_ICON_TITLE_X
+#define PS_ICON_VAL_Y     (PS_ICON_HEIGHT / 2)
+#define PS_ICON_VAL_LG_EX 150
+#define PS_ICON_VAL_SM_EX 117
 
 // Popup menu
 #define POPUP_RECT_WINDOW         {SPACE_X * 2, TITLE_END_Y, LCD_WIDTH - SPACE_X * 2, LCD_HEIGHT - SPACE_Y / 2}

@@ -10,15 +10,14 @@ typedef enum
   UNLOAD_STARTED,
 } CMD_TYPE;
 
-// 1 title, ITEM_PER_PAGE items (icon + label)
 const MENUITEMS loadUnloadItems = {
   // title
   LABEL_LOAD_UNLOAD,
   // icon                          label
   {
     {ICON_UNLOAD,                  LABEL_UNLOAD},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_NULL,                    LABEL_NULL},
+    {ICON_NULL,                    LABEL_NULL},
     {ICON_LOAD,                    LABEL_LOAD},
     {ICON_NOZZLE,                  LABEL_NOZZLE},
     {ICON_HEAT,                    LABEL_HEAT},
@@ -30,26 +29,20 @@ const MENUITEMS loadUnloadItems = {
 static uint8_t tool_index = NOZZLE0;
 CMD_TYPE lastCmd = NONE;
 
-// set the hotend to the minimum extrusion temperature if user selected "OK"
-void loadMinTemp_OK(void)
-{
-  heatSetTargetTemp(tool_index, infoSettings.min_ext_temp);
-}
-
 void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
   if (eAxisBackup.handled == false)
   {
-    loopProcessToCondition(&isNotEmptyCmdQueue);  // wait for the communication to be clean
+    TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
-    eAxisBackup.coordinate = ((infoFile.source >= BOARD_SD) ? coordinateGetAxisActual(E_AXIS) : coordinateGetAxisTarget(E_AXIS));
+    eAxisBackup.coordinate = coordinateGetAxis(E_AXIS);
     eAxisBackup.handled = true;
   }
 
   menuDrawPage(&loadUnloadItems);
-  temperatureReDraw(tool_index, NULL, false);
+  temperatureReDraw(tool_index, NULL, true);
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
@@ -58,7 +51,7 @@ void menuLoadUnload(void)
     key_num = menuKeyGetValue();
 
     // show reminder for process running if any button is pressed
-    if (infoHost.wait == true && key_num != KEY_IDLE)
+    if (isPendingCmd() && key_num != KEY_IDLE)
     {
       if ((lastCmd == UNLOAD_REQUESTED) || (lastCmd == UNLOAD_STARTED))
       { // unloading in progress
@@ -77,61 +70,67 @@ void menuLoadUnload(void)
     {
       switch (key_num)
       {
-        case KEY_ICON_0:  // Unload
+        case KEY_ICON_0:  // unload
           lastCmd = UNLOAD_REQUESTED;
           break;
 
-        case KEY_ICON_3:  // Load
+        case KEY_ICON_3:  // load
           lastCmd = LOAD_REQUESTED;
           break;
 
         case KEY_INFOBOX:  // edit nozzle temp
         {
+          lastCmd = NONE;
+
           int16_t actTarget = heatGetTargetTemp(tool_index);
           int16_t val = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
 
           if (val != actTarget)
-            heatSetTargetTemp(tool_index, val);
+            heatSetTargetTemp(tool_index, val, FROM_GUI);
 
-          temperatureReDraw(tool_index, NULL, false);
-          lastCmd = NONE;
+          temperatureReDraw(tool_index, NULL, true);
           break;
         }
 
         case KEY_ICON_4:  // nozzle select
+          lastCmd = NONE;
           tool_index = (tool_index + 1) % infoSettings.hotend_count;
 
-          temperatureReDraw(tool_index, NULL, false);
-          lastCmd = NONE;
+          temperatureReDraw(tool_index, NULL, true);
           break;
 
         case KEY_ICON_5:  // heat menu
-          heatSetCurrentIndex(currentTool);  // preselect current nozzle for "Heat" menu
-          OPEN_MENU(menuHeat);
-          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
           lastCmd = NONE;
+          eAxisBackup.handled = false;  // exiting from Extrude menu (user might never come back by "Back" long press in Heat menu)
+
+          heatSetCurrentIndex(tool_index);  // preselect current nozzle for "Heat" menu
+
+          OPEN_MENU(menuHeat);
           break;
 
         case KEY_ICON_6:  // cool down nozzle
-          heatCoolDown();
           lastCmd = NONE;
+
+          heatCoolDown();
           break;
 
         case KEY_ICON_7:  // back
-          cooldownTemperature();
           lastCmd = NONE;
-          CLOSE_MENU();
           eAxisBackup.handled = false;  // the user exited from menu (not any other process/popup/etc)
+
+          COOLDOWN_TEMPERATURE();
+
+          CLOSE_MENU();
           break;
 
         default:
-          temperatureReDraw(tool_index, NULL, true);
+          temperatureReDraw(tool_index, NULL, false);
           break;
       }
 
-      if ((lastCmd == UNLOAD_REQUESTED) || (lastCmd == LOAD_REQUESTED))
+      if ((lastCmd == UNLOAD_REQUESTED || lastCmd == LOAD_REQUESTED) && heatSetTool(tool_index))
       {
-        switch (warmupNozzle(tool_index, loadMinTemp_OK))
+        switch (warmupNozzle())
         {
           case COLD:
             lastCmd = NONE;
@@ -143,34 +142,25 @@ void menuLoadUnload(void)
           case HEATED:
             if (lastCmd == UNLOAD_REQUESTED)
             { // unload
-              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-              {
-                mustStoreCmd("M702 T%d\n", tool_index);
-              }
-              else
-              {
-                mustStoreCmd("T%d\n", tool_index);
-                request_M98("sys/unload.g");
-              }
               lastCmd = UNLOAD_STARTED;
+
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+                mustStoreCmd("M702\n");
+              else
+                request_M98("sys/unload.g");
             }
             else  // LOAD_REQUESTED
             { // load
-              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-              {
-                mustStoreCmd("M701 T%d\n", tool_index);
-              }
-              else
-              {
-                mustStoreCmd("T%d\n", tool_index);
-                request_M98("sys/load.g");
-              }
               lastCmd = LOAD_STARTED;
+
+              if (infoMachineSettings.firmwareType != FW_REPRAPFW)
+                mustStoreCmd("M701\n");
+              else
+                request_M98("sys/load.g");
             }
+
             if (isPrinting() && isPaused())
-            {
               setExtrusionDuringPause(true);
-            }
          }
       }
     }
@@ -179,11 +169,9 @@ void menuLoadUnload(void)
   }
 
   if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
-  {
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
-  }
 
-  // Set slow update time if not waiting for target temperature
+  // set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

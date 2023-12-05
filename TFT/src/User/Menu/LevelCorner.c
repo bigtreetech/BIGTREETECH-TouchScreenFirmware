@@ -3,28 +3,65 @@
 
 const uint8_t valIconIndex[LEVELING_POINT_COUNT] = {4, 5, 1, 0, 3};
 
-// Buffer current Z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
+// buffer current Z value measured in Level Corner = {position 1, position 2, position 3, position 4, probe accuracy(M48)}
 float levelCornerPosition[LEVELING_POINT_COUNT] = {0};
 
-// Draw values under icons
-static inline void refreshValue(MENUITEMS * levelItems, uint8_t index)
+int16_t origLevelEdge = -1;
+
+uint8_t getLevelEdgeMin(void)
+{
+  // min edge limit for the probe with probe offset set in parseACK.c
+  int16_t maxXedge = getParameter(P_PROBE_OFFSET, AXIS_INDEX_X) + getParameter(P_HOME_OFFSET, AXIS_INDEX_X);
+  int16_t maxYedge = getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y) + getParameter(P_HOME_OFFSET, AXIS_INDEX_Y);
+
+  maxXedge = ABS(maxXedge);
+  maxYedge = ABS(maxYedge);
+
+  return MAX(maxXedge, maxYedge) + 1;
+}
+
+uint8_t getLevelEdgeDefault(void)
+{
+  return MAX(origLevelEdge, getLevelEdgeMin());
+}
+
+void setLevelEdgeMin(void)
+{
+  infoSettings.level_edge = getLevelEdgeMin();
+}
+
+// draw values under icons
+void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
   sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
-// Show M48 on icon
-static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
+void checkRefreshValue(MENUITEMS * levelItems)
+{
+  LEVELING_POINT levelingPoint = levelingGetProbedPoint();
+
+  if (levelingPoint != LEVEL_NO_POINT)
+  {
+    levelCornerPosition[levelingPoint] = levelingGetProbedZ();
+    refreshValue(levelItems, levelingPoint);
+
+    levelingResetProbedPoint();  // reset to check for new updates
+  }
+}
+
+// show M48 on icon
+void drawProbeAccuracyIcon(MENUITEMS * levelItems)
 {
   uint8_t index = 4;
   GUI_POINT loc;
   LIVE_INFO lvIcon;
-  const ITEM * menuitem = &levelItems->items[valIconIndex[index]];
   char * str = "M48";
 
   loc.x = 5;
   loc.y = ICON_HEIGHT - 5;
 
+  lvIcon.iconIndex = levelItems->items[valIconIndex[index]].icon;
   lvIcon.enabled[0] = true;
   lvIcon.enabled[1] = true;
   lvIcon.enabled[2] = false;
@@ -46,7 +83,7 @@ static inline void drawProbeAccuracyIcon(MENUITEMS * levelItems)
   lvIcon.lines[0].text = (uint8_t *)str;
   lvIcon.lines[1].text = (uint8_t *)str;
 
-  showLiveInfo(valIconIndex[index], &lvIcon, menuitem);
+  showLiveInfo(valIconIndex[index], &lvIcon, false);
 }
 
 void menuLevelCorner(void)
@@ -69,27 +106,17 @@ void menuLevelCorner(void)
 
   KEY_VALUES key_num = KEY_IDLE;
   char iconText[LEVELING_POINT_COUNT][15];
-  LEVELING_POINT levelingPoint;
 
-  if (coordinateIsKnown() == false)
-    probeHeightHomeAndRaise();  // home and raise nozzle
-
-  // Check min edge limit for the probe with probe offset set in parseACK.c
-  uint8_t edge_min = MAX(ABS(getParameter((int16_t)P_PROBE_OFFSET, AXIS_INDEX_X)),
-                         ABS((int16_t)getParameter(P_PROBE_OFFSET, AXIS_INDEX_Y))) + 1;
-
-  if (infoSettings.level_edge < edge_min)
+  if (origLevelEdge < 0)  // initialize leveling edge value to be used for leveling corner if not yet initialized (-1)
   {
-    infoSettings.level_edge = ((LEVELING_EDGE_DISTANCE >= edge_min) ? LEVELING_EDGE_DISTANCE : edge_min);
+    origLevelEdge = infoSettings.level_edge;          // save leveling edge value to restore after leveling corner completion
+    infoSettings.level_edge = getLevelEdgeDefault();  // set leveling edge value for leveling corner
   }
 
   for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
   {
     levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
-  }
 
-  for (uint8_t i = 0; i < LEVELING_POINT_COUNT; i++)
-  {
     refreshValue(&levelCornerItems, i);
   }
 
@@ -111,15 +138,20 @@ void menuLevelCorner(void)
 
       case KEY_ICON_2:
       {
-        infoSettings.level_edge = editIntValue(edge_min, LEVELING_EDGE_DISTANCE_MAX,
-                                               LEVELING_EDGE_DISTANCE_DEFAULT, infoSettings.level_edge);
+        uint8_t curLevelEdge = infoSettings.level_edge;
+
+        infoSettings.level_edge = editIntValue(LEVELING_EDGE_DISTANCE_MIN, LEVELING_EDGE_DISTANCE_MAX,
+                                               getLevelEdgeDefault(), infoSettings.level_edge);
+
+        if (curLevelEdge >= getLevelEdgeMin() && infoSettings.level_edge < getLevelEdgeMin())  // if new value is below min limit
+          popupDialog(DIALOG_TYPE_QUESTION, LABEL_WARNING, LABEL_LEVEL_CORNER_INFO, LABEL_CONFIRM, LABEL_CANCEL, setLevelEdgeMin, NULL, NULL);
+
         break;
       }
 
       case KEY_ICON_3:
         mustStoreCmd("M48\n");
-        mustStoreCmd(ENABLE_STEPPER_CMD);
-        mustStoreCmd(DISABLE_STEPPER_CMD);
+
         drawProbeAccuracyIcon(&levelCornerItems);
         break;
 
@@ -132,13 +164,19 @@ void menuLevelCorner(void)
         break;
 
       case KEY_ICON_6:
-        levelingProbePoint(LEVEL_BOTTOM_LEFT);
-        levelingProbePoint(LEVEL_BOTTOM_RIGHT);
-        levelingProbePoint(LEVEL_TOP_RIGHT);
-        levelingProbePoint(LEVEL_TOP_LEFT);
+        for (int i = LEVEL_BOTTOM_LEFT; i <= LEVEL_TOP_LEFT; i++)
+        {
+          levelingProbePoint(i);
+
+          // following loop needed to guarantee the value for each point beeing probed is updated at least one time on the menu
+          TASK_LOOP_WHILE(isNotEmptyCmdQueue(), checkRefreshValue(&levelCornerItems));
+        }
+
         break;
 
       case KEY_ICON_7:
+        infoSettings.level_edge = origLevelEdge;  // restore original leveling edge value
+        origLevelEdge = -1;
         CLOSE_MENU();
         break;
 
@@ -146,16 +184,8 @@ void menuLevelCorner(void)
         break;
     }
 
-    levelingPoint = levelingGetProbedPoint();
-
-    if (levelingPoint != LEVEL_NO_POINT)
-    {
-      levelCornerPosition[levelingPoint] = levelingGetProbedZ();
-      refreshValue(&levelCornerItems, levelingPoint);
-
-      levelingResetProbedPoint();  // reset to check for new updates
-    }
-
     loopProcess();
+
+    checkRefreshValue(&levelCornerItems);
   }
 }

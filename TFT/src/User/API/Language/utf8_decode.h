@@ -22,11 +22,11 @@ typedef struct {
 typedef struct
 {
   // encode info
-  uint8_t  bytes;        // Number of bytes occupied by one character
-  uint32_t codePoint;    // Actual encoding index of characters
+  uint8_t  bytes;        // number of bytes occupied by one character
+  uint32_t codePoint;    // actual encoding index of characters
   // font info
-  uint8_t  pixelHeight;  // The pixel height of a character display
-  uint8_t  pixelWidth;   // The pixel width of a character display
+  uint8_t  pixelHeight;  // the pixel height of a character display
+  uint8_t  pixelWidth;   // the pixel width of a character display
   uint32_t bitMapAddr;   // the address of font bitmap in w25qxx
 } CHAR_INFO;
 
@@ -38,11 +38,10 @@ uint16_t getUTF8Length(const uint8_t *const str);
 uint16_t GUI_StrPixelWidth_str(const uint8_t *str);
 uint16_t GUI_StrPixelWidth_label(int16_t index);
 
-#define GUI_StrPixelWidth(X) _Generic(((X+0)),                             \
-                              const uint8_t*: GUI_StrPixelWidth_str,       \
-                              const uint8_t* const: GUI_StrPixelWidth_str, \
-                              uint8_t*: GUI_StrPixelWidth_str,             \
-                              default: GUI_StrPixelWidth_label)(X)
+#define GUI_StrPixelWidth(X) _Generic(((X+0)), const uint8_t* const: GUI_StrPixelWidth_str, \
+                                                     const uint8_t*: GUI_StrPixelWidth_str, \
+                                                           uint8_t*: GUI_StrPixelWidth_str, \
+                                                            default: GUI_StrPixelWidth_label)(X)
 #ifdef __cplusplus
 }
 #endif

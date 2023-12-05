@@ -27,7 +27,7 @@ float homeOffsetGetValue(void);
 float homeOffsetResetValue(void);
 
 // Update Z offset value
-float homeOffsetUpdateValue(float unit, int8_t direction);
+float homeOffsetUpdateValue(float unit);
 
 #ifdef __cplusplus
 }

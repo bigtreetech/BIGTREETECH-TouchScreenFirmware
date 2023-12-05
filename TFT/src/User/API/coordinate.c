@@ -58,15 +58,13 @@ float coordinateGetAxisTarget(AXIS axis)
 
 void coordinateSetAxisTarget(AXIS axis, float position)
 {
-  bool r = (axis == E_AXIS) ? (relative_e || relative_mode) : relative_mode;
-
-  if (r == false)
+  if ((axis == E_AXIS) ? relative_e : relative_mode)
   {
-    targetPosition.axis[axis] = position;
+    targetPosition.axis[axis] += position;
   }
   else
   {
-    targetPosition.axis[axis] += position;
+    targetPosition.axis[axis] = position;
   }
 }
 
@@ -105,6 +103,11 @@ void coordinateSetAxisActual(AXIS axis, float position)
   curPosition.axis[axis] = position;
 }
 
+void coordinateGetAllActual(COORDINATE *tmp)
+{
+  memcpy(tmp, &curPosition, sizeof(curPosition));
+}
+
 void coordinateQuerySetWait(bool wait)
 {
   coordinateQueryWait = wait;
@@ -116,22 +119,42 @@ void coordinateQuerySetWait(bool wait)
  *                 for auto query if available in marlin.
  */
 void coordinateQuery(uint8_t seconds)
-{
-  if (infoHost.connected == true && infoHost.wait == false && !coordinateQueryWait)
+{ // following conditions ordered by importance
+  if (!coordinateQueryWait && infoHost.tx_slots != 0 && infoHost.connected)
   {
-    if (infoMachineSettings.autoReportPos == 1 && seconds > 0)  // auto report only accepts delay in seconds
+    if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled
     {
-      if (seconds != curQuerySeconds)  // send M154 only if not already sent
-        coordinateQueryWait = storeCmd("M154 S%d\n", seconds);
-    }
-    else  // send M114 if delay is less than 1 second or auto report is disabled
-    {
-      // turn off auto report if it was turned on
-      char * strQueryOff = (infoMachineSettings.autoReportPos == 1 && curQuerySeconds > 0) ? "M154 S0\n" : "";
-      coordinateQueryWait = storeCmd("%sM114\n", strQueryOff);
-    }
+      if (seconds == 0)  // if manual querying is requested (if query interval is 0)
+        coordinateQueryWait = storeCmd("M114\n");
 
-    if (coordinateQueryWait)
-      curQuerySeconds = seconds;
+      if (seconds != curQuerySeconds)  // if query interval is changed
+      {
+        if (storeCmd("M154 S%d\n", seconds))  // turn on or off (if query interval is 0) auto report
+          curQuerySeconds = seconds;          // if gcode will be sent, avoid to enable auto report again on next
+      }                                       // function call if already enabled for that query interval
+    }
+    else  // if auto report is disabled
+    {
+      coordinateQueryWait = storeCmd("M114\n");
+    }
   }
+}
+
+void coordinateQueryTurnOff(void)
+{
+  coordinateQueryWait = false;
+
+  if (infoMachineSettings.autoReportPos == 1)  // if auto report is enabled, turn it off
+  {
+    storeCmd("M154 S0\n");
+    curQuerySeconds = 0;
+  }
+}
+
+float coordinateGetAxis(AXIS axis)
+{
+  if (infoFile.source >= FS_ONBOARD_MEDIA)
+    return coordinateGetAxisActual(axis);
+  else
+    return coordinateGetAxisTarget(axis);
 }

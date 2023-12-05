@@ -9,12 +9,12 @@ void menuBedLevelingLayer2(void)
     // icon                          label
     {
       {ICON_LEVELING,                LABEL_START},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
@@ -37,6 +37,7 @@ void menuBedLevelingLayer2(void)
 
     case BL_MBL:
       bedLevelingLayer2Items.title.index = LABEL_MBL_SETTINGS;
+      break;
 
     default:
       break;
@@ -80,8 +81,7 @@ void menuBedLevelingLayer2(void)
           #if DELTA_PROBE_TYPE != 2  // if not removable probe
             ablStart();
           #else  // if removable probe
-            setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, ablStart, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL, ablStart, NULL, NULL);
           #endif
         }
         else  // if MBL

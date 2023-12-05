@@ -8,19 +8,20 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"
-#include "coordinate.h"
+#include "coordinate.h"  // for TOTAL_AXIS
+#include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
-// Config version support
-// change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
-// this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20211213
+// Config version support (format YYYYMMDD)
+// change if new elements/keywords are added/removed/changed in the Configuration.h
+// this number should match CONFIG_VERSION in Configuration.h
+#define CONFIG_SUPPPORT 20230929
 
-#define FONT_FLASH_SIGN       20210522  // (YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20211213  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20211111  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20211122  // (YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_FLASH_SIGN     20230929  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20230821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20230821  // (YYYYMMDD) change if any icon(s) is added or removed
 
-#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE + FLASH_SIGN_ADDR)
+#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
                                sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(PREHEAT_STORE) + \
                                sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
@@ -30,7 +31,8 @@ extern "C" {
 #define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6
 #define MAX_HOTEND_COUNT      6
-#define MAX_HEATER_COUNT      (2 + MAX_HOTEND_COUNT)  // chamber + bed + hotend
+#define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2)  // hotends + bed + chamber
+#define MAX_HEATER_PID_COUNT  (MAX_HOTEND_COUNT + 1)  // hotends + bed
 #define MAX_COOLING_FAN_COUNT 6
 #define MAX_CRTL_FAN_COUNT    2
 #define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
@@ -51,8 +53,9 @@ extern "C" {
 #define DISABLED  0
 #define ENABLED   1
 #define AUTO      2
-#define HIGH      1
 #define LOW       0
+#define HIGH      1
+#define UNDEFINED 3
 
 enum
 {
@@ -68,6 +71,7 @@ enum
 typedef enum
 {
   INDEX_LISTENING_MODE = 0,
+  INDEX_ADVANCED_OK,
   INDEX_EMULATED_M600,
   INDEX_EMULATED_M109_M190,
   INDEX_EVENT_LED,
@@ -164,22 +168,13 @@ typedef enum
 
 typedef struct
 {
-<<<<<<< HEAD
-  uint32_t baudrate;
-  uint8_t  language;
-  uint8_t  mode;
-  uint8_t  unified_menu;
-  uint8_t  cnc_mode;
-  uint8_t  laser_mode;
-  float    touchplate_height;
-  uint8_t  touchplate_on;
-  uint8_t  rotate_ui;
-=======
+  uint16_t CRC_checksum;
+
   // General Settings
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
-  uint8_t  general_settings;  // emulated M600 / emulated M109-M190 / file comment parsing toggles (Bit Values)
->>>>>>> btt_main/master
-
+  uint8_t  tx_slots;
+  uint8_t  general_settings;  // listening mode / advanced ok / emulated M600 /
+                              // emulated M109-M190 / event led / file comment parsing toggles (Bit Values)
   // UI Settings
   uint8_t  rotated_ui;
   uint8_t  language;
@@ -204,6 +199,7 @@ typedef struct
   uint8_t  persistent_info;
   uint8_t  terminal_ack;
   uint8_t  notification_m117;
+  uint8_t  prog_source;
   uint8_t  prog_disp_type;
   uint8_t  layer_disp_type;
 
@@ -223,7 +219,7 @@ typedef struct
   uint8_t  ext_count;
   uint8_t  fan_count;
   uint8_t  ctrl_fan_en;
-  uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
+  uint16_t max_temp[MAX_HEATER_COUNT];  // hotends + bed + chamber
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
   int16_t  machine_size_min[AXIS_NUM];  // X, Y, Z
@@ -276,6 +272,8 @@ typedef struct
   uint8_t  lcd_idle_brightness;
   uint8_t  lcd_idle_time;
   uint8_t  lcd_lock_on_idle;
+  uint8_t  led_color[LED_COLOR_COMPONENT_COUNT];
+  uint8_t  led_always_on;
   uint8_t  knob_led_color;
   uint8_t  knob_led_idle;
   uint8_t  neopixel_pixels;
@@ -350,6 +348,7 @@ typedef struct
   uint8_t emergencyParser;
   uint8_t promptSupport;
   uint8_t onboardSD;
+  uint8_t multiVolume;
   uint8_t autoReportSDStatus;
   uint8_t longFilename;
   uint8_t babyStepping;
@@ -372,9 +371,18 @@ extern const uint16_t default_preheat_ext[];
 extern const uint16_t default_preheat_bed[];
 extern const uint8_t default_custom_enabled[];
 
+// Init settings data with default values
 void initSettings(void);
+
+// Save settings to Flash only if CRC does not match
+void saveSettings(void);
+
+// Init machine settings data with default values
 void initMachineSettings(void);
+
+// Setup machine settings
 void setupMachine(FW_TYPE fwType);
+
 float flashUsedPercentage(void);
 void checkflashSign(void);
 bool getFlashSignStatus(int index);

@@ -11,29 +11,40 @@ extern "C" {
 
 #define FOLDER_NUM   255
 #define FILE_NUM     255
-#define MAX_PATH_LEN 1024
+#define MAX_PATH_LEN 420
+
+#define SD_ROOT_DIR  "SD:"
+#define USB_ROOT_DIR "U:"
 
 typedef enum
 {
-  TFT_SD,
-  TFT_UDISK,
+  FS_TFT_SD,
+  FS_TFT_USB,
+  FS_ONBOARD_MEDIA,
+  FS_ONBOARD_MEDIA_REMOTE,
+  FS_REMOTE_HOST
+} FILE_SOURCE;
+
+typedef enum
+{
   BOARD_SD,
-  BOARD_SD_REMOTE,
-  REMOTE_HOST
-} FS_SOURCE;
+  BOARD_USB
+} ONBOARD_SOURCE;
 
 typedef struct
 {
-  TCHAR title[MAX_PATH_LEN];   // selected file path
-  TCHAR * folder[FOLDER_NUM];  // folder list buffer
-  TCHAR * file[FILE_NUM];      // file list buffer
-  uint16_t folderCount;        // current folder count
-  uint16_t fileCount;          // current gcode file count
-  uint16_t curPage;            // current display page index (5 files per page)
-  uint16_t fileIndex;          // selected file index
-  FS_SOURCE source;            // source of the file. TFT SD or ONBOARD SD.
-  TCHAR * longFile[FILE_NUM];  // long file name buffer from ONBOARD SD only
-  bool modelIcon;              // 1: model preview icon exist, 0: not exist
+  FILE_SOURCE source;              // selected file source. TFT media or onboard media
+  ONBOARD_SOURCE onboardSource;    // SD or USB for onboard media only
+  TCHAR path[MAX_PATH_LEN];        // selected file path
+  TCHAR * longFolder[FOLDER_NUM];  // long folder name buffer from onboard media only
+  TCHAR * folder[FOLDER_NUM];      // folder list buffer
+  TCHAR * longFile[FILE_NUM];      // long file name buffer from onboard media only
+  TCHAR * file[FILE_NUM];          // file list buffer
+  uint16_t folderCount;            // current folder count
+  uint16_t fileCount;              // current gcode file count
+  uint16_t fileIndex;              // selected file index
+  uint16_t curPage;                // current display page index (5 files per page)
+  bool modelIcon;                  // 1: model preview icon exist, 0: not exist
 } MYFILE;
 
 extern MYFILE infoFile;
@@ -41,20 +52,34 @@ extern MYFILE infoFile;
 void setPrintModelIcon(bool exist);
 bool isPrintModelIcon(void);
 
-bool mountFS(void);
-bool scanPrintFiles(void);
+TCHAR * getFS(void);                                                       // get FS's ID of current source
+bool mountFS(void);                                                        // mount FS of current source
+bool scanPrintFiles(void);                                                 // scan files in current source and create a file list
+void clearInfoFile(void);                                                  // clear and free memory for file list
 
-TCHAR * getCurFileSource(void);
-void clearInfoFile(void);
-void resetInfoFile(void);
-bool EnterDir(char * nextdir);
-void ExitDir(void);
-bool IsRootDir(void);
-char * isSupportedFile(char * filename);
-char * hideFileExtension(uint8_t index);
-char * restoreFileExtension(uint8_t index);
+void resetInfoFile(void);                                                  // clear file list and path
+bool enterFolder(const char * path);                                       // check and open folder
+void exitFolder(void);                                                     // close folder
+bool isRootFolder(void);                                                   // check if current folder is root
+bool addFile(bool isFile, const char * shortName, const char * longName);  // add a file name or folder name to file list
 
-bool isVolumeExist(uint8_t src);
+// called in Print.c
+const char * getFoldername(uint8_t index);  // return the long folder name if exists, otherwise the short one
+const char * getFilename(uint8_t index);    // return the long file name if exists, otherwise the short one
+
+// hide the extension of the file name and return a pointer to that file name (the long one if exists, otherwise the short one).
+// The hide of the extension is not temporary so do not forget to restore it afterwards!
+const char * hideFilenameExtension(uint8_t index);
+
+// restore the extension of the file name and return a pointer to that file name (the long one if exists, otherwise the short one)
+const char * restoreFilenameExtension(uint8_t index);
+
+// called in PrintingMenu.c
+const char * getPrintFilename(void);          // get print filename according to print originator (remote or local to TFT)
+bool getPrintTitle(char * buf, uint8_t len);  // get print title according to print originator (remote or local to TFT)
+
+// called in menu.c
+bool volumeExists(uint8_t src);
 void loopVolumeSource(void);
 
 #ifdef __cplusplus

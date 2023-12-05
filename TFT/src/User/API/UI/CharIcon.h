@@ -13,15 +13,14 @@ typedef enum
   #define X_CHAR(NAME) CHARICON_##NAME ,
   #include "CharIcon.inc"
   #undef  X_CHAR
-  //keep below items always at the end
+  // keep below items always at the end
   CHARICON_NUM,
-  CHARICON_BACKGROUND
+  CHARICON_NULL
 } CHAR_ICON;
 
 extern const uint16_t charIconColor[CHARICON_NUM];
 
 uint8_t * IconCharSelect(uint8_t sel);
-char * IconChar(uint8_t sel);
 void drawCharIcon(const GUI_RECT * rect, ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color);
 
 #ifdef __cplusplus

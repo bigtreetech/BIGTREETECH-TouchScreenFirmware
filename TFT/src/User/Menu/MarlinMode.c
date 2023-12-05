@@ -5,10 +5,10 @@
 
 #ifdef HAS_EMULATOR
 
-typedef void (*CB_INIT)(CIRCULAR_QUEUE *);
-typedef void (*CB_DEINIT)(void);
-typedef bool (*CB_DATA)(uint8_t *);
-typedef void (*CB_PARSE)(uint8_t);
+typedef void (* CB_INIT)(CIRCULAR_QUEUE *);
+typedef void (* CB_DEINIT)(void);
+typedef bool (* CB_DATA)(uint8_t *);
+typedef void (* CB_PARSE)(uint8_t);
 
 void menuMarlinMode(void)
 {
@@ -71,24 +71,22 @@ void menuMarlinMode(void)
       LCD_Enc_SendPulse(Touch_Enc_ReadPos());
     #endif
 
-    Mode_CheckSwitching();
-
     if (infoSettings.serial_always_on == ENABLED)
     {
       loopBackEnd();
     }
-    #if defined(SCREEN_SHOT_TO_SD) || defined(LCD_LED_PWM_CHANNEL)  // loopScreenShot() and LCD_CheckDimming() are invoked by loopBackEnd(),
-      else                                                          // so we guarantee they are invoked only once
-      {
-        #ifdef SCREEN_SHOT_TO_SD
-          loopScreenShot();
-        #endif
+    else  // Mode_CheckSwitching(), loopScreenShot() and LCD_CheckDimming() are invoked by loopBackEnd(),
+    {     // so we guarantee they are invoked only once
+      Mode_CheckSwitching();
 
-        #ifdef LCD_LED_PWM_CHANNEL
-          LCD_CheckDimming();
-        #endif
-      }
-    #endif
+      #ifdef SCREEN_SHOT_TO_SD
+        loopScreenShot();
+      #endif
+
+      #ifdef LCD_LED_PWM_CHANNEL
+        LCD_CheckDimming();
+      #endif
+    }
   }
 
   marlinDeInit();

@@ -81,7 +81,7 @@ extern "C" {
   #error "FIL_RUNOUT cannot be less than 0 or greater than 3"
 #endif
 
-#ifdef LED_COLOR_PIN
+#ifdef KNOB_LED_COLOR_PIN
   #ifdef KNOB_LED_COLOR
     #if KNOB_LED_COLOR < 0
       #error "KNOB_LED_COLOR cannot be less than 1"
@@ -331,30 +331,6 @@ extern "C" {
   #endif
 #else
   #define PROGRESS_BAR_COLOR 0
-#endif
-
-#ifdef LIVE_TEXT_BG_COLOR_PRINTING
-  #if LIVE_TEXT_BG_COLOR_PRINTING > 2
-    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be greater than 2"
-  #endif
-
-  #if LIVE_TEXT_BG_COLOR_PRINTING < 0
-    #error "LIVE_TEXT_BG_COLOR_PRINTING cannot be less than 0"
-  #endif
-#else
-  #define LIVE_TEXT_BG_COLOR_PRINTING 0
-#endif
-
-#ifdef LIVE_TEXT_BG_COLOR_STATUS
-  #if LIVE_TEXT_BG_COLOR_STATUS > 6
-    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be greater than 6"
-  #endif
-
-  #if LIVE_TEXT_BG_COLOR_STATUS < 0
-    #error "LIVE_TEXT_BG_COLOR_STATUS cannot be less than 0"
-  #endif
-#else
-  #define LIVE_TEXT_BG_COLOR_STATUS 0
 #endif
 
 #if THUMBNAIL_PARSER == PARSER_BASE64PNG

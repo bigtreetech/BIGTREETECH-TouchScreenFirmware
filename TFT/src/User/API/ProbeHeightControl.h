@@ -38,7 +38,7 @@ void probeHeightRelative(void);
 void probeHeightAbsolute(void);
 
 // Change probe height
-void probeHeightMove(float unit, int8_t direction);
+void probeHeightMove(float unit);
 
 // Query for new coordinates
 void probeHeightQueryCoord(void);

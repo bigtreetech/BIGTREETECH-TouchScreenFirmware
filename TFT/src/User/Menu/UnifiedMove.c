@@ -25,7 +25,7 @@ void menuUnifiedMove(void)
       #else
         {ICON_DELTA_CALIBRATE,         LABEL_CALIBRATION},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
@@ -72,15 +72,19 @@ void menuUnifiedMove(void)
           #if DELTA_PROBE_TYPE != 2  // if not removable probe
             deltaCalibration();
           #else  // if removable probe
-            setDialogText(LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL);
-            showDialog(DIALOG_TYPE_ALERT, deltaCalibration, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL, deltaCalibration, NULL, NULL);
           #endif
         #endif
         break;
 
       case KEY_ICON_6:
         if (infoMachineSettings.leveling != BL_DISABLED)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+            storeCmd("M420\n");  // refresh ABL_STATE
+
           OPEN_MENU(menuBedLeveling);
+        }
         break;
 
       case KEY_ICON_7:

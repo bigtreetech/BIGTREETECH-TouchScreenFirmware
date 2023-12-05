@@ -19,6 +19,7 @@
  *    "fanPercent": [ 0, 100, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
  *    "fanRPM": [ -1, -1, -1 ],
  *    "homed": [ 0, 0, 0 ],
+ *    "fraction_printed": 0,
  *    "msgBox.mode": -1
  *  }
  *
@@ -77,7 +78,7 @@ void ParseACKJsonParser::endDocument()
     _setDialogTitleStr((uint8_t *)(m291_title == NULL ? M291 : m291_title));
     _setDialogMsgStr((uint8_t *)m291_msg);
     _setDialogOkTextLabel(LABEL_CONFIRM);
-    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_BACKGROUND);
+    _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_NULL);
     expire_time = m291_timeo > 0 ? OS_GetTimeMs() + m291_timeo : 0;
     showDialog(m291_mode > 2 ? DIALOG_TYPE_QUESTION : DIALOG_TYPE_INFO, m291_confirm,
         m291_mode > 2 ? m291_cancel : NULL, m291_loop);
@@ -122,11 +123,11 @@ void ParseACKJsonParser::value(const char *value)
     case active:
       if (index == 0)
       {
-        heatSyncTargetTemp(BED, strtod((char *)value, NULL) + 0.5f);
+        heatSetTargetTemp(BED, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
       }
       else if (index <= INVALID_HEATER)
       {
-        heatSyncTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
+        heatSetTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
       }
       break;
     case standby:
@@ -136,11 +137,11 @@ void ParseACKJsonParser::value(const char *value)
       {
         if (index == 0)
         {
-          heatSetTargetTemp(BED, 0);
+          heatSetTargetTemp(BED, 0, FROM_HOST);
         }
         else if (index <= INVALID_HEATER)
         {
-          heatSetTargetTemp(index - 1, 0);
+          heatSetTargetTemp(index - 1, 0, FROM_HOST);
         }
       }
       break;
@@ -151,7 +152,7 @@ void ParseACKJsonParser::value(const char *value)
       speedSetCurPercent(0, strtod((char *)value, NULL));
       break;
     case efactor:
-      if (index == heatGetCurrentTool())
+      if (index == heatGetToolIndex())
       {
         speedSetCurPercent(1, strtod((char *)value, NULL));
       }
@@ -164,12 +165,18 @@ void ParseACKJsonParser::value(const char *value)
     case probe:
       break;
     case fan_percent:
-      if (index != 0 && index <= infoSettings.fan_count) // index 0 is an alias for default tool fan
+      if (index != 0 && index <= infoSettings.fan_count)  // index 0 is an alias for default tool fan
       {
         fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
       }
       break;
     case fanRPM:
+      break;
+    case fraction_printed:
+      if (getPrintProgressSource() < PROG_RRF)
+        setPrintProgressSource(PROG_RRF);
+      if (getPrintProgressSource() == PROG_RRF)
+        setPrintProgressPercentage((value[0] - '0') * 100 + (value[2] - '0') * 10 + (value[3] - '0'));
       break;
     case mbox_seq:
       seq = strtod((char *)value, NULL);
@@ -188,23 +195,23 @@ void ParseACKJsonParser::value(const char *value)
       strcpy(m291_title, value);
       break;
     case mbox_timeo:
-      m291_timeo = strtod((char *)value, NULL) * 1000;
+      m291_timeo = SEC_TO_MS(strtod((char *)value, NULL));
       break;
     case resp:
-      if (strstr(value, (char *)"Steps/"))       //parse M92
+      if (strstr(value, (char *)"Steps/"))  // parse M92
       {
         if ((value = strstr(value, (char *)"X: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_X,  atoi(value + 3));
         if ((value = strstr(value, (char *)"Y: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Y,  atoi(value + 3));
         if ((value = strstr(value, (char *)"Z: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_Z,  atoi(value + 3));
         if ((value = strstr(value, (char *)"E: ")) != NULL ) setParameter(P_STEPS_PER_MM, AXIS_INDEX_E0, atoi(value + 3));
       }
-      else if ((string_start = strstr(value, (char *)"RepRapFirmware")) != NULL)    // parse M115
+      else if ((string_start = strstr(value, (char *)"RepRapFirmware")) != NULL)  // parse M115
       {
         setupMachine(FW_REPRAPFW);
         string_end = strstr(string_start, "ELECTRONICS");
         infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
       }
-      else if ((string_start = strstr(value, (char *)"access point")) != NULL)    //parse M552
+      else if ((string_start = strstr(value, (char *)"access point")) != NULL)  // parse M552
       {
         string_end = strstr(string_start, ",");
         string_start += 13;
@@ -217,27 +224,27 @@ void ParseACKJsonParser::value(const char *value)
           infoSetIPAddress((uint8_t *)string_start,  string_end-string_start);
         }
       }
-      else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)       // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}
+      else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)  // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}
       {
         string_end = strstr(string_start, (char *)"/");
-        setPrintProgress(atoi(string_start + 14), atoi(string_end + 1));
+        setPrintProgressData(atoi(string_start + 14), atoi(string_end + 1));
       }
       else if (strstr(value, (char *)"Auto tuning heater") && strstr(value, (char *)"completed"))
       {
-        pidUpdateStatus(true);
+        pidUpdateStatus(PID_SUCCESS);
       }
       else if (strstr(value, (char *)"Error: M303") || (strstr(value, (char *)"Auto tune of heater") && strstr(value, (char *)"failed")))
       {
-        pidUpdateStatus(false);
+        pidUpdateStatus(PID_FAILED);
       }
 
       break;
     case result:
-        if (starting_print)
-        {
-          printRemoteStart(value);
-          starting_print = false;
-        }
+      if (starting_print)
+      {
+        startPrintingFromRemoteHost(value);  // start print and open Printing menu
+        starting_print = false;
+      }
       break;
     case none:
       break;

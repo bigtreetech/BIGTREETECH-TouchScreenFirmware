@@ -1,6 +1,11 @@
 #include "PersistentInfo.h"
 #include "includes.h"
 
+// global Info
+#define GLOBALICON_WIDTH    (BYTE_WIDTH * 2)
+#define GLOBALICON_HEIGHT   GLOBALICON_WIDTH
+#define GLOBALICON_INTERVAL 2
+
 // check current menu to avoid display info
 bool temperatureStatusValid(void)
 {
@@ -52,7 +57,7 @@ void loopTemperatureStatus(void)
     }
   }
 
-  if (update) menuReDrawCurTitle();
+  if (update) menuDrawTitle();
 }
 
 // draw temperature status on title bar
@@ -68,7 +73,7 @@ int16_t drawTemperatureStatus(void)
 
   if (infoSettings.hotend_count)
   {  // global hotend
-    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en )  // dual hotend
+    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en)  // dual hotend
     {
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
       tmpHeater[tmpIndex++] = NOZZLE0;

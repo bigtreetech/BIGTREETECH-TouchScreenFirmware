@@ -27,7 +27,7 @@ void rrfStatusSet(char status)
           case 'D':
           case 'A':
             setHostDialog(false);
-            setPrintResume(true);
+            setPrintResume(HOST_STATUS_RESUMING);
             break;
           case 'I':
             // RRFParseACK will take care of going to the print screen
@@ -44,7 +44,7 @@ void rrfStatusSet(char status)
           case 'R':
           case 'A':
           case 'D':
-            setPrintAbort(); // done is the same as abort
+            setPrintAbort();  // done is the same as abort
             break;
 
           case 'B':
@@ -57,7 +57,7 @@ void rrfStatusSet(char status)
       case 'D':
       case 'A':
         if (rrf_status == 'P')
-          setPrintPause(false, PAUSE_EXTERNAL);
+          setPrintPause(HOST_STATUS_PAUSING, PAUSE_EXTERNAL);
         break;
 
       case 'B':
@@ -116,11 +116,8 @@ inline void rrfStatusQueryNormal(void)
 }
 
 void rrfStatusQuery(void)
-{
-  if (!infoHost.connected)
-    return;
-
-  if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+{ // following conditions ordered by importance
+  if (infoMachineSettings.firmwareType == FW_REPRAPFW && infoHost.connected)
   {
     static uint32_t rrf_next_query_time = 0;
 

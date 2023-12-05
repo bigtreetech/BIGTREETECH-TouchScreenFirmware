@@ -20,13 +20,7 @@ void probeOffsetEnable(float shim)
   {
     levelingProbePoint(LEVEL_CENTER);  // probe center of bed
 
-    while (true)
-    {
-      loopProcess();
-
-      if (levelingGetProbedPoint() != LEVEL_NO_POINT)  // if probed Z is set, exit from loop and read probed Z
-        break;
-    }
+    TASK_LOOP_WHILE(levelingGetProbedPoint() == LEVEL_NO_POINT);  // if probed Z is set, exit from loop and read probed Z
 
     probedZ = levelingGetProbedZ();
     levelingResetProbedPoint();  // reset to check for new updates
@@ -80,42 +74,29 @@ float probeOffsetGetValue(void)
 // Reset Z offset value to default value
 float probeOffsetResetValue(void)
 {
-  if (z_offset_value == PROBE_Z_OFFSET_DEFAULT_VALUE)  // if already default value, nothing to do
-    return z_offset_value;
+  if (z_offset_value != PROBE_Z_OFFSET_DEFAULT_VALUE)  // if not default value
+  {
+    sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, PROBE_Z_OFFSET_DEFAULT_VALUE);  // set Z probe offset value
+    mustStoreCmd("G1 Z%.2f\n", PROBE_Z_OFFSET_DEFAULT_VALUE - z_offset_value);     // move nozzle
 
-  float unit = z_offset_value - PROBE_Z_OFFSET_DEFAULT_VALUE;
-
-  z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
-  sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
-  mustStoreCmd("G1 Z%.2f\n", -unit);                               // move nozzle
+    z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
+  }
 
   return z_offset_value;
 }
 
 // Update Z offset value
-float probeOffsetUpdateValue(float unit, int8_t direction)
+float probeOffsetUpdateValue(float unit)
 {
-  float diff;
+  unit = NOBEYOND(PROBE_Z_OFFSET_MIN_VALUE, z_offset_value + unit, PROBE_Z_OFFSET_MAX_VALUE) - z_offset_value;
 
-  if (direction < 0)
+  if (unit != 0)
   {
-    if (z_offset_value <= PROBE_Z_OFFSET_MIN_VALUE)
-      return z_offset_value;
+    z_offset_value += unit;
 
-    diff = z_offset_value - PROBE_Z_OFFSET_MIN_VALUE;
+    sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z probe offset value
+    mustStoreCmd("G1 Z%.2f\n", unit);                                // move nozzle
   }
-  else
-  {
-    if (z_offset_value >= PROBE_Z_OFFSET_MAX_VALUE)
-      return z_offset_value;
-
-    diff = PROBE_Z_OFFSET_MAX_VALUE - z_offset_value;
-  }
-
-  unit = ((diff > unit) ? unit : diff) * direction;
-  z_offset_value += unit;
-  sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, z_offset_value);  // set Z offset value
-  mustStoreCmd("G1 Z%.2f\n", unit);                                // move nozzle
 
   return z_offset_value;
 }

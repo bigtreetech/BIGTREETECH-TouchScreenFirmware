@@ -5,6 +5,16 @@
 extern "C" {
 #endif
 
+typedef enum
+{
+  HS_OFF = 0,
+  HS_ON,
+  HS_DISABLED
+} BLT_HS_MODE;
+
+// called by parseAck() to notify BLTouch mode status
+void setHSmode(BLT_HS_MODE hsMode);
+
 void menuBLTouch(void);
 
 #ifdef __cplusplus

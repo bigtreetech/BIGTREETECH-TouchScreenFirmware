@@ -25,8 +25,8 @@ void addToast(DIALOG_TYPE style, char * text)
   LCD_WAKE();
 
   TOAST t;
-  strncpy(t.text, text, TOAST_MSG_LENGTH);
-  t.text[TOAST_MSG_LENGTH - 1] = 0;  // ensure string ends with null terminator
+  strncpy_no_pad(t.text, text, TOAST_MSG_LENGTH);
+  t.style = style;
   t.isNew = true;
   toastlist[nextToastIndex] = t;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
@@ -101,7 +101,7 @@ void drawToast(bool redraw)
 
     // set new timer if notification is new
     if (!redraw)
-      nextToastTime = OS_GetTimeMs() + TOAST_DURATION;
+      nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);
 
     GUI_RestoreColorDefault();
   }
@@ -124,7 +124,7 @@ void loopToast(void)
       _toastRunning = false;
       GUI_ClearPrect(&toastIconRect);
       GUI_ClearPrect(&toastRect);
-      menuReDrawCurTitle();
+      menuDrawTitle();
     }
   }
 }
@@ -145,11 +145,9 @@ void addNotification(DIALOG_TYPE style, char *title, char *text, bool ShowDialog
   }
 
   // store message
-  msglist[nextMsgIndex].style  = style;
-  strncpy(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
-  msglist[nextMsgIndex].text[MAX_MSG_LENGTH - 1] = 0;  // ensure string ends with null terminator
-  strncpy(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
-  msglist[nextMsgIndex].title[MAX_MSG_TITLE_LENGTH - 1] = 0;  // ensure string ends with null terminator
+  msglist[nextMsgIndex].style = style;
+  strncpy_no_pad(msglist[nextMsgIndex].text, text, MAX_MSG_LENGTH);
+  strncpy_no_pad(msglist[nextMsgIndex].title, title, MAX_MSG_TITLE_LENGTH);
 
   if (ShowDialog && MENU_IS_NOT(menuNotification))
     popupReminder(style, (uint8_t *)title, (uint8_t *)msglist[nextMsgIndex].text);

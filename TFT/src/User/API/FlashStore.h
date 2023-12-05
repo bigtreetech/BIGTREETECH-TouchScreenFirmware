@@ -9,12 +9,12 @@ extern "C" {
 #include <stdint.h>
 #include "Settings.h"
 
-#define PARA_SIZE (128 * 3)  // Max size of settings buffer to read/write
+#define PARA_SIZE (128 * 3)  // max size of settings buffer to read/write
 
 extern int32_t TSC_Para[7];
 extern SETTINGS infoSettings;
 
-void readStoredPara(void);
+void readStoredPara(void);  // read settings parameter if exist, or reset settings parameter
 void storePara(void);
 bool readIsTSCExist(void);
 bool readIsNotStored(void);

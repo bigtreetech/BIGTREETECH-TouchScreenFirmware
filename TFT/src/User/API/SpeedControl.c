@@ -12,16 +12,6 @@ static uint8_t  needSetPercent = 0;
 static bool speedQueryWait = false;
 static uint32_t nextSpeedTime = 0;
 
-void speedSetCurPercent(uint8_t tool, uint16_t per)
-{
-  curPercent[tool] = per;
-}
-
-uint16_t speedGetCurPercent(uint8_t tool)
-{
-  return curPercent[tool];
-}
-
 void speedSetPercent(uint8_t tool, uint16_t per)
 {
   uint16_t value = NOBEYOND(SPEED_MIN, per, SPEED_MAX);
@@ -32,6 +22,16 @@ void speedSetPercent(uint8_t tool, uint16_t per)
 uint16_t speedGetSetPercent(uint8_t tool)
 {
   return setPercent[tool];
+}
+
+void speedSetCurPercent(uint8_t tool, uint16_t per)
+{
+  curPercent[tool] = per;
+}
+
+uint16_t speedGetCurPercent(uint8_t tool)
+{
+  return curPercent[tool];
 }
 
 void loopSpeed(void)
@@ -46,7 +46,7 @@ void loopSpeed(void)
 
     if (GET_BIT(needSetPercent, i) && (OS_GetTimeMs() > nextSpeedTime))
     {
-      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetCurrentTool()))
+      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetToolIndex()))
       {
         SET_BIT_OFF(needSetPercent, i);
       }
@@ -62,16 +62,14 @@ void speedQuerySetWait(bool wait)
 }
 
 void speedQuery(void)
-{
-  if (infoHost.connected && !infoHost.wait && !speedQueryWait && infoMachineSettings.firmwareType != FW_REPRAPFW)
+{ // following conditions ordered by importance
+  if (!speedQueryWait && infoHost.tx_slots != 0 && infoHost.connected && infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
+    speedQueryWait = storeCmd("M220\n");
+
     if (infoSettings.ext_count > 0)
     {
-      speedQueryWait = storeCmd("M220\nM221\n");
-    }
-    else
-    {
-      speedQueryWait = storeCmd("M220\n");
+      speedQueryWait |= storeCmd("M221\n");  // speedQueryWait set to "true" if at least one command will be sent
     }
   }
 }

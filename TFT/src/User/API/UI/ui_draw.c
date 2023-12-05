@@ -44,53 +44,90 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 
 #endif
 
-void lcd_frame_partial_display(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey, uint16_t w, uint16_t h, uint32_t addr)
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit)
 {
-  uint16_t x, y;
-  uint16_t color;
+  uint16_t wl = w - limit->x1;
+  uint16_t hl = h - limit->y1;
+  uint16_t x;
+  uint16_t y;
 
-  LCD_SetWindow(sx, sy, ex - 1, ey - 1);
+  LCD_SetWindow(sx + limit->x0, sy + limit->y0, sx + wl - 1, sy + hl - 1);
 
-  W25Qxx_SPI_CS_Set(0);
-  W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF0000) >> 16);
-  W25Qxx_SPI_Read_Write_Byte((addr & 0xFF00) >> 8);
-  W25Qxx_SPI_Read_Write_Byte(addr & 0xFF);
-
-  for (y = sy; y < ey; y++)
+  for (y = limit->y0; y < hl; y++)
   {
-    for (x = sx; x < sx + w; x++)
+    for (x = limit->x0; x < wl; x++)
+    {
+      LCD_WR_16BITS_DATA(buf[(y * w) + x]);
+    }
+  }
+}
+
+void getBMPsize(BMP_INFO *bmp)
+{
+  if (!bmp->address && bmp->index < ICON_NULL)
+    bmp->address = ICON_ADDR(bmp->index);
+
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address += COLOR_BYTE_SIZE;
+  W25Qxx_ReadBuffer((uint8_t*)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
+  bmp->address += COLOR_BYTE_SIZE;
+}
+
+void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_INFO *iconInfo)
+{
+  uint16_t frameLines = (endPoint.y - startPoint.y);  // total lines in frame
+  uint16_t blockLines = (endPoint.y >= iconInfo->height) ? (iconInfo->height - startPoint.y) : frameLines;  // total drawable lines
+
+  uint16_t frameWidth = (endPoint.x - startPoint.x);  // total frame width
+  uint16_t blockWidth = (endPoint.x >= iconInfo->width) ? (iconInfo->width - startPoint.x) : frameWidth;  // total drawable width
+  uint16_t bgWidth = frameWidth - blockWidth;  // total empty width to be filled with bg color
+  uint16_t color = 0;
+
+  // move address to block starting point
+  iconInfo->address += ((iconInfo->width * startPoint.y) + startPoint.x) * COLOR_BYTE_SIZE;
+
+  for (uint16_t y = 0; y < blockLines; y++)
+  {
+    W25Qxx_SPI_CS_Set(0);
+    W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
+    W25Qxx_SPI_Read_Write_Byte((iconInfo->address & 0xFF0000) >> 16);
+    W25Qxx_SPI_Read_Write_Byte((iconInfo->address & 0xFF00) >> 8);
+    W25Qxx_SPI_Read_Write_Byte(iconInfo->address & 0xFF);
+
+    for (uint8_t x = 0; x < blockWidth; x++)
     {
       color = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
-
-      if (x < ex)
-        LCD_WR_16BITS_DATA(color);
+      buf[(y * frameWidth) + x] = color;
     }
+
+    W25Qxx_SPI_CS_Set(1);
+
+    if (bgWidth)
+    {
+      for (uint8_t x = blockWidth; x < frameWidth; x++)
+      {
+        buf[(y * frameWidth) + x] = infoSettings.bg_color;
+      }
+    }
+
+    iconInfo->address += iconInfo->width * COLOR_BYTE_SIZE;
   }
 
-  W25Qxx_SPI_CS_Set(1);
-}
-
-uint32_t getBMPsize(uint8_t *w, uint8_t *h, uint32_t address)
-{
-  uint16_t len = sizeof(uint16_t);
-
-  W25Qxx_ReadBuffer(w, address, len);
-  address +=len;
-  W25Qxx_ReadBuffer(h, address, len);
-  address +=len;
-
-  return address;
+  // fill empty frame lines with background color
+  for (uint16_t i = (blockLines * frameWidth); i < (frameLines * frameWidth); i++)
+  {
+    buf[i] = infoSettings.bg_color;
+  }
 }
 
 // draw an image from specific address on flash (sx & sy cordinates for top left of image, w width, h height, addr flash byte address)
 void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address)
 {
-  uint16_t w, h;
+  BMP_INFO bmpInfo = {.index = ICON_NULL, .address = address};
 
-  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, address);
-  lcd_frame_display(sx, sy, w, h, address);
+  getBMPsize(&bmpInfo);
+  lcd_frame_display(sx, sy, bmpInfo.width, bmpInfo.height, bmpInfo.address);
 }
 
 void LOGO_ReadDisplay(void)
@@ -98,64 +135,30 @@ void LOGO_ReadDisplay(void)
   IMAGE_ReadDisplay(0, 0, LOGO_ADDR);
 }
 
-void ICON_PartialReadDisplay(uint16_t sx, uint16_t sy, int16_t width, int16_t height, uint8_t icon, uint16_t isx, uint16_t isy)
-{
-  uint16_t w, h;
-  uint32_t address;
-
-  address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
-
-  if (width < 0 || (isx + width) > w)
-    width = w - isx;
-
-  if (height < 0 || (isy + height) > h)
-    height = h - isy;
-
-  lcd_frame_partial_display(sx, sy, sx + width, sy + height, w, h, address + (isy * w * 2) + (isx * 2));
-}
-
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   IMAGE_ReadDisplay(sx, sy, ICON_ADDR(icon));
 }
 
-typedef struct
+// load the selected area of bmp icon from flash to buffer
+void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon)
 {
-  uint16_t sx;
-  uint16_t sy;
-  uint16_t w;
-  uint16_t h;
-  uint32_t address;
-  GUI_TEXT_MODE pre_mode;
-  uint16_t pre_bgColor;
-} TEXT_ON_ICON;
+  BMP_INFO iconInfo = {.index = icon, .address = 0};
+  GUI_POINT startPoint = {.x = x, .y = y};
+  GUI_POINT endPoint = {.x = x + w, .y = y + h};
 
-TEXT_ON_ICON backgroundIcon;
-
-void ICON_PrepareRead(uint16_t sx, uint16_t sy, uint8_t icon)
-{
-  backgroundIcon.pre_bgColor = GUI_GetBkColor();
-  backgroundIcon.pre_mode = GUI_GetTextMode();
-  backgroundIcon.address = getBMPsize((uint8_t *)&backgroundIcon.w, (uint8_t *)&backgroundIcon.h, ICON_ADDR(icon));
-  backgroundIcon.sx = sx;
-  backgroundIcon.sy = sy;
-
-  GUI_SetTextMode(GUI_TEXTMODE_ON_ICON);
+  getBMPsize(&iconInfo);
+  bmpToBuffer(buf, startPoint, endPoint, &iconInfo);
 }
 
-void ICON_PrepareReadEnd(void)
+uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int16_t y)
 {
-  GUI_SetBkColor(backgroundIcon.pre_bgColor);
-  GUI_SetTextMode(backgroundIcon.pre_mode);
-}
+  // Out of range calls
+  if (x > w || y > h)
+    return infoSettings.bg_color;
 
-uint16_t ICON_ReadPixel(int16_t x, int16_t y)
-{
-  // // Out of range calls
-  // if ((x > backgroundIcon.sx + backgroundIcon.w) || (y > backgroundIcon.sy + backgroundIcon.h))
-  //   return 0;
   uint16_t color;
-  uint32_t address = backgroundIcon.address + ((x - backgroundIcon.sx) + (y - backgroundIcon.sy) * backgroundIcon.w) * 2;
+  address += ((w * y) + x) * COLOR_BYTE_SIZE;
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
@@ -280,6 +283,9 @@ uint32_t modelFileSeekToThumbnailBase64PNG(FIL *fp, uint16_t width, uint16_t hei
   snprintf(buf, sizeof(buf), "; thumbnail begin %hux%hu ", width, height);
   dbg_print("Start search\n");
 
+  // Seek to the beginning of the file as the file pointer was moved during the RGB565 thumbnail search
+  f_lseek(fp, 0);
+
   if (!modelFileFind(fp, buf))
     return 0;
 
@@ -317,6 +323,36 @@ void on_draw_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint3
   LCD_WR_16BITS_DATA(color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]));
 }
 
+typedef struct
+{
+    uint16_t bnum;
+    uint32_t addr;
+    uint8_t buf[256];
+} W25Qxx_DECODE;
+
+void on_decode_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+{
+  W25Qxx_DECODE *session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
+
+  uint16_t color = color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]);
+
+  session->buf[session->bnum++] = (uint8_t) (color >> 8);
+  session->buf[session->bnum++] = (uint8_t) (color & 0xFF);
+
+  if (session->bnum == 256)
+  {
+    W25Qxx_WritePage(session->buf, session->addr, 256);
+    session->addr += 256;
+    session->bnum = 0;
+  }
+}
+
+void on_decode_png_pixel_done(pngle_t *pngle)
+{
+  W25Qxx_DECODE *session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
+  W25Qxx_WritePage(session->buf, session->addr, session->bnum);
+}
+
 /**
  * Thumbnail is a Base64 encoded PNG file.
  * Gcode format:
@@ -324,37 +360,37 @@ void on_draw_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint3
  * <BASE64 encoded PNG>
  * ; thumbnail end
  */
-bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char *gcode)
+bool model_Process_Base64PNG(FIL *gcodeFile, void *user_data, pngle_draw_callback_t draw_callback,
+                             pngle_done_callback_t done_callback)
 {
-  FIL gcodeFile;
   uint32_t base64_len;
   char buf[256];
 
-  dbg_printf("PNG Gcode: %s\n", gcode);
-
-  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    return false;
+  dbg_printf("Finding BASE64PNG\n");
 
   // Find thumbnail block with correct picture size
-  base64_len = modelFileSeekToThumbnailBase64PNG(&gcodeFile, ICON_WIDTH, ICON_HEIGHT);
+  base64_len = modelFileSeekToThumbnailBase64PNG(gcodeFile, ICON_WIDTH, ICON_HEIGHT);
 
   if (base64_len == 0)
   {
     dbg_printf("thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
-
     return false;
   }
 
   // Base64 decode on the fly while reading the PNG
-  b64_init(&gcode_thumb_b64, &gcodeFile, base64_len);
+  b64_init(&gcode_thumb_b64, gcodeFile, base64_len);
 
   pngle_t *pngle = pngle_new();
 
   if (!pngle)
     goto pngle_new_failed;
 
-  pngle_set_draw_callback(pngle, on_draw_png_pixel);
-  pngle_set_user_data(pngle, &pos);
+  pngle_set_draw_callback(pngle, draw_callback);
+
+  if (done_callback)
+    pngle_set_done_callback(pngle, done_callback);
+
+  pngle_set_user_data(pngle, user_data);
 
   int remain = 0;
   int len;
@@ -366,7 +402,6 @@ bool model_DirectDisplay_Base64PNG(GUI_POINT pos, char *gcode)
     if (fed < 0)
     {
       dbg_printf("pngle error: %s\n", pngle_error(pngle));
-
       goto pngle_failed;
     }
 
@@ -387,6 +422,26 @@ pngle_new_failed:
   return false;
 }
 
+bool model_DirectDisplay_Base64PNG(GUI_POINT pos, FIL *gcodeFile)
+{
+  return model_Process_Base64PNG(gcodeFile, &pos, on_draw_png_pixel, NULL);
+}
+
+bool model_DecodeToFlash_Base64PNG(FIL *gcodeFile, uint32_t addr)
+{
+  uint16_t w = ICON_WIDTH;
+  uint16_t h = ICON_HEIGHT;
+
+  W25Qxx_DECODE session = {0, addr, {}};
+
+  memcpy(session.buf, (uint8_t *)&w, sizeof(uint16_t));
+  session.bnum += sizeof(uint16_t);
+  memcpy(session.buf + session.bnum, (uint8_t *)&h, sizeof(uint16_t));
+  session.bnum += sizeof(uint16_t);
+
+  return model_Process_Base64PNG(gcodeFile, &session, on_decode_png_pixel, on_decode_png_pixel_done);
+}
+
 #endif
 
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG) || (THUMBNAIL_PARSER == PARSER_RGB565)
@@ -395,144 +450,115 @@ bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
 {
   char buf[39];
 
+  dbg_printf("Finding RGB565 by signature\n");
+
   // Find thumbnail begin marker for the right thumbnail resolution and read the base64 length
   snprintf(buf, sizeof(buf), "; bigtree thumbnail begin %hux%hu", width, height);
-  dbg_print("Start search\n");
 
-  if (!modelFileFind(fp, buf))
-    return false;
+  if (modelFileFind(fp, buf))
+  {
+    dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
 
-  dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
+    // Seek to the start of the RGB565 block
+    if (modelFileFind(fp, ";"))
+      return true;
+  }
 
-  // Seek to the start of the RGB565 block
-  if (!modelFileFind(fp, ";"))
-    return false;
-
-  return true;
+  dbg_printf("bigtree thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
+  return false;
 }
 
+#endif
+
 /**
- * Thumbnail is a "raw RGB56" file encoded as hexstring.
+ * Thumbnail is a raw RGB565 file encoded as hexstring.
  * Gcode format:
  * ; bigtreetech thumbnail begin <WIDTH>x<HEIGHT>
  * <WIDTHxHEIGHT 16-Bit RGB565 Data as Hexstring>
  * ; bigtreetech thumbnail end
  */
-bool model_DirectDisplay_RGB565(GUI_POINT pos, char *gcode)
+bool model_DirectDisplay_Classic(GUI_POINT pos, FIL *gcodeFile)
 {
-  FIL gcodeFile;
-
-  dbg_printf("RGB565 Gcode: %s\n", gcode);
-
-  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    return false;
-
-  // Move the file cursor to the corresponding resolution area
-  if (!modelFileSeekToThumbnailRGB565(&gcodeFile, ICON_WIDTH, ICON_HEIGHT))
+  // try finding RGB565 thumbnail signature
+  #if (THUMBNAIL_PARSER >= PARSER_RGB565)
+    // Move the file cursor to the signature location if found
+    if (!modelFileSeekToThumbnailRGB565(gcodeFile, ICON_WIDTH, ICON_HEIGHT))
+  #endif
   {
-    dbg_printf("bigtree thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
+    dbg_printf("Finding RGB565 by predefined offset\n");
 
-    return false;
+    // Move the file cursor to the predefined location
+    f_lseek(gcodeFile, MODEL_PREVIEW_OFFSET);
+
+    // Check whether the icon size matches
+    if (modelFileReadHalfword(gcodeFile) != ICON_WIDTH || modelFileReadHalfword(gcodeFile) != ICON_HEIGHT)
+    {
+      dbg_printf("RGB565 not found\n");
+      return false;
+    }
   }
 
   LCD_SetWindow(pos.x, pos.y, pos.x + ICON_WIDTH - 1, pos.y + ICON_HEIGHT - 1);
 
   for (uint16_t i = 0; i < ICON_WIDTH * ICON_HEIGHT; i++)
   {
-    LCD_WR_16BITS_DATA(modelFileReadHalfword(&gcodeFile));
+    LCD_WR_16BITS_DATA(modelFileReadHalfword(gcodeFile));
   }
-
-  return true;
-}
-
-#endif
-
-bool model_DirectDisplay_Classic(GUI_POINT pos, char *gcode)
-{
-  FIL gcodeFile;
-
-  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    return false;
-
-  // Move the file cursor to the corresponding resolution area
-  f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
-
-  // Check whether the icon size matches
-  if (modelFileReadHalfword(&gcodeFile) != ICON_WIDTH || modelFileReadHalfword(&gcodeFile) != ICON_HEIGHT)
-    return false;
-
-  LCD_SetWindow(pos.x, pos.y, pos.x + ICON_WIDTH - 1, pos.y + ICON_HEIGHT - 1);
-
-  for (uint16_t i = 0; i < ICON_WIDTH * ICON_HEIGHT; i++)
-  {
-    LCD_WR_16BITS_DATA(modelFileReadHalfword(&gcodeFile));
-  }
-
   return true;
 }
 
 bool model_DirectDisplay(GUI_POINT pos, char *gcode)
 {
-  // Try all compiled in options from fastest to slowest
-  if (model_DirectDisplay_Classic(pos, gcode))
+  FIL gcodeFile;
+
+  dbg_printf("Opening file: %s\n", gcode);
+
+  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+    return false;
+
+  // Try all available options from fastest to slowest
+  if (model_DirectDisplay_Classic(pos, &gcodeFile))
     return true;
 
-  #if (THUMBNAIL_PARSER == PARSER_RGB565) || (THUMBNAIL_PARSER == PARSER_BASE64PNG)
-    if (model_DirectDisplay_RGB565(pos, gcode))
-      return true;
-  #endif
-
   #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
-    if (model_DirectDisplay_Base64PNG(pos, gcode))
+    if (model_DirectDisplay_Base64PNG(pos, &gcodeFile))
       return true;
   #endif
 
   return false;
 }
 
-bool model_DecodeToFlash(char *gcode)
+bool model_DecodeToFlash_Classic(FIL *gcodeFile, uint32_t addr)
 {
-  uint32_t addr = ICON_ADDR(ICON_PREVIEW);
-  uint16_t bnum;
+  uint16_t bnum = 0;
   uint16_t w = ICON_WIDTH;
   uint16_t h = ICON_HEIGHT;
 
   uint8_t buf[256];
-  FIL gcodeFile;
-
-  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
-    return false;
 
   // Move the file cursor to the corresponding resolution area
-  f_lseek(&gcodeFile, MODEL_PREVIEW_OFFSET);
+  f_lseek(gcodeFile, MODEL_PREVIEW_OFFSET);
 
   // Check whether the icon size matches
-  if (modelFileReadHalfword(&gcodeFile) != w || modelFileReadHalfword(&gcodeFile) != h)
+  if (modelFileReadHalfword(gcodeFile) != w || modelFileReadHalfword(gcodeFile) != h)
     return false;
 
   // Move to next line
-  f_lseek(&gcodeFile, gcodeFile.fptr + 3);
+  f_lseek(gcodeFile, gcodeFile->fptr + 3);
 
-  for (bnum = 0; bnum < (w * h * 2 + W25QXX_SECTOR_SIZE - 1) / W25QXX_SECTOR_SIZE; bnum++)
-  {
-    W25Qxx_EraseSector(addr + bnum * W25QXX_SECTOR_SIZE);
-  }
-
-  bnum = 0;
-
-  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  memcpy(buf, (uint8_t *) &w, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
-  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  memcpy(buf + bnum, (uint8_t *) &h, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
 
   for (uint16_t y = 0; y < h; y++)
   {
     for (uint16_t x = 0; x < w; x++)
     {
-      uint16_t color = modelFileReadHalfword(&gcodeFile);
+      uint16_t color = modelFileReadHalfword(gcodeFile);
 
-      buf[bnum++] = (uint8_t)(color >> 8);
-      buf[bnum++] = (uint8_t)(color & 0xFF);
+      buf[bnum++] = (uint8_t) (color >> 8);
+      buf[bnum++] = (uint8_t) (color & 0xFF);
 
       if (bnum == 256)
       {
@@ -543,12 +569,38 @@ bool model_DecodeToFlash(char *gcode)
     }
 
     // Move to next line
-    f_lseek(&gcodeFile, gcodeFile.fptr + 3);
+    f_lseek(gcodeFile, gcodeFile->fptr + 3);
   }
 
   W25Qxx_WritePage(buf, addr, bnum);
 
   return true;
+}
+
+bool model_DecodeToFlash(char *gcode)
+{
+  FIL gcodeFile;
+
+  if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
+    return false;
+
+  uint32_t addr = ICON_ADDR(ICON_PREVIEW);
+
+  for (uint16_t bnum = 0;
+       bnum < (ICON_WIDTH * ICON_HEIGHT * 2 + W25QXX_SECTOR_SIZE - 1) / W25QXX_SECTOR_SIZE; bnum++)
+  {
+    W25Qxx_EraseSector(addr + bnum * W25QXX_SECTOR_SIZE);
+  }
+
+  if (model_DecodeToFlash_Classic(&gcodeFile, addr))
+    return true;
+
+  #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
+    if (model_DecodeToFlash_Base64PNG(&gcodeFile, addr))
+      return true;
+  #endif
+
+  return false;
 }
 
 void SMALLICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
@@ -560,21 +612,21 @@ void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 {
   uint16_t mode = 0x0FF0;
   uint16_t x, y;
-  uint16_t w, h;
   uint16_t color = 0;
-  uint32_t address = getBMPsize((uint8_t *)&w, (uint8_t *)&h, ICON_ADDR(icon));
+  BMP_INFO bmpInfo = {.index = icon, .address = 0};
+  getBMPsize(&bmpInfo);
 
-  LCD_SetWindow(sx, sy, sx + w - 1, sy + h - 1);
+  LCD_SetWindow(sx, sy, sx + bmpInfo.width - 1, sy + bmpInfo.height - 1);
 
   W25Qxx_SPI_CS_Set(0);
   W25Qxx_SPI_Read_Write_Byte(CMD_READ_DATA);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF0000) >> 16);
-  W25Qxx_SPI_Read_Write_Byte((address & 0xFF00) >> 8);
-  W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
+  W25Qxx_SPI_Read_Write_Byte((bmpInfo.address & 0xFF0000) >> 16);
+  W25Qxx_SPI_Read_Write_Byte((bmpInfo.address & 0xFF00) >> 8);
+  W25Qxx_SPI_Read_Write_Byte(bmpInfo.address & 0xFF);
 
-  for (y = sy; y < sy + w; y++)
+  for (y = sy; y < sy + bmpInfo.width; y++)
   {
-    for (x = sx; x < sx + h; x++)
+    for (x = sx; x < sx + bmpInfo.height; x++)
     {
       color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
       color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);

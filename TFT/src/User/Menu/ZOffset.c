@@ -23,21 +23,23 @@ void zOffsetNotifyError(bool isStarted)
 
 void zOffsetDraw(bool status, float val)
 {
-  char tempstr[20], tempstr2[20], tempstr3[20];
+  char tempstr[20], tempstr2[20], tempstr3[30];
 
   if (!status)
   {
     sprintf(tempstr, "%-15s", textSelect(itemToggle[status].index));
     sprintf(tempstr3, "%-15s", "");
-    GUI_SetColor(infoSettings.reminder_color);
     sprintf(tempstr2, "  %.2f  ", val);
+
+    GUI_SetColor(infoSettings.reminder_color);
   }
   else
   {
     sprintf(tempstr, "ZO:%.2f  ", val);
-    sprintf(tempstr3, "Shim:%.3f", infoSettings.level_z_pos);
-    GUI_SetColor(infoSettings.status_color);
+    sprintf(tempstr3, "%s:%.3f", textSelect(LABEL_SHIM), infoSettings.level_z_pos);
     sprintf(tempstr2, "  %.2f  ", val + infoSettings.level_z_pos);
+
+    GUI_SetColor(infoSettings.status_color);
   }
 
   GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
@@ -61,6 +63,7 @@ void menuZOffset(void)
     {ICON_01_MM,                   LABEL_01_MM},
     {ICON_RESET_VALUE,             LABEL_RESET},
     {ICON_EEPROM_SAVE,             LABEL_SAVE},
+    {ICON_BABYSTEP,                LABEL_SHIM},
     {ICON_DISABLE_STEPPERS,        LABEL_XY_UNLOCK},
   };
 
@@ -75,8 +78,8 @@ void menuZOffset(void)
       #else
         {ICON_DEC,                     LABEL_DEC},
       #endif
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
-      {ICON_BACKGROUND,              LABEL_BACKGROUND},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
         {ICON_NOZZLE_UP,               LABEL_UP},
       #else
@@ -92,12 +95,12 @@ void menuZOffset(void)
   KEY_VALUES key_num = KEY_IDLE;
   float now, z_offset;
   float unit;
-  void (* offsetEnable)(float);                // enable Z offset
-  void (* offsetDisable)(void);                // disable Z offset
-  bool (* offsetGetStatus)(void);              // get current status
-  float (* offsetGetValue)(void);              // get current Z offset
-  float (* offsetResetValue)(void);            // reset current Z offset
-  float (* offsetUpdateValue)(float, int8_t);  // update current Z offset
+  void (* offsetEnable)(float);        // enable Z offset
+  void (* offsetDisable)(void);        // disable Z offset
+  bool (* offsetGetStatus)(void);      // get current status
+  float (* offsetGetValue)(void);      // get current Z offset
+  float (* offsetResetValue)(void);    // reset current Z offset
+  float (* offsetUpdateValue)(float);  // update current Z offset
 
   if (probeOffsetMenu)
   { // use Probe Offset menu
@@ -145,7 +148,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetUpdateValue(unit, -1);
+          z_offset = offsetUpdateValue(-unit);
         break;
 
       case KEY_INFOBOX:
@@ -161,7 +164,7 @@ void menuZOffset(void)
         if (!offsetGetStatus())
           zOffsetNotifyError(false);
         else
-          z_offset = offsetUpdateValue(unit, 1);
+          z_offset = offsetUpdateValue(unit);
         break;
 
       // enable/disable Z offset change
@@ -209,14 +212,18 @@ void menuZOffset(void)
           // save to EEPROM
           case 2:
             if (infoMachineSettings.EEPROM == 1)
-            {
-              setDialogText(zOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL);
-              showDialog(DIALOG_TYPE_QUESTION, saveEepromSettings, NULL, NULL);
-            }
+              popupDialog(DIALOG_TYPE_QUESTION, zOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+            break;
+
+          // set level Z pos (shim)
+          case 3:
+            infoSettings.level_z_pos = editFloatValue(LEVELING_Z_POS_MIN, LEVELING_Z_POS_MAX,
+                                                      LEVELING_Z_POS_DEFAULT, infoSettings.level_z_pos);
+            zOffsetDraw(offsetGetStatus(), now);
             break;
 
           // unlock XY axis
-          case 3:
+          case 4:
             if (!offsetGetStatus())
               zOffsetNotifyError(false);
             else
@@ -246,9 +253,11 @@ void menuZOffset(void)
 
       // reset babystep every time Z offset is changed otherwise the set babystep value
       // will not be aligned with the new Z offset
-      babystepReset();
+      babystepSetValue(BABYSTEP_DEFAULT_VALUE);
     }
 
     loopProcess();
   }
+
+  saveSettings();  // save settings
 }

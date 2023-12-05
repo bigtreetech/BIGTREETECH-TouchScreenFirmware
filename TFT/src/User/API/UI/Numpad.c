@@ -5,9 +5,10 @@
 #define SKEYHEIGHT (LCD_HEIGHT - ICON_START_Y) / 4
 #define SKEYWIDTH  LCD_WIDTH / 4
 
-#define KEY_COUNT        16
-#define FLOAT_BUF_LENGTH  9
-#define INT_BUF_LENGTH    6
+#define KEY_COUNT         16
+#define FLOAT_BUF_LENGTH   9
+#define FLOAT_PREC_LENGTH  5
+#define INT_BUF_LENGTH     6
 
 typedef enum
 {
@@ -213,7 +214,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
   uint8_t nowIndex;
   uint8_t lastIndex = 0;
   char ParameterBuf[FLOAT_BUF_LENGTH + 1] = {0};
-  uint8_t prec = (old_val == 0) ? 0 : 3;
+  uint8_t prec = (old_val == 0) ? 0 : FLOAT_PREC_LENGTH;
   bool valueFirstPress = true;
 
   sprintf(ParameterBuf, "%.*f", prec, old_val);
@@ -291,7 +292,7 @@ double numPadFloat(uint8_t * title, double old_val, double reset_val, bool negat
           {
             nowIndex = lastIndex = 0;
           }
-          else if(ParameterBuf[0] == '-' && ParameterBuf[1] == '0' && nowIndex == 2)  // avoid "-0x", change to "-x"
+          else if (ParameterBuf[0] == '-' && ParameterBuf[1] == '0' && nowIndex == 2)  // avoid "-0x", change to "-x"
           {
             nowIndex = lastIndex = 1;
           }
@@ -458,7 +459,7 @@ int32_t numPadInt(uint8_t* title, int32_t old_val, int32_t reset_val, bool negat
           val = 0;
         }
         len = strlen(ParameterBuf);
-        if (len < INT_BUF_LENGTH && !(val == 0 && key_num == NUM_KEY_0))
+        if (len < INT_BUF_LENGTH)
         {
           int num = (numPadKeyChar[key_num][0] - '0');
           val = (val * 10) + ABS(num);

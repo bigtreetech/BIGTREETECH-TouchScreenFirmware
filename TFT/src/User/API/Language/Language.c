@@ -44,12 +44,15 @@
   #include "language_tc.h"
 #elif SYSTEM_LANGUAGE == UKRAINIAN
   #include "language_uk.h"
+#elif SYSTEM_LANGUAGE == BRAZIL
+  #include "language_br.h"
+#elif SYSTEM_LANGUAGE == CROATIAN
+  #include "language_hr.h"
 #else
   #error "Error: invalid language defined"
 #endif
-//
-// Add new Keywords in Language.inc file Only
-//
+// add new keywords in Language.inc file only
+
 uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 const char *const default_pack[LABEL_NUM] = {
@@ -66,32 +69,29 @@ const char *const lang_key_list[LABEL_NUM] =
   #undef X_WORD
 };
 
-uint8_t *textSelect(uint16_t sel)
+uint32_t getLabelFlashAddr(uint16_t index)
 {
-  switch(infoSettings.language)
+  if (index > LABEL_NULL) return LANGUAGE_ADDR;
+  return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
+}
+
+uint8_t *textSelect(uint16_t index)
+{
+  switch (infoSettings.language)
   {
     case LANG_DEFAULT:
-      return (uint8_t *)default_pack[sel];
+      return (uint8_t *)default_pack[index];
     case LANG_FLASH:
-      loadLabelText(tempLabelString, sel);
+      W25Qxx_ReadBuffer(tempLabelString, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
       return tempLabelString;
     default:
       return NULL;
   }
 }
 
-uint32_t getLabelFlashAddr(uint16_t index)
+bool loadLabelText(uint8_t * buf, uint16_t index)
 {
-  if (index > LABEL_BACKGROUND) return LANGUAGE_ADDR;
-  return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
-}
-
-bool loadLabelText(uint8_t* buf, uint16_t index)
-{
-  if(index >= LABEL_NUM) return false;
-  if(infoSettings.language == LANG_FLASH)
-    W25Qxx_ReadBuffer(buf, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
-  else
-    memcpy(buf, textSelect(index), sizeof(tempLabelString));
+  if (index >= LABEL_NUM) return false;
+  memcpy(buf, textSelect(index), sizeof(tempLabelString));
   return true;
 }

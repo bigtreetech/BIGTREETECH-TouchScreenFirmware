@@ -23,7 +23,7 @@ void OS_TimerInitMs(void);
 uint32_t OS_GetTimeMs(void);
 
 void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function, void *para);
-void OS_TaskCheck(OS_TASK *task);
+void OS_TaskLoop(OS_TASK *task);
 void OS_TaskEnable(OS_TASK *task, uint8_t is_exec, uint8_t is_repeat);
 void OS_TaskDisable(OS_TASK *task);
 

@@ -35,10 +35,7 @@ void Mode_Switch(void)
           LOGO_ReadDisplay();
           updateNextHeatCheckTime();  // send "M105" after a delay, because of mega2560 will be hanged when received data at startup
 
-          while (OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME)  // display logo BTT_BOOTSCREEN_TIME ms
-          {
-            loopProcess();
-          }
+          TASK_LOOP_WHILE(OS_GetTimeMs() - startUpTime < BTT_BOOTSCREEN_TIME);  // display logo BTT_BOOTSCREEN_TIME ms
 
           heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
           modeFreshBoot = false;
@@ -59,28 +56,27 @@ void Mode_Switch(void)
 
 void Mode_CheckSwitching(void)
 {
-//  #ifndef SERIAL_ALWAYS_ON
-  // IDEALLY I would like to be able to swap even when the TFT is in printing mode
-  // but before I can allow that I need a way to make sure that we swap back into
-  // the right mode (and correct screen) and I really want a reliable way to DETECT
-  // that the TFT should be in printing mode even when the print was started externally.
-  if (isPrinting() || infoHost.printing || modeSwitching)
+  // we must always call Touch_Enc_ReadPen() and LCD_Enc_ReadBtn() first just to always update their internal timers
+  // when an encoder/touch button is pressed or released (avoiding the Mode menu is displayed by mistake when aborting
+  // a print in Marlin mode with infoSettings.serial_always_on enabled)
+  bool btnPressed = Touch_Enc_ReadPen(MODE_SWITCHING_INTERVAL);
+
+  #if LCD_ENCODER_SUPPORT
+    btnPressed |= LCD_Enc_ReadBtn(MODE_SWITCHING_INTERVAL);
+  #endif
+
+  // NOTE: leave this check after Touch_Enc_ReadPen() was called to allow the Smart Home feature to work properly
+  //       when infoSettings.mode is set to a blocked mode
+  if (infoSettings.mode >= MODE_COUNT)  // if blocked mode, then exit
+    return;
+
+  // do not change mode if printing from any source or is already waiting mode selection
+  if (isPrinting() || isPrintingFromOnboard() || modeSwitching)
     return;
 
   if (MENU_IS(menuMode))
     return;
-//  #endif
 
-  if (Touch_Enc_ReadPen(MODE_SWITCHING_INTERVAL)
-    #if LCD_ENCODER_SUPPORT
-      || LCD_Enc_ReadBtn(MODE_SWITCHING_INTERVAL)
-    #endif
-    )
-  {
-    // NOTE: leave this check after Touch_Enc_ReadPen() to allow the Smart Home feature to work properly
-    if (infoSettings.mode >= MODE_COUNT)  // if blocked mode, then exit
-      return;
-
+  if (btnPressed)
     OPEN_MENU(menuMode);
-  }
 }
