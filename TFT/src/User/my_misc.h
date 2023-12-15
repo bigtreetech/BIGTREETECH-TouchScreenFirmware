@@ -29,6 +29,8 @@ extern "C" {
 
 #define WITHIN(N, L, H) ((N) >= (L) && (N) <= (H))
 #define NUMERIC(a)      WITHIN(a, '0', '9')
+#define LOWER_CASE(c)   WITHIN(c, 'a', 'z')
+#define UPPER_CASE(c)   WITHIN(c, 'A', 'Z')
 
 // Bitwise macros
 
@@ -90,6 +92,9 @@ void time_2_string(char *buf, char *str_format, uint32_t time);           // con
 double strtod_ligth(char *str, char **endptr);               // light weight strtod() function without exponential support
 void strncpy_pad(char *dest, const char *src, size_t n);     // light weight and safe strncpy() function with padding
 void strncpy_no_pad(char *dest, const char *src, size_t n);  // light weight and safe strncpy() function without padding
+
+char * strToLwr(char * string);  // converts a string to lower case, returns the pointer of said string
+char * strToUpr(char * string);  // converts a string to upper case, returns the pointer of said string
 
 const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
 void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string

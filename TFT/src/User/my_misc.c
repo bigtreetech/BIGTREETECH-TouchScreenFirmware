@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #define CRC_POLY 0xA001
+#define HIGH_TO_LOW_CASE 32  // 'a' - 'A'
 
 uint8_t inRange(int cur, int tag , int range)
 {
@@ -173,6 +174,35 @@ double strtod_ligth(char *str, char **endptr)
 
   return val * sign;
 }
+
+// converts a string to lower case, returns the pointer of said string
+char * strToLwr(char * string)
+{
+  char * tmp_str = string;
+  while (*tmp_str != '\0')
+  {
+    if (UPPER_CASE(*tmp_str))
+      *tmp_str |= HIGH_TO_LOW_CASE;
+    tmp_str++;
+  }
+
+  return string;
+}
+
+// converts a string to upper case, returns the pointer of said string
+char * strToUpr(char * string)
+{
+  char * tmp_str = string;
+  while (*tmp_str != '\0')
+  {
+    if (LOWER_CASE(*tmp_str))
+      *tmp_str &= ~HIGH_TO_LOW_CASE;
+    tmp_str++;
+  }
+
+  return string;
+}
+
 
 // light weight and safe strncpy() function with padding:
 // - copy "src" to "dest" for a maximum of "n-1" characters
