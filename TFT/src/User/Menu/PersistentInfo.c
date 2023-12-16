@@ -7,7 +7,7 @@
 #define GLOBALICON_INTERVAL 2
 
 // check current menu to avoid display info
-bool temperatureStatusValid(void)
+static bool temperatureStatusValid(void)
 {
   if (infoSettings.persistent_info != 1) return false;
   if (infoHost.connected == false) return false;

@@ -56,7 +56,7 @@ const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ
 
 static bool list_mode = true;
 
-void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
+static void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 {
   if (name == NULL)
     return;
@@ -73,7 +73,7 @@ void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 //   - icon mode menu is an option available only for browsing files from TFT SD card / TFT USB disk.
 //     It is not available for browsing files from onboard media
 //   - only short (not long) folder names and filenames are available browsing files from TFT SD card / TFT USB disk
-void gocdeIconDraw(void)
+static void gocdeIconDraw(void)
 {
   ITEM curItem = {ICON_NULL, LABEL_NULL};
   uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
@@ -139,7 +139,7 @@ void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 }
 
 // open selected file/folder
-bool printPageItemSelected(uint16_t index)
+static bool printPageItemSelected(uint16_t index)
 {
   bool hasUpdate = true;
 

@@ -3,7 +3,7 @@
 
 SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
-void updateListeningMode(MENUITEMS * menu)
+static void updateListeningMode(MENUITEMS * menu)
 {
   menu->items[4].label.index = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1) ? LABEL_OFF : LABEL_ON;
 

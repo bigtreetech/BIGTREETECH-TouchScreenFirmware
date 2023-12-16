@@ -5,9 +5,9 @@
                                                          moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
                                                          moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
                                                        } while(0)
-#define X_MOVE_GCODE "G1 X%.2f F%d\n"
-#define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
-#define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
+#define X_MOVE_GCODE "G0 X%.2f F%d\n"
+#define Y_MOVE_GCODE "G0 Y%.2f F%d\n"
+#define Z_MOVE_GCODE "G0 Z%.2f F%d\n"
 #define GANTRY_UPDATE_DELAY 500  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
@@ -20,7 +20,7 @@ const char *const xyzMoveCmd[] = {X_MOVE_GCODE, Y_MOVE_GCODE, Z_MOVE_GCODE};
 static uint8_t item_moveLen_index = 1;
 AXIS nowAxis = X_AXIS;
 
-void storeMoveCmd(const AXIS xyz, const float amount)
+static void storeMoveCmd(const AXIS xyz, const float amount)
 {
   // if invert is true, use 'amount' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
@@ -29,7 +29,7 @@ void storeMoveCmd(const AXIS xyz, const float amount)
   nowAxis = xyz;  // update now axis
 }
 
-void drawXYZ(void)
+static void drawXYZ(void)
 {
   if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning()) return;
 
@@ -49,7 +49,7 @@ void drawXYZ(void)
   GUI_SetColor(infoSettings.font_color);
 }
 
-void updateGantry(void)
+static void updateGantry(void)
 {
   if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
   {
@@ -170,7 +170,6 @@ void menuMove(void)
           moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
 
           menuDrawItem(&moveItems.items[key_num], key_num);
-
           amount = moveLenSteps[item_moveLen_index];
           break;
 

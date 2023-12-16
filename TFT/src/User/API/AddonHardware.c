@@ -203,7 +203,7 @@ bool FIL_SmartRunoutDetect(void)
   return false;
 }
 
-bool FIL_IsRunout(void)
+static bool FIL_IsRunout(void)
 {
   switch (GET_BIT(infoSettings.runout, RUNOUT_SENSOR_TYPE))
   {

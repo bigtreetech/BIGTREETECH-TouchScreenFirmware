@@ -23,9 +23,6 @@ void setDynamicValue(uint8_t i, float value);     // set list item value to any 
 
 void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * curitem, bool pressed);
 void ListMenuSetItem(const LISTITEM * menuItem, uint8_t position);
-void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width);
-void ListItem_DisplayToggle(uint16_t sx, uint16_t sy, uint8_t iconchar_state);
-void ListItem_DisplayCustomValue(const GUI_RECT * rect, LABEL value, int i);
 GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar);
 
 #ifdef __cplusplus

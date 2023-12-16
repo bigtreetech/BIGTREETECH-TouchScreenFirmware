@@ -252,7 +252,7 @@ const char * meshErrorMsg[] = {"Invalid mesh"};  // list of possible error respo
 
 static MESH_DATA * meshData = NULL;
 
-static inline void meshInitData(void)
+static void meshInitData(void)
 {
   if (meshData == NULL)
     return;
@@ -288,7 +288,7 @@ static inline void meshAllocData(void)
   }
 }
 
-void meshDeallocData(void)
+static void meshDeallocData(void)
 {
   if (meshData != NULL)
   {
@@ -682,7 +682,7 @@ static inline void processGridData(void)
 
     memcpy(meshData->oriData, meshData->curData, sizeof(meshData->curData));  // copy the inversed rows data back to oriData
   }
-  else  // copy oriData to curData
+  else  // store grid data with the rows in normal order
   {
     memcpy(meshData->curData, meshData->oriData, sizeof(meshData->oriData));
   }

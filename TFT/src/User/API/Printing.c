@@ -49,7 +49,7 @@ bool getRunoutAlarm(void)
   return filamentRunoutAlarm;
 }
 
-void clearQueueAndMore(void)
+static void clearQueueAndMore(void)
 {
   clearCmdQueue();
   setRunoutAlarmFalse();
@@ -75,7 +75,7 @@ void resumeAndContinue(void)
   sendEmergencyCmd("M876 S1\n");
 }
 
-void abortAndTerminate(void)
+static void abortAndTerminate(void)
 {
   clearQueueAndMore();
 
@@ -98,7 +98,7 @@ void abortAndTerminate(void)
   }
 }
 
-void loopBreakToCondition(CONDITION_CALLBACK condCallback)
+static void loopBreakToCondition(CONDITION_CALLBACK condCallback)
 {
   // M108 is sent to Marlin because consecutive blocking operations such as heating bed, extruder may defer processing of other gcodes.
   // If there's any ongoing blocking command, "M108" will take that out from the closed loop and a response will be received
@@ -326,7 +326,7 @@ void preparePrintSummary(void)
 }
 
 // send print codes [0: start gcode, 1: end gcode 2: cancel gcode]
-void sendPrintCodes(uint8_t index)
+static void sendPrintCodes(uint8_t index)
 {
   PRINT_GCODES printcodes;
 
@@ -372,7 +372,7 @@ void clearInfoPrint(void)
   memset(&infoPrinting, 0, sizeof(PRINTING));
 }
 
-void completePrint(void)
+static void completePrint(void)
 {
   infoPrinting.cur = infoPrinting.size;  // always update the print progress to 100% even if the print terminated
   infoPrinting.progress = 100;           // set progress to 100% in case progress is controlled by slicer

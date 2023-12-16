@@ -75,7 +75,7 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
-void drawStatus(void)
+static void drawStatus(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
   char tempstr[45];
@@ -200,26 +200,26 @@ void drawStatus(void)
   GUI_RestoreColorDefault();
 }
 
-void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
+void statusScreenSetMsg(const uint8_t *title, const uint8_t *msg)
 {
   strncpy_no_pad(msgTitle, (char *)title, sizeof(msgTitle));
   strncpy_no_pad(msgBody, (char *)msg, sizeof(msgBody));
   msgNeedRefresh = true;
 }
 
-void statusScreen_setReady(void)
+void statusScreenSetReady(void)
 {
   strncpy_no_pad(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
 
   if (infoHost.connected == false)
     strncpy_no_pad(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   else
-    snprintf(msgBody, sizeof(msgBody), "%s %s", (char *)machine_type, (char *)textSelect(LABEL_READY));
+    snprintf(msgBody, sizeof(msgBody), "%s %s", machine_type, (char *)textSelect(LABEL_READY));
 
   msgNeedRefresh = true;
 }
 
-void drawStatusScreenMsg(void)
+static void drawStatusScreenMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -296,7 +296,7 @@ void menuStatus(void)
   {
     if (infoHost.connected != lastConnectionStatus)
     {
-      statusScreen_setReady();
+      statusScreenSetReady();
       lastConnectionStatus = infoHost.connected;
     }
 
