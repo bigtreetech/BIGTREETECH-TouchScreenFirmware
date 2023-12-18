@@ -73,7 +73,7 @@ void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 //   - icon mode menu is an option available only for browsing files from TFT SD card / TFT USB disk.
 //     It is not available for browsing files from onboard media
 //   - only short (not long) folder names and filenames are available browsing files from TFT SD card / TFT USB disk
-void gocdeIconDraw(void)
+static inline void gocdeIconDraw(void)
 {
   ITEM curItem = {ICON_NULL, LABEL_NULL};
   uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;

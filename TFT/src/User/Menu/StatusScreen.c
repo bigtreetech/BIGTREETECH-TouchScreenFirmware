@@ -214,7 +214,7 @@ void statusScreen_setReady(void)
   if (infoHost.connected == false)
     strncpy_no_pad(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   else
-    snprintf(msgBody, sizeof(msgBody), "%s %s", (char *)machine_type, (char *)textSelect(LABEL_READY));
+    snprintf(msgBody, sizeof(msgBody), "%s %s", machine_type, (char *)textSelect(LABEL_READY));
 
   msgNeedRefresh = true;
 }

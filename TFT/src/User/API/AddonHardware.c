@@ -147,7 +147,7 @@ bool FIL_NormalRunoutDetect(void)
   return runout;
 }
 
-bool FIL_SmartRunoutDetect(void)
+static inline bool FIL_SmartRunoutDetect(void)
 {
   static float lastPosE = 0.0f;
   static bool lastRunout = false;
@@ -203,7 +203,7 @@ bool FIL_SmartRunoutDetect(void)
   return false;
 }
 
-bool FIL_IsRunout(void)
+static inline bool FIL_IsRunout(void)
 {
   switch (GET_BIT(infoSettings.runout, RUNOUT_SENSOR_TYPE))
   {

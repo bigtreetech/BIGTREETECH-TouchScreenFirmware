@@ -222,22 +222,9 @@ typedef enum
   CSTAT_SPI_WRITE_FAIL,
 } CONFIG_STATS;
 
+void resetConfig(void);
 bool getConfigFromFile(char * configPath);
 bool getLangFromFile(char * rootDir);
-
-bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen);
-
-void parseConfigLine(void);
-void parseLangLine(void);
-
-void parseConfigKey(uint16_t index);
-void writeConfig(uint8_t* dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize);
-void saveConfig(void);
-void resetConfig(void);
-
-void drawProgressPage(uint8_t * title);
-void drawProgress(void);
-void showError(CONFIG_STATS stat);
 
 // This List is Auto-Generated. Please add new config in config.inc only
 enum

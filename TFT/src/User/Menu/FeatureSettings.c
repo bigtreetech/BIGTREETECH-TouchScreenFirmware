@@ -60,7 +60,7 @@ void resetSettings(void)
 }
 
 // perform action on button press
-void updateFeatureSettings(uint8_t item_index)
+static inline void updateFeatureSettings(uint8_t item_index)
 {
   switch (item_index)
   {

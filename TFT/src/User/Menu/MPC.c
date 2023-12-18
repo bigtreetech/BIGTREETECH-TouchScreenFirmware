@@ -127,7 +127,7 @@ void menuSetMpcParam(void)
       case KEY_ICON_2:
         parameter->method = (parameter->method + 1) % MPC_METHOD_COUNT;
         setDynamicTextValue(2, mpcMethod_label[parameter->method]);
-        listViewRefreshMenu();
+        listViewRefreshItem(curIndex);
         break;
 
       case KEY_BACK:
@@ -232,12 +232,11 @@ void menuMPC(void)
 
       LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
       LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
+
+      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
     }
     else if (mpcTuning.status == ONGOING)
     {
-      if (getMenuType() != MENU_TYPE_SPLASH)
-        popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-
       if (mpcTuning.result != NO_RESULT)
       {
         mpcTuning.status = DONE;

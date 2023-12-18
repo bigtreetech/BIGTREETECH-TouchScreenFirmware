@@ -1,7 +1,8 @@
 #include "os_timer.h"
 #include "includes.h"
 
-volatile uint32_t os_counter = 0;
+volatile uint32_t os_counter_ms = 0;
+volatile uint16_t os_counter_sec = 0;
 
 void OS_TimerInitMs(void)
 {
@@ -35,39 +36,45 @@ void OS_TimerInitMs(void)
 #ifdef GD32F2XX
 void TIMER6_IRQHandler(void)
 {
-  if ((TIMER_INTF(TIMER6) & 0x01) != 0)
-  { // update interrupt flag
-    TIMER_INTF(TIMER6) &= (uint16_t)~(1<<0);  // clear interrupt flag
+  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)
+  {
+    os_counter_ms++;
+    os_counter_sec++;
 
-    os_counter++;
-
-    if (os_counter % 1000 == 0)
+    if (os_counter_sec >= 1000)  // if one second has been elapsed
     {
-      AVG_KPIS();  // debug monitoring KPI
+      os_counter_sec = 0;  // reset one second counter
 
-      updatePrintTime();
+      AVG_KPIS();          // collect debug monitoring KPI
+
+      updatePrintTime();   // if printing, update printing info
     }
 
-    loopTouchScreen();
+    checkTouchScreen();  // check touch screen once a millisecond
+
+    TIMER_INTF(TIMER6) &= TIMER_INTF_UPIF;  // clear interrupt flag
   }
 }
 #else
 void TIM7_IRQHandler(void)
 {
-  if ((TIM7->SR & 0x01) != 0)
-  { // update interrupt flag
-    TIM7->SR &= (uint16_t)~(1<<0);  // clear interrupt flag
+  if ((TIM7->SR & TIM_SR_UIF) != 0)
+  {
+    os_counter_ms++;
+    os_counter_sec++;
 
-    os_counter++;
-
-    if (os_counter % 1000 == 0)
+    if (os_counter_sec >= 1000)  // if one second has been elapsed
     {
-      AVG_KPIS();  // debug monitoring KPI
+      os_counter_sec = 0;  // reset one second counter
 
-      updatePrintTime();
+      AVG_KPIS();          // collect debug monitoring KPI
+
+      updatePrintTime();   // if printing, update printing info
     }
 
-    loopTouchScreen();
+    checkTouchScreen();  // check touch screen once a millisecond
+
+    TIM7->SR &= ~TIM_SR_UIF;  // clear interrupt flag
   }
 }
 #endif
@@ -75,13 +82,12 @@ void TIM7_IRQHandler(void)
 // 1ms
 uint32_t OS_GetTimeMs(void)
 {
-  return os_counter;
+  return os_counter_ms;
 }
 
-/*
- * task: task structure to be filled
- * time_ms:
- */
+// task: task structure to be filled
+// time_ms:
+//
 void OS_TaskInit(OS_TASK *task_t, uint32_t time_ms, FP_TASK function, void *para)
 {
   task_t->time_ms = time_ms;

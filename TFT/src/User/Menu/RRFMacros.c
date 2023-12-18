@@ -21,7 +21,7 @@ void rrfShowRunningMacro(void)
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)running_macro_name);
 }
 
-void runMacro(const char *display_name)
+static inline void runMacro(const char *display_name)
 {
   running_macro_name = display_name;
   rrfShowRunningMacro();

@@ -112,7 +112,6 @@ typedef union
 } GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState);
 BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr);
 
 #ifdef __cplusplus

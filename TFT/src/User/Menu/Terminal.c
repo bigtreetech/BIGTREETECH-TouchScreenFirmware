@@ -104,7 +104,7 @@ typedef enum
 
 #define COMMAND_START_ROW 0                              // row number for text box and send button
 #define KB_START_ROW      1                              // row number for keyboard
-#define CRTL_START_ROW    (KB_START_ROW + KB_ROW_COUNT)  // row number for control bar
+#define CTRL_START_ROW    (KB_START_ROW + KB_ROW_COUNT)  // row number for control bar
 
 // for text in terminal
 #define CURSOR_H_OFFSET 2
@@ -226,7 +226,7 @@ const GUI_RECT editorKeyRect[KEY_COUNT] = {
 const GUI_RECT editorAreaRect[3] = {
   {0, COMMAND_START_ROW * CTRL_HEIGHT, LCD_WIDTH, ROW_HEIGHT},                // text box + send area
   {0, ROW_HEIGHT,                      LCD_WIDTH, LCD_HEIGHT - CTRL_HEIGHT},  // keyboard area
-  {0, CRTL_START_ROW * CTRL_HEIGHT,    LCD_WIDTH, LCD_HEIGHT}                 // control bar area
+  {0, CTRL_START_ROW * CTRL_HEIGHT,    LCD_WIDTH, LCD_HEIGHT}                 // control bar area
 };
 
 const GUI_RECT terminalKeyRect[TERM_KEY_COUNT] = {

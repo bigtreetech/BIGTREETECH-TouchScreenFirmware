@@ -19,7 +19,7 @@ const uint8_t icon_mode [MODE_COUNT] = {
   ICON_TOUCH_MODE,
 };
 
-void drawModeIcon(void)
+static inline void drawModeIcon(void)
 {
   for (uint8_t i = 0; i < MODE_COUNT; i++)
   {

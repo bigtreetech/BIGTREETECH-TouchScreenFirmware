@@ -17,6 +17,44 @@ static bool handleBack = true;
 static void (*action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
 static void (*action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos) = NULL;
 
+// display page at selected index
+void listViewSetCurPage(uint8_t curPage)
+{
+  if (action_preparePage != NULL)
+  {
+    action_preparePage(&listItems, curPage);
+  }
+  else
+  {
+    for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
+    {
+      uint16_t index = curPage * LISTITEM_PER_PAGE + i;
+
+      if (index < maxItemCount)
+      {
+        if (totalItems != NULL)
+          listItems.items[i] = totalItems[index];
+
+        if (action_prepareItem != NULL)
+          action_prepareItem(&listItems.items[i], index, i);
+      }
+      else
+      {
+        listItems.items[i].icon = CHARICON_NULL;
+      }
+    }
+  }
+
+  // only 1 page or in first page, hide up button
+  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_NULL : CHARICON_PAGEUP;
+  // only 1 page or in last page, hide down button
+  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_NULL : CHARICON_PAGEDOWN;
+
+  listItems.items[7].icon = CHARICON_BACK;
+
+  curPageIndex = curPage;
+}
+
 /**
  * @brief Set and innitialize list menu
  *
@@ -60,46 +98,8 @@ uint8_t listViewGetCurPage(void)
   return curPageIndex;
 }
 
-// display page at selected index
-void listViewSetCurPage(uint8_t curPage)
-{
-  if (action_preparePage != NULL)
-  {
-    action_preparePage(&listItems, curPage);
-  }
-  else
-  {
-    for (uint8_t i = 0; i < LISTITEM_PER_PAGE; i++)
-    {
-      uint16_t index = curPage * LISTITEM_PER_PAGE + i;
-
-      if (index < maxItemCount)
-      {
-        if (totalItems != NULL)
-          listItems.items[i] = totalItems[index];
-
-        if (action_prepareItem != NULL)
-          action_prepareItem(&listItems.items[i], index, i);
-      }
-      else
-      {
-        listItems.items[i].icon = CHARICON_NULL;
-      }
-    }
-  }
-
-  // only 1 page or in first page, hide up button
-  listItems.items[5].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == 0)) ? CHARICON_NULL : CHARICON_PAGEUP;
-  // only 1 page or in last page, hide down button
-  listItems.items[6].icon = ((maxItemCount <= LISTITEM_PER_PAGE) || (curPage == maxPageCount - 1)) ? CHARICON_NULL : CHARICON_PAGEDOWN;
-
-  listItems.items[7].icon = CHARICON_BACK;
-
-  curPageIndex = curPage;
-}
-
 // open next page
-bool listViewNextPage(void)
+static inline bool listViewNextPage(void)
 {
   if (maxPageCount <= 1) return false;                 // only 0 or 1 page, can't goto next page
   if (curPageIndex + 1 >= maxPageCount) return false;  // already last page
@@ -116,7 +116,7 @@ bool listViewNextPage(void)
 }
 
 // open previous page
-bool listViewPreviousPage(void)
+static inline bool listViewPreviousPage(void)
 {
   if (maxPageCount <= 1) return false;  // only 0 or 1 page, can't goto previous page
   if (curPageIndex == 0) return false;  // already first page

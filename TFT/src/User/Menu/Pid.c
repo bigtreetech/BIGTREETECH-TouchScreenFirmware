@@ -57,7 +57,7 @@ static inline void pidStart(void)
   pidRun();
 }
 
-void pidResultAction(void)
+static inline void pidResultAction(void)
 {
   if (pidStatus == PID_TIMEOUT)
   {

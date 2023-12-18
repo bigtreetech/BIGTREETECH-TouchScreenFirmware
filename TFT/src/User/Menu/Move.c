@@ -49,7 +49,7 @@ void drawXYZ(void)
   GUI_SetColor(infoSettings.font_color);
 }
 
-void updateGantry(void)
+static inline void updateGantry(void)
 {
   if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
   {
