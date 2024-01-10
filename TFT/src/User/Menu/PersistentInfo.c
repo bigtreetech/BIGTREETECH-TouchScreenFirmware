@@ -28,10 +28,10 @@ void loopTemperatureStatus(void)
   if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
-  static int16_t lastCurrent[4];  // chamber, bed, 1-2 hotend
+  static int16_t lastCurrent[4];  // 1-2 hotend, bed, chamber
   static int16_t lastTarget[4];
 
-  uint8_t tmpHeater[4];  // chamber, bed, 1-2 hotend
+  uint8_t tmpHeater[4];  // 1-2 hotend, bed, chamber
   uint8_t tmpIndex = 0;
   bool update = false;
 
@@ -80,7 +80,7 @@ int16_t drawTemperatureStatus(void)
 
   if (!temperatureStatusValid()) return x_offset;
 
-  uint16_t tmpIcon[4];  // chamber, bed, 1-2 hotend
+  uint16_t tmpIcon[4];  // 1-2 hotend, bed, chamber
   uint8_t tmpHeater[4];
   uint8_t tmpIndex = 0;
 
