@@ -815,7 +815,6 @@ void loopPrintFromTFT(void)
 
   CMD      gcode;
   uint8_t  gcode_count = 0;
-  uint8_t  comment_count = 0;
   char     read_char = '\0';
   UINT     br = 0;
   FIL *    ip_file = &infoPrinting.file;
@@ -860,6 +859,7 @@ void loopPrintFromTFT(void)
     // if file comment parsing is enabled and a comment tag was previously intercepted parsing the gcode, enable comment parsing
     bool comment_parsing = (GET_BIT(infoSettings.general_settings, INDEX_FILE_COMMENT_PARSING) == 1 &&
                             read_char == ';') ? true : false;
+    uint8_t comment_count = 0;
 
     for ( ; ip_cur < ip_size; ip_cur++)  // continue to parse the line (e.g. comment) until command end flag
     {
