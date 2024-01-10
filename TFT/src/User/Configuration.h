@@ -1117,7 +1117,7 @@
  * Monitoring Debug
  * Uncomment/Enable to monitor/show system resources usage in Monitoring menu.
  */
-#define DEBUG_MONITORING  // Default: commented (disabled)
+#define DEBUG_MONITORING  // Default: uncommented (enabled)
 
 /**
  * Generic Debug

@@ -28,11 +28,12 @@ void loopTemperatureStatus(void)
   if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
-  bool update = false;
-  static int16_t lastCurrent[3];
-  static int16_t lastTarget[3];
-  uint8_t tmpHeater[3];  // chamber, bed, hotend
+  static int16_t lastCurrent[4];  // chamber, bed, 1-2 hotend
+  static int16_t lastTarget[4];
+
+  uint8_t tmpHeater[4];  // chamber, bed, 1-2 hotend
   uint8_t tmpIndex = 0;
+  bool update = false;
 
   if (infoSettings.hotend_count)  // global hotend
   {
@@ -64,6 +65,7 @@ void loopTemperatureStatus(void)
     {
       lastCurrent[tmpIndex] = actCurrent;
       lastTarget[tmpIndex] = actTarget;
+
       update = true;
     }
   }
@@ -78,8 +80,8 @@ int16_t drawTemperatureStatus(void)
 
   if (!temperatureStatusValid()) return x_offset;
 
-  uint8_t tmpHeater[3];  // chamber, bed, 1-2hotend
-  uint16_t tmpIcon[3];
+  uint16_t tmpIcon[4];  // chamber, bed, 1-2 hotend
+  uint8_t tmpHeater[4];
   uint8_t tmpIndex = 0;
 
   if (infoSettings.hotend_count)
@@ -99,13 +101,13 @@ int16_t drawTemperatureStatus(void)
   }
 
   if (infoSettings.bed_en)
-  {  // global bed
+  { // global bed
     tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
     tmpHeater[tmpIndex++] = BED;
   }
 
   if (infoSettings.chamber_en)
-  {  // global chamber
+  { // global chamber
     tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
     tmpHeater[tmpIndex++] = CHAMBER;
   }
@@ -116,20 +118,20 @@ int16_t drawTemperatureStatus(void)
 
   while (tmpIndex > 0)
   {
-    char tempstr[10];
-
     tmpIndex--;
 
+    char tempstr[10];
+
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
+
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[tmpIndex]), heatGetTargetTemp(tmpHeater[tmpIndex]));
-
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
-    GUI_StrPixelWidth(LABEL_10_PERCENT);
-
     GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
+
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
+
     x_offset -= GLOBALICON_WIDTH;
     ICON_ReadDisplay(x_offset, start_y, tmpIcon[tmpIndex]);  // icon
   }
