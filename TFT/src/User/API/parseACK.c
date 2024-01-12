@@ -263,7 +263,7 @@ static inline void hostActionCommands(void)
     }
     else
     {
-      statusScreen_setMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
+      statusSetMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
 
       if (!ack_continue_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {

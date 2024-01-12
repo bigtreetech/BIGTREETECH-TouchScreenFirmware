@@ -41,7 +41,7 @@ void infoSetMachineType(char * machine, uint8_t type_len)
   type_len++;  // add space for terminal '\0' character
   strncpy_no_pad(machine_type, machine, MIN(sizeof(machine_type), type_len));
 
-  statusScreen_setReady();
+  statusSetReady();
 }
 
 void infoSetAccessPoint(char * ssid, uint8_t ssid_len)

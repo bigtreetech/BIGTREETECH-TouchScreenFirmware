@@ -162,7 +162,7 @@ void addNotification(DIALOG_TYPE style, char * title, char * text, bool drawDial
 
   notificationDot();
 
-  statusScreen_setMsg((uint8_t *)title, (uint8_t *)text);
+  statusSetMsg((uint8_t *)title, (uint8_t *)text);
 }
 
 // replay a notification
@@ -195,7 +195,7 @@ void clearNotification(void)
     msglist[i].title[0] = '\0';
   }
   notificationDot();
-  statusScreen_setReady();
+  statusSetReady();
 }
 
 // check if pressed on titlebar area

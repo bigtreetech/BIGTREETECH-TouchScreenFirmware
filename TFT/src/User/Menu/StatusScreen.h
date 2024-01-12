@@ -10,8 +10,8 @@ extern "C" {
 
 extern const GUI_RECT msgRect;
 
-void statusScreen_setMsg(const uint8_t *title,const uint8_t *msg);
-void statusScreen_setReady(void);
+void statusSetMsg(const uint8_t *title,const uint8_t *msg);
+void statusSetReady(void);
 void menuStatus(void);
 
 #ifdef __cplusplus
