@@ -790,18 +790,33 @@ void parseACK(void)
     // parse and store build volume size
     else if (ack_seen("work:"))
     {
+      // NOTE: old Marlin fw provides a build area where home offset's coordinates, if any, are added while new Marlin fw
+      //       (or other firmwares) do not apply home offset
+      //
+      //       e.g. considering home offset's coordinates {13,14,0}, the following build areas can be provided:
+      //       - old Marlin fw: work:{min:{x:13.0000,y:14.0000,z:0.0000},max:{x:313.0000,y:314.0000,z:400.0000}}
+      //       - new Marlin fw: work:{min:{x:0.0000,y:0.0000,z:0.0000},max:{x:300.0000,y:300.0000,z:400.0000}}
+      //
+      //       the following code adopts a common solution based on a build area where home offset, if any, is always removed
+      //
+      float x, y, z;
+
+      x = y = z = 0.0f;
+
       if (ack_continue_seen("min:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        if (ack_continue_seen("x:")) x = ack_value();
+        if (ack_continue_seen("y:")) y = ack_value();
+        if (ack_continue_seen("z:")) z = ack_value();
+
+        infoSettings.machine_size_min[X_AXIS] = infoSettings.machine_size_min[Y_AXIS] = infoSettings.machine_size_min[Z_AXIS] = 0.0f;
       }
 
       if (ack_continue_seen("max:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
+        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value() - x;
+        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value() - y;
+        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value() - z;
       }
     }
     // parse M48, repeatability test
@@ -826,7 +841,7 @@ void parseACK(void)
       char tmpMsg[100];
       char * dialogMsg = (char *)getDialogMsgStr();
 
-      if (memcmp(dialogMsg, "Mean:", 6) == 0)
+      if (memcmp(dialogMsg, "Mean:", 5) == 0)
       {
         levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
         sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", dialogMsg, ack_value());

@@ -12,8 +12,8 @@ float probedZ = 0.0f;                         // last Z offset measured by probe
 
 int16_t setCoordValue(AXIS axis, ALIGN_POSITION align)
 {
-  return ((align == LEFT || align == BOTTOM) ? infoSettings.machine_size_min[axis] + infoSettings.level_edge
-                                             : infoSettings.machine_size_max[axis] - infoSettings.level_edge) - infoParameters.HomeOffset[axis];
+  return (align == LEFT || align == BOTTOM) ? infoSettings.machine_size_min[axis] + infoSettings.level_edge
+                                            : infoSettings.machine_size_max[axis] - infoSettings.level_edge;
 }
 
 void levelingGetPointCoords(LEVELING_POINT_COORDS coords)
