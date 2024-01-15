@@ -203,7 +203,7 @@ void ackPopupInfo(const char * info)
   }
 }
 
-bool processKnownEcho(void)
+static inline bool processKnownEcho(void)
 {
   bool isKnown = false;
   uint8_t i;
@@ -239,7 +239,7 @@ bool processKnownEcho(void)
   return isKnown;
 }
 
-void hostActionCommands(void)
+static inline void hostActionCommands(void)
 {
   if (ack_seen(":notification "))
   {
@@ -263,7 +263,7 @@ void hostActionCommands(void)
     }
     else
     {
-      statusScreen_setMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
+      statusSetMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
 
       if (!ack_continue_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
@@ -790,18 +790,33 @@ void parseACK(void)
     // parse and store build volume size
     else if (ack_seen("work:"))
     {
+      // NOTE: old Marlin fw provides a build area where home offset's coordinates, if any, are added while new Marlin fw
+      //       (or other firmwares) do not apply home offset
+      //
+      //       e.g. considering home offset's coordinates {13,14,0}, the following build areas can be provided:
+      //       - old Marlin fw: work:{min:{x:13.0000,y:14.0000,z:0.0000},max:{x:313.0000,y:314.0000,z:400.0000}}
+      //       - new Marlin fw: work:{min:{x:0.0000,y:0.0000,z:0.0000},max:{x:300.0000,y:300.0000,z:400.0000}}
+      //
+      //       the following code adopts a common solution based on a build area where home offset, if any, is always removed
+      //
+      float x, y, z;
+
+      x = y = z = 0.0f;
+
       if (ack_continue_seen("min:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_min[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_min[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_min[Z_AXIS] = ack_value();
+        if (ack_continue_seen("x:")) x = ack_value();
+        if (ack_continue_seen("y:")) y = ack_value();
+        if (ack_continue_seen("z:")) z = ack_value();
+
+        infoSettings.machine_size_min[X_AXIS] = infoSettings.machine_size_min[Y_AXIS] = infoSettings.machine_size_min[Z_AXIS] = 0.0f;
       }
 
       if (ack_continue_seen("max:"))
       {
-        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value();
-        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value();
-        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value();
+        if (ack_continue_seen("x:")) infoSettings.machine_size_max[X_AXIS] = ack_value() - x;
+        if (ack_continue_seen("y:")) infoSettings.machine_size_max[Y_AXIS] = ack_value() - y;
+        if (ack_continue_seen("z:")) infoSettings.machine_size_max[Z_AXIS] = ack_value() - z;
       }
     }
     // parse M48, repeatability test
@@ -812,21 +827,21 @@ void parseACK(void)
       sprintf(tmpMsg, "Mean: %0.5f", ack_value());
 
       if (ack_continue_seen("Min: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMin: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nMin: %0.5f", ack_value());
       if (ack_continue_seen("Max: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nMax: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nMax: %0.5f", ack_value());
       if (ack_continue_seen("Range: "))
-        sprintf(&tmpMsg[strlen(tmpMsg)], "\nRange: %0.5f", ack_value());
+        sprintf(strchr(tmpMsg, '\0'), "\nRange: %0.5f", ack_value());
 
       popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
     }
     // parse M48, standard deviation
-    else if (ack_seen("Standard Deviation: "))
+    else if (ack_seen("Standard Deviation:"))
     {
       char tmpMsg[100];
       char * dialogMsg = (char *)getDialogMsgStr();
 
-      if (memcmp(dialogMsg, "Mean: ", 6) == 0)
+      if (memcmp(dialogMsg, "Mean:", 5) == 0)
       {
         levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
         sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", dialogMsg, ack_value());
@@ -922,13 +937,20 @@ void parseACK(void)
     else if (ack_seen("Bed X:"))
     {
       float x = ack_value();
-      float y = 0;
 
       if (ack_continue_seen("Y:"))
-        y = ack_value();
+      {
+        float y = ack_value();
 
-      if (ack_continue_seen("Z:"))
-        levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
+        if (ack_continue_seen("Z:"))
+          levelingSetProbedPoint(x, y, ack_value());  // save probed Z value
+      }
+    }
+    // parse G30 coordinate unreachable message
+    else if (ack_seen("Z Probe Past Bed"))
+    {
+      levelingSetProbedPoint(-1, -1, 0);  // cancel waiting for coordinates
+      BUZZER_PLAY(SOUND_ERROR);
     }
     #if DELTA_PROBE_TYPE != 0
       // parse and store Delta calibration settings
@@ -1212,7 +1234,7 @@ void parseACK(void)
     // parse M115 capability report
     else if (ack_seen("FIRMWARE_NAME:"))
     {
-      uint8_t * string = (uint8_t *)&ack_cache[ack_index];
+      char * string = &ack_cache[ack_index];
       uint16_t string_start = ack_index;
       uint16_t string_end = string_start;
 
@@ -1234,7 +1256,7 @@ void parseACK(void)
 
       if (ack_seen("MACHINE_TYPE:"))
       {
-        string = (uint8_t *)&ack_cache[ack_index];
+        string = &ack_cache[ack_index];
         string_start = ack_index;
 
         if (ack_seen("EXTRUDER_COUNT:"))
@@ -1245,7 +1267,7 @@ void parseACK(void)
           string_end = ack_index - sizeof("EXTRUDER_COUNT:");
         }
 
-        infoSetMachineType(string, string_end - string_start);  // set firmware name
+        infoSetMachineType(string, string_end - string_start);  // set printer name
       }
     }
     else if (ack_starts_with("Cap:"))

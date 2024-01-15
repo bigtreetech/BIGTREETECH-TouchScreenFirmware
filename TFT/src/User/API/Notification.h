@@ -23,13 +23,6 @@ extern "C" {
 typedef struct
 {
   DIALOG_TYPE style;
-  uint8_t isNew;
-  char text[TOAST_MSG_LENGTH];
-} TOAST;
-
-typedef struct
-{
-  DIALOG_TYPE style;
   char title[MAX_MSG_TITLE_LENGTH];
   char text[MAX_MSG_LENGTH];
 } NOTIFICATION;
@@ -38,7 +31,7 @@ bool toastRunning(void);
 void addToast(DIALOG_TYPE style, char * text);
 void drawToast(bool redraw);
 void loopToast(void);
-void addNotification(DIALOG_TYPE style, char * title, char * text, bool ShowDialog);
+void addNotification(DIALOG_TYPE style, char * title, char * text, bool drawDialog);
 void replayNotification(uint8_t index);
 NOTIFICATION * getNotification(uint8_t index);
 bool hasNotification(void);

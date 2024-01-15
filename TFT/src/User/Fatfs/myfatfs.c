@@ -12,7 +12,7 @@ FATFS fatfs[FF_VOLUMES];  // FATFS work area
  * @param name2 name of second file/folder
  * @param date2 date/time for second file/folder
  */
-bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
+static inline bool compareFile(char * name1, uint32_t date1, char * name2, uint32_t date2)
 {
   if (infoSettings.files_sort_by <= SORT_DATE_OLD_FIRST)  // sort by date
   {
@@ -153,7 +153,7 @@ bool f_dir_exists(const TCHAR* path)
   return false;
 }
 
-FRESULT f_remove_node(
+static FRESULT f_remove_node(
   TCHAR* path,   // Path name buffer with the sub-directory to delete
   UINT sz_buff,  // Size of path name buffer (items)
   FILINFO* fno   // Name read buffer

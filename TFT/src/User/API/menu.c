@@ -801,10 +801,14 @@ void menuDrawTitle(void)
   }
 
   // draw title
-  uint8_t *titleString = labelGetAddress(curTitle);
   uint16_t start_y = (TITLE_END_Y - BYTE_HEIGHT) / 2;
   uint16_t start_x = 10;
   uint16_t end_x = drawTemperatureStatus();
+
+  // NOTE: load the label just before displaying it. This is needed only in case a secondary language pack (.ini file) is used
+  //       by the TFT (secondary language shares a common buffer where all labels are loaded from flash memory) just to avoid the
+  //       possibility to display a wrong label
+  uint8_t *titleString = labelGetAddress(curTitle);
 
   GUI_SetBkColor(infoSettings.title_bg_color);
 
@@ -825,6 +829,56 @@ void menuDrawTitle(void)
 
   // draw reminder/storage status
   if (reminder.status != SYS_STATUS_IDLE) drawReminderMsg();
+}
+
+// When there is a button value, the icon changes color and redraws
+void itemDrawIconPress(uint8_t position, uint8_t is_press)
+{
+  if (position > KEY_ICON_7) return;
+
+  if (menuType == MENU_TYPE_ICON)
+  {
+    if (curMenuItems == NULL) return;
+    if (curMenuItems->items[position].icon == ICON_NULL) return;
+
+    const GUI_RECT *rect = curRect + position;
+
+    if (is_press)  // Turn green when pressed
+      ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+    else  // Redraw normal icon when released
+      ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
+  }
+  else if (menuType == MENU_TYPE_LISTVIEW)
+  { // draw rec over list item if pressed
+    if (curListItems == NULL)
+      return;
+
+    const GUI_RECT *rect = rect_of_keyListView + position;
+
+    if (curListItems->items[position].icon == CHARICON_NULL)
+    {
+      GUI_ClearPrect(rect);
+      return;
+    }
+    if (is_press)
+      ListItem_Display(rect,position,&curListItems->items[position], true);
+    else
+      ListItem_Display(rect,position,&curListItems->items[position], false);
+  }
+}
+
+// When there is a button value, the icon changes color and redraws
+void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
+{
+  if (position < PS_KEY_6 || position > PS_KEY_9) return;
+  position -= PS_TOUCH_OFFSET;
+
+  const GUI_RECT *rect = curRect + position;
+
+  if (is_press)  // Turn green when pressed
+    ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
+  else  // Redraw normal icon when released
+    ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
 }
 
 // Draw the entire interface
@@ -998,56 +1052,6 @@ void displayExhibitValue(const char * valueStr)
   setFontSize(FONT_SIZE_NORMAL);
 }
 
-// When there is a button value, the icon changes color and redraws
-void itemDrawIconPress(uint8_t position, uint8_t is_press)
-{
-  if (position > KEY_ICON_7) return;
-
-  if (menuType == MENU_TYPE_ICON)
-  {
-    if (curMenuItems == NULL) return;
-    if (curMenuItems->items[position].icon == ICON_NULL) return;
-
-    const GUI_RECT *rect = curRect + position;
-
-    if (is_press)  // Turn green when pressed
-      ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
-    else  // Redraw normal icon when released
-      ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
-  }
-  else if (menuType == MENU_TYPE_LISTVIEW)
-  { // draw rec over list item if pressed
-    if (curListItems == NULL)
-      return;
-
-    const GUI_RECT *rect = rect_of_keyListView + position;
-
-    if (curListItems->items[position].icon == CHARICON_NULL)
-    {
-      GUI_ClearPrect(rect);
-      return;
-    }
-    if (is_press)
-      ListItem_Display(rect,position,&curListItems->items[position], true);
-    else
-      ListItem_Display(rect,position,&curListItems->items[position], false);
-  }
-}
-
-// When there is a button value, the icon changes color and redraws
-void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
-{
-  if (position < PS_KEY_6 || position > PS_KEY_9) return;
-  position -= PS_TOUCH_OFFSET;
-
-  const GUI_RECT *rect = curRect + position;
-
-  if (is_press)  // Turn green when pressed
-    ICON_PressedDisplay(rect->x0, rect->y0, curMenuItems->items[position].icon);
-  else  // Redraw normal icon when released
-    ICON_ReadDisplay(rect->x0, rect->y0,curMenuItems->items[position].icon);
-}
-
 // Get button value
 KEY_VALUES menuKeyGetValue(void)
 {
@@ -1133,7 +1137,7 @@ KEY_VALUES menuKeyGetValue(void)
 // Smart home (long press on back button to go to status screen)
 #ifdef SMART_HOME
 
-void loopCheckBackPress(void)
+static inline void loopCheckBackPress(void)
 {
   static bool longPress = false;
 

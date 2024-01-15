@@ -25,58 +25,35 @@ const MENUITEMS settingsItems = {
 //   {1 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},
 //   {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
 
-static uint8_t firmare_name[64] = "Unknown system";  // Marlin firmware version
-uint8_t machine_type[64] = "3D Printer";  // Marlin machine type
-uint8_t access_point[64] = "Connecting...";  // Access point for RepRapFirmware
-uint8_t ip_address[20] = "0.0.0.0";  // IP address for RepRapFirmware
+static char firmware_name[64] = "Unknown system";  // Marlin firmware version
+char machine_type[64] = "3D Printer";              // Marlin machine type
+static char access_point[64] = "Connecting...";    // Access point for RepRapFirmware
+static char ip_address[20] = "0.0.0.0";            // IP address for RepRapFirmware
 
-void infoSetFirmwareName(uint8_t *name, uint8_t name_len)
+void infoSetFirmwareName(char * name, uint8_t name_len)
 {
-  if (name_len > sizeof(firmare_name) - 1)
-    name_len = sizeof(firmare_name) - 1;
-  uint8_t i;
-  for (i = 0; i < name_len; i++)
-  {
-    firmare_name[i] = name[i];
-  }
-  firmare_name[i] = 0;
+  name_len++;  // add space for terminal '\0' character
+  strncpy_no_pad(firmware_name, name, MIN(sizeof(firmware_name), name_len));
 }
 
-void infoSetMachineType(uint8_t *machine, uint8_t type_len)
+void infoSetMachineType(char * machine, uint8_t type_len)
 {
-  if (type_len > sizeof(machine_type) - 1)
-    type_len = sizeof(machine_type) - 1;
-  uint8_t i;
-  for (i = 0; i < type_len; i++)
-  {
-    machine_type[i] = machine[i];
-  }
-  machine_type[i] = 0;
-  statusScreen_setReady();
+  type_len++;  // add space for terminal '\0' character
+  strncpy_no_pad(machine_type, machine, MIN(sizeof(machine_type), type_len));
+
+  statusSetReady();
 }
 
-void infoSetAccessPoint(uint8_t *ssid, uint8_t ssid_len)
+void infoSetAccessPoint(char * ssid, uint8_t ssid_len)
 {
-  if (ssid_len > sizeof(access_point) - 1)
-    ssid_len = sizeof(access_point) - 1;
-  uint8_t i;
-  for (i = 0; i < ssid_len; i++)
-  {
-    access_point[i] = ssid[i];
-  }
-  access_point[i] = 0;
+  ssid_len++;  // add space for terminal '\0' character
+  strncpy_no_pad(access_point, ssid, MIN(sizeof(access_point), ssid_len));
 }
 
-void infoSetIPAddress(uint8_t *ip, uint8_t ip_len)
+void infoSetIPAddress(char * ip, uint8_t ip_len)
 {
-  if (ip_len > sizeof(ip_address) - 1)
-    ip_len = sizeof(ip_address) - 1;
-  uint8_t i;
-  for (i = 0; i < ip_len; i++)
-  {
-    ip_address[i] = ip[i];
-  }
-  ip_address[i] = 0;
+  ip_len++;  // add space for terminal '\0' character
+  strncpy_no_pad(ip_address, ip, MIN(sizeof(ip_address), ip_len));
 }
 
 // Version infomation
@@ -135,8 +112,8 @@ void menuInfo(void)
 
   // draw info
   GUI_SetColor(0xDB40);
-  GUI_DispStringInPrectEOL(&version[0], firmare_name);
-  GUI_DispStringInPrectEOL(&version[1], machine_type);
+  GUI_DispStringInPrectEOL(&version[0], (uint8_t *)firmware_name);
+  GUI_DispStringInPrectEOL(&version[1], (uint8_t *)machine_type);
   GUI_DispStringInPrectEOL(&version[2], (uint8_t *)hardware);
   sprintf(buf, "V"STRINGIFY(SOFTWARE_VERSION) " " __DATE__ " in %dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
   GUI_DispStringInPrectEOL(&version[3], (uint8_t *)buf);
@@ -156,9 +133,9 @@ void menuInfo(void)
 
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while (!isPress()) loopBackEnd();
+  while (!isPress()) { loopBackEnd(); }
   BUZZER_PLAY(SOUND_KEYPRESS);
-  while (isPress()) loopBackEnd();
+  while (isPress()) { loopBackEnd(); }
 
   GUI_RestoreColorDefault();
   CLOSE_MENU();

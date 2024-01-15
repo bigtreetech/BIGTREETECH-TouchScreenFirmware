@@ -18,18 +18,26 @@ void menuDisconnect(void)
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_DeInit(ALL_PORTS);
+
   while (!isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();
     #endif
   }
+
+  #ifdef BUZZER_PIN
+    BUZZER_PLAY(SOUND_KEYPRESS);
+    loopBuzzer();
+  #endif
+
   while (isPress())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();
     #endif
   }
+
   Serial_Init(ALL_PORTS);
 
   CLOSE_MENU();

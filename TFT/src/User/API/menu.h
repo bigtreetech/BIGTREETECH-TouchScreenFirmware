@@ -201,15 +201,11 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon);
 void displayExhibitHeader(const char * titleStr, const char * unitStr);
 void displayExhibitValue(const char * valueStr);
 
-void itemDrawIconPress(uint8_t position, uint8_t is_press);
-void itemDrawIconPress_PS(uint8_t position, uint8_t is_press);
 KEY_VALUES menuKeyGetValue(void);
 
 // Smart home
 #ifdef SMART_HOME
   #define LONG_TOUCH (MODE_SWITCHING_INTERVAL / 3)  // keep it lower than MODE_SWITCHING_INTERVAL
-
-  void loopCheckBackPress(void);
 #endif
 
 void menuDummy(void);

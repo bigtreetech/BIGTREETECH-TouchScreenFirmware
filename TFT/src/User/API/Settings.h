@@ -34,8 +34,8 @@ extern "C" {
 #define MAX_HEATER_COUNT      (MAX_HOTEND_COUNT + 2)  // hotends + bed + chamber
 #define MAX_HEATER_PID_COUNT  (MAX_HOTEND_COUNT + 1)  // hotends + bed
 #define MAX_COOLING_FAN_COUNT 6
-#define MAX_CRTL_FAN_COUNT    2
-#define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CRTL_FAN_COUNT)
+#define MAX_CTRL_FAN_COUNT    2
+#define MAX_FAN_COUNT         (MAX_COOLING_FAN_COUNT + MAX_CTRL_FAN_COUNT)
 
 #define AXIS_NUM              (TOTAL_AXIS - 1)
 #define SPEED_COUNT            3

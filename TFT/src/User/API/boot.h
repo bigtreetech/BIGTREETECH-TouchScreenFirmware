@@ -72,24 +72,10 @@ enum
   #define X_ICON(NAME) ICON_##NAME ,
     #include "icon_list.inc"
   #undef X_ICON
-  // add new icons in icon_list.inc only
-  //ICON_RESERVE
 
-  // Preview should be in the last place before ICON_NULL to save flash storage space
-  ICON_PREVIEW,
-  // Back ground sign
-  ICON_NULL
-};
-
-// This List is Auto-Generated. Please add new icons in small_icon_list.inc only
-enum
-{
-  #define X_SMALLICON(NAME) SMALL_ICON_##NAME ,
-    #include "small_icon_list.inc"
-  #undef X_SMALLICON
-  // add new icons in small_icon_list.inc only
-  // Back ground sign
-  SMALL_ICON_NULL
+  //ICON_RESERVE,
+  ICON_PREVIEW,  // preview should be in the last place before ICON_NULL to save flash storage space
+  ICON_NULL      // back ground sign
 };
 
 typedef enum
@@ -112,8 +98,6 @@ typedef union
 } GUI_COLOR;
 
 void scanUpdates(void);
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState);
-BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr);
 
 #ifdef __cplusplus
 }

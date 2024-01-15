@@ -28,11 +28,25 @@ void loopTemperatureStatus(void)
   if (getMenuType() == MENU_TYPE_FULLSCREEN) return;
   if (!temperatureStatusValid()) return;
 
-  uint8_t tmpHeater[3];  // chamber, bed, hotend
+  static int16_t lastCurrent[4];  // 1-2 hotend, bed, chamber
+  static int16_t lastTarget[4];
+
+  uint8_t tmpHeater[4];  // 1-2 hotend, bed, chamber
   uint8_t tmpIndex = 0;
+  bool update = false;
 
   if (infoSettings.hotend_count)  // global hotend
-    tmpHeater[tmpIndex++] = heatGetCurrentHotend();
+  {
+    if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en)  // dual hotend
+    {
+      tmpHeater[tmpIndex++] = NOZZLE0;
+      tmpHeater[tmpIndex++] = NOZZLE1;
+    }
+    else  // single or mixing hotend
+    {
+      tmpHeater[tmpIndex++] = heatGetCurrentHotend();
+    }
+  }
 
   if (infoSettings.bed_en)  // global bed
     tmpHeater[tmpIndex++] = BED;
@@ -40,19 +54,18 @@ void loopTemperatureStatus(void)
   if (infoSettings.chamber_en)  // global chamber
     tmpHeater[tmpIndex++] = CHAMBER;
 
-  bool update = false;
-  static int16_t lastCurrent[3];
-  static int16_t lastTarget[3];
-
-  for (int8_t i = tmpIndex - 1; i >= 0; i--)
+  while (tmpIndex > 0)
   {
-    int16_t actCurrent = heatGetCurrentTemp(tmpHeater[i]);
-    int16_t actTarget = heatGetTargetTemp(tmpHeater[i]);
+    tmpIndex--;
 
-    if (lastCurrent[i] != actCurrent || lastTarget[i] != actTarget)
+    int16_t actCurrent = heatGetCurrentTemp(tmpHeater[tmpIndex]);
+    int16_t actTarget = heatGetTargetTemp(tmpHeater[tmpIndex]);
+
+    if (lastCurrent[tmpIndex] != actCurrent || lastTarget[tmpIndex] != actTarget)
     {
-      lastCurrent[i] = actCurrent;
-      lastTarget[i] = actTarget;
+      lastCurrent[tmpIndex] = actCurrent;
+      lastTarget[tmpIndex] = actTarget;
+
       update = true;
     }
   }
@@ -67,12 +80,12 @@ int16_t drawTemperatureStatus(void)
 
   if (!temperatureStatusValid()) return x_offset;
 
-  uint8_t tmpHeater[3];  // chamber, bed, 1-2hotend
-  uint16_t tmpIcon[3];
+  uint16_t tmpIcon[4];  // 1-2 hotend, bed, chamber
+  uint8_t tmpHeater[4];
   uint8_t tmpIndex = 0;
 
   if (infoSettings.hotend_count)
-  {  // global hotend
+  { // global hotend
     if (infoSettings.hotend_count == 2 && !infoSettings.chamber_en)  // dual hotend
     {
       tmpIcon[tmpIndex] = ICON_GLOBAL_NOZZLE;
@@ -88,13 +101,13 @@ int16_t drawTemperatureStatus(void)
   }
 
   if (infoSettings.bed_en)
-  {  // global bed
+  { // global bed
     tmpIcon[tmpIndex] = ICON_GLOBAL_BED;
     tmpHeater[tmpIndex++] = BED;
   }
 
   if (infoSettings.chamber_en)
-  {  // global chamber
+  { // global chamber
     tmpIcon[tmpIndex] = ICON_GLOBAL_CHAMBER;
     tmpHeater[tmpIndex++] = CHAMBER;
   }
@@ -103,22 +116,24 @@ int16_t drawTemperatureStatus(void)
 
   GUI_SetBkColor(infoSettings.title_bg_color);
 
-  for (int8_t i = tmpIndex - 1; i >= 0; i--)
+  while (tmpIndex > 0)
   {
+    tmpIndex--;
+
     char tempstr[10];
 
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
-    sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[i]), heatGetTargetTemp(tmpHeater[i]));
 
+    sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[tmpIndex]), heatGetTargetTemp(tmpHeater[tmpIndex]));
     x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
-    GUI_StrPixelWidth(LABEL_10_PERCENT);
-
     GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
+
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
+
     x_offset -= GLOBALICON_WIDTH;
-    ICON_ReadDisplay(x_offset, start_y, tmpIcon[i]);  // icon
+    ICON_ReadDisplay(x_offset, start_y, tmpIcon[tmpIndex]);  // icon
   }
 
   GUI_SetBkColor(infoSettings.bg_color);

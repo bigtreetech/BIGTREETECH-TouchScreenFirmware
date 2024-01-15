@@ -261,7 +261,7 @@ void loopCheckHeater(void)
       if (OS_GetTimeMs() < nextHeatCheckTime)
         break;
 
-      if (requestCommandInfoIsRunning())  // To avoid colision in gcode response processing
+      if (requestCommandInfoIsRunning())  // To avoid collision in gcode response processing
         break;
 
       if ((infoMachineSettings.firmwareType != FW_REPRAPFW) && !storeCmd("M105\n"))

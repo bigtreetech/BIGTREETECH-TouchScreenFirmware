@@ -415,7 +415,7 @@ bool openRemoteTFT(bool writingMode)
   return open;
 }
 
-void writeRemoteTFT()
+static inline void writeRemoteTFT()
 {
   // examples:
   //
@@ -801,7 +801,7 @@ void sendQueueCmd(void)
               Serial_Forward(cmd_port_index, buf);
               sprintf(buf, "Cap:FAN_NUM:%d\n", infoSettings.fan_count);
               Serial_Forward(cmd_port_index, buf);
-              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CRTL_FAN_COUNT : 0);
+              sprintf(buf, "Cap:FAN_CTRL_NUM:%d\n", infoSettings.ctrl_fan_en ? MAX_CTRL_FAN_COUNT : 0);
               Serial_Forward(cmd_port_index, buf);
               Serial_Forward(cmd_port_index, "ok\n");
 
@@ -971,7 +971,7 @@ void sendQueueCmd(void)
             stripChecksum(rawMsg);
             msgText = stripHead(rawMsg);
 
-            statusScreen_setMsg((uint8_t *)"M117", (uint8_t *)msgText);
+            statusSetMsg((uint8_t *)"M117", (uint8_t *)msgText);
 
             if (MENU_IS_NOT(menuStatus))
               addToast(DIALOG_TYPE_INFO, (char *)msgText);

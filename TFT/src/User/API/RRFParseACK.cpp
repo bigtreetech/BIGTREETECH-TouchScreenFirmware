@@ -209,19 +209,19 @@ void ParseACKJsonParser::value(const char *value)
       {
         setupMachine(FW_REPRAPFW);
         string_end = strstr(string_start, "ELECTRONICS");
-        infoSetFirmwareName((uint8_t *)string_start, string_end-string_start);
+        infoSetFirmwareName(string_start, string_end-string_start);
       }
       else if ((string_start = strstr(value, (char *)"access point")) != NULL)  // parse M552
       {
         string_end = strstr(string_start, ",");
         string_start += 13;
-        infoSetAccessPoint((uint8_t *)string_start,  string_end-string_start);
+        infoSetAccessPoint(string_start,  string_end-string_start);
 
         if ((string_start = strstr(string_start, (char *)"IP address")) != NULL)
         {
           string_end = strstr(string_start, "\\n");
           string_start += 11;
-          infoSetIPAddress((uint8_t *)string_start,  string_end-string_start);
+          infoSetIPAddress(string_start,  string_end-string_start);
         }
       }
       else if ((string_start = strstr(value, (char *)"printing byte")) != NULL)  // parse M27  {"seq":21,"resp":"SD printing byte 1226/5040433\n"}

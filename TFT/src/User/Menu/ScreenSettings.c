@@ -268,7 +268,7 @@ void menuLanguage(void)
 
   if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
   {
-    statusScreen_setReady();  // restore msg buffer when language is changed
+    statusSetReady();  // restore msg buffer when language is changed
     storePara();
   }
 }

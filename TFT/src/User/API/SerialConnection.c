@@ -26,54 +26,36 @@ const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT] = {
 
 const uint32_t baudrateValues[BAUDRATE_COUNT] = {
   0,     2400,   9600,   19200,   38400,   57600,   115200,   230400,   250000,   500000,   921600,   1000000};
+
 const char * const baudrateNames[BAUDRATE_COUNT] = {
   "OFF", "2400", "9600", "19200", "38400", "57600", "115200", "230400", "250000", "500000", "921600", "1000000"};
-
-static inline void Serial_InitPrimary(void)
-{
-  InfoHost_Init(false);  // initialize infoHost when disconnected
-
-  Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSizeRX, serialPort[PORT_1].cacheSizeTX, baudrateValues[infoSettings.serial_port[PORT_1]]);
-}
-
-static inline void Serial_DeInitPrimary(void)
-{
-  Serial_DeConfig(serialPort[PORT_1].port);
-}
 
 void Serial_Init(SERIAL_PORT_INDEX portIndex)
 {
   if (!WITHIN(portIndex, ALL_PORTS, SERIAL_PORT_COUNT - 1))
     return;
 
-  if (portIndex <= PORT_1)  // if primary, all serial ports or all supplementary serial ports
+  if (portIndex == PORT_1 || portIndex == ALL_PORTS)  // if primary or all serial ports, initialize the primary serial port first
   {
-    if (portIndex != SUP_PORTS)  // if primary or all serial ports, initialize the primary serial port
-      Serial_InitPrimary();
+    InfoHost_Init(false);  // initialize infoHost when disconnected
+    coordinateSetKnown(false);
 
-    #ifdef SERIAL_PORT_2
-      if (portIndex != PORT_1)  // if ALL_PORTS or SUP_PORTS, initialize all the supplementary serial ports
-      {
-        for (portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)
-        {
-          // the supplementary serial ports should be enabled according to config.ini.
-          // Disable the serial port when it is not in use and/or not connected to a device (floating) to
-          // avoid to receive and process wrong data due to possible electromagnetic interference (EMI).
-          if (infoSettings.serial_port[portIndex] > 0)  // if serial port is enabled
-            Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSizeRX, serialPort[portIndex].cacheSizeTX,
-                          baudrateValues[infoSettings.serial_port[portIndex]]);
-        }
-      }
-    #endif
+    Serial_Config(serialPort[PORT_1].port, serialPort[PORT_1].cacheSizeRX, serialPort[PORT_1].cacheSizeTX, baudrateValues[infoSettings.serial_port[PORT_1]]);
   }
+
   #ifdef SERIAL_PORT_2
-    else  // if supplementary serial port
+    // if ALL_PORTS, SUP_PORTS or specific supplementary port
+    //
+    for (SERIAL_PORT_INDEX tmpIndex = PORT_2; tmpIndex < SERIAL_PORT_COUNT; tmpIndex++)
     {
-      if (infoSettings.serial_port[portIndex] > 0)  // if serial port is enabled
-      {
-        Serial_Config(serialPort[portIndex].port, serialPort[portIndex].cacheSizeRX, serialPort[portIndex].cacheSizeTX,
-                      baudrateValues[infoSettings.serial_port[portIndex]]);
-      }
+      // the supplementary serial ports should be enabled according to config.ini.
+      // Disable the serial port when it is not in use and/or not connected to a device (floating) to
+      // avoid to receive and process wrong data due to possible electromagnetic interference (EMI)
+
+      // if serial port is enabled...
+      if (infoSettings.serial_port[tmpIndex] > 0 && (portIndex == tmpIndex || portIndex < PORT_1))
+        Serial_Config(serialPort[tmpIndex].port, serialPort[tmpIndex].cacheSizeRX, serialPort[tmpIndex].cacheSizeTX,
+                      baudrateValues[infoSettings.serial_port[tmpIndex]]);
     }
   #endif
 }
@@ -83,25 +65,16 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex)
   if (!WITHIN(portIndex, ALL_PORTS, SERIAL_PORT_COUNT - 1))
     return;
 
-  if (portIndex <= PORT_1)  // if primary, all serial ports or all supplementary serial ports
-  {
-    if (portIndex != SUP_PORTS)  // if primary or all serial ports, deinitialize the primary serial port
-      Serial_DeInitPrimary();
+  if (portIndex == PORT_1 || portIndex == ALL_PORTS)  // if primary or all serial ports, deinitialize the primary serial port first
+    Serial_DeConfig(serialPort[PORT_1].port);
 
-    #ifdef SERIAL_PORT_2
-      if (portIndex != PORT_1)  // if ALL_PORTS or SUP_PORTS, deinitialize all the supplementary serial ports
-      {
-        for (portIndex = PORT_2; portIndex < SERIAL_PORT_COUNT; portIndex++)
-        {
-          Serial_DeConfig(serialPort[portIndex].port);
-        }
-      }
-    #endif
-  }
   #ifdef SERIAL_PORT_2
-    else  // if supplementary serial port
+    // if ALL_PORTS, SUP_PORTS or specific supplementary port
+    //
+    for (SERIAL_PORT_INDEX tmpIndex = PORT_2; tmpIndex < SERIAL_PORT_COUNT; tmpIndex++)
     {
-      Serial_DeConfig(serialPort[portIndex].port);
+      if (portIndex == tmpIndex || portIndex < PORT_1)
+        Serial_DeConfig(serialPort[tmpIndex].port);
     }
   #endif
 }

@@ -75,7 +75,26 @@ const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
                               START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
-void drawStatus(void)
+void statusSetMsg(const uint8_t *title, const uint8_t *msg)
+{
+  strncpy_no_pad(msgTitle, (char *)title, sizeof(msgTitle));
+  strncpy_no_pad(msgBody, (char *)msg, sizeof(msgBody));
+  msgNeedRefresh = true;
+}
+
+void statusSetReady(void)
+{
+  strncpy_no_pad(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
+
+  if (infoHost.connected == false)
+    strncpy_no_pad(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
+  else
+    snprintf(msgBody, sizeof(msgBody), "%s %s", machine_type, (char *)textSelect(LABEL_READY));
+
+  msgNeedRefresh = true;
+}
+
+void statusDraw(void)
 {
   // icons and their values are updated one by one to reduce flicker/clipping
   char tempstr[45];
@@ -200,26 +219,7 @@ void drawStatus(void)
   GUI_RestoreColorDefault();
 }
 
-void statusScreen_setMsg(const uint8_t *title, const uint8_t *msg)
-{
-  strncpy_no_pad(msgTitle, (char *)title, sizeof(msgTitle));
-  strncpy_no_pad(msgBody, (char *)msg, sizeof(msgBody));
-  msgNeedRefresh = true;
-}
-
-void statusScreen_setReady(void)
-{
-  strncpy_no_pad(msgTitle, (char *)textSelect(LABEL_STATUS), sizeof(msgTitle));
-
-  if (infoHost.connected == false)
-    strncpy_no_pad(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
-  else
-    snprintf(msgBody, sizeof(msgBody), "%s %s", (char *)machine_type, (char *)textSelect(LABEL_READY));
-
-  msgNeedRefresh = true;
-}
-
-void drawStatusScreenMsg(void)
+void statusDrawMsg(void)
 {
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
 
@@ -241,7 +241,7 @@ void drawStatusScreenMsg(void)
   msgNeedRefresh = false;
 }
 
-static inline void scrollMsg(void)
+static inline void statusScrollMsg(void)
 {
   GUI_SetBkColor(INFOMSG_BG_COLOR);
   GUI_SetColor(INFOMSG_FONT_COLOR);
@@ -249,7 +249,7 @@ static inline void scrollMsg(void)
   GUI_RestoreColorDefault();
 }
 
-static inline void toggleTool(void)
+static inline void statusToggleTool(void)
 {
   if (nextScreenUpdate(UPDATE_TOOL_TIME))
   {
@@ -272,7 +272,7 @@ static inline void toggleTool(void)
 
     // switch speed/flow
     TOGGLE_BIT(currentSpeedID, 0);
-    drawStatus();
+    statusDraw();
 
     // gcode queries must be call after drawStatus
     coordinateQuery(MS_TO_SEC(UPDATE_TOOL_TIME));
@@ -289,21 +289,21 @@ void menuStatus(void)
   menuDrawPage(&statusItems);
   GUI_SetColor(GANTRY_XYZ_BG_COLOR);
   GUI_FillPrect(&recGantry);
-  drawStatus();
-  drawStatusScreenMsg();
+  statusDraw();
+  statusDrawMsg();
 
   while (MENU_IS(menuStatus))
   {
     if (infoHost.connected != lastConnectionStatus)
     {
-      statusScreen_setReady();
+      statusSetReady();
       lastConnectionStatus = infoHost.connected;
     }
 
     if (msgNeedRefresh)
-      drawStatusScreenMsg();
+      statusDrawMsg();
 
-    scrollMsg();
+    statusScrollMsg();
     key_num = menuKeyGetValue();
 
     switch (key_num)
@@ -348,7 +348,7 @@ void menuStatus(void)
         break;
     }
 
-    toggleTool();
+    statusToggleTool();
     loopProcess();
   }
 
