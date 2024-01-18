@@ -3,7 +3,7 @@
 #include "GPIO_Init.h"
 
 #ifdef MKS_TFT35_V1_0
-  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0
+  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0.
   // Defined in MKS TFT35 Touch Screen source code: user\others\mks_touch_screen.c CHX=0x90, CHY=0xD0
   #define CMD_RDX 0x90
   #define CMD_RDY 0xD0
@@ -36,7 +36,7 @@
 #define F   TS_CalPara[5]
 #define K   TS_CalPara[6]
 
-#define TS_DEBOUNCE_MS 20  // 20ms
+#define TS_DEBOUNCE_MS 20  // 20 ms
 #define TS_ERR_RANGE   10
 
 static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
