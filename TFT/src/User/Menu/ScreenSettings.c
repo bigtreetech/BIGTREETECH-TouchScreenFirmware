@@ -552,12 +552,12 @@ void menuScreenSettings(void)
       case KEY_ICON_0:
         TOGGLE_BIT(infoSettings.rotated_ui, 0);
         LCD_RefreshDirection(infoSettings.rotated_ui);
-        TSC_Calibration();
+        TS_Calibrate();
         menuDrawPage(&screenSettingsItems);
         break;
 
       case KEY_ICON_1:
-        TSC_Calibration();
+        TS_Calibrate();
         menuDrawPage(&screenSettingsItems);
         break;
 

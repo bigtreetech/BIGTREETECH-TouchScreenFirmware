@@ -64,7 +64,6 @@
 #include "ListManager.h"
 #include "Numpad.h"            // it uses infoSettings
 #include "ST7920_Emulator.h"   // it uses infoSettings
-#include "TouchProcess.h"
 #include "ui_draw.h"
 
 // User/API
@@ -102,6 +101,7 @@
 #include "SpeedControl.h"
 #include "Temperature.h"
 #include "Touch_Encoder.h"
+#include "Touch_Screen.h"
 
 // User/Menu
 #include "ABL.h"

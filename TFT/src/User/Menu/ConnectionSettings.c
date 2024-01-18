@@ -19,7 +19,7 @@ void menuDisconnect(void)
 
   Serial_DeInit(ALL_PORTS);
 
-  while (!isPress())
+  while (!TS_IsPressed())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();
@@ -31,7 +31,7 @@ void menuDisconnect(void)
     loopBuzzer();
   #endif
 
-  while (isPress())
+  while (TS_IsPressed())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();

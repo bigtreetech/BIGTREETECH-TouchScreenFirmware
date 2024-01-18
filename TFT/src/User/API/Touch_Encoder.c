@@ -34,7 +34,7 @@ bool Touch_Enc_ReadBtn(uint16_t interval)
 
   if (!XPT2046_Read_Pen())
   {
-    TS_Get_Coordinates(&tx, &ty);
+    TS_GetCoordinates(&tx, &ty);
 
     if (OS_GetTimeMs() - nowTime >= interval)
     {
@@ -60,7 +60,7 @@ uint8_t Touch_Enc_ReadPos(void)
 
   if (!XPT2046_Read_Pen())
   {
-    TS_Get_Coordinates(&ex, &ey);
+    TS_GetCoordinates(&ex, &ey);
 
     if (!move)
       sy = ey;
