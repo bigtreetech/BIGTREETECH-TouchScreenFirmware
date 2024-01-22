@@ -44,7 +44,7 @@ void powerFailedSetDriverSource(void)
 
 bool powerFailedLoad(FIL *print_fp)
 {
-  // set status flag status first
+  // set status flag first
   load_ok = false;
   restore_ok = false;
 
