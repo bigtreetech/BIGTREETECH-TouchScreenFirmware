@@ -1262,6 +1262,9 @@ bool getConfigFromFile(char * configPath)
   STRINGS_STORE tempStringStore;
   PREHEAT_STORE tempPreheatStore;
 
+  // initialize all settings to default values before eventually overwriting them with values from configuration file
+  initSettings();
+
   configCustomGcodes = &tempCustomGcodes;
   configPrintGcodes = &tempPrintCodes;
   configStringsStore = &tempStringStore;
