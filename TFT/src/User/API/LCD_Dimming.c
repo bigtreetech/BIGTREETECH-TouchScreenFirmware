@@ -89,7 +89,7 @@ void LCD_CheckDimming(void)
   if (infoSettings.lcd_idle_time == IDLE_TIME_OFF)
     return;
 
-  if (isPress()
+  if (TS_IsPressed()
     #if LCD_ENCODER_SUPPORT
       || LCD_Enc_CheckState()
     #endif
@@ -97,8 +97,8 @@ void LCD_CheckDimming(void)
   {
     if (lcd_dim.dimmed)
     {
-      if (infoSettings.lcd_lock_on_idle && isPress())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
-        lcd_dim.locked = true;                         // the first touch will be skipped preventing to trigger any undesired action
+      if (infoSettings.lcd_lock_on_idle && TS_IsPressed())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
+        lcd_dim.locked = true;                              // the first touch will be skipped preventing to trigger any undesired action
 
       lcd_dim.dimmed = false;
       LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);

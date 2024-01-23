@@ -1,9 +1,9 @@
-#include "TouchProcess.h"
+#include "Touch_Screen.h"
 #include "includes.h"
 #include "GPIO_Init.h"
 
 #ifdef MKS_TFT35_V1_0
-  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0
+  // touch screen X, Y channels are swapped for MKS_TFT35_V1_0.
   // Defined in MKS TFT35 Touch Screen source code: user\others\mks_touch_screen.c CHX=0x90, CHY=0xD0
   #define CMD_RDX 0x90
   #define CMD_RDY 0xD0
@@ -28,21 +28,24 @@
 #define Y2  TP_Y[1]
 #define Y3  TP_Y[2]
 
-#define A TSC_Para[0]
-#define B TSC_Para[1]
-#define C TSC_Para[2]
-#define D TSC_Para[3]
-#define E TSC_Para[4]
-#define F TSC_Para[5]
-#define K TSC_Para[6]
+#define A   TS_CalPara[0]
+#define B   TS_CalPara[1]
+#define C   TS_CalPara[2]
+#define D   TS_CalPara[3]
+#define E   TS_CalPara[4]
+#define F   TS_CalPara[5]
+#define K   TS_CalPara[6]
 
-#define TOUCH_DEBOUNCE_MS 20  // 20ms
+#define TS_DEBOUNCE_MS 20  // 20 ms
+#define TS_ERR_RANGE   10
 
-int32_t TSC_Para[7];
-static volatile uint8_t touchCountdown = TOUCH_DEBOUNCE_MS;
-bool touchSound = true;
+static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
 
-void TS_Get_Coordinates(uint16_t *x, uint16_t *y)
+int32_t TS_CalPara[7];
+bool TS_Sound = true;
+void (*TS_ReDrawIcon)(uint8_t position, uint8_t isPressed) = NULL;
+
+void TS_GetCoordinates(uint16_t *x, uint16_t *y)
 {
   uint16_t tp_x = XPT2046_Repeated_Compare_AD(CMD_RDX);
   uint16_t tp_y = XPT2046_Repeated_Compare_AD(CMD_RDY);
@@ -51,9 +54,89 @@ void TS_Get_Coordinates(uint16_t *x, uint16_t *y)
   *y = (D * tp_x + E * tp_y + F) / K;
 }
 
-#define TS_ERR_RANGE 10
+void TS_CheckPress(void)
+{
+  if (XPT2046_Read_Pen() == LOW)
+  {
+    if (touchCountdown > 0)
+      touchCountdown--;
+  }
+  else
+  {
+    touchCountdown = TS_DEBOUNCE_MS;
+  }
+}
 
-uint8_t calibrationEnsure(uint16_t x, uint16_t y)
+bool TS_IsPressed(void)
+{
+  return (touchCountdown == 0);
+}
+
+uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT *menuRect)
+{
+  uint8_t i = 0;
+  uint16_t x, y;
+
+  TS_GetCoordinates(&x, &y);
+
+  for (i = 0; i < totalRect; i++)
+  {
+    if ((x > menuRect[i].x0) && (x < menuRect[i].x1) && (y > menuRect[i].y0) && (y < menuRect[i].y1))
+    {
+      #ifdef BUZZER_PIN
+        if (TS_Sound == true)
+          BUZZER_PLAY(SOUND_KEYPRESS);
+      #endif
+
+      return i;
+    }
+  }
+
+  return IDLE_TOUCH;
+}
+
+uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT* menuRect)
+{
+  static uint16_t key_num = IDLE_TOUCH;
+  static bool firstPress = true;
+
+  uint16_t key_return = IDLE_TOUCH;
+
+  if (TS_IsPressed())
+  {
+    if (firstPress)
+    {
+      key_num = TS_KeyValue(totalRect, menuRect);
+      firstPress = false;
+
+      if (TS_ReDrawIcon)
+        TS_ReDrawIcon(key_num, 1);
+    }
+  }
+  else
+  {
+    if (firstPress == false)
+    {
+      if (TS_ReDrawIcon)
+        TS_ReDrawIcon(key_num, 0);
+
+      key_return = key_num;
+      key_num = IDLE_TOUCH;
+      firstPress = true;
+
+      #ifdef LCD_LED_PWM_CHANNEL
+        // if LCD is blocked (on idle), skip the first touch, preventing to trigger any undesired action,
+        // and wait the LCD brightness is restored first
+        if (LCD_IsBlocked())
+          key_return = IDLE_TOUCH;
+      #endif
+    }
+  }
+
+  return key_return;
+}
+
+uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
 {
   uint32_t i;
   uint16_t tp_x, tp_y;
@@ -70,7 +153,7 @@ uint8_t calibrationEnsure(uint16_t x, uint16_t y)
     GUI_DrawPoint(x, y - i);
   }
 
-  while (!isPress());
+  while (!TS_IsPressed());
 
   tp_x = XPT2046_Repeated_Compare_AD(CMD_RDX);
   tp_y = XPT2046_Repeated_Compare_AD(CMD_RDY);
@@ -85,7 +168,7 @@ uint8_t calibrationEnsure(uint16_t x, uint16_t y)
   }
   else
   {
-    while (isPress());
+    while (TS_IsPressed());
 
     GUI_SetColor(RED);
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_FAILED);
@@ -99,7 +182,7 @@ uint8_t calibrationEnsure(uint16_t x, uint16_t y)
   return 1;
 }
 
-void TSC_Calibration(void)
+void TS_Calibrate(void)
 {
   uint32_t LCD_X[3] = {40, LCD_WIDTH - 40, LCD_WIDTH - 40};
   uint32_t LCD_Y[3] = {40, 40, LCD_HEIGHT - 40};
@@ -128,12 +211,12 @@ void TSC_Calibration(void)
         GUI_DrawPoint(LCD_X[tp_num], LCD_Y[tp_num] - i);
       }
 
-      while (isPress() == false);
+      while (TS_IsPressed() == false);
 
       TP_X[tp_num] = XPT2046_Repeated_Compare_AD(CMD_RDX);
       TP_Y[tp_num] = XPT2046_Repeated_Compare_AD(CMD_RDY);
 
-      while (isPress() != false);
+      while (TS_IsPressed() != false);
     }
 
     K = (X1 - X3) * (Y2 - Y3) - (X2 - X3) * (Y1 - Y3);
@@ -143,91 +226,7 @@ void TSC_Calibration(void)
     D = ((YL1 - YL3) * (Y2 - Y3) - (YL2 - YL3) * (Y1 - Y3));
     E = ((X1 - X3) * (YL2 - YL3) - (YL1 - YL3) * (X2 - X3));
     F = (Y1 * (X3 * YL2 - X2 * YL3) + Y2 * (X1 * YL3 - X3 * YL1) + Y3 * (X2 * YL1 - X1 * YL2));
-  } while (calibrationEnsure(LCD_WIDTH / 2, LCD_HEIGHT / 2) == 0);
+  } while (TS_CalibrationEnsure(LCD_WIDTH / 2, LCD_HEIGHT / 2) == 0);
 
   GUI_RestoreColorDefault();
-}
-
-uint16_t Key_value(uint8_t total_rect, const GUI_RECT *menuRect)
-{
-  uint8_t i = 0;
-  uint16_t x, y;
-
-  TS_Get_Coordinates(&x, &y);
-
-  for (i = 0; i < total_rect; i++)
-  {
-    if ((x > menuRect[i].x0) && (x < menuRect[i].x1) && (y > menuRect[i].y0) && (y < menuRect[i].y1))
-    {
-      #ifdef BUZZER_PIN
-        if (touchSound == true)
-          BUZZER_PLAY(SOUND_KEYPRESS);
-      #endif
-
-      return i;
-    }
-  }
-
-  return IDLE_TOUCH;
-}
-
-void checkTouchScreen(void)
-{
-  if (XPT2046_Read_Pen() == LOW)
-  {
-    if (touchCountdown > 0)
-      touchCountdown--;
-  }
-  else
-  {
-    touchCountdown = TOUCH_DEBOUNCE_MS;
-  }
-}
-
-bool isPress(void)
-{
-  return (touchCountdown == 0);
-}
-
-void (*TSC_ReDrawIcon)(uint8_t position, uint8_t is_press) = NULL;
-
-uint16_t KEY_GetValue(uint8_t total_rect, const GUI_RECT* menuRect)
-{
-  static uint16_t key_num = IDLE_TOUCH;
-  static bool firstPress = true;
-
-  uint16_t key_return = IDLE_TOUCH;
-
-  if (isPress())
-  {
-    if (firstPress)
-    {
-      key_num = Key_value(total_rect, menuRect);
-      firstPress = false;
-
-      if (TSC_ReDrawIcon)
-        TSC_ReDrawIcon(key_num, 1);
-    }
-  }
-  else
-  {
-    if (firstPress == false)
-    {
-      if (TSC_ReDrawIcon)
-        TSC_ReDrawIcon(key_num, 0);
-
-      key_return = key_num;
-      key_num = IDLE_TOUCH;
-      firstPress = true;
-
-      #ifdef LCD_LED_PWM_CHANNEL
-        // if LCD is blocked (on idle), skip the first touch, preventing to trigger any undesired action,
-        // and wait the LCD brightness is restored first
-        if (LCD_IsBlocked())
-          key_return = IDLE_TOUCH;
-      #endif
-    }
-  }
-
-  return key_return;
 }

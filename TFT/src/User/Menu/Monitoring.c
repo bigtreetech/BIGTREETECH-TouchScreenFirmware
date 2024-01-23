@@ -8,16 +8,13 @@ MONITORING infoMonitoring;
 void menuMonitoring(void)
 {
   const GUI_RECT fullRect = {0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1};
-  const GUI_RECT monitoringRect = {0, ICON_START_Y, LCD_WIDTH - 1, LCD_HEIGHT - 1};
   char str[30];
 
-  setMenu(MENU_TYPE_OTHER, NULL, 1, &monitoringRect, NULL, NULL);
-  menuDrawTitle();
-
   // clear screen
-  GUI_ClearPrect(&monitoringRect);
+  GUI_Clear(infoSettings.bg_color);
 
-  GUI_SetColor(WHITE);
+  setMenu(MENU_TYPE_OTHER, NULL, 1, &fullRect, NULL, NULL);
+  menuDrawTitle();
 
   // draw titles
   GUI_DispString(0, ICON_START_Y,                         (uint8_t *)"Buffered gcodes : ");
@@ -39,7 +36,7 @@ void menuMonitoring(void)
     if (nextScreenUpdate(1000))
     {
       // draw info
-      GUI_SetColor(YELLOW);
+      GUI_SetColor(infoSettings.status_color);
 
       sprintf(str, "%d   ", getQueueCount());
       GUI_DispString(18 * BYTE_WIDTH, ICON_START_Y,                         (uint8_t *)str);

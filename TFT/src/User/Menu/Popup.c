@@ -63,7 +63,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
                    const uint8_t * no)
 {
   window.type = type;  // window.type is used by GUI_DrawWindow() function so it must be set before the function invokation
-  TSC_ReDrawIcon = windowReDrawButton;
+  TS_ReDrawIcon = windowReDrawButton;
 
   if (btn != NULL)
   {

@@ -53,11 +53,16 @@ typedef struct
   uint32_t PCLK2_Timer_Frequency;
 } CLOCKS;
 
-extern MENU infoMenu;
-extern HOST infoHost;
-extern CLOCKS mcuClocks;
-extern uint32_t bePriorityCounter;
-extern uint32_t fePriorityCounter;
+typedef struct
+{
+  uint32_t be;  // back end
+  uint32_t fe;  // front end
+} PRIORITY_COUNTER;
+
+extern MENU infoMenu;                     // menu structure
+extern HOST infoHost;                     // information interaction with Marlin
+extern CLOCKS mcuClocks;                  // system clocks: SYSCLK, AHB, APB1, APB2, APB1_Timer, APB2_Timer2
+extern PRIORITY_COUNTER priorityCounter;  // priority counter
 
 void InfoHost_Init(bool isConnected);
 void InfoHost_UpdateListeningMode(void);

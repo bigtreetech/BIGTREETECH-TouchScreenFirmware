@@ -133,9 +133,9 @@ void menuInfo(void)
 
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  while (!isPress()) { loopBackEnd(); }
+  while (!TS_IsPressed()) { loopBackEnd(); }
   BUZZER_PLAY(SOUND_KEYPRESS);
-  while (isPress()) { loopBackEnd(); }
+  while (TS_IsPressed()) { loopBackEnd(); }
 
   GUI_RestoreColorDefault();
   CLOSE_MENU();

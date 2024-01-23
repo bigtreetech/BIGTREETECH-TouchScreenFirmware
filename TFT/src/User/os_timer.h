@@ -19,7 +19,7 @@ typedef struct
   uint8_t  is_repeat;
 } OS_TASK;
 
-void OS_TimerInitMs(void);
+void OS_InitTimerMs(void);
 uint32_t OS_GetTimeMs(void);
 
 void OS_TaskInit(OS_TASK *task, uint32_t time_ms, FP_TASK function, void *para);

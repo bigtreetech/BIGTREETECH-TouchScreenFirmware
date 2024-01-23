@@ -1,13 +1,15 @@
 #include "Move.h"
 #include "includes.h"
 
-#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis) do { \
-                                                         moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
-                                                         moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
-                                                       } while(0)
-#define X_MOVE_GCODE "G1 X%.2f F%d\n"
-#define Y_MOVE_GCODE "G1 Y%.2f F%d\n"
-#define Z_MOVE_GCODE "G1 Z%.2f F%d\n"
+#define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis)       \
+  do {                                                       \
+    moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
+    moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
+  } while (0)
+
+#define X_MOVE_GCODE "G0 X%.2f F%d\n"
+#define Y_MOVE_GCODE "G0 Y%.2f F%d\n"
+#define Z_MOVE_GCODE "G0 Z%.2f F%d\n"
 #define GANTRY_UPDATE_DELAY 500  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE

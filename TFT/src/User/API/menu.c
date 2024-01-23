@@ -659,8 +659,8 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
   curRect = menuRect;
   curRectCount = rectCount;
   curTitle = title;
-  TSC_ReDrawIcon = action_redraw;
   curMenuRedrawHandle = menu_redraw;
+  TS_ReDrawIcon = action_redraw;
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -887,8 +887,8 @@ void menuDrawPage(const MENUITEMS *menuItems)
   uint8_t i = 0;
   menuType = MENU_TYPE_ICON;
   curMenuItems = menuItems;
-  TSC_ReDrawIcon = (MENU_IS(menuPrinting)) ? itemDrawIconPress_PS : itemDrawIconPress;
   curMenuRedrawHandle = NULL;
+  TS_ReDrawIcon = (MENU_IS(menuPrinting)) ? itemDrawIconPress_PS : itemDrawIconPress;
 
   #ifdef PORTRAIT_MODE
     if (MENU_IS(menuPrinting))
@@ -934,8 +934,8 @@ void menuDrawListPage(const LISTITEMS *listItems)
   uint8_t i = 0;
   menuType = MENU_TYPE_LISTVIEW;
   curListItems = listItems;
-  TSC_ReDrawIcon = itemDrawIconPress;
   curMenuRedrawHandle = NULL;
+  TS_ReDrawIcon = itemDrawIconPress;
 
   GUI_SetBkColor(infoSettings.title_bg_color);
   GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
@@ -1145,7 +1145,7 @@ static inline void loopCheckBackPress(void)
     static bool backHeld = false;
   #endif
 
-  if (!isPress())
+  if (!TS_IsPressed())
   {
     longPress = false;
 
@@ -1179,18 +1179,18 @@ static inline void loopCheckBackPress(void)
   {
     KEY_VALUES tempKey = KEY_IDLE;
     longPress = true;
-    touchSound = false;
+    TS_Sound = false;
 
     if (MENU_IS(menuPrinting))
     {
-      tempKey = Key_value(COUNT(rect_of_keySS), rect_of_keySS);
+      tempKey = TS_KeyValue(COUNT(rect_of_keySS), rect_of_keySS);
     }
     else
     {
-      tempKey = Key_value(COUNT(rect_of_key), rect_of_key);
+      tempKey = TS_KeyValue(COUNT(rect_of_key), rect_of_key);
     }
 
-    touchSound = true;
+    TS_Sound = true;
 
     if (tempKey != KEY_IDLE && getCurMenuItems()->items[tempKey].label.index == LABEL_BACK)  // check if Back button is held
     {
@@ -1232,7 +1232,7 @@ void loopBackEnd(void)
     USB_LoopProcess();
   #endif
 
-  if ((bePriorityCounter++ % BE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
+  if ((priorityCounter.be++ % BE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
     return;
 
   // Temperature monitor
@@ -1327,7 +1327,7 @@ void loopProcess(void)
 {
   loopBackEnd();
 
-  if ((fePriorityCounter++ % FE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
+  if ((priorityCounter.fe++ % FE_PRIORITY_DIVIDER) != 0)  // a divider value of 16 -> run 6% of the time only
     return;
 
   loopFrontEnd();

@@ -10,8 +10,8 @@ void updateListeningMode(MENUITEMS * menu)
   InfoHost_UpdateListeningMode();  // update listening mode
 }
 
-// set uart pins to input, free uart
-void menuDisconnect(void)
+// disconnect (free uart), wait for a key press and finally connect again (set uart pins to input)
+void refreshConnection(void)
 {
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
@@ -19,7 +19,7 @@ void menuDisconnect(void)
 
   Serial_DeInit(ALL_PORTS);
 
-  while (!isPress())
+  while (!TS_IsPressed())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();
@@ -31,7 +31,7 @@ void menuDisconnect(void)
     loopBuzzer();
   #endif
 
-  while (isPress())
+  while (TS_IsPressed())
   {
     #ifdef LCD_LED_PWM_CHANNEL
       LCD_CheckDimming();
@@ -39,8 +39,6 @@ void menuDisconnect(void)
   }
 
   Serial_Init(ALL_PORTS);
-
-  CLOSE_MENU();
 }
 
 void menuBaudrate(void)
@@ -65,6 +63,7 @@ void menuBaudrate(void)
     {
       totalItems[i].icon = CHARICON_UNCHECKED;
     }
+
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel.address = (uint8_t *) baudrateNames[i + minIndex];
   }
@@ -160,13 +159,14 @@ void menuConnectionSettings(void)
         break;
 
       case KEY_ICON_1:
-        OPEN_MENU(menuDisconnect);
+        refreshConnection();
+        menuDrawPage(&connectionSettingsItems);
         break;
 
       case KEY_ICON_2:
-        // Emergency Stop : Used for emergency stopping, a reset is required to return to operational mode.
-        // it may need to wait for a space to open up in the command queue.
-        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command.
+        // Emergency Stop: Used for emergency stopping, a reset is required to return to operational mode.
+        // It may need to wait for a space to open up in the command queue.
+        // Enable EMERGENCY_PARSER in Marlin Firmware for an instantaneous M112 command
         sendEmergencyCmd("M112\n");
         break;
 

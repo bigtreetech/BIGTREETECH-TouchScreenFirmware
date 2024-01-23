@@ -45,6 +45,18 @@ typedef struct
   int16_t x0, y0, x1, y1;
 } GUI_RECT;
 
+typedef union
+{
+  uint16_t color;
+
+  struct
+  {
+    uint16_t b:5;
+    uint16_t g:6;
+    uint16_t r:5;
+  } RGB;
+} GUI_COLOR;
+
 void GUI_SetColor(uint16_t color);
 uint16_t GUI_GetColor(void);
 void GUI_SetBkColor(uint16_t bkcolor);

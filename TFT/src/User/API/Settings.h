@@ -11,22 +11,19 @@ extern "C" {
 #include "coordinate.h"  // for TOTAL_AXIS
 #include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
-// Config version support (format YYYYMMDD)
-// change if new elements/keywords are added/removed/changed in the Configuration.h
-// this number should match CONFIG_VERSION in Configuration.h
-#define CONFIG_SUPPPORT 20231119
-
-#define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
+#define CONFIG_SUPPPORT       20231119  // (YYYYMMDD) change if any keyword(s) is Configuration.h is added, removed or changed.
+                                        // This number should match CONFIGURATION_H_VERSION in Configuration.h
 #define CONFIG_FLASH_SIGN     20230929  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
 #define LANGUAGE_FLASH_SIGN   20230821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20230821  // (YYYYMMDD) change if any icon(s) is added or removed
+#define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
 
-#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR + \
                                sizeof(SETTINGS) + sizeof(STRINGS_STORE) + sizeof(PREHEAT_STORE) + \
                                sizeof(CUSTOM_GCODES) + sizeof(PRINT_GCODES))
 #define LANGUAGE_CHECK_SIGN   (LANGUAGE_FLASH_SIGN + LANGUAGE_ADDR + LABEL_NUM)
 #define ICON_CHECK_SIGN       (ICON_FLASH_SIGN + ICON_ADDR(0) + ICON_PREVIEW)
+#define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE_ADDR + FLASH_SIGN_ADDR)
 
 #define MAX_SERIAL_PORT_COUNT 4
 #define MAX_EXT_COUNT         6

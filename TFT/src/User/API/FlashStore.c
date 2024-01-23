@@ -1,4 +1,6 @@
 #include "FlashStore.h"
+#include "Touch_Screen.h"
+#include "Settings.h"
 #include "HAL_Flash.h"
 #include <string.h>
 
@@ -6,10 +8,9 @@
   #include "i2c_eeprom.h"
 #endif
 
-#define TSC_SIGN  0x20200512  // DO NOT MODIFY
-#define PARA_SIGN 0x20220321  // (YYYYMMDD) If a new setting parameter is added,
-                              // modify here and initialize the initial value
-                              // in the "initSettings()" function
+#define TSC_SIGN  0x20200512  // (YYYYMMDD) DO NOT MODIFY (Touch Screem Calibration sign)
+#define PARA_SIGN 0x20220321  // (YYYYMMDD) if a new setting parameter is added, modify here and
+                              // initialize the initial value in the "initSettings()" function
 enum
 {
   PARA_TSC_EXIST = (1 << 0),
@@ -57,9 +58,9 @@ void readStoredPara(void)
   if (sign == TSC_SIGN)
   {
     paraStatus |= PARA_TSC_EXIST;  // if the touch screen calibration parameter already exists
-    for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++)
+    for (int i = 0; i < sizeof(TS_CalPara) / sizeof(TS_CalPara[0]); i++)
     {
-      TSC_Para[i] = byteToWord(data + (index += 4), 4);
+      TS_CalPara[i] = byteToWord(data + (index += 4), 4);
     }
   }
 
@@ -82,9 +83,9 @@ void storePara(void)
   uint32_t index = 0;
 
   wordToByte(TSC_SIGN, data + (index += 4));
-  for (int i = 0; i < sizeof(TSC_Para) / sizeof(TSC_Para[0]); i++)
+  for (int i = 0; i < sizeof(TS_CalPara) / sizeof(TS_CalPara[0]); i++)
   {
-    wordToByte(TSC_Para[i], data + (index += 4));
+    wordToByte(TS_CalPara[i], data + (index += 4));
   }
 
   wordToByte(PARA_SIGN, data + (index += 4));

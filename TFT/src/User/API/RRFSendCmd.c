@@ -1,3 +1,4 @@
+#include "RRFM20Parser.hpp"
 #include "includes.h"
 
 static uint32_t line_number = 0;
