@@ -253,12 +253,12 @@ For **MKS TFTs**:
 
 1. The firmwares use the naming convention `MKS_TFT*_V*.*.*.x.bin`
 2. Any binary file for an MKS firmware (e.g. `MKS_TFT28_V4.0.27.x.bin`) **MUST** be renamed to `MKSTFT*.bin` (e.g. `MKSTFT28.bin`, `MKSTFT35.bin` etc.) in order it can be recognized and installed by the TFT
-3. For MKS TFT35, two binary files are provided:
-   1. Encrypted version: Usable on a stock MKS TFT35 (based on a bootloader with encryption)
-   2. Unencrypted version: Usable with a bootloader without encryption
-4. For MKS TFT28 that mount GD32 MCU (like the newest version of Genious Pro), you need some more steps:
-   1. rename the right binary (e.g. `MKS_GD_TFT28_V4.0.27.x.bin`) in `mkstft28evo.bin`
-   2. create an empty `mkstft28.bin` file
+
+For MKS TFTs **GigaDevice MCUs** (like the newest version of Genious Pro):
+
+1. rename the right binary (e.g. `MKS_GD_TFT28_V1_2-4.27.x.bin`) in `mkstft28evo.bin`
+2. create an empty `mkstft28.bin` file
+3. create two empty directories `mks_font` and `mks_pic`
 
 For example, for BTT TFT35 V3 select:
 
