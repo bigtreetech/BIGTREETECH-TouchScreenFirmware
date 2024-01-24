@@ -1,5 +1,5 @@
-#ifndef _PIN_MKS_GD_TFT28_V4_0_H_  // modify to actual filename !!!
-#define _PIN_MKS_GD_TFT28_V4_0_H_  // modify to actual filename !!!
+#ifndef _PIN_MKS_GD_TFT28_V1_24_H_  // modify to actual filename !!!
+#define _PIN_MKS_GD_TFT28_V1_24_H_  // modify to actual filename !!!
 
 // MCU type (STM32F10x, STM32F2xx, STM32F4xx, gd32f20x, gd32f30x)
 #ifndef MCU_TYPE

@@ -89,6 +89,10 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
     MKS_TFT32L_V3_0
     MKS_TFT35_V1_0
 
+**MKS TFT with GigaDevice MCUs**
+
+    MKS_GD_TFT28_V1_2-4
+
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
 ## Software Repository
@@ -469,6 +473,7 @@ Please, see [Customization Guides](https://github.com/bigtreetech/BIGTREETECH-To
 ;MKS_TFT28_V4_0
 ;MKS_TFT28_NEW_GENIUS
 ;MKS_TFT35_V1_0
+;MKS_GD_TFT28_V1_2-4
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards
