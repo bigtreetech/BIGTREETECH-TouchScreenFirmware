@@ -102,20 +102,16 @@ const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
 
 // Check time elapsed against the time specified in milliseconds for displaying/updating info on screen
 // Use this for timed screen updates in menu loops only
-bool nextScreenUpdate(uint32_t duration)
+bool nextScreenUpdate(uint32_t refreshTime)
 {
   static uint32_t lastTime = 0;
-  uint32_t curTime = OS_GetTimeMs();
 
-  if (curTime > (lastTime + duration))
-  {
-    lastTime = curTime;
-    return true;
-  }
-  else
-  {
+  if (OS_GetTimeMs() - lastTime < refreshTime)
     return false;
-  }
+
+  lastTime = OS_GetTimeMs();
+
+  return true;
 }
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE

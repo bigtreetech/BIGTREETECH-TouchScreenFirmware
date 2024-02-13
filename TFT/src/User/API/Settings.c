@@ -26,6 +26,7 @@ void initSettings(void)
   infoSettings.tx_slots               = TX_SLOTS;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
                                          (ADVANCED_OK << INDEX_ADVANCED_OK) |
+                                         (COMMAND_CHECKSUM << INDEX_COMMAND_CHECKSUM) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
                                          (EVENT_LED << INDEX_EVENT_LED) |
@@ -173,12 +174,12 @@ void initSettings(void)
     infoSettings.pause_feedrate[i]    = default_pause_speed[i];  // XY, Z, E
   }
 
-  for (int i = 0; i < FEEDRATE_COUNT - 1 ; i++)  // xy, z
+  for (int i = 0; i < FEEDRATE_COUNT - 1; i++)  // xy, z
   {
     infoSettings.level_feedrate[i]    = default_level_speed[i];
   }
 
-  for (int i = 0; i < LED_COLOR_COMPONENT_COUNT - 1 ; i++)
+  for (int i = 0; i < LED_COLOR_COMPONENT_COUNT - 1; i++)
   {
     infoSettings.led_color[i]         = default_led_color[i];
   }
@@ -226,10 +227,6 @@ void initMachineSettings(void)
   infoMachineSettings.babyStepping            = DISABLED;
   infoMachineSettings.buildPercent            = DISABLED;
   infoMachineSettings.softwareEndstops        = ENABLED;
-
-  // reset the state to restart the temperature polling process
-  // needed by parseAck() function to establish the connection
-  heatSetUpdateWaiting(false);
 }
 
 void setupMachine(FW_TYPE fwType)
@@ -354,5 +351,6 @@ bool getFlashSignStatus(int index)
   uint32_t len = sizeof(flash_sign);
 
   W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
+
   return (flash_sign[index] == cur_flash_sign[index]);
 }

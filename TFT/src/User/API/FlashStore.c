@@ -9,7 +9,7 @@
 #endif
 
 #define TSC_SIGN  0x20200512  // (YYYYMMDD) DO NOT MODIFY (Touch Screem Calibration sign)
-#define PARA_SIGN 0x20220321  // (YYYYMMDD) if a new setting parameter is added, modify here and
+#define PARA_SIGN 0x20240203  // (YYYYMMDD) if a new setting parameter is added, modify here and
                               // initialize the initial value in the "initSettings()" function
 enum
 {

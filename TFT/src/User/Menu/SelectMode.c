@@ -66,11 +66,13 @@ void menuMode(void)
   drawSelectedMode(nowMode);
 
   #if LCD_ENCODER_SUPPORT
-    while (!XPT2046_Read_Pen() || LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))
-      ;  // wait for button release
+    while (!XPT2046_Read_Pen() || LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))  // wait for button release
+    {
+    }
   #else
-    while (!XPT2046_Read_Pen())
-      ;  // wait for touch release
+    while (!XPT2046_Read_Pen())  // wait for touch release
+    {
+    }
   #endif
 
   while (MENU_IS(menuMode))

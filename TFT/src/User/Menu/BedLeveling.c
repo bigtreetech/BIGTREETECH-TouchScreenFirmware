@@ -168,7 +168,7 @@ void menuBedLeveling(void)
         break;
     }
 
-    if (levelStateNew != UNDEFINED)  // it's Marlin or Reprap FW
+    if (levelStateNew != UNDEFINED)  // it's Marlin or RepRap firmware
     {
       levelStateNew = getParameter(P_ABL_STATE, 0);
 

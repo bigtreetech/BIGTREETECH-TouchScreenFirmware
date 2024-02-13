@@ -1126,7 +1126,7 @@ SD_Error SD_GetCardInfo(SD_CardInfo *cardinfo)
     tmp = (uint8_t)((CSD_Tab[2] & 0x0000FF00) >> 8);
     cardinfo->SD_csd.DeviceSizeMul |= (tmp & 0x80) >> 7;
 
-    cardinfo->CardCapacity = (cardinfo->SD_csd.DeviceSize + 1) ;
+    cardinfo->CardCapacity = (cardinfo->SD_csd.DeviceSize + 1);
     cardinfo->CardCapacity *= (1 << (cardinfo->SD_csd.DeviceSizeMul + 2));
     cardinfo->CardBlockSize = 1 << (cardinfo->SD_csd.RdBlockLen);
     cardinfo->CardCapacity *= cardinfo->CardBlockSize;

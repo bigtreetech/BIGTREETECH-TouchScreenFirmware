@@ -24,6 +24,7 @@ const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
 typedef enum
 {
   SKEY_ADVANCED_OK = 0,
+  SKEY_COMMAND_CHECKSUM,
   SKEY_EMULATED_M600,
   SKEY_EMULATED_M109_M190,
   SKEY_EVENT_LED,
@@ -65,6 +66,7 @@ static inline void updateFeatureSettings(uint8_t item_index)
   switch (item_index)
   {
     case SKEY_ADVANCED_OK:
+    case SKEY_COMMAND_CHECKSUM:
     case SKEY_EMULATED_M600:
     case SKEY_EMULATED_M109_M190:
     case SKEY_EVENT_LED:
@@ -139,6 +141,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
     switch (item_index)
     {
       case SKEY_ADVANCED_OK:
+      case SKEY_COMMAND_CHECKSUM:
       case SKEY_EMULATED_M600:
       case SKEY_EMULATED_M109_M190:
       case SKEY_EVENT_LED:
@@ -176,7 +179,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         case SKEY_FIL_RUNOUT:
         {
           LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
-          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF ;
+          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF;
           break;
         }
       #endif
@@ -215,6 +218,7 @@ void menuFeatureSettings(void)
   // set item types
   LISTITEM settingPage[SKEY_COUNT] = {
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_COMMAND_CHECKSUM,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_NULL},

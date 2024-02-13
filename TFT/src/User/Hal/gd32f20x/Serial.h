@@ -30,6 +30,7 @@ typedef struct
 } SERIAL_CFG;
 
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];
+extern DMA_CIRCULAR_BUFFER dmaL1DataTX[_UART_CNT];
 extern const SERIAL_CFG Serial[_UART_CNT];
 
 void Serial_Config(uint8_t port, uint32_t cacheSizeRX, uint32_t cacheSizeTX, uint32_t baudrate);

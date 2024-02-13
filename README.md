@@ -85,9 +85,10 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
 **MKS TFT**
 
     MKS_TFT28_V3.0 and V4.0
+    MKS_TFT28_NEW_GENIUS
     MKS_TFT32_V1.3 and V1.4
-    MKS_TFT32L_V3_0
-    MKS_TFT35_V1_0
+    MKS_TFT32L_V3.0
+    MKS_TFT35_V1.0
 
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
@@ -447,22 +448,38 @@ Please, see [Customization Guides](https://github.com/bigtreetech/BIGTREETECH-To
   <img src="https://user-images.githubusercontent.com/25599056/56637532-77115000-669e-11e9-809b-f6bc25412f75.png"></li>
 
 <li>After opening the project, edit <a href="platformio.ini"><code>platformio.ini</code></a> and change the <code>default_envs</code> to one that matches your TFT model and version:
-<pre>;BIGTREE_TFT35_V1_0
+<pre>;BIGTREE_TFT24_V1_1
+;BIGTREE_TFT28_V1_0
+;BIGTREE_TFT28_V3_0
+;BIGTREE_TFT35_V1_0
 ;BIGTREE_TFT35_V1_1
 ;BIGTREE_TFT35_V1_2
 ;BIGTREE_TFT35_V2_0
 ;BIGTREE_TFT35_V3_0
 ;BIGTREE_TFT35_E3_V3_0
-;BIGTREE_TFT28_V1_0
-;BIGTREE_TFT28_V3_0
-;BIGTREE_TFT24_V1_1
-;MKS_TFT32_V1_3
-;MKS_TFT32_V1_4
-;MKS_TFT32_V1_4_NOBL
+;BIGTREE_TFT35_B1_V3_0
+;BIGTREE_TFT43_V3_0
+;BIGTREE_TFT50_V3_0
+;BIGTREE_TFT70_V3_0
+
+;BIGTREE_GD_TFT24_V1_1
+;BIGTREE_GD_TFT35_V2_0
+;BIGTREE_GD_TFT35_V3_0
+;BIGTREE_GD_TFT35_E3_V3_0
+;BIGTREE_GD_TFT35_B1_V3_0
+;BIGTREE_GD_TFT43_V3_0
+;BIGTREE_GD_TFT50_V3_0
+;BIGTREE_GD_TFT70_V3_0
+
 ;MKS_TFT28_V3_0
 ;MKS_TFT28_V4_0
 ;MKS_TFT28_NEW_GENIUS
+;MKS_TFT32_V1_3
+;MKS_TFT32_V1_4
+;MKS_TFT32_V1_4_NOBL
+;MKS_TFT32L_V3_0
 ;MKS_TFT35_V1_0
+
 [platformio]
 src_dir      = TFT
 boards_dir   = buildroot/boards

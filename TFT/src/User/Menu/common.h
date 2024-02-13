@@ -58,7 +58,7 @@ extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
 extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 
 // Check if next screen update is due
-bool nextScreenUpdate(uint32_t duration);
+bool nextScreenUpdate(uint32_t refreshTime);
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
   void invertZAxisIcons(MENUITEMS * menuItems);

@@ -7,11 +7,11 @@
 
 void HW_GetClocksFreq(CLOCKS *clk)
 {
-#ifdef GD32F2XX
-  RCU_GetClocksFreq(&clk->rccClocks);
-#else
-  RCC_GetClocksFreq(&clk->rccClocks);
-#endif
+  #ifdef GD32F2XX
+    RCU_GetClocksFreq(&clk->rccClocks);
+  #else
+    RCC_GetClocksFreq(&clk->rccClocks);
+  #endif
 
   if (clk->rccClocks.PCLK1_Frequency < clk->rccClocks.HCLK_Frequency)  // if (APBx presc = 1) x1 else x2
     clk->PCLK1_Timer_Frequency = clk->rccClocks.PCLK1_Frequency * 2;
@@ -27,11 +27,13 @@ void HW_GetClocksFreq(CLOCKS *clk)
 void HW_Init(void)
 {
   HW_GetClocksFreq(&mcuClocks);
-#ifdef GD32F2XX
-  nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
-#else
-  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-#endif
+
+  #ifdef GD32F2XX
+    nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
+  #else
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+  #endif
+
   Delay_init();
 
   #ifdef DISABLE_JTAG
@@ -42,7 +44,7 @@ void HW_Init(void)
     DISABLE_DEBUG();  // disable JTAG & SWD
   #endif
 
-  #if defined(MKS_TFT) && !defined (MKS_TFT35_V1_0)  // not used by MKS_TFT35_V1_0
+  #if defined(MKS_TFT) && !defined(MKS_TFT35_V1_0)  // not used by MKS_TFT35_V1_0
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
   #endif

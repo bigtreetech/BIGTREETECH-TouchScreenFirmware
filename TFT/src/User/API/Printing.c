@@ -24,10 +24,12 @@ typedef struct
 PRINTING infoPrinting = {0};
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
 
-static bool updateM27Waiting = false;
 static bool extrusionDuringPause = false;  // flag for extrusion during Print -> Pause
 static bool filamentRunoutAlarm = false;
 static float lastEPos = 0;                 // used only to update stats in infoPrintSummary
+
+static uint32_t nextUpdateTime = 0;
+static bool sendingWaiting = false;
 
 void setExtrusionDuringPause(bool extruded)
 {
@@ -52,9 +54,8 @@ bool getRunoutAlarm(void)
 void clearQueueAndMore(void)
 {
   clearCmdQueue();
+  resetPendingQueries();
   setRunoutAlarmFalse();
-  heatSetUpdateWaiting(false);
-  setPrintUpdateWaiting(false);
 }
 
 void breakAndContinue(void)
@@ -345,11 +346,6 @@ void sendPrintCodes(uint8_t index)
   }
 }
 
-void setPrintUpdateWaiting(bool isWaiting)
-{
-  updateM27Waiting = isWaiting;
-}
-
 void updatePrintUsedFilament(void)
 {
   float ePos = coordinateGetAxis(E_AXIS);
@@ -424,7 +420,7 @@ bool startPrintFromRemoteHost(const char * filename)
   {
     infoFile.source = FS_ONBOARD_MEDIA_REMOTE;  // set source first
     resetInfoFile();                            // then reset infoFile (source is restored)
-    enterFolder(stripHead(filename));           // set path as last
+    enterFolder(stripCmdHead(filename));        // set path as last
 
     request_M27(infoSettings.m27_refresh_time);  // use gcode M27 in case of a print running from remote onboard media
   }
@@ -502,7 +498,7 @@ bool startPrint(void)
 
   if (infoFile.source == FS_ONBOARD_MEDIA)
   {
-    // let setPrintResume() (that will be called in parseAck.c by parsing ACK message for M24 or M27)
+    // let setPrintResume() (that will be called in Mainboard_AckHandler.c by parsing ACK message for M24 or M27)
     // notify the print as started (infoHost.status set to "HOST_STATUS_PRINTING")
     infoHost.status = HOST_STATUS_RESUMING;
 
@@ -578,7 +574,7 @@ void abortPrint(void)
     case FS_REMOTE_HOST:
       // - forward a print cancel notification to all hosts (so also the one handling the print) asking to cancel the print
       // - the host handling the print should respond to this notification with "M118 P0 A1 action:cancel" that will
-      //   trigger setPrintAbort() in parseACK() once the following loop does its job (stopping all blocking operations)
+      //   trigger setPrintAbort() in parseAck() once the following loop does its job (stopping all blocking operations)
       //
       mustStoreCmd("M118 P0 A1 action:notification remote cancel\n");
       waitForAbort();
@@ -588,9 +584,10 @@ void abortPrint(void)
   }
 
   // - forward a print cancel action to all hosts (also TFT) to notify the print cancelation
-  // - the print cancel action received by the TFT always guarantees the invokation of setPrintAbort() in parseAck.c
-  //   (e.g. to finalize the print (e.g. stats) in case the ACK messages "Not SD printing" and/or "//action:cancel"
-  //   are not received from Marlin) once the following loop does its job (stopping all blocking operations)
+  // - the print cancel action received by the TFT always guarantees the invokation of setPrintAbort()
+  //   in Mainboard_AckHandler.c (e.g. to finalize the print (e.g. stats) in case the ACK messages
+  //   "Not SD printing" and/or "//action:cancel" are not received from Marlin) once the following
+  //   loop does its job (stopping all blocking operations)
   //
   mustStoreCmd("M118 P0 A1 action:cancel\n");
   waitForAbort();
@@ -919,6 +916,16 @@ void loopPrintFromTFT(void)
   }
 }
 
+void printSetNextUpdateTime(void)
+{
+  nextUpdateTime = OS_GetTimeMs() + SEC_TO_MS(infoSettings.m27_refresh_time);
+}
+
+void printClearSendingWaiting(void)
+{
+  sendingWaiting = false;
+}
+
 void loopPrintFromOnboard(void)
 {
   #ifdef HAS_EMULATOR
@@ -931,24 +938,18 @@ void loopPrintFromOnboard(void)
   if (!infoSettings.m27_active) return;
   if (MENU_IS(menuTerminal)) return;
 
-  static uint32_t nextCheckPrintTime = 0;
-  uint32_t update_M27_time = SEC_TO_MS(infoSettings.m27_refresh_time);
-
   do
-  { // WAIT FOR M27
-    if (updateM27Waiting == true)
-    {
-      nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
-      break;
-    }
+  { // send M27 to query SD print status continuously
 
-    if (OS_GetTimeMs() < nextCheckPrintTime)
+    if (OS_GetTimeMs() < nextUpdateTime)  // if next check time not yet elapsed, do nothing
       break;
 
-    if (storeCmd("M27\n") == false)
+    printSetNextUpdateTime();  // extend next check time
+
+    // if M27 previously enqueued and not yet sent, do nothing
+    if (sendingWaiting)
       break;
 
-    nextCheckPrintTime = OS_GetTimeMs() + update_M27_time;
-    updateM27Waiting = true;
+    sendingWaiting = storeCmd("M27\n");
   } while (0);
 }

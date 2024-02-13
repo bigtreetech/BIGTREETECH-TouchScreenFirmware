@@ -1,5 +1,5 @@
-#ifndef _INTERFACE_CMD_H_
-#define _INTERFACE_CMD_H_
+#ifndef _MAINBOARD_CMD_HANDLER_H_
+#define _MAINBOARD_CMD_HANDLER_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,6 +33,7 @@ void mustStoreCmd(const char * format, ...);
 void mustStoreScript(const char * format, ...);
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex);
 void clearCmdQueue(void);
+void handleCmdLineNumberMismatch(const uint32_t lineNumber);
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex);
 void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex);
 void sendQueueCmd(void);

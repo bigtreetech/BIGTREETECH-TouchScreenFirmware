@@ -42,7 +42,7 @@ void pidRun(void)
 
   if (tool < MAX_HEATER_PID_COUNT)
   {
-    mustStoreCmd("%s S%d\n", (infoMachineSettings.firmwareType == FW_REPRAPFW) ? pidCmdRRF[tool] : pidCmdMarlin[tool], (int)pidHeaterTarget[tool]);  // start PID autotune
+    mustStoreCmd("%s S%d\n", (infoMachineSettings.firmwareType != FW_REPRAPFW) ? pidCmdMarlin[tool] : pidCmdRRF[tool], (int)pidHeaterTarget[tool]);  // start PID autotune
     pidStatus = PID_RUNNING;
   }
 }
@@ -235,7 +235,7 @@ void menuPid(void)
       if (getMenuType() != MENU_TYPE_SPLASH)
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
-      if (OS_GetTimeMs() > pidTimeout)
+      if (OS_GetTimeMs() >= pidTimeout)
         pidUpdateStatus(PID_TIMEOUT);
 
       if (pidStatus != PID_RUNNING)

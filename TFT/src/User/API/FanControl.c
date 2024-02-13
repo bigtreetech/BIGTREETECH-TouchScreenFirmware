@@ -1,17 +1,16 @@
 #include "FanControl.h"
 #include "includes.h"
 
-#define NEXT_FAN_WAIT 500  // 1 second is 1000
+#define FAN_REFRESH_TIME 500  // 1 second is 1000
 
-const char* fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
-const char* fanCmd[MAX_FAN_COUNT] = FAN_CMD;
+const char * fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
+const char * fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
 static uint8_t needSetFanSpeed = 0;
 
-static bool ctrlFanQueryWait = false;
-static uint32_t nextCtrlFanTime = 0;
+static bool ctrlFanSendingWaiting = false;
 
 void fanResetSpeed(void)
 {
@@ -20,7 +19,6 @@ void fanResetSpeed(void)
   memset(curFanSpeed, 0, sizeof(curFanSpeed));
 }
 
-// Check whether the index is a valid fan index.
 bool fanIsValid(const uint8_t index)
 {
   if (index >= infoSettings.fan_count && index < MAX_COOLING_FAN_COUNT)  // invalid cooling fan index
@@ -74,32 +72,32 @@ uint8_t fanGetCurPercent(const uint8_t i)
   return (curFanSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
-void loopFan(void)
+void loopCheckFan(void)
 {
+  static uint32_t nextUpdateTime = 0;
+
+  if (OS_GetTimeMs() < nextUpdateTime)  // avoid rapid fire, clogging the queue
+    return;
+
+  nextUpdateTime = OS_GetTimeMs() + FAN_REFRESH_TIME;  // extend next check time
+
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (GET_BIT(needSetFanSpeed, i) && (OS_GetTimeMs() > nextCtrlFanTime))
+    if (GET_BIT(needSetFanSpeed, i))
     {
       if (storeCmd(fanCmd[i], setFanSpeed[i]))
-      {
         SET_BIT_OFF(needSetFanSpeed, i);
-      }
-
-      nextCtrlFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT;  // avoid rapid fire, clogging the queue
     }
   }
 }
 
-void ctrlFanQuerySetWait(const bool wait)
+void ctrlFanQueryClearSendingWaiting(void)
 {
-  ctrlFanQueryWait = wait;
+  ctrlFanSendingWaiting = false;
 }
 
-// query for controller fan only
 void ctrlFanQuery(void)
 { // following conditions ordered by importance
-  if (!ctrlFanQueryWait && infoHost.tx_slots != 0 && infoHost.connected && infoSettings.ctrl_fan_en)
-  {
-    ctrlFanQueryWait = storeCmd("M710\n");
-  }
+  if (infoSettings.ctrl_fan_en && !ctrlFanSendingWaiting && infoHost.tx_slots != 0 && infoHost.connected)
+    ctrlFanSendingWaiting = storeCmd("M710\n");
 }
