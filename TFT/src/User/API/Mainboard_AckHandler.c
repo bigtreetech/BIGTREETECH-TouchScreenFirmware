@@ -566,7 +566,7 @@ void parseAck(void)
         goto parse_end;  // nothing else to do
       }
 
-      // if here, it is a temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
+      // if here, it is an M105 temperature response (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n").
       // Proceed with generic OK response handling to update infoHost.tx_slots and infoHost.tx_count
       // and then continue applying the next matching patterns to handle the temperature response
       InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);
@@ -586,7 +586,9 @@ void parseAck(void)
     // Pushed / polled / on printing parsed responses
     //----------------------------------------
 
-    // parse and store M105/M155, temperatures (e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n")
+    // parse and store M105 or auto reported (M155) temperature response,
+    // e.g. "ok T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n" for M105,
+    // e.g. "T:16.13 /0.00 B:16.64 /0.00 @:0 B@:0\n" for auto reported (M155)
     else if ((ack_seen("@") && ack_seen("T:")) || ack_seen("T0:"))
     {
       uint8_t heaterIndex = NOZZLE0;
