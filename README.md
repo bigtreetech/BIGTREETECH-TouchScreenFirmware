@@ -90,6 +90,10 @@ Only the TFTs listed below are currently supported. Trying to install the firmwa
     MKS_TFT32L_V3.0
     MKS_TFT35_V1.0
 
+**MKS TFT with GigaDevice MCUs**
+
+    MKS_GD_TFT28_V1_2-4
+
 **WARNING:** BTT does not officially provide MKS TFT hardware support. MKS TFT is maintained by open source contributors and BTT does not bear any risk of MKS TFT hardware using this firmware.
 
 ## Software Repository
@@ -250,6 +254,12 @@ For **MKS TFTs**:
 
 1. The firmwares use the naming convention `MKS_TFT*_V*.*.*.x.bin`
 2. Any binary file for an MKS firmware (e.g. `MKS_TFT28_V4.0.27.x.bin`) **MUST** be renamed to `MKSTFT*.bin` (e.g. `MKSTFT28.bin`, `MKSTFT35.bin` etc.) in order it can be recognized and installed by the TFT
+
+For MKS TFTs **GigaDevice MCUs** (like the newest version of Genious Pro):
+
+1. rename the right binary (e.g. `MKS_GD_TFT28_V1_2-4.27.x.bin`) in `mkstft28evo.bin`
+2. create an empty `mkstft28.bin` file
+3. create two empty directories `mks_font` and `mks_pic`
 
 For example, for BTT TFT35 V3 select:
 
@@ -479,6 +489,7 @@ Please, see [Customization Guides](https://github.com/bigtreetech/BIGTREETECH-To
 ;MKS_TFT32_V1_4_NOBL
 ;MKS_TFT32L_V3_0
 ;MKS_TFT35_V1_0
+;MKS_GD_TFT28_V1_2-4
 
 [platformio]
 src_dir      = TFT
