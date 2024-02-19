@@ -2,7 +2,10 @@
 #define _PIN_MKS_TFT32_V1_4_H_  // modify to actual filename !!!
 
 // MCU type (STM32F10x, STM32F2xx, STM32F4xx)
-#include "stm32f10x.h"
+#ifndef MCU_TYPE
+  #define MCU_TYPE
+  #include "stm32f10x.h"
+#endif
 
 // Portrait Mode support
 // Comment the following line in case the TFT variant supports Portrait Mode

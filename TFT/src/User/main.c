@@ -90,6 +90,11 @@ void InfoHost_HandleOkAck(int16_t target_tx_slots)
 
 int main(void)
 {
+  #if defined GD32F3XX
+    // Required due to enabling interrupt after vector table relocation
+    __enable_irq();
+  #endif
+
   SystemClockInit();
 
   SCB->VTOR = VECT_TAB_FLASH;
