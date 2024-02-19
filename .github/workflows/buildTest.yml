@@ -115,4 +115,4 @@ jobs:
         run: platformio run --environment MKS_TFT35_V1_0
 
       - name: Build MKS GD TFT28 V1.2-4
-        run: platformio run --environment MKS_GD_TFT28_V1_2-4
+        run: platformio run --environment MKS_GD_TFT28_V1_2_4
