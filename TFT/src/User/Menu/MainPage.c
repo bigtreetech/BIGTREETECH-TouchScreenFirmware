@@ -27,9 +27,7 @@ void menuMain(void)
   KEY_VALUES key_num = KEY_IDLE;
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-  {
     mainPageItems.items[5].label.index = LABEL_MACROS;
-  }
 
   if (infoSettings.status_screen != 1)
   {
@@ -72,14 +70,14 @@ void menuMain(void)
         break;
 
       case KEY_ICON_5:
-        if (infoMachineSettings.firmwareType == FW_REPRAPFW)
+        if (infoMachineSettings.firmwareType != FW_REPRAPFW)
         {
-          strcpy(infoFile.path, "Macros");
-          OPEN_MENU(menuCallMacro);
+          OPEN_MENU(menuCustom);
         }
         else
         {
-          OPEN_MENU(menuCustom);
+          strcpy(infoFile.path, "Macros");
+          OPEN_MENU(menuCallMacro);
         }
         break;
 

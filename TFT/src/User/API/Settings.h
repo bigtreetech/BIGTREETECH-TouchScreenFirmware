@@ -11,10 +11,10 @@ extern "C" {
 #include "coordinate.h"  // for TOTAL_AXIS
 #include "LED_Colors.h"  // for LED_COLOR_COMPONENT_COUNT
 
-#define CONFIG_SUPPPORT       20231119  // (YYYYMMDD) change if any keyword(s) is Configuration.h is added, removed or changed.
+#define CONFIG_SUPPPORT       20240203  // (YYYYMMDD) change if any keyword(s) in Configuration.h is added, removed or changed.
                                         // This number should match CONFIGURATION_H_VERSION in Configuration.h
-#define CONFIG_FLASH_SIGN     20230929  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20230821  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define CONFIG_FLASH_SIGN     20240203  // (YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20240203  // (YYYYMMDD) change if any keyword(s) in language pack is added or removed
 #define ICON_FLASH_SIGN       20230821  // (YYYYMMDD) change if any icon(s) is added or removed
 #define FONT_FLASH_SIGN       20230821  // (YYYYMMDD) change if fonts require updating
 
@@ -69,6 +69,7 @@ typedef enum
 {
   INDEX_LISTENING_MODE = 0,
   INDEX_ADVANCED_OK,
+  INDEX_COMMAND_CHECKSUM,
   INDEX_EMULATED_M600,
   INDEX_EMULATED_M109_M190,
   INDEX_EVENT_LED,

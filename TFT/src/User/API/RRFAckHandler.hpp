@@ -1,11 +1,11 @@
-#ifndef _PARSE_ACK_JSON_H_
-#define _PARSE_ACK_JSON_H_
+#ifndef _RRF_ACK_HANDLER_JSON_H_
+#define _RRF_ACK_HANDLER_JSON_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-  void rrfParseACK(const char *data);
+  void rrfParseAck(const char *data);
 #ifdef __cplusplus
 }
 #endif
@@ -79,11 +79,13 @@ public:
   inline void endObject() {}
   inline void whitespace(char c) {}
   virtual void endDocument();
+
   inline void startArray()
   {
     in_array = true;
     index = 0;
   }
+
   inline void endArray()
   {
     in_array = false;
@@ -164,6 +166,7 @@ public:
       state = none;
     }
   }
+
   virtual void value(const char *value);
 };
 #endif

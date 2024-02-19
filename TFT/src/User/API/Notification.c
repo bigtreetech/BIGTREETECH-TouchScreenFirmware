@@ -14,17 +14,17 @@ typedef struct
 } TOAST;
 
 // toast notification variables
-static TOAST toastlist[TOAST_MSG_COUNT];
+static TOAST toastlist[TOAST_MSG_COUNT];  // toast notification array
+static bool _toastRunning = false;        // "true" when a toast notification is currently displayed
+static bool _toastAvailable = false;      // "true" when a new toast is added. "false" when no more toasts to display are available
+static uint8_t nextToastIndex = 0;        // next index to store new toast
+static uint8_t curToastDisplay = 0;       // current toast notification being displayed
+static uint32_t nextToastTime = 0;        // time to change to next toast notification
 
-static uint8_t nextToastIndex = 0;   // next index to store new toast
-static uint8_t curToastDisplay = 0;  // current toast notification being displayed
-static uint32_t nextToastTime = 0;   // time to change to next notification
-
-static NOTIFICATION msglist[MAX_MSG_COUNT];
-static uint8_t nextMsgIndex = 0;  // next index to store new message
-static void (*notificationHandler)() = NULL;
-
-bool _toastRunning = false;
+// message notification variables
+static NOTIFICATION msglist[MAX_MSG_COUNT];    // message notification array
+static uint8_t nextMsgIndex = 0;               // next index to store new message
+static void (* notificationHandler)() = NULL;  // message notification handler
 
 // add new message to toast notification queue
 void addToast(DIALOG_TYPE style, char * text)
@@ -34,24 +34,9 @@ void addToast(DIALOG_TYPE style, char * text)
   strncpy_no_pad(toastlist[nextToastIndex].text, text, TOAST_MSG_LENGTH);
   toastlist[nextToastIndex].style = style;
   toastlist[nextToastIndex].isNew = true;
+
+  _toastAvailable = true;
   nextToastIndex = (nextToastIndex + 1) % TOAST_MSG_COUNT;
-}
-
-// check if notification is currently displayed
-bool toastRunning(void)
-{
-  return _toastRunning;
-}
-
-// check if any new notification is available
-static inline bool toastAvailable(void)
-{
-  for (int i = 0; i < TOAST_MSG_COUNT; i++)
-  {
-    if (toastlist[i].isNew == true)
-      return true;
-  }
-  return false;
 }
 
 // show next notification
@@ -66,33 +51,33 @@ void drawToast(bool redraw)
     _toastRunning = true;
 
     // draw icon
-    uint8_t *icon;
-    SOUND cursound;
+    uint8_t * icon;
+    SOUND curSound;
 
     switch (toastlist[curToastDisplay].style)
     {
       case DIALOG_TYPE_ERROR:
         GUI_SetColor(NOTIF_ICON_ERROR_BG_COLOR);
         icon = IconCharSelect(CHARICON_ERROR);
-        cursound = SOUND_ERROR;
+        curSound = SOUND_ERROR;
         break;
 
       case DIALOG_TYPE_SUCCESS:
         GUI_SetColor(NOTIF_ICON_SUCCESS_BG_COLOR);
         icon = IconCharSelect(CHARICON_OK_ROUND);
-        cursound = SOUND_SUCCESS;
+        curSound = SOUND_SUCCESS;
         break;
 
       default:
         GUI_SetColor(NOTIF_ICON_INFO_BG_COLOR);
         icon = IconCharSelect(CHARICON_INFO);
-        cursound = SOUND_TOAST;
+        curSound = SOUND_TOAST;
         break;
     }
 
     if (!redraw)  // if notification is new
     {
-      BUZZER_PLAY(cursound);  // play sound
+      BUZZER_PLAY(curSound);  // play sound
       nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);  // set new timer
     }
 
@@ -114,22 +99,42 @@ void drawToast(bool redraw)
   }
 }
 
+// check if notification is currently displayed
+bool toastRunning(void)
+{
+  return _toastRunning;
+}
+
+// check if any new notification is available
+static inline bool toastAvailable(void)
+{
+  for (int i = 0; i < TOAST_MSG_COUNT; i++)
+  {
+    if (toastlist[i].isNew == true)
+      return true;
+  }
+
+  return false;
+}
+
 // check and control toast notification display
 void loopToast(void)
 {
-  if (getMenuType() != MENU_TYPE_FULLSCREEN && OS_GetTimeMs() > nextToastTime)
+  // if no new toast is available or it is not yet expired on screen or in case a full screen menu is displayed, do nothing
+  if (_toastAvailable == false || OS_GetTimeMs() < nextToastTime || getMenuType() == MENU_TYPE_FULLSCREEN)
+    return;
+
+  if (toastAvailable())
   {
-    if (toastAvailable())
-    {
-      drawToast(false);
-    }
-    else if (_toastRunning == true)
-    {
-      _toastRunning = false;
-      GUI_ClearPrect(&toastIconRect);
-      GUI_ClearPrect(&toastRect);
-      menuDrawTitle();
-    }
+    drawToast(false);
+  }
+  else if (_toastRunning == true)
+  {
+    _toastRunning = false;
+    _toastAvailable = false;
+    GUI_ClearPrect(&toastIconRect);
+    GUI_ClearPrect(&toastRect);
+    menuDrawTitle();
   }
 }
 
@@ -145,6 +150,7 @@ void addNotification(DIALOG_TYPE style, char * title, char * text, bool drawDial
     {
       memcpy(&msglist[i], &msglist[i + 1], sizeof(NOTIFICATION));
     }
+
     nextMsgIndex = MAX_MSG_COUNT - 1;
   }
 
@@ -173,7 +179,7 @@ void replayNotification(uint8_t index)
 }
 
 // retrieve a stored notification
-NOTIFICATION *getNotification(uint8_t index)
+NOTIFICATION * getNotification(uint8_t index)
 {
   if (msglist[index].title[0] != '\0' && msglist[index].text[0] != '\0')
     return &msglist[index];
@@ -189,13 +195,20 @@ bool hasNotification(void)
 void clearNotification(void)
 {
   nextMsgIndex = 0;
+
   for (int i = 0; i < MAX_MSG_COUNT; i++)
   {
     msglist[i].text[0] = '\0';
     msglist[i].title[0] = '\0';
   }
+
   notificationDot();
   statusSetReady();
+}
+
+void setNotificationHandler(void (* handler)())
+{
+  notificationHandler = handler;
 }
 
 // check if pressed on titlebar area
@@ -204,13 +217,6 @@ void titleBarPress(void)
   if (getMenuType() == MENU_TYPE_ICON || getMenuType() == MENU_TYPE_LISTVIEW)
   {
     if (MENU_IS_NOT(menuNotification))
-    {
       OPEN_MENU(menuNotification);
-    }
   }
-}
-
-void setNotificationHandler(void (*handler)())
-{
-  notificationHandler = handler;
 }

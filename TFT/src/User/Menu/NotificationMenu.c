@@ -72,6 +72,8 @@ void menuNotification(void)
       case KEY_ICON_0:
       case KEY_ICON_1:
       case KEY_ICON_2:
+      case KEY_ICON_3:
+      case KEY_ICON_4:
         replayNotification(key_num);
         break;
 

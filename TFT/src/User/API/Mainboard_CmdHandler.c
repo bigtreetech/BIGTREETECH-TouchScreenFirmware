@@ -1,8 +1,9 @@
-#include "interfaceCmd.h"
+#include "Mainboard_CmdHandler.h"
 #include "includes.h"
-#include "RRFSendCmd.h"
+#include "RRFStatusControl.h"
 
-#define CMD_QUEUE_SIZE 20
+#define CMD_QUEUE_SIZE  20
+#define CMD_RETRY_COUNT 3
 
 typedef struct
 {
@@ -18,6 +19,14 @@ typedef struct
   uint8_t count;    // count of commands in the queue
 } GCODE_QUEUE;
 
+typedef struct
+{
+  uint32_t line_number;    // line number used as matching key with value reported by mainboard on "Resend: " ACK message
+  bool retry;              // flag set to "true" to trigger a command resend. Initially set to "false" (no need to resend)
+  int8_t retry_attempts;   // remaining retry attempts. Initially set to default max value CMD_RETRY_COUNT
+  GCODE_INFO gcode_info;   // command to resend
+} GCODE_RETRY_INFO;
+
 typedef enum
 {
   NO_WRITING = 0,
@@ -25,13 +34,15 @@ typedef enum
   ONBOARD_WRITING
 } WRITING_MODE;
 
-GCODE_QUEUE cmdQueue;              // command queue where commands to be sent are stored
+GCODE_QUEUE cmdQueue;                    // command queue where commands to be sent are stored
+GCODE_RETRY_INFO cmdRetryInfo = {0};     // command retry info. Required COMMAND_CHECKSUM feature enabled in TFT
+
 char * cmd_ptr;
 uint8_t cmd_len;
-SERIAL_PORT_INDEX cmd_port_index;  // index of serial port originating the gcode
-uint8_t cmd_base_index;            // base index in case the gcode has checksum ("Nxxx " is present at the beginning of gcode)
+SERIAL_PORT_INDEX cmd_port_index;        // index of serial port originating the gcode
+uint8_t cmd_base_index;                  // base index in case the gcode has checksum ("Nxx " is present at the beginning of gcode)
 uint8_t cmd_index;
-WRITING_MODE writing_mode = NO_WRITING;
+WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and M29
 FIL file;
 
 uint8_t getQueueCount(void)
@@ -182,25 +193,20 @@ void clearCmdQueue(void)
 
 // Strip out any leading space from the passed command.
 // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command.
-char * stripCmd(char ** cmdPtr)
+char * stripCmd(char * cmdPtr)
 {
-  char * strPtr = *cmdPtr;
-
   // skip leading spaces
-  while (*strPtr == ' ') strPtr++;           // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
-
-  // save pointer to skipped spaces
-  *cmdPtr = strPtr;                          // e.g. "  N1   G28*46\n" -> "N1   G28*46\n"
+  while (*cmdPtr == ' ') cmdPtr++;           // e.g. "  N1   G28*18\n" -> "N1   G28*18\n"
 
   // skip N[-0-9] (line number) if included in the command line
-  if (*strPtr == 'N' && NUMERIC(strPtr[1]))  // e.g. "N1   G28*46\n" -> "G28*46\n"
+  if (*cmdPtr == 'N' && NUMERIC(cmdPtr[1]))  // e.g. "N1   G28*18\n" -> "G28*18\n"
   {
-    strPtr += 2;                             // skip N[-0-9]
-    while (NUMERIC(*strPtr)) strPtr++;       // skip [0-9]*
-    while (*strPtr == ' ') strPtr++;         // skip [ ]*
+    cmdPtr += 2;                             // skip N[-0-9]
+    while (NUMERIC(*cmdPtr)) cmdPtr++;       // skip [0-9]*
+    while (*cmdPtr == ' ') cmdPtr++;         // skip [ ]*
   }
 
-  return strPtr;
+  return cmdPtr;
 }
 
 // Get the data of the next to be sent command in cmdQueue
@@ -215,14 +221,31 @@ static inline bool getCmd(void)
   //
   // set cmd_base_index with index of gcode command
   //
-  cmd_base_index = stripCmd(&cmd_ptr) - cmd_ptr;                 // e.g. "N1   G28*46\n" -> "G28*46\n"
+  cmd_base_index = stripCmd(cmd_ptr) - cmd_ptr;                 // e.g. "N1   G28*18\n" -> "G28*18\n"
 
   // set cmd_index with index of gcode value
-  cmd_index = cmd_base_index + 1;                                // e.g. "G28*46\n" -> "28*46\n"
+  cmd_index = cmd_base_index + 1;                                // e.g. "G28*18\n" -> "28*18\n"
 
   cmd_len = strlen(cmd_ptr);                                     // length of gcode
 
   return (cmd_port_index == PORT_1);  // if gcode is originated by TFT (SERIAL_PORT), return "true"
+}
+
+static inline void getCmdFromCmdRetryInfo(void)
+{
+  cmd_ptr = cmdRetryInfo.gcode_info.gcode;
+  cmd_port_index = cmdRetryInfo.gcode_info.port_index;
+  cmd_len = strlen(cmd_ptr);
+}
+
+void setCmdRetryInfo(uint32_t lineNumber)
+{
+  cmdRetryInfo.line_number = lineNumber;          // set line number to the provided value
+  cmdRetryInfo.retry = false;                     // set retry flag to "false" (no need to resend)
+  cmdRetryInfo.retry_attempts = CMD_RETRY_COUNT;  // set retry attempts to default max value CMD_RETRY_COUNT
+
+  strncpy_no_pad(cmdRetryInfo.gcode_info.gcode, cmd_ptr, CMD_MAX_SIZE);  // copy command
+  cmdRetryInfo.gcode_info.port_index = cmd_port_index;                   // copy port index
 }
 
 // Purge gcode cmd or send it to the printer and then remove it from cmdQueue queue.
@@ -238,24 +261,40 @@ bool sendCmd(bool purge, bool avoidTerminal)
     // dump serial data sent to debug port
     Serial_Put(SERIAL_DEBUG_PORT, serialPort[cmd_port_index].id);  // serial port ID (e.g. "2" for SERIAL_PORT_2)
     Serial_Put(SERIAL_DEBUG_PORT, ">>");
-
-    if (purge)
-      Serial_Put(SERIAL_DEBUG_PORT, purgeStr);
-
-    Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
   if (!purge)  // if command is not purged, send it to printer
   {
+    if (!cmdRetryInfo.retry)  // if there is no pending command to resend
+    {
+      if (GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM) == 1)
+        setCmdRetryInfo(addCmdLineNumberAndChecksum(cmd_ptr, cmd_base_index, &cmd_len));  // cmd_ptr and cmd_len are updated
+
+      cmdQueue.count--;
+      cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
+    }
+    else  // if there is a pending command to resend
+    {
+      cmdRetryInfo.retry = false;     // disable command resend flag
+      cmdRetryInfo.retry_attempts--;  // update remaining retry attempts
+    }
+
+    // send or resend command
+
     UPD_TX_KPIS(cmd_len);  // debug monitoring KPI
 
-    if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-      Serial_Put(SERIAL_PORT, cmd_ptr);
-    else
-      rrfSendCmd(cmd_ptr);
+    Serial_Put(SERIAL_PORT, cmd_ptr);
 
     setCurrentAckSrc(cmd_port_index);
   }
+  #if defined(SERIAL_DEBUG_PORT) && defined(DEBUG_SERIAL_COMM)
+    else  // if command is purged
+    {
+      Serial_Put(SERIAL_DEBUG_PORT, purgeStr);
+    }
+
+    Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
+  #endif
 
   if (!avoidTerminal && MENU_IS(menuTerminal))
   {
@@ -264,9 +303,6 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
     terminalCache(cmd_ptr, cmd_len, cmd_port_index, SRC_TERMINAL_GCODE);
   }
-
-  cmdQueue.count--;
-  cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
 
   return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
@@ -334,12 +370,12 @@ bool initRemoteTFT()
 {
   // examples:
   //
-  // "cmd_ptr" = "N1 M23 SD:/test/cap2.gcode*36\n"
-  // "cmd_ptr" = "N1 M23 S /test/cap2.gcode*36\n"
+  // "cmd_ptr" = "N1 M23 SD:/test/cap2.gcode*12\n"
+  // "cmd_ptr" = "N1 M23 S /test/cap2.gcode*82\n"
   //
   // "infoFile.path" = "SD:/test/cap2.gcode"
 
-  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "SD:/test/cap2.gcode*36\n"
+  // e.g. "N1 M23 SD:/test/cap2.gcode*12\n" -> "SD:/test/cap2.gcode*12\n"
   //
   if (cmd_seen_from(cmd_base_index, "SD:") || cmd_seen_from(cmd_base_index, "S "))
     infoFile.source = FS_TFT_SD;   // set source first
@@ -354,11 +390,11 @@ bool initRemoteTFT()
   CMD path;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
   // cmd_index was set by cmd_seen_from() function
-  strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*36\n" -> "/test/cap2.gcode*36\n"
-  stripChecksum(path);                // e.g. "/test/cap2.gcode*36\n" -> /test/cap2.gcode"
+  strcpy(path, &cmd_ptr[cmd_index]);  // e.g. "N1 M23 SD:/test/cap2.gcode*12\n" -> "/test/cap2.gcode*12\n"
+  stripCmdChecksum(path);             // e.g. "/test/cap2.gcode*12\n" -> /test/cap2.gcode"
 
-  resetInfoFile();               // then reset infoFile (source is restored)
-  enterFolder(stripHead(path));  // set path as last
+  resetInfoFile();                  // then reset infoFile (source is restored)
+  enterFolder(stripCmdHead(path));  // set path as last
 
   return true;
 }
@@ -419,12 +455,12 @@ static inline void writeRemoteTFT()
 {
   // examples:
   //
-  // "cmd_ptr" = "N1 G28*46\n"
-  // "cmd_ptr" = "N2 G29*56\n"
-  // "cmd_ptr" = "N3 M29*66\n"
+  // "cmd_ptr" = "N1 G28*18\n"
+  // "cmd_ptr" = "N2 G29*16\n"
+  // "cmd_ptr" = "N3 M29*27\n"
 
   // if M29, stop writing mode. cmd_index (used by cmd_value() function) was set by sendQueueCmd() function
-  if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*66\n" -> "M29*66\n"
+  if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // e.g. "N3 M29*27\n" -> "M29*27\n"
   {
     f_close(&file);
 
@@ -437,12 +473,13 @@ static inline void writeRemoteTFT()
     UINT br;
     CMD cmd;  // temporary working buffer (cmd_ptr buffer must always remain unchanged)
 
-    strcpy(cmd, &cmd_ptr[cmd_base_index]);  // e.g. "N1 G28*46\n" -> "G28*46\n"
-    stripChecksum(cmd);                     // e.g. "G28*46\n" -> "G28"
+    strcpy(cmd, &cmd_ptr[cmd_base_index]);  // e.g. "N1 G28*18\n" -> "G28*18\n"
+    stripCmdChecksum(cmd);                  // e.g. "G28*18\n" -> "G28"
 
     f_write(&file, cmd, strlen(cmd), &br);
 
-    // "\n" is always removed by stripChecksum() function even if there is no checksum, so we need to write it on file separately
+    // "\n" is always removed by stripCmdChecksum() function even if there is no checksum,
+    // so we need to write it on file separately
     f_write(&file, "\n", 1, &br);
     f_sync(&file);
   }
@@ -476,6 +513,37 @@ void syncTargetTemp(uint8_t index)
   }
 }
 
+void handleCmdLineNumberMismatch(const uint32_t lineNumber)
+{
+  // if no buffered command with the requested line number is found or it is found but the maximum number of retry
+  // attempts is reached, reset the line number with M110 just to try to avoid further retransmission requests for
+  // the same line number or for any out of synch command already sent to the mainboard (e.g. in case ADVANCED_OK
+  // feature is enabled in TFT)
+  if (cmdRetryInfo.line_number != lineNumber || cmdRetryInfo.retry_attempts == 0)
+  {
+    if (getCmdLineNumberBase() != lineNumber)  // if notification not already displayed for the same line number
+    {
+      char msgText[MAX_MSG_LENGTH];
+
+      snprintf(msgText, MAX_MSG_LENGTH, "line: cur=%lu, exp=%lu", cmdRetryInfo.line_number, lineNumber);
+
+      addNotification(DIALOG_TYPE_ERROR, "Cmd not found", msgText, false);
+    }
+
+    setCmdLineNumberBase(lineNumber);  // set base line number of next command sent by the TFT to the requested line number
+
+    CMD cmd;
+
+    sprintf(cmd, "M110 N%lu", lineNumber);
+
+    sendEmergencyCmd(cmd);  // immediately send M110 command to set new base line number on mainboard
+  }
+  else  // if a command with the requested line number is present on the buffer and
+  {     // not already resent for the maximum retry attempts, mark it as to be sent
+    cmdRetryInfo.retry = true;
+  }
+}
+
 // Check if the received gcode is an emergency command or not
 // (M108, M112, M410, M524, M876) and parse it accordingly.
 // Otherwise, store the gcode on command queue.
@@ -484,13 +552,13 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
   // strip out any leading space from the passed command.
   // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
   //
-  char * strPtr = stripCmd(&cmd);  // e.g. "  N1   G28*46\n" -> "G28*46\n"
+  char * cmdPtr = stripCmd(cmd);  // e.g. "  N1   G28*18\n" -> "G28*18\n"
 
   // check if the received gcode is an emergency command and parse it accordingly
 
-  if (strPtr[0] == 'M')
+  if (cmdPtr[0] == 'M')
   {
-    switch (strtol(&strPtr[1], NULL, 10))
+    switch (strtol(&cmdPtr[1], NULL, 10))
     {
       case 108:  // M108
       case 112:  // M112
@@ -529,23 +597,32 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
     Serial_Put(SERIAL_DEBUG_PORT, emergencyCmd);
   #endif
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)
-    Serial_Put(SERIAL_PORT, emergencyCmd);
-  else
-    rrfSendCmd(emergencyCmd);
+  uint8_t cmdLen = strlen(emergencyCmd);
+
+  UPD_TX_KPIS(cmdLen);  // debug monitoring KPI
+
+  Serial_Put(SERIAL_PORT, emergencyCmd);
 
   setCurrentAckSrc(portIndex);
 
   if (MENU_IS(menuTerminal))
-    terminalCache(emergencyCmd, strlen(emergencyCmd), portIndex, SRC_TERMINAL_GCODE);
+    terminalCache(emergencyCmd, cmdLen, portIndex, SRC_TERMINAL_GCODE);
 }
 
 // Parse and send gcode cmd in cmdQueue queue.
 void sendQueueCmd(void)
 {
-  if (infoHost.tx_slots == 0 || cmdQueue.count == 0) return;
+  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry)) return;
 
   bool avoid_terminal = false;
+
+  if (cmdRetryInfo.retry)  // if there is a pending command to resend
+  {
+    getCmdFromCmdRetryInfo();  // retrieve gcode from cmdRetryInfo
+
+    goto send_cmd;  // send the command
+  }
+
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
 
   if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
@@ -653,8 +730,8 @@ void sendQueueCmd(void)
             if (!fromTFT)
             {
               // NOTE: If the file was selected (with M23) from onboard media, infoFile.source will be set to
-              //       FS_ONBOARD_MEDIA_REMOTE by the startPrintingFromRemoteHost() function called in parseAck.c
-              //       during M23 ACK parsing
+              //       FS_ONBOARD_MEDIA_REMOTE by the startPrintingFromRemoteHost() function called in
+              //       Mainboard_AckHandler.c during M23 ACK parsing
 
               if (infoFile.source < FS_ONBOARD_MEDIA)  // if a file was selected from TFT media with M23
               {
@@ -725,7 +802,7 @@ void sendQueueCmd(void)
             }
             else
             {
-              setPrintUpdateWaiting(false);
+              printClearSendingWaiting();
             }
             break;
 
@@ -838,7 +915,7 @@ void sendQueueCmd(void)
 
         #else  // not SERIAL_PORT_2
           case 27:  // M27
-            setPrintUpdateWaiting(false);
+            printClearSendingWaiting();
             break;
         #endif  // SERIAL_PORT_2
 
@@ -865,17 +942,15 @@ void sendQueueCmd(void)
           }
           break;
 
-        case 80:  // M80
-          #ifdef PS_ON_PIN
+        #ifdef PS_ON_PIN
+          case 80:  // M80
             PS_ON_On();
-          #endif
-          break;
+            break;
 
-        case 81:  // M81
-          #ifdef PS_ON_PIN
+          case 81:  // M81
             PS_ON_Off();
-          #endif
-          break;
+            break;
+        #endif
 
         case 82:  // M82
           eSetRelative(false);
@@ -895,7 +970,7 @@ void sendQueueCmd(void)
 
           if (fromTFT)
           {
-            heatSetUpdateWaiting(false);
+            heatClearSendingWaiting();
 
             if (cmd_value() == 105)  // if M105
             {
@@ -934,11 +1009,20 @@ void sendQueueCmd(void)
           }
           break;
 
+        case 110:  // M110
+          setCmdLineNumberBase(cmd_seen('N') ? (uint32_t)cmd_value() : 0);
+          break;
+
         case 114:  // M114
-          #ifdef FIL_RUNOUT_PIN
-            if (fromTFT)
-              FIL_PosE_SetUpdateWaiting(false);
-          #endif
+          if (fromTFT)
+          {
+            if (!cmd_seen('E'))
+              coordinateQueryClearSendingWaiting();
+            #ifdef FIL_RUNOUT_PIN
+              else
+                FIL_PosE_ClearSendingWaiting();
+            #endif
+          }
           break;
 
         case 117:  // M117
@@ -968,8 +1052,8 @@ void sendQueueCmd(void)
             strncpy_no_pad(rawMsg, &cmd_ptr[cmd_base_index + 4], CMD_MAX_SIZE);
 
             // retrieve message text
-            stripChecksum(rawMsg);
-            msgText = stripHead(rawMsg);
+            stripCmdChecksum(rawMsg);
+            msgText = stripCmdHead(rawMsg);
 
             statusSetMsg((uint8_t *)"M117", (uint8_t *)msgText);
 
@@ -1104,11 +1188,17 @@ void sendQueueCmd(void)
         case 220:  // M220
           if (cmd_seen('S'))
             speedSetCurPercent(0, cmd_value());
+
+          if (fromTFT)
+            speedQueryClearSendingWaiting();
           break;
 
         case 221:  // M221
           if (cmd_seen('S'))
             speedSetCurPercent(1, cmd_value());
+
+          if (fromTFT)
+            speedQueryClearSendingWaiting();
           break;
 
         #ifdef BUZZER_PIN
@@ -1157,7 +1247,7 @@ void sendQueueCmd(void)
             caseLightSetPercent(cmd_value());
           break;
 
-        case 376:  // M376 (Reprap FW)
+        case 376:  // M376 (RepRap firmware)
           if (infoMachineSettings.firmwareType == FW_REPRAPFW && cmd_seen('H'))
             setParameter(P_ABL_STATE, 1, cmd_float());
           break;
@@ -1287,6 +1377,9 @@ void sendQueueCmd(void)
 
           if (cmd_seen('I'))
             fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
+
+          if (fromTFT)
+            ctrlFanQueryClearSendingWaiting();
           break;
 
         case 900:  // M900 linear advance factor

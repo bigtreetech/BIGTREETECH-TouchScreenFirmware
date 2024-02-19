@@ -26,7 +26,7 @@ TCHAR * getFS(void)
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      return infoMachineSettings.firmwareType == FW_REPRAPFW ? "gcodes" : "oMD:";
+      return infoMachineSettings.firmwareType != FW_REPRAPFW ? "oMD:" : "gcodes";
 
     case FS_REMOTE_HOST:
       return "Remote printing...";

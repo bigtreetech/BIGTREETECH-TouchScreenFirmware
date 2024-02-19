@@ -1,13 +1,7 @@
 #include "os_timer.h"
 #include "includes.h"
 
-typedef struct
-{
-  uint32_t ms;   // milliseconds
-  uint16_t sec;  // seconds
-} OS_COUNTER;
-
-volatile static OS_COUNTER os_counter = {0, 0};
+OS_COUNTER os_counter = {0, 0};
 
 void OS_InitTimerMs(void)
 {
@@ -83,12 +77,6 @@ void TIM7_IRQHandler(void)
   }
 }
 #endif
-
-// 1 ms
-uint32_t OS_GetTimeMs(void)
-{
-  return os_counter.ms;
-}
 
 // task: task structure to be filled
 // time_ms:

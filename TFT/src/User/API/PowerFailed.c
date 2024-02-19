@@ -203,9 +203,7 @@ void powerFailedCreate(char *path)
       if (f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
       {
         if (f_sync(&fpPowerFailed) == FR_OK)
-        {
           create_ok = true;
-        }
       }
     }
   }

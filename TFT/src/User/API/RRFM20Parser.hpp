@@ -18,6 +18,7 @@ extern "C"
     TCHAR *file_name;
     uint32_t timestamp;
   } M20_LIST_ITEM;
+
   void parseJobListResponse(const char *data);
   void parseMacroListResponse(const char *data);
 #ifdef __cplusplus
@@ -32,6 +33,7 @@ extern "C"
 #define FILES_TYPE "type"
 #define FILES_NAME "name"
 #define FILES_DATE "date"
+
 enum RRFM20ParserState { none, type, name, date };
 
 class RRFM20Parser : public JsonListener
@@ -72,6 +74,7 @@ public:
   {
     in_array = in_files;
   }
+
   inline void endArray()
   {
     in_array = false;

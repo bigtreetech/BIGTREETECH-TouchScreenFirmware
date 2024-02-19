@@ -1,5 +1,5 @@
-#ifndef _PARSE_ACK_H_
-#define _PARSE_ACK_H_
+#ifndef _MAINBOARD_ACK_HANDLER_H_
+#define _MAINBOARD_ACK_HANDLER_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,7 +11,7 @@ extern "C" {
 void setHostDialog(bool isHostDialog);
 bool getHostDialog(void);
 void setCurrentAckSrc(SERIAL_PORT_INDEX portIndex);
-void parseACK(void);
+void parseAck(void);
 
 #ifdef __cplusplus
 }

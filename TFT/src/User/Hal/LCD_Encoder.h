@@ -19,7 +19,7 @@ extern "C" {
   extern int16_t encoderPosition;  // make it available for reading the current rotation value
 
   void LCD_Enc_Init(void);
-  bool LCD_Enc_ReadBtn(uint16_t interval);  // return the button press state. Interval is in milli seconds
+  bool LCD_Enc_ReadBtn(uint16_t duration);  // return the button press state. Duration is in milli seconds
   uint8_t LCD_Enc_ReadPos(void);            // return the position pins state
   void LCD_Enc_SendPulse(uint8_t num);      // send a pulse to the encoder
   bool LCD_Enc_CheckState(void);

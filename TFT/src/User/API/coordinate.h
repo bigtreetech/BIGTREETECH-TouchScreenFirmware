@@ -50,10 +50,11 @@ void coordinateSetExtruderActualSteps(float steps);
 float coordinateGetAxisActual(AXIS axis);
 void coordinateSetAxisActual(AXIS axis, float position);
 void coordinateGetAllActual(COORDINATE *tmp);
-void coordinateQuerySetWait(bool wait);
-void coordinateQuery(uint8_t delay);
-void coordinateQueryTurnOff(void);
 float coordinateGetAxis(AXIS axis);
+
+void coordinateQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for coordinate query
+void coordinateQuery(uint8_t delay);            // query for coordinate
+void coordinateQueryTurnOff(void);
 
 #ifdef __cplusplus
 }

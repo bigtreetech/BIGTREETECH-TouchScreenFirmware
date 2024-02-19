@@ -1,8 +1,6 @@
 #include "CaseLight.h"
 #include "includes.h"
 
-#define CASE_LIGHT_UPDATE_TIME 1000  // 1 seconds is 1000
-
 static uint8_t caseLightPercent = 0;
 static bool caseLightState;
 
@@ -87,8 +85,8 @@ void menuCaseLight(void)
       case KEY_ICON_3:
       case KEY_INCREASE:
         requestedCLpercent = (key_num == KEY_ICON_3 || key_num == KEY_INCREASE) ?
-                            NOBEYOND(0, requestedCLpercent + percentSteps[percent_index], 100) :
-                            NOBEYOND(0, requestedCLpercent - percentSteps[percent_index], 100);
+                             NOBEYOND(0, requestedCLpercent + percentSteps[percent_index], 100) :
+                             NOBEYOND(0, requestedCLpercent - percentSteps[percent_index], 100);
         sendingNeeded |= DO_SEND_PERCENT;
         break;
 

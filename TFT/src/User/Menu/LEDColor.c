@@ -2,9 +2,9 @@
 #include "includes.h"
 
 // value ranges
-#define LED_UPDATE_TIME 1000  // 1 seconds is 1000
-#define LED_MIN_VALUE   0
-#define LED_MAX_VALUE   255
+#define LED_REFRESH_TIME 1000  // 1 seconds is 1000
+#define LED_MIN_VALUE    0
+#define LED_MAX_VALUE    255
 
 // key button enumeration
 typedef enum
@@ -444,7 +444,7 @@ void menuLEDColorCustom(void)
       sendingNeeded = true;
     }
 
-    if ((sendingNeeded && nextScreenUpdate(LED_UPDATE_TIME)) || updateForced)
+    if ((sendingNeeded && nextScreenUpdate(LED_REFRESH_TIME)) || updateForced)
     {
       LED_SendColor(&ledColor);
 

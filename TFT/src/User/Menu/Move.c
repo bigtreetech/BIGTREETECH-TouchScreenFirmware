@@ -105,7 +105,7 @@ void menuMove(void)
        | X-(4) | Y+(5) | X+(6) | back(7) |
        *-------*-------*-------*---------*
        |X+ X-  |Y+ Y-  |Z+ Z-            */
-      {{6, 4}, {5, 1}, {2, 0}}
+      {{6, 4}, {5, 1}, {2, 0}};
     #else
       /*-------*-------*-------*---------*
        | X+(0) | Y+(1) | Z+(2) | unit(3) |
@@ -113,9 +113,8 @@ void menuMove(void)
        | X-(4) | Y-(5) | Z-(6) | back(7) |
        *-------*-------*-------*---------*
        |X+ X-  |Y+ Y-  |Z+ Z-            */
-      {{0, 4}, {1, 5}, {2, 6}}
+      {{0, 4}, {1, 5}, {2, 6}};
     #endif
-    ;
 
   if (!GET_BIT(infoSettings.inverted_axis, X_AXIS))
     LOAD_XYZ_LABEL_INDEX(table[X_AXIS][0], INC, table[X_AXIS][1], DEC, X);  // table[0] <--> INC(+) table[1] <--> DEC(+) if not inverted

@@ -9,13 +9,6 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>  // for size_t
 
-// Menu Macros
-#define OPEN_MENU(x)    infoMenu.menu[++infoMenu.cur] = x
-#define REPLACE_MENU(x) infoMenu.menu[infoMenu.cur] = x
-#define CLOSE_MENU()    infoMenu.cur--
-#define MENU_IS(x)      infoMenu.menu[infoMenu.cur] == x
-#define MENU_IS_NOT(x)  infoMenu.menu[infoMenu.cur] != x
-
 // Macros to make a string from a macro
 #define STRINGIFY_(M) #M
 #define STRINGIFY(M)  STRINGIFY_(M)
@@ -90,13 +83,6 @@ void time_2_string(char *buf, char *str_format, uint32_t time);           // con
 double strtod_ligth(char *str, char **endptr);               // light weight strtod() function without exponential support
 void strncpy_pad(char *dest, const char *src, size_t n);     // light weight and safe strncpy() function with padding
 void strncpy_no_pad(char *dest, const char *src, size_t n);  // light weight and safe strncpy() function without padding
-
-const char *stripHead(const char *str);  // strip out any leading " ", "/" or ":" character that might be in the string
-void stripChecksum(char *str);           // strip out any trailing checksum that might be in the string
-uint8_t getChecksum(char *str);
-bool validateChecksum(char *str);
-
-const char *parseM118(char *str, bool *hasE, bool *hasA);
 
 #ifdef __cplusplus
 }

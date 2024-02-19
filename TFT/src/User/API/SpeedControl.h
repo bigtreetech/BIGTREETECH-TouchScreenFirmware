@@ -12,13 +12,14 @@ extern "C" {
 #define SPEED_MIN 10
 #define SPEED_MAX 999
 
-void speedSetPercent(uint8_t tool, uint16_t per);
-uint16_t speedGetSetPercent(uint8_t tool);
-void speedSetCurPercent(uint8_t tool, uint16_t per);
-uint16_t speedGetCurPercent(uint8_t tool);
-void loopSpeed(void);
-void speedQuerySetWait(bool wait);
-void speedQuery(void);
+void speedSetPercent(const uint8_t tool, const uint16_t per);
+uint16_t speedGetSetPercent(const uint8_t tool);
+void speedSetCurPercent(const uint8_t tool, const uint16_t per);
+uint16_t speedGetCurPercent(const uint8_t tool);
+
+void loopCheckSpeed(void);                 // called in loopBackEnd(). Loop for check on speed
+void speedQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for speed query
+void speedQuery(void);                     // query for speed
 
 #ifdef __cplusplus
 }

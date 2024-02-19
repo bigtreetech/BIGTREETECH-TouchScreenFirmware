@@ -176,7 +176,7 @@ void HD44780_DispDDRAM(uint8_t data)
         temp |= font[i++];
       }
 
-      for (y = HD44780.y * BYTE_HEIGHT; y < ey ;y++)
+      for (y = HD44780.y * BYTE_HEIGHT; y < ey; y++)
       {
         HD44780_DrawPixel(x, y, temp & (1 << (BYTE_HEIGHT - 1)), 1);
         temp <<= 1;

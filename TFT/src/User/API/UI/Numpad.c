@@ -162,7 +162,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 
     setFontSize(FONT_SIZE_LARGE);
 
-    for (uint8_t i = 0; i < KEY_COUNT ;i++)
+    for (uint8_t i = 0; i < KEY_COUNT; i++)
     {
       if (!(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || (i % 4) == 3))  // || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET))
         GUI_DispStringInPrect(&rect_of_numkey[i], (uint8_t *)numPadKeyChar[i]);

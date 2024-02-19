@@ -34,6 +34,7 @@ extern REQUEST_COMMAND_INFO requestCommandInfo;
 
 bool requestCommandInfoIsRunning(void);
 void clearRequestCommandInfo(void);
+void abortRequestCommandInfo(void);
 
 void detectAdvancedOk(void);
 bool request_M21(void);

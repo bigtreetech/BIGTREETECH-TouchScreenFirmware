@@ -8,6 +8,7 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 #include "variants.h"  // for SERIAL_PORT_2 etc.
+#include "Serial.h"    // for dmaL1DataTX etc.
 #include "uart.h"      // for _UART_CNT etc.
 
 #define BAUDRATE_COUNT 12
@@ -64,11 +65,20 @@ void Serial_DeInit(SERIAL_PORT_INDEX portIndex);
 //   - msg: message to send
 void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg);
 
-// test if a new message is available in the message queue of the provided physical serial port:
+// test if a message is available in the RX message queue of the provided physical serial port:
 //   - port: physical serial port where data availability is tested
 //
 //   - return value: "true" if a new message is available. "false" otherwise
-bool Serial_NewDataAvailable(uint8_t port);
+bool Serial_DataAvailableRX(uint8_t port);
+
+// test if a message is available in the TX message queue of the provided physical serial port:
+//   - port: physical serial port where data availability is tested
+//
+//   - return value: "true" if a message is available. "false" otherwise
+static inline bool Serial_DataAvailableTX(uint8_t port)
+{
+  return (dmaL1DataTX[port].wIndex != dmaL1DataTX[port].rIndex);  // is more data available?
+}
 
 // retrieve a message from the provided physical serial port:
 //   - port: physical serial port where data are read from
@@ -80,7 +90,7 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize);
 
 #ifdef SERIAL_PORT_2
   // retrieve messages from all the enabled supplementary ports storing them
-  // in the command queue (in interfaceCmd.c) for further processing
+  // in the command queue (in Mainboard_CmdHandler.c) for further processing
   void Serial_GetFromUART(void);
 #endif
 

@@ -1,9 +1,10 @@
 #include "gcode.h"
 #include "includes.h"
+#include "RRFStatusControl.h"
 
 REQUEST_COMMAND_INFO requestCommandInfo = {0};
 
-void waitForResponse(void)
+static void waitForResponse(void)
 {
   TASK_LOOP_WHILE(!requestCommandInfo.done);
 }
@@ -22,6 +23,14 @@ void clearRequestCommandInfo(void)
   }
 }
 
+void abortRequestCommandInfo(void)
+{
+  requestCommandInfo.inWaitResponse = false;
+  requestCommandInfo.inResponse = false;
+  requestCommandInfo.done = true;
+  requestCommandInfo.inError = true;
+}
+
 static void resetRequestCommandInfo(
   const char * string_start,   // The magic to identify the start
   const char * string_stop,    // The magic to identify the stop
@@ -34,8 +43,9 @@ static void resetRequestCommandInfo(
 
   requestCommandInfo.cmd_rev_buf = malloc(CMD_MAX_REV);
 
-  while (!requestCommandInfo.cmd_rev_buf)
-    ;  // malloc failed
+  while (!requestCommandInfo.cmd_rev_buf)  // if malloc failed, block the TFT
+  {
+  }
 
   memset(requestCommandInfo.cmd_rev_buf, 0, CMD_MAX_REV);
   requestCommandInfo.startMagic = string_start;
@@ -187,7 +197,7 @@ long request_M23_M36(const char * filename)
   const char * sizeTag;
   char * strPtr;
 
-  if (infoMachineSettings.firmwareType != FW_REPRAPFW)  // all other firmwares except reprap firmware
+  if (infoMachineSettings.firmwareType != FW_REPRAPFW)  // all other firmwares except RepRap firmware
   {
     resetRequestCommandInfo("File opened",    // The magic to identify the start
                             "File selected",  // The magic to identify the stop
@@ -200,7 +210,7 @@ long request_M23_M36(const char * filename)
 
     sizeTag = "Size:";
   }
-  else  // reprap firmware
+  else  // RepRap firmware
   {
     resetRequestCommandInfo("{\"err\"",  // The magic to identify the start
                             "}",         // The magic to identify the stop
@@ -210,7 +220,7 @@ long request_M23_M36(const char * filename)
 
     mustStoreCmd("M36 /%s\n", filename);
 
-    sizeTag = "size\":";  // reprap firmware reports size JSON
+    sizeTag = "size\":";  // RepRap firmware reports size JSON
   }
 
   waitForResponse();  // wait for response
@@ -223,7 +233,7 @@ long request_M23_M36(const char * filename)
   }
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
-    mustStoreCmd("M23 /%s\n", filename);  // send M23 for reprap firmware
+    mustStoreCmd("M23 /%s\n", filename);  // send M23 for RepRap firmware
 
   // Find file size and report it
   strPtr = strstr(requestCommandInfo.cmd_rev_buf, sizeTag);
@@ -278,7 +288,7 @@ void request_M125(void)
 }
 
 /**
- * Stop or Unconditional stop in reprap firmware
+ * Stop or Unconditional stop in RepRap firmware
  */
 void request_M0(void)
 {

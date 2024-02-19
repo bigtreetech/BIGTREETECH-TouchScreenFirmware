@@ -43,7 +43,7 @@ const LABEL lcd_idle_time_names[LCD_IDLE_TIME_COUNT] = {
 
 typedef struct
 {
-  uint32_t idle_ms;
+  uint32_t next_idle_time;
   bool dimmed;
   bool locked;
 } LCD_AUTO_DIM;
@@ -62,10 +62,9 @@ bool LCD_IsBlocked(void)
 
 void LCD_Wake(void)
 {
-  if (infoSettings.lcd_idle_time != IDLE_TIME_OFF)
+  if (infoSettings.lcd_idle_time != IDLE_TIME_OFF)  // if LCD dim function is activated
   {
-    // the LCD dim function is activated. First check if it's dimmed
-    if (lcd_dim.dimmed)
+    if (lcd_dim.dimmed)  // if LCD is dimmed
     {
       lcd_dim.locked = false;
       lcd_dim.dimmed = false;
@@ -79,8 +78,8 @@ void LCD_Wake(void)
       #endif
     }
 
-    // set a new idle_ms time
-    lcd_dim.idle_ms = OS_GetTimeMs();
+    // always set next idle time
+    lcd_dim.next_idle_time = OS_GetTimeMs() + SEC_TO_MS(lcd_idle_times[infoSettings.lcd_idle_time]);
   }
 }
 
@@ -89,49 +88,51 @@ void LCD_CheckDimming(void)
   if (infoSettings.lcd_idle_time == IDLE_TIME_OFF)
     return;
 
-  if (TS_IsPressed()
+  if (!TS_IsPressed()
     #if LCD_ENCODER_SUPPORT
-      || LCD_Enc_CheckState()
+      && !LCD_Enc_CheckState()
     #endif
-    )
+    )  // if touch screen not pressed and rotary encoder neither pressed nor rotated
   {
-    if (lcd_dim.dimmed)
-    {
-      if (infoSettings.lcd_lock_on_idle && TS_IsPressed())  // if touch is blocked on idle and pressing on the LCD (not on the encoder),
-        lcd_dim.locked = true;                              // the first touch will be skipped preventing to trigger any undesired action
-
-      lcd_dim.dimmed = false;
-      LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
-
-      #ifdef KNOB_LED_COLOR_PIN
-        if (infoSettings.knob_led_idle)
-        {
-          Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
-        }
-      #endif
-    }
-
-    lcd_dim.idle_ms = OS_GetTimeMs();
-  }
-  else
-  {
-    if (OS_GetTimeMs() - lcd_dim.idle_ms < SEC_TO_MS(lcd_idle_times[infoSettings.lcd_idle_time]))
+    if (lcd_dim.dimmed || OS_GetTimeMs() < lcd_dim.next_idle_time)
       return;
 
-    if (!lcd_dim.dimmed)
-    {
-      lcd_dim.locked = false;
-      lcd_dim.dimmed = true;
-      LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_idle_brightness]);
+    lcd_dim.locked = false;
+    lcd_dim.dimmed = true;
+    LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_idle_brightness]);
 
-      #ifdef KNOB_LED_COLOR_PIN
-        if (infoSettings.knob_led_idle)
-        {
-          Knob_LED_SetColor(knob_led_colors[KNOB_LED_OFF], infoSettings.neopixel_pixels);
-        }
-      #endif
-    }
+    #ifdef KNOB_LED_COLOR_PIN
+      if (infoSettings.knob_led_idle)
+      {
+        Knob_LED_SetColor(knob_led_colors[KNOB_LED_OFF], infoSettings.neopixel_pixels);
+      }
+    #endif
+
+    return;
   }
+
+  // touch screen pressed and/or rotary encoder pressed or rotated
+
+  // always set next idle time
+  lcd_dim.next_idle_time = OS_GetTimeMs() + SEC_TO_MS(lcd_idle_times[infoSettings.lcd_idle_time]);
+
+  if (!lcd_dim.dimmed)
+    return;
+
+  // if touch is blocked on idle and pressing on the LCD (not on the rotary encoder),
+  // the first touch will be skipped preventing to trigger any undesired action
+  if (infoSettings.lcd_lock_on_idle && TS_IsPressed())
+    lcd_dim.locked = true;
+
+  lcd_dim.dimmed = false;
+  LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
+
+  #ifdef KNOB_LED_COLOR_PIN
+    if (infoSettings.knob_led_idle)
+    {
+      Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
+    }
+  #endif
 }
 
 #ifdef KNOB_LED_COLOR_PIN

@@ -1,5 +1,6 @@
-#include "RRFParseACK.hpp"
+#include "RRFAckHandler.hpp"
 #include "includes.h"
+#include "RRFStatusControl.h"
 
 /*
  * Parses structures like follows:
@@ -43,26 +44,33 @@ static uint32_t expire_time = 0;
 
 static void m291_confirm(void)
 {
-  if (m291_mode >= 1) mustStoreCmd("M292 P0\n");
+  if (m291_mode >= 1)
+    mustStoreCmd("M292 P0\n");
+
   if (rrfStatusIsMacroBusy())
     rrfShowRunningMacro();
 }
 
 static void m291_cancel(void)
 {
-  if (m291_mode > 2) mustStoreCmd("M292 P1\n");
-  if (m291_mode == 2) mustStoreCmd("M292 P0\n");
+  if (m291_mode > 2)
+    mustStoreCmd("M292 P1\n");
+
+  if (m291_mode == 2)
+    mustStoreCmd("M292 P0\n");
+
   if (rrfStatusIsMacroBusy())
     rrfShowRunningMacro();
 }
 
 static void m291_loop(void)
 {
-  if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() > expire_time))
+  if (m291_mode == -1 || (expire_time > 0 && OS_GetTimeMs() >= expire_time))
   {
-    CLOSE_MENU();
     if (rrfStatusIsMacroBusy())
       rrfShowRunningMacro();
+
+    CLOSE_MENU();
   }
 }
 
@@ -73,6 +81,7 @@ void ParseACKJsonParser::endDocument()
   if (show_m291 && m291_msg != NULL)
   {
     char M291[] = "M291";
+
     // _Generic is not available in C++
     //setDialogText(m291_title, m291_msg, LABEL_CONFIRM, LABEL_CANCEL);
     _setDialogTitleStr((uint8_t *)(m291_title == NULL ? M291 : m291_title));
@@ -80,8 +89,10 @@ void ParseACKJsonParser::endDocument()
     _setDialogOkTextLabel(LABEL_CONFIRM);
     _setDialogCancelTextLabel(m291_mode > 2 ? LABEL_CANCEL : LABEL_NULL);
     expire_time = m291_timeo > 0 ? OS_GetTimeMs() + m291_timeo : 0;
+
     showDialog(m291_mode > 2 ? DIALOG_TYPE_QUESTION : DIALOG_TYPE_INFO, m291_confirm,
-        m291_mode > 2 ? m291_cancel : NULL, m291_loop);
+               m291_mode > 2 ? m291_cancel : NULL, m291_loop);
+
     BUZZER_PLAY(SOUND_NOTIFY);
     show_m291 = false;
   }
@@ -97,6 +108,7 @@ void ParseACKJsonParser::endDocument()
     free(m291_title);
     m291_title = NULL;
   }
+
   need_parser_reset = true;
 }
 
@@ -105,98 +117,103 @@ void ParseACKJsonParser::value(const char *value)
   uint32_t seq;
   char *string_end;
   char *string_start;
+
   switch (state)
   {
     case status:
       rrfStatusSet(value[0]);
       break;
+
     case heaters:
       if (index == 0)
-      {
         heatSetCurrentTemp(BED, strtod((char *)value, NULL) + 0.5f);
-      }
       else if (index <= INVALID_HEATER)
-      {
         heatSetCurrentTemp(index - 1, strtod((char *)value, NULL) + 0.5f);
-      }
       break;
+
     case active:
       if (index == 0)
-      {
         heatSetTargetTemp(BED, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
-      }
       else if (index <= INVALID_HEATER)
-      {
         heatSetTargetTemp(index - 1, strtod((char *)value, NULL) + 0.5f, FROM_HOST);
-      }
       break;
+
     case standby:
       break;
+
     case hstat:
       if (strtod((char *)value, NULL) == 3)
       {
         if (index == 0)
-        {
           heatSetTargetTemp(BED, 0, FROM_HOST);
-        }
         else if (index <= INVALID_HEATER)
-        {
           heatSetTargetTemp(index - 1, 0, FROM_HOST);
-        }
       }
       break;
+
     case pos:
       coordinateSetAxisActual((AXIS)index, strtod((char *)value, NULL));
       break;
+
     case sfactor:
       speedSetCurPercent(0, strtod((char *)value, NULL));
       break;
+
     case efactor:
       if (index == heatGetToolIndex())
-      {
         speedSetCurPercent(1, strtod((char *)value, NULL));
-      }
       break;
+
     case baby_step:
       babystepSetValue(strtod((char *)value, NULL));
       break;
+
     case tool:
       break;
+
     case probe:
       break;
+
     case fan_percent:
       if (index != 0 && index <= infoSettings.fan_count)  // index 0 is an alias for default tool fan
-      {
         fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
-      }
       break;
+
     case fanRPM:
       break;
+
     case fraction_printed:
       if (getPrintProgressSource() < PROG_RRF)
         setPrintProgressSource(PROG_RRF);
+
       if (getPrintProgressSource() == PROG_RRF)
         setPrintProgressPercentage((value[0] - '0') * 100 + (value[2] - '0') * 10 + (value[3] - '0'));
       break;
+
     case mbox_seq:
       seq = strtod((char *)value, NULL);
       show_m291 = seq != m291_seq;
       m291_seq = seq;
       break;
+
     case mbox_mode:
       m291_mode = strtod((char *)value, NULL);
       break;
+
     case mbox_msg:
       m291_msg = (char*)malloc(strlen(value) + 1);
       strcpy(m291_msg, value);
       break;
+
     case mbox_title:
       m291_title = (char*)malloc(strlen(value) + 1);
       strcpy(m291_title, value);
       break;
+
     case mbox_timeo:
       m291_timeo = SEC_TO_MS(strtod((char *)value, NULL));
       break;
+
     case resp:
       if (strstr(value, (char *)"Steps/"))  // parse M92
       {
@@ -237,8 +254,8 @@ void ParseACKJsonParser::value(const char *value)
       {
         pidUpdateStatus(PID_FAILED);
       }
-
       break;
+
     case result:
       if (starting_print)
       {
@@ -246,22 +263,26 @@ void ParseACKJsonParser::value(const char *value)
         starting_print = false;
       }
       break;
+
     case none:
       break;
   }
+
   if (in_array)
     ++index;
 }
 
-void rrfParseACK(const char *data)
+void rrfParseAck(const char *data)
 {
   static ParseACKJsonParser handler;
 
   jsonStreamingParser.setListener(&handler);
+
   while (*data != 0)
   {
     jsonStreamingParser.parse(*data++);
   }
+
   if (handler.need_parser_reset)
   {
     jsonStreamingParser.reset();

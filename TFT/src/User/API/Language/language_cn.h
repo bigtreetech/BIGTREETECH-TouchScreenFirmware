@@ -4,6 +4,7 @@
     // config.ini Parameter Settings - Screen Settings and Feature Settings
     #define STRING_LANGUAGE               "简体中文"
     #define STRING_ADVANCED_OK            "Advanced OK"
+    #define STRING_COMMAND_CHECKSUM       "Command checksum"
     #define STRING_EMULATED_M600          "模拟M600"
     #define STRING_EMULATED_M109_M190     "Emulated M109 / M190"
     #define STRING_EVENT_LED              "Event LED"

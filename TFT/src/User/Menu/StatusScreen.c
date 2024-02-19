@@ -12,7 +12,7 @@
   #define SET_SPEEDMENUINDEX(x)
 #endif
 
-#define UPDATE_TOOL_TIME 2000  // 1 seconds is 1000
+#define TOOL_TOGGLE_TIME 2000  // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
   #define XYZ_STATUS "X:%.2f Y:%.2f Z:%.2f"
@@ -251,7 +251,7 @@ static inline void statusScrollMsg(void)
 
 static inline void statusToggleTool(void)
 {
-  if (nextScreenUpdate(UPDATE_TOOL_TIME))
+  if (nextScreenUpdate(TOOL_TOGGLE_TIME))
   {
     // increment hotend index
     if (infoSettings.hotend_count > 1)
@@ -275,7 +275,7 @@ static inline void statusToggleTool(void)
     statusDraw();
 
     // gcode queries must be call after drawStatus
-    coordinateQuery(MS_TO_SEC(UPDATE_TOOL_TIME));
+    coordinateQuery(MS_TO_SEC(TOOL_TOGGLE_TIME));
     speedQuery();
     ctrlFanQuery();
   }

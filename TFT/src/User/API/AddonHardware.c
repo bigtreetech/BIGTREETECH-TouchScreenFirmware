@@ -3,25 +3,22 @@
 #include "GPIO_Init.h"
 
 //
-// Power Supply
+// power supply
 //
 
 #ifdef PS_ON_PIN
 
-// Power Supply Control pins Initialization
 void PS_ON_Init(void)
 {
   GPIO_InitSet(PS_ON_PIN, MGPIO_MODE_OUT_PP, 0);
   GPIO_SetLevel(PS_ON_PIN, infoSettings.ps_active_high);
 }
 
-// Power Supply Control turn on, M80
 void PS_ON_On(void)
 {
   GPIO_SetLevel(PS_ON_PIN, infoSettings.ps_active_high);
 }
 
-// Power Supply Control turn off, M81
 void PS_ON_Off(void)
 {
   GPIO_SetLevel(PS_ON_PIN, !infoSettings.ps_active_high);
@@ -30,10 +27,13 @@ void PS_ON_Off(void)
 #endif  // PS_ON_PIN
 
 //
-// Filament runout detection
+// filament runout detection
 //
 
 #ifdef FIL_RUNOUT_PIN
+
+#define FIL_POS_E_REFRESH_TIME  2000
+#define FIL_ALARM_REMINDER_TIME 10000
 
 enum
 {
@@ -41,9 +41,9 @@ enum
   FILAMENT_SENSOR_SMART,
 };
 
-static uint32_t nextUpdateTime = FIL_ALARM_REMINDER_TIME;  // Give TFT time to connect to mainboard first before polling for runout
-static bool posE_updateWaiting = false;
-static bool sfs_alive = false;  // Use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
+static uint32_t posE_nextUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
+static bool posE_sendingWaiting = false;
+static bool sfs_alive = false;  // use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
 
 void FIL_Runout_Init(void)
 {
@@ -73,15 +73,9 @@ void FIL_Runout_Init(void)
   #endif
 }
 
-static inline void FIL_SetNextUpdateTime(uint32_t timeInterval)
+void FIL_PosE_ClearSendingWaiting(void)
 {
-  nextUpdateTime = OS_GetTimeMs() + timeInterval;
-}
-
-// Set whether we need to query the current position
-void FIL_PosE_SetUpdateWaiting(bool waiting)
-{
-  posE_updateWaiting = waiting;
+  posE_sendingWaiting = false;
 }
 
 void FIL_SFS_SetAlive(bool alive)
@@ -93,14 +87,9 @@ bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
   static int32_t trigBalance = 0;
+  static uint32_t nextUpdateTime = 0;
 
-  if (OS_GetTimeMs() > nextUpdateTime)
-  {
-    runout = (trigBalance > 0);
-    trigBalance = 0;
-    FIL_SetNextUpdateTime(infoSettings.runout_noise);
-  }
-  else
+  if (OS_GetTimeMs() < nextUpdateTime)
   {
     bool pinState = false;
     uint8_t toolNum = heatGetToolIndex();
@@ -116,33 +105,46 @@ bool FIL_NormalRunoutDetect(void)
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_1);
           break;
       #endif
+
       #ifdef FIL_RUNOUT_PIN_2
         case 2:
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_2);
           break;
       #endif
+
       #ifdef FIL_RUNOUT_PIN_3
         case 3:
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_3);
           break;
       #endif
+
       #ifdef FIL_RUNOUT_PIN_4
         case 4:
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_4);
           break;
       #endif
+
       #ifdef FIL_RUNOUT_PIN_5
         case 5:
           pinState = GPIO_GetLevel(FIL_RUNOUT_PIN_5);
           break;
       #endif
+
       default:
         pinState = GPIO_GetLevel(FIL_RUNOUT_PIN);
         break;
     }
 
     trigBalance += (pinState == GET_BIT(infoSettings.runout, RUNOUT_INVERTED)) ? 1: -1;  // if triggered add 1 else substract 1
+
+    return runout;
   }
+
+  // if OS_GetTimeMs() >= nextUpdateTime
+
+  runout = (trigBalance > 0);
+  trigBalance = 0;
+  nextUpdateTime = OS_GetTimeMs() + infoSettings.runout_noise;
 
   return runout;
 }
@@ -156,34 +158,23 @@ static inline bool FIL_SmartRunoutDetect(void)
   bool runout = FIL_NormalRunoutDetect();
 
   do
-  {
-    // Send M114 E to query extrude position continuously
-    if (posE_updateWaiting == true)
-    {
-      FIL_SetNextUpdateTime(FIL_POS_E_UPDATE_TIME);
-      break;
-    }
+  { // send M114 E to query extrude position continuously
 
-    if (OS_GetTimeMs() < nextUpdateTime)
+    if (OS_GetTimeMs() < posE_nextUpdateTime)  // if next check time not yet elapsed, do nothing
       break;
 
-    if (requestCommandInfoIsRunning())  // To avoid collision in gcode response processing
+    posE_nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_REFRESH_TIME;  // extend next check time
+
+    // if M114 previously enqueued and not yet sent or pending command
+    // (to avoid collision in gcode response processing), do nothing
+    if (posE_sendingWaiting || requestCommandInfoIsRunning())
       break;
 
-    if (!storeCmd("M114 E\n"))
-      break;
-
-    FIL_SetNextUpdateTime(FIL_POS_E_UPDATE_TIME);
-    posE_updateWaiting = true;
+    posE_sendingWaiting = storeCmd("M114 E\n");
   } while (0);
 
-  if (sfs_alive == false)
-  {
-    if (lastRunout != runout)
-    {
-      sfs_alive = true;
-    }
-  }
+  if (!sfs_alive && lastRunout != runout)
+    sfs_alive = true;
 
   if (ABS(posE - lastPosE) >= infoSettings.runout_distance)
   {
@@ -220,10 +211,10 @@ static inline bool FIL_IsRunout(void)
 
 void FIL_BE_CheckRunout(void)
 {
-  if (!GET_BIT(infoSettings.runout, RUNOUT_ENABLED))  // Filament runout turned off
+  if (!GET_BIT(infoSettings.runout, RUNOUT_ENABLED))  // filament runout turned off
     return;
 
-  setPrintRunout(FIL_IsRunout());  // Need constant scanning to filter interference
+  setPrintRunout(FIL_IsRunout());  // need constant scanning to filter interference
 }
 
 void FIL_FE_CheckRunout(void)
@@ -233,13 +224,13 @@ void FIL_FE_CheckRunout(void)
   if (!getPrintRunout() && !getRunoutAlarm())
     return;
 
-  if (pausePrint(true, PAUSE_NORMAL) && !getRunoutAlarm())  // If not printing, pausePrint() function will always fail
+  if (pausePrint(true, PAUSE_NORMAL) && !getRunoutAlarm())  // if not printing, pausePrint() function will always fail
   {                                                         // so no useless error message is displayed
     setRunoutAlarmTrue();
     popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_NULL, setRunoutAlarmFalse, NULL, NULL);
   }
 
-  if ((OS_GetTimeMs() > nextReminderTime) && (getRunoutAlarm() == true))
+  if (OS_GetTimeMs() >= nextReminderTime && getRunoutAlarm())
   {
     BUZZER_PLAY(SOUND_ERROR);
     nextReminderTime = OS_GetTimeMs() + FIL_ALARM_REMINDER_TIME;
