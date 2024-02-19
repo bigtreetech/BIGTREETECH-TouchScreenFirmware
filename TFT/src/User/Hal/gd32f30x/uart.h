@@ -4,11 +4,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define _USART1    0    // USART0
-#define _USART2    1    // USART1
-#define _USART3    2    // USART2
-#define _UART4     3    // UART3
-#define _UART5     4    // UART4
+#define _USART1    0  // USART0
+#define _USART2    1  // USART1
+#define _USART3    2  // USART2
+#define _UART4     3  // UART3
+#define _UART5     4  // UART4
 #define _USART6    5
 #define _UART_CNT  6
 

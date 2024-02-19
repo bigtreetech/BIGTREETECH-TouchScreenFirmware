@@ -59,8 +59,8 @@ void LCD_GPIO_Config(void)
 
 void LCD_EXMC_Config(void)
 {
-  exmc_norsram_parameter_struct    EXMC_NORSRAMInitStructure;
-  exmc_norsram_timing_parameter_struct   readWriteTiming,writeTiming; ;
+  exmc_norsram_parameter_struct EXMC_NORSRAMInitStructure;
+  exmc_norsram_timing_parameter_struct readWriteTiming,writeTiming;
 
   /* EXMC configuration */
   readWriteTiming.asyn_address_setuptime = 1U;

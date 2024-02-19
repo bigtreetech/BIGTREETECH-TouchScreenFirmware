@@ -7,7 +7,7 @@
 
 void HW_GetClocksFreq(CLOCKS *clk)
 {
-  #if defined GD32F2XX || defined GD32F3XX
+  #if defined(GD32F2XX) || defined(GD32F3XX)
     RCU_GetClocksFreq(&clk->rccClocks);
   #else
     RCC_GetClocksFreq(&clk->rccClocks);
@@ -28,7 +28,7 @@ void HW_Init(void)
 {
   HW_GetClocksFreq(&mcuClocks);
 
-  #if defined GD32F2XX || defined GD32F3XX
+  #if defined(GD32F2XX) || defined(GD32F3XX)
     nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
   #else
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -45,10 +45,10 @@ void HW_Init(void)
   #endif
 
   #if defined(MKS_TFT) && !defined(MKS_TFT35_V1_0)  // not used by MKS_TFT35_V1_0
-    #if defined (GD32F3XX)
+    #ifdef GD32F3XX
       rcu_periph_clock_enable(RCU_AF);
       gpio_pin_remap_config(GPIO_USART1_REMAP, ENABLE);
-    #else
+    #else  // if STM32F<xxx>
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
       GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
     #endif
