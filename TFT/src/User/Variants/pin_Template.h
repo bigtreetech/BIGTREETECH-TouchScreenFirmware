@@ -1,7 +1,7 @@
 #ifndef _PIN_TEMPLATE_H_  // modify to actual filename !!!
 #define _PIN_TEMPLATE_H_  // modify to actual filename !!!
 
-// MCU type (STM32F10x, STM32F2xx, STM32F4xx, gd32f20x, gd32f30x)
+// MCU type (STM32F10x, STM32F2xx, STM32F4xx, GD32F20x, GD32F30x)
 #ifndef MCU_TYPE
   #define MCU_TYPE
   //#include "stm32fxxx.h"

@@ -21,7 +21,7 @@ volatile uint32_t toggles = 0;
 
 void TIM3_Config(void)
 {
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
   nvic_irq_enable(TIMER2_IRQn, 1U, 0U);
 
   rcu_periph_clock_enable(RCU_TIMER2);
@@ -46,7 +46,7 @@ void TIM3_Config(void)
 #endif
 }
 
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
 void TIMER2_IRQHandler(void)
 {
   if ((TIMER_INTF(TIMER2) & TIMER_INTF_UPIF) != 0)  // update interrupt flag
@@ -108,7 +108,7 @@ void Buzzer_TurnOn(const uint16_t frequency, const uint16_t duration)
 void tone(const uint16_t frequency, const uint16_t duration)
 {
   if (frequency == 0 || duration == 0) return;
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
   nvic_irq_disable(TIMER2_IRQn);
   toggles = 2 * (frequency * duration / 1000);  // must have an even value
 
@@ -147,7 +147,7 @@ void loopBuzzer(void)
   else if (OS_GetTimeMs() > buzzerEndTime && toggles == 0)
   {
     buzzerEndTime = 0;
-  #if defined GD32F2XX || defined GD32F3XX
+  #if defined(GD32F2XX) || defined(GD32F3XX)
     TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;
   #else
     TIM3->CR1 &= ~TIM_CR1_CEN;  // stop timer (for safety)

@@ -55,7 +55,7 @@
 #define W25Qxx_CS_PIN PB9
 
 // LCD interface
-// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
+// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558, ST7796S]
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER HX8558
 #endif
@@ -209,7 +209,7 @@
 #endif
 
 // LCD Encoder pins + Marlin mode
-#ifdef ST7920_EMULATOR
+#if defined(ST7920_EMULATOR) && !defined(GD32F3XX)
   // Free JTAG (PB3/PB4) for SPI3 and free SWDIO, PA13, PA14 for encoder pins
   #define DISABLE_DEBUG() RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE); \
                           GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE)

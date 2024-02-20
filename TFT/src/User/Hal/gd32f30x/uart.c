@@ -78,7 +78,7 @@ void UART_GPIO_DeInit(uint8_t port)
   GPIO_InitSet(uart_rx[port], MGPIO_MODE_IPN, 0);
 }
 
-void UART_Protocol_Init(uint8_t port,uint32_t baud)
+void UART_Protocol_Init(uint8_t port, uint32_t baud)
 {
   rcu_periph_clock_enable(rcu_uart_en[port]);  // Enable clock
 
@@ -96,7 +96,7 @@ void UART_Protocol_Init(uint8_t port,uint32_t baud)
 
 void UART_IRQ_Init(uint8_t port, uint16_t usart_it, bool idle_interrupt)
 {
-  uint32_t IRQ_Channel[_UART_CNT] = {USART0_IRQn, USART1_IRQn, USART2_IRQn, UART3_IRQn, UART4_IRQn };
+  uint32_t IRQ_Channel[_UART_CNT] = {USART0_IRQn, USART1_IRQn, USART2_IRQn, UART3_IRQn, UART4_IRQn};
   nvic_irq_enable(IRQ_Channel[port], 0U, 0U);
 
   if (idle_interrupt)  // enable or disable serial line IDLE interrupt

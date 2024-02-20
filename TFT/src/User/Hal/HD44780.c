@@ -8,7 +8,7 @@ CIRCULAR_QUEUE *HD44780_queue = NULL;
 
 void HD44780_DeConfig(void)
 {
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
   nvic_irq_disable(EXTI10_15_IRQn);
 #else
   NVIC_InitTypeDef NVIC_InitStructure;
@@ -49,7 +49,7 @@ void HD44780_Config(CIRCULAR_QUEUE *queue)
   GPIO_InitSet(LCD_D4, MGPIO_MODE_IPD, 0);
   GPIO_InitSet(LCD_RS, MGPIO_MODE_IPD, 0);
 
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
   gpio_exti_source_select(GPIO_EVENT_PORT_GPIOB, GPIO_EVENT_PIN_15);
 
   exti_init(EXTI_15, EXTI_INTERRUPT, EXTI_TRIG_RISING);
@@ -86,7 +86,7 @@ void HD44780_Config(CIRCULAR_QUEUE *queue)
 bool HD44780_writeData(void)
 {
   bool dataWritten = false;
-#if defined GD32F2XX || defined GD32F3XX
+#if defined(GD32F2XX) || defined(GD32F3XX)
   if ((GPIO_ISTAT(GPIOB) & (1 << 15)) != 0)
   {
     uint8_t temp = ((GPIO_ISTAT(LCD_D7_PORT) & GPIO_PIN_6) >> 3 ) +  // D7

@@ -1,7 +1,7 @@
 #ifndef _PIN_TFT35_V1_0_H_  // modify to actual filename !!!
 #define _PIN_TFT35_V1_0_H_  // modify to actual filename !!!
 
-// MCU type (STM32F10x, STM32F2xx, STM32F4xx, gd32f20x, gd32f30x)
+// MCU type (STM32F10x, STM32F2xx, STM32F4xx, GD32F20x, GD32F30x)
 #ifndef MCU_TYPE
   #define MCU_TYPE
   #include "stm32f10x.h"
@@ -55,7 +55,7 @@
 #define W25Qxx_CS_PIN PA4
 
 // LCD interface
-// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558]
+// Supported LCD drivers: [ST7789, SSD1963, RM68042, NT35310, ILI9488, ILI9341, ILI9325, HX8558, ST7796S]
 #ifndef TFTLCD_DRIVER
   #define TFTLCD_DRIVER       RM68042
   #define TFTLCD_DRIVER_SPEED 0x03

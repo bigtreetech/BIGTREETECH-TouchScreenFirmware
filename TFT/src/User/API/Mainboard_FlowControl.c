@@ -76,7 +76,7 @@ void loopBackEnd(void)
   if (infoMachineSettings.onboardSD == ENABLED)
     loopPrintFromOnboard();
 
-  // Buzzer handling
+  // buzzer handling
   #ifdef BUZZER_PIN
     loopBuzzer();
   #endif

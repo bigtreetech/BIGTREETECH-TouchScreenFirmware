@@ -9,8 +9,8 @@
 ENTRY(Reset_Handler)
 
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x5000;      /* required amount of heap  */
-_Min_Stack_Size = 0x2000; /* required amount of stack */
+_Min_Heap_Size = 0x5000;     /* required amount of heap  */
+_Min_Stack_Size = 0x2000;    /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
@@ -54,12 +54,12 @@ SECTIONS
   } >FLASH
 
 
-   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
-    .ARM : {
+  .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+  .ARM : {
     __exidx_start = .;
-      *(.ARM.exidx*)
-      __exidx_end = .;
-    } >FLASH
+    *(.ARM.exidx*)
+    __exidx_end = .;
+  } >FLASH
 
   .ARM.attributes : { *(.ARM.attributes) } > FLASH
 
@@ -79,8 +79,8 @@ SECTIONS
   .fini_array :
   {
     PROVIDE_HIDDEN (__fini_array_start = .);
-    KEEP (*(.fini_array*))
     KEEP (*(SORT(.fini_array.*)))
+    KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
   } >FLASH
 
@@ -145,3 +145,5 @@ SECTIONS
     libgcc.a ( * )
   }
 }
+
+
