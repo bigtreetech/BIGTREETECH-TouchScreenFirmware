@@ -26,10 +26,7 @@ void refreshConnection(void)
     #endif
   }
 
-  #ifdef BUZZER_PIN
-    BUZZER_PLAY(SOUND_KEYPRESS);
-    loopBuzzer();
-  #endif
+  BUZZER_PLAY(SOUND_KEYPRESS);
 
   while (TS_IsPressed())
   {

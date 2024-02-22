@@ -7,10 +7,10 @@
     moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
   } while (0)
 
-#define X_MOVE_GCODE "G0 X%.2f F%d\n"
-#define Y_MOVE_GCODE "G0 Y%.2f F%d\n"
-#define Z_MOVE_GCODE "G0 Z%.2f F%d\n"
-#define GANTRY_UPDATE_DELAY 500  // 1 seconds is 1000
+#define X_MOVE_GCODE        "G0 X%.2f F%d\n"  // X axis gcode
+#define Y_MOVE_GCODE        "G0 Y%.2f F%d\n"  // Y axis gcode
+#define Z_MOVE_GCODE        "G0 Z%.2f F%d\n"  // Z axis gcode
+#define GANTRY_REFRESH_TIME 500               // 1 seconds is 1000
 
 #ifdef PORTRAIT_MODE
   #define OFFSET 0
@@ -26,7 +26,7 @@ void storeMoveCmd(const AXIS xyz, const float amount)
 {
   // if invert is true, use 'amount' multiplied by -1
   storeCmd(xyzMoveCmd[xyz], GET_BIT(infoSettings.inverted_axis, xyz) ? -amount : amount,
-           ((xyz != Z_AXIS) ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]));
+           xyz != Z_AXIS ? infoSettings.xy_speed[infoSettings.move_speed] : infoSettings.z_speed[infoSettings.move_speed]);
 
   nowAxis = xyz;  // update now axis
 }
@@ -53,7 +53,7 @@ void drawXYZ(void)
 
 static inline void updateGantry(void)
 {
-  if (nextScreenUpdate(GANTRY_UPDATE_DELAY))
+  if (nextScreenUpdate(GANTRY_REFRESH_TIME))
   {
     coordinateQuery(0);  // query position manually for delay less than 1 second
     drawXYZ();

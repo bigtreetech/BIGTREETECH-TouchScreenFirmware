@@ -76,11 +76,6 @@ void loopBackEnd(void)
   if (infoMachineSettings.onboardSD == ENABLED)
     loopPrintFromOnboard();
 
-  // buzzer handling
-  #ifdef BUZZER_PIN
-    loopBuzzer();
-  #endif
-
   // check filament runout status
   #ifdef FIL_RUNOUT_PIN
     FIL_BE_CheckRunout();
