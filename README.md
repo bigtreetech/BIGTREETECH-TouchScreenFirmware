@@ -581,6 +581,7 @@ OctoPrint, ESP3D, Pronterface etc, connected to a TFT's serial port, can browse 
 **NOTES:**
 - TFT's media devices, if any, does not need to be initialized/released
 - When present, the G-code's options (e.g. `M27 C`) have the same meaning like in Marlin fw
+- G-code **M300 TFT P0** (with a duration of 0 ms) will mute (with the exception of touch type sound, if enabled) the TFT if not already muted while a duration different than 0 will unmute the TFT if not already unmuted
 
 ### Printing from Remote Host
 

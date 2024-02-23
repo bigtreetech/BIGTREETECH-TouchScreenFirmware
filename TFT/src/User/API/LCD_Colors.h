@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "Configuration.h"  // for KEYBOARD_MATERIAL_THEME etc...
+#include "Configuration.h"  // for KEYBOARD_MATERIAL_THEME, LIVE_TEXT_COMMON_COLOR etc...
 #include "menu.h"
 
 // Color Definition

@@ -238,7 +238,7 @@ static inline void getCmdFromCmdRetryInfo(void)
   cmd_len = strlen(cmd_ptr);
 }
 
-void setCmdRetryInfo(uint32_t lineNumber)
+static inline void setCmdRetryInfo(uint32_t lineNumber)
 {
   cmdRetryInfo.line_number = lineNumber;          // set line number to the provided value
   cmdRetryInfo.retry = false;                     // set retry flag to "false" (no need to resend)
@@ -265,19 +265,10 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    if (!cmdRetryInfo.retry)  // if there is no pending command to resend
-    {
-      if (GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM) == 1)
-        setCmdRetryInfo(addCmdLineNumberAndChecksum(cmd_ptr, cmd_base_index, &cmd_len));  // cmd_ptr and cmd_len are updated
-
-      cmdQueue.count--;
-      cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
-    }
-    else  // if there is a pending command to resend
-    {
-      cmdRetryInfo.retry = false;     // disable command resend flag
-      cmdRetryInfo.retry_attempts--;  // update remaining retry attempts
-    }
+    // if the message under processing is from command queue and COMMAND_CHECKSUM feature is enabled,
+    // apply line number and checksum and store the new gcode in the retry buffer
+    if (!cmdRetryInfo.retry && GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM) == 1)
+      setCmdRetryInfo(addCmdLineNumberAndChecksum(cmd_ptr, cmd_base_index, &cmd_len));  // cmd_ptr and cmd_len are updated
 
     // send or resend command
 
@@ -295,6 +286,17 @@ bool sendCmd(bool purge, bool avoidTerminal)
 
     Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
+
+  if (!cmdRetryInfo.retry)  // if the message under processing is from command queue, dequeue the command
+  {
+    cmdQueue.count--;
+    cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
+  }
+  else  // if there is a pending command to resend
+  {
+    cmdRetryInfo.retry = false;     // disable command resend flag
+    cmdRetryInfo.retry_attempts--;  // update remaining retry attempts
+  }
 
   if (!avoidTerminal && MENU_IS(menuTerminal))
   {
@@ -538,7 +540,7 @@ void handleCmdLineNumberMismatch(const uint32_t lineNumber)
 
     sendEmergencyCmd(cmd);  // immediately send M110 command to set new base line number on mainboard
   }
-  else  // if a command with the requested line number is present on the buffer and
+  else  // if a command with the requested line number is present in the buffer and
   {     // not already resent for the maximum retry attempts, mark it as to be sent
     cmdRetryInfo.retry = true;
   }
@@ -1203,24 +1205,29 @@ void sendQueueCmd(void)
 
         #ifdef BUZZER_PIN
           case 300:  // M300
-            if (cmd_seen('S'))
+          {
+            if (fromTFT || cmd_seen_from(cmd_base_index, "TFT"))  // if M300 issued from TFT or "M300 TFT", play sound on TFT
             {
-              uint16_t hz = cmd_value();
+              uint16_t hz = 260;   // default Marlin tone frequency: 260Hz
+              uint16_t ms = 1000;  // default Marlin tone duration: 1000ms
+
+              if (cmd_seen('S'))
+                hz = cmd_value();
 
               if (cmd_seen('P'))
-              {
-                uint16_t ms = cmd_value();
+                ms = cmd_value();
 
-                Buzzer_TurnOn(hz, ms);
+              Buzzer_HandleMute(ms == 0 ? true : false);  // if sound duration is 0, mute the TFT. Otherwise, unmute the TFT
+              Buzzer_AddSound(hz, ms);
 
-                if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
-                {
-                  sendCmd(true, avoid_terminal);
-                  return;
-                }
-              }
+              if (!fromTFT)
+                Serial_Forward(cmd_port_index, "ok\n");
+
+              sendCmd(true, avoid_terminal);
+              return;
             }
-            break;
+            break;  // if here, forward sound to mainboard
+          }
         #endif
 
         case 301:  // Hotend PID

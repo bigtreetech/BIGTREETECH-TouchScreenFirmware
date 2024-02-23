@@ -652,6 +652,22 @@ void parseAck(void)
     {
       fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
+    #ifdef BUZZER_PIN
+      // parse M300 sound coming from mainboard, play on TFT
+      else if (ack_seen("M300"))
+      {
+        uint16_t hz = 260;   // default Marlin tone frequency: 260Hz
+        uint16_t ms = 1000;  // default Marlin tone duration: 1000ms
+
+        if (ack_seen("S"))
+          hz = ack_value();
+
+        if (ack_seen("P"))
+          ms = ack_value();
+
+        Buzzer_AddSound(hz, ms);  // (freq, duration), process tone by TFT
+      }
+    #endif
     // parse and store M710, controller fan
     else if (ack_starts_with("M710"))
     {
@@ -898,6 +914,15 @@ void parseAck(void)
     else if (meshIsWaitingData())
     {
       meshUpdateData(ack_cache);  // update mesh data
+    }
+    // parse and store M420 V1 T1 or M420 Sxx, ABL state (e.g. from Bed Leveling menu)
+    else if (ack_starts_with("echo:Bed Leveling"))
+    {
+      setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
+    }
+    else if (ack_starts_with("echo:Fade Height"))
+    {
+      setParameter(P_ABL_STATE, 1, ack_value());
     }
     // parse and store M420 V1 T1 or G29 S0 (mesh. Z offset:) or M503 (G29 S4 Zxx), MBL Z offset value (e.g. from Babystep menu)
     else if (ack_seen("mesh. Z offset:") || ack_seen("G29 S4 Z"))
@@ -1368,15 +1393,6 @@ void parseAck(void)
       if (ack_continue_seen("BLTouch HS mode"))
       {
         setHSmode(ack_continue_seen("ON") ? HS_ON : HS_OFF);
-      }
-      // parse and store M420 V1 T1 or M420 Sxx, ABL state (e.g. from Bed Leveling menu)
-      else if (ack_continue_seen("Bed Leveling"))
-      {
-        setParameter(P_ABL_STATE, 0, ack_continue_seen("ON") ? ENABLED : DISABLED);
-      }
-      else if (ack_continue_seen("Fade Height"))
-      {
-        setParameter(P_ABL_STATE, 1, ack_value());
       }
       // newer Marlin (e.g. 2.0.9.3) returns this ACK for M900 command
       else if (ack_continue_seen("Advance K="))
