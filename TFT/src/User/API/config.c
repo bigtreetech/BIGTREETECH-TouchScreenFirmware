@@ -213,15 +213,17 @@ const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WI
 const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
 const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
-const char * const cgList[] = CUSTOM_GCODE_LIST;
-const char * const cgNames[] = CUSTOM_GCODE_LABELS;
 const char * const preheatNames[] = PREHEAT_LABELS;
+const uint16_t preheatHotend[]    = PREHEAT_HOTEND;
+const uint16_t preheatBed[]       = PREHEAT_BED;
+const char * const cgNames[]      = CUSTOM_GCODE_LABELS;
+const char * const cgList[]       = CUSTOM_GCODE_LIST;
 
 CONFIGFILE* CurConfigFile;
-CUSTOM_GCODES* configCustomGcodes = NULL;
-PRINT_GCODES* configPrintGcodes = NULL;
 STRINGS_STORE* configStringsStore = NULL;
 PREHEAT_STORE* configPreheatStore = NULL;
+PRINT_GCODES* configPrintGcodes   = NULL;
+CUSTOM_GCODES* configCustomGcodes = NULL;
 
 char * cur_line = NULL;
 uint16_t c_index = 0;
@@ -577,7 +579,7 @@ void parseConfigKey(uint16_t index)
 
       case C_INDEX_MARLIN_TITLE:
       {
-        char * pchr = strrchr(cur_line, ':') + 1;
+        char * pchr = strchr(cur_line, ':') + 1;
         int utf8len = getUTF8Length((uint8_t*)pchr);
         int bytelen = strlen(pchr) + 1;
         if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
@@ -763,7 +765,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_NAME_6:
     {
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
@@ -779,7 +781,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
-      if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_temp[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
+      if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_hotend[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       break;
     }
@@ -925,7 +927,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_CUSTOM_LABEL_15:
     {
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((uint8_t*)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
@@ -957,7 +959,7 @@ void parseConfigKey(uint16_t index)
     {
       int lineIndex = index - C_INDEX_CUSTOM_GCODE_1;  // actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int len = strlen(pchr) + 1;
       // check if gcode length is ok and the name was ok
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
@@ -977,7 +979,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_START_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -994,7 +996,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_END_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -1011,7 +1013,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_CANCEL_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -1195,10 +1197,10 @@ void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t
 
 void saveConfig(void)
 {
-  writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
-  writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
   writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
   writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
@@ -1214,30 +1216,20 @@ void saveConfig(void)
 // Reset & store config settings
 void resetConfig(void)
 {
-  CUSTOM_GCODES tempCG;
   STRINGS_STORE tempST;
-  PRINT_GCODES tempPC;
   PREHEAT_STORE tempPH;
-
-  // restore custom gcode presets
-  int n = 0;
-  for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
-  {
-    if (default_custom_enabled[i] == 1)
-    {
-      strcpy(tempCG.gcode[n],cgList[i]);
-      strcpy(tempCG.name[n],cgNames[i]);
-      n++;
-    }
-  }
-  tempCG.count = n;
+  PRINT_GCODES tempPC;
+  CUSTOM_GCODES tempCG;
 
   // restore strings store
   strcpy(tempST.marlin_title, MARLIN_TITLE);
 
+  // restore preheat presets
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
     strcpy(tempPH.preheat_name[i], preheatNames[i]);
+    tempPH.preheat_hotend[i] = preheatHotend[i];
+    tempPH.preheat_bed[i] = preheatBed[i];
   }
 
   // restore print gcodes
@@ -1245,10 +1237,24 @@ void resetConfig(void)
   strcpy(tempPC.end_gcode, END_GCODE);
   strcpy(tempPC.cancel_gcode, CANCEL_GCODE);
 
+  // restore custom gcode presets
+  int n = 0;
+  for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
+  {
+    if (default_custom_enabled[i] == 1)
+    {
+      strcpy(tempCG.name[n], cgNames[i]);
+      strcpy(tempCG.gcode[n], cgList[i]);
+      n++;
+    }
+  }
+  tempCG.count = n;
+
   // write restored config
-  writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
-  writeConfig((uint8_t *)&tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
   writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)&tempPH, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
+  writeConfig((uint8_t *)&tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
 }
 
 bool getConfigFromFile(char * configPath)
@@ -1259,18 +1265,25 @@ bool getConfigFromFile(char * configPath)
     return false;
   }
 
-  CUSTOM_GCODES tempCustomGcodes;
-  PRINT_GCODES tempPrintCodes;
-  STRINGS_STORE tempStringStore;
-  PREHEAT_STORE tempPreheatStore;
-
-  // initialize all settings to default values before eventually overwriting them with values from configuration file
+  // initialize all settings to default values before eventually overwriting them with the values from configuration file.
+  // resetConfig() function is also invoked by initSettings() function just to initialize the following 4 data structures
+  // into the flash before loading them from the flash
   initSettings();
 
-  configCustomGcodes = &tempCustomGcodes;
-  configPrintGcodes = &tempPrintCodes;
+  STRINGS_STORE tempStringStore;
+  PREHEAT_STORE tempPreheatStore;
+  PRINT_GCODES tempPrintCodes;
+  CUSTOM_GCODES tempCustomGcodes;
+
+  W25Qxx_ReadBuffer((uint8_t*)&tempStringStore, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
+  W25Qxx_ReadBuffer((uint8_t*)&tempPreheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t*)&tempPrintCodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
+  W25Qxx_ReadBuffer((uint8_t*)&tempCustomGcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+
   configStringsStore = &tempStringStore;
   configPreheatStore = &tempPreheatStore;
+  configPrintGcodes = &tempPrintCodes;
+  configCustomGcodes = &tempCustomGcodes;
   customcode_index = 0;
   foundkeys = 0;
 
@@ -1286,13 +1299,16 @@ bool getConfigFromFile(char * configPath)
 
     PRINTDEBUG("\nCustom gcode stored at 1:");
     PRINTDEBUG(configCustomGcodes->gcode[1]);
+
     if (scheduleRotate)
     {
       LCD_RefreshDirection(infoSettings.rotated_ui);
       TS_Calibrate();
     }
+
     storePara();  // TODO: The touch sign will also be written if the touch calibration data is invalid
     saveConfig();
+
     PRINTDEBUG("config saved\n");
     return true;
   }

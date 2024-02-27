@@ -4,6 +4,29 @@
 
 #ifdef LCD_LED_PWM_CHANNEL
 
+// in percentage 0-100
+#define BRIGHTNESS_0     0
+#define BRIGHTNESS_5     5
+#define BRIGHTNESS_10   10
+#define BRIGHTNESS_20   20
+#define BRIGHTNESS_30   30
+#define BRIGHTNESS_40   40
+#define BRIGHTNESS_50   50
+#define BRIGHTNESS_60   60
+#define BRIGHTNESS_70   70
+#define BRIGHTNESS_80   80
+#define BRIGHTNESS_90   90
+#define BRIGHTNESS_100 100
+
+// in seconds
+#define IDLE_TIME_OFF   0  // off
+#define IDLE_TIME_5     5
+#define IDLE_TIME_10   10
+#define IDLE_TIME_30   30
+#define IDLE_TIME_60   60
+#define IDLE_TIME_120 120
+#define IDLE_TIME_300 300
+
 const uint8_t lcd_brightness[LCD_BRIGHTNESS_COUNT] = {
   BRIGHTNESS_0,
   BRIGHTNESS_5,
@@ -27,7 +50,7 @@ const uint16_t lcd_idle_times[LCD_IDLE_TIME_COUNT] = {
   IDLE_TIME_60,
   IDLE_TIME_120,
   IDLE_TIME_300,
-  IDLE_TIME_CUSTOM
+  IDLE_TIME_CUSTOM  // custom value predefined in Configuration.h
 };
 
 const LABEL lcd_idle_time_names[LCD_IDLE_TIME_COUNT] = {
