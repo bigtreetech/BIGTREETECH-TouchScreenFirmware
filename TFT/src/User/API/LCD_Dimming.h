@@ -5,32 +5,10 @@
 extern "C" {
 #endif
 
-#include "variants.h"  // for LCD_LED_PWM_CHANNEL
+#include "variants.h"  // for LCD_LED_PWM_CHANNEL, KNOB_LED_COLOR_PIN etc...
 #include "menu.h"
 
 #ifdef LCD_LED_PWM_CHANNEL
-
-  #define BRIGHTNESS_0     0
-  #define BRIGHTNESS_5     5
-  #define BRIGHTNESS_10   10
-  #define BRIGHTNESS_20   20
-  #define BRIGHTNESS_30   30
-  #define BRIGHTNESS_40   40
-  #define BRIGHTNESS_50   50
-  #define BRIGHTNESS_60   60
-  #define BRIGHTNESS_70   70
-  #define BRIGHTNESS_80   80
-  #define BRIGHTNESS_90   90
-  #define BRIGHTNESS_100 100
-
-  #define IDLE_TIME_OFF              0  // Off
-  #define IDLE_TIME_5                5  // seconds
-  #define IDLE_TIME_10              10  // seconds
-  #define IDLE_TIME_30              30  // seconds
-  #define IDLE_TIME_60              60  // seconds
-  #define IDLE_TIME_120            120  // seconds
-  #define IDLE_TIME_300            300  // seconds
-  //#define IDLE_TIME_CUSTOM IDLE_TIME_5  // custom value predefined in Configuration.h
 
   typedef enum
   {
@@ -58,7 +36,7 @@ extern "C" {
     LCD_IDLE_TIME_60,
     LCD_IDLE_TIME_120,
     LCD_IDLE_TIME_300,
-    LCD_IDLE_TIME_CUSTOM,
+    LCD_IDLE_TIME_CUSTOM,  // the related custom value is IDLE_TIME_CUSTOM predefined in Configuration.h
     LCD_IDLE_TIME_COUNT
   } LCD_IDLE_TIME_;
 

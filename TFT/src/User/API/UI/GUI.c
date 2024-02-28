@@ -866,17 +866,25 @@ void _GUI_DispStringOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT te
 {
   if (p == NULL) return;
 
-  CHAR_INFO info;
   uint16_t _iconBuffer[LARGE_BYTE_WIDTH * LARGE_BYTE_HEIGHT];
+  BMP_INFO iconInfo = {.index = iconIndex, .address = 0};
+  CHAR_INFO info;
 
   iconBuffer = _iconBuffer;
   GUI_SetTextMode(GUI_TEXTMODE_ON_ICON);
 
+  getBMPsize(&iconInfo);
+
   while (*p)
   {
     getCharacterInfo(p, &info);
-    ICON_ReadBuffer(iconBuffer, textPos.x, textPos.y, info.pixelWidth, info.pixelHeight, iconIndex);
-    GUI_DispOne(iconPoint.x + textPos.x, iconPoint.y + textPos.y, &info);
+
+    if ((textPos.x >= 0 && textPos.x + info.pixelWidth <= iconInfo.width) &&
+        (textPos.y >= 0 && textPos.y + info.pixelHeight <= iconInfo.height))
+    {
+      ICON_ReadBuffer(iconBuffer, textPos.x, textPos.y, info.pixelWidth, info.pixelHeight, iconIndex);
+      GUI_DispOne(iconPoint.x + textPos.x, iconPoint.y + textPos.y, &info);
+    }
 
     textPos.x += info.pixelWidth;
     p += info.bytes;

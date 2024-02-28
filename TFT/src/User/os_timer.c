@@ -1,7 +1,7 @@
 #include "os_timer.h"
 #include "includes.h"
 
-OS_COUNTER os_counter = {0, 0};
+OS_COUNTER os_counter = {0, 1000};
 
 void OS_InitTimerMs(void)
 {
@@ -40,15 +40,15 @@ void TIMER6_IRQHandler(void)
     TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // clear interrupt flag
 
     os_counter.ms++;
-    os_counter.sec++;
+    os_counter.sec--;
 
-    if (os_counter.sec >= 1000)  // if one second has been elapsed
+    if (os_counter.sec == 0)  // if one second has been elapsed
     {
-      os_counter.sec = 0;  // reset one second counter
+      os_counter.sec = 1000;  // reset one second counter
 
-      AVG_KPIS();          // collect debug monitoring KPI
+      AVG_KPIS();             // collect debug monitoring KPI
 
-      updatePrintTime();   // if printing, update printing info
+      updatePrintTime();      // if printing, update printing info
     }
 
     TS_CheckPress();  // check touch screen once a millisecond
@@ -62,15 +62,15 @@ void TIM7_IRQHandler(void)
     TIM7->SR &= ~TIM_SR_UIF;  // clear interrupt flag
 
     os_counter.ms++;
-    os_counter.sec++;
+    os_counter.sec--;
 
-    if (os_counter.sec >= 1000)  // if one second has been elapsed
+    if (os_counter.sec == 0)  // if one second has been elapsed
     {
-      os_counter.sec = 0;  // reset one second counter
+      os_counter.sec = 1000;  // reset one second counter
 
-      AVG_KPIS();          // collect debug monitoring KPI
+      AVG_KPIS();             // collect debug monitoring KPI
 
-      updatePrintTime();   // if printing, update printing info
+      updatePrintTime();      // if printing, update printing info
     }
 
     TS_CheckPress();  // check touch screen once a millisecond

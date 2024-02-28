@@ -227,13 +227,13 @@ extern "C" {
                               ENABLE_CUSTOM_5,  ENABLE_CUSTOM_6,  ENABLE_CUSTOM_7,  ENABLE_CUSTOM_8,  ENABLE_CUSTOM_9,\
                               ENABLE_CUSTOM_10, ENABLE_CUSTOM_11, ENABLE_CUSTOM_12, ENABLE_CUSTOM_13, ENABLE_CUSTOM_14}
 
-#define CUSTOM_GCODE_LIST    {CUSTOM_GCODE_0,  CUSTOM_GCODE_1,  CUSTOM_GCODE_2,  CUSTOM_GCODE_3,  CUSTOM_GCODE_4,\
-                              CUSTOM_GCODE_5,  CUSTOM_GCODE_6,  CUSTOM_GCODE_7,  CUSTOM_GCODE_8,  CUSTOM_GCODE_9,\
-                              CUSTOM_GCODE_10, CUSTOM_GCODE_11, CUSTOM_GCODE_12, CUSTOM_GCODE_13, CUSTOM_GCODE_14}
-
 #define CUSTOM_GCODE_LABELS  {CUSTOM_LABEL_0,  CUSTOM_LABEL_1,  CUSTOM_LABEL_2,  CUSTOM_LABEL_3,  CUSTOM_LABEL_4,\
                               CUSTOM_LABEL_5,  CUSTOM_LABEL_6,  CUSTOM_LABEL_7,  CUSTOM_LABEL_8,  CUSTOM_LABEL_9,\
                               CUSTOM_LABEL_10, CUSTOM_LABEL_11, CUSTOM_LABEL_12, CUSTOM_LABEL_13, CUSTOM_LABEL_14}
+
+#define CUSTOM_GCODE_LIST    {CUSTOM_GCODE_0,  CUSTOM_GCODE_1,  CUSTOM_GCODE_2,  CUSTOM_GCODE_3,  CUSTOM_GCODE_4,\
+                              CUSTOM_GCODE_5,  CUSTOM_GCODE_6,  CUSTOM_GCODE_7,  CUSTOM_GCODE_8,  CUSTOM_GCODE_9,\
+                              CUSTOM_GCODE_10, CUSTOM_GCODE_11, CUSTOM_GCODE_12, CUSTOM_GCODE_13, CUSTOM_GCODE_14}
 
 //====================================================================================================
 //============================ Settings Configurable At Compile Time Only ============================

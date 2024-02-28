@@ -288,7 +288,7 @@ typedef struct
 typedef struct
 {
   char preheat_name[PREHEAT_COUNT][MAX_STRING_LENGTH + 1];
-  uint16_t preheat_temp[PREHEAT_COUNT];
+  uint16_t preheat_hotend[PREHEAT_COUNT];
   uint16_t preheat_bed[PREHEAT_COUNT];
 } PREHEAT_STORE;
 
@@ -365,8 +365,6 @@ extern const uint16_t default_move_speed[];
 extern const uint16_t default_ext_speed[];
 extern const uint16_t default_level_speed[];
 extern const uint16_t default_pause_speed[];
-extern const uint16_t default_preheat_ext[];
-extern const uint16_t default_preheat_bed[];
 extern const uint8_t default_custom_enabled[];
 
 // Init settings data with default values

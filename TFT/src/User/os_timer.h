@@ -7,11 +7,14 @@ extern "C" {
 
 #include <stdint.h>
 
-// NOTE: not needed to define "ms" attribute as "volatile"
+// NOTE: "ms" attribute defined as "volatile" to avoid freezes in case the inline OS_GetTimeMs()
+//       function is used on a loop statement such as "while (frameTimeStamp == OS_GetTimeMs());"
+//       in the Knob_LED_SetColor() function in Knob_LED.c (the value of OS_GetTimeMs() will be
+//       cached on a register and never updated causing no exit from the loop)
 typedef struct
 {
-  uint32_t ms;   // milliseconds
-  uint16_t sec;  // seconds
+  volatile uint32_t ms;  // milliseconds
+  uint16_t sec;          // seconds
 } OS_COUNTER;
 
 typedef void (*FP_TASK)(void *);
