@@ -4,18 +4,17 @@
 SETTINGS infoSettings;
 MACHINE_SETTINGS infoMachineSettings;
 
-const uint8_t default_serial_port[]    = {SP_1, SP_2, SP_3, SP_4};
-const uint16_t default_max_temp[]      = MAX_TEMP;
-const uint16_t default_max_fan[]       = FAN_MAX;
-const uint16_t default_size_min[]      = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
-const uint16_t default_size_max[]      = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
-const uint16_t default_xy_speed[]      = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
-const uint16_t default_z_speed[]       = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
-const uint16_t default_ext_speed[]     = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
-const uint16_t default_pause_speed[]   = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
-const uint16_t default_level_speed[]   = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
-const uint8_t default_led_color[]      = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
-const uint8_t default_custom_enabled[] = CUSTOM_GCODE_ENABLED;
+const uint8_t default_serial_port[]  = {SP_1, SP_2, SP_3, SP_4};
+const uint16_t default_max_temp[]    = MAX_TEMP;
+const uint16_t default_max_fan[]     = FAN_MAX;
+const uint16_t default_size_min[]    = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
+const uint16_t default_size_max[]    = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
+const uint16_t default_xy_speed[]    = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+const uint16_t default_z_speed[]     = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
+const uint16_t default_ext_speed[]   = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+const uint16_t default_pause_speed[] = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+const uint16_t default_level_speed[] = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
+const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
 
 // Init settings data with default values
 void initSettings(void)

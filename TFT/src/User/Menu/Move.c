@@ -10,7 +10,7 @@
 #define X_MOVE_GCODE        "G0 X%.2f F%d\n"  // X axis gcode
 #define Y_MOVE_GCODE        "G0 Y%.2f F%d\n"  // Y axis gcode
 #define Z_MOVE_GCODE        "G0 Z%.2f F%d\n"  // Z axis gcode
-#define GANTRY_REFRESH_TIME 500               // 1 seconds is 1000
+#define GANTRY_REFRESH_TIME 500               // 1 second is 1000
 
 #ifdef PORTRAIT_MODE
   #define OFFSET 0
