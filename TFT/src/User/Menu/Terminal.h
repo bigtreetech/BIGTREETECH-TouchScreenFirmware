@@ -15,8 +15,8 @@ typedef enum
   SRC_TERMINAL_COUNT
 } TERMINAL_SRC;
 
-void menuTerminal(void);
 void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX portIndex, TERMINAL_SRC src);
+void menuTerminal(void);
 
 #ifdef __cplusplus
 }

@@ -7,7 +7,9 @@ extern "C" {
 
 #include <stdbool.h>
 
+// called by menuTuning()
 void zOffsetSetMenu(bool probeOffset);
+
 void menuZOffset(void);
 
 #ifdef __cplusplus
