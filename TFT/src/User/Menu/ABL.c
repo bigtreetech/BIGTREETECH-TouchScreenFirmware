@@ -54,7 +54,7 @@ void ablUpdateStatus(bool succeeded)
   }
 }
 
-// Start ABL process
+// start ABL process
 void ablStart(void)
 {
   storeCmd("G28\n");
