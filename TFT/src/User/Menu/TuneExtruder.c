@@ -3,8 +3,8 @@
 
 #define ITEM_TUNE_EXTRUDER_LEN_NUM 4
 
-#define EXTRUDE_LEN 100.0f   // in mm
-#define REMAINING_LEN 20.0f  // in mm
+#define EXTRUDE_LEN   100.0f  // in mm
+#define REMAINING_LEN  20.0f  // in mm
 
 static uint8_t tool_index = NOZZLE0;
 static uint8_t degreeSteps_index = 1;
