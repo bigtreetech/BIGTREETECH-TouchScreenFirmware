@@ -42,7 +42,7 @@ static inline bool compareFile(char * name1, uint32_t date1, char * name2, uint3
 /**
  * sort file list
  */
-static void sortFile(uint16_t fileCount, TCHAR * fileName[], uint32_t fileDate[])
+void sortFile(uint16_t fileCount, TCHAR * fileName[], uint32_t fileDate[])
 {
   for (int i = 1; i < fileCount; i++)
   {

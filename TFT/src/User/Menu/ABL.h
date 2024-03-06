@@ -10,7 +10,7 @@ extern "C" {
 // called by parseAck() to notify ABL process status
 void ablUpdateStatus(bool succeeded);
 
-// start ABL process
+// Start ABL process
 void ablStart(void);
 
 void menuUBLSave(void);

@@ -5,14 +5,9 @@
 extern "C" {
 #endif
 
-#include "variants.h"  // for TFT70_V3_0
+#include <stdint.h>
 
-#ifdef TFT70_V3_0
-  #include <stdint.h>
-
-  void setSpeedItemIndex(uint8_t index);
-#endif
-
+void setSpeedItemIndex(uint8_t index);
 void menuSpeed(void);
 
 #ifdef __cplusplus

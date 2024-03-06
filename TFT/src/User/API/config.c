@@ -216,7 +216,6 @@ const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)}
 const char * const preheatNames[] = PREHEAT_LABELS;
 const uint16_t preheatHotend[]    = PREHEAT_HOTEND;
 const uint16_t preheatBed[]       = PREHEAT_BED;
-const uint8_t cgEnabled[]         = CUSTOM_GCODE_ENABLED;
 const char * const cgNames[]      = CUSTOM_GCODE_LABELS;
 const char * const cgList[]       = CUSTOM_GCODE_LIST;
 
@@ -1240,17 +1239,15 @@ void resetConfig(void)
 
   // restore custom gcode presets
   int n = 0;
-
   for (int i = 0; i < CUSTOM_GCODES_COUNT; i++)
   {
-    if (cgEnabled[i] == 1)
+    if (default_custom_enabled[i] == 1)
     {
       strcpy(tempCG.name[n], cgNames[i]);
       strcpy(tempCG.gcode[n], cgList[i]);
       n++;
     }
   }
-
   tempCG.count = n;
 
   // write restored config
@@ -1331,7 +1328,6 @@ bool getLangFromFile(char * rootDir)
   FRESULT r = f_findfirst(&d, &f, rootDir, "language_*.ini");
 
   f_closedir(&d);
-
   if (r != FR_OK)
     return false;
 
@@ -1359,19 +1355,19 @@ bool getLangFromFile(char * rootDir)
     showError(CSTAT_FILE_INVALID);
     success = false;
   }
-  else  // rename file if update was successful
-  {
-    if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))  // language exists
-    {
+  else
+  {  // rename file if update was successful
+    if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))
+    {  // language exists
       char newlangpath[256];
       sprintf(newlangpath, "%s/%s.CUR", rootDir, f.fname);
 
-      if (f_file_exists(newlangpath))  // old language also exists
+      if (f_file_exists(newlangpath))
+      {  // old language also exists
         f_unlink(newlangpath);
-
+      }
       f_rename(langpath, newlangpath);
     }
   }
-
   return success;
 }
