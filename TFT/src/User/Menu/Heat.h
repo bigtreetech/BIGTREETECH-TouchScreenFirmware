@@ -13,6 +13,7 @@ extern "C" {
  * index == -2 to set the last used bed index
  */
 void heatSetCurrentIndex(uint8_t index);
+
 void menuHeat(void);
 
 #ifdef __cplusplus

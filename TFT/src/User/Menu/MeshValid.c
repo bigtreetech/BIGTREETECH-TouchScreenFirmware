@@ -35,18 +35,12 @@ void menuMeshValid(void)
     key_num = menuKeyGetValue();
     switch (key_num)
     {
-      // MESHVALID PLA
-      case KEY_ICON_0:
-      // MESHVALID PETG
-      case KEY_ICON_1:
-      // MESHVALID ABS
-      case KEY_ICON_2:
-      // MESHVALID WOOD
-      case KEY_ICON_3:
-      // MESHVALID TPU
-      case KEY_ICON_4:
-      // MESHVALID NYLON
-      case KEY_ICON_5:
+      case KEY_ICON_0:  // MESHVALID PLA
+      case KEY_ICON_1:  // MESHVALID PETG
+      case KEY_ICON_2:  // MESHVALID ABS
+      case KEY_ICON_3:  // MESHVALID WOOD
+      case KEY_ICON_4:  // MESHVALID TPU
+      case KEY_ICON_5:  // MESHVALID NYLON
         mustStoreCmd("G28\n");
         mustStoreCmd("G26 H%u B%u R99\n", preheatStore.preheat_hotend[key_num], preheatStore.preheat_bed[key_num]);
         mustStoreCmd("G1 Z10 F%d\n", infoSettings.level_feedrate[FEEDRATE_Z]);

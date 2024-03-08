@@ -9,7 +9,9 @@ extern "C" {
 #include <stdint.h>
 #include "Settings.h"
 
+// called by menuMeshValid()
 void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redrawIcon);
+
 void menuPreheat(void);
 
 #ifdef __cplusplus

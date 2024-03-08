@@ -73,7 +73,7 @@ void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 //   - icon mode menu is an option available only for browsing files from TFT SD card / TFT USB disk.
 //     It is not available for browsing files from onboard media
 //   - only short (not long) folder names and filenames are available browsing files from TFT SD card / TFT USB disk
-static inline void gocdeIconDraw(void)
+static inline void gcodeIconDraw(void)
 {
   ITEM curItem = {ICON_NULL, LABEL_NULL};
   uint8_t baseIndex = infoFile.curPage * NUM_PER_PAGE;
@@ -118,7 +118,7 @@ static inline void gocdeIconDraw(void)
 }
 
 // update items in list mode
-void gocdeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
+void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 {
   if (index < infoFile.folderCount)  // folder
   {
@@ -329,7 +329,7 @@ void menuPrintFromSource(void)
       if (list_mode != true)
       {
         printIconItems.title.address = (uint8_t *)infoFile.path;
-        gocdeIconDraw();
+        gcodeIconDraw();
 
         if (update != 2)  // update title only when entering/exiting to/from directory
           menuDrawTitle();
@@ -337,7 +337,7 @@ void menuPrintFromSource(void)
       else
       { // title bar is also drawn by listViewCreate
         listViewCreate((LABEL){.address = (uint8_t *)infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
-                       &infoFile.curPage, false, NULL, gocdeListDraw);
+                       &infoFile.curPage, false, NULL, gcodeListDraw);
       }
 
       Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.path, &titleRect);
