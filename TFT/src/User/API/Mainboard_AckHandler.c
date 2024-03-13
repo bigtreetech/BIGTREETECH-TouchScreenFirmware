@@ -1273,7 +1273,9 @@ void parseAck(void)
         string = &ack_cache[ack_index];
         string_start = ack_index;
 
-        if (ack_seen("EXTRUDER_COUNT:"))
+        if (ack_seen("KINEMATICS:"))  // as of MarlinFirmware/Marlin@3fd175a
+          string_end = ack_index - sizeof("KINEMATICS:");
+        else if (ack_seen("EXTRUDER_COUNT:"))
         {
           if (MIXING_EXTRUDER == 0)
             infoSettings.ext_count = ack_value();
