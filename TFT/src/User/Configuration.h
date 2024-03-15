@@ -116,7 +116,7 @@
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define COMMAND_CHECKSUM 1  // Default: 1
+#define COMMAND_CHECKSUM 0  // Default: 0
 
 /**
  * Emulated M600
