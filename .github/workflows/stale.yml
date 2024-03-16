@@ -3,7 +3,7 @@
 # You can adjust the behavior by modifying this file.
 # For more information, see:
 # https://github.com/actions/stale
-name: Mark stale issues and pull requests
+name: Mark Stale Issues and PRs
 
 on:
   schedule:
@@ -11,6 +11,8 @@ on:
 
 jobs:
   stale:
+    name: Mark Stale Issues and PRs
+    if: github.repository == 'bigtreetech/BIGTREETECH-TouchScreenFirmware'
 
     runs-on: ubuntu-latest
     permissions:
