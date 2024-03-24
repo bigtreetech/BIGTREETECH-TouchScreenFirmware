@@ -15,9 +15,9 @@ enum
   PRINT_KEY_ONBOARD_USB
 };
 
-const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
+static const GUI_RECT titleRect = {10, (TITLE_END_Y - BYTE_HEIGHT) / 2, LCD_WIDTH - 10, (TITLE_END_Y - BYTE_HEIGHT) / 2 + BYTE_HEIGHT};
 
-const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
+static const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
 #ifdef PORTRAIT_MODE
   {BYTE_WIDTH/2+0*SPACE_X_PER_ICON, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2,
    1*SPACE_X_PER_ICON-BYTE_WIDTH/2, 1*ICON_HEIGHT+0*SPACE_Y+ICON_START_Y+(SPACE_Y-BYTE_HEIGHT)/2+BYTE_HEIGHT},
@@ -52,11 +52,11 @@ const GUI_RECT gcodeRect[NUM_PER_PAGE] = {
 };
 
 // error labels for files/volume errors
-const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ_ERROR, LABEL_ONBOARD_SD_READ_ERROR};
+static const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_USB_READ_ERROR, LABEL_ONBOARD_SD_READ_ERROR};
 
 static bool list_mode = true;
 
-void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
+static void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
 {
   if (name == NULL)
     return;
@@ -118,7 +118,7 @@ static inline void gcodeIconDraw(void)
 }
 
 // update items in list mode
-void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
+static void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 {
   if (index < infoFile.folderCount)  // folder
   {
@@ -139,7 +139,7 @@ void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 }
 
 // open selected file/folder
-bool printPageItemSelected(uint16_t index)
+static bool printPageItemSelected(uint16_t index)
 {
   bool hasUpdate = true;
 

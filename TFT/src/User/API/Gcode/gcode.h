@@ -15,18 +15,17 @@ typedef void (* FP_STREAM_HANDLER)(const char *);
 
 typedef struct
 {
-  char * cmd_rev_buf;       // Buffer where store the command response
-  const char * startMagic;  // The magic to identify the start
-  const char * stopMagic;   // The magic to identify the stop
-  const char * errorMagic[MAX_ERROR_NUM];
-  // The magic to identify the error response
-  // Some gcodes respond to multiple errors, such as M21 - "SD card failed", "No SD card", "volume.init failed"
-  uint8_t error_num;       // Number of error magic corresponding to current gcode
-  bool inResponse;         // true if between start and stop magic
-  bool inWaitResponse;     // true if waiting for start magic
-  bool done;               // true if command is executed and response is received
-  bool inError;            // true if error response
-  bool inJson;             // true if !inResponse and !inWaitResponse and '{' is found
+  char * cmd_rev_buf;                      // buffer where store the command response
+  const char * startMagic;                 // the magic to identify the start
+  const char * stopMagic;                  // the magic to identify the stop
+  const char * errorMagic[MAX_ERROR_NUM];  // the magic to identify the error response. Some gcodes respond to multiple errors,
+                                           // such as M21 - "SD card failed", "No SD card", "volume.init failed"
+  uint8_t error_num;                       // number of error magic corresponding to current gcode
+  bool inResponse;                         // "true" if between start and stop magic
+  bool inWaitResponse;                     // "true" if waiting for start magic
+  bool done;                               // "true" if command is executed and response is received
+  bool inError;                            // "true" if error response
+  bool inJson;                             // "true" if !inResponse and !inWaitResponse and '{' is found
   FP_STREAM_HANDLER stream_handler;
 } REQUEST_COMMAND_INFO;
 

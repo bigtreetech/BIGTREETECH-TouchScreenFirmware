@@ -8,7 +8,7 @@
 typedef struct
 {
   CMD gcode;
-  SERIAL_PORT_INDEX port_index;  // 0: for SERIAL_PORT, 1: for SERIAL_PORT_2 etc...
+  SERIAL_PORT_INDEX port_index;  // 0: for SERIAL_PORT, 1: for SERIAL_PORT_2 etc.
 } GCODE_INFO;
 
 typedef struct
@@ -34,16 +34,16 @@ typedef enum
   ONBOARD_WRITING
 } WRITING_MODE;
 
-GCODE_QUEUE cmdQueue;                    // command queue where commands to be sent are stored
-GCODE_RETRY_INFO cmdRetryInfo = {0};     // command retry info. Required COMMAND_CHECKSUM feature enabled in TFT
+static GCODE_QUEUE cmdQueue;                    // command queue where commands to be sent are stored
+static GCODE_RETRY_INFO cmdRetryInfo = {0};     // command retry info. Required COMMAND_CHECKSUM feature enabled in TFT
 
-char * cmd_ptr;
-uint8_t cmd_len;
-SERIAL_PORT_INDEX cmd_port_index;        // index of serial port originating the gcode
-uint8_t cmd_base_index;                  // base index in case the gcode has checksum ("Nxx " is present at the beginning of gcode)
-uint8_t cmd_index;
-WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and M29
-FIL file;
+static char * cmd_ptr;
+static uint8_t cmd_len;
+static SERIAL_PORT_INDEX cmd_port_index;        // index of serial port originating the gcode
+static uint8_t cmd_base_index;                  // base index in case the gcode has checksum ("Nxx " is present at the beginning of gcode)
+static uint8_t cmd_index;
+static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and M29
+static FIL file;
 
 uint8_t getQueueCount(void)
 {
@@ -82,7 +82,7 @@ bool isWritingMode(void)
 }
 
 // Common store cmd.
-void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
+static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
 
@@ -163,7 +163,7 @@ void mustStoreScript(const char * format, ...)
   }
 }
 
-// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc...) to cmdQueue queue.
+// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
@@ -193,7 +193,7 @@ void clearCmdQueue(void)
 
 // Strip out any leading space from the passed command.
 // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command.
-char * stripCmd(char * cmdPtr)
+static char * stripCmd(char * cmdPtr)
 {
   // skip leading spaces
   while (*cmdPtr == ' ') cmdPtr++;           // e.g. "  N1   G28*18\n" -> "N1   G28*18\n"
@@ -249,7 +249,7 @@ static inline void setCmdRetryInfo(uint32_t lineNumber)
 }
 
 // Purge gcode cmd or send it to the printer and then remove it from cmdQueue queue.
-bool sendCmd(bool purge, bool avoidTerminal)
+static bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
 
@@ -323,6 +323,7 @@ static bool cmd_seen_from(uint8_t index, const char * keyword)
       if (keyword[++i] == '\0')
       {
         cmd_index = index + i;
+
         return true;
       }
     }
@@ -368,7 +369,7 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
-bool initRemoteTFT()
+static bool initRemoteTFT(void)
 {
   // examples:
   //
@@ -401,7 +402,7 @@ bool initRemoteTFT()
   return true;
 }
 
-bool openRemoteTFT(bool writingMode)
+static bool openRemoteTFT(bool writingMode)
 {
   bool open = false;
 
@@ -453,7 +454,7 @@ bool openRemoteTFT(bool writingMode)
   return open;
 }
 
-static inline void writeRemoteTFT()
+static inline void writeRemoteTFT(void)
 {
   // examples:
   //
@@ -489,7 +490,7 @@ static inline void writeRemoteTFT()
   Serial_Forward(cmd_port_index, "ok\n");
 }
 
-void setWaitHeating(uint8_t index)
+static void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
   {
@@ -502,7 +503,7 @@ void setWaitHeating(uint8_t index)
   }
 }
 
-void syncTargetTemp(uint8_t index)
+static void syncTargetTemp(uint8_t index)
 {
   uint16_t temp;
 

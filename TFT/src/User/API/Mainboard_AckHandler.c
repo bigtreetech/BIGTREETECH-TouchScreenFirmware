@@ -16,7 +16,7 @@ typedef struct
 } ECHO;
 
 // notify or ignore messages starting with following text
-const ECHO knownEcho[] = {
+static const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "busy: paused for user"},
   {ECHO_NOTIFY_NONE, "busy: processing"},
   {ECHO_NOTIFY_NONE, "Now fresh file:"},
@@ -35,21 +35,21 @@ const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
-const char magic_error[] = "Error:";
-const char magic_echo[] = "echo:";
-const char magic_warning[] = "Warning:";  // RRF warning
-const char magic_message[] = "message";   // RRF message in Json format
+static const char magic_error[] = "Error:";
+static const char magic_echo[] = "echo:";
+static const char magic_warning[] = "Warning:";  // RRF warning
+static const char magic_message[] = "message";   // RRF message in Json format
 
 // size of buffer where read ACK messages are stored (including terminating null character '\0')
 #define ACK_CACHE_SIZE 512
 
-char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
-uint16_t ack_len;                           // length of data present in ack_cache without the terminating null character '\0'
-uint16_t ack_index;
-SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
-bool hostDialog = false;
+static char ack_cache[ACK_CACHE_SIZE];             // buffer where read ACK messages are stored
+static uint16_t ack_len;                           // length of data present in ack_cache without the terminating null character '\0'
+static uint16_t ack_index;
+static SERIAL_PORT_INDEX ack_port_index = PORT_1;  // index of target serial port for the ACK message (related to originating gcode)
+static bool hostDialog = false;
 
-struct HOST_ACTION
+static struct HOST_ACTION
 {
   char prompt_begin[30];
   char prompt_button[2][20];
@@ -82,6 +82,7 @@ static bool ack_starts_with(const char * str)
     if (str[++i] == '\0')
     {
       ack_index = i;
+
       return true;
     }
   }
@@ -103,6 +104,7 @@ static bool ack_seen(const char * str)
       if (str[++i] == '\0')
       {
         ack_index += i;
+
         return true;
       }
     }
@@ -125,6 +127,7 @@ static bool ack_continue_seen(const char * str)
       if (str[++i] == '\0')
       {
         ack_index = tmp_index + i;
+
         return true;
       }
     }
@@ -133,13 +136,13 @@ static bool ack_continue_seen(const char * str)
   return false;
 }
 
-static float ack_value()
+static float ack_value(void)
 {
   return (strtod(&ack_cache[ack_index], NULL));
 }
 
 // read the value after "/", if any
-static float ack_second_value()
+static float ack_second_value(void)
 {
   char * secondValue = strchr(&ack_cache[ack_index], '/');
 
@@ -149,7 +152,7 @@ static float ack_second_value()
     return -0.5;
 }
 
-void ack_values_sum(float * data)
+static void ack_values_sum(float * data)
 {
   while (((ack_cache[ack_index] < '0') || (ack_cache[ack_index] > '9')) && ack_cache[ack_index] != '\n')
   {
@@ -168,7 +171,7 @@ void ack_values_sum(float * data)
     ack_values_sum(data);
 }
 
-void ackPopupInfo(const char * info)
+static void ackPopupInfo(const char * info)
 {
   bool show_dialog = true;
 
@@ -272,11 +275,11 @@ static inline void hostActionCommands(void)
       }
     }
   }
-  else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc...)
+  else if (ack_seen(":print_start"))  // print started from remote host (e.g. OctoPrint etc.)
   {
     startPrintingFromRemoteHost(NULL);  // start print originated and hosted by remote host and open Printing menu
   }
-  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc...)
+  else if (ack_seen(":print_end"))  // print ended from remote host (e.g. OctoPrint etc.)
   {
     endPrint();
   }

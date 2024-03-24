@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variants.h"  // for BUZZER_PIN etc...
+#include "variants.h"  // for BUZZER_PIN etc.
 
 #ifdef BUZZER_PIN
   void Buzzer_Config(void);

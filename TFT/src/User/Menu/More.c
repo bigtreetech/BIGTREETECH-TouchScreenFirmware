@@ -1,7 +1,7 @@
 #include "More.h"
 #include "includes.h"
 
-const MENUITEMS moreItems = {
+static const MENUITEMS moreItems = {
   // title
   LABEL_MORE,
   // icon                          label
@@ -21,13 +21,13 @@ const MENUITEMS moreItems = {
   }
 };
 
-void isPauseExtrude(void)
+static void isPauseExtrude(void)
 {
   if (pausePrint(true, PAUSE_NORMAL))
     REPLACE_MENU(menuExtrude);
 }
 
-void isPauseLoadUnload(void)
+static void isPauseLoadUnload(void)
 {
   if (pausePrint(true, PAUSE_NORMAL))
     REPLACE_MENU(menuLoadUnload);
@@ -42,6 +42,7 @@ void menuMore(void)
   while (MENU_IS(menuMore))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

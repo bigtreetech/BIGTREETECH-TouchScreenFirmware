@@ -81,14 +81,14 @@ void TIM7_IRQHandler(void)
 // task: task structure to be filled
 // time_ms:
 //
-void OS_TaskInit(OS_TASK *task_t, uint32_t time_ms, FP_TASK function, void *para)
+void OS_TaskInit(OS_TASK * task_t, uint32_t time_ms, FP_TASK function, void * para)
 {
   task_t->time_ms = time_ms;
   task_t->task = function;
   task_t->para = para;
 }
 
-void OS_TaskLoop(OS_TASK *task_t)
+void OS_TaskLoop(OS_TASK * task_t)
 {
   if (task_t->is_exist == 0)
     return;
@@ -108,7 +108,7 @@ void OS_TaskLoop(OS_TASK *task_t)
   (*task_t->task)(task_t->para);
 }
 
-void OS_TaskEnable(OS_TASK *task_t, uint8_t is_exec, uint8_t is_repeat)
+void OS_TaskEnable(OS_TASK * task_t, uint8_t is_exec, uint8_t is_repeat)
 {
   task_t->is_exist =1;
   task_t->is_repeat = is_repeat;
@@ -118,7 +118,7 @@ void OS_TaskEnable(OS_TASK *task_t, uint8_t is_exec, uint8_t is_repeat)
     (*task_t->task)(task_t->para);
 }
 
-void OS_TaskDisable(OS_TASK *task_t)
+void OS_TaskDisable(OS_TASK * task_t)
 {
   task_t->is_exist = 0;
 }

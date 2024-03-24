@@ -22,7 +22,7 @@ extern "C" {
   #define GRB_INDIGO                  0x00004B82
   #define GRB_VIOLET                  0x0000FEFE
 
-  // Color macro  // 颜色宏定          // R G B
+  // color macro  // 颜色宏定          // R G B
   #define COLOR_LIGHTPINK             0xFFB6C1  // 浅粉
   #define COLOR_PINK                  0xFFC0CB  // 粉红
   #define COLOR_CRIMSON               0xDC143C  // 猩红

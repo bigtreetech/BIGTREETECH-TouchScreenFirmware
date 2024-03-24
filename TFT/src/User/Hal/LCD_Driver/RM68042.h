@@ -5,10 +5,7 @@
 extern "C" {
 #endif
 
-#define RM68042_0_DEGREE_REG_VALUE   0X28
-#define RM68042_180_DEGREE_REG_VALUE 0X2B
-#define RM68042_90_DEGREE_REG_VALUE  0x09
-#define RM68042_270_DEGREE_REG_VALUE 0x0A
+#include <stdint.h>
 
 uint8_t LCD_DriveIsRM68042(void);
 void RM68042_Init_Sequential(void);

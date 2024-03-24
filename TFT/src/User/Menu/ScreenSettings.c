@@ -16,7 +16,7 @@ enum
 };
 
 #define ITEM_MARLIN_TYPE_NUM 2
-const char *const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
+static const char * const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
 {
   // item value text(only for custom value)
   "128x64",
@@ -24,7 +24,7 @@ const char *const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
 };
 
 #define ITEM_NOTIFICATION_TYPE_NUM 3
-const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
+static const char * const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
 {
   // item value text(only for custom value)
   "OFF",
@@ -32,7 +32,7 @@ const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
   "TOAST"
 };
 
-const char *const itemSortBy[SORT_BY_COUNT] =
+static const char * const itemSortBy[SORT_BY_COUNT] =
 {
   // item value text(only for custom value)
   "Date ▼",
@@ -43,7 +43,7 @@ const char *const itemSortBy[SORT_BY_COUNT] =
 
 #ifdef HAS_EMULATOR
 
-void menuEmulatorFontColor(void)
+static void menuEmulatorFontColor(void)
 {
   LABEL title = {LABEL_FONT_COLOR};
   LISTITEM totalItems[LCD_COLOR_COUNT];
@@ -93,7 +93,7 @@ void menuEmulatorFontColor(void)
   saveSettings();  // save settings
 }
 
-void menuEmulatorBGColor(void)
+static void menuEmulatorBGColor(void)
 {
   LABEL title = {LABEL_BG_COLOR};
   LISTITEM totalItems[LCD_COLOR_COUNT];
@@ -143,7 +143,7 @@ void menuEmulatorBGColor(void)
   saveSettings();  // save settings
 }
 
-void menuMarlinModeSettings(void)
+static void menuMarlinModeSettings(void)
 {
   LABEL title = {LABEL_MARLIN_MODE_SETTINGS};
   LISTITEM marlinModeitems[] = {
@@ -217,7 +217,7 @@ void menuMarlinModeSettings(void)
 
 #endif  // ST7920_EMULATOR
 
-void menuLanguage(void)
+static void menuLanguage(void)
 {
   LABEL title = {LABEL_LANGUAGE};
   LISTITEM totalItems[LANGUAGE_NUM];
@@ -225,7 +225,7 @@ void menuLanguage(void)
   uint16_t curItem = infoSettings.language;
   SETTINGS now = infoSettings;
 
-  char *firstLanguage = (char *)default_pack[LABEL_LANGUAGE];  // get first language name directly from memory
+  char * firstLanguage = (char *)default_pack[LABEL_LANGUAGE];  // get first language name directly from memory
   char secondLanguage[MAX_LANG_LABEL_LENGTH];
 
   W25Qxx_ReadBuffer((uint8_t *)&secondLanguage, getLabelFlashAddr(LABEL_LANGUAGE), MAX_LANG_LABEL_LENGTH);  // read second language name from SPI flash
@@ -273,7 +273,7 @@ void menuLanguage(void)
   }
 }
 
-void menuUISettings(void)
+static void menuUISettings(void)
 {
   LABEL title = {LABEL_UI_SETTINGS};
   LISTITEM uiItems[] = {
@@ -320,6 +320,7 @@ void menuUISettings(void)
   while (MENU_IS(menuUISettings))
   {
     curIndex = listViewGetSelectedIndex();
+
     switch (curIndex)
     {
       case 0:
@@ -392,7 +393,7 @@ void menuUISettings(void)
 
 #ifdef BUZZER_PIN
 
-void menuSoundSettings(void)
+static void menuSoundSettings(void)
 {
   LABEL title = {LABEL_SOUND};
   LISTITEM sounditems[] = {
@@ -427,13 +428,13 @@ void menuSoundSettings(void)
   }
 
   saveSettings();  // save settings
-}  // menuSoundSettings
+} // menuSoundSettings
 
 #endif  // BUZZER_PIN
 
 #ifdef LCD_LED_PWM_CHANNEL
 
-void menuBrightnessSettings(void)
+static void menuBrightnessSettings(void)
 {
   LABEL title = {LABEL_LCD_BRIGHTNESS};
   LISTITEM brightnessitems[] = {
@@ -461,6 +462,7 @@ void menuBrightnessSettings(void)
   while (MENU_IS(menuBrightnessSettings))
   {
     curIndex = listViewGetSelectedIndex();
+
     switch (curIndex)
     {
       case 0:
@@ -547,6 +549,7 @@ void menuScreenSettings(void)
   while (MENU_IS(menuScreenSettings))
   {
     curIndex = menuKeyGetValue();
+
     switch (curIndex)
     {
       case KEY_ICON_0:

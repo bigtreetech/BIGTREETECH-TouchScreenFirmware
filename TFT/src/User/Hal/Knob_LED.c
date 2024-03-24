@@ -1,10 +1,10 @@
 #include "Knob_LED.h"
-#include "includes.h"  // for mcuClocks, KNOB_LED_COLOR_PIN etc...
+#include "includes.h"  // for mcuClocks, KNOB_LED_COLOR_PIN etc.
 #include "GPIO_Init.h"
 
 #ifdef KNOB_LED_COLOR_PIN
 
-uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
+static uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
 
 // total 2.5us, run in 400Khz
 #define NEOPIXEL_T0H_US 0.35  // Neopixel code 0 high level hold time in us

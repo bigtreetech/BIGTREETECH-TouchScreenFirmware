@@ -211,7 +211,7 @@ const uint16_t charIconColor[CHARICON_NUM] =
 #define CHAR_TOGGLE_ON             ""       // only for toggle state detection in list menu
 #define CHAR_TOGGLE_OFF            ""       // only for toggle state detection in list menu
 
-const char *const charIcon[CHARICON_NUM]={
+static const char * const charIcon[CHARICON_NUM] = {
   #define X_CHAR(NAME) CHAR_##NAME ,
   #include "CharIcon.inc"
   #undef  X_CHAR
@@ -227,12 +227,15 @@ uint8_t * IconCharSelect(uint8_t sel)
 void drawCharIcon(const GUI_RECT * rect, ALIGN_POSITION iconalign, uint16_t iconindex, bool drawBgColor, uint16_t btn_color)
 {
   GUI_POINT icon_p = getTextStartPoint(rect->x0, rect->y0, rect->x1, rect->y1, iconalign, (char *)IconCharSelect(iconindex));
+
   GUI_SetColor(charIconColor[iconindex]);
+
   if (drawBgColor)
   {
     GUI_SetBkColor(btn_color);
     GUI_ClearPrect(rect);
   }
+
   GUI_DispString(icon_p.x, icon_p.y, IconCharSelect(iconindex));
   GUI_RestoreColorDefault();
 }

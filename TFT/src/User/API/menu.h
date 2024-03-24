@@ -88,7 +88,7 @@ typedef enum
 typedef union
 {
   int32_t index;  // language index, address = textSelect(index);
-  void *address;
+  void * address;
 } LABEL;
 
 // always initialize label to default values
@@ -163,7 +163,6 @@ extern const GUI_RECT rect_of_key[MENU_RECT_COUNT];
 extern const GUI_RECT rect_of_keySS[SS_RECT_COUNT];
 extern const GUI_RECT rect_of_keyPS[];
 extern const GUI_RECT rect_of_keyPS_end[];
-extern const GUI_RECT rect_of_keyPS_draw[];  // used to draw VERTICAL GUI Printing menu
 extern const GUI_RECT rect_of_titleBar[1];
 
 SYS_STATUS getReminderStatus(void);
@@ -175,25 +174,25 @@ void loopBusySignClear(void);
 void notificationDot(void);
 
 void GUI_RestoreColorDefault(void);
-MENUITEMS *getCurMenuItems(void);
-LISTITEMS *getCurListItems(void);
+MENUITEMS * getCurMenuItems(void);
+LISTITEMS * getCurListItems(void);
 GUI_POINT getIconStartPoint(int index);
-uint8_t *labelGetAddress(const LABEL * label);
+uint8_t * labelGetAddress(const LABEL * label);
 void menuDrawItem (const ITEM * menuItem, uint8_t position);
-void menuDrawIconOnly(const ITEM *item, uint8_t position);
-void menuDrawIconText(const ITEM *item, uint8_t position);
-void menuDrawListItem(const LISTITEM *item, uint8_t position);
+void menuDrawIconOnly(const ITEM * item, uint8_t position);
+void menuDrawIconText(const ITEM * item, uint8_t position);
+void menuDrawListItem(const LISTITEM * item, uint8_t position);
 void menuRefreshListPage(void);
 
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
 void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void (*action_redraw)(uint8_t position, uint8_t is_press),
-             void (*menu_redraw)(void));
-void menuSetTitle(const LABEL *title);
+             void (* action_redraw)(uint8_t position, uint8_t is_press),
+             void (* menu_redraw)(void));
+void menuSetTitle(const LABEL * title);
 void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);
-void menuDrawListPage(const LISTITEMS *listItems);
+void menuDrawListPage(const LISTITEMS * listItems);
 
 void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon);
 void displayExhibitHeader(const char * titleStr, const char * unitStr);

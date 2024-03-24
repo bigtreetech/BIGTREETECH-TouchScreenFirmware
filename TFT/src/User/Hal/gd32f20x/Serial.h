@@ -2,8 +2,8 @@
 #define _SERIAL_H_
 
 #include <stdint.h>
-#include "variants.h"  // for uint32_t etc...
-#include "uart.h"
+#include "variants.h"  // for rcu_periph_enum etc.
+#include "uart.h"      // for _UART_CNT etc.
 
 // comment out this line to use TX interrupt based serial writing instead of TX DMA based serial writing
 #define TX_DMA_WRITE

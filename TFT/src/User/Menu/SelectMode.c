@@ -8,13 +8,13 @@ typedef enum
   MKEY_IDLE = IDLE_TOUCH,
 } MKEY_VALUES;
 
-const GUI_RECT rect_of_mode[MODE_COUNT] = {
+static const GUI_RECT rect_of_mode[MODE_COUNT] = {
   // 2 select icon
   {1 * SPACE_SELEX + 0 * ICON_WIDTH, SPACE_SELEY, 1 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
   {3 * SPACE_SELEX + 1 * ICON_WIDTH, SPACE_SELEY, 3 * SPACE_SELEX + 2 * ICON_WIDTH, SPACE_SELEY + ICON_HEIGHT},
 };
 
-const uint8_t icon_mode [MODE_COUNT] = {
+static const uint8_t icon_mode [MODE_COUNT] = {
   ICON_MARLIN_MODE,
   ICON_TOUCH_MODE,
 };
@@ -27,8 +27,8 @@ static inline void drawModeIcon(void)
   }
 
   const GUI_RECT mode_title_rect[MODE_COUNT] = {
-    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT / 2, text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
-    {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT / 2, LCD_WIDTH,   rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
+    {0,           rect_of_mode[0].y1 + BYTE_HEIGHT / 2, TEXT_STARTX, rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
+    {TEXT_STARTX, rect_of_mode[0].y1 + BYTE_HEIGHT / 2, LCD_WIDTH,   rect_of_mode[0].y1 + BYTE_HEIGHT / 2 + BYTE_HEIGHT},
   };
 
   GUI_RestoreColorDefault();
@@ -41,7 +41,7 @@ static inline MKEY_VALUES MKeyGetValue(void)
   return (MKEY_VALUES)KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
 }
 
-void drawSelectedMode(int8_t nowMode)
+static void drawSelectedMode(int8_t nowMode)
 {
   const uint8_t border_off = 4;
 

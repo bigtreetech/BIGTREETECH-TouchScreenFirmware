@@ -31,11 +31,11 @@ typedef struct __attribute__((__packed__))
 
 #define ALIGNMENT_4BYTE(n) (((n + 3) >> 2) << 2)
 
-bool screenShotBMP(char *bmp)
+bool screenShotBMP(char * bmp)
 {
   BMP_FILEHEADER bmp_file = {
     .bfType = 0x4D42,  // "BM"
-    .bfSize = (ALIGNMENT_4BYTE(LCD_WIDTH)  * LCD_HEIGHT) * 3 + sizeof(BMP_FILEHEADER) + sizeof(BMP_INFOHEADER),
+    .bfSize = (ALIGNMENT_4BYTE(LCD_WIDTH) * LCD_HEIGHT) * 3 + sizeof(BMP_FILEHEADER) + sizeof(BMP_INFOHEADER),
     .bfReserved1 = 0,
     .bfReserved2 = 0,
     .bfoffBits = sizeof(BMP_FILEHEADER) + sizeof(BMP_INFOHEADER),
@@ -59,9 +59,7 @@ bool screenShotBMP(char *bmp)
   UINT mybw;
 
   if (f_open(&bmpFile, bmp, FA_CREATE_NEW | FA_WRITE) != FR_OK)
-  {
-    return false;  // Create failed, filename maybe existed.
-  }
+    return false;  // Create failed, filename maybe existed
 
   f_write(&bmpFile, &bmp_file, sizeof(BMP_FILEHEADER), &mybw);
   f_write(&bmpFile, &bmp_info, sizeof(BMP_INFOHEADER), &mybw);
@@ -69,6 +67,7 @@ bool screenShotBMP(char *bmp)
   for (uint16_t y = 0; y < LCD_HEIGHT; y++)
   {
     f_lseek(&bmpFile, bmp_file.bfoffBits + (LCD_HEIGHT - y - 1) * (bmp_info.biWidth * bmp_info.biBitCount / 8));
+
     for (uint16_t x = 0; x < LCD_WIDTH; x++)
     {
       uint32_t c = LCD_ReadPixel_24Bit(x, y);
@@ -77,6 +76,7 @@ bool screenShotBMP(char *bmp)
   }
 
   f_close(&bmpFile);
+
   return true;
 }
 
@@ -91,7 +91,7 @@ void loopScreenShot(void)
    * - A long press of 1.5 seconds on touch screen to trigger a screenshot
    */
   #if LCD_ENCODER_SUPPORT
-    bool (*screenShotTriggered)(uint16_t ) = (MENU_IS(menuMarlinMode)) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
+    bool (* screenShotTriggered)(uint16_t ) = (MENU_IS(menuMarlinMode)) ? Touch_Enc_ReadPen : LCD_Enc_ReadBtn;
 
     #define SCREEN_SHOT_TRIGGERED() screenShotTriggered(LCD_ENC_BUTTON_INTERVAL)
   #else
@@ -106,12 +106,12 @@ void loopScreenShot(void)
     char screenShotFileName[FF_LFN_BUF] = "ScreenShot";
 
     if (!f_dir_exists(screenShotFileName))
-    {
       f_mkdir(screenShotFileName);
-    }
+
     strcat(screenShotFileName, "/");
 
     uint16_t i = strlen(screenShotFileName);
+
     switch (getMenuType())
     {
       case MENU_TYPE_ICON:
@@ -130,13 +130,12 @@ void loopScreenShot(void)
     for (uint16_t j = strlen(screenShotFileName); j >= i; j--)
     {
       if (screenShotFileName[j] == '/')
-      {
         screenShotFileName[j] = '_';
-      }
     }
 
     uint8_t index = 0;
     char fileName[FF_LFN_BUF];
+
     do {
       sprintf(fileName, "%s_%d.bmp", screenShotFileName, index);
       index++;

@@ -302,7 +302,7 @@ float editFloatValue(float minValue, float maxValue, float resetValue, float val
 }
 
 // set the hotend to the minimum extrusion temperature if user selected "OK"
-void heatToMinTemp(void)
+static void heatToMinTemp(void)
 {
   heatSetTargetTemp(heatGetToolIndex(), infoSettings.min_ext_temp, FROM_GUI);
 }
@@ -330,6 +330,7 @@ NOZZLE_STATUS warmupNozzle(void)
     else
     { // contiunue with current temp but no lower than the minimum extruder temperature
       heatSetTargetTemp(toolIndex, MAX(infoSettings.min_ext_temp, heatGetCurrentTemp(toolIndex)), FROM_GUI);
+
       return SETTLING;
     }
   }
@@ -346,6 +347,7 @@ NOZZLE_STATUS warmupNozzle(void)
       strcat(tempMsg, tempStr);
 
       popupReminder(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg);
+
       return COLD;
     }
   }

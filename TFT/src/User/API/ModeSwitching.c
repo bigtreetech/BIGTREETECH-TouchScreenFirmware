@@ -1,7 +1,8 @@
 #include "ModeSwitching.h"
 #include "includes.h"
 
-bool modeFreshBoot = true;
+static bool modeFreshBoot = true;
+
 bool modeSwitching = false;
 
 // change UI mode

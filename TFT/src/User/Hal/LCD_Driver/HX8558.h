@@ -5,10 +5,7 @@
 extern "C" {
 #endif
 
-#define HX8558_0_DEGREE_REG_VALUE   0xA4
-#define HX8558_180_DEGREE_REG_VALUE 0X64
-#define HX8558_90_DEGREE_REG_VALUE  0x04
-#define HX8558_270_DEGREE_REG_VALUE 0xC4
+#include <stdint.h>
 
 uint8_t LCD_DriveIsHX8558(void);
 void HX8558_Init_Sequential(void);

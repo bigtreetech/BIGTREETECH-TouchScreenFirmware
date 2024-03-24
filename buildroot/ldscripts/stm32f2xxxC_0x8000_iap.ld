@@ -9,18 +9,18 @@
 ENTRY(Reset_Handler)
 
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x5000;      /* required amount of heap  */
-_Min_Stack_Size = 0x1000;     /* required amount of stack */
+_Min_Heap_Size = 0x5000;     /* required amount of heap  */
+_Min_Stack_Size = 0x1000;    /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-    RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 96K
-    FLASH (rx)      : ORIGIN = 0x8008000, LENGTH = 256K - 32K
+  FLASH (rx)      : ORIGIN = 0x8008000,  LENGTH = 256K - 32K
+  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 96K
 }
 
 /* Highest address of the user mode stack */
-_estack = ALIGN(ORIGIN(RAM) + LENGTH(RAM) - 16 ,8);    /* end of RAM */
+_estack = ALIGN(ORIGIN(RAM) + LENGTH(RAM) - 16, 8);    /* end of RAM */
 
 /* Define output sections */
 SECTIONS
@@ -129,8 +129,6 @@ SECTIONS
     . = ALIGN(4);
   } >RAM
 
-
-
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
@@ -141,5 +139,3 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }
-
-

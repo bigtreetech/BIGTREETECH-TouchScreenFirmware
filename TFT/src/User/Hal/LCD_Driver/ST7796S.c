@@ -3,7 +3,12 @@
 #if LCD_DRIVER_HAS(ST7796S)
 
   #include "ST7796S.h"
-  // ST7796S
+
+  #define ST7796S_0_DEGREE_REG_VALUE   0X28
+  #define ST7796S_180_DEGREE_REG_VALUE 0XE8
+  #define ST7796S_90_DEGREE_REG_VALUE  0X88
+  #define ST7796S_270_DEGREE_REG_VALUE 0X48
+
   uint8_t LCD_DriveIsST7796S(void)
   {
     uint16_t id = 0;

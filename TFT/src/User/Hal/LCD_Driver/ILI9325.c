@@ -3,7 +3,7 @@
 #if LCD_DRIVER_HAS(ILI9325)
 
   #include "ILI9325.h"
-  // ILI9325
+
   void ILI9325_Init_Sequential(void)
   {
     #if defined(MKS_TFT32L_V3_0)                                // For this, SS=0 and GS=0 for default screen rotation=0

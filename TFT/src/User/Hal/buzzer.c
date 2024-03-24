@@ -1,5 +1,5 @@
 #include "buzzer.h"
-#include "includes.h"  // for mcuClocks etc...
+#include "includes.h"  // for mcuClocks etc.
 #include "GPIO_Init.h"
 
 #ifdef BUZZER_PIN
@@ -18,7 +18,7 @@ typedef volatile struct
 
 static BUZZER buzzer;
 
-void Buzzer_ConfigTimer(void)
+static inline void Buzzer_ConfigTimer(void)
 {
 #if defined(GD32F2XX) || defined(GD32F3XX)
   rcu_periph_clock_enable(RCU_TIMER2);                                // enable timer clock
@@ -65,7 +65,7 @@ void Buzzer_DeConfig(void)
 }
 
 // play a tone with the help of interrupts
-void Buzzer_PlaySound(uint16_t frequency, const uint16_t duration)
+static inline void Buzzer_PlaySound(uint16_t frequency, const uint16_t duration)
 {
   uint32_t silence = (frequency == SILENCE_FREQ);       // frequency == 0 indicates silence/pause in the sound
 
@@ -95,7 +95,7 @@ void Buzzer_PlaySound(uint16_t frequency, const uint16_t duration)
 }
 
 // play a sound from sound queue. Called by timer interrupt and Buzzer_AddSound() function
-void Buzzer_GetSound(void)
+static void Buzzer_GetSound(void)
 {
   // stop timer
 #if defined(GD32F2XX) || defined(GD32F3XX)

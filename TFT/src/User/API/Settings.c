@@ -1,20 +1,20 @@
 #include "Settings.h"
 #include "includes.h"
 
+static const uint8_t default_serial_port[]  = {SP_1, SP_2, SP_3, SP_4};
+static const uint16_t default_max_temp[]    = MAX_TEMP;
+static const uint16_t default_max_fan[]     = FAN_MAX;
+static const uint16_t default_size_min[]    = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
+static const uint16_t default_size_max[]    = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
+static const uint16_t default_xy_speed[]    = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
+static const uint16_t default_z_speed[]     = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
+static const uint16_t default_ext_speed[]   = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
+static const uint16_t default_pause_speed[] = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
+static const uint16_t default_level_speed[] = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
+static const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
+
 SETTINGS infoSettings;
 MACHINE_SETTINGS infoMachineSettings;
-
-const uint8_t default_serial_port[]  = {SP_1, SP_2, SP_3, SP_4};
-const uint16_t default_max_temp[]    = MAX_TEMP;
-const uint16_t default_max_fan[]     = FAN_MAX;
-const uint16_t default_size_min[]    = {X_MIN_POS, Y_MIN_POS, Z_MIN_POS};
-const uint16_t default_size_max[]    = {X_MAX_POS, Y_MAX_POS, Z_MAX_POS};
-const uint16_t default_xy_speed[]    = {SPEED_XY_SLOW, SPEED_XY_NORMAL, SPEED_XY_FAST};
-const uint16_t default_z_speed[]     = {SPEED_Z_SLOW, SPEED_Z_NORMAL, SPEED_Z_FAST};
-const uint16_t default_ext_speed[]   = {EXTRUDE_SLOW_SPEED, EXTRUDE_NORMAL_SPEED, EXTRUDE_FAST_SPEED};
-const uint16_t default_pause_speed[] = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_PAUSE_Z_FEEDRATE, NOZZLE_PAUSE_E_FEEDRATE};
-const uint16_t default_level_speed[] = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
-const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
 
 // Init settings data with default values
 void initSettings(void)
@@ -183,17 +183,17 @@ void initSettings(void)
 
   resetConfig();
 
-  // Calculate checksum excluding the CRC variable in infoSettings
-  infoSettings.CRC_checksum = calculateCRC16((uint8_t*)&infoSettings + sizeof(infoSettings.CRC_checksum),
-                                                sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+  // calculate checksum excluding the CRC variable in infoSettings
+  infoSettings.CRC_checksum = calculateCRC16((uint8_t *)&infoSettings + sizeof(infoSettings.CRC_checksum),
+                                                 sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 }
 
 // Save settings to Flash only if CRC does not match
 void saveSettings(void)
 {
-  // Calculate checksum excluding the CRC variable in infoSettings
-  uint32_t curCRC = calculateCRC16((uint8_t*)&infoSettings + sizeof(infoSettings.CRC_checksum),
-                                      sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+  // calculate checksum excluding the CRC variable in infoSettings
+  uint32_t curCRC = calculateCRC16((uint8_t *)&infoSettings + sizeof(infoSettings.CRC_checksum),
+                                       sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 
   if (curCRC != infoSettings.CRC_checksum)  // save to Flash only if CRC does not match
   {
@@ -290,7 +290,7 @@ float flashUsedPercentage(void)
   return percent;
 }
 
-// check font/icon/config signature in SPI flash for update
+// Check font/icon/config signature in SPI flash for update
 void checkflashSign(void)
 {
   //cur_flash_sign[lang_sign] = flash_sign[lang_sign];  // ignore language signature not implemented yet
@@ -347,7 +347,7 @@ bool getFlashSignStatus(int index)
   uint32_t addr = FLASH_SIGN_ADDR;
   uint32_t len = sizeof(flash_sign);
 
-  W25Qxx_ReadBuffer((uint8_t*)&cur_flash_sign, addr, len);
+  W25Qxx_ReadBuffer((uint8_t *)&cur_flash_sign, addr, len);
 
   return (flash_sign[index] == cur_flash_sign[index]);
 }

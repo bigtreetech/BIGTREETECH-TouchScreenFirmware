@@ -1,5 +1,5 @@
 #include "uart.h"
-#include "variants.h"  // for USART1_TX_PIN etc...
+#include "variants.h"  // for USART1_TX_PIN etc.
 #include "GPIO_Init.h"
 
 // USART1 default pins config
@@ -64,32 +64,33 @@ static rcu_periph_enum rcu_uart_en[_UART_CNT] = {
 };
 
 static uint32_t const uart[_UART_CNT] = {
-  USART0,   // TX--PA9  RX--PA10
-  USART1,   // TX--PA2  RX--PA3
-  USART2,   // TX--PB10 RX--PB11
-  UART3,    // TX--PC10 RX--PC11
-  UART4,    // TX--PC12 RX--PD2
-  USART5};  // TX--PG14 RX--PG9  //error
+  USART0,  // TX--PA9  RX--PA10
+  USART1,  // TX--PA2  RX--PA3
+  USART2,  // TX--PB10 RX--PB11
+  UART3,   // TX--PC10 RX--PC11
+  UART4,   // TX--PC12 RX--PD2
+  USART5,  // TX--PG14 RX--PG9  // error
+};
 
 static const uint16_t uart_tx[_UART_CNT] = {USART1_TX_PIN, USART2_TX_PIN, USART3_TX_PIN, UART4_TX_PIN, UART5_TX_PIN, USART6_TX_PIN};  // TX
 static const uint16_t uart_rx[_UART_CNT] = {USART1_RX_PIN, USART2_RX_PIN, USART3_RX_PIN, UART4_RX_PIN, UART5_RX_PIN, USART6_RX_PIN};  // RX
 
-void UART_GPIO_Init(uint8_t port)
+static inline void UART_GPIO_Init(uint8_t port)
 {
   GPIO_InitSet(uart_tx[port], MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(uart_rx[port], MGPIO_MODE_IPU, 0);
 }
 
-void UART_GPIO_DeInit(uint8_t port)
+static inline void UART_GPIO_DeInit(uint8_t port)
 {
   // set tx/rx to input
   GPIO_InitSet(uart_tx[port], MGPIO_MODE_IPN, 0);
   GPIO_InitSet(uart_rx[port], MGPIO_MODE_IPN, 0);
 }
 
-void UART_Protocol_Init(uint8_t port, uint32_t baud)
+static inline void UART_Protocol_Init(uint8_t port, uint32_t baud)
 {
-  rcu_periph_clock_enable(rcu_uart_en[port]);  // Enable clock
+  rcu_periph_clock_enable(rcu_uart_en[port]);  // enable clock
 
   usart_deinit(uart[port]);
   usart_baudrate_set(uart[port], baud);
@@ -103,7 +104,7 @@ void UART_Protocol_Init(uint8_t port, uint32_t baud)
   usart_enable(uart[port]);
 }
 
-void UART_IRQ_Init(uint8_t port, uint16_t usart_it, bool idle_interrupt)
+static inline void UART_IRQ_Init(uint8_t port, uint16_t usart_it, bool idle_interrupt)
 {
   uint32_t IRQ_Channel[_UART_CNT] = {USART0_IRQn, USART1_IRQn, USART2_IRQn, UART3_IRQn, UART4_IRQn, USART5_IRQn};
   nvic_irq_enable(IRQ_Channel[port], 0U, 0U);
@@ -119,28 +120,28 @@ void UART_Config(uint8_t port, uint32_t baud, uint16_t usart_it, bool idle_inter
 {
   UART_Protocol_Init(port, baud);
   UART_IRQ_Init(port, usart_it, idle_interrupt);
-  UART_GPIO_Init(port);  // After all initialization is completed, enable IO, otherwise a 0xFF will be sent automatically after power-on
+  UART_GPIO_Init(port);  // after all initialization is completed, enable IO, otherwise a 0xFF will be sent automatically after power-on
 }
 
 void UART_DeConfig(uint8_t port)
 {
   UART_GPIO_DeInit(port);
 
-  rcu_periph_reset_enable(rcu_uart_rst[port]);    // Reset clock
-  rcu_periph_reset_disable(rcu_uart_rst[port]);
+  rcu_periph_reset_enable(rcu_uart_rst[port]);
+  rcu_periph_reset_disable(rcu_uart_rst[port]);  // reset clock
 }
 
 void UART_Write(uint8_t port, uint8_t d)
 {
-  while ((USART_STAT0(uart[port]) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
+  while ((USART_STAT0(uart[port]) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);  // wait
   USART_DATA(uart[port]) = ((uint16_t)d & (uint16_t)0x01FF);
 }
 
-void UART_Puts(uint8_t port, uint8_t *str)
+void UART_Puts(uint8_t port, uint8_t * str)
 {
   while (*str)
   {
-    while ((USART_STAT0(uart[port]) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);
+    while ((USART_STAT0(uart[port]) & (1 << USART_FLAG_TC)) == (uint16_t)RESET);  // wait
     USART_DATA(uart[port]) = ((uint16_t)*str++ & (uint16_t)0x01FF);
   }
 }

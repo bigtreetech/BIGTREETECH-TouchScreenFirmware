@@ -74,7 +74,7 @@ static void m291_loop(void)
   }
 }
 
-void ParseACKJsonParser::endDocument()
+void ParseACKJsonParser::endDocument(void)
 {
   requestCommandInfo.inJson = false;
 
@@ -112,11 +112,11 @@ void ParseACKJsonParser::endDocument()
   need_parser_reset = true;
 }
 
-void ParseACKJsonParser::value(const char *value)
+void ParseACKJsonParser::value(const char * value)
 {
   uint32_t seq;
-  char *string_end;
-  char *string_start;
+  char * string_end;
+  char * string_start;
 
   switch (state)
   {
@@ -201,12 +201,12 @@ void ParseACKJsonParser::value(const char *value)
       break;
 
     case mbox_msg:
-      m291_msg = (char*)malloc(strlen(value) + 1);
+      m291_msg = (char *)malloc(strlen(value) + 1);
       strcpy(m291_msg, value);
       break;
 
     case mbox_title:
-      m291_title = (char*)malloc(strlen(value) + 1);
+      m291_title = (char *)malloc(strlen(value) + 1);
       strcpy(m291_title, value);
       break;
 
@@ -272,7 +272,7 @@ void ParseACKJsonParser::value(const char *value)
     ++index;
 }
 
-void rrfParseAck(const char *data)
+void rrfParseAck(const char * data)
 {
   static ParseACKJsonParser handler;
 

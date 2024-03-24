@@ -13,7 +13,7 @@ extern "C" {
 #include "ui_draw.h"
 
 // check size of settings against max allocated size at compile time
-#define SIZE_CHECK(object) ((void)sizeof(char[1 - 2*!!(object)]))
+#define SIZE_CHECK(object) ((void)sizeof(char[1 - 2 * !!(object)]))
 
 #if CONFIG_VERSION != CONFIG_SUPPPORT
   #error "the Configuration.h is old. please use the latest Configuration.h file"
@@ -56,8 +56,8 @@ extern "C" {
     #ifdef DEFAULT_MODE
       #undef DEFAULT_MODE
     #endif
-    #define DEFAULT_MODE 1  // Just set hardcoded here.
-    //#warning "DEFAULT_MODE supports only Touch Mode. Please update/check your configuration."
+    #define DEFAULT_MODE 1  // just set hardcoded here
+    //#warning "DEFAULT_MODE supports only Touch Mode. Please update/check your configuration"
   #endif
 #endif
 
@@ -335,7 +335,7 @@ extern "C" {
 
 #if THUMBNAIL_PARSER == PARSER_BASE64PNG
   #if RAM_SIZE < 96
-    // Decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option.
+    // decoding Base64-encoded PNGs is not possible due to memory requirements. Downgrading to the "RGB565 bitmap" option
     #undef THUMBNAIL_PARSER
     #define THUMBNAIL_PARSER PARSER_RGB565
   #endif

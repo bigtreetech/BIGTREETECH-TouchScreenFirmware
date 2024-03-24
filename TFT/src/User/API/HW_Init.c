@@ -5,7 +5,7 @@
   #include "i2c_eeprom.h"
 #endif
 
-void HW_GetClocksFreq(CLOCKS *clk)
+static inline void HW_GetClocksFreq(CLOCKS * clk)
 {
   #if defined(GD32F2XX) || defined(GD32F3XX)
     RCU_GetClocksFreq(&clk->rccClocks);

@@ -14,13 +14,13 @@ extern "C"
   typedef struct
   {
     bool is_directory;
-    TCHAR *display_name;
-    TCHAR *file_name;
+    TCHAR * display_name;
+    TCHAR * file_name;
     uint32_t timestamp;
   } M20_LIST_ITEM;
 
-  void parseJobListResponse(const char *data);
-  void parseMacroListResponse(const char *data);
+  void parseJobListResponse(const char * data);
+  void parseMacroListResponse(const char * data);
 #ifdef __cplusplus
 }
 #endif
@@ -53,12 +53,12 @@ public:
 
   virtual ~RRFM20Parser() {}
   inline void startDocument() {}
-  virtual void startObject();
-  virtual void endObject();
+  virtual void startObject(void);
+  virtual void endObject(void);
   inline void whitespace(char c) {}
-  virtual void endDocument();
-  virtual void key(const char *key);
-  virtual void value(const char *value);
+  virtual void endDocument(void);
+  virtual void key(const char * key);
+  virtual void value(const char * value);
 
   inline void reset()
   {

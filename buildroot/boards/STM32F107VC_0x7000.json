@@ -28,7 +28,7 @@
     "cmsis",
     "stm32cube"
   ],
-  "name": "STM32F107VC (64k RAM. 256k - 28K Flash)",
+  "name": "STM32F107VC (64K RAM, 256K - 28K Flash)",
   "upload": {
     "disable_flushing": false,
     "offset_address": "0x8007000",

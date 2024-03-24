@@ -4,11 +4,11 @@
 #include "../Configuration.h"
 
 /*
-* hardware source
-* TIM3 for Buzzer timer
-* TIM6 for Neopixel RGB
-* TIM7 for OS Timer
-*/
+ * hardware source
+ * TIM3 for Buzzer timer
+ * TIM6 for Neopixel RGB
+ * TIM7 for OS Timer
+ */
 
 // Type of LCD driver, now support[RM68042, ILI9488, ILI9341, ILI9325, ST7789, HX8558, SSD1963].
 #define RM68042 (1 << 0)
@@ -89,7 +89,7 @@
 #define _FONT_H(size) (size >> 8)
 #define _FONT_W(size) (size & 0xFF)
 
-#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)              // Normal font for common menu etc...
-#define FONT_SIZE_LARGE  _FONT_SIZE(LARGE_BYTE_HEIGHT, LARGE_BYTE_WIDTH)  // Large font for numpad menu etc...
+#define FONT_SIZE_NORMAL _FONT_SIZE(BYTE_HEIGHT, BYTE_WIDTH)              // Normal font for common menu etc.
+#define FONT_SIZE_LARGE  _FONT_SIZE(LARGE_BYTE_HEIGHT, LARGE_BYTE_WIDTH)  // Large font for numpad menu etc.
 
 #endif

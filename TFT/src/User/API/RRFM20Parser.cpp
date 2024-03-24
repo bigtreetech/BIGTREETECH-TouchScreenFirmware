@@ -37,7 +37,7 @@
   }
 */
 
-const TCHAR *skip_number(const TCHAR *value)
+static const TCHAR * skip_number(const TCHAR * value)
 {
   if (isdigit(*value))
   {
@@ -52,7 +52,7 @@ const TCHAR *skip_number(const TCHAR *value)
   return value;
 }
 
-int compare_items(void *arg, const void *a, const void *b)
+static int compare_items(void * arg, const void * a, const void * b)
 {
   bool macro_sort = *(bool *)arg;
 
@@ -78,12 +78,12 @@ int compare_items(void *arg, const void *a, const void *b)
   return strcmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
 }
 
-void RRFM20Parser::startObject()
+void RRFM20Parser::startObject(void)
 {
   in_object = in_files;
 }
 
-void RRFM20Parser::endObject()
+void RRFM20Parser::endObject(void)
 {
   in_object = false;
 
@@ -91,7 +91,7 @@ void RRFM20Parser::endObject()
     ++fileCount;
 }
 
-void RRFM20Parser::endDocument()
+void RRFM20Parser::endDocument(void)
 {
   if (macro_sort)
   {
@@ -142,7 +142,7 @@ void RRFM20Parser::endDocument()
 
 // TODO handle `next` parameter when there are too many files to list
 // above ~8k response payloads result in pagination that needs handling
-void RRFM20Parser::key(const char *key)
+void RRFM20Parser::key(const char * key)
 {
   state = none;
 
@@ -160,7 +160,7 @@ void RRFM20Parser::key(const char *key)
   }
 }
 
-void RRFM20Parser::value(const char *value)
+void RRFM20Parser::value(const char * value)
 {
   if (!in_files)
     return;
@@ -183,7 +183,7 @@ void RRFM20Parser::value(const char *value)
         if ((fileList[fileCount].file_name = (TCHAR *)malloc(len)) != NULL)
           strcpy(fileList[fileCount].file_name, value);
 
-        const char *skipped = macro_sort ? skip_number(value) : value;
+        const char * skipped = macro_sort ? skip_number(value) : value;
         len = strlen(skipped) + 1;
 
         if (macro_sort && value != skipped && (fileList[fileCount].display_name = (TCHAR *)malloc(len)) != NULL)
@@ -196,7 +196,7 @@ void RRFM20Parser::value(const char *value)
       case date:
       {
         // convert to uint to enable sorting: 2021-08-11T07:06:28
-        char *out;
+        char * out;
         uint8_t year = strtol(value,   &out, 10) - 1970; // will allow up to year 2225
         uint8_t mnth = strtol(out + 1, &out, 10);
         uint8_t date = strtol(out + 1, &out, 10);
@@ -239,9 +239,9 @@ void RRFM20Parser::value(const char *value)
   }
 }
 
-void parseM20Response(const char *data, bool macro_sorting)
+static void parseM20Response(const char * data, bool macro_sorting)
 {
-  static RRFM20Parser *handler = NULL;
+  static RRFM20Parser * handler = NULL;
 
   if (handler == NULL)
     handler = new RRFM20Parser;
@@ -262,12 +262,12 @@ void parseM20Response(const char *data, bool macro_sorting)
   }
 }
 
-void parseMacroListResponse(const char *data)
+void parseMacroListResponse(const char * data)
 {
   parseM20Response(data, true);
 }
 
-void parseJobListResponse(const char  *data)
+void parseJobListResponse(const char  * data)
 {
   parseM20Response(data, false);
 }

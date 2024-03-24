@@ -54,7 +54,7 @@
 #define _TIM8_CH4  (((_TIM8)<<8) + 3)
 
 #define TIMER_GET_TIM(n) ((n>>8) & 0xFF)
-#define TIMER_GET_CH(n) (n & 0xFF)
+#define TIMER_GET_CH(n)  (n & 0xFF)
 
 void TIM_PWM_SetDutyCycle(uint16_t tim_ch, uint8_t duty);
 void TIM_PWM_Init(uint16_t tim_ch);

@@ -1,7 +1,7 @@
 #include "SettingsMenu.h"
 #include "includes.h"
 
-const MENUITEMS settingsItems = {
+static const MENUITEMS settingsItems = {
   // title
   LABEL_SETTINGS,
   // icon                          label
@@ -61,7 +61,7 @@ void menuInfo(void)
 {
   char buf[128];
 
-  const char *const hardware = HARDWARE_MANUFACTURER HARDWARE_VERSION;
+  const char * const hardware = HARDWARE_MANUFACTURER HARDWARE_VERSION;
 
   GUI_Clear(infoSettings.bg_color);
   GUI_SetColor(GRAY);
@@ -150,6 +150,7 @@ void menuSettings(void)
   while (MENU_IS(menuSettings))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

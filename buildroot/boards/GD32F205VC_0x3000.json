@@ -25,7 +25,7 @@
     "arduino",
     "spl"
   ],
-  "name": "GD32F205VC (128k RAM, 256k - 12K Flash)",
+  "name": "GD32F205VC (128K RAM, 256K - 12K Flash)",
   "upload": {
     "disable_flushing": false,
     "maximum_ram_size": 131072,

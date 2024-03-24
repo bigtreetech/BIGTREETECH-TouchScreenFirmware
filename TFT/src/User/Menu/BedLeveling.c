@@ -1,7 +1,7 @@
 #include "BedLeveling.h"
 #include "includes.h"
 
-void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
+static void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
 {
   if (bedLevelState == ENABLED)
   {
@@ -16,12 +16,12 @@ void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
 }
 
 #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
-  void deltaMeshEditor(void)
+  static void deltaMeshEditor(void)
   {
     OPEN_MENU(menuMeshEditor);
   }
 
-  void deltaZOffset(void)
+  static void deltaZOffset(void)
   {
     storeCmd("M851\n");
     zOffsetSetMenu(true);  // use Probe Offset menu
@@ -92,6 +92,7 @@ void menuBedLeveling(void)
   while (MENU_IS(menuBedLeveling))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

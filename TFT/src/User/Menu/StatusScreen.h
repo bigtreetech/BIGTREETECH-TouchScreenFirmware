@@ -10,7 +10,7 @@ extern "C" {
 
 extern const GUI_RECT msgRect;
 
-void statusSetMsg(const uint8_t *title,const uint8_t *msg);
+void statusSetMsg(const uint8_t * title,const uint8_t * msg);
 void statusSetReady(void);
 void menuStatus(void);
 

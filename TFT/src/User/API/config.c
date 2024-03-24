@@ -173,7 +173,7 @@ enum
 };
 
 // this list is Auto-Generated. Please add new config in config.inc only
-const char * const config_keywords[CONFIG_COUNT] = {
+static const char * const config_keywords[CONFIG_COUNT] = {
   #define X_CONFIG(NAME) CONFIG_##NAME ,
     #include "config.inc"
   #undef X_CONFIG
@@ -206,34 +206,33 @@ typedef enum
   CSTAT_SPI_WRITE_FAIL,
 } CONFIG_STATS;
 
-const GUI_POINT pointConfigTitle  = {2, 2};
-const GUI_RECT  rectTitleline     = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
-const GUI_RECT  recterror         = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
-const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WIDTH-BYTE_WIDTH/2,   LCD_HEIGHT-(BYTE_HEIGHT*4)-6};
-const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
-const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
+static const GUI_RECT  rectTitleline     = {0,               BYTE_HEIGHT+4,      LCD_WIDTH,                BYTE_HEIGHT+6};
+static const GUI_RECT  recterror         = {BYTE_WIDTH/2-2,  BYTE_HEIGHT*2+2,    LCD_WIDTH-BYTE_WIDTH/2+2, LCD_HEIGHT-(BYTE_HEIGHT*4)-4};
+static const GUI_RECT  recterrortxt      = {BYTE_WIDTH/2,    BYTE_HEIGHT*2+4,    LCD_WIDTH-BYTE_WIDTH/2,   LCD_HEIGHT-(BYTE_HEIGHT*4)-6};
+static const GUI_RECT  rectProgressframe = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*2+BYTE_HEIGHT/2), LCD_WIDTH-BYTE_WIDTH/2+2,LCD_HEIGHT-BYTE_HEIGHT/2};
+static const GUI_POINT pointProgressText = {BYTE_WIDTH/2-2, LCD_HEIGHT-(BYTE_HEIGHT*4)};
 
-const char * const preheatNames[] = PREHEAT_LABELS;
-const uint16_t preheatHotend[]    = PREHEAT_HOTEND;
-const uint16_t preheatBed[]       = PREHEAT_BED;
-const uint8_t cgEnabled[]         = CUSTOM_GCODE_ENABLED;
-const char * const cgNames[]      = CUSTOM_GCODE_LABELS;
-const char * const cgList[]       = CUSTOM_GCODE_LIST;
+static const char * const preheatNames[] = PREHEAT_LABELS;
+static const uint16_t preheatHotend[]    = PREHEAT_HOTEND;
+static const uint16_t preheatBed[]       = PREHEAT_BED;
+static const uint8_t cgEnabled[]         = CUSTOM_GCODE_ENABLED;
+static const char * const cgNames[]      = CUSTOM_GCODE_LABELS;
+static const char * const cgList[]       = CUSTOM_GCODE_LIST;
 
-CONFIGFILE* CurConfigFile;
-STRINGS_STORE* configStringsStore = NULL;
-PREHEAT_STORE* configPreheatStore = NULL;
-PRINT_GCODES* configPrintGcodes   = NULL;
-CUSTOM_GCODES* configCustomGcodes = NULL;
+static CONFIGFILE * CurConfigFile;
+static STRINGS_STORE * configStringsStore = NULL;
+static PREHEAT_STORE * configPreheatStore = NULL;
+static PRINT_GCODES * configPrintGcodes   = NULL;
+static CUSTOM_GCODES * configCustomGcodes = NULL;
 
-char * cur_line = NULL;
-uint16_t c_index = 0;
-uint16_t foundkeys = 0;
-uint8_t customcode_index = 0;
-uint8_t customcode_good[CUSTOM_GCODES_COUNT];
-bool scheduleRotate = false;
+static char * cur_line = NULL;
+static uint16_t c_index = 0;
+static uint16_t foundkeys = 0;
+static uint8_t customcode_index = 0;
+static uint8_t customcode_good[CUSTOM_GCODES_COUNT];
+static bool scheduleRotate = false;
 
-void drawProgressPage(uint8_t * title)
+static void drawProgressPage(uint8_t * title)
 {
   GUI_Clear(BLACK);
   GUI_DispString(2, 2, title);
@@ -241,19 +240,22 @@ void drawProgressPage(uint8_t * title)
   GUI_DrawPrect(&rectProgressframe);
 }
 
-void drawProgress(void)
+static void drawProgress(void)
 {
   char tempstr[50];
+
   sprintf(tempstr, "Total keywords found: %d", foundkeys);
   GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
+
   uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
+
   GUI_FillRect(rectProgressframe.x0, rectProgressframe.y0, p, rectProgressframe.y1);
 }
 
-void showError(CONFIG_STATS stat)
+static void showError(CONFIG_STATS stat)
 {
-  char *ttl;
-  char *txt;
+  char * ttl;
+  char * txt;
   char tempstr[50];
 
   GUI_SetBkColor(BLACK);
@@ -291,16 +293,18 @@ void showError(CONFIG_STATS stat)
       txt = "Invalid config File";
       break;
   }
-  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t*)ttl);
-  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t*)txt);
+
+  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t *)ttl);
+  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t *)txt);
   GUI_SetColor(WHITE);
   Delay_ms(5000);
 }
 
 // check if config keyword exits in the buffer line
-bool key_seen(const char * keyStr)
+static bool key_seen(const char * keyStr)
 {
   uint16_t i;
+
   for (c_index = 0, i = 0; c_index < LINE_MAX_CHAR && cur_line[c_index] != '\0'; c_index++, i = 0)
   {
     while (cur_line[c_index + i] == keyStr[i])
@@ -308,10 +312,12 @@ bool key_seen(const char * keyStr)
       if (keyStr[++i] == '\0')
       {
         c_index += i;
+
         return true;
       }
     }
   }
+
   return false;
 }
 
@@ -319,24 +325,28 @@ bool key_seen(const char * keyStr)
 static inline bool param_seen(const char * keyStr)
 {
   bool found = key_seen(keyStr);
+
   if (found)
   {
     size_t index = c_index - strlen(keyStr);
+
     if (index > 0)
     {
       if (cur_line[index - 1] != ' ')  // if keyStr is not fully matching (it is a substring of another key))
         return false;
     }
   }
+
   return found;
 }
 
 // check if the value is within min and max limits
-bool inLimit(int val, int min, int max)
+static bool inLimit(int val, int min, int max)
 {
   if (val < min || val > max)
   {
     showError(CSTAT_INVALID_VALUE);
+
     return false;
   }
   else
@@ -345,13 +355,13 @@ bool inLimit(int val, int min, int max)
   }
 }
 
-// Get the int after config keyword.
+// get the int after config keyword
 static inline int config_int(void)
 {
   return (strtol(&cur_line[c_index], NULL, 10));
 }
 
-// Get valid int value or old value
+// get valid int value or old value
 static inline int valid_intValue(int min, int max, int defaultVal)
 {
   if (inLimit(config_int(), min, max))
@@ -360,8 +370,8 @@ static inline int valid_intValue(int min, int max, int defaultVal)
     return defaultVal;
 }
 
-// Treat all values other than 0 as 1.
-int8_t getOnOff(void)
+// treat all values other than 0 as 1
+static int8_t getOnOff(void)
 {
   if (config_int() == 0)
     return 0;
@@ -369,13 +379,13 @@ int8_t getOnOff(void)
     return 1;
 }
 
-// Get the float after config keyword.
+// get the float after config keyword
 static inline float config_float(void)
 {
   return (strtod(&cur_line[c_index], NULL));
 }
 
-// Get valid float value or old value
+// get valid float value or old value
 static inline float valid_floatValue(float min, float max, float defaultVal)
 {
   if (inLimit(config_float(), min, max))
@@ -390,7 +400,7 @@ static inline bool config_is_hex(void)
   return (strstr(&cur_line[c_index], "0x") != NULL);
 }
 
-// Get the hex after config keyword.
+// get the hex after config keyword
 static inline uint32_t config_hex(void)
 {
   return (strtol(&cur_line[c_index], NULL, 16));
@@ -402,10 +412,11 @@ static inline uint16_t RGB888_to_RGB565(uint32_t rgb888)
   uint8_t r = ((rgb888 >> 16) & 0xFF) >> 3;  // R5
   uint8_t g = ((rgb888 >> 8) & 0xFF) >> 2;   // G6
   uint8_t b = (rgb888 & 0xFF) >> 3;          // B5
+
   return ((r << 11) | (g << 5) | b);
 }
 
-static inline void config_set_color(uint16_t *color_src)
+static inline void config_set_color(uint16_t * color_src)
 {
   if (config_is_hex())
   {
@@ -418,7 +429,7 @@ static inline void config_set_color(uint16_t *color_src)
 }
 
 // parse the keyword values in the buffer
-void parseConfigKey(uint16_t index)
+static void parseConfigKey(uint16_t index)
 {
   switch (index)
   {
@@ -581,8 +592,9 @@ void parseConfigKey(uint16_t index)
       case C_INDEX_MARLIN_TITLE:
       {
         char * pchr = strchr(cur_line, ':') + 1;
-        int utf8len = getUTF8Length((uint8_t*)pchr);
+        int utf8len = getUTF8Length((uint8_t *)pchr);
         int bytelen = strlen(pchr) + 1;
+
         if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
           strcpy(configStringsStore->marlin_title, pchr);
         break;
@@ -766,9 +778,12 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_NAME_6:
     {
       char pchr[LINE_MAX_CHAR];
+
       strcpy(pchr, strchr(cur_line, ':') + 1);
+
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
+
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
         strcpy(configPreheatStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
       break;
@@ -782,6 +797,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_TEMP_6:
     {
       int val_index = index - C_INDEX_PREHEAT_TEMP_1;
+
       if (key_seen("T")) SET_VALID_INT_VALUE(configPreheatStore->preheat_hotend[val_index], MIN_TOOL_TEMP, MAX_TOOL_TEMP);
       if (key_seen("B")) SET_VALID_INT_VALUE(configPreheatStore->preheat_bed[val_index], MIN_BED_TEMP, MAX_BED_TEMP);
       break;
@@ -862,8 +878,9 @@ void parseConfigKey(uint16_t index)
     #ifdef LCD_LED_PWM_CHANNEL
       case C_INDEX_LCD_BRIGHTNESS:
         SET_VALID_INT_VALUE(infoSettings.lcd_brightness, 0, LCD_BRIGHTNESS_COUNT - 1);
-        if (infoSettings.lcd_brightness == 0)
-          infoSettings.lcd_brightness = 1;  // If someone set it to 0 set it to 1
+
+        if (infoSettings.lcd_brightness == 0)  // if someone set it to 0 set it to 1
+          infoSettings.lcd_brightness = 1;
         break;
 
       case C_INDEX_LCD_IDLE_BRIGHTNESS:
@@ -928,9 +945,12 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_CUSTOM_LABEL_15:
     {
       char pchr[LINE_MAX_CHAR];
+
       strcpy(pchr, strchr(cur_line, ':') + 1);
-      int utf8len = getUTF8Length((uint8_t*)pchr);
+
+      int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
+
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
@@ -960,8 +980,11 @@ void parseConfigKey(uint16_t index)
     {
       int lineIndex = index - C_INDEX_CUSTOM_GCODE_1;  // actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
+
       strcpy(pchr, strchr(cur_line, ':') + 1);
+
       int len = strlen(pchr) + 1;
+
       // check if gcode length is ok and the name was ok
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
         strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
@@ -982,6 +1005,7 @@ void parseConfigKey(uint16_t index)
     {
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
+
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->start_gcode, pchr);
@@ -999,6 +1023,7 @@ void parseConfigKey(uint16_t index)
     {
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
+
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->end_gcode, pchr);
@@ -1016,6 +1041,7 @@ void parseConfigKey(uint16_t index)
     {
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
+
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->cancel_gcode, pchr);
@@ -1035,7 +1061,7 @@ void parseConfigKey(uint16_t index)
 }
 
 // check keywords in the config line in buffer
-void parseConfigLine(void)
+static void parseConfigLine(void)
 {
   for (uint16_t i = 0; i < CONFIG_COUNT; i++)
   {
@@ -1043,16 +1069,19 @@ void parseConfigLine(void)
     {
       PRINTDEBUG("\n");
       PRINTDEBUG((char *)config_keywords[i]);
+
       parseConfigKey(i);
       foundkeys++;
+
       return;
     }
   }
+
   showError(CSTAT_UNKNOWN_KEYWORD);
 }
 
 // parse keywords from line read from language file
-void parseLangLine(void)
+static void parseLangLine(void)
 {
   for (int i = 0; i < LABEL_NUM; i++)
   {
@@ -1060,15 +1089,18 @@ void parseLangLine(void)
     {
       PRINTDEBUG("\n");
       PRINTDEBUG((char *)lang_key_list[i]);
+
       uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
       uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
       int bytelen = strlen((char *)pchr);
 
       if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
       {
-        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
         char check[MAX_LANG_LABEL_LENGTH];
+
+        W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
         W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+
         if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
           showError(CSTAT_SPI_WRITE_FAIL);
       }
@@ -1076,14 +1108,17 @@ void parseLangLine(void)
       {
         showError(CSTAT_INVALID_VALUE);
       }
+
       foundkeys++;
+
       return;
     }
   }
+
   showError(CSTAT_UNKNOWN_KEYWORD);
 }
 
-bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen)
+static bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLen)
 {
   bool comment_mode = false;
   bool comment_space = true;
@@ -1100,34 +1135,43 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
   if (f_open(&configFile.file, path, FA_OPEN_EXISTING | FA_READ) != FR_OK)
   {
     PRINTDEBUG("parse error\n");
+
     showError(CSTAT_FILE_NOTOPEN);
+
     return false;
   }
   else
   {
     configFile.size = f_size(&configFile.file);
+
     if (configFile.size == 0)
     {
       showError(CSTAT_FILE_INVALID);
       f_close(&configFile.file);
+
       return false;
     }
 
     configFile.cur = 0;
+
     for (; configFile.cur < configFile.size;)
     {
       if (f_read(&configFile.file, &cur_char, 1, &br) != FR_OK)
       {
         PRINTDEBUG("read error\n");
+
         return false;
       }
+
       configFile.cur++;
+
       //PRINTDEBUG("Line ++\n");
 
-      if (cur_char == '\n')  // start parsing line after new line.
+      if (cur_char == '\n')  // start parsing line after new line
       {
         comment_mode = false;  // for new command
         comment_space = true;
+
         if (count != 0)
         {
           cur_line[count] = '\0';  // terminate string
@@ -1136,17 +1180,22 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
 
           PRINTDEBUG("\n");
           PRINTDEBUG(cur_line);
+
           count = 0;  // clear buffer
         }
       }
       else if (count < maxLineLen - 2)
       {
         if (cur_char == '#')
+        {
           comment_mode = true;
+        }
         else
         {
           if (comment_space && cur_char != ' ')  // ignore ' ' space bytes
+          {
             comment_space = false;
+          }
           if (!comment_mode && !comment_space && cur_char != '\r')  // normal code
           {
             if (cur_char == 'n' && last_char == '\\')  // replace "\n" with new line char('\n')
@@ -1154,36 +1203,44 @@ bool readConfigFile(const char * path, void (* lineParser)(), uint16_t maxLineLe
               cur_char = '\n';
               count--;
             }
+
             cur_line[count++] = cur_char;
             last_char = cur_char;
 
             if (configFile.cur == configFile.size)
             {
               cur_line[count] = '\0';  // terminate string
+
               PRINTDEBUG("line read\n");
-              lineParser();  // start parsing at the end of the file.
+
+              lineParser();  // start parsing at the end of the file
               drawProgress();
             }
           }
         }
       }
     }
+
     f_close(&configFile.file);
     configFile.cur = 0;
     configFile.size = 0;
+
     return true;
   }
 }
 
-void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
+static void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t maxSize)
 {
-  // do not proceed if data size is larger than reserved max size.
+  // do not proceed if data size is larger than reserved max size
   if (numBytes > maxSize)
   {
     PRINTDEBUG("\nwrite error\n");
+
     showError(CSTAT_STORAGE_LOW);
+
     return;
   }
+
   int sectorCount = maxSize / W25QXX_SECTOR_SIZE;
 
   // erase part of flash to be rewritten
@@ -1191,12 +1248,13 @@ void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, uint32_t
   {
     W25Qxx_EraseSector(addr + (i * W25QXX_SECTOR_SIZE));
   }
-  Delay_ms(100);  // give time for spi flash to settle
+
+  Delay_ms(100);                                  // give time for spi flash to settle
   W25Qxx_WriteBuffer(dataBytes, addr, numBytes);  // write data to spi flash
-  Delay_ms(100);  // give time for spi flash to settle
+  Delay_ms(100);                                  // give time for spi flash to settle
 }
 
-void saveConfig(void)
+static void saveConfig(void)
 {
   writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
   writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
@@ -1208,13 +1266,14 @@ void saveConfig(void)
     uint8_t * data_r = (uint8_t *)&tempgcode;
 
     W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+
     PRINTDEBUG("\nread done");
     PRINTDEBUG("\nread from flash:");
     PRINTDEBUG(tempgcode.gcode[1]);
   #endif
 }
 
-// Reset & store config settings
+// reset & store config settings
 void resetConfig(void)
 {
   STRINGS_STORE tempST;
@@ -1247,6 +1306,7 @@ void resetConfig(void)
     {
       strcpy(tempCG.name[n], cgNames[i]);
       strcpy(tempCG.gcode[n], cgList[i]);
+
       n++;
     }
   }
@@ -1265,6 +1325,7 @@ bool getConfigFromFile(char * configPath)
   if (f_file_exists(configPath) == false)
   {
     PRINTDEBUG("configFile not found\n");
+
     return false;
   }
 
@@ -1278,10 +1339,10 @@ bool getConfigFromFile(char * configPath)
   PRINT_GCODES tempPrintCodes;
   CUSTOM_GCODES tempCustomGcodes;
 
-  W25Qxx_ReadBuffer((uint8_t*)&tempStringStore, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
-  W25Qxx_ReadBuffer((uint8_t*)&tempPreheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
-  W25Qxx_ReadBuffer((uint8_t*)&tempPrintCodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
-  W25Qxx_ReadBuffer((uint8_t*)&tempCustomGcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *)&tempStringStore, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
+  W25Qxx_ReadBuffer((uint8_t *)&tempPreheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *)&tempPrintCodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *)&tempCustomGcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
   configStringsStore = &tempStringStore;
   configPreheatStore = &tempPreheatStore;
@@ -1291,9 +1352,10 @@ bool getConfigFromFile(char * configPath)
   foundkeys = 0;
 
   char cur_line_buffer[LINE_MAX_CHAR];
+
   cur_line = cur_line_buffer;
 
-  drawProgressPage((uint8_t*)"Updating Configuration...");
+  drawProgressPage((uint8_t *)"Updating Configuration...");
 
   if (readConfigFile(configPath, parseConfigLine, LINE_MAX_CHAR))
   {
@@ -1313,11 +1375,13 @@ bool getConfigFromFile(char * configPath)
     saveConfig();
 
     PRINTDEBUG("config saved\n");
+
     return true;
   }
   else
   {
     PRINTDEBUG("configFile save failed\n");
+
     return false;
   }
 }
@@ -1336,15 +1400,17 @@ bool getLangFromFile(char * rootDir)
     return false;
 
   char langpath[256];
+
   sprintf(langpath, "%s/%s", rootDir, f.fname);
 
   if (!f_file_exists(langpath))
     return false;
 
   char cur_line_buffer[MAX_LANG_LABEL_LENGTH + 100];
+
   cur_line = cur_line_buffer;
 
-  drawProgressPage((uint8_t*)f.fname);
+  drawProgressPage((uint8_t *)f.fname);
 
   // erase part of flash to be rewritten
   for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE); i++)
@@ -1357,6 +1423,7 @@ bool getLangFromFile(char * rootDir)
   if (foundkeys != LABEL_NUM)
   {
     showError(CSTAT_FILE_INVALID);
+
     success = false;
   }
   else  // rename file if update was successful
@@ -1364,6 +1431,7 @@ bool getLangFromFile(char * rootDir)
     if (!f_file_exists(FILE_ADMIN_MODE) && f_file_exists(langpath))  // language exists
     {
       char newlangpath[256];
+
       sprintf(newlangpath, "%s/%s.CUR", rootDir, f.fname);
 
       if (f_file_exists(newlangpath))  // old language also exists

@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 uint8_t LCD_DriveIsILI9325(void);
 void ILI9325_Init_Sequential(void);
 void ILI9325_SetDirection(uint8_t rotate);

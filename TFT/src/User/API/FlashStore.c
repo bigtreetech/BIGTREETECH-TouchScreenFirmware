@@ -17,12 +17,13 @@ enum
   PARA_NOT_STORED = (1 << 1),
 };
 
-uint8_t paraStatus = 0;
+static uint8_t paraStatus = 0;
 
-void wordToByte(uint32_t word, uint8_t *bytes)
+static void wordToByte(uint32_t word, uint8_t * bytes)
 {
   uint8_t len = 4;
   uint8_t i = 0;
+
   for (i = 0; i < len; i++)
   {
     bytes[i] = (word >> 24) & 0xFF;
@@ -30,15 +31,17 @@ void wordToByte(uint32_t word, uint8_t *bytes)
   }
 }
 
-uint32_t byteToWord(uint8_t *bytes, uint8_t len)
+static uint32_t byteToWord(uint8_t * bytes, uint8_t len)
 {
   uint32_t word = 0;
   uint8_t i = 0;
+
   for (i = 0; i < len; i++)
   {
     word <<= 8;
     word |= bytes[i];
   }
+
   return word;
 }
 
@@ -55,9 +58,11 @@ void readStoredPara(void)
 #endif
 
   sign = byteToWord(data + (index += 4), 4);
+
   if (sign == TSC_SIGN)
   {
     paraStatus |= PARA_TSC_EXIST;  // if the touch screen calibration parameter already exists
+
     for (int i = 0; i < sizeof(TS_CalPara) / sizeof(TS_CalPara[0]); i++)
     {
       TS_CalPara[i] = byteToWord(data + (index += 4), 4);
@@ -65,6 +70,7 @@ void readStoredPara(void)
   }
 
   sign = byteToWord(data + (index += 4), 4);
+
   if (sign != PARA_SIGN)  // if the settings parameter is illegal, reset settings parameter
   {
     paraStatus |= PARA_NOT_STORED;
@@ -83,6 +89,7 @@ void storePara(void)
   uint32_t index = 0;
 
   wordToByte(TSC_SIGN, data + (index += 4));
+
   for (int i = 0; i < sizeof(TS_CalPara) / sizeof(TS_CalPara[0]); i++)
   {
     wordToByte(TS_CalPara[i], data + (index += 4));

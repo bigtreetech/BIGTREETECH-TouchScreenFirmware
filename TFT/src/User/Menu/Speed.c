@@ -7,13 +7,13 @@ typedef struct
   uint8_t set;
 } LASTSPEED;
 
-const ITEM itemPercentType[SPEED_NUM] = {
+static const ITEM itemPercentType[SPEED_NUM] = {
   // icon                        label
   {ICON_MOVE,                    LABEL_PERCENTAGE_SPEED},
   {ICON_EXTRUDE,                 LABEL_PERCENTAGE_FLOW},
 };
 
-const int16_t itemPercentTypeTitle[SPEED_NUM] = {
+static const int16_t itemPercentTypeTitle[SPEED_NUM] = {
   LABEL_PERCENTAGE_SPEED,
   LABEL_PERCENTAGE_FLOW
 };

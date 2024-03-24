@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include "variants.h"  // for BUZZER_PIN etc...
+#include "variants.h"  // for BUZZER_PIN etc.
 
 typedef enum
 {

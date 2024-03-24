@@ -25,10 +25,10 @@ bool powerFailedInitRestore(void);  // initialize print restore, if any, if not 
  * It finally disables print restore flag (one shot flag) for the next print.
  * The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
  */
-bool powerFailedLoad(FIL *print_fp);
+bool powerFailedLoad(FIL * print_fp);
 
 bool powerFailedExist(void);
-void powerFailedCreate(char *path);
+void powerFailedCreate(char * path);
 void powerFailedCache(uint32_t offset);
 void powerFailedDelete(void);
 

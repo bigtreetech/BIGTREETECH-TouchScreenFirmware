@@ -140,39 +140,39 @@ extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
 
-// Get enable element count for the parameter
+// get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);
 
-// Get element index out of total enabled enabled element
+// get element index out of total enabled enabled element.
 // If no element is enabled, total element count is returned
 uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index);
 
-// Get total enabled parameters
+// get total enabled parameters
 uint8_t getEnabledParameterCount(void);
 
-// Get PARAMETER_NAME of selected index out of total enabled parameters
+// get PARAMETER_NAME of selected index out of total enabled parameters.
 // If no parameter is enabled, total parameter count is returned
 PARAMETER_NAME getEnabledParameter(uint8_t index);
 
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
 
-// Get total elements in a parameter
+// get total elements in a parameter
 uint8_t getElementCount(PARAMETER_NAME para);
 
-// Get type of value a parameter element holds
+// get type of value a parameter element holds
 VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index);
 
-// Send parameter cmd (Parameter value gets updated after the cmd passes through the cmd cache)
+// send parameter cmd (parameter value gets updated after the cmd passes through the cmd cache)
 void sendParameterCmd(PARAMETER_NAME para_index, uint8_t stepper_index, float Value);
 
-// Save parameter setting to eeprom
+// save parameter setting to eeprom
 void saveEepromSettings(void);
 
-// Restore settings from eeprom
+// restore settings from eeprom
 void restoreEepromSettings(void);
 
-// Reset settings and eeprom to default values
+// reset settings and eeprom to default values
 void resetEepromSettings(void);
 
 #ifdef __cplusplus

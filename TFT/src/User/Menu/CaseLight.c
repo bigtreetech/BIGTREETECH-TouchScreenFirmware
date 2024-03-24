@@ -10,7 +10,7 @@ static void updateCaseLightIcon(MENUITEMS * curmenu, const bool state)
   curmenu->items[KEY_ICON_5].label.index = state ? LABEL_ON : LABEL_OFF;
 }
 
-void caseLightPercentReDraw(void)
+static void caseLightPercentReDraw(void)
 {
   char tempstr[20];
 

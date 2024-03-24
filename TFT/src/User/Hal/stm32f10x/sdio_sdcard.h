@@ -1,7 +1,13 @@
 #ifndef __SDIO_SDCARD_H
 #define __SDIO_SDCARD_H
 
-#include "variants.h"  // for uint16_t etc...
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+#include "variants.h"  // for SD_SDIO_SUPPORT etc.
+
+#ifdef SD_SDIO_SUPPORT
 
 //SDIO��ر�־λ
 #define SDIO_FLAG_CCRCFAIL                  ((uint32_t)0x00000001)
@@ -338,6 +344,7 @@ extern SD_CardInfo SDCardInfo;//SD card information
 
 //Related function definitions
 uint8_t SD_CD_Inserted(void);
+
 SD_Error SD_Init(void);
 void SD_DeInit(void);
 void SDIO_Clock_Set(uint8_t clkdiv);
@@ -371,5 +378,11 @@ void SD_DMA_Config(uint32_t*mbuf,uint32_t bufsize,uint8_t dir);
 
 uint8_t SD_ReadDisk(uint8_t*buf,uint32_t sector,uint8_t cnt);   //Read SD card, fatfs / usb call
 uint8_t SD_WriteDisk(uint8_t*buf,uint32_t sector,uint8_t cnt);  //Write SD card, fatfs / usb call
+
+#endif  // SD_SDIO_SUPPORT
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -20,7 +20,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max)
 }
 
 // calculate CRC16 checksum
-uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
+uint32_t calculateCRC16(const uint8_t * data, uint32_t length)
 {
   uint16_t crc = 0xFFFF;
   uint32_t i;
@@ -42,7 +42,7 @@ uint32_t calculateCRC16(const uint8_t *data, uint32_t length)
 }
 
 // string convert to uint8, MSB ("2C" to 0x2C)
-uint8_t string_2_uint8(const uint8_t *str)
+uint8_t string_2_uint8(const uint8_t * str)
 {
   uint8_t rtv = 0;
 
@@ -64,7 +64,7 @@ uint8_t string_2_uint8(const uint8_t *str)
 }
 
 // uint8 convert to string, MSB (0x2C to "2C")
-uint8_t *uint8_2_string(uint8_t num, uint8_t *str)
+uint8_t * uint8_2_string(uint8_t num, uint8_t * str)
 {
   for (unsigned char i = 0; i < 2; i++)
   {
@@ -84,7 +84,7 @@ uint8_t *uint8_2_string(uint8_t num, uint8_t *str)
 }
 
 // string convert to uint32, MSB
-uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num)
+uint32_t string_2_uint32(const uint8_t * str, const uint8_t bytes_num)
 {
   uint32_t rtv = 0;
 
@@ -98,7 +98,7 @@ uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num)
 }
 
 // uint32 convert to string, MSB
-uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str)
+uint8_t * uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t * str)
 {
   for (uint8_t i = 0; i < bytes_num; i++)
   {
@@ -112,7 +112,7 @@ uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str)
 }
 
 // convert time to string with given formatting
-void time_2_string(char *buf, char *str_format, uint32_t time)
+void time_2_string(char * buf, char * str_format, uint32_t time)
 {
   uint8_t hour = HOURS(time);
   uint8_t min = MINUTES(time);
@@ -123,9 +123,9 @@ void time_2_string(char *buf, char *str_format, uint32_t time)
 
 // light weight strtod() function without exponential support.
 // Convert string to double (without exponential support)
-double strtod_ligth(char *str, char **endptr)
+double strtod_ligth(char * str, char ** endptr)
 {
-  char *p = str;
+  char * p = str;
   double val = 0.0;
   int8_t sign = 1;
   uint32_t prec = 0;
@@ -177,7 +177,7 @@ double strtod_ligth(char *str, char **endptr)
 // - copy "src" to "dest" for a maximum of "n-1" characters
 // - if null terminating character is found in "src" the rest in "dest" is padded with '\0'
 // - "dest" always ends with '\0'
-void strncpy_pad(char *dest, const char *src, size_t n)
+void strncpy_pad(char * dest, const char * src, size_t n)
 {
   // if "src" is not NULL, proceed first with the copy.
   // Otherwise, proceed only padding "dest" with '\0'
@@ -197,7 +197,7 @@ void strncpy_pad(char *dest, const char *src, size_t n)
 // - copy "src" to "dest" for a maximum of "n-1" characters
 // - if null terminating character is found in "src" the copy stops there
 // - "dest" always ends with '\0'
-void strncpy_no_pad(char *dest, const char *src, size_t n)
+void strncpy_no_pad(char * dest, const char * src, size_t n)
 {
   // if "src" is not NULL, proceed with the copy
   if (src != NULL)

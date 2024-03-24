@@ -53,7 +53,7 @@
 #endif
 // add new keywords in Language.inc file only
 
-uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
+static uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 const char *const default_pack[LABEL_NUM] = {
   #define X_WORD(NAME) STRING_##NAME ,

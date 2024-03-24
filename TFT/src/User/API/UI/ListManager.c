@@ -6,7 +6,7 @@
 #define KEY_INDEX_BACK     (KEY_INDEX_PAGEDOWN + 1)
 
 static LISTITEMS listItems;
-static LISTITEM *totalItems;
+static LISTITEM * totalItems;
 
 static uint16_t maxItemCount;
 static uint8_t maxPageCount;
@@ -14,11 +14,11 @@ static uint16_t curPageIndex;
 static uint16_t * curPageIndexSource;
 static bool handleBack = true;
 
-static void (*action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
-static void (*action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos) = NULL;
+static void (* action_preparePage)(LISTITEMS * listItems, uint8_t index) = NULL;
+static void (* action_prepareItem)(LISTITEM * item, uint16_t index, uint8_t itemPos) = NULL;
 
 // display page at selected index
-void listViewSetCurPage(uint8_t curPage)
+static void listViewSetCurPage(uint8_t curPage)
 {
   if (action_preparePage != NULL)
   {
@@ -55,20 +55,9 @@ void listViewSetCurPage(uint8_t curPage)
   curPageIndex = curPage;
 }
 
-/**
- * @brief Set and innitialize list menu
- *
- * @param title Title of menu
- * @param items Preset list of items. Set to NULL if not used.
- * @param maxItems Maximum number of items possilbe in current list.
- * @param curPage Display this page index.
- * @param handleBackPress Set true to handle back button automatically.
- * @param preparePage_action Pointer to function to execute for preparing page before display. Set to NULL if not used.
- * @param prepareItem_action Pointer to function to execute for preparing item before display. Set to NULL if not used.
- */
 void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t * curPage, bool handleBackPress,
-                    void (*preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
-                    void (*prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos))
+                    void (* preparePage_action)(LISTITEMS * listItems, uint8_t pageIndex),
+                    void (* prepareItem_action)(LISTITEM * item, uint16_t index, uint8_t itemPos))
 {
   listItems.title = title;
   totalItems = items;
@@ -85,17 +74,10 @@ void listViewCreate(LABEL title, LISTITEM * items, uint16_t maxItems, uint16_t *
   menuDrawListPage(&listItems);
 }
 
-// Set/Update List view title
 void listViewSetTitle(LABEL title)
 {
   listItems.title = title;
   menuSetTitle(&listItems.title);
-}
-
-// Get current displayed pade index
-uint8_t listViewGetCurPage(void)
-{
-  return curPageIndex;
 }
 
 // open next page
@@ -132,25 +114,23 @@ static inline bool listViewPreviousPage(void)
   return true;
 }
 
-// refresh list items
 void listViewRefreshPage(void)
 {
   menuRefreshListPage();
 }
 
-// refresh whole list menu
 void listViewRefreshMenu(void)
 {
   menuDrawListPage(&listItems);
 }
 
-// refresh selected list item
 void listViewRefreshItem(uint16_t item)
 {
   uint8_t cur_i = item % LISTITEM_PER_PAGE;
 
   if (item > maxItemCount)
     return;  // error index.
+
   if (item < curPageIndex * LISTITEM_PER_PAGE || item >= (curPageIndex + 1) * LISTITEM_PER_PAGE)
     return;  // not in cur page
 
@@ -165,10 +145,15 @@ void listViewRefreshItem(uint16_t item)
   {
     listItems.items[cur_i].icon = CHARICON_NULL;
   }
+
   menuDrawListItem(&listItems.items[cur_i], cur_i);
 }
 
-// get index of selected item
+uint8_t listViewGetCurPage(void)
+{
+  return curPageIndex;
+}
+
 uint16_t listViewGetSelectedIndex(void)
 {
   KEY_VALUES key_num = menuKeyGetValue();

@@ -63,9 +63,9 @@ bool nextScreenUpdate(uint32_t refreshTime);
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
   void invertZAxisIcons(MENUITEMS * menuItems);
 
-  #define  INVERT_Z_AXIS_ICONS(menuItemsPtr) invertZAxisIcons(menuItemsPtr)
+  #define INVERT_Z_AXIS_ICONS(menuItemsPtr) invertZAxisIcons(menuItemsPtr)
 #else
-  #define  INVERT_Z_AXIS_ICONS(menuItemsPtr)
+  #define INVERT_Z_AXIS_ICONS(menuItemsPtr)
 #endif
 
 void drawBorder(const GUI_RECT * rect, uint16_t color, uint16_t edgeDistance);

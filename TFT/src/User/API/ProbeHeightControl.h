@@ -8,11 +8,11 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-// Enable probe height
+// Enable probe height.
 // Temporary disable software endstops and save ABL state
 void probeHeightEnable(void);
 
-// Disable probe height
+// Disable probe height.
 // Restore original software endstops state and ABL state
 void probeHeightDisable(void);
 

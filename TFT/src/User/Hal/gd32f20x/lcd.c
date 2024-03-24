@@ -7,26 +7,30 @@
 uint16_t LCD_RD_DATA(void)
 {
   volatile uint16_t ram;
+
   ram = LCD->LCD_RAM;
+
   return ram;
 }
 
-void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
+static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
   LCD->LCD_RAM = LCD_RegValue;
 }
 
-uint16_t LCD_ReadReg(uint8_t LCD_Reg)
+static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
 {
   LCD_WR_REG(LCD_Reg);
   Delay_us(5);
+
   return LCD_RD_DATA();
 }
 
-void LCD_GPIO_Config(void)
+static inline void LCD_GPIO_Config(void)
 {
   rcu_periph_clock_enable(RCU_EXMC);
+
   // fsmc 16bit data pins
   GPIO_InitSet(PD0, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD1, MGPIO_MODE_AF_PP, 0);
@@ -45,24 +49,25 @@ void LCD_GPIO_Config(void)
   GPIO_InitSet(PE14, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PE15, MGPIO_MODE_AF_PP, 0);
 
-  /*Configure the control line corresponding to FSMC
-  * PD4-FSMC_NOE :LCD-RD
-  * PD5-FSMC_NWE :LCD-WR
-  * PD7-FSMC_NE1 :LCD-CS
-  * PE2-FSMC_A23 :LCD-RS   LCD-RS data or cmd
-  */
+  /*
+   * configure the control line corresponding to FSMC
+   * PD4-FSMC_NOE :LCD-RD
+   * PD5-FSMC_NWE :LCD-WR
+   * PD7-FSMC_NE1 :LCD-CS
+   * PE2-FSMC_A23 :LCD-RS   LCD-RS data or cmd
+   */
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD7, MGPIO_MODE_AF_PP, 0);
 }
 
-void LCD_EXMC_Config(void)
+static inline void LCD_EXMC_Config(void)
 {
   exmc_norsram_parameter_struct EXMC_NORSRAMInitStructure;
   exmc_norsram_timing_parameter_struct readWriteTiming,writeTiming;
 
-  /* EXMC configuration */
+  // EXMC configuration
   readWriteTiming.asyn_address_setuptime = 1U;
   readWriteTiming.asyn_address_holdtime = 0U;
   readWriteTiming.asyn_data_setuptime = 15U;
@@ -96,7 +101,7 @@ void LCD_EXMC_Config(void)
   EXMC_NORSRAMInitStructure.write_timing = &writeTiming;
 
   exmc_norsram_init(&EXMC_NORSRAMInitStructure);
-  /* enable EXMC SARM bank0 */
+  // enable EXMC SRAM bank0
   exmc_norsram_enable(EXMC_BANK0_NORSRAM_REGION0);
 }
 

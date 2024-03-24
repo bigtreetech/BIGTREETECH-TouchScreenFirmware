@@ -28,7 +28,7 @@
     "cmsis",
     "stm32cube"
   ],
-  "name": "STM32F103VC (48k RAM. 256k - 12K Flash)",
+  "name": "STM32F103VC (48K RAM, 256K - 12K Flash)",
   "upload": {
     "disable_flushing": false,
     "offset_address": "0x8003000",

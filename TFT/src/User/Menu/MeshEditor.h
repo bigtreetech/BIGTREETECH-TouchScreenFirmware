@@ -9,7 +9,7 @@ extern "C" {
 
 // called by parseAck()
 bool meshIsWaitingData(void);
-void meshUpdateData(char *dataRow);
+void meshUpdateData(char * dataRow);
 
 void menuMeshEditor(void);
 

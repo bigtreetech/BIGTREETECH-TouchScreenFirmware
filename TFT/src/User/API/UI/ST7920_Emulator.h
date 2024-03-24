@@ -6,10 +6,6 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "../../Configuration.h"
-
-#define ST7920_XSTART    (0x80)
-#define ST7920_YSTART    (0x80)
 
 // ST7920_FULLSCREEN
 #define ST7920_GXROWS_FULLSCREEN  128.0f
@@ -18,15 +14,6 @@ extern "C" {
 #define ST7920_GYDOT_FULLSCREEN   (ST7920_GXDOT_FULLSCREEN)
 #define ST7920_GXSTART_FULLSCREEN ((LCD_WIDTH - ST7920_GXDOT_FULLSCREEN * ST7920_GXROWS_FULLSCREEN) / 2)
 #define ST7920_GYSTART_FULLSCREEN ((LCD_HEIGHT - ST7920_GYDOT_FULLSCREEN * ST7920_GYROWS_FULLSCREEN) / 2)
-
-#define ST7920_GXROWS  128
-#define ST7920_GYROWS  64
-#define ST7920_GXDOT   (MIN(LCD_WIDTH / ST7920_GXROWS, LCD_HEIGHT / ST7920_GYROWS))
-#define ST7920_GYDOT   (ST7920_GXDOT)
-#define ST7920_GXSTART ((LCD_WIDTH - ST7920_GXDOT * ST7920_GXROWS) / 2)
-#define ST7920_GYSTART ((LCD_HEIGHT - ST7920_GYDOT * ST7920_GYROWS) / 2)
-
-typedef void (*FP_CMD)(uint8_t);
 
 typedef enum
 {
@@ -46,10 +33,10 @@ typedef enum
 
 typedef struct
 {
-  int16_t  xByte;   // current x byte, range is 0 ~ 15 byte = 0 ~ 127 pixel
-  int16_t  yPixel;  // current y pixel, range is 0 ~ 63
-  // Extended Instruction, The first address set Y, second address set X
-  uint8_t  address_is_y;  // record current address is Y or X
+  int16_t  xByte;         // Current x byte, range is 0 ~ 15 byte = 0 ~ 127 pixel
+  int16_t  yPixel;        // Current y pixel, range is 0 ~ 63
+  // Extended Instruction, the first address set Y, second address set X
+  uint8_t  address_is_y;  // Record current address is Y or X
 } ST7920_POSITION;
 
 /*** Common Instruction ***/
@@ -63,7 +50,7 @@ typedef struct
     {
       uint8_t : 1,
               g : 1,   // Graphic display control bit
-              re : 1,  // extended instruction set control bit
+              re : 1,  // Extended instruction set control bit
               :1,
               dl : 1;  // 4/8-bit interface control bit (0-4bit, 1-8bit)
     };
@@ -161,7 +148,7 @@ typedef struct
     uint8_t reg;
     struct
     {
-      uint8_t sr : 1;  // "1", the Vertical Scroll mode is enabled.
+      uint8_t sr : 1;  // "1", the Vertical Scroll mode is enabled
                        // "0", “Set CGRAM Address” instruction (basic instruction) is enabled
     };
   };
@@ -241,23 +228,23 @@ typedef struct
   ST7920_CTRL_STATUS ctrl_status;
 } ST7920_REG;  // Extended Instruction
 
-typedef struct 
+typedef struct
 {
   // Position info
   ST7920_POSITION position;
   // ST7920 register
   ST7920_REG reg;
   // Character Generation RAM
-  uint8_t CGRAM[64][2];  // [64*2] = [4 * 16*2*8], means 4 * [16*16] bitmap font
+  uint8_t CGRAM[64][2];       // [64 * 2] = [4 * 16 * 2 * 8], means 4 * [16 * 16] bitmap font
   // Display Data RAM
-  uint8_t DDRAM[4][16];  // 16 characters (8x16) by 4 lines
+  uint8_t DDRAM[4][16];       // 16 characters (8x16) by 4 lines
   // Graphic Display RAM
-  uint8_t GDRAM[64][16];  // [64*16] = [64 * 16*8], means 64 * 128 pixels
+  uint8_t GDRAM[64][16];      // [64 * 16] = [64 * 16 * 8], means 64 * 128 pixels
   // 8x16 ASCII font
   uint8_t _8x16Font[95][16];  // 0x20 ~ 0x7E = 95char, 8width * 16height / 8 = 16 bytes, scan dir: left to right & top to bottom
 } ST7920;
 
-void ST7920_Init(ST7920 *pStruct);
+void ST7920_Init(ST7920 * pStruct);
 void ST7920_ParseRecv(uint8_t val);
 
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
 #include "spi.h"
-#include "variants.h"  // for SPI1_SCK_PIN etc...
+#include "variants.h"  // for SPI1_SCK_PIN etc.
 #include "GPIO_Init.h"
 
 // SPI1 default pins config
@@ -69,9 +69,9 @@ void SPI_Slave_GPIO_Init(uint8_t port)
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0);    // MOSI
 }
 
-void SPI_GPIO_DeInit(uint8_t port)
+static inline void SPI_GPIO_DeInit(uint8_t port)
 {
-  // Set all of spi pins to input
+  // set all of spi pins to input
   GPIO_InitSet(spi_sck[port],  MGPIO_MODE_IPN, 0);  // SCK
   GPIO_InitSet(spi_miso[port], MGPIO_MODE_IPN, 0);  // MISO
   GPIO_InitSet(spi_mosi[port], MGPIO_MODE_IPN, 0);  // MOSI
@@ -82,9 +82,9 @@ void SPI_GPIO_DeInit(uint8_t port)
 void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)
 {
   rcu_periph_reset_enable(rcu_spi_rst[port]);
-  rcu_periph_reset_disable(rcu_spi_rst[port]);
+  rcu_periph_reset_disable(rcu_spi_rst[port]);  // reset SPI clock
 
-  rcu_periph_clock_enable(rcu_spi_en[port]);
+  rcu_periph_clock_enable(rcu_spi_en[port]);    // enable SPI clock
 
   SPI_CTL0(spi[port]) = (0<<15)        // 0:2-line 1: 1-line
                       | (0<<14)        // in bidirectional mode 0:read only 1: read/write
@@ -93,9 +93,9 @@ void SPI_Protocol_Init(uint8_t port, uint8_t baudrate)
                       | (0<<11)        // 0:8-bit data frame 1:16-bit data frame
                       | (0<<10)        // 0:Full duplex 1:Receive-only
                       | (1<<9)         // 0:enable NSS 1:disable NSS (Software slave management)
-                      | (1<<8)         // This bit has an effect only when the SSM bit is set. The value of this bit is forced onto the NSS pin and the IO value of the NSS pin is ignored
+                      | (1<<8)         // this bit has an effect only when the SSM bit is set. The value of this bit is forced onto the NSS pin and the IO value of the NSS pin is ignored
                       | (0<<7)         // 0:MSB 1:LSB
-                      | (1<<6)         // Enable SPI
+                      | (1<<6)         // enable SPI
                       | (baudrate<<3)  // bit3-5   000:fPCLK/2    001:fPCLK/4    010:fPCLK/8     011:fPCLK/16
                                        //          100:fPCLK/32   101:fPCLK/64   110:fPCLK/128   111:fPCLK/256
                       | (1<<2)         // 0:Slave 1:Master
@@ -112,8 +112,9 @@ void SPI_Config(uint8_t port)
 void SPI_DeConfig(uint8_t port)
 {
   SPI_GPIO_DeInit(port);
+
   rcu_periph_reset_enable(rcu_spi_rst[port]);
-  rcu_periph_reset_disable(rcu_spi_rst[port]);
+  rcu_periph_reset_disable(rcu_spi_rst[port]);  // reset SPI clock
 }
 
 uint16_t SPI_Read_Write(uint8_t port, uint16_t d)
@@ -121,5 +122,6 @@ uint16_t SPI_Read_Write(uint8_t port, uint16_t d)
   while ((SPI_STAT(spi[port]) & (1 << 1)) == RESET);  // wait for tx empty
   SPI_DATA(spi[port]) = d;
   while ((SPI_STAT(spi[port]) & (1 << 0)) == RESET);  // wait for rx no empty
+
   return SPI_DATA(spi[port]);
 }

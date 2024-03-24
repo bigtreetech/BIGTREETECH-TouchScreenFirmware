@@ -10,8 +10,11 @@
   #include "base64.h"
 #endif
 
+#define COLOR_BYTE_SIZE sizeof(uint16_t)  // RGB565 color byte is equal to uint16_t
+
 #ifdef STM32_HAS_FSMC
 
+// defined and implemented on lcd_dma.h / .c
 void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_t addr);
 
 #else
@@ -44,7 +47,7 @@ void lcd_frame_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint32_
 
 #endif
 
-void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit)
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t * buf, GUI_RECT * limit)
 {
   uint16_t wl = w - limit->x1;
   uint16_t hl = h - limit->y1;
@@ -62,18 +65,18 @@ void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16
   }
 }
 
-void getBMPsize(BMP_INFO *bmp)
+void getBMPsize(BMP_INFO * bmp)
 {
   if (!bmp->address && bmp->index < ICON_NULL)
     bmp->address = ICON_ADDR(bmp->index);
 
-  W25Qxx_ReadBuffer((uint8_t*)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
+  W25Qxx_ReadBuffer((uint8_t *)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
   bmp->address += COLOR_BYTE_SIZE;
-  W25Qxx_ReadBuffer((uint8_t*)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
+  W25Qxx_ReadBuffer((uint8_t *)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
   bmp->address += COLOR_BYTE_SIZE;
 }
 
-void bmpToBuffer(uint16_t *buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_INFO *iconInfo)
+static inline void bmpToBuffer(uint16_t * buf, GUI_POINT startPoint, GUI_POINT endPoint, BMP_INFO * iconInfo)
 {
   uint16_t frameLines = (endPoint.y - startPoint.y);  // total lines in frame
   uint16_t blockLines = (endPoint.y >= iconInfo->height) ? (iconInfo->height - startPoint.y) : frameLines;  // total drawable lines
@@ -141,7 +144,7 @@ void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
 }
 
 // load the selected area of bmp icon from flash to buffer
-void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon)
+void ICON_ReadBuffer(uint16_t * buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon)
 {
   BMP_INFO iconInfo = {.index = icon, .address = 0};
   GUI_POINT startPoint = {.x = x, .y = y};
@@ -153,11 +156,10 @@ void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h
 
 uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int16_t y)
 {
-  // Out of range calls
+  // out of range calls
   if (x > w || y > h)
     return infoSettings.bg_color;
 
-  uint16_t color;
   address += ((w * y) + x) * COLOR_BYTE_SIZE;
 
   W25Qxx_SPI_CS_Set(0);
@@ -166,7 +168,9 @@ uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int
   W25Qxx_SPI_Read_Write_Byte((address & 0xFF00) >> 8);
   W25Qxx_SPI_Read_Write_Byte(address & 0xFF);
 
-  color  = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
+  uint16_t color;
+
+  color = (W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE) << 8);
   color |= W25Qxx_SPI_Read_Write_Byte(W25QXX_DUMMY_BYTE);
 
   W25Qxx_SPI_CS_Set(1);
@@ -174,11 +178,11 @@ uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int
   return color;
 }
 
-uint16_t modelFileReadHalfword(FIL *fp)
+static uint16_t modelFileReadHalfword(FIL * fp)
 {
   uint8_t buf[4];
   uint8_t ascii[4];
-  uint8_t *pd = ascii;
+  uint8_t * pd = ascii;
   UINT mybr;
   uint8_t rest = 4;
 
@@ -189,8 +193,8 @@ uint16_t modelFileReadHalfword(FIL *fp)
     if (mybr != rest)
       return 0;
 
-    // Check buf for non-valid character i.e. not 0-9, a-f or A-F and skip
-    for (uint8_t *ps = buf; ps < buf + rest; )
+    // check buf for non-valid character i.e. not 0-9, a-f or A-F and skip
+    for (uint8_t * ps = buf; ps < buf + rest; )
     {
       char c = *ps++;
 
@@ -206,15 +210,15 @@ uint16_t modelFileReadHalfword(FIL *fp)
 
 #if (THUMBNAIL_PARSER == PARSER_RGB565) || (THUMBNAIL_PARSER == PARSER_BASE64PNG)
 
-// Define where to search for dedicated thumbnail comments at max (defaults to first 100kb)
+// define where to search for dedicated thumbnail comments at max (defaults to first 100kb)
 #define BLOCKSIZE_THUMBNAIL_SEARCH (512)
 #define MAX_THUMBNAIL_SEARCH_BLOCKS (100 * 2)
 
-// Search for the gcode thumbnail comment signature within the first BLOCKSIZE_THUMBNAIL_SEARCH * MAX_THUMBNAIL_SEARCH_BLOCKS bytes
-bool modelFileFind(FIL *fp, char *find)
+// search for the gcode thumbnail comment signature within the first BLOCKSIZE_THUMBNAIL_SEARCH * MAX_THUMBNAIL_SEARCH_BLOCKS bytes
+static bool modelFileFind(FIL * fp, char * find)
 {
   char search_buf[BLOCKSIZE_THUMBNAIL_SEARCH];
-  char *cFind = find;
+  char * cFind = find;
 
   dbg_printf("Find: '%s' starting from %d\n", find, f_tell(fp));
 
@@ -228,7 +232,7 @@ bool modelFileFind(FIL *fp, char *find)
     if (len == 0)
       return false;
 
-    for (char *cSearch = search_buf; cSearch < search_buf + len; cSearch++)
+    for (char * cSearch = search_buf; cSearch < search_buf + len; cSearch++)
     {
       if (*cSearch == *cFind)
         cFind++;
@@ -252,8 +256,8 @@ bool modelFileFind(FIL *fp, char *find)
 
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG)
 
-// Read an unsigned int value from a file
-uint32_t modelFileReadValue(FIL *fp)
+// read an unsigned int value from a file
+static inline uint32_t modelFileReadValue(FIL * fp)
 {
   char current = 0;
   UINT br = 0;
@@ -274,30 +278,30 @@ uint32_t modelFileReadValue(FIL *fp)
   return 0;
 }
 
-uint32_t modelFileSeekToThumbnailBase64PNG(FIL *fp, uint16_t width, uint16_t height)
+static inline uint32_t modelFileSeekToThumbnailBase64PNG(FIL * fp, uint16_t width, uint16_t height)
 {
   uint32_t len = 0;
   char buf[32];
 
-  // Find thumbnail begin marker for the right thumbnail resolution and read the base64 length
+  // find thumbnail begin marker for the right thumbnail resolution and read the base64 length
   snprintf(buf, sizeof(buf), "; thumbnail begin %hux%hu ", width, height);
   dbg_print("Start search\n");
 
-  // Seek to the beginning of the file as the file pointer was moved during the RGB565 thumbnail search
+  // seek to the beginning of the file as the file pointer was moved during the RGB565 thumbnail search
   f_lseek(fp, 0);
 
   if (!modelFileFind(fp, buf))
     return 0;
 
   dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
-  // Get the base64 length of the encoded PNG thumbnail file
+  // get the base64 length of the encoded PNG thumbnail file
   len = modelFileReadValue(fp);
   dbg_printf("Base64 len=%d\n", len);
 
   if (len == 0)
     return 0;
 
-  // Seek to the start of the base64 block
+  // seek to the start of the base64 block
   if (!modelFileFind(fp, ";"))
     return 0;
 
@@ -306,7 +310,7 @@ uint32_t modelFileSeekToThumbnailBase64PNG(FIL *fp, uint16_t width, uint16_t hei
 
 static b64_decoder_t gcode_thumb_b64;
 
-uint16_t color_alpha_565(const uint8_t r0, const uint8_t g0, const uint8_t b0, const uint8_t r1, const uint8_t g1, const uint8_t b1, const uint8_t alpha)
+static uint16_t color_alpha_565(const uint8_t r0, const uint8_t g0, const uint8_t b0, const uint8_t r1, const uint8_t g1, const uint8_t b1, const uint8_t alpha)
 {
   const uint8_t r = ((255 - alpha) * r0 + alpha * r1) / 255;
   const uint8_t g = ((255 - alpha) * g0 + alpha * g1) / 255;
@@ -315,9 +319,9 @@ uint16_t color_alpha_565(const uint8_t r0, const uint8_t g0, const uint8_t b0, c
   return ((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3);
 }
 
-void on_draw_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+static inline void on_draw_png_pixel(pngle_t * pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
 {
-  GUI_POINT *pos = (GUI_POINT *)pngle_get_user_data(pngle);
+  GUI_POINT * pos = (GUI_POINT *)pngle_get_user_data(pngle);
 
   LCD_SetWindow(pos->x + x, pos->y + y, pos->x + x, pos->y + y);
   LCD_WR_16BITS_DATA(color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]));
@@ -330,9 +334,9 @@ typedef struct
     uint8_t buf[256];
 } W25Qxx_DECODE;
 
-void on_decode_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
+static void on_decode_png_pixel(pngle_t * pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
 {
-  W25Qxx_DECODE *session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
+  W25Qxx_DECODE * session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
 
   uint16_t color = color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]);
 
@@ -347,9 +351,9 @@ void on_decode_png_pixel(pngle_t *pngle, uint32_t x, uint32_t y, uint32_t w, uin
   }
 }
 
-void on_decode_png_pixel_done(pngle_t *pngle)
+static inline void on_decode_png_pixel_done(pngle_t * pngle)
 {
-  W25Qxx_DECODE *session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
+  W25Qxx_DECODE * session = (W25Qxx_DECODE *) pngle_get_user_data(pngle);
   W25Qxx_WritePage(session->buf, session->addr, session->bnum);
 }
 
@@ -360,27 +364,28 @@ void on_decode_png_pixel_done(pngle_t *pngle)
  * <BASE64 encoded PNG>
  * ; thumbnail end
  */
-bool model_Process_Base64PNG(FIL *gcodeFile, void *user_data, pngle_draw_callback_t draw_callback,
-                             pngle_done_callback_t done_callback)
+static bool model_Process_Base64PNG(FIL * gcodeFile, void * user_data, pngle_draw_callback_t draw_callback,
+                                    pngle_done_callback_t done_callback)
 {
   uint32_t base64_len;
   char buf[256];
 
   dbg_printf("Finding BASE64PNG\n");
 
-  // Find thumbnail block with correct picture size
+  // find thumbnail block with correct picture size
   base64_len = modelFileSeekToThumbnailBase64PNG(gcodeFile, ICON_WIDTH, ICON_HEIGHT);
 
   if (base64_len == 0)
   {
     dbg_printf("thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
+  
     return false;
   }
 
   // Base64 decode on the fly while reading the PNG
   b64_init(&gcode_thumb_b64, gcodeFile, base64_len);
 
-  pngle_t *pngle = pngle_new();
+  pngle_t * pngle = pngle_new();
 
   if (!pngle)
     goto pngle_new_failed;
@@ -422,12 +427,12 @@ pngle_new_failed:
   return false;
 }
 
-bool model_DirectDisplay_Base64PNG(GUI_POINT pos, FIL *gcodeFile)
+static inline bool model_DirectDisplay_Base64PNG(GUI_POINT pos, FIL * gcodeFile)
 {
   return model_Process_Base64PNG(gcodeFile, &pos, on_draw_png_pixel, NULL);
 }
 
-bool model_DecodeToFlash_Base64PNG(FIL *gcodeFile, uint32_t addr)
+static inline bool model_DecodeToFlash_Base64PNG(FIL * gcodeFile, uint32_t addr)
 {
   uint16_t w = ICON_WIDTH;
   uint16_t h = ICON_HEIGHT;
@@ -446,25 +451,26 @@ bool model_DecodeToFlash_Base64PNG(FIL *gcodeFile, uint32_t addr)
 
 #if (THUMBNAIL_PARSER == PARSER_BASE64PNG) || (THUMBNAIL_PARSER == PARSER_RGB565)
 
-bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
+static inline bool modelFileSeekToThumbnailRGB565(FIL * fp, uint16_t width, uint16_t height)
 {
   char buf[39];
 
   dbg_printf("Finding RGB565 by signature\n");
 
-  // Find thumbnail begin marker for the right thumbnail resolution and read the base64 length
+  // find thumbnail begin marker for the right thumbnail resolution and read the base64 length
   snprintf(buf, sizeof(buf), "; bigtree thumbnail begin %hux%hu", width, height);
 
   if (modelFileFind(fp, buf))
   {
     dbg_printf("Found signature '%s' at %ld\n", buf, f_tell(fp));
 
-    // Seek to the start of the RGB565 block
+    // seek to the start of the RGB565 block
     if (modelFileFind(fp, ";"))
       return true;
   }
 
   dbg_printf("bigtree thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
+
   return false;
 }
 
@@ -477,23 +483,24 @@ bool modelFileSeekToThumbnailRGB565(FIL *fp, uint16_t width, uint16_t height)
  * <WIDTHxHEIGHT 16-Bit RGB565 Data as Hexstring>
  * ; bigtreetech thumbnail end
  */
-bool model_DirectDisplay_Classic(GUI_POINT pos, FIL *gcodeFile)
+static inline bool model_DirectDisplay_Classic(GUI_POINT pos, FIL * gcodeFile)
 {
   // try finding RGB565 thumbnail signature
   #if (THUMBNAIL_PARSER >= PARSER_RGB565)
-    // Move the file cursor to the signature location if found
+    // move the file cursor to the signature location if found
     if (!modelFileSeekToThumbnailRGB565(gcodeFile, ICON_WIDTH, ICON_HEIGHT))
   #endif
   {
     dbg_printf("Finding RGB565 by predefined offset\n");
 
-    // Move the file cursor to the predefined location
+    // move the file cursor to the predefined location
     f_lseek(gcodeFile, MODEL_PREVIEW_OFFSET);
 
-    // Check whether the icon size matches
+    // check whether the icon size matches
     if (modelFileReadHalfword(gcodeFile) != ICON_WIDTH || modelFileReadHalfword(gcodeFile) != ICON_HEIGHT)
     {
       dbg_printf("RGB565 not found\n");
+
       return false;
     }
   }
@@ -504,10 +511,11 @@ bool model_DirectDisplay_Classic(GUI_POINT pos, FIL *gcodeFile)
   {
     LCD_WR_16BITS_DATA(modelFileReadHalfword(gcodeFile));
   }
+
   return true;
 }
 
-bool model_DirectDisplay(GUI_POINT pos, char *gcode)
+bool model_DirectDisplay(GUI_POINT pos, char * gcode)
 {
   FIL gcodeFile;
 
@@ -516,7 +524,7 @@ bool model_DirectDisplay(GUI_POINT pos, char *gcode)
   if (f_open(&gcodeFile, gcode, FA_OPEN_EXISTING | FA_READ) != FR_OK)
     return false;
 
-  // Try all available options from fastest to slowest
+  // try all available options from fastest to slowest
   if (model_DirectDisplay_Classic(pos, &gcodeFile))
     return true;
 
@@ -528,22 +536,21 @@ bool model_DirectDisplay(GUI_POINT pos, char *gcode)
   return false;
 }
 
-bool model_DecodeToFlash_Classic(FIL *gcodeFile, uint32_t addr)
+static inline bool model_DecodeToFlash_Classic(FIL * gcodeFile, uint32_t addr)
 {
   uint16_t bnum = 0;
   uint16_t w = ICON_WIDTH;
   uint16_t h = ICON_HEIGHT;
-
   uint8_t buf[256];
 
-  // Move the file cursor to the corresponding resolution area
+  // move the file cursor to the corresponding resolution area
   f_lseek(gcodeFile, MODEL_PREVIEW_OFFSET);
 
-  // Check whether the icon size matches
+  // check whether the icon size matches
   if (modelFileReadHalfword(gcodeFile) != w || modelFileReadHalfword(gcodeFile) != h)
     return false;
 
-  // Move to next line
+  // move to next line
   f_lseek(gcodeFile, gcodeFile->fptr + 3);
 
   memcpy(buf, (uint8_t *) &w, sizeof(uint16_t));
@@ -568,7 +575,7 @@ bool model_DecodeToFlash_Classic(FIL *gcodeFile, uint32_t addr)
       }
     }
 
-    // Move to next line
+    // move to next line
     f_lseek(gcodeFile, gcodeFile->fptr + 3);
   }
 
@@ -577,7 +584,7 @@ bool model_DecodeToFlash_Classic(FIL *gcodeFile, uint32_t addr)
   return true;
 }
 
-bool model_DecodeToFlash(char *gcode)
+bool model_DecodeToFlash(char * gcode)
 {
   FIL gcodeFile;
 
@@ -614,6 +621,7 @@ void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon)
   uint16_t x, y;
   uint16_t color = 0;
   BMP_INFO bmpInfo = {.index = icon, .address = 0};
+
   getBMPsize(&bmpInfo);
 
   LCD_SetWindow(sx, sy, sx + bmpInfo.width - 1, sy + bmpInfo.height - 1);

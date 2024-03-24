@@ -3,6 +3,20 @@
 #if LCD_DRIVER_HAS(SSD1963)
 
   #include "SSD1963.h"
+
+  #define SSD1963_0_DEGREE_REG_VALUE   0x00
+  #define SSD1963_180_DEGREE_REG_VALUE 0x03
+  #define SSD1963_90_DEGREE_REG_VALUE  0x21
+  #define SSD1963_270_DEGREE_REG_VALUE 0x22
+
+  #ifdef PORTRAIT_MODE
+    #define SSD1963_CMD_SET_X 0x2B
+    #define SSD1963_CMD_SET_Y 0x2A
+  #else
+    #define SSD1963_CMD_SET_X 0x2A
+    #define SSD1963_CMD_SET_Y 0x2B
+  #endif
+
   // SSD1963  resolution max:864*480
   #define SSD_HOR_RESOLUTION LCD_HARDWARE_WIDTH   // LCD width pixel
   #define SSD_VER_RESOLUTION LCD_HARDWARE_HEIGHT  // LCD height pixel

@@ -3,8 +3,8 @@
 
 //#define ENABLE_PID_STATUS_UPDATE_NOTIFICATION
 
-const char *const pidCmdMarlin[] = PID_CMD_MARLIN;
-const char *const pidCmdRRF[] = PID_CMD_RRF;
+static const char * const pidCmdMarlin[] = PID_CMD_MARLIN;
+static const char * const pidCmdRRF[]    = PID_CMD_RRF;
 
 static int16_t pidHeaterTarget[MAX_HEATER_PID_COUNT] = {0};
 static uint8_t curTool_index = NOZZLE0;
@@ -21,7 +21,7 @@ void pidUpdateStatus(PID_STATUS status)
   pidStatus = status;
 }
 
-uint8_t checkFirstValidPID(void)
+static uint8_t checkFirstValidPID(void)
 {
   uint8_t tool = 0;
 
@@ -36,7 +36,7 @@ uint8_t checkFirstValidPID(void)
   return tool;
 }
 
-void pidRun(void)
+static void pidRun(void)
 {
   uint8_t tool = checkFirstValidPID();
 

@@ -30,7 +30,7 @@
     "stm32cube",
     "zephyr"
   ],
-  "name": "STM32F407VG (192k RAM. 512k - 48K Flash)",
+  "name": "STM32F407VG (192K RAM, 512K - 48K Flash)",
   "upload": {
     "offset_address": "0x800C000",
     "maximum_ram_size": 196608,

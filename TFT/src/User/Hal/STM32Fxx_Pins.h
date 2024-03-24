@@ -204,7 +204,6 @@ extern "C" {
 #define PK14  ((_GPIOK_MAP<<8) | 14)
 #define PK15  ((_GPIOK_MAP<<8) | 15)
 
-
 #define GPIO_GET_PORT(n) (((n)>>8) & 0xFF)
 #define GPIO_GET_PIN(n) ((n) & 0xFF)
 

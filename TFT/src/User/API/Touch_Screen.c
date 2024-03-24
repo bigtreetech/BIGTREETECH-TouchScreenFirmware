@@ -43,9 +43,9 @@ static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
 
 int32_t TS_CalPara[7];
 bool TS_Sound = true;
-void (*TS_ReDrawIcon)(uint8_t position, uint8_t isPressed) = NULL;
+void (* TS_ReDrawIcon)(uint8_t position, uint8_t isPressed) = NULL;
 
-void TS_GetCoordinates(uint16_t *x, uint16_t *y)
+void TS_GetCoordinates(uint16_t * x, uint16_t * y)
 {
   uint16_t tp_x = XPT2046_Repeated_Compare_AD(CMD_RDX);
   uint16_t tp_y = XPT2046_Repeated_Compare_AD(CMD_RDY);
@@ -72,7 +72,7 @@ bool TS_IsPressed(void)
   return (touchCountdown == 0);
 }
 
-uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT *menuRect)
+uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT * menuRect)
 {
   uint8_t i = 0;
   uint16_t x, y;
@@ -95,7 +95,7 @@ uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT *menuRect)
   return IDLE_TOUCH;
 }
 
-uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT* menuRect)
+uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT * menuRect)
 {
   static uint16_t key_num = IDLE_TOUCH;
   static bool firstPress = true;
@@ -136,7 +136,7 @@ uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT* menuRect)
   return key_return;
 }
 
-uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
+static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
 {
   uint32_t i;
   uint16_t tp_x, tp_y;
