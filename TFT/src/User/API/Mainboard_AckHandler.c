@@ -35,8 +35,8 @@ static const ECHO knownEcho[] = {
   {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
 };
 
-static const char magic_error[] = "Error:";
-static const char magic_echo[] = "echo:";
+static const char magic_error[]   = "Error:";
+static const char magic_echo[]    = "echo:";
 static const char magic_warning[] = "Warning:";  // RRF warning
 static const char magic_message[] = "message";   // RRF message in Json format
 

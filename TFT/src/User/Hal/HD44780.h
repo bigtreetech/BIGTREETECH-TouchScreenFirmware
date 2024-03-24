@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdbool.h>
 #include "variants.h"       // for LCD2004_EMULATOR etc.
-#include "CircularQueue.h"
+#include "CircularQueue.h"  // for CIRCULAR_QUEUE etc.
 
 #ifdef LCD2004_EMULATOR
   void HD44780_DeConfig(void);
