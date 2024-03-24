@@ -4,7 +4,7 @@
 #define DEF_HEATER_POWER      40
 #define DEF_FIL_HEAT_CAPACITY 0.0046f
 #define MPC_PARAM_ITEMS_COUNT 3
-#define MPC_METHOD_COUNT 3
+#define MPC_METHOD_COUNT      3
 
 typedef struct
 {

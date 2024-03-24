@@ -3,7 +3,7 @@
 
 #define FAN_REFRESH_TIME 500  // 1 second is 1000
 
-const char * fanID[MAX_FAN_COUNT] = FAN_DISPLAY_ID;
+const char * fanID[MAX_FAN_COUNT]  = FAN_DISPLAY_ID;
 const char * fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
 static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
