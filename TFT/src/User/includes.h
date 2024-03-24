@@ -18,7 +18,7 @@
 #include "os_timer.h"
 #include "SanityCheck.h"
 
-// User/HAL/stm32f10x or // HAL/stm32f2_f4xx
+// User/HAL/stm32f10x, HAL/stm32f2_f4xx, HAL/gd32f20x or HAL/gd32f30x
 #include "lcd_dma.h"
 #include "lcd.h"
 #include "Serial.h"

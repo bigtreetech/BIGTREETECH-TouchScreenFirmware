@@ -9,7 +9,6 @@ extern "C" {
 #include <stdint.h>
 #include "variants.h"  // for SERIAL_PORT_2 etc.
 #include "Serial.h"    // for dmaL1DataTX etc.
-#include "uart.h"      // for _UART_CNT etc.
 
 #define BAUDRATE_COUNT 12
 
