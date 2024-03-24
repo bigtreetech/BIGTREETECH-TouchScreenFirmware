@@ -1,12 +1,12 @@
 #include "utf8_decode.h"
 #include "includes.h"
 
-// High 8bits: font height
-// Low 8bits: font width
+// high 8bits: font height
+// low 8bits: font width
 static uint16_t fontSize = FONT_SIZE_NORMAL;
 
 static FONT_BITMAP font[] = {
-  { // Visible ASCII code, from ' ' to '~'
+  { // visible ASCII code, from ' ' to '~'
     // start unicode code point for language
     0x20,  // 0x20 means the first visible character ' '
     // end unicode code point for language
@@ -115,7 +115,7 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
     pInfo->bytes = 4;
     pInfo->codePoint = (ch[0] & 0x07);
   }
-  else  // Wrong char return '?' means unkown
+  else  // wrong char return '?' means unkown
   {
     pInfo->bytes = 1;
     pInfo->codePoint = '?';
@@ -135,6 +135,7 @@ static inline void getBitMapFontInfo(CHAR_INFO *pInfo)
     pInfo->pixelWidth = 0;
     pInfo->pixelHeight = 0;
     pInfo->bitMapAddr = 0;
+
     return;
   }
 
@@ -142,17 +143,16 @@ static inline void getBitMapFontInfo(CHAR_INFO *pInfo)
   {
     if (pInfo->codePoint >= font[i].startCodePoint && pInfo->codePoint <= font[i].endCodePoint)
     {
-      if (pInfo->codePoint >= 0x20 && pInfo->codePoint <= 0x7E)  // The font size of ASCII is variable
+      if (pInfo->codePoint >= 0x20 && pInfo->codePoint <= 0x7E)  // the font size of ASCII is variable
       {
         if (_FONT_H(fontSize) != font[i].pixelHeight || _FONT_W(fontSize) != font[i].pixelWidth)
-        {
           continue;
-        }
       }
 
       pInfo->pixelWidth = font[i].pixelWidth;
       pInfo->pixelHeight = font[i].pixelHeight;
       pInfo->bitMapAddr = font[i].bitMapStartAddr + (pInfo->codePoint - font[i].bitMapStartCodePoint) * (font[i].bitMapHeight * font[i].bitMapWidth / 8);
+
       return;
     }
   }
@@ -162,7 +162,8 @@ void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 {
   pInfo->bytes = 0;
 
-  if (ch == NULL || *ch == 0) return;
+  if (ch == NULL || *ch == 0)
+    return;
 
   getUTF8EncodeInfo(ch, pInfo);
 
@@ -174,7 +175,9 @@ uint16_t getUTF8Length(const uint8_t *const str)
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
 
-  if (str == NULL) return 0;
+  if (str == NULL)
+    return 0;
+
   while (str[i])
   {
     info.bytes = 0;
@@ -182,6 +185,7 @@ uint16_t getUTF8Length(const uint8_t *const str)
     i += info.bytes;
     len++;
   }
+
   return len;
 }
 
@@ -191,13 +195,16 @@ uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
 
-  if (str == NULL) return 0;
+  if (str == NULL)
+    return 0;
+
   while (str[i])
   {
     getCharacterInfo(str + i, &info);
     i += info.bytes;
     len += info.pixelWidth;
   }
+
   return len;
 }
 
@@ -205,6 +212,9 @@ uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
 uint16_t GUI_StrPixelWidth_label(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-  if (loadLabelText((uint8_t*)tempstr, index) == false) return 0;
+
+  if (loadLabelText((uint8_t*)tempstr, index) == false)
+    return 0;
+
   return GUI_StrPixelWidth_str(tempstr);
 }
