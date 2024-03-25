@@ -2,8 +2,8 @@
 #include "includes.h"
 
 static uint8_t curUnit_index = 0;
-uint8_t mblPoint = 0;
-bool mblRunning = false;
+static uint8_t mblPoint = 0;
+static bool mblRunning = false;
 
 // Start MBL
 static inline void mblStart(void)
@@ -81,7 +81,7 @@ void mblUpdateStatus(bool succeeded)
 }
 
 // Show an error notification
-void mblNotifyError(bool isStarted)
+static void mblNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_MBL);
 
@@ -90,7 +90,7 @@ void mblNotifyError(bool isStarted)
   addToast(DIALOG_TYPE_ERROR, tempMsg);
 }
 
-void mblDraw(COORDINATE *val)
+static void mblDraw(COORDINATE * val)
 {
   char tempstr[24], tempstr2[24], tempstr3[24];
 

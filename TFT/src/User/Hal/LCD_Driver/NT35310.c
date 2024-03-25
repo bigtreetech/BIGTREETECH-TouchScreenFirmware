@@ -3,7 +3,12 @@
 #if LCD_DRIVER_HAS(NT35310)
 
   #include "NT35310.h"
-  // NT35310
+
+  #define NT35310_0_DEGREE_REG_VALUE   0X60
+  #define NT35310_180_DEGREE_REG_VALUE 0XA0
+  #define NT35310_90_DEGREE_REG_VALUE  0XC0
+  #define NT35310_270_DEGREE_REG_VALUE 0X00
+
   uint8_t LCD_DriveIsNT35310(void)
   {
     uint16_t id = 0;

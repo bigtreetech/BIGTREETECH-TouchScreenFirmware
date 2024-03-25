@@ -10,7 +10,7 @@
 static uint8_t origEndstopsState = DISABLED;
 static float origAblState = DISABLED;
 
-// Enable probe height
+// Enable probe height.
 // Temporary disable software endstops and save ABL state
 void probeHeightEnable(void)
 {
@@ -26,7 +26,7 @@ void probeHeightEnable(void)
   }
 }
 
-// Disable probe height
+// Disable probe height.
 // Restore original software endstops state and ABL state
 void probeHeightDisable(void)
 {

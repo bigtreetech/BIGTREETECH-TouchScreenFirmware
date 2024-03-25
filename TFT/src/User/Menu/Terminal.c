@@ -111,11 +111,11 @@ typedef enum
 #define CURSOR_END_Y    ((KB_START_ROW + KB_ROW_COUNT) * KEY_HEIGHT)
 
 // gcode command draw area inside text box
-const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW + 0) * CTRL_HEIGHT + TEXTBOX_INSET,
-                              3 * CTRL_WIDTH - TEXTBOX_INSET, (COMMAND_START_ROW + 1) * CTRL_HEIGHT - TEXTBOX_INSET};
+static const GUI_RECT textBoxRect = {             0 + TEXTBOX_INSET, (COMMAND_START_ROW + 0) * CTRL_HEIGHT + TEXTBOX_INSET,
+                                     3 * CTRL_WIDTH - TEXTBOX_INSET, (COMMAND_START_ROW + 1) * CTRL_HEIGHT - TEXTBOX_INSET};
 
 // keyboard rectangles
-const GUI_RECT editorKeyRect[KEY_COUNT] = {
+static const GUI_RECT editorKeyRect[KEY_COUNT] = {
   // row text box + send button
   {0 * CTRL_WIDTH + TEXTBOX_INSET + TEXTBOX_BUTTON_INSET, (COMMAND_START_ROW + 0) * CTRL_HEIGHT + TEXTBOX_INSET + TEXTBOX_BUTTON_INSET,
    1 * CTRL_WIDTH +                 TEXTBOX_BUTTON_INSET, (COMMAND_START_ROW + 1) * CTRL_HEIGHT - TEXTBOX_INSET - TEXTBOX_BUTTON_INSET},  // Prev gcode (top row)
@@ -223,29 +223,29 @@ const GUI_RECT editorKeyRect[KEY_COUNT] = {
 };
 
 // area rectangles
-const GUI_RECT editorAreaRect[3] = {
+static const GUI_RECT editorAreaRect[3] = {
   {0, COMMAND_START_ROW * CTRL_HEIGHT, LCD_WIDTH, ROW_HEIGHT},                // text box + send area
   {0, ROW_HEIGHT,                      LCD_WIDTH, LCD_HEIGHT - CTRL_HEIGHT},  // keyboard area
   {0, CTRL_START_ROW * CTRL_HEIGHT,    LCD_WIDTH, LCD_HEIGHT}                 // control bar area
 };
 
-const GUI_RECT terminalKeyRect[TERM_KEY_COUNT] = {
+static const GUI_RECT terminalKeyRect[TERM_KEY_COUNT] = {
   {1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // page down
   {2 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // page up
   {3 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // ACK
   {4 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 5 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT},  // Back
 };
 
-const GUI_RECT terminalPageRect = {
+static const GUI_RECT terminalPageRect = {
   0 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT - CTRL_HEIGHT, 1 * TERMINAL_CTRL_WIDTH, LCD_HEIGHT};  // page number
 
-const GUI_RECT terminalAreaRect[2] = {
+static const GUI_RECT terminalAreaRect[2] = {
   {0,            0, LCD_WIDTH, CURSOR_END_Y},  // terminal area
   {0, CURSOR_END_Y, LCD_WIDTH,   LCD_HEIGHT},  // control area
 };
 
 // keyboard keys for first layout
-const char * const gcodeKey123[KEY_COUNT] = {
+static const char * const gcodeKey123[KEY_COUNT] = {
   "Prev", "Next", "Clear", "Send", "ABC", "Space", "Del", "Back",
   #if KB_COL_COUNT == LAYOUT_1_COL_COUNT
     "1", "2", "3", "M", "G", "T",
@@ -268,7 +268,7 @@ const char * const gcodeKey123[KEY_COUNT] = {
 };
 
 // keyboard keys for second layout
-const char * const gcodeKeyABC[KEY_COUNT] = {
+static const char * const gcodeKeyABC[KEY_COUNT] = {
   "Prev", "Next", "Clear", "Send", "123", "Space", "Del", "Back",
   #if KB_COL_COUNT == LAYOUT_1_COL_COUNT
     "A", "B", "C", "D", "H", "I",
@@ -306,19 +306,19 @@ const char * const gcodeKeyABC[KEY_COUNT] = {
   #endif
 };
 
-const uint16_t fontSrcColor[3][3] = {
+static const uint16_t fontSrcColor[3][3] = {
   // Gcode                  ACK                    Background
   {COLORSCHEME1_TERM_GCODE, COLORSCHEME1_TERM_ACK, COLORSCHEME1_TERM_BACK},  // Material Dark
   {COLORSCHEME2_TERM_GCODE, COLORSCHEME2_TERM_ACK, COLORSCHEME2_TERM_BACK},  // Material Light
   {COLORSCHEME3_TERM_GCODE, COLORSCHEME3_TERM_ACK, COLORSCHEME3_TERM_BACK},  // High Contrast
 };
 
-KEYBOARD_DATA * keyboardData;
-TERMINAL_DATA * terminalData;
-char * terminalBuf;
-TERMINAL_WINDOW curView = KEYBOARD_VIEW;
+static KEYBOARD_DATA * keyboardData;
+static TERMINAL_DATA * terminalData;
+static char * terminalBuf;
+static TERMINAL_WINDOW curView = KEYBOARD_VIEW;
 
-bool numpad =
+static bool numpad =
   #if defined(KB_TYPE_QWERTY)
     false;  // show qwerty as default for larger
   #else
@@ -563,6 +563,7 @@ static inline void menuKeyboardView(void)
       break;
 
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case GKEY_IDLE:
@@ -694,7 +695,7 @@ void terminalCache(const char * stream, uint16_t streamLen, SERIAL_PORT_INDEX po
 }
 
 // reverse lookup for source identifier
-TERMINAL_SRC getLastSrc(char * ptr)
+static TERMINAL_SRC getLastSrc(char * ptr)
 {
   TERMINAL_SRC lastSrc = SRC_TERMINAL_COUNT;
   char * endPtr = (ptr + 1);
@@ -784,7 +785,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
-uint8_t terminalUpdatePageCount(void)
+static uint8_t terminalUpdatePageCount(void)
 {
   if (terminalData->pageTail >= terminalData->pageHead)
     terminalData->pageCount = abs(terminalData->pageTail - terminalData->pageHead);
@@ -828,7 +829,7 @@ static inline void terminalDrawMenu(void)
   terminalDrawPageNumber();
 }
 
-void menuTerminalView(void)
+static void menuTerminalView(void)
 {
   #define CURSOR_START_X (terminalAreaRect[0].x0 + CURSOR_H_OFFSET)
 
@@ -850,6 +851,7 @@ void menuTerminalView(void)
       break;
 
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case TERM_PAGE_UP:  // page up

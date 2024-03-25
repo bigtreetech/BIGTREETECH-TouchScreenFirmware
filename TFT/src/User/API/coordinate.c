@@ -1,15 +1,15 @@
 #include "coordinate.h"
 #include "includes.h"
 
-const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
-
 static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-static COORDINATE curPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-E_AXIS_BACKUP eAxisBackup = {0, 0, false, false};
+static COORDINATE curPosition    = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+
+const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
+E_AXIS_BACKUP eAxisBackup      = {0, 0, false, false};
 
 /**
  * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
- * It may be replaced by "M114 R".
+ * It may be replaced by "M114 R"
  */
 static float extruderPostion = 0.0f;
 
@@ -79,7 +79,7 @@ void coordinateSetFeedRate(uint32_t feedrate)
   targetPosition.feedrate = feedrate;
 }
 
-void coordinateGetAll(COORDINATE *tmp)
+void coordinateGetAll(COORDINATE * tmp)
 {
   memcpy(tmp, &targetPosition, sizeof(targetPosition));
 }
@@ -104,7 +104,7 @@ void coordinateSetAxisActual(AXIS axis, float position)
   curPosition.axis[axis] = position;
 }
 
-void coordinateGetAllActual(COORDINATE *tmp)
+void coordinateGetAllActual(COORDINATE * tmp)
 {
   memcpy(tmp, &curPosition, sizeof(curPosition));
 }

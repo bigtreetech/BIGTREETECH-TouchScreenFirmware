@@ -3,7 +3,12 @@
 #if LCD_DRIVER_HAS(ILI9341)
 
   #include "ILI9341.h"
-  // ILI9341
+
+  #define ILI9341_0_DEGREE_REG_VALUE   0X68
+  #define ILI9341_180_DEGREE_REG_VALUE 0XA8
+  #define ILI9341_90_DEGREE_REG_VALUE  0XC8
+  #define ILI9341_270_DEGREE_REG_VALUE 0X08
+
   void ILI9341_Init_Sequential(void)
   {
     Delay_ms(50);  // delay 50 ms

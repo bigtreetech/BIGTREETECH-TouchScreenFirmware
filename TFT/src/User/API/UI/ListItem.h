@@ -9,10 +9,8 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "GUI.h"
-#include "menu.h"
-
-#define LISTBTN_BKCOLOR MAT_DARKSLATE
+#include "GUI.h"   // for GUI_RECT etc.
+#include "menu.h"  // for LISTITEM etc.
 
 void setDynamicLabel(uint8_t i, char * label);  // set list item title to any text
 char * getDynamicLabel(uint8_t i);              // get the custom text of the list item title
@@ -22,8 +20,6 @@ char * getDynamicTextValue(uint8_t i);            // get the custom text of the 
 void setDynamicValue(uint8_t i, float value);     // set list item value to any numeric value (upto 7 digits)
 
 void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * curitem, bool pressed);
-void ListMenuSetItem(const LISTITEM * menuItem, uint8_t position);
-GUI_POINT getTextStartPoint(uint16_t sx, uint16_t sy, uint16_t ex, uint16_t ey,ALIGN_POSITION pos, const char * textchar);
 
 #ifdef __cplusplus
 }

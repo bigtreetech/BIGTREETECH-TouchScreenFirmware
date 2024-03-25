@@ -37,6 +37,7 @@ void menuManualLeveling(void)
   while (MENU_IS(menuManualLeveling))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

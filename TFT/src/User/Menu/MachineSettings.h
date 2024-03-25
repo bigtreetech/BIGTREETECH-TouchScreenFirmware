@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-void menuMachineSettings(void);
 void menuCustom(void);
+void menuMachineSettings(void);
 
 #ifdef __cplusplus
 }

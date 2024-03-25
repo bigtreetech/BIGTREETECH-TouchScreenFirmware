@@ -32,7 +32,7 @@ typedef enum
   NUM_KEY_IDLE = IDLE_TOUCH,
 } NUM_KEY_VALUES;
 
-const GUI_RECT rect_of_numkey[KEY_COUNT] = {
+static const GUI_RECT rect_of_numkey[KEY_COUNT] = {
   {0 * SKEYWIDTH, ICON_START_Y + 0 * SKEYHEIGHT, 1 * SKEYWIDTH, ICON_START_Y + 1 * SKEYHEIGHT},  // 1
   {1 * SKEYWIDTH, ICON_START_Y + 0 * SKEYHEIGHT, 2 * SKEYWIDTH, ICON_START_Y + 1 * SKEYHEIGHT},  // 2
   {2 * SKEYWIDTH, ICON_START_Y + 0 * SKEYHEIGHT, 3 * SKEYWIDTH, ICON_START_Y + 1 * SKEYHEIGHT},  // 3
@@ -54,22 +54,23 @@ const GUI_RECT rect_of_numkey[KEY_COUNT] = {
   {3 * SKEYWIDTH, ICON_START_Y + 3 * SKEYHEIGHT, 4 * SKEYWIDTH, ICON_START_Y + 4 * SKEYHEIGHT},  // Undo/Reset
 };
 
-const GUI_RECT oldParameterRect = {0,                          0, LCD_WIDTH / 2 - BYTE_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
-const GUI_RECT newParameterRect = {LCD_WIDTH / 2 + BYTE_WIDTH, 0,                  LCD_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
-const GUI_RECT arrowRect        = {LCD_WIDTH / 2 - BYTE_WIDTH, 0, LCD_WIDTH / 2 + BYTE_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
+static const GUI_RECT oldParameterRect = {0,                          0, LCD_WIDTH / 2 - BYTE_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
+static const GUI_RECT newParameterRect = {LCD_WIDTH / 2 + BYTE_WIDTH, 0,                  LCD_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
+static const GUI_RECT arrowRect        = {LCD_WIDTH / 2 - BYTE_WIDTH, 0, LCD_WIDTH / 2 + BYTE_WIDTH,  ICON_START_Y + 0 * SKEYHEIGHT};
 
-const char * const numPadKeyChar[KEY_COUNT] = {
+static const char * const numPadKeyChar[KEY_COUNT] = {
   "1", "2", "3", "\u0894",
   "4", "5", "6", "\u0899",
   "7", "8", "9", "\u0895",
   ".", "0", "-", "\u08A5"
 };
 
-uint8_t numpadType = 0;  // numpad type identifier
+static uint8_t numpadType = 0;  // numpad type identifier
 
-void drawKeypadButton(uint8_t index, uint8_t isPressed)
+static void drawKeypadButton(uint8_t index, uint8_t isPressed)
 {
-  if (index >= COUNT(rect_of_numkey)) return;
+  if (index >= COUNT(rect_of_numkey))
+    return;
 
   #ifdef KEYBOARD_MATERIAL_THEME
     uint16_t fontcolor = CTRL_FONT_COLOR;
@@ -112,18 +113,21 @@ void drawKeypadButton(uint8_t index, uint8_t isPressed)
                   .rect       = rectBtn};
 
     setFontSize(FONT_SIZE_LARGE);
+
     if (!(index == NUM_KEY_DEC && GET_BIT(numpadType, 0)) && !(index == NUM_KEY_MINUS && !GET_BIT(numpadType, 1)))
       GUI_DrawButton(&btn, isPressed);
+
     setFontSize(FONT_SIZE_NORMAL);
   #else
     if (!isPressed)
       GUI_SetColor(infoSettings.bg_color);
+
     GUI_DrawRect(rect_of_numkey[index].x0 + 2, rect_of_numkey[index].y0 + 2, rect_of_numkey[index].x1-2, rect_of_numkey[index].y1 - 2);
     GUI_SetColor(infoSettings.font_color);
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
-void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
+static void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 {
   numpadType = (negative << 1) | (numberOnly << 0);  // numpad type identfier
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -143,6 +147,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     {
       drawKeypadButton(i, false);
     }
+
     GUI_SetColor(BAR_FONT_COLOR);
   #else
     GUI_ClearRect(0, 0, LCD_WIDTH, rect_of_numkey[0].y0);
@@ -150,10 +155,11 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 
     // draw button borders
     GUI_SetColor(infoSettings.list_border_color);
+
     for (int i = 0; i < 3; i++)
     {
-      GUI_VLine(rect_of_numkey[i].x1, rect_of_numkey[i].y0, rect_of_numkey[12+i].y1);
-      GUI_HLine(rect_of_numkey[i*4].x0, rect_of_numkey[i*4].y1, rect_of_numkey[3+i*4].x1);
+      GUI_VLine(rect_of_numkey[i].x1, rect_of_numkey[i].y0, rect_of_numkey[12 + i].y1);
+      GUI_HLine(rect_of_numkey[i * 4].x0, rect_of_numkey[i * 4].y1, rect_of_numkey[3 + i * 4].x1);
     }
 
     // draw value display border line
@@ -170,6 +176,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
 
     if (!numberOnly)
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(uint8_t *)numPadKeyChar[NUM_KEY_DEC]);
+
     if (negative)
       GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(uint8_t *)numPadKeyChar[NUM_KEY_MINUS]);
 
@@ -182,8 +189,8 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
   #endif  // KEYBOARD_MATERIAL_THEME
 
   GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
-
   setFontSize(FONT_SIZE_LARGE);
+
   if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
     setFontSize(FONT_SIZE_NORMAL);
 
@@ -191,7 +198,7 @@ void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
   setFontSize(FONT_SIZE_NORMAL);
 }
 
-static inline void drawValue(char * str)
+static void drawValue(char * str)
 {
   #ifdef KEYBOARD_MATERIAL_THEME
     GUI_SetBkColor(BAR_BG_COLOR);
@@ -204,7 +211,6 @@ static inline void drawValue(char * str)
   setFontSize(FONT_SIZE_NORMAL);
 }
 
-// Numpad for decimal numbers
 double numPadFloat(uint8_t * title, double param_val, double reset_val, bool negative)
 {
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
@@ -231,6 +237,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
   while (TS_Sound == false)  // TS_TouchSound gets true only when exit from numpad is requested
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case NUM_KEY_EXIT:
@@ -321,6 +328,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
           {
             parameterBuf[bufIndex++] = '0';             // add zero between minus and decimal sign
           }
+
           parameterBuf[bufIndex++] = '.';
           parameterBuf[bufIndex] = '\0';
           BUZZER_PLAY(SOUND_KEYPRESS);
@@ -381,13 +389,13 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
     loopBackEnd();
   }
 
-  if (title == NULL) free(numTitle);
+  if (title == NULL)
+    free(numTitle);
 
   return param_val;
 }
 
-// Numpad for integer numbers
-int32_t numPadInt(uint8_t* title, int32_t param_val, int32_t reset_val, bool negative)
+int32_t numPadInt(uint8_t * title, int32_t param_val, int32_t reset_val, bool negative)
 {
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
   uint8_t * numTitle = title;
@@ -414,6 +422,7 @@ int32_t numPadInt(uint8_t* title, int32_t param_val, int32_t reset_val, bool neg
   while (TS_Sound == false)  // TS_TouchSound gets true only when exit from numpad is requested
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case NUM_KEY_EXIT:
@@ -496,7 +505,8 @@ int32_t numPadInt(uint8_t* title, int32_t param_val, int32_t reset_val, bool neg
     loopBackEnd();
   }
 
-  if (title == NULL) free(numTitle);
+  if (title == NULL)
+    free(numTitle);
 
   return param_val;
 }

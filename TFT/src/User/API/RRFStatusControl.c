@@ -12,6 +12,7 @@ static bool was_printing = false;
 
 static uint16_t rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
 static bool macro_busy = false;
+
 bool starting_print = false;
 
 void rrfStatusSet(char status)

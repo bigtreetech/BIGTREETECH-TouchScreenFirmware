@@ -9,7 +9,6 @@ extern "C" {
 #include <stdint.h>
 #include "variants.h"  // for SERIAL_PORT_2 etc.
 #include "Serial.h"    // for dmaL1DataTX etc.
-#include "uart.h"      // for _UART_CNT etc.
 
 #define BAUDRATE_COUNT 12
 
@@ -32,14 +31,14 @@ typedef enum
 
 typedef struct
 {
-  uint8_t port;             // physical port (e.g. _USART1) related to serial port (e.g. 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc...)
+  uint8_t port;             // physical port (e.g. _USART1) related to serial port (e.g. 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc.)
   uint16_t cacheSizeRX;     // buffer size for receiving data from the serial port
   uint16_t cacheSizeTX;     // buffer size for sending data to the serial port
-  const char * const id;    // serial port ID (e.g. "" for SERIAL_PORT, "2" for SERIAL_PORT_2 etc...)
-  const char * const desc;  // serial port description (e.g. "1 - Printer" for SERIAL_PORT, "2 - WIFI" for SERIAL_PORT_2 etc...)
+  const char * const id;    // serial port ID (e.g. "" for SERIAL_PORT, "2" for SERIAL_PORT_2 etc.)
+  const char * const desc;  // serial port description (e.g. "1 - Printer" for SERIAL_PORT, "2 - WIFI" for SERIAL_PORT_2 etc.)
 } SERIAL_PORT_INFO;         // serial port info
 
-extern const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT];  // serial port (index 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc...)
+extern const SERIAL_PORT_INFO serialPort[SERIAL_PORT_COUNT];  // serial port (index 0 for SERIAL_PORT, 1 for SERIAL_PORT_2 etc.)
 extern const uint32_t baudrateValues[BAUDRATE_COUNT];         // baudrate values
 extern const char * const baudrateNames[BAUDRATE_COUNT];      // baudrate names
 

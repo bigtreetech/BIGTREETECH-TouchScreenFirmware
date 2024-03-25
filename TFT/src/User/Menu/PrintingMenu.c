@@ -1,15 +1,6 @@
 #include "Printing.h"
 #include "includes.h"
 
-const GUI_RECT printinfo_val_rect[6] = {
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
-  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT}
-};
-
 #define PROGRESS_BAR_RAW_X0   (START_X)                                 // X0 aligned to first icon
 #ifdef PORTRAIT_MODE
   #define PROGRESS_BAR_RAW_X1 (START_X + 3 * ICON_WIDTH + 2 * SPACE_X)  // X1 aligned to last icon
@@ -31,26 +22,12 @@ const GUI_RECT printinfo_val_rect[6] = {
 #define PROGRESS_BAR_SLICE_WIDTH (PROGRESS_BAR_FULL_WIDTH / 10)       // 10% progress bar width
 
 #ifdef PORTRAIT_MODE
-  const GUI_RECT progressBar = {PROGRESS_BAR_X0, TITLE_END_Y + 1,
-                                PROGRESS_BAR_X1, PS_ICON_START_Y - PS_ICON_SPACE_Y - 1};
+  static const GUI_RECT progressBar = {PROGRESS_BAR_X0, TITLE_END_Y + 1,
+                                       PROGRESS_BAR_X1, PS_ICON_START_Y - PS_ICON_SPACE_Y - 1};
 #else
-  const GUI_RECT progressBar = {PROGRESS_BAR_X0, PS_ICON_START_Y + PS_ICON_HEIGHT * 2 + PS_ICON_SPACE_Y * 2 + 1,
-                                PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PS_ICON_SPACE_Y - 1};
+  static const GUI_RECT progressBar = {PROGRESS_BAR_X0, PS_ICON_START_Y + PS_ICON_HEIGHT * 2 + PS_ICON_SPACE_Y * 2 + 1,
+                                       PROGRESS_BAR_X1, ICON_START_Y + ICON_HEIGHT + SPACE_Y - PS_ICON_SPACE_Y - 1};
 #endif
-
-enum
-{
-  LIVE_INFO_ICON = (1 << 0),
-  LIVE_INFO_TOP_ROW = (1 << 1),
-  LIVE_INFO_BOTTOM_ROW = (1 << 2),
-};
-
-const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
-                                ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
-
-const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
-
-const char * const speedId[2] = {"Speed", "Flow "};
 
 #define TOGGLE_TIME     2000     // 1 seconds is 1000
 #define LAYER_DELTA     0.1      // minimal layer height change to update the layer display (avoid congestion in vase mode)
@@ -58,9 +35,12 @@ const char * const speedId[2] = {"Speed", "Flow "};
 #define MAX_TITLE_LEN   70
 #define TIME_FORMAT_STR "%02u:%02u:%02u"
 
-PROGRESS_DISPLAY progDisplayType;
-LAYER_TYPE layerDisplayType;
-char title[MAX_TITLE_LEN];
+enum
+{
+  LIVE_INFO_ICON = (1 << 0),
+  LIVE_INFO_TOP_ROW = (1 << 1),
+  LIVE_INFO_BOTTOM_ROW = (1 << 2),
+};
 
 enum
 {
@@ -78,6 +58,26 @@ enum
   ICON_POS_Z,
   ICON_POS_SPD,
 };
+
+static const GUI_RECT printingInfo_rect[6] = {
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_LG_EX, PS_ICON_VAL_Y + BYTE_HEIGHT},
+  {PS_ICON_VAL_X, PS_ICON_VAL_Y, PS_ICON_VAL_SM_EX, PS_ICON_VAL_Y + BYTE_HEIGHT}
+};
+
+static const uint8_t printingIcon[] = {ICON_PRINTING_NOZZLE, ICON_PRINTING_BED,    ICON_PRINTING_FAN,
+                                       ICON_PRINTING_TIMER,  ICON_PRINTING_ZLAYER, ICON_PRINTING_SPEED};
+
+static const uint8_t printingIcon2nd[] = {ICON_PRINTING_CHAMBER, ICON_PRINTING_FLOW};
+
+static const char * const speedId[2] = {"Speed", "Flow "};
+
+static PROGRESS_DISPLAY progDisplayType;
+static LAYER_TYPE layerDisplayType;
+static char title[MAX_TITLE_LEN];
 
 static inline void setPauseResumeIcon(MENUITEMS * curmenu, bool paused)
 {
@@ -188,7 +188,7 @@ void startPrinting(void)
 static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 {
   LIVE_INFO lvIcon;
-  GUI_RECT const * curRect = &printinfo_val_rect[icon_pos];
+  GUI_RECT const * curRect = &printingInfo_rect[icon_pos];
   char tempstrTop[14];
   char tempstrBottom[14];
 
@@ -650,6 +650,7 @@ void menuPrinting(void)
     toggleInfo();
 
     KEY_VALUES key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case PS_KEY_0:

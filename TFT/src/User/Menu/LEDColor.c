@@ -40,7 +40,7 @@ typedef enum
 #define CTRL_HEIGHT ROW_HEIGHT
 
 // key button rectangles
-const GUI_RECT ledKeyRect[KEY_NUM] = {
+static const GUI_RECT ledKeyRect[KEY_NUM] = {
 #ifdef KEYBOARD_ON_LEFT
   // control bar
   {0 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 1 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // PREV
@@ -98,7 +98,7 @@ const GUI_RECT ledKeyRect[KEY_NUM] = {
 #endif
 };
 
-const GUI_RECT ledColorRect = {
+static const GUI_RECT ledColorRect = {
   #ifdef KEYBOARD_ON_LEFT
     3 * KB_WIDTH, 0 * KB_HEIGHT, 4 * KB_WIDTH, 1 * KB_HEIGHT
   #else
@@ -106,7 +106,7 @@ const GUI_RECT ledColorRect = {
   #endif
 };
 
-const GUI_RECT ledPageRect = {
+static const GUI_RECT ledPageRect = {
   #ifdef KEYBOARD_ON_LEFT
     2 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 3 * CTRL_WIDTH, 5 * KB_HEIGHT
   #else
@@ -115,22 +115,22 @@ const GUI_RECT ledPageRect = {
 };
 
 // area rectangles
-const GUI_RECT ledAreaRect[2] = {
+static const GUI_RECT ledAreaRect[2] = {
   {0, 0,               LCD_WIDTH, LCD_HEIGHT - CTRL_HEIGHT},  // keyboard area
   {0, 4 * CTRL_HEIGHT, LCD_WIDTH, LCD_HEIGHT}                 // control bar area
 };
 
-const char *const ledKeyString[2] = {
+static const char * const ledKeyString[2] = {
   "<",  // PREV
   ">",  // NEXT
 };
 
-const char * const ledString[LED_COLOR_COMPONENT_COUNT] = {"R", "G", "B", "W", "P", "I"};
+static const char * const ledString[LED_COLOR_COMPONENT_COUNT] = {"R", "G", "B", "W", "P", "I"};
 
-uint8_t ledPage = 0;
-uint8_t ledIndex = 0;
+static uint8_t ledPage = 0;
+static uint8_t ledIndex = 0;
 
-uint8_t ledGetComponentIndex(uint8_t index)
+static uint8_t ledGetComponentIndex(uint8_t index)
 {
   return ledPage * PAGE_ITEMS + index;
 }
@@ -147,24 +147,24 @@ static inline uint8_t ledEditComponentValue(uint8_t index)
   return ledColor[realIndex] = editIntValue(LED_MIN_VALUE, LED_MAX_VALUE, ledColor[realIndex], ledColor[realIndex]);
 }
 
-uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit)
+static uint8_t ledUpdateComponentValue(uint8_t index, int8_t unit)
 {
   uint8_t realIndex = ledGetComponentIndex(index);
 
   return ledColor[realIndex] = NOBEYOND(LED_MIN_VALUE, ledColor[realIndex] + unit, LED_MAX_VALUE);
 }
 
-uint8_t ledGetControlIndex(uint8_t keyNum)
+static uint8_t ledGetControlIndex(uint8_t keyNum)
 {
   return (keyNum - (LED_KEY_OK + 1)) / 4;
 }
 
-uint8_t ledGetControlSubIndex(uint8_t keyNum)
+static uint8_t ledGetControlSubIndex(uint8_t keyNum)
 {
   return (keyNum - (LED_KEY_OK + 1)) % 4;
 }
 
-uint16_t ledGetComponentRGBColor(uint8_t component, uint8_t index)
+static uint16_t ledGetComponentRGBColor(uint8_t component, uint8_t index)
 {
   LED_COLOR led = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};  // component RGB color in RGB 565 16 bit format
 
@@ -182,7 +182,7 @@ static inline void ledDrawPageNumber(void)
   drawStandardValue(&ledPageRect, VALUE_STRING, &tempstr, FONT_SIZE_LARGE, LC_CTRL_FONT_COLOR, LC_CTRL_BG_COLOR, 1, true);
 }
 
-void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
+static void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
 {
   GUI_RECT rect, rect2;
   uint16_t bgColorFocus;
@@ -227,7 +227,7 @@ void ledDrawControl(uint8_t index, bool isFocused, bool drawFocus, bool drawAll)
   }
 }
 
-void ledDrawButton(uint8_t index, uint8_t isPressed)
+static void ledDrawButton(uint8_t index, uint8_t isPressed)
 {
   if (index >= KEY_NUM)
     return;
@@ -248,7 +248,7 @@ void ledDrawButton(uint8_t index, uint8_t isPressed)
   }
 }
 
-void ledDrawKeyboard(void)
+static void ledDrawKeyboard(void)
 {
   // draw horizontal button borders
   GUI_SetColor(LC_KB_BORDER_COLOR);
@@ -292,7 +292,7 @@ void ledDrawKeyboard(void)
   GUI_RestoreColorDefault();
 }
 
-void ledDrawMenu(void)
+static void ledDrawMenu(void)
 {
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(ledKeyRect), ledKeyRect, ledDrawButton, &ledDrawMenu);
 
@@ -315,7 +315,7 @@ void ledDrawMenu(void)
   ledDrawKeyboard();
 }
 
-void menuLEDColorCustom(void)
+static void menuLEDColorCustom(void)
 {
   LED_KEY_VALUES key_num = LED_KEY_IDLE;
   LED_COLOR origLedColor;
@@ -333,6 +333,7 @@ void menuLEDColorCustom(void)
   while (MENU_IS(menuLEDColorCustom))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       // previous page
@@ -489,6 +490,7 @@ void menuLEDColor(void)
   while (MENU_IS(menuLEDColor))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       // red

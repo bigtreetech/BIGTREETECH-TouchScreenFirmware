@@ -3,7 +3,12 @@
 #if LCD_DRIVER_HAS(HX8558)
 
   #include "HX8558.h"
-  // HX8558
+
+  #define HX8558_0_DEGREE_REG_VALUE   0xA4
+  #define HX8558_180_DEGREE_REG_VALUE 0X64
+  #define HX8558_90_DEGREE_REG_VALUE  0x04
+  #define HX8558_270_DEGREE_REG_VALUE 0xC4
+
   void HX8558_Init_Sequential(void)
   {
     Delay_ms(50);  // delay 50 ms

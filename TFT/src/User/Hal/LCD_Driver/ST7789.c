@@ -3,7 +3,12 @@
 #if LCD_DRIVER_HAS(ST7789)
 
   #include "ST7789.h"
-  // ST7789
+
+  #define ST7789_0_DEGREE_REG_VALUE   0X60
+  #define ST7789_180_DEGREE_REG_VALUE 0XA0
+  #define ST7789_90_DEGREE_REG_VALUE  0XC0
+  #define ST7789_270_DEGREE_REG_VALUE 0X00
+
   void ST7789_Init_Sequential(void)
   {
     LCD_WR_REG(0x11);

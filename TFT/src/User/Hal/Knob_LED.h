@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include "variants.h"  // for KNOB_LED_COLOR_PIN etc...
+#include <stdint.h>    // for uint32_t etc.
+#include "variants.h"  // for KNOB_LED_COLOR_PIN etc.
 
 #ifdef KNOB_LED_COLOR_PIN
   void knob_LED_Init(void);

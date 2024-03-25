@@ -51,6 +51,7 @@ uint16_t LED_GetRGBColor(LED_COLOR * led)
   uint8_t r = (*led)[0] >> 3;
   uint8_t g = (*led)[1] >> 2;
   uint8_t b = (*led)[2] >> 3;
+
   return ((r & 0x001F) << 11) | ((g & 0x003F) << 5) | ((b & 0x001F));  // RGB color in RGB 565 16 bit format
 }
 

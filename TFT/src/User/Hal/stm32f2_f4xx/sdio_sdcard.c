@@ -223,11 +223,13 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "variants.h"
-#ifdef SD_SDIO_SUPPORT
 #include "sdio_sdcard.h"
-#include "string.h"
+
+#ifdef SD_SDIO_SUPPORT
+
 #include "GPIO_Init.h"
+#include "string.h"
+
 /** @addtogroup Utilities
   * @{
   */
@@ -3203,7 +3205,9 @@ void SD_SDIO_DMA_IRQHANDLER(void)
 {
   SD_ProcessDMAIRQ();
 }
-#endif
+
+#endif  // SD_SDIO_SUPPORT
+
 /**
   * @}
   */

@@ -26,7 +26,7 @@ static inline void meshResetPoint(void)
 //  probeHeightDisable();  // restore original software endstops state and ABL state
 }
 
-void meshDraw(uint16_t col, uint16_t row, COORDINATE *val)
+static void meshDraw(uint16_t col, uint16_t row, COORDINATE * val)
 {
   char tempstr[24], tempstr2[24], tempstr3[24];
 

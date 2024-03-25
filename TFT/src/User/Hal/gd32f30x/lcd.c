@@ -7,26 +7,30 @@
 uint16_t LCD_RD_DATA(void)
 {
   volatile uint16_t ram;
+
   ram = LCD->LCD_RAM;
+
   return ram;
 }
 
-void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
+static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
   LCD->LCD_RAM = LCD_RegValue;
 }
 
-uint16_t LCD_ReadReg(uint8_t LCD_Reg)
+static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
 {
   LCD_WR_REG(LCD_Reg);
   Delay_us(5);
+
   return LCD_RD_DATA();
 }
 
-void LCD_GPIO_Config(void)
+static inline void LCD_GPIO_Config(void)
 {
   rcu_periph_clock_enable(RCU_EXMC);
+
   // fsmc 16bit data pins
   GPIO_InitSet(PD0, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD1, MGPIO_MODE_AF_PP, 0);
@@ -45,24 +49,25 @@ void LCD_GPIO_Config(void)
   GPIO_InitSet(PE14, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PE15, MGPIO_MODE_AF_PP, 0);
 
-  /*Configure the control line corresponding to FSMC
-  * PD4-FSMC_NOE :LCD-RD
-  * PD5-FSMC_NWE :LCD-WR
-  * PD7-FSMC_NE1 :LCD-CS
-  * PE2-FSMC_A23 :LCD-RS   LCD-RS data or cmd
-  */
+  /*
+   * configure the control line corresponding to FSMC
+   * PD4-FSMC_NOE :LCD-RD
+   * PD5-FSMC_NWE :LCD-WR
+   * PD7-FSMC_NE1 :LCD-CS
+   * PE2-FSMC_A23 :LCD-RS   LCD-RS data or cmd
+   */
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, 0);
   GPIO_InitSet(PD7, MGPIO_MODE_AF_PP, 0);
 }
 
-void LCD_EXMC_Config(void)
+static inline void LCD_EXMC_Config(void)
 {
   exmc_norsram_parameter_struct EXMC_NORSRAMInitStructure;
   exmc_norsram_timing_parameter_struct readWriteTiming,writeTiming;
 
-  /* EXMC configuration */
+  // EXMC configuration
   readWriteTiming.asyn_address_setuptime = 1U;
   readWriteTiming.asyn_address_holdtime = 0U;
   readWriteTiming.asyn_data_setuptime = 15U;
@@ -96,7 +101,7 @@ void LCD_EXMC_Config(void)
   EXMC_NORSRAMInitStructure.write_timing = &writeTiming;
 
   exmc_norsram_init(&EXMC_NORSRAMInitStructure);
-  /* enable EXMC SARM bank0 */
+  // enable EXMC SRAM bank0
   exmc_norsram_enable(EXMC_BANK0_NORSRAM_REGION0);
 }
 
@@ -107,6 +112,30 @@ void LCD_HardwareConfig(void)
 }
 
 #else
+
+#if defined(MKS_TFT)
+  /*
+  #define LCD_WR PB14
+  #define LCD_RS PD13
+  #define LCD_CS PC8
+  #define LCD_RD PD15
+  */
+  // GPIO_SetLevel
+  #define LCD_CS_SET gpio_bit_set(GPIOC, GPIO_PIN_8 )          // Chip Select Port  PC8   //片选端口
+  #define LCD_RS_SET gpio_bit_set(GPIOD, GPIO_PIN_13)          // Data / command    PD13  //数据/命令
+  #define LCD_WR_SET gpio_bit_set(GPIOB, GPIO_PIN_14)          // Write data        PB14  //写数据
+  #define LCD_RD_SET gpio_bit_set(GPIOD, GPIO_PIN_15)          // Read data         PD15  //读数据
+
+  #define LCD_CS_CLR gpio_bit_reset(GPIOC, GPIO_PIN_8)         // Chip select port  PC8   //片选端口
+  #define LCD_RS_CLR gpio_bit_reset(GPIOD, GPIO_PIN_13)        // Data / command    PD13  //数据/命令
+  #define LCD_WR_CLR gpio_bit_reset(GPIOB, GPIO_PIN_14)        // Write data        PB14  //写数据
+  #define LCD_RD_CLR gpio_bit_reset(GPIOD, GPIO_PIN_15)        // Read data         PD15  //读数据
+
+  #define DATAOUT(x) do{ gpio_port_write(GPIOE, x); }while(0)  // Data output  //数据输出
+  #define DATAIN()   gpio_input_port_get(GPIOE)                // Data input   //数据输入
+#else
+  #error "don't support LCD-GPIO yet"
+#endif
 
 void LCD_WR_REG(uint16_t data)
 {
@@ -145,7 +174,7 @@ uint16_t LCD_RD_DATA(void)
 
   LCD_RS_SET;
   LCD_CS_CLR;
-  LCD_RD_CLR;  // double for delay.
+  LCD_RD_CLR;  // double for delay
   LCD_RD_CLR;
   ram = DATAIN();
   LCD_RD_SET;
@@ -156,19 +185,20 @@ uint16_t LCD_RD_DATA(void)
   gpio_init(LCD_DATA_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_ALL);
   // LCD_DATA_PORT->ODR = 0XFFFF;
   gpio_port_write(LCD_DATA_PORT, 0XFFFF);
+  
   return ram;
 }
 
-void LCD_GPIO_Config(void)
+static inline void LCD_GPIO_Config(void)
 {
 #if defined(MKS_TFT)
   // GPIO_InitTypeDef GPIO_InitStructure;
-  /* GPIO Ports Clock Enable */
+  // GPIO Ports Clock Enable
 
   // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOB, ENABLE);
-  /* Configure GPIO pin Output Level */
+  // configure GPIO pin Output Level
 
-  /* Configure GPIO pins : Pin1_Pin Pin2_Pin */
+  // configure GPIO pins : Pin1_Pin Pin2_Pin
 
   // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_9;
   // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -211,4 +241,4 @@ void LCD_HardwareConfig(void)
   LCD_GPIO_Config();
 }
 
-#endif
+#endif  // STM32_HAS_FSMC

@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
-#include <stdint.h>
-#include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT etc...
+#include <stdint.h>    // for uint8_t etc.
+#include "variants.h"  // for ENC_ACTIVE_SIGNAL, LCD_ENCODER_SUPPORT etc.
 #include "menu.h"
 
 #if ENC_ACTIVE_SIGNAL

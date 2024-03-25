@@ -4,7 +4,7 @@
 
 #ifdef LCD2004_EMULATOR
 
-CIRCULAR_QUEUE *HD44780_queue = NULL;
+static CIRCULAR_QUEUE * HD44780_queue = NULL;
 
 void HD44780_DeConfig(void)
 {
@@ -28,14 +28,14 @@ void HD44780_DeConfig(void)
 }
 
 /**
-* LCD_EN  PB15  4 line mode
-* LCD_RS  PB12
-* LCD_D4  PB13
-* LCD_D5  PB14
-* LCD_D6  PC7
-* LCD_D7  PC6
-*/
-void HD44780_Config(CIRCULAR_QUEUE *queue)
+ * LCD_EN  PB15  4 line mode
+ * LCD_RS  PB12
+ * LCD_D4  PB13
+ * LCD_D5  PB14
+ * LCD_D6  PC7
+ * LCD_D7  PC6
+ */
+void HD44780_Config(CIRCULAR_QUEUE * queue)
 {
   HD44780_queue = queue;
 
@@ -130,7 +130,7 @@ bool HD44780_writeData(void)
   return dataWritten;
 }
 
-bool HD44780_getData(uint8_t *data)
+bool HD44780_getData(uint8_t * data)
 {
   bool dataRead = false;
 

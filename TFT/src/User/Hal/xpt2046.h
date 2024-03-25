@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include "variants.h"  // for uint8_t etc...
+#include <stdint.h>  // for uint8_t etc.
 
 void XPT2046_Init(void);
 uint8_t XPT2046_Read_Pen(void);

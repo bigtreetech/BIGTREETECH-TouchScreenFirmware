@@ -15,7 +15,7 @@
 **
 **  Environment : Atollic TrueSTUDIO(R)
 **
-**  Distribution: The file is distributed �as is,� without any warranty
+**  Distribution: The file is distributed “as is,” without any warranty
 **                of any kind.
 **
 **  (c)Copyright Atollic AB.
@@ -32,12 +32,9 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-/* Highest address of the user mode stack */
-_estack = 0x2000C000;    /* end of 48K RAM */
-
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x5000;      /* required amount of heap  */
-_Min_Stack_Size = 0x1000; /* required amount of stack */
+_Min_Heap_Size = 0x5000;     /* required amount of heap  */
+_Min_Stack_Size = 0x1000;    /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
@@ -46,6 +43,10 @@ MEMORY
   RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 48K
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
 }
+
+/* Highest address of the user mode stack */
+/* _estack = ALIGN(ORIGIN(RAM) + LENGTH(RAM) - 16, 8);    /* end of RAM */
+_estack = 0x2000C000;    /* end of 48K RAM */
 
 /* Define output sections */
 SECTIONS
@@ -77,12 +78,12 @@ SECTIONS
   } >FLASH
 
 
-   .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
-    .ARM : {
+  .ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } >FLASH
+  .ARM : {
     __exidx_start = .;
-      *(.ARM.exidx*)
-      __exidx_end = .;
-    } >FLASH
+    *(.ARM.exidx*)
+    __exidx_end = .;
+  } >FLASH
 
   .ARM.attributes : { *(.ARM.attributes) } > FLASH
 

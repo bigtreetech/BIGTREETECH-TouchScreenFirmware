@@ -2,11 +2,11 @@
 #include "includes.h"
 #include "RRFM20Parser.hpp"
 
-static const char *running_macro_name;
-extern const GUI_RECT titleRect;
+static const char * running_macro_name;
+static const GUI_RECT titleRect;
 
 // Scan files in RRF
-void scanInfoFilesFs(void)
+static void scanInfoFilesFs(void)
 {
   clearInfoFile();
   request_M20_rrf(infoFile.path, false, parseMacroListResponse);
@@ -33,7 +33,7 @@ static inline void runMacro(const char *display_name)
 
 // Draw Macro file list
 // update items in list mode
-void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
+static void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 {
   if (index < infoFile.folderCount)
   {

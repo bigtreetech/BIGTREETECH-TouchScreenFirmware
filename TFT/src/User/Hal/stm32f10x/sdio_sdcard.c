@@ -1,8 +1,7 @@
-#include "variants.h"  // for SD_SDIO_SUPPORT etc...
+#include "sdio_sdcard.h"
 
 #ifdef SD_SDIO_SUPPORT
 
-#include "sdio_sdcard.h"
 #include "GPIO_Init.h"
 #include <string.h>
 
@@ -1304,4 +1303,4 @@ uint8_t SD_WriteDisk(uint8_t*buf,uint32_t sector,uint8_t cnt)
     return sta;
 }
 
-#endif
+#endif  // SD_SDIO_SUPPORT

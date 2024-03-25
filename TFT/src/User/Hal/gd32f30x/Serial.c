@@ -27,7 +27,7 @@ const SERIAL_CFG Serial[_UART_CNT] = {
 };
 
 // disable RX DMA and clear all interrupt flags for a serial port
-void Serial_DMA_DisableAndClearFlagsRX(uint8_t port)
+static void Serial_DMA_DisableAndClearFlagsRX(uint8_t port)
 {
   DMA_CHCTL(Serial[port].dma_stream, Serial[port].dma_channelRX) &= ~(1<<0);  // disable RX DMA
 
@@ -54,17 +54,13 @@ void Serial_DMA_DisableAndClearFlagsRX(uint8_t port)
     case _UART5:
       DMA_INTC(DMA1) = (0x0F << 4);   // DMA1 channel 1
       break;
-
-    case _USART6:
-      DMA_INTC(DMA1) = (0x0F << 20);  // DMA1 channel 5
-      break;
   }
 }
 
 #ifdef TX_DMA_WRITE
 
 // disable TX DMA and clear all interrupt flags for a serial port
-void Serial_DMA_DisableAndClearFlagsTX(uint8_t port)
+static void Serial_DMA_DisableAndClearFlagsTX(uint8_t port)
 {
   DMA_CHCTL(Serial[port].dma_stream, Serial[port].dma_channelTX) &= ~(1<<0);  // disable TX DMA
 
@@ -91,16 +87,12 @@ void Serial_DMA_DisableAndClearFlagsTX(uint8_t port)
     case _UART5:
       DMA_INTC(DMA1) = (0x0F << 12);  // DMA1 channel 3
       break;
-
-    case _USART6:
-      DMA_INTC(DMA1) = (0x0F << 24);  // DMA1 channel 6
-      break;
   }
 }
 
 #endif
 
-void Serial_DMA_Config(uint8_t port)
+static inline void Serial_DMA_Config(uint8_t port)
 {
   const SERIAL_CFG * cfg = &Serial[port];
 
@@ -155,7 +147,7 @@ void Serial_DMA_Config(uint8_t port)
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (1<<0);     // RX enable DMA
 }
 
-void Serial_ClearData(uint8_t port)
+static void Serial_ClearData(uint8_t port)
 {
   dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].cacheSize = 0;
 
@@ -207,7 +199,7 @@ void Serial_DeConfig(uint8_t port)
 #ifdef TX_DMA_WRITE  // TX DMA based serial writing
 
 // DMA serial write support function
-void Serial_Send_TX(uint8_t port)
+static void Serial_Send_TX(uint8_t port)
 {
   // setup DMA transfer, and wait for serial Transfer Complete (TX) interrupt in ISR
   if (dmaL1DataTX[port].wIndex >= dmaL1DataTX[port].rIndex)

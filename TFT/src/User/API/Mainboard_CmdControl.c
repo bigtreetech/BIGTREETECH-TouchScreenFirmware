@@ -4,9 +4,9 @@
 // line number of last command properly processed by mainboard,
 // base line number and line number of last command sent by TFT respectively.
 // Required COMMAND_CHECKSUM feature enabled in TFT
-static uint32_t cmd_line_number_ok = NO_LINE_NUMBER;
+static uint32_t cmd_line_number_ok   = NO_LINE_NUMBER;
 static uint32_t cmd_line_number_base = 0;
-static uint32_t cmd_line_number = 0;
+static uint32_t cmd_line_number      = 0;
 
 uint32_t getCmdLineNumberOk(void)
 {

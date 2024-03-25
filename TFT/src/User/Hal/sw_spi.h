@@ -5,8 +5,7 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include "variants.h"  // for uint8_t etc...
+#include <stdint.h>  // for uint8_t etc.
 
 typedef enum
 {
@@ -26,14 +25,14 @@ typedef struct
   uint8_t   dataSize;
 } _SW_SPI;
 
-void SW_SPI_Config(_SW_SPI *sw_spi, _SPI_MODE mode, uint8_t dataSize,
+void SW_SPI_Config(_SW_SPI * sw_spi, _SPI_MODE mode, uint8_t dataSize,
   uint16_t cs,
   uint16_t sck,
   uint16_t miso,
   uint16_t mosi);
 
-uint16_t SW_SPI_Read_Write(_SW_SPI *sw_spi, uint16_t d);
-void SW_SPI_CS_Set(_SW_SPI *sw_spi, uint8_t level);
+uint16_t SW_SPI_Read_Write(_SW_SPI * sw_spi, uint16_t d);
+void SW_SPI_CS_Set(_SW_SPI * sw_spi, uint8_t level);
 
 #ifdef __cplusplus
 }

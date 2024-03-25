@@ -18,9 +18,9 @@ typedef struct
   bool     pause;
 } BREAK_POINT;
 
-BREAK_POINT infoBreakPoint;
-char powerFailedFileName[sizeof(BREAK_POINT_FILE) + 20 + 1];  // extra 20 chars for concatenation with string returned by getFS()
-FIL fpPowerFailed;
+static BREAK_POINT infoBreakPoint;
+static char powerFailedFileName[sizeof(BREAK_POINT_FILE) + 20 + 1];  // extra 20 chars for concatenation with string returned by getFS()
+static FIL fpPowerFailed;
 
 static bool restore = false;     // print restore flag disabled by default
 static bool restore_ok = false;  // print restore initialization flag disabled by default
@@ -37,12 +37,12 @@ bool powerFailedGetRestore(void)
   return restore;
 }
 
-void powerFailedSetDriverSource(void)
+static void powerFailedSetDriverSource(void)
 {
   sprintf(powerFailedFileName, "%s%s", getFS(), BREAK_POINT_FILE);
 }
 
-bool powerFailedLoad(FIL *print_fp)
+bool powerFailedLoad(FIL * print_fp)
 {
   // set status flag first
   load_ok = false;
@@ -106,13 +106,13 @@ bool powerFailedInitRestore(void)
 
   mustStoreCmd("%s\n", toolChange[infoBreakPoint.tool]);
 
-  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // Bed & Chamber
+  for (uint8_t i = MAX_HEATER_COUNT - 1; i >= MAX_HOTEND_COUNT; i--)  // bed & chamber
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
   }
 
-  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // Tool nozzle
+  for (int8_t i = infoSettings.hotend_count - 1; i >= 0; i--)  // tool nozzle
   {
     if (infoBreakPoint.target[i] != 0)
       mustStoreCmd("%s S%d\n", heatWaitCmd[i], infoBreakPoint.target[i]);
@@ -175,7 +175,7 @@ bool powerFailedExist(void)
   return access_ok;
 }
 
-void powerFailedCreate(char *path)
+void powerFailedCreate(char * path)
 {
   powerFailedDelete();  // close and delete PLR file, if any, first
 
@@ -231,15 +231,15 @@ void powerFailedCache(uint32_t offset)
     }
 
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetCurPercent(0);  // Move speed percent
-    infoBreakPoint.flow = speedGetCurPercent(1);   // Flow percent
+    infoBreakPoint.speed = speedGetCurPercent(0);  // speed percent
+    infoBreakPoint.flow = speedGetCurPercent(1);   // flow percent
 
-    for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // Tool nozzle
+    for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // tool nozzle
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }
 
-    for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // Bed & Chamber
+    for (uint8_t i = MAX_HOTEND_COUNT; i < MAX_HEATER_COUNT; i++)  // bed & chamber
     {
       infoBreakPoint.target[i] = heatGetTargetTemp(i);
     }

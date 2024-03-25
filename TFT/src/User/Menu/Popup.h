@@ -19,7 +19,7 @@ extern BUTTON bottomDoubleBtn[];
 
 void _setDialogTitleStr(uint8_t * str);
 void _setDialogMsgStr(uint8_t * str);
-uint8_t *getDialogMsgStr(void);
+uint8_t * getDialogMsgStr(void);
 void _setDialogOkTextStr(uint8_t * str);
 void _setDialogCancelTextStr(uint8_t * str);
 
@@ -28,20 +28,20 @@ void _setDialogMsgLabel(int16_t index);
 void _setDialogOkTextLabel(int16_t index);
 void _setDialogCancelTextLabel(int16_t index);
 
-#define setDialogTitle(x) _Generic(((x+0)), const uint8_t*: _setDialogTitleStr, \
-                                                  uint8_t*: _setDialogTitleStr, \
-                                                   default: _setDialogTitleLabel)(x)
-#define setDialogMsg(x) _Generic(((x+0)), const uint8_t*: _setDialogMsgStr, \
-                                                uint8_t*: _setDialogMsgStr, \
-                                                 default: _setDialogMsgLabel)(x)
-#define setDialogOkText(x) _Generic(((x+0)), const uint8_t*: _setDialogOkTextStr, \
-                                                   uint8_t*: _setDialogOkTextStr, \
-                                                    default: _setDialogOkTextLabel)(x)
-#define setDialogCancelText(x) _Generic(((x+0)), const uint8_t*: _setDialogCancelTextStr, \
-                                                       uint8_t*: _setDialogCancelTextStr, \
-                                                        default: _setDialogCancelTextLabel)(x)
+#define setDialogTitle(x) _Generic(((x+0)), const uint8_t *: _setDialogTitleStr, \
+                                                  uint8_t *: _setDialogTitleStr, \
+                                                    default: _setDialogTitleLabel)(x)
+#define setDialogMsg(x) _Generic(((x+0)), const uint8_t *: _setDialogMsgStr, \
+                                                uint8_t *: _setDialogMsgStr, \
+                                                  default: _setDialogMsgLabel)(x)
+#define setDialogOkText(x) _Generic(((x+0)), const uint8_t *: _setDialogOkTextStr, \
+                                                   uint8_t *: _setDialogOkTextStr, \
+                                                     default: _setDialogOkTextLabel)(x)
+#define setDialogCancelText(x) _Generic(((x+0)), const uint8_t *: _setDialogCancelTextStr, \
+                                                       uint8_t *: _setDialogCancelTextStr, \
+                                                         default: _setDialogCancelTextLabel)(x)
 
-// set text from LABEL index or pointer (uint8_t*)
+// set text from LABEL index or pointer (uint8_t *)
 #define setDialogText(title, msg, oktext, canceltext) \
   {                                                   \
     setDialogTitle(title);                            \
@@ -53,7 +53,7 @@ void _setDialogCancelTextLabel(int16_t index);
 void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context,
                    const uint8_t * yes, const uint8_t * no);
 void menuDialog(void);
-void showDialog(DIALOG_TYPE type, void (*ok_action)(), void (*cancel_action)(), void (*loop_action)());
+void showDialog(DIALOG_TYPE type, void (* ok_action)(), void (* cancel_action)(), void (* loop_action)());
 void loopPopup(void);
 
 /**

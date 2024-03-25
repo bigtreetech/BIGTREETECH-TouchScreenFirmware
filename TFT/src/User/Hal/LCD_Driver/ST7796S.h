@@ -5,10 +5,7 @@
 extern "C" {
 #endif
 
-#define ST7796S_0_DEGREE_REG_VALUE   0X28
-#define ST7796S_180_DEGREE_REG_VALUE 0XE8
-#define ST7796S_90_DEGREE_REG_VALUE  0X88
-#define ST7796S_270_DEGREE_REG_VALUE 0X48
+#include <stdint.h>
 
 uint8_t LCD_DriveIsST7796S(void);
 void ST7796S_Init_Sequential(void);

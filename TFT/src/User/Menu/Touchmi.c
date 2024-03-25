@@ -1,7 +1,7 @@
 #include "Touchmi.h"
 #include "includes.h"
 
-const MENUITEMS touchmiItems = {
+static const MENUITEMS touchmiItems = {
   // title
   LABEL_TOUCHMI,
   // icon                          label
@@ -26,6 +26,7 @@ void menuTouchMi(void)
   while (MENU_IS(menuTouchMi))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

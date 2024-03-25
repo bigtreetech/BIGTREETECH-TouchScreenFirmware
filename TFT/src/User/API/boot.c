@@ -13,19 +13,19 @@ typedef enum
   BMP_INVALIDFILE
 } BMPUPDATE_STAT;
 
-const GUI_RECT labelUpdateRect = {0,     BYTE_HEIGHT + PADDING,                 LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING};
-const GUI_RECT iconUpdateRect  = {0, (BYTE_HEIGHT*2) + PADDING*2,               LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING*3 + ICON_HEIGHT};
-const GUI_RECT statUpdateRect  = {0, (BYTE_HEIGHT*3) + PADDING*3 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*4) + PADDING*3 + ICON_HEIGHT};
-const GUI_RECT labelFailedRect = {0, (BYTE_HEIGHT*4) + PADDING*4 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*5) + PADDING*4 + ICON_HEIGHT};
+static const GUI_RECT labelUpdateRect = {0,     BYTE_HEIGHT + PADDING,                 LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING};
+static const GUI_RECT iconUpdateRect  = {0, (BYTE_HEIGHT*2) + PADDING*2,               LCD_WIDTH, (BYTE_HEIGHT*2) + PADDING*3 + ICON_HEIGHT};
+static const GUI_RECT statUpdateRect  = {0, (BYTE_HEIGHT*3) + PADDING*3 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*4) + PADDING*3 + ICON_HEIGHT};
+static const GUI_RECT labelFailedRect = {0, (BYTE_HEIGHT*4) + PADDING*4 + ICON_HEIGHT, LCD_WIDTH, (BYTE_HEIGHT*5) + PADDING*4 + ICON_HEIGHT};
 
-const uint32_t fontAddrList[] = {
+static const uint32_t fontAddrList[] = {
   BYTE_ASCII_ADDR,
   WORD_UNICODE_ADDR,
   LARGE_FONT_ADDR,
   _8X16_FONT_ADDR
 };
 
-const char * fontPathList[] = {
+static const char * fontPathList[] = {
   FONT_UPDATE_DIR "/" FILE_ASCII_FONT,
   FONT_UPDATE_DIR "/" FILE_UNICODE_FONT,
   FONT_UPDATE_DIR "/" FILE_LARGE_ASCII_FONT,
@@ -33,15 +33,15 @@ const char * fontPathList[] = {
 };
 
 // this list is Auto-Generated. Please add new icons in icon_list.inc only
-const char * const iconBmpName[] = {
+static const char * const iconBmpName[] = {
   #define X_ICON(NAME) #NAME ,
     #include "icon_list.inc"
   #undef X_ICON
 };
 
-GUI_POINT bmpSize;
+static GUI_POINT bmpSize;
 
-BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
+static BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 {
   FIL bmpFile;
   char magic[2];
@@ -135,7 +135,7 @@ BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   return BMP_SUCCESS;
 }
 
-void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
+static void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
 {
   char * statTxt;
   char errorTxt[30];

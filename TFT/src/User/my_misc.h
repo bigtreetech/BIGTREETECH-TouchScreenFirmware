@@ -72,17 +72,17 @@ extern "C" {
 uint8_t inRange(int cur, int tag , int range);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
-uint32_t calculateCRC16(const uint8_t *data, uint32_t length);  // calculate CRC16 checksum
+uint32_t calculateCRC16(const uint8_t * data, uint32_t length);  // calculate CRC16 checksum
 
-uint8_t string_2_uint8(const uint8_t *str);                               // string convert to uint8, MSB ("2C" to 0x2C)
-uint8_t *uint8_2_string(uint8_t num, uint8_t *str);                       // uint8 convert to string, MSB (0x2C to "2C")
-uint32_t string_2_uint32(const uint8_t *str, const uint8_t bytes_num);    // string convert to uint32, MSB
-uint8_t *uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t *str);  // uint32 convert to string, MSB
-void time_2_string(char *buf, char *str_format, uint32_t time);           // convert time to string with given formatting
+uint8_t string_2_uint8(const uint8_t * str);                                // string convert to uint8, MSB ("2C" to 0x2C)
+uint8_t * uint8_2_string(uint8_t num, uint8_t * str);                       // uint8 convert to string, MSB (0x2C to "2C")
+uint32_t string_2_uint32(const uint8_t * str, const uint8_t bytes_num);     // string convert to uint32, MSB
+uint8_t * uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t * str);  // uint32 convert to string, MSB
+void time_2_string(char * buf, char * str_format, uint32_t time);           // convert time to string with given formatting
 
-double strtod_ligth(char *str, char **endptr);               // light weight strtod() function without exponential support
-void strncpy_pad(char *dest, const char *src, size_t n);     // light weight and safe strncpy() function with padding
-void strncpy_no_pad(char *dest, const char *src, size_t n);  // light weight and safe strncpy() function without padding
+double strtod_ligth(char * str, char ** endptr);               // light weight strtod() function without exponential support
+void strncpy_pad(char * dest, const char * src, size_t n);     // light weight and safe strncpy() function with padding
+void strncpy_no_pad(char * dest, const char * src, size_t n);  // light weight and safe strncpy() function without padding
 
 #ifdef __cplusplus
 }

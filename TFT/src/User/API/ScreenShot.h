@@ -9,7 +9,7 @@ extern "C" {
 #include "variants.h"  // for SCREEN_SHOT_TO_SD
 
 #ifdef SCREEN_SHOT_TO_SD
-  bool screenShotBMP(char *bmp);
+  bool screenShotBMP(char * bmp);
   void loopScreenShot(void);
 #endif
 

@@ -1,25 +1,6 @@
 #include "FeatureSettings.h"
 #include "includes.h"
 
-static uint16_t fe_cur_page = 0;
-
-// parameter values
-
-#define ITEM_TOGGLE_AUTO_NUM 3
-const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
-{
-  LABEL_OFF,
-  LABEL_ON,
-  LABEL_AUTO
-};
-
-#define ITEM_TOGGLE_SMART_NUM 2
-const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
-{
-  LABEL_ON,
-  LABEL_SMART
-};
-
 // add key number index of the items
 typedef enum
 {
@@ -53,7 +34,26 @@ typedef enum
   SKEY_COUNT                  // keep this always at the end
 } SKEY_LIST;
 
-void resetSettings(void)
+// parameter values
+
+#define ITEM_TOGGLE_AUTO_NUM 3
+static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
+{
+  LABEL_OFF,
+  LABEL_ON,
+  LABEL_AUTO
+};
+
+#define ITEM_TOGGLE_SMART_NUM 2
+static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
+{
+  LABEL_ON,
+  LABEL_SMART
+};
+
+static uint16_t fe_cur_page = 0;
+
+static void resetSettings(void)
 {
   initSettings();
   storePara();
@@ -131,10 +131,10 @@ static inline void updateFeatureSettings(uint8_t item_index)
     default:
       return;
   }
-}  // updateFeatureSettings
+} // updateFeatureSettings
 
 // load values on page change and reload
-void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
+static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
 {
   if (item_index < SKEY_COUNT)
   {
@@ -209,7 +209,7 @@ void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t itemPos)
         break;
     }
   }
-}  // loadFeatureSettings
+} // loadFeatureSettings
 
 void menuFeatureSettings(void)
 {

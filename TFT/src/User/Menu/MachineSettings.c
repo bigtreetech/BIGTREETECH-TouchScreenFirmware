@@ -17,7 +17,7 @@ void menuCustom(void)
   {
     customItems[i].icon = CHARICON_CODE;
     customItems[i].itemType = LIST_LABEL;
-    customItems[i].titlelabel.address = (uint8_t*)customcodes.name[i];
+    customItems[i].titlelabel.address = (uint8_t *)customcodes.name[i];
   }
 
   listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);
@@ -28,7 +28,7 @@ void menuCustom(void)
 
 #ifdef QUICK_EEPROM_BUTTON
 
-void menuEepromSettings(void)
+static void menuEepromSettings(void)
 {
   MENUITEMS eepromSettingsItems = {
     // title
@@ -53,6 +53,7 @@ void menuEepromSettings(void)
   while (MENU_IS(menuEepromSettings))
   {
     curIndex = menuKeyGetValue();
+
     switch (curIndex)
     {
       case KEY_ICON_0:
@@ -132,6 +133,7 @@ void menuMachineSettings(void)
   while (MENU_IS(menuMachineSettings))
   {
     curIndex = menuKeyGetValue();
+
     switch (curIndex)
     {
       case KEY_ICON_0:

@@ -7,8 +7,8 @@ extern "C" {
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "variants.h"
-#include "GUI.h"
+#include "variants.h"  // for PORTRAIT_MODE etc.
+#include "GUI.h"       // for GUI_POINT etc.
 
 #ifdef PORTRAIT_MODE
   #define SPACE_X          ((LCD_WIDTH - ICON_WIDTH * 3) / 3)
@@ -29,14 +29,12 @@ extern "C" {
 // select marlin or bigtree
 #define SPACE_SELEX      ((LCD_WIDTH - ICON_WIDTH * 2) / 4)
 #define SPACE_SELEY      ((LCD_HEIGHT - ICON_HEIGHT) / 2)
-#define text_startx      (LCD_WIDTH / 2)
+#define TEXT_STARTX      (LCD_WIDTH / 2)
 
 // thumbnail parser options
 #define PARSER_CLASSIC   0
 #define PARSER_RGB565    1
 #define PARSER_BASE64PNG 2
-
-#define COLOR_BYTE_SIZE sizeof(uint16_t)  // RGB565 color byte is equal to uint16_t
 
 typedef struct
 {
@@ -46,17 +44,17 @@ typedef struct
   uint16_t height;
 } BMP_INFO;
 
-void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t *buf, GUI_RECT *limit);
+void lcd_buffer_display(uint16_t sx, uint16_t sy, uint16_t w, uint16_t h, uint16_t * buf, GUI_RECT * limit);
 
-void getBMPsize(BMP_INFO *bmp);
+void getBMPsize(BMP_INFO * bmp);
 
+void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address);
 void LOGO_ReadDisplay(void);
 void ICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
-void ICON_ReadBuffer(uint16_t *buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon);
+void ICON_ReadBuffer(uint16_t * buf, uint16_t x, uint16_t y, int16_t w, int16_t h, uint16_t icon);
 uint16_t ICON_ReadPixel(uint32_t address, uint16_t w, uint16_t h, int16_t x, int16_t y);
-bool model_DirectDisplay(GUI_POINT pos, char *gcode);
-bool model_DecodeToFlash(char *gcode);
-void IMAGE_ReadDisplay(uint16_t sx, uint16_t sy, uint32_t address);
+bool model_DirectDisplay(GUI_POINT pos, char * gcode);
+bool model_DecodeToFlash(char * gcode);
 void SMALLICON_ReadDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 void ICON_PressedDisplay(uint16_t sx, uint16_t sy, uint8_t icon);
 

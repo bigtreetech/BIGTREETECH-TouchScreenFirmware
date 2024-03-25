@@ -25,13 +25,14 @@ void LCD_Enc_SetActiveSignal(uint8_t status)
 #define B01  1
 #define B10  2
 
+static volatile int8_t encoderDiff;  // updated in LCD_Enc_CheckSteps(), added to encoderPosition at every LCD update
 static uint8_t encoderLastState = 0;
 static uint8_t encoderLastSteps = 0;
-volatile int8_t encoderDiff;  // updated in LCD_Enc_CheckSteps(), added to encoderPosition at every LCD update
-int8_t encoderDirection = 1;
+static int8_t encoderDirection = 1;
+
 int16_t encoderPosition = 0;
 
-bool LCD_Enc_ReadStep(uint16_t io_pin)
+static bool LCD_Enc_ReadStep(uint16_t io_pin)
 {
   return !GPIO_GetLevel(io_pin);
 }
@@ -138,7 +139,7 @@ void LCD_Enc_SendPulse(uint8_t num)
   LCD_Enc_Init();
 }
 
-bool LCD_Enc_CheckState()
+bool LCD_Enc_CheckState(void)
 {
   if (LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL) || LCD_Enc_ReadPos() != encoderLastState)
   {

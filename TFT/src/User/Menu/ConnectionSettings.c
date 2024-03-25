@@ -1,9 +1,9 @@
 #include "ConnectionSettings.h"
 #include "includes.h"
 
-SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
+static SERIAL_PORT_INDEX portIndex = 0;  // index on serialPort array
 
-void updateListeningMode(MENUITEMS * menu)
+static void updateListeningMode(MENUITEMS * menu)
 {
   menu->items[4].label.index = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1) ? LABEL_OFF : LABEL_ON;
 
@@ -11,7 +11,7 @@ void updateListeningMode(MENUITEMS * menu)
 }
 
 // disconnect (free uart), wait for a key press and finally connect again (set uart pins to input)
-void refreshConnection(void)
+static void refreshConnection(void)
 {
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
@@ -38,7 +38,7 @@ void refreshConnection(void)
   Serial_Init(ALL_PORTS);
 }
 
-void menuBaudrate(void)
+static void menuBaudrate(void)
 {
   LABEL title = {LABEL_BAUDRATE};
   uint8_t minIndex = portIndex == PORT_1 ? 1 : 0;  // if primary serial port, set minIndex to 1 (value OFF is skipped)
@@ -92,7 +92,7 @@ void menuBaudrate(void)
   saveSettings();  // save settings
 }
 
-void menuSerialPorts(void)
+static void menuSerialPorts(void)
 {
   LABEL title = {LABEL_SERIAL_PORTS};
   LISTITEM totalItems[SERIAL_PORT_COUNT];
@@ -149,6 +149,7 @@ void menuConnectionSettings(void)
   while (MENU_IS(menuConnectionSettings))
   {
     curIndex = menuKeyGetValue();
+
     switch (curIndex)
     {
       case KEY_ICON_0:

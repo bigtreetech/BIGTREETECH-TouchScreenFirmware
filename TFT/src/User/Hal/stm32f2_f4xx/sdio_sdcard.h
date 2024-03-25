@@ -34,6 +34,10 @@
   extern "C" {
 #endif
 
+#include "variants.h"  // for SD_SDIO_SUPPORT etc.
+
+#ifdef SD_SDIO_SUPPORT
+
 /* Includes ------------------------------------------------------------------*/
 //#include "stm324xg_eval.h"
 #include "stm32f4xx.h"
@@ -354,6 +358,8 @@ typedef struct
 /** @defgroup STM324xG_EVAL_SDIO_SD_Exported_Functions
   * @{
   */
+uint8_t SD_CD_Inserted(void);
+
 void SD_DeInit(void);
 SD_Error SD_Init(void);
 SDTransferState SD_GetStatus(void);
@@ -381,6 +387,8 @@ SD_Error SD_WaitReadOperation(void);
 SD_Error SD_WaitWriteOperation(void);
 u8 SD_ReadDisk(u8*buf,u32 sector,u8 cnt);   //Read SD card, fatfs / usb call
 u8 SD_WriteDisk(u8*buf,u32 sector,u8 cnt);  //Write SD card, fatfs / usb call
+
+#endif  // SD_SDIO_SUPPORT
 
 #ifdef __cplusplus
 }

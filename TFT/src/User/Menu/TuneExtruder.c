@@ -11,7 +11,7 @@ static uint8_t degreeSteps_index = 1;
 static uint8_t extStep_index = 0;
 static bool loadRequested = false;
 
-void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
+static void showNewESteps(const float measured_length, const float old_esteps, float * new_esteps)
 {
   char tempstr[20];
 
@@ -23,14 +23,14 @@ void showNewESteps(const float measured_length, const float old_esteps, float * 
   sprintf(tempstr, "  %0.2fmm  ", measured_length);
   GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
 
-  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
+  sprintf(tempstr, (char *)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
   GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *)tempstr);
 
-  sprintf(tempstr, (char*)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
+  sprintf(tempstr, (char *)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
   GUI_DispString(exhibitRect.x0,  exhibitRect.y1, (uint8_t *)tempstr);
 }
 
-void menuNewExtruderESteps(void)
+static void menuNewExtruderESteps(void)
 {
   // extruder steps are not correct. Ask user for the amount that's extruded.
   // Automaticaly calculate new steps/mm when changing the measured distance.

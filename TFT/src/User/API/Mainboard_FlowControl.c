@@ -7,7 +7,7 @@ PRIORITY_COUNTER priorityCounter;
 HOST infoHost;
 MENU infoMenu;
 
-void resetInfoQueries(void)
+static inline void resetInfoQueries(void)
 {
   fanResetSpeed();
   coordinateSetKnown(false);
@@ -44,7 +44,7 @@ void loopBackEnd(void)
   // parse the received slave response information
   parseAck();
 
-  // retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc...
+  // retrieve and store (in command queue) the gcodes received from other UART, such as ESP3D etc.
   #ifdef SERIAL_PORT_2
     Serial_GetFromUART();
   #endif
@@ -153,7 +153,7 @@ void loopProcess(void)
   loopFrontEnd();
 }
 
-void menuDummy(void)
+static void menuDummy(void)
 {
   CLOSE_MENU();
 }

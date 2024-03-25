@@ -45,6 +45,7 @@ void menuTuning(void)
   while (MENU_IS(menuTuning))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

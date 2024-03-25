@@ -96,7 +96,7 @@
 #define _TIM15_CH4 (((_TIM15)<<8) + 3)
 
 #define TIMER_GET_TIM(n) ((n>>8) & 0xFF)
-#define TIMER_GET_CH(n) (n & 0xFF)
+#define TIMER_GET_CH(n)  (n & 0xFF)
 
 void TIM_PWM_SetDutyCycle(uint16_t tim_ch, uint8_t duty);
 void TIM_PWM_Init(uint16_t tim_ch);

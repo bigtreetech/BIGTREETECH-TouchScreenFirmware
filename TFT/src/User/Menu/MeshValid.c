@@ -1,7 +1,7 @@
 #include "MeshValid.h"
 #include "includes.h"
 
-const MENUITEMS meshValidItems = {
+static const MENUITEMS meshValidItems = {
   // title
   LABEL_MESH_VALID,
   // icon             label
@@ -22,7 +22,7 @@ void menuMeshValid(void)
   KEY_VALUES key_num;
   PREHEAT_STORE preheatStore;
 
-  W25Qxx_ReadBuffer((uint8_t*)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
   menuDrawPage(&meshValidItems);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
@@ -33,6 +33,7 @@ void menuMeshValid(void)
   while (MENU_IS(menuMeshValid))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:  // MESHVALID PLA

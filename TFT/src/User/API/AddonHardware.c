@@ -83,7 +83,7 @@ void FIL_SFS_SetAlive(bool alive)
   sfs_alive = alive;
 }
 
-bool FIL_NormalRunoutDetect(void)
+static bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
   static int32_t trigBalance = 0;

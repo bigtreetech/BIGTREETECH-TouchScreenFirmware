@@ -5,8 +5,8 @@
 
 #define CUSTOM_VAL_LEN 7
 
-char * dynamic_label[LISTITEM_PER_PAGE];
-char dynamic_text_value[LISTITEM_PER_PAGE][10];
+static char * dynamic_label[LISTITEM_PER_PAGE];
+static char dynamic_text_value[LISTITEM_PER_PAGE][10];
 
 void setDynamicLabel(uint8_t i, char * label)
 {
@@ -59,7 +59,7 @@ static inline void DrawListItemPress(const GUI_RECT * rect, bool pressed)
 }
 
 // draw title text of list item
-static inline void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width)
+static void draw_itemtitle(GUI_POINT pos, LABEL label, uint8_t position, int textarea_width)
 {
   if (label.index != LABEL_NULL)
   {
@@ -140,6 +140,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
     {
       GUI_ClearPrect(rect);
     }
+
     GUI_RestoreColorDefault();
   }
   // draw list items
@@ -156,6 +157,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
+
         textarea_width = LISTITEM_WIDTH - (pos.x + 1);  // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
         break;
@@ -181,6 +183,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 1);
         }
+
         textarea_width = LISTITEM_WIDTH - (pos.x + BYTE_HEIGHT + 2);  // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
 
@@ -195,6 +198,7 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
           drawCharIcon(rect, LEFT, curitem->icon, true, infoSettings.bg_color);
           pos.x += (BYTE_HEIGHT + 3);
         }
+
         GUI_ClearRect(pos.x, rect->y0, rect->x1 - BYTE_WIDTH * 8 - 1, rect->y1);  // clear only text area
         textarea_width = LISTITEM_WIDTH - (pos.x + 1);                            // width after removing the width for icon
         draw_itemtitle(pos, curitem->titlelabel, position, textarea_width);
@@ -211,5 +215,6 @@ void ListItem_Display(const GUI_RECT * rect, uint8_t position, const LISTITEM * 
   {
     GUI_ClearPrect(rect);
   }
+
   GUI_RestoreColorDefault();
 }

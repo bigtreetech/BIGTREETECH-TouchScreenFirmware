@@ -1,7 +1,7 @@
 #include "Home.h"
 #include "includes.h"
 
-const MENUITEMS homeItems = {
+static const MENUITEMS homeItems = {
   // title
   LABEL_HOME,
   // icon                          label
@@ -26,13 +26,14 @@ void menuHome(void)
   while (MENU_IS(menuHome))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0: storeCmd("G28\n");   break;
       case KEY_ICON_1: storeCmd("G28 X\n"); break;
       case KEY_ICON_2: storeCmd("G28 Y\n"); break;
       case KEY_ICON_3: storeCmd("G28 Z\n"); break;
-      case KEY_ICON_7: CLOSE_MENU();      break;
+      case KEY_ICON_7: CLOSE_MENU();        break;
       default: break;
     }
 

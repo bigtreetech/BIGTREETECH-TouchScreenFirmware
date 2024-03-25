@@ -41,7 +41,7 @@ extern "C" {
 
 #include "variants.h"
 
-// largest possilbe Float number
+// Largest possilbe Float number
 #define PRINTF_MAX_FLOAT  1e8
 
 // Disable support for long long

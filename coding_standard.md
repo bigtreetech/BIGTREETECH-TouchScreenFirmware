@@ -228,7 +228,7 @@ void parseData(uint8_t * data)
 - Use 2 spaces and don’t use tabs.
 - All block elements should increase the indentation level, including #if blocks and other non-brace compiler blocks:
 ```C
-void testFunction()
+void testFunction(void)
 {
   if (variableA == 0)
   {

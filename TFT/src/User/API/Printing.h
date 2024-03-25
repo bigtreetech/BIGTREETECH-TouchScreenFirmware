@@ -72,13 +72,13 @@ uint32_t getPrintTime(void);
 
 void setPrintRemainingTime(int32_t remainingTime);  // used for M73 Rxx and M117 Time Left xx
 void parsePrintRemainingTime(char * buffer);        // used for M117 Time Left xx
-uint32_t getPrintRemainingTime();
+uint32_t getPrintRemainingTime(void);
 
 void setPrintLayerNumber(uint16_t layerNumber);
-uint16_t getPrintLayerNumber();
+uint16_t getPrintLayerNumber(void);
 
 void setPrintLayerCount(uint16_t layerCount);
-uint16_t getPrintLayerCount();
+uint16_t getPrintLayerCount(void);
 
 void setPrintProgressSource(PROG_FROM progressSource);
 PROG_FROM getPrintProgressSource(void);

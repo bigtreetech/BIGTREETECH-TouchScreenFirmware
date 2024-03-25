@@ -53,7 +53,7 @@
 #endif
 // add new keywords in Language.inc file only
 
-uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
+static uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 const char *const default_pack[LABEL_NUM] = {
   #define X_WORD(NAME) STRING_##NAME ,
@@ -71,7 +71,9 @@ const char *const lang_key_list[LABEL_NUM] =
 
 uint32_t getLabelFlashAddr(uint16_t index)
 {
-  if (index > LABEL_NULL) return LANGUAGE_ADDR;
+  if (index > LABEL_NULL)
+    return LANGUAGE_ADDR;
+
   return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
 }
 
@@ -81,9 +83,11 @@ uint8_t *textSelect(uint16_t index)
   {
     case LANG_DEFAULT:
       return (uint8_t *)default_pack[index];
+
     case LANG_FLASH:
       W25Qxx_ReadBuffer(tempLabelString, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
       return tempLabelString;
+
     default:
       return NULL;
   }
@@ -91,7 +95,10 @@ uint8_t *textSelect(uint16_t index)
 
 bool loadLabelText(uint8_t * buf, uint16_t index)
 {
-  if (index >= LABEL_NUM) return false;
+  if (index >= LABEL_NUM)
+    return false;
+
   memcpy(buf, textSelect(index), sizeof(tempLabelString));
+
   return true;
 }

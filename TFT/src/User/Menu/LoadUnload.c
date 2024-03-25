@@ -10,7 +10,7 @@ typedef enum
   UNLOAD_STARTED,
 } CMD_TYPE;
 
-const MENUITEMS loadUnloadItems = {
+static const MENUITEMS loadUnloadItems = {
   // title
   LABEL_LOAD_UNLOAD,
   // icon                          label
@@ -27,7 +27,7 @@ const MENUITEMS loadUnloadItems = {
 };
 
 static uint8_t tool_index = NOZZLE0;
-CMD_TYPE lastCmd = NONE;
+static CMD_TYPE lastCmd = NONE;
 
 void menuLoadUnload(void)
 {

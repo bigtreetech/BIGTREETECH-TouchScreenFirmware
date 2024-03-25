@@ -1,7 +1,7 @@
 #include "NotificationMenu.h"
 #include "includes.h"
 
-void loadNotificationItems(void)
+static void loadNotificationItems(void)
 {
   LISTITEMS * itemlist = getCurListItems();
 
@@ -67,6 +67,7 @@ void menuNotification(void)
   while (MENU_IS(menuNotification))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

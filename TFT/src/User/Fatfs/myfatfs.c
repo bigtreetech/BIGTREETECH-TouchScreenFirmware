@@ -1,5 +1,5 @@
 #include "myfatfs.h"
-#include "includes.h"  // for infoSettings etc...
+#include "includes.h"  // for infoSettings etc.
 #include "diskio.h"
 
 FATFS fatfs[FF_VOLUMES];  // FATFS work area
@@ -129,82 +129,94 @@ bool scanPrintFilesFatFs(void)
   return true;
 }
 
-bool f_file_exists(const TCHAR* path)
+bool f_file_exists(const TCHAR * path)
 {
   FIL tmp;
 
   if (f_open(&tmp, path, FA_OPEN_EXISTING) == FR_OK)
   {
     f_close(&tmp);
+
     return true;
   }
+
   return false;
 }
 
-bool f_dir_exists(const TCHAR* path)
+bool f_dir_exists(const TCHAR * path)
 {
   DIR tmp;
 
   if (f_opendir(&tmp, path) == FR_OK)
   {
     f_closedir(&tmp);
+
     return true;
   }
+
   return false;
 }
 
 static FRESULT f_remove_node(
-  TCHAR* path,   // Path name buffer with the sub-directory to delete
-  UINT sz_buff,  // Size of path name buffer (items)
-  FILINFO* fno   // Name read buffer
+  TCHAR * path,   // path name buffer with the sub-directory to delete
+  UINT sz_buff,   // size of path name buffer (items)
+  FILINFO * fno   // name read buffer
 )
 {
   UINT i, j;
   FRESULT fr;
   DIR dir;
 
-  fr = f_opendir(&dir, path);  // Open the directory
-  if (fr != FR_OK) return fr;
+  fr = f_opendir(&dir, path);  // open the directory
 
-  for (i = 0; path[i]; i++);  // Get current path length
+  if (fr != FR_OK)
+    return fr;
+
+  for (i = 0; path[i]; i++);  // get current path length
+
   path[i++] = '/';
 
   for (;;)
   {
-    fr = f_readdir(&dir, fno);  // Get a directory item
-    if (fr != FR_OK || !fno->fname[0])  // End of directory?
+    fr = f_readdir(&dir, fno);  // get a directory item
+
+    if (fr != FR_OK || !fno->fname[0])  // end of directory?
       break;
+
     j = 0;
+
     do
-    { // Make a path name
+    { // make a path name
       if (i + j >= sz_buff)
-      { // Buffer over flow?
+      { // buffer over flow?
         fr = FR_DENIED;
-        goto end_delete;  // Fails with 100 when buffer overflow
+
+        goto end_delete;  // fails with 100 when buffer overflow
       }
+
       path[i + j] = fno->fname[j];
     } while (fno->fname[j++]);
-    if (fno->fattrib & AM_DIR)
-    { // Item is a directory
+
+    if (fno->fattrib & AM_DIR)  // item is a directory
       fr = f_remove_node(path, sz_buff, fno);
-    }
-    else
-    { // Item is a file
+    else  // item is a file
       fr = f_unlink(path);
-    }
+
     if (fr != FR_OK)
       break;
   }
 
 end_delete:
-  path[--i] = 0;  // Restore the path name
+  path[--i] = 0;  // restore the path name
   f_closedir(&dir);
 
-  if (fr == FR_OK) fr = f_unlink(path);  // Delete the empty directory
+  if (fr == FR_OK)
+    fr = f_unlink(path);  // delete the empty directory
+
   return fr;
 }
 
-bool f_remove_full_dir(const TCHAR* path)
+bool f_remove_full_dir(const TCHAR * path)
 {
   #define BUFFER_SIZE 256
 
@@ -212,9 +224,9 @@ bool f_remove_full_dir(const TCHAR* path)
   FILINFO tmpInfo;
 
   strncpy_no_pad(dirBuffer, path, BUFFER_SIZE);
+
   if (f_remove_node(dirBuffer, BUFFER_SIZE, &tmpInfo) == FR_OK)
-  {
     return true;
-  }
+
   return false;
 }

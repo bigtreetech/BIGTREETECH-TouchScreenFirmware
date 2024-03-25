@@ -5,7 +5,7 @@
 extern "C"
 {
 #endif
-  void rrfParseAck(const char *data);
+  void rrfParseAck(const char * data);
 #ifdef __cplusplus
 }
 #endif
@@ -68,8 +68,8 @@ private:
 
   uint16_t index = 0;
 
-  char *m291_msg = NULL;
-  char *m291_title = NULL;
+  char * m291_msg = NULL;
+  char * m291_title = NULL;
   uint32_t m291_timeo = 0;
 
 public:
@@ -78,7 +78,7 @@ public:
   inline void startObject() {}
   inline void endObject() {}
   inline void whitespace(char c) {}
-  virtual void endDocument();
+  virtual void endDocument(void);
 
   inline void startArray()
   {
@@ -91,7 +91,7 @@ public:
     in_array = false;
   }
 
-  inline void key(const char *key)
+  inline void key(const char * key)
   {
     if (strcmp(STATUS, key) == 0)
     {
@@ -167,7 +167,7 @@ public:
     }
   }
 
-  virtual void value(const char *value);
+  virtual void value(const char * value);
 };
 #endif
 

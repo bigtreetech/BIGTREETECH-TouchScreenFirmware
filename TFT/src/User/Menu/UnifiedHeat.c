@@ -1,7 +1,7 @@
 #include "UnifiedHeat.h"
 #include "includes.h"
 
-const MENUITEMS UnifiedHeatItems = {
+static const MENUITEMS UnifiedHeatItems = {
   // title
   LABEL_UNIFIEDHEAT,
   // icon                          label
@@ -26,6 +26,7 @@ void menuUnifiedHeat(void)
   while (MENU_IS(menuUnifiedHeat))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:

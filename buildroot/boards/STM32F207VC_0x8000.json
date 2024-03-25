@@ -28,7 +28,7 @@
     "mbed",
     "stm32cube"
   ],
-  "name": "STM32F207VC (96k RAM. 256k - 32K Flash)",
+  "name": "STM32F207VC (96K RAM, 256K - 32K Flash)",
   "upload": {
     "offset_address": "0x8008000",
     "maximum_ram_size": 98304,

@@ -15,7 +15,7 @@
   #define COLD_TEMPERATURE 0
 #endif
 
-inline static bool nextUpdate(void)
+static inline bool nextUpdate(void)
 {
   static uint32_t lastUpdateTime = 0;
 
@@ -29,7 +29,7 @@ inline static bool nextUpdate(void)
 
 #ifdef ROOM_TEMPERATURE
 
-void getColdTemperature(void)
+static inline void getColdTemperature(void)
 { // let's estimate the room temperature
   if (coldTemperature == 0)
   {

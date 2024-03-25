@@ -1,9 +1,9 @@
 #include "PreheatMenu.h"
 #include "includes.h"
 
-const GUI_POINT preheat_title = {ICON_WIDTH / 2, PREHEAT_TITLE_Y };
-const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_TOOL_Y};
-const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_BED_Y};
+static const GUI_POINT preheat_title = {ICON_WIDTH / 2, PREHEAT_TITLE_Y };
+static const GUI_POINT preheat_val_tool = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_TOOL_Y};
+static const GUI_POINT preheat_val_bed = {ICON_WIDTH - BYTE_WIDTH / 2, PREHEAT_BED_Y};
 
 typedef enum
 {
@@ -13,7 +13,7 @@ typedef enum
   PREHEAT_TOOL_COUNT = 3,
 } TOOLPREHEAT;
 
-void setPreheatIcon(ITEM * item, TOOLPREHEAT nowHeater)
+static void setPreheatIcon(ITEM * item, TOOLPREHEAT nowHeater)
 {
   switch (nowHeater)
   {
@@ -107,7 +107,7 @@ void menuPreheat(void)
   setPreheatIcon(&preheatItems.items[KEY_ICON_6], nowHeater);
   menuDrawPage(&preheatItems);
 
-  W25Qxx_ReadBuffer((uint8_t*)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {

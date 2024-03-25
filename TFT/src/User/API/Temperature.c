@@ -157,6 +157,7 @@ bool heatSetTool(const uint8_t toolIndex)
   if (storeCmd("%s\n", toolChange[toolIndex]))
   {
     heater.toolIndex = toolIndex;
+
     return true;
   }
 

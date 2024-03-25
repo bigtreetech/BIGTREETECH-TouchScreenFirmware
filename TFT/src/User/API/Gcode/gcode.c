@@ -32,11 +32,11 @@ void abortRequestCommandInfo(void)
 }
 
 static void resetRequestCommandInfo(
-  const char * string_start,   // The magic to identify the start
-  const char * string_stop,    // The magic to identify the stop
-  const char * string_error0,  // The first magic to identify the error response
-  const char * string_error1,  // The second error magic
-  const char * string_error2   // The third error magic
+  const char * string_start,   // the magic to identify the start
+  const char * string_stop,    // the magic to identify the stop
+  const char * string_error0,  // the first magic to identify the error response
+  const char * string_error1,  // the second error magic
+  const char * string_error2   // the third error magic
 )
 {
   clearRequestCommandInfo();  // release requestCommandInfo.cmd_rev_buf before allocating a new one
@@ -81,11 +81,11 @@ void detectAdvancedOk(void)
 
   TASK_LOOP_WHILE(isPendingCmd() && isNotEmptyCmdQueue());  // wait for the communication to be clean
 
-  resetRequestCommandInfo("ok",   // The magic to identify the start
-                          "ok",   // The magic to identify the stop
-                          NULL,   // The first magic to identify the error response
-                          NULL,   // The second error magic
-                          NULL);  // The third error magic
+  resetRequestCommandInfo("ok",   // the magic to identify the start
+                          "ok",   // the magic to identify the stop
+                          NULL,   // the first magic to identify the error response
+                          NULL,   // the second error magic
+                          NULL);  // the third error magic
 
   // send any gcode replied by the mainboard with a regular OK response ("ok\n") or an ADVANCED_OK response (e.g. "ok N10 P15 B3\n")
   mustStoreCmd("M220\n");
@@ -118,11 +118,11 @@ void detectAdvancedOk(void)
  */
 bool request_M21(void)
 {
-  resetRequestCommandInfo("SD card ",             // The magic to identify the start
-                          "ok",                   // The magic to identify the stop
-                          "No SD card",           // The first magic to identify the error response
-                          "SD init fail",         // The second error magic
-                          "volume.init failed");  // The third error magic
+  resetRequestCommandInfo("SD card ",             // the magic to identify the start
+                          "ok",                   // the magic to identify the stop
+                          "No SD card",           // the first magic to identify the error response
+                          "SD init fail",         // the second error magic
+                          "volume.init failed");  // the third error magic
 
   mustStoreCmd((infoMachineSettings.multiVolume == ENABLED) ? ((infoFile.onboardSource == BOARD_SD) ? "M21 S\n" : "M21 U\n") : "M21\n");
 
@@ -130,17 +130,17 @@ bool request_M21(void)
 
   clearRequestCommandInfo();
 
-  // Check reponse
+  // check reponse
   return !requestCommandInfo.inError;
 }
 
 char * request_M20(void)
 {
-  resetRequestCommandInfo("Begin file list",  // The magic to identify the start
-                          "End file list",    // The magic to identify the stop
-                          "Error",            // The first magic to identify the error response
-                          NULL,               // The second error magic
-                          NULL);              // The third error magic
+  resetRequestCommandInfo("Begin file list",  // the magic to identify the start
+                          "End file list",    // the magic to identify the stop
+                          "Error",            // the first magic to identify the error response
+                          NULL,               // the second error magic
+                          NULL);              // the third error magic
 
   if (infoMachineSettings.longFilename == ENABLED)  // if long filename is supported
     mustStoreCmd("M20 L\n");  // L option is supported since Marlin 2.0.9
@@ -149,7 +149,7 @@ char * request_M20(void)
 
   waitForResponse();  // wait for response
 
-  //clearRequestCommandInfo();  // shall be call after copying the buffer ...
+  //clearRequestCommandInfo();  // shall be call after copying the buffer
   return requestCommandInfo.cmd_rev_buf;
 }
 
@@ -161,11 +161,11 @@ char * request_M20(void)
  */
 char * request_M33(const char * filename)
 {
-  resetRequestCommandInfo("/",                   // The magic to identify the start
-                          "ok",                  // The magic to identify the stop
-                          "Cannot open subdir",  // The first magic to identify the error response
-                          NULL,                  // The second error magic
-                          NULL);                 // The third error magic
+  resetRequestCommandInfo("/",                   // the magic to identify the start
+                          "ok",                  // the magic to identify the stop
+                          "Cannot open subdir",  // the first magic to identify the error response
+                          NULL,                  // the second error magic
+                          NULL);                 // the third error magic
 
   if (filename[0] != '/')
     mustStoreCmd("M33 /%s\n", filename);  // append '/' to short file path
@@ -199,11 +199,11 @@ long request_M23_M36(const char * filename)
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)  // all other firmwares except RepRap firmware
   {
-    resetRequestCommandInfo("File opened",    // The magic to identify the start
-                            "File selected",  // The magic to identify the stop
-                            "open failed",    // The first magic to identify the error response
-                            NULL,             // The second error magic
-                            NULL);            // The third error magic
+    resetRequestCommandInfo("File opened",    // the magic to identify the start
+                            "File selected",  // the magic to identify the stop
+                            "open failed",    // the first magic to identify the error response
+                            NULL,             // the second error magic
+                            NULL);            // the third error magic
 
     // skip source and first "/" character (e.g. "oMD:/sub_dir/cap2.gcode" -> "sub_dir/cap2.gcode")
     mustStoreCmd("M23 %s\n", filename + strlen(getFS()) + 1);
@@ -212,11 +212,11 @@ long request_M23_M36(const char * filename)
   }
   else  // RepRap firmware
   {
-    resetRequestCommandInfo("{\"err\"",  // The magic to identify the start
-                            "}",         // The magic to identify the stop
-                            "Error:",    // The first magic to identify the error response
-                            NULL,        // The second error magic
-                            NULL);       // The third error magic
+    resetRequestCommandInfo("{\"err\"",  // the magic to identify the start
+                            "}",         // the magic to identify the stop
+                            "Error:",    // the first magic to identify the error response
+                            NULL,        // the second error magic
+                            NULL);       // the third error magic
 
     mustStoreCmd("M36 /%s\n", filename);
 
@@ -235,7 +235,7 @@ long request_M23_M36(const char * filename)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
     mustStoreCmd("M23 /%s\n", filename);  // send M23 for RepRap firmware
 
-  // Find file size and report it
+  // find file size and report it
   strPtr = strstr(requestCommandInfo.cmd_rev_buf, sizeTag);
 
   if (strPtr != NULL)
@@ -309,7 +309,7 @@ void request_M98(const char * filename)
 
   rrfStatusQueryFast();
 
-  // Wait for macro to complete
+  // wait for macro to complete
   TASK_LOOP_WHILE(rrfStatusIsBusy());
 
   rrfStatusQueryNormal();

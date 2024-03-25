@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "variants.h"  // for LCD_LED_PWM_CHANNEL, KNOB_LED_COLOR_PIN etc...
+#include "variants.h"  // for LCD_LED_PWM_CHANNEL, KNOB_LED_COLOR_PIN etc.
 #include "menu.h"
 
 #ifdef LCD_LED_PWM_CHANNEL

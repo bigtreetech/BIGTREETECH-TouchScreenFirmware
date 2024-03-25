@@ -33,7 +33,7 @@ static inline void rrfScanPrintFilesGcodeFs(void)
  *
  * So the long name will be parsed "0.00 @:0 B@:0" instead of "1.gcode" if the truncated character is "\n" not string "\nok"
  */
-void addName(bool isFile, char * longPath, const char * shortPath, const char * relativePath)
+static void addName(bool isFile, char * longPath, const char * shortPath, const char * relativePath)
 {
   char * longName = NULL;  // initialize to NULL in case long filename is not supported or no long name exists
 

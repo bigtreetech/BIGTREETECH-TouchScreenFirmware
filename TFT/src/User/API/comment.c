@@ -4,8 +4,9 @@
 #define TOKEN_DELIMITERS " :=_"   // possible delimiters found in the comments of the G-code file
 #define KEYWORD_INTIALS "lLrRtT"  // the initials of the searched keywords, add new initials for new keywords
 
+static bool slicerTimePresence = false;
+
 char gCodeCommentLine[COMMENT_MAX_CHAR] = {0};
-bool slicerTimePresence = false;
 
 void setTimeFromSlicer(bool present)
 {

@@ -3,7 +3,7 @@
 
 static uint8_t moveLenSteps_index = 0;
 
-void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHeader)
+static void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHeader)
 {
   if (drawHeader)
   {
@@ -27,7 +27,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHe
 
   setFontSize(FONT_SIZE_LARGE);
   sprintf(tempstr, "% 6.2f", babystep);
-  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t*) tempstr);
+  GUI_DispStringRight(point_bs.x, point_bs.y, (uint8_t *) tempstr);
 
   if (infoMachineSettings.firmwareType != FW_REPRAPFW)
   {
@@ -38,7 +38,7 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHe
     else
       GUI_SetColor(infoSettings.font_color);
 
-    GUI_DispStringRight(point_of.x, point_of.y, (uint8_t*) tempstr);
+    GUI_DispStringRight(point_of.x, point_of.y, (uint8_t *) tempstr);
   }
 
   GUI_SetColor(infoSettings.font_color);  // restore default font color
@@ -46,15 +46,16 @@ void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool drawHe
 }
 
 // Set Z offset value for MBL bl type
-float babyMblOffsetSetValue(float value)
+static float babyMblOffsetSetValue(float value)
 {
   mustStoreCmd("G29 S4 Z%.2f\n", value);
   mustStoreCmd("G29 S0\n");  // needed by babyMblOffsetGetValue() to retrieve the new value
+
   return value;
 }
 
 // Get current Z offset value for MBL bl type
-float babyMblOffsetGetValue(void)
+static float babyMblOffsetGetValue(void)
 {
   return getParameter(P_MBL_OFFSET, 0);
 }

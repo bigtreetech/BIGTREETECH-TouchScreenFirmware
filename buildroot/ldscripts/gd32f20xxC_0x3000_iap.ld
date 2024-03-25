@@ -8,19 +8,21 @@
 /* Entry Point */
 ENTRY(Reset_Handler)
 
-/* Highest address of the user mode stack */
-_estack = 0x20020000;    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x200;      /* required amount of heap  */
-_Min_Stack_Size = 0x400;     /* required amount of stack */
+_Min_Heap_Size = 0x200;     /* required amount of heap  */
+_Min_Stack_Size = 0x400;    /* required amount of stack */
 
 /* Specify the memory areas */
 MEMORY
 {
-    RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 128K
-    CCRAM (xrw)    : ORIGIN = 0x10000000, LENGTH = 0K
-    FLASH (rx)      : ORIGIN = 0x8003000, LENGTH = 256K - 12K
+  FLASH (rx)      : ORIGIN = 0x8003000,  LENGTH = 256K - 12K
+  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 128K
+  CCRAM (xrw)     : ORIGIN = 0x10000000, LENGTH = 0K
 }
+
+/* Highest address of the user mode stack */
+/* _estack = ALIGN(ORIGIN(RAM) + LENGTH(RAM) - 16, 8);    /* end of RAM */
+_estack = 0x20020000;    /* end of RAM */
 
 /* Define output sections */
 SECTIONS
@@ -152,7 +154,6 @@ SECTIONS
     _ccram_end_data = .;      /* define a global symbol at data end */
   } >CCRAM AT> FLASH
 
-
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
@@ -163,5 +164,3 @@ SECTIONS
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
 }
-
-

@@ -2,7 +2,7 @@
 #include "includes.h"
 
 #if DELTA_PROBE_TYPE != 0  // if Delta printer
-  void deltaCalibration(void)
+  static void deltaCalibration(void)
   {
     mustStoreCmd("G33\n");
   }
@@ -43,6 +43,7 @@ void menuUnifiedMove(void)
   while (MENU_IS(menuUnifiedMove))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
