@@ -1222,8 +1222,8 @@
 #define SPEED_ID {"Sp.", "Fr."}  // (speed, flow rate)
 
 // Axes names displayed in Parameter Settings menu
-#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1"}                                // (X, Y, Z, E0, E1)
-#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1)
+#define AXIS_DISPLAY_ID    {"X", "Y", "Z", "E0", "E1", "E2"}                                // (X, Y, Z, E0, E1)
+#define STEPPER_DISPLAY_ID {"X", "X2", "Y", "Y2", "Z", "Z2", "Z3", "Z4", "E0", "E1", "E2"}  // (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
 
 // Manual Leveling
 // Move to four corner points to Leveling manually (Point 1, Point 2, Point 3, Point 4).

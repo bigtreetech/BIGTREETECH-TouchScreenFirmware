@@ -57,6 +57,7 @@ typedef enum
   AXIS_INDEX_Z,
   AXIS_INDEX_E0,
   AXIS_INDEX_E1,
+  AXIS_INDEX_E2,
   AXIS_INDEX_COUNT
 } AXIS_INDEX;
 
@@ -72,6 +73,7 @@ typedef enum
   STEPPER_INDEX_Z4,
   STEPPER_INDEX_E0,
   STEPPER_INDEX_E1,
+  STEPPER_INDEX_E2,
   STEPPER_INDEX_COUNT
 } STEPPER_INDEX;
 
@@ -90,13 +92,13 @@ typedef struct
   float MaxAcceleration[AXIS_INDEX_COUNT];
   float MaxFeedRate[AXIS_INDEX_COUNT];
   float Acceleration[3];
-  float Jerk[AXIS_INDEX_COUNT - 1];
+  float Jerk[4];
   float JunctionDeviation[1];
-  float HomeOffset[AXIS_INDEX_COUNT - 2];
+  float HomeOffset[3];
   float FwRetract[4];
   float FwRecover[4];
   float AutoRetract[1];
-  float HotendOffset[AXIS_INDEX_COUNT - 2];
+  float HotendOffset[3];
   float HotendPid[3];
   float BedPid[3];
   float ABLState[2];
@@ -106,11 +108,11 @@ typedef struct
   float DeltaTowerAngle[3];
   float DeltaDiagonalRod[3];
   float DeltaEndstop[3];
-  float ProbeOffset[AXIS_INDEX_COUNT - 2];
+  float ProbeOffset[3];
   float LinAdvance[2];
   float Current[STEPPER_INDEX_COUNT];
   float HybridThreshold[STEPPER_INDEX_COUNT];
-  float BumpSensitivity[STEPPER_INDEX_COUNT];
+  float BumpSensitivity[STEPPER_INDEX_COUNT - 3];
   float MblOffset[1];
 } PARAMETERS;
 
