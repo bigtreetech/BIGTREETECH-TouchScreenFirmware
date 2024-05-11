@@ -1181,6 +1181,9 @@ void parseAck(void)
       {
         if (ack_value() > 0)  // if "X"->0, "X1"->0, "X2"->1, "Y"->2, "Y1"->2, "Y2"->3, "Z"->4, "Z1"->4, "Z2"->5, "Z3"->6, "Z4"->7
           stepperIndex += ack_value() - 1;
+      } else {
+        if (ack_value() > 0)  // "E"->0, "E1"->1, "E2"->2
+          stepperIndex += ack_value();
       }
 
       setParameter(P_STEALTH_CHOP, stepperIndex, isStealthChop);

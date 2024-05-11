@@ -85,39 +85,6 @@ typedef enum
   VAL_TYPE_NEG_FLOAT,
 } VAL_TYPE;
 
-typedef struct
-{
-  float StepsPerMM[AXIS_INDEX_COUNT];
-  float FilamentSetting[3];
-  float MaxAcceleration[AXIS_INDEX_COUNT];
-  float MaxFeedRate[AXIS_INDEX_COUNT];
-  float Acceleration[3];
-  float Jerk[4];
-  float JunctionDeviation[1];
-  float HomeOffset[3];
-  float FwRetract[4];
-  float FwRecover[4];
-  float AutoRetract[1];
-  float HotendOffset[3];
-  float HotendPid[3];
-  float BedPid[3];
-  float ABLState[2];
-  float StealthChop[STEPPER_INDEX_COUNT];
-  float InputShaping[4];
-  float DeltaConfiguration[4];
-  float DeltaTowerAngle[3];
-  float DeltaDiagonalRod[3];
-  float DeltaEndstop[3];
-  float ProbeOffset[3];
-  float LinAdvance[2];
-  float Current[STEPPER_INDEX_COUNT];
-  float HybridThreshold[STEPPER_INDEX_COUNT];
-  float BumpSensitivity[STEPPER_INDEX_COUNT - 3];
-  float MblOffset[1];
-} PARAMETERS;
-
-extern PARAMETERS infoParameters;
-
 // param attributes multi purpose hard coded labels
 extern char * const axisDisplayID[AXIS_INDEX_COUNT];
 extern char * const stepperDisplayID[STEPPER_INDEX_COUNT];
@@ -141,6 +108,9 @@ extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
+
+void infoParametersRefreshBackup(void);
+bool infoParametersHasChange(void);
 
 // get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);

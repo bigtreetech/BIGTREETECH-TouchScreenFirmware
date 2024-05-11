@@ -160,7 +160,7 @@ static void menuShowParameter(void)
   uint8_t enabledElementCount = getEnabledElementCount(curParameter);
   float oldval[enabledElementCount];
   uint16_t curIndex = KEY_IDLE;
-  PARAMETERS now = infoParameters;
+  infoParametersRefreshBackup();
 
   for (uint8_t i = 0; i < enabledElementCount; i++)
   {
@@ -176,7 +176,7 @@ static void menuShowParameter(void)
     switch (curIndex)
     {
       case KEY_BACK:
-        if (memcmp(&now, &infoParameters, sizeof(PARAMETERS)))
+        if (infoParametersHasChange())
           parametersChanged = true;
 
         CLOSE_MENU();

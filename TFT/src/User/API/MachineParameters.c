@@ -1,142 +1,237 @@
 #include "MachineParameters.h"
 #include "includes.h"
 
-#define MAX_ELEMENT_COUNT 11
+typedef struct {
+  const char * const suffix;
+  const VAL_TYPE valType;
+} suffix_t;
 
-static const uint8_t parameterElementCount[PARAMETERS_COUNT] = {
-  AXIS_INDEX_COUNT,           // Steps/mm (X, Y, Z, E0, E1, E2)
-  4,                          // Filament Diameter (Enable, E0, E1, E2)
-  AXIS_INDEX_COUNT,           // MaxAcceleration (X, Y, Z, E0, E1, E2)
-  AXIS_INDEX_COUNT,           // MaxFeedrate (X, Y, Z, E0, E1, E2)
-  3,                          // Acceleration (Print, Retract, Travel)
-  4,                          // Jerk (X, Y, Z, E)
-  1,                          // Junction Deviation
-  3,                          // Home offset (X, Y, Z)
-  4,                          // FW retract (Length, Swap Length, Feedrate, Z lift height)
-  4,                          // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  1,                          // Set auto FW retract
-  3,                          // Hotend Offset (X, Y, Z)
-  3,                          // Hotend PID
-  3,                          // Bed PID
-  2,                          // ABL State & Z Fade
-  STEPPER_INDEX_COUNT,        // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  4,                          // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
-  4,                          // Delta Configuration
-  3,                          // Delta Tower Angle
-  3,                          // Delta Diagonal Rod Trim
-  3,                          // Delta Endstop Adjustments
-  3,                          // Probe offset (X, Y, Z)
-  3,                          // Linear Advance (E0, E1, E2)
-  STEPPER_INDEX_COUNT,        // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  STEPPER_INDEX_COUNT,        // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  (STEPPER_INDEX_COUNT - 3),  // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-  1                           // MBL offset
+typedef struct {
+  const char * const prefix;
+  const suffix_t * const suffix;
+  const uint8_t cnt;
+  uint16_t enabled;  // parameterElementCount must be less than 16
+} parameter_member_t;
+
+// Steps/mm (X, Y, Z, E0, E1, E2)
+static const suffix_t M92_suffix[]= {
+  {"X%.4f\n",    VAL_TYPE_FLOAT}, {"Y%.4f\n",    VAL_TYPE_FLOAT}, {"Z%.2f\n", VAL_TYPE_FLOAT},
+  {"T0 E%.2f\n", VAL_TYPE_FLOAT}, {"T1 E%.2f\n", VAL_TYPE_FLOAT}, {"T2 E%.2f\n", VAL_TYPE_FLOAT}, 
+};
+// Filament Diameter (Enable, E0, E1, E2)
+static const suffix_t M200_suffix[]= {
+  {"S%.0f\n",       VAL_TYPE_INT},   {"S1 T0 D%.2f\n", VAL_TYPE_FLOAT}, {"S1 T1 D%.2f\n", VAL_TYPE_FLOAT},
+  {"S1 T2 D%.2f\n", VAL_TYPE_FLOAT},
+};
+// MaxAcceleration (X, Y, Z, E0, E1, E2)
+static const suffix_t M201_suffix[]= {
+  {"X%.0f\n",    VAL_TYPE_INT}, {"Y%.0f\n",    VAL_TYPE_INT}, {"Z%.0f\n",    VAL_TYPE_INT},
+  {"T0 E%.0f\n", VAL_TYPE_INT}, {"T1 E%.0f\n", VAL_TYPE_INT}, {"T2 E%.0f\n", VAL_TYPE_INT},
+};
+// MaxFeedrate (X, Y, Z, E0, E1, E2)
+static const suffix_t M203_suffix[]= {
+  {"X%.0f\n",    VAL_TYPE_INT}, {"Y%.0f\n",    VAL_TYPE_INT}, {"Z%.0f\n",    VAL_TYPE_INT},
+  {"T0 E%.0f\n", VAL_TYPE_INT}, {"T1 E%.0f\n", VAL_TYPE_INT}, {"T2 E%.0f\n", VAL_TYPE_INT},
+};
+// Acceleration (Print, Retract, Travel)
+static const suffix_t M204_suffix[]= {
+  {"P%.0f\n", VAL_TYPE_INT}, {"R%.0f\n", VAL_TYPE_INT}, {"T%.0f\n", VAL_TYPE_INT},
+};
+// Jerk (X, Y, Z, E)
+static const suffix_t M205_jerk_suffix[]= {
+  {"X%.0f\n", VAL_TYPE_INT},   {"Y%.0f\n", VAL_TYPE_INT}, {"Z%.2f\n", VAL_TYPE_FLOAT},
+  {"E%.2f\n", VAL_TYPE_FLOAT},
+};
+// Junction Deviation (X, Y, Z, E)
+static const suffix_t M205_deviation_suffix[]= {
+  {"J%.3f\n", VAL_TYPE_FLOAT},
+};
+// Home offset (X, Y, Z)
+static const suffix_t M206_suffix[]= {
+  {"X%.2f\n", VAL_TYPE_NEG_FLOAT}, {"Y%.2f\n", VAL_TYPE_NEG_FLOAT}, {"Z%.2f\n", VAL_TYPE_NEG_FLOAT},
+};
+// FW retract (Length, Swap Length, Feedrate, Z lift height)
+static const suffix_t M207_suffix[]= {
+  {"S%.2f\n", VAL_TYPE_FLOAT}, {"W%.2f\n", VAL_TYPE_FLOAT}, {"F%.2f\n", VAL_TYPE_INT},
+  {"Z%.2f\n", VAL_TYPE_FLOAT},
+};
+// FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
+static const suffix_t M208_suffix[]= {
+  {"S%.2f\n", VAL_TYPE_FLOAT}, {"W%.2f\n", VAL_TYPE_FLOAT}, {"F%.2f\n", VAL_TYPE_INT},
+  {"R%.2f\n", VAL_TYPE_INT},
+};
+// Set auto FW retract
+static const suffix_t M209_suffix[]= {
+  {"S%.0f\n", VAL_TYPE_INT}
+};
+// Hotend Offset (X, Y, Z)
+static const suffix_t M218_suffix[]= {
+  {"T1 X%.2f\n", VAL_TYPE_NEG_FLOAT}, {"T1 Y%.2f\n", VAL_TYPE_NEG_FLOAT}, {"T1 Z%.2f\n", VAL_TYPE_NEG_FLOAT},
+};
+// Hotend PID
+static const suffix_t M301_suffix[]= {
+  {"P%.4f\n", VAL_TYPE_FLOAT}, {"I%.4f\n", VAL_TYPE_FLOAT}, {"D%.4f\n", VAL_TYPE_FLOAT},
+};
+// Bed PID
+static const suffix_t M304_suffix[]= {
+  {"P%.4f\n", VAL_TYPE_FLOAT}, {"I%.4f\n", VAL_TYPE_FLOAT}, {"D%.4f\n", VAL_TYPE_FLOAT},
+};
+// ABL State + Z Fade
+static const suffix_t M420_suffix[]= {
+  {"S%.0f\n", VAL_TYPE_INT}, {"Z%.2f\n", VAL_TYPE_FLOAT},
+};
+// TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
+static const suffix_t M569_suffix[]= {
+  {"S%.0f I0 X\n", VAL_TYPE_INT}, {"S%.0f I1 X\n", VAL_TYPE_INT}, {"S%.0f I0 Y\n", VAL_TYPE_INT},
+  {"S%.0f I1 Y\n", VAL_TYPE_INT}, {"S%.0f I0 Z\n", VAL_TYPE_INT}, {"S%.0f I1 Z\n", VAL_TYPE_INT},
+  {"S%.0f I2 Z\n", VAL_TYPE_INT}, {"S%.0f I3 Z\n", VAL_TYPE_INT}, {"S%.0f T0 E\n", VAL_TYPE_INT},
+  {"S%.0f T1 E\n", VAL_TYPE_INT}, {"S%.0f T2 E\n", VAL_TYPE_INT},
+};
+// Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
+static const suffix_t M593_suffix[]= {
+  {"X F%.3f\n", VAL_TYPE_FLOAT}, {"X D%.3f\n", VAL_TYPE_FLOAT}, {"Y F%.3f\n", VAL_TYPE_FLOAT},
+  {"Y D%.3f\n", VAL_TYPE_FLOAT},
+};
+// Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
+static const suffix_t M665_hsrl_suffix[]= {
+  {"H%.4f\n", VAL_TYPE_FLOAT}, {"S%.4f\n", VAL_TYPE_FLOAT}, {"R%.4f\n", VAL_TYPE_FLOAT},
+  {"L%.4f\n", VAL_TYPE_FLOAT},
+};
+// Delta Tower Angle (Tx, Ty, Tz)
+static const suffix_t M665_xyz_suffix[]= {
+  {"X%.4f\n", VAL_TYPE_NEG_FLOAT}, {"Y%.4f\n", VAL_TYPE_NEG_FLOAT}, {"Z%.4f\n", VAL_TYPE_NEG_FLOAT},
+};
+// Delta Diagonal Rod Trim (Dx, Dy, Dz)
+static const suffix_t M665_abc_suffix[]= {
+  {"A%.4f\n", VAL_TYPE_NEG_FLOAT}, {"B%.4f\n", VAL_TYPE_NEG_FLOAT}, {"C%.4f\n", VAL_TYPE_NEG_FLOAT},
+};
+// Delta Endstop Adjustments (Ex, Ey, Ez)
+static const suffix_t M666_suffix[]= {
+  {"X%.4f\n", VAL_TYPE_NEG_FLOAT}, {"Y%.4f\n", VAL_TYPE_NEG_FLOAT}, {"Z%.4f\n", VAL_TYPE_NEG_FLOAT},
+};
+// Probe offset (X, Y, Z)
+static const suffix_t M851_suffix[]= {
+  {"X%.2f\n", VAL_TYPE_NEG_FLOAT}, {"Y%.2f\n", VAL_TYPE_NEG_FLOAT}, {"Z%.2f\n", VAL_TYPE_NEG_FLOAT},
+};
+// Linear Advance (E0, E1, E2)
+static const suffix_t M900_suffix[]= {
+  {"T0 K%.3f\n", VAL_TYPE_FLOAT}, {"T1 K%.3f\n", VAL_TYPE_FLOAT}, {"T2 K%.3f\n", VAL_TYPE_FLOAT},
+};
+// Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
+static const suffix_t M906_suffix[]= {
+  {"I0 X%.0f\n", VAL_TYPE_INT}, {"I1 X%.0f\n", VAL_TYPE_INT}, {"I0 Y%.0f\n", VAL_TYPE_INT},
+  {"I1 Y%.0f\n", VAL_TYPE_INT}, {"I0 Z%.0f\n", VAL_TYPE_INT}, {"I1 Z%.0f\n", VAL_TYPE_INT},
+  {"I2 Z%.0f\n", VAL_TYPE_INT}, {"I3 Z%.0f\n", VAL_TYPE_INT}, {"T0 E%.0f\n", VAL_TYPE_INT},
+  {"T1 E%.0f\n", VAL_TYPE_INT}, {"T2 E%.0f\n", VAL_TYPE_INT},
+};
+// TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
+static const suffix_t M913_suffix[]= {
+  {"I1 X%.0f\n", VAL_TYPE_INT}, {"I2 X%.0f\n", VAL_TYPE_INT}, {"I1 Y%.0f\n", VAL_TYPE_INT},
+  {"I2 Y%.0f\n", VAL_TYPE_INT}, {"I1 Z%.0f\n", VAL_TYPE_INT}, {"I2 Z%.0f\n", VAL_TYPE_INT},
+  {"I3 Z%.0f\n", VAL_TYPE_INT}, {"I4 Z%.0f\n", VAL_TYPE_INT}, {"T0 E%.0f\n", VAL_TYPE_INT},
+  {"T1 E%.0f\n", VAL_TYPE_INT}, {"T2 E%.0f\n", VAL_TYPE_INT},
+};
+// TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
+static const suffix_t M914_suffix[]= {
+  {"I1 X%.0f\n", VAL_TYPE_NEG_INT}, {"I2 X%.0f\n", VAL_TYPE_NEG_INT}, {"I1 Y%.0f\n", VAL_TYPE_NEG_INT},
+  {"I2 Y%.0f\n", VAL_TYPE_NEG_INT}, {"I1 Z%.0f\n", VAL_TYPE_NEG_INT}, {"I2 Z%.0f\n", VAL_TYPE_NEG_INT},
+  {"I3 Z%.0f\n", VAL_TYPE_NEG_INT}, {"I4 Z%.0f\n", VAL_TYPE_NEG_INT},
+};
+// MBL offset
+static const suffix_t G29_suffix[]= {
+  {"S4 Z%.2f\nG29 S0\n", VAL_TYPE_NEG_FLOAT},
 };
 
-static const char * const parameterCode[PARAMETERS_COUNT] = {
-  "M92",   // Steps/mm
-  "M200",  // Filament Diameter
-  "M201",  // MaxAcceleration
-  "M203",  // MaxFeedrate
-  "M204",  // Acceleration
-  "M205",  // Jerk
-  "M205",  // Junction Deviation
-  "M206",  // Home offset
-  "M207",  // FW retract
-  "M208",  // FW retract recover
-  "M209",  // Set auto FW retract
-  "M218",  // Hotend Offset
-  "M301",  // Hotend PID
-  "M304",  // Bed PID
-  "M420",  // ABL State & Z Fade
-  "M569",  // TMC StealthChop
-  "M593",  // Input Shape
-  "M665",  // Delta Configuration
-  "M665",  // Delta Tower Angle
-  "M665",  // Delta Diagonal Rod Trim
-  "M666",  // Delta Endstop Adjustments
-  "M851",  // Probe offset
-  "M900",  // Linear Advance
-  "M906",  // Stepper Motor Current
-  "M913",  // TMC Hybrid Threshold Speed
-  "M914",  // TMC Bump Sensitivity
-  "G29",   // MBL offset
+parameter_member_t parameter_list[] = {
+  // Steps/mm
+  {"M92", M92_suffix, COUNT(M92_suffix)},
+  // Filament Diameter
+  {"M200", M200_suffix, COUNT(M200_suffix)},
+  // MaxAcceleration
+  {"M201", M201_suffix, COUNT(M201_suffix)},
+  // MaxFeedrate
+  {"M203", M203_suffix, COUNT(M203_suffix)},
+  // Acceleration
+  {"M204", M204_suffix, COUNT(M204_suffix)},
+  // Jerk
+  {"M205", M205_jerk_suffix, COUNT(M205_jerk_suffix)},
+  // Junction Deviation
+  {"M205", M205_deviation_suffix, COUNT(M205_deviation_suffix)},
+  // Home offset
+  {"M206", M206_suffix, COUNT(M206_suffix)},
+  // FW retract
+  {"M207", M207_suffix, COUNT(M207_suffix)},
+  // FW retract recover
+  {"M208", M208_suffix, COUNT(M208_suffix)},
+  // Set auto FW retract
+  {"M209", M209_suffix, COUNT(M209_suffix)},
+  // Hotend Offset
+  {"M218", M218_suffix, COUNT(M218_suffix)},
+  // Hotend PID
+  {"M301", M301_suffix, COUNT(M301_suffix)},
+  // Bed PID
+  {"M304", M304_suffix, COUNT(M304_suffix)},
+  // ABL State & Z Fade
+  {"M420", M420_suffix, COUNT(M420_suffix)},
+  // TMC StealthChop
+  {"M569", M569_suffix, COUNT(M569_suffix)},
+  // Input Shape
+  {"M593", M593_suffix, COUNT(M593_suffix)},
+  // Delta Configuration
+  {"M665", M665_hsrl_suffix, COUNT(M665_hsrl_suffix)},
+  // Delta Tower Angle
+  {"M665", M665_xyz_suffix, COUNT(M665_xyz_suffix)},
+  // Delta Diagonal Rod Trim
+  {"M665", M665_abc_suffix, COUNT(M665_abc_suffix)},
+  // Delta Endstop Adjustments
+  {"M666", M666_suffix, COUNT(M666_suffix)},
+  // Probe offset
+  {"M851", M851_suffix, COUNT(M851_suffix)},
+  // Linear Advance
+  {"M900", M900_suffix, COUNT(M900_suffix)},
+  // Stepper Motor Current
+  {"M906", M906_suffix, COUNT(M906_suffix)},
+  // TMC Hybrid Threshold Speed
+  {"M913", M913_suffix, COUNT(M913_suffix)},
+  // TMC Bump Sensitivity
+  {"M914", M914_suffix, COUNT(M914_suffix)},
+  // MBL offset
+  {"G29", G29_suffix, COUNT(G29_suffix)},
 };
 
-static const char * const parameterCmd[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-  {"X%.4f\n",            "Y%.4f\n",       "Z%.2f\n",       "T0 E%.2f\n",   "T1 E%.2f\n",   "T2 E%.2f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // Steps/mm (X, Y, Z, E0, E1)
-  {"S%.0f\n",            "S1 T0 D%.2f\n", "S1 T1 D%.2f\n", "S1 T2 D%.2f\n",NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Filament Diameter (Enable, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   "T2 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxAcceleration (X, Y, Z, E0, E1)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.0f\n",       "T0 E%.0f\n",   "T1 E%.0f\n",   "T2 E%.0f\n",   NULL,           NULL,           NULL,           NULL,           NULL},           // MaxFeedrate (X, Y, Z, E0, E1)
-  {"P%.0f\n",            "R%.0f\n",       "T%.0f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Acceleration (Print, Retract, Travel)
-  {"X%.0f\n",            "Y%.0f\n",       "Z%.2f\n",       "E%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Jerk (X, Y, Z, E)
-  {"J%.3f\n",            NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Junction Deviation
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Home offset (X, Y, Z)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "Z%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract (Length, Swap Length, Feedrate, Z lift height)
-  {"S%.2f\n",            "W%.2f\n",       "F%.2f\n",       "R%.2f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  {"S%.0f\n",            NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Set auto FW retract
-  {"T1 X%.2f\n",         "T1 Y%.2f\n",    "T1 Z%.2f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend Offset (X, Y, Z)
-  {"P%.4f\n",            "I%.4f\n",       "D%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Hotend PID
-  {"P%.4f\n",            "I%.4f\n",       "D%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Bed PID
-  {"S%.0f\n",            "Z%.2f\n",       NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // ABL State & Z Fade
-  {"S%.0f I0 X\n",       "S%.0f I1 X\n",  "S%.0f I0 Y\n",  "S%.0f I1 Y\n", "S%.0f I0 Z\n", "S%.0f I1 Z\n", "S%.0f I2 Z\n", "S%.0f I3 Z\n", "S%.0f T0 E\n", "S%.0f T1 E\n", "S%.0f T2 E\n"}, // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  {"X F%.3f\n",          "X D%.3f\n",     "Y F%.3f\n",     "Y D%.3f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
-  {"H%.4f\n",            "S%.4f\n",       "R%.4f\n",       "L%.4f\n",      NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
-  {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Tower Angle (Tx, Ty, Tz)
-  {"A%.4f\n",            "B%.4f\n",       "C%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Diagonal Rod Trim (Dx, Dy, Dz)
-  {"X%.4f\n",            "Y%.4f\n",       "Z%.4f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Delta Endstop Adjustments (Ex, Ey, Ez)
-  {"X%.2f\n",            "Y%.2f\n",       "Z%.2f\n",       NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Probe offset (X, Y, Z)
-  {"T0 K%.3f\n",         "T1 K%.3f\n",    "T2 K%.3f\n",    NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // Linear Advance (E0, E1)
-  {"I0 X%.0f\n",         "I1 X%.0f\n",    "I0 Y%.0f\n",    "I1 Y%.0f\n",   "I0 Z%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n",   "T2 E%.0f\n"},   // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   "T0 E%.0f\n",   "T1 E%.0f\n",   "T2 E%.0f\n"},   // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-  {"I1 X%.0f\n",         "I2 X%.0f\n",    "I1 Y%.0f\n",    "I2 Y%.0f\n",   "I1 Z%.0f\n",   "I2 Z%.0f\n",   "I3 Z%.0f\n",   "I4 Z%.0f\n",   NULL,           NULL,           NULL},           // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-  {"S4 Z%.2f\nG29 S0\n", NULL,            NULL,            NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL,           NULL},           // MBL offset
-};
+typedef struct {
+  float StepsPerMM[COUNT(M92_suffix)];
+  float FilamentSetting[COUNT(M200_suffix)];
+  float MaxAcceleration[COUNT(M201_suffix)];
+  float MaxFeedRate[COUNT(M203_suffix)];
+  float Acceleration[COUNT(M204_suffix)];
+  float Jerk[COUNT(M205_jerk_suffix)];
+  float JunctionDeviation[COUNT(M205_deviation_suffix)];
+  float HomeOffset[COUNT(M206_suffix)];
+  float FwRetract[COUNT(M207_suffix)];
+  float FwRecover[COUNT(M208_suffix)];
+  float AutoRetract[COUNT(M209_suffix)];
+  float HotendOffset[COUNT(M218_suffix)];
+  float HotendPid[COUNT(M301_suffix)];
+  float BedPid[COUNT(M304_suffix)];
+  float ABLState[COUNT(M420_suffix)];
+  float StealthChop[COUNT(M569_suffix)];
+  float InputShaping[COUNT(M593_suffix)];
+  float DeltaConfiguration[COUNT(M665_hsrl_suffix)];
+  float DeltaTowerAngle[COUNT(M665_xyz_suffix)];
+  float DeltaDiagonalRod[COUNT(M665_abc_suffix)];
+  float DeltaEndstop[COUNT(M666_suffix)];
+  float ProbeOffset[COUNT(M851_suffix)];
+  float LinAdvance[COUNT(M900_suffix)];
+  float Current[COUNT(M906_suffix)];
+  float HybridThreshold[COUNT(M913_suffix)];
+  float BumpSensitivity[COUNT(M914_suffix)];
+  float MblOffset[COUNT(G29_suffix)];
+} PARAMETERS;
 
-static const VAL_TYPE parameterValType[PARAMETERS_COUNT][MAX_ELEMENT_COUNT] = {
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,   VAL_TYPE_FLOAT,   // Steps/mm (X, Y, Z, E0, E1, E2)
-   VAL_TYPE_FLOAT},
-  {VAL_TYPE_INT,        VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Filament Diameter (Enable, E0, E1, E2)
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // MaxAcceleration (X, Y, Z, E0, E1, E2)
-   VAL_TYPE_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // MaxFeedrate (X, Y, Z, E0, E2)
-   VAL_TYPE_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT},                                           // Acceleration (Print, Retract, Travel)
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Jerk (X, Y, Z, E)
-  {VAL_TYPE_FLOAT},                                                                                  // Junction Deviation
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Home offset (X, Y, Z)
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_FLOAT},                    // FW retract (Length, Swap Length, Feedrate, Z lift height)
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_INT,        VAL_TYPE_INT},                      // FW retract recover (Additional length, Additional Swap Length, Feedrate, Swap feedrate)
-  {VAL_TYPE_INT},                                                                                    // Set auto FW retract
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Hotend Offset (X, Y, Z)
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Hotend PID
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Bed PID
-  {VAL_TYPE_INT,        VAL_TYPE_FLOAT},                                                             // ABL State + Z Fade
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC StealthChop (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,
-   VAL_TYPE_INT},
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT},                    // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Tower Angle (Tx, Ty, Tz)
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Diagonal Rod Trim (Dx, Dy, Dz)
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Delta Endstop Adjustments (Ex, Ey, Ez)
-  {VAL_TYPE_NEG_FLOAT,  VAL_TYPE_NEG_FLOAT, VAL_TYPE_NEG_FLOAT},                                     // Probe offset (X, Y, Z)
-  {VAL_TYPE_FLOAT,      VAL_TYPE_FLOAT,     VAL_TYPE_FLOAT},                                         // Linear Advance (E0, E1, E2)
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // Stepper Motor Current (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,
-   VAL_TYPE_INT},
-  {VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,     // TMC Hybrid Threshold Speed (X, X2, Y, Y2, Z, Z2, Z3, Z4, E0, E1, E2)
-   VAL_TYPE_INT,        VAL_TYPE_INT,       VAL_TYPE_INT,        VAL_TYPE_INT,     VAL_TYPE_INT,
-   VAL_TYPE_INT},
-  {VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT, VAL_TYPE_NEG_INT, // TMC Bump Sensitivity (X, X2, Y, Y2, Z, Z2, Z3, Z4)
-   VAL_TYPE_NEG_INT,    VAL_TYPE_NEG_INT,   VAL_TYPE_NEG_INT},
-  {VAL_TYPE_NEG_FLOAT},                                                                              // MBL offset
-};
-
-static uint32_t parametersEnabled = 0;
-static uint16_t elementEnabled[PARAMETERS_COUNT];  // parameterElementCount must be less than 16
-
+PARAMETERS infoParametersBackup;
 PARAMETERS infoParameters;
+static uint32_t parametersEnabled = 0;
 
 // param attributes multi purpose hard coded labels
 char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;
@@ -152,7 +247,7 @@ char * const bedPidDisplayID[] = {"Kp", "Ki", "Kd"};
 char * const ablStateDisplayID[] = {"S " ONOFF_DISPLAY_ID, "Z fade height"};
 char * const stealthChopDisplayID[] = {"X " ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y " ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
                                        "Z " ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
-                                       "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID};
+                                       "E0 "ONOFF_DISPLAY_ID, "E1 "ONOFF_DISPLAY_ID, "E2 "ONOFF_DISPLAY_ID};
 char * const inputShapingDisplayID[] = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
 char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
 char * const deltaTowerAngleDisplayID[] = {"Tx", "Ty", "Tz"};
@@ -166,23 +261,34 @@ const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
 const LABEL retractDisplayID[] = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
 const LABEL recoverDisplayID[] = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
 
+void infoParametersRefreshBackup(void)
+{
+  memcpy(&infoParametersBackup, &infoParameters, sizeof(PARAMETERS));
+}
+
+bool infoParametersHasChange(void)
+{
+  return memcmp(&infoParametersBackup, &infoParameters, sizeof(PARAMETERS)) ? true : false;
+}
+
 static inline void setElementStatus(PARAMETER_NAME name, uint8_t element, bool status)
 {
-  SET_BIT_VALUE(elementEnabled[name], element, status);
+  SET_BIT_VALUE(parameter_list[name].enabled, element, status);
 }
 
 static inline uint8_t getElementStatus(PARAMETER_NAME name, uint8_t element)
 {
-  return GET_BIT(elementEnabled[name], element);
+  return GET_BIT(parameter_list[name].enabled, element);
 }
 
 uint8_t getEnabledElementCount(PARAMETER_NAME name)
 {
   uint8_t count = 0;
+  parameter_member_t * p = &parameter_list[name];
 
-  for (uint8_t i = 0; i < parameterElementCount[name]; i++)
+  for (uint8_t i = 0; i < p->cnt; i++)
   {
-    count += GET_BIT(elementEnabled[name], i);
+    count += GET_BIT(p->enabled, i);
   }
 
   return count;
@@ -192,17 +298,18 @@ uint8_t getEnabledElement(PARAMETER_NAME name, uint8_t index)
 {
   uint8_t count = 0;
   uint8_t state = 0;
+  parameter_member_t * p = &parameter_list[name];
 
-  for (uint8_t i = 0; i < parameterElementCount[name]; i++)
+  for (uint8_t i = 0; i < p->cnt; i++)
   {
-    state = GET_BIT(elementEnabled[name], i);
+    state = GET_BIT(p->enabled, i);
     count += state;
 
     if (state && count == (index + 1))
       return i;
   }
 
-  return parameterElementCount[name];
+  return p->cnt;
 }
 
 static inline void setParameterStatus(PARAMETER_NAME name, bool status)
@@ -246,7 +353,7 @@ PARAMETER_NAME getEnabledParameter(uint8_t index)
 
 float getParameter(PARAMETER_NAME name, uint8_t index)
 {
-  if (index >= parameterElementCount[name] || !getParameterStatus(name) || !getElementStatus(name, index))
+  if (index >= parameter_list[name].cnt || !getParameterStatus(name) || !getElementStatus(name, index))
     return 0.0f;
 
   switch (name)
@@ -339,7 +446,7 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
 
 void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 {
-  if (index >= parameterElementCount[name])
+  if (index >= parameter_list[name].cnt)
     return;
 
   setParameterStatus(name, true);
@@ -462,18 +569,18 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
 uint8_t getElementCount(PARAMETER_NAME para)
 {
-  return parameterElementCount[para];
+  return parameter_list[para].cnt;
 }
 
 VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index)
 {
-  return parameterValType[para][index];
+  return parameter_list[para].suffix[index].valType;
 }
 
 void sendParameterCmd(PARAMETER_NAME name, uint8_t elementIndex, float Value)
 {
   char tempCmd[30];
-  sprintf(tempCmd, "%s %s", parameterCode[name], parameterCmd[name][elementIndex]);
+  snprintf(tempCmd, sizeof(tempCmd),"%s %s", parameter_list[name].prefix, parameter_list[name].suffix[elementIndex].suffix);
   mustStoreScript(tempCmd, Value);  // mustStoreScript() used because parameterCmd[] can have more than one command
 }
 
