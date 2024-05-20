@@ -8,26 +8,13 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-// Enable probe offset
-void probeOffsetEnable(float shim);
-
-// Disable probe offset
-void probeOffsetDisable(void);
-
-// Get probe offset status
-bool probeOffsetGetStatus(void);
-
-// Set Z offset value
-float probeOffsetSetValue(float value);
-
-// Get current Z offset value
-float probeOffsetGetValue(void);
-
-// Reset Z offset value to default value
-float probeOffsetResetValue(void);
-
-// Update Z offset value
-float probeOffsetUpdateValue(float unit);
+void probeOffsetEnable(float shim);        // enable probe offset
+void probeOffsetDisable(void);             // disable probe offset
+bool probeOffsetGetStatus(void);           // get probe offset status
+float probeOffsetSetValue(float value);    // set Z offset value
+float probeOffsetGetValue(void);           // get current Z offset value
+float probeOffsetResetValue(void);         // reset Z offset value to default value
+float probeOffsetUpdateValue(float unit);  // update Z offset value
 
 #ifdef __cplusplus
 }

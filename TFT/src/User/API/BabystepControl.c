@@ -1,24 +1,24 @@
 #include "BabystepControl.h"
 #include "includes.h"
 
-static float babystep_value = BABYSTEP_DEFAULT_VALUE;
-
 #define BABYSTEP_CMD     "M290 Z%.2f\n"
 #define BABYSTEP_CMD_SMW "G43.2 Z%.2f\n"
 
-// Set current babystep value
+static float babystep_value = BABYSTEP_DEFAULT_VALUE;
+
+// set current babystep value
 void babystepSetValue(float value)
 {
   babystep_value = value;
 }
 
-// Get current babystep value
+// get current babystep value
 float babystepGetValue(void)
 {
   return babystep_value;
 }
 
-// Reset babystep value to default value
+// reset babystep value to default value
 float babystepResetValue(void)
 {
   if (babystep_value != BABYSTEP_DEFAULT_VALUE)  // if already default value, nothing to do
@@ -39,10 +39,9 @@ float babystepResetValue(void)
     }
 
     last_unit = (BABYSTEP_DEFAULT_VALUE - babystep_value) - (BABYSTEP_MAX_STEP * step_count * direction);
+
     if (last_unit != 0.0f)
-    {
       mustStoreCmd(babyStepCmd, last_unit);
-    }
 
     babystep_value = BABYSTEP_DEFAULT_VALUE;
   }
@@ -50,7 +49,7 @@ float babystepResetValue(void)
   return babystep_value;
 }
 
-// Update babystep value
+// update babystep value
 float babystepUpdateValue(float unit)
 {
   unit = NOBEYOND(BABYSTEP_MIN_VALUE, babystep_value + unit, BABYSTEP_MAX_VALUE) - babystep_value;

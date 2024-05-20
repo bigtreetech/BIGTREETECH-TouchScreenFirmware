@@ -2,7 +2,7 @@
 #include "includes.h"
 #include "GPIO_Init.h"
 
-#ifdef MKS_TFT35_V1_0
+#if defined(MKS_TFT35_V1_0)
   // touch screen X, Y channels are swapped for MKS_TFT35_V1_0.
   // Defined in MKS TFT35 Touch Screen source code: user\others\mks_touch_screen.c CHX=0x90, CHY=0xD0
   #define CMD_RDX 0x90

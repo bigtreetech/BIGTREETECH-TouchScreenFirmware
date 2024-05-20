@@ -166,7 +166,7 @@ typedef struct {
   FATFS*  fs;             // Pointer to the hosting volume of this object
   WORD    id;             // Hosting volume mount ID
   BYTE    attr;           // Object attribute
-  BYTE    stat;           // Object chain status (b1-0: =0:not contiguous, =2:contiguous, =3:fragmented in this session, b2:sub-directory stretched) 
+  BYTE    stat;           // Object chain status (b1-0: =0:not contiguous, =2:contiguous, =3:fragmented in this session, b2:sub-directory stretched)
   DWORD   sclust;         // Object data start cluster (0:no cluster or root directory)
   FSIZE_t objsize;        // Object size (valid when sclust != 0)
 #if FF_FS_EXFAT

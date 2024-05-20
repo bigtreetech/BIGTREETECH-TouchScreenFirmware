@@ -34,7 +34,7 @@ void menuHome(void)
       case KEY_ICON_2: storeCmd("G28 Y\n"); break;
       case KEY_ICON_3: storeCmd("G28 Z\n"); break;
       case KEY_ICON_7: CLOSE_MENU();        break;
-      default: break;
+      default:                              break;
     }
 
     loopProcess();

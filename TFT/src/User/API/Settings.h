@@ -306,9 +306,7 @@ typedef struct
   char cancel_gcode[MAX_GCODE_LENGTH + 1];
 } PRINT_GCODES;
 
-/**
- * Firmware type
- */
+// Firmware type
 typedef enum
 {
   FW_NOT_DETECTED,
@@ -319,9 +317,7 @@ typedef enum
   FW_UNKNOWN,
 } FW_TYPE;
 
-/**
- * Bed Leveling type
- */
+// Bed Leveling type
 typedef enum
 {
   BL_DISABLED = DISABLED,  // Bed Leveling Diabled
@@ -357,21 +353,15 @@ typedef struct
 extern SETTINGS infoSettings;
 extern MACHINE_SETTINGS infoMachineSettings;
 
-// Init settings data with default values
-void initSettings(void);
+void initSettings(void);  // init settings data with default values
+void saveSettings(void);  // save settings to Flash only if CRC does not match
 
-// Save settings to Flash only if CRC does not match
-void saveSettings(void);
+void initMachineSettings(void);     // init machine settings data with default values
+void setupMachine(FW_TYPE fwType);  // setup machine settings
 
-// Init machine settings data with default values
-void initMachineSettings(void);
-
-// Setup machine settings
-void setupMachine(FW_TYPE fwType);
-
-float flashUsedPercentage(void);
-void checkflashSign(void);
-bool getFlashSignStatus(int index);
+float flashUsedPercentage(void);     // get flash used percentage
+void checkflashSign(void);           // check font/icon/config signature in SPI flash for update
+bool getFlashSignStatus(int index);  // get sign status from SPI flash
 
 #ifdef __cplusplus
 }

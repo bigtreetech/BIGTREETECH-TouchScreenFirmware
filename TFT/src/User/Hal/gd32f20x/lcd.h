@@ -5,7 +5,6 @@
 #include "variants.h"  // for STM32_HAS_FSMC etc.
 
 #ifdef STM32_HAS_FSMC
-
   typedef struct
   {
     volatile uint16_t LCD_REG;
@@ -18,11 +17,10 @@
   #define LCD_WR_REG(regval) do{ LCD->LCD_REG = regval; }while(0)
   #define LCD_WR_DATA(data)  do{ LCD->LCD_RAM = data; }while(0)
 
+  uint16_t LCD_RD_DATA(void);
+  void LCD_HardwareConfig(void);
 #else
   #error "don't support LCD-GPIO yet"
 #endif
-
-uint16_t LCD_RD_DATA(void);
-void LCD_HardwareConfig(void);
 
 #endif

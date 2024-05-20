@@ -2,10 +2,12 @@
 #include "includes.h"
 
 #if DELTA_PROBE_TYPE != 0  // if Delta printer
-  static void deltaCalibration(void)
-  {
-    mustStoreCmd("G33\n");
-  }
+
+static void deltaCalibration(void)
+{
+  mustStoreCmd("G33\n");
+}
+
 #endif
 
 void menuUnifiedMove(void)

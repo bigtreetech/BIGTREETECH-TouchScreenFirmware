@@ -2,7 +2,8 @@
 #include "includes.h"
 
 #define LOAD_XYZ_LABEL_INDEX(p0, dir0, p1, dir1, axis)       \
-  do {                                                       \
+  do                                                         \
+  {                                                          \
     moveItems.items[p0].label.index = LABEL_##axis##_##dir0; \
     moveItems.items[p1].label.index = LABEL_##axis##_##dir1; \
   } while (0)
@@ -57,6 +58,7 @@ static inline void updateGantry(void)
   if (nextScreenUpdate(GANTRY_REFRESH_TIME))
   {
     coordinateQuery(0);  // query position manually for delay less than 1 second
+
     drawXYZ();
   }
 }
@@ -196,6 +198,7 @@ void menuMove(void)
     }
 
     loopProcess();
+
     updateGantry();
   }
 

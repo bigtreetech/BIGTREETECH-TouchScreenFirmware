@@ -5,10 +5,11 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-typedef struct {
+typedef struct
+{
   uint32_t startCodePoint;        // start unicode code point for language
   uint32_t endCodePoint;          // end unicode code point for language
   uint8_t  pixelHeight;           // font display pixel height
@@ -32,16 +33,16 @@ typedef struct
 
 void setFontSize(uint16_t size);
 
-void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo);
-uint16_t getUTF8Length(const uint8_t *const str);
+void getCharacterInfo(const uint8_t * ch, CHAR_INFO * pInfo);
+uint16_t getUTF8Length(const uint8_t * const str);
 
-uint16_t GUI_StrPixelWidth_str(const uint8_t *str);
+uint16_t GUI_StrPixelWidth_str(const uint8_t * str);
 uint16_t GUI_StrPixelWidth_label(int16_t index);
 
-#define GUI_StrPixelWidth(X) _Generic(((X+0)), const uint8_t* const: GUI_StrPixelWidth_str, \
-                                                     const uint8_t*: GUI_StrPixelWidth_str, \
-                                                           uint8_t*: GUI_StrPixelWidth_str, \
-                                                            default: GUI_StrPixelWidth_label)(X)
+#define GUI_StrPixelWidth(X) _Generic(((X+0)), const uint8_t * const: GUI_StrPixelWidth_str, \
+                                                     const uint8_t *: GUI_StrPixelWidth_str, \
+                                                           uint8_t *: GUI_StrPixelWidth_str, \
+                                                             default: GUI_StrPixelWidth_label)(X)
 #ifdef __cplusplus
 }
 #endif

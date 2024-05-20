@@ -24,9 +24,9 @@ typedef struct
   uint32_t dma_rcc;
   DMA_TypeDef * dma_controller;
   DMA_Channel_TypeDef * dma_channelRX;
-#ifdef TX_DMA_WRITE
-  DMA_Channel_TypeDef * dma_channelTX;
-#endif
+  #ifdef TX_DMA_WRITE
+    DMA_Channel_TypeDef * dma_channelTX;
+  #endif
 } SERIAL_CFG;
 
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];

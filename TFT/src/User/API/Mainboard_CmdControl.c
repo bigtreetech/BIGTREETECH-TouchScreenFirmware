@@ -91,6 +91,7 @@ void stripCmdChecksum(CMD cmd)
     if (*cmdPtr != ' ' && *cmdPtr != '\t' && *cmdPtr != '\n' && *cmdPtr != '\r')
     {
       cmdPtr++;  // next char has to be set to "\0"
+
       break;
     }
   }

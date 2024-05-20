@@ -8,13 +8,13 @@ extern "C" {
 #include "Settings.h"
 #include "menu.h"
 
-#define ITEM_DEGREE_NUM         3
-#define ITEM_SPEED_NUM          3
-#define ITEM_PERCENT_STEPS_NUM  3
-#define ITEM_MOVE_LEN_NUM       5
-#define ITEM_FINE_MOVE_LEN_NUM  3
-#define ITEM_EXT_LEN_NUM        5
-#define ITEM_TOGGLE_NUM         2
+#define ITEM_DEGREE_NUM        3
+#define ITEM_SPEED_NUM         3
+#define ITEM_PERCENT_STEPS_NUM 3
+#define ITEM_MOVE_LEN_NUM      5
+#define ITEM_FINE_MOVE_LEN_NUM 3
+#define ITEM_EXT_LEN_NUM       5
+#define ITEM_TOGGLE_NUM        2
 
 typedef enum
 {
@@ -57,7 +57,8 @@ extern const float extlenSteps[ITEM_EXT_LEN_NUM];
 extern const LABEL itemToggle[ITEM_TOGGLE_NUM];
 extern const uint16_t iconToggle[ITEM_TOGGLE_NUM];
 
-// Check if next screen update is due
+// check time elapsed against the time specified in milliseconds for displaying/updating info on screen.
+// Use this for timed screen updates in menu loops only
 bool nextScreenUpdate(uint32_t refreshTime);
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
@@ -75,27 +76,28 @@ void drawBackground(const GUI_RECT * rect, uint16_t bgColor, uint16_t edgeDistan
 void drawStandardValue(const GUI_RECT * rect, VALUE_TYPE valType, const void * val, uint16_t font,
                        uint16_t color, uint16_t bgColor, uint16_t edgeDistance, bool clearBgColor);
 
-// Show/draw temperature in a standard menu
+// show/draw temperature in a standard menu
 void temperatureReDraw(uint8_t toolIndex, int16_t * temp, bool drawHeader);
 
-// Show/draw fan in a standard menu
+// show/draw fan in a standard menu
 void fanReDraw(uint8_t fanIndex, bool drawHeader);
 
-// Show/draw extruder in a standard menu
+// show/draw extruder in a standard menu
 void extruderReDraw(uint8_t extruderIndex, float extrusion, bool drawHeader);
 
-// Show/draw percentage in a standard menu
+// show/draw percentage in a standard menu
 void percentageReDraw(uint8_t itemIndex, bool drawHeader);
 
-// Edit temperature in a standard menu
+// edit an integer value in a standard menu
 int32_t editIntValue(int32_t minValue, int32_t maxValue, int32_t resetValue, int32_t value);
 
-// Edit a float value in a standard menu
+// edit a float value in a standard menu
 float editFloatValue(float minValue, float maxValue, float resetValue, float value);
 
 NOZZLE_STATUS warmupNozzle(void);
 
 #ifdef SAFETY_ALERT
+  // user choice for disabling all heaters/hotends
   void cooldownTemperature(void);
 
   #define COOLDOWN_TEMPERATURE() cooldownTemperature()

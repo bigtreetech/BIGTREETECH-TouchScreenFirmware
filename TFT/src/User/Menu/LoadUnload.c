@@ -168,7 +168,7 @@ void menuLoadUnload(void)
     loopProcess();
   }
 
-  if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
+  if (eAxisBackup.handled == false)                       // the user exited from menu (not any other process/popup/etc)
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
 
   // set slow update time if not waiting for target temperature

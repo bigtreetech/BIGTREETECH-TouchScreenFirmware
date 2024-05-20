@@ -25,8 +25,8 @@ static WINDOW window = {
   POPUP_BOTTOM_HEIGHT,                               // height of action bar
   2,                                                 // window border width
   POPUP_BORDER_COLOR,                                // window border color
-  {POPUP_TITLE_FONT_COLOR, POPUP_TITLE_BG_COLOR},    // Title bar font color / background color
-  {POPUP_MSG_FONT_COLOR, POPUP_MSG_BG_COLOR},        // Message area font color / background color
+  {POPUP_TITLE_FONT_COLOR, POPUP_TITLE_BG_COLOR},    // title bar font color / background color
+  {POPUP_MSG_FONT_COLOR, POPUP_MSG_BG_COLOR},        // message area font color / background color
   {POPUP_ACTION_FONT_COLOR, POPUP_ACTION_BG_COLOR},  // action bar font color / background color
 };
 
@@ -73,6 +73,7 @@ void _setDialogCancelTextStr(uint8_t * str)
 void _setDialogTitleLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+
   loadLabelText(tempstr, index);
   strncpy_no_pad((char *)popup_title, (char *)tempstr, sizeof(popup_title));
 }
@@ -80,6 +81,7 @@ void _setDialogTitleLabel(int16_t index)
 void _setDialogMsgLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+
   loadLabelText(tempstr, index);
   strncpy_no_pad((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
 }
@@ -87,6 +89,7 @@ void _setDialogMsgLabel(int16_t index)
 void _setDialogOkTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+
   loadLabelText(tempstr, index);
   strncpy_no_pad((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
 }
@@ -94,6 +97,7 @@ void _setDialogOkTextLabel(int16_t index)
 void _setDialogCancelTextLabel(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
+
   loadLabelText(tempstr, index);
   strncpy_no_pad((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
 }
@@ -124,17 +128,18 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
     windowButton = btn;
 
     if (yes && yes[0])
-    {
       windowButton[buttonNum++].context = yes;
-    }
+
     if (no && no[0])
-    {
       windowButton[buttonNum++].context = no;
-    }
 
     // draw a window with buttons bar
     GUI_DrawWindow(&window, title, context, true);
-    for (uint8_t i = 0; i < buttonNum; i++) GUI_DrawButton(&windowButton[i], 0);
+
+    for (uint8_t i = 0; i < buttonNum; i++)
+    {
+      GUI_DrawButton(&windowButton[i], 0);
+    }
 
     setMenuType(MENU_TYPE_DIALOG);
   }
@@ -158,12 +163,14 @@ void menuDialog(void)
     {
       case KEY_POPUP_CONFIRM:
         CLOSE_MENU();
+
         if (action_ok != NULL)
           action_ok();
         break;
 
       case KEY_POPUP_CANCEL:
         CLOSE_MENU();
+
         if (action_cancel != NULL)
           action_cancel();
         break;
@@ -213,11 +220,13 @@ void loopPopup(void)
   if (popup_cancel[0])
   {
     popupDrawPage(popup_type, bottomDoubleBtn, popup_title, popup_msg, popup_ok, popup_cancel);
+
     cur_btn_rect = doubleBtnRect;
   }
   else if (popup_ok[0])  // show only ok button
   {
     popupDrawPage(popup_type, &bottomSingleBtn, popup_title, popup_msg, popup_ok, NULL);
+
     cur_btn_rect = &singleBtnRect;
   }
   else  // if no button is requested
@@ -231,7 +240,5 @@ void loopPopup(void)
 
   // avoid to nest menuDialog popup type (while a menuNotification popup type can be overridden)
   if (MENU_IS_NOT(menuDialog))
-  { // handle the user interaction, then reload the previous menu
-    OPEN_MENU(menuDialog);
-  }
+    OPEN_MENU(menuDialog);  // handle the user interaction, then reload the previous menu
 }

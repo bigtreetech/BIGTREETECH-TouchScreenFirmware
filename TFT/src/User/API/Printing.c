@@ -230,7 +230,6 @@ uint8_t updatePrintProgress(void)
         infoPrinting.progress = 100;
       else
         infoPrinting.progress = (uint8_t)((float)(infoPrinting.cur - infoPrinting.fileOffset) / (infoPrinting.size - infoPrinting.fileOffset) * 100);
-
       break;
 
     case PROG_RRF:
@@ -287,8 +286,8 @@ static void shutdownLoop(void)
 static void shutdownStart(void)
 {
   char tempstr[75];
-
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
+
   sprintf(tempstr, tempbody, infoSettings.auto_shutdown_temp);
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
@@ -457,6 +456,7 @@ bool startPrint(void)
           // disable print restore flag (one shot flag) for the next print.
           // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
           powerFailedSetRestore(false);
+
           break;
         }
 
@@ -474,7 +474,6 @@ bool startPrint(void)
 
         powerFailedCreate(infoFile.path);  // if PLR feature is enabled, open a new PLR file
       }
-
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -530,7 +529,6 @@ void endPrint(void)
       // execute post print end tasks
       if (GET_BIT(infoSettings.send_gcodes, SEND_GCODES_END_PRINT))
         sendPrintCodes(1);
-
       break;
 
     case FS_ONBOARD_MEDIA_REMOTE:  // nothing to do
@@ -620,6 +618,7 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
       static COORDINATE tmp;
+
       bool isCoorRelative = coorGetRelative();
       bool isExtrudeRelative = eGetRelative();
 
@@ -690,7 +689,6 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
           if (isExtrudeRelative == true) mustStoreCmd("M83\n");
         }
       }
-
       break;
 
     case FS_ONBOARD_MEDIA:
@@ -699,7 +697,6 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         request_M25();   // pause
       else
         request_M24(0);  // resume
-
       break;
 
     case FS_REMOTE_HOST:

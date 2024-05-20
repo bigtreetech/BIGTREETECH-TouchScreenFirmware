@@ -59,6 +59,7 @@ static void drawSelectedMode(int8_t nowMode)
 void menuMode(void)
 {
   int8_t nowMode = GET_BIT(infoSettings.mode, 0);
+
   TS_ReDrawIcon = NULL;  // disable icon redraw callback function
 
   GUI_Clear(infoSettings.bg_color);
@@ -66,13 +67,9 @@ void menuMode(void)
   drawSelectedMode(nowMode);
 
   #if LCD_ENCODER_SUPPORT
-    while (!XPT2046_Read_Pen() || LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))  // wait for button release
-    {
-    }
+    while (!XPT2046_Read_Pen() || LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL));  // wait for button release
   #else
-    while (!XPT2046_Read_Pen())  // wait for touch release
-    {
-    }
+    while (!XPT2046_Read_Pen());  // wait for touch release
   #endif
 
   while (MENU_IS(menuMode))
@@ -82,6 +79,7 @@ void menuMode(void)
     if (key_num == MKEY_0 || key_num == MKEY_1)
     {
       nowMode = key_num;
+
       break;
     }
 
@@ -89,8 +87,9 @@ void menuMode(void)
       if (encoderPosition)
       {
         nowMode = NOBEYOND(0, nowMode + encoderPosition, MODE_COUNT - 1);
-        drawSelectedMode(nowMode);
         encoderPosition = 0;
+
+        drawSelectedMode(nowMode);
       }
 
       if (LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))
@@ -100,14 +99,10 @@ void menuMode(void)
     #endif
 
     if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_always_on == 1)
-    {
       loopBackEnd();
-    }
     #ifdef LCD_LED_PWM_CHANNEL  // LCD_CheckDimming() is invoked by loopBackEnd(), so we guarantee it is invoked only once
       else
-      {
         LCD_CheckDimming();
-      }
     #endif
   }
 

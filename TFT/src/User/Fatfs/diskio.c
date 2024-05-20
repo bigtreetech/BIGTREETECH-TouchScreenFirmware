@@ -203,6 +203,7 @@ DRESULT disk_ioctl(
       return RES_OK;
     // {
     //   DRESULT res = RES_ERROR;
+    //
     //   switch (cmd)
     //   {
     //     case CTRL_SYNC:         // Make sure that no pending write process
@@ -226,6 +227,7 @@ DRESULT disk_ioctl(
     //     default:
     //       res = RES_PARERR;
     //   }
+    //
     //   return res;
     // }
   }

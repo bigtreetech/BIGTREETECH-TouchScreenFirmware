@@ -20,27 +20,27 @@ static BUZZER buzzer;
 
 static inline void Buzzer_ConfigTimer(void)
 {
-#if defined(GD32F2XX) || defined(GD32F3XX)
-  rcu_periph_clock_enable(RCU_TIMER2);                                // enable timer clock
-  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;                              // disable timer
-  TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;                             // clear update interrupt flag
-  TIMER_DMAINTEN(TIMER2) |= TIMER_DMAINTEN_UPIE;                      // enable update interrupt
-  TIMER_CAR(TIMER2) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 1 count = 1us
-#else
-  NVIC_InitTypeDef NVIC_InitStructure;
+  #if defined(GD32F2XX) || defined(GD32F3XX)
+    rcu_periph_clock_enable(RCU_TIMER2);                                // enable timer clock
+    TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;                              // disable timer
+    TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;                             // clear update interrupt flag
+    TIMER_DMAINTEN(TIMER2) |= TIMER_DMAINTEN_UPIE;                      // enable update interrupt
+    TIMER_CAR(TIMER2) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 1 count = 1us
+  #else
+    NVIC_InitTypeDef NVIC_InitStructure;
 
-  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+    NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
 
-  RCC->APB1ENR |= RCC_APB1Periph_TIM3;                        // enable timer clock
-  TIM3->CR1 &= ~TIM_CR1_CEN;                                  // disable timer
-  TIM3->SR &= ~TIM_SR_UIF;                                    // clear update interrupt flag
-  TIM3->DIER |= TIM_DIER_UIE;                                 // enable update interrupt
-  TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 1 count = 1us
-#endif
+    RCC->APB1ENR |= RCC_APB1Periph_TIM3;                        // enable timer clock
+    TIM3->CR1 &= ~TIM_CR1_CEN;                                  // disable timer
+    TIM3->SR &= ~TIM_SR_UIF;                                    // clear update interrupt flag
+    TIM3->DIER |= TIM_DIER_UIE;                                 // enable update interrupt
+    TIM3->ARR = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;  // 1 count = 1us
+  #endif
 }
 
 void Buzzer_Config(void)
@@ -55,54 +55,54 @@ void Buzzer_DeConfig(void)
   GPIO_InitSet(BUZZER_PIN, MGPIO_MODE_IPN, 0);
   buzzer.wIndex = buzzer.rIndex = buzzer.toggles = 0;
 
-#if defined(GD32F2XX) || defined(GD32F3XX)
-  nvic_irq_disable(TIMER2_IRQn);          // disable timer interrupt
-  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  // stop timer
-#else
-  NVIC_DisableIRQ(TIM3_IRQn);             // disable timer interrupt
-  TIM3->CR1 &= ~TIM_CR1_CEN;              // stop timer
-#endif
+  #if defined(GD32F2XX) || defined(GD32F3XX)
+    nvic_irq_disable(TIMER2_IRQn);          // disable timer interrupt
+    TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;  // stop timer
+  #else
+    NVIC_DisableIRQ(TIM3_IRQn);             // disable timer interrupt
+    TIM3->CR1 &= ~TIM_CR1_CEN;              // stop timer
+  #endif
 }
 
 // play a tone with the help of interrupts
 static inline void Buzzer_PlaySound(uint16_t frequency, const uint16_t duration)
 {
-  uint32_t silence = (frequency == SILENCE_FREQ);       // frequency == 0 indicates silence/pause in the sound
+  uint32_t silence = (frequency == SILENCE_FREQ);         // frequency == 0 indicates silence/pause in the sound
 
   if (silence)
-    frequency = 1000;                                   // give 1ms resolution for silence
+    frequency = 1000;                                     // give 1ms resolution for silence
 
-#if defined(GD32F2XX) || defined(GD32F3XX)
-  nvic_irq_disable(TIMER2_IRQn);                        // disable timer interrupt
-  buzzer.toggles = 2 * (frequency * duration / 1000);   // 2 toggles per period
-  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;                // disable timer
-  TIMER_CNT(TIMER2) = 0;                                // reset counter
-  TIMER_PSC(TIMER2) = (1000000 / (2 * frequency)) - 1;  // prescaler, half period time in us
-  TIMER_CTL0(TIMER2) |= TIMER_CTL0_CEN;                 // enable timer
-  nvic_irq_enable(TIMER2_IRQn, 1U, 0U);                 // enable timer interrupt
-#else
-  NVIC_DisableIRQ(TIM3_IRQn);                           // disable timer interrupt
-  buzzer.toggles = 2 * (frequency * duration / 1000);   // 2 toggles per period
-  TIM3->CR1 &= ~TIM_CR1_CEN;                            // disable timer
-  TIM3->CNT = 0;                                        // reset counter
-  TIM3->PSC = (1000000 / (2 * frequency)) - 1;          // prescaler, half period time in us
-  TIM3->CR1 |= TIM_CR1_CEN;                             // enable timer
-  NVIC_EnableIRQ(TIM3_IRQn);                            // enable interrupt
-#endif
+  #if defined(GD32F2XX) || defined(GD32F3XX)
+    nvic_irq_disable(TIMER2_IRQn);                        // disable timer interrupt
+    buzzer.toggles = 2 * (frequency * duration / 1000);   // 2 toggles per period
+    TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;                // disable timer
+    TIMER_CNT(TIMER2) = 0;                                // reset counter
+    TIMER_PSC(TIMER2) = (1000000 / (2 * frequency)) - 1;  // prescaler, half period time in us
+    TIMER_CTL0(TIMER2) |= TIMER_CTL0_CEN;                 // enable timer
+    nvic_irq_enable(TIMER2_IRQn, 1U, 0U);                 // enable timer interrupt
+  #else
+    NVIC_DisableIRQ(TIM3_IRQn);                           // disable timer interrupt
+    buzzer.toggles = 2 * (frequency * duration / 1000);   // 2 toggles per period
+    TIM3->CR1 &= ~TIM_CR1_CEN;                            // disable timer
+    TIM3->CNT = 0;                                        // reset counter
+    TIM3->PSC = (1000000 / (2 * frequency)) - 1;          // prescaler, half period time in us
+    TIM3->CR1 |= TIM_CR1_CEN;                             // enable timer
+    NVIC_EnableIRQ(TIM3_IRQn);                            // enable interrupt
+  #endif
 
   if (silence)
-    buzzer.toggles = -buzzer.toggles;                   // setup for silence, negative toggles
+    buzzer.toggles = -buzzer.toggles;                     // setup for silence, negative toggles
 }
 
 // play a sound from sound queue. Called by timer interrupt and Buzzer_AddSound() function
 static void Buzzer_GetSound(void)
 {
   // stop timer
-#if defined(GD32F2XX) || defined(GD32F3XX)
-  TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;
-#else
-  TIM3->CR1 &= ~TIM_CR1_CEN;
-#endif
+  #if defined(GD32F2XX) || defined(GD32F3XX)
+    TIMER_CTL0(TIMER2) &= ~TIMER_CTL0_CEN;
+  #else
+    TIM3->CR1 &= ~TIM_CR1_CEN;
+  #endif
 
   if (buzzer.rIndex != buzzer.wIndex)  // play a queued sound, if any
   {
@@ -132,13 +132,13 @@ void Buzzer_AddSound(const uint16_t frequency, const uint16_t duration)
     buzzer.wIndex = 0;
 
   // check if timer is running before playing the next queued sound
-#if defined(GD32F2XX) || defined(GD32F3XX)
-  if ((TIMER_CTL0(TIMER2) & TIMER_CTL0_CEN))
-    return;
-#else
-  if ((TIM3->CR1 & TIM_CR1_CEN))
-    return;
-#endif
+  #if defined(GD32F2XX) || defined(GD32F3XX)
+    if ((TIMER_CTL0(TIMER2) & TIMER_CTL0_CEN))
+      return;
+  #else
+    if ((TIM3->CR1 & TIM_CR1_CEN))
+      return;
+  #endif
 
   Buzzer_GetSound();  // play next queued sound
 }

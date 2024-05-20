@@ -5,7 +5,7 @@ static bool probeOffsetMenu = false;
 static uint8_t curUnit_index = 0;
 static uint8_t curSubmenu_index = 0;
 
-// Show an error notification
+// show an error notification
 static void zOffsetNotifyError(bool isStarted)
 {
   LABELCHAR(tempMsg, LABEL_PROBE_OFFSET)
@@ -219,6 +219,7 @@ void menuZOffset(void)
           case 3:
             infoSettings.level_z_pos = editFloatValue(LEVELING_Z_POS_MIN, LEVELING_Z_POS_MAX,
                                                       LEVELING_Z_POS_DEFAULT, infoSettings.level_z_pos);
+
             zOffsetDraw(offsetGetStatus(), now);
             break;
 
@@ -249,6 +250,7 @@ void menuZOffset(void)
     if (now != z_offset)
     {
       now = z_offset;
+
       zOffsetDraw(offsetGetStatus(), now);
 
       // reset babystep every time Z offset is changed otherwise the set babystep value

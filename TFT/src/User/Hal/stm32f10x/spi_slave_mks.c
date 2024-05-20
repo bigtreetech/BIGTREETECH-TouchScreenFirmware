@@ -6,7 +6,7 @@
 
 #if defined(MKS_TFT)
 
-#if defined(ST7920_EMULATOR)
+#ifdef ST7920_EMULATOR
 
 // TODO:
 // now support SPI3 and PB1 CS only

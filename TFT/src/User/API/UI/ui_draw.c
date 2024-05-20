@@ -378,7 +378,7 @@ static bool model_Process_Base64PNG(FIL * gcodeFile, void * user_data, pngle_dra
   if (base64_len == 0)
   {
     dbg_printf("thumbnail for w=%d,h=%d not found.\n", ICON_WIDTH, ICON_HEIGHT);
-  
+
     return false;
   }
 
@@ -407,6 +407,7 @@ static bool model_Process_Base64PNG(FIL * gcodeFile, void * user_data, pngle_dra
     if (fed < 0)
     {
       dbg_printf("pngle error: %s\n", pngle_error(pngle));
+
       goto pngle_failed;
     }
 

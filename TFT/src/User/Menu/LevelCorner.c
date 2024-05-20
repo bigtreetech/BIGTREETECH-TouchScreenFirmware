@@ -35,6 +35,7 @@ static void setLevelEdgeMin(void)
 static void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
   sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
+
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
 
@@ -93,11 +94,11 @@ void menuLevelCorner(void)
           // wait until point probing is executed
           TASK_LOOP_WHILE(levelingGetProbedPoint() == LEVEL_NO_POINT);
 
-          levelCornerPosition[i] = levelingGetProbedZ();
-          refreshValue(&levelCornerItems, i);
-          levelingResetProbedPoint();  // reset to check for new updates
-        }
+          levelingResetProbedPoint();                     // reset to check for new updates
+          levelCornerPosition[i] = levelingGetProbedZ();  // update position
 
+          refreshValue(&levelCornerItems, i);
+        }
         break;
 
       case KEY_ICON_2:
@@ -109,7 +110,6 @@ void menuLevelCorner(void)
 
         if (curLevelEdge >= getLevelEdgeMin() && infoSettings.level_edge < getLevelEdgeMin())  // if new value is below min limit
           popupDialog(DIALOG_TYPE_QUESTION, LABEL_WARNING, LABEL_LEVEL_CORNER_INFO, LABEL_CONFIRM, LABEL_CANCEL, setLevelEdgeMin, NULL, NULL);
-
         break;
       }
 
@@ -120,6 +120,7 @@ void menuLevelCorner(void)
       case KEY_ICON_7:
         infoSettings.level_edge = origLevelEdge;  // restore original leveling edge value
         origLevelEdge = -1;
+
         CLOSE_MENU();
         break;
 

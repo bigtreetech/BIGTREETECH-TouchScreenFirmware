@@ -8,40 +8,23 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-// Enable probe height.
+// enable probe height.
 // Temporary disable software endstops and save ABL state
 void probeHeightEnable(void);
 
-// Disable probe height.
+// disable probe height.
 // Restore original software endstops state and ABL state
 void probeHeightDisable(void);
 
-// Home, disable ABL and raise nozzle
-void probeHeightHome(void);
-
-// Home and disable ABL
-void probeHeightHomeAndNoABL(void);
-
-// Home and raise nozzle
-void probeHeightHomeAndRaise(void);
-
-// Start probe height
-void probeHeightStart(float initialHeight, bool relativeHeight);
-
-// Stop probe height
-void probeHeightStop(float raisedHeight);
-
-// Set probe height to relative position mode
-void probeHeightRelative(void);
-
-// Set probe height to absolute position mode
-void probeHeightAbsolute(void);
-
-// Change probe height
-void probeHeightMove(float unit);
-
-// Query for new coordinates
-void probeHeightQueryCoord(void);
+void probeHeightHome(void);                                       // home, disable ABL and raise nozzle
+void probeHeightHomeAndNoABL(void);                               // home and disable ABL
+void probeHeightHomeAndRaise(void);                               // home and raise nozzle
+void probeHeightStart(float initialHeight, bool relativeHeight);  // start probe height
+void probeHeightStop(float raisedHeight);                         // stop probe height
+void probeHeightRelative(void);                                   // set probe height to relative position mode
+void probeHeightAbsolute(void);                                   // set probe height to absolute position mode
+void probeHeightMove(float unit);                                 // change probe height
+void probeHeightQueryCoord(void);                                 // query for new coordinates
 
 #ifdef __cplusplus
 }

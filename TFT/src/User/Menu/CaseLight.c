@@ -50,10 +50,11 @@ void menuCaseLight(void)
     }
   };
 
+  static uint8_t percent_index = 1;
+
   KEY_VALUES key_num = KEY_IDLE;
   uint8_t requestedCLpercent = caseLightPercent;
   uint8_t requestedCLstate = caseLightState;
-  static uint8_t percent_index = 1;
 
   enum
   {
@@ -93,8 +94,8 @@ void menuCaseLight(void)
       // change unit
       case KEY_ICON_4:
         percent_index = (percent_index + 1) % ITEM_PERCENT_STEPS_NUM;
-
         caseLightItems.items[key_num] = itemPercent[percent_index];
+
         menuDrawItem(&caseLightItems.items[key_num], key_num);
         break;
 
@@ -130,6 +131,7 @@ void menuCaseLight(void)
         requestedCLstate = caseLightState;
 
       updateCaseLightIcon(&caseLightItems, caseLightState);
+
       menuDrawItem(&caseLightItems.items[KEY_ICON_5], KEY_ICON_5);
     }
 

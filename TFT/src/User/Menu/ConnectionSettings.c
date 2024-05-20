@@ -76,9 +76,12 @@ static void menuBaudrate(void)
     if (curIndex < size && curIndex != curItem)  // if changed
     {
       totalItems[curItem].icon = CHARICON_UNCHECKED;
+
       listViewRefreshItem(curItem);  // refresh unchecked status
+
       curItem = curIndex;
       totalItems[curItem].icon = CHARICON_CHECKED;
+
       listViewRefreshItem(curItem);  // refresh checked status
 
       infoSettings.serial_port[portIndex] = curItem + minIndex;
@@ -116,6 +119,7 @@ static void menuSerialPorts(void)
     if (curIndex < (KEY_VALUES)SERIAL_PORT_COUNT)
     {
       portIndex = (SERIAL_PORT_INDEX)curIndex;
+
       OPEN_MENU(menuBaudrate);
     }
 
@@ -144,6 +148,7 @@ void menuConnectionSettings(void)
   KEY_VALUES curIndex = KEY_IDLE;
 
   updateListeningMode(&connectionSettingsItems);
+
   menuDrawPage(&connectionSettingsItems);
 
   while (MENU_IS(menuConnectionSettings))
@@ -177,6 +182,7 @@ void menuConnectionSettings(void)
         storePara();
 
         updateListeningMode(&connectionSettingsItems);
+
         menuDrawItem(&connectionSettingsItems.items[4], 4);
         break;
 

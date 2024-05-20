@@ -29,6 +29,7 @@ void menuHeat(void)
   };
 
   static uint8_t degreeSteps_index = 1;
+
   KEY_VALUES key_num = KEY_IDLE;
   int16_t lastCurrent = heatGetCurrentTemp(tool_index);
   int16_t lastTarget = heatGetTargetTemp(tool_index);
@@ -60,6 +61,7 @@ void menuHeat(void)
       case KEY_INFOBOX:
       {
         setTarget = editIntValue(0, infoSettings.max_temp[tool_index], 0, actTarget);
+
         temperatureReDraw(tool_index, NULL, true);
         break;
       }
@@ -102,14 +104,15 @@ void menuHeat(void)
 
     if (setTarget != lastTarget)
     {
-      heatSetTargetTemp(tool_index, setTarget, FROM_GUI);
       actTarget = setTarget;
+      heatSetTargetTemp(tool_index, setTarget, FROM_GUI);
     }
 
     if (lastCurrent != actCurrent || lastTarget != actTarget)
     {
       lastCurrent = actCurrent;
       lastTarget = actTarget;
+
       temperatureReDraw(tool_index, NULL, false);
     }
 
@@ -119,7 +122,7 @@ void menuHeat(void)
   if (WITHIN(tool_index, NOZZLE0, NOZZLE5))
     last_nozzle_index = tool_index;  // save last used hotend index
 
-  // Set slow update time if not waiting for target temperature
+  // set slow update time if not waiting for target temperature
   if (heatHasWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

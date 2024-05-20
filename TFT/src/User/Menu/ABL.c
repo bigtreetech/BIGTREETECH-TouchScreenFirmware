@@ -22,8 +22,8 @@ void ablUpdateStatus(bool succeeded)
 
     case BL_UBL:
       savingEnabled = false;
-      tempTitle.index = LABEL_ABL_SETTINGS_UBL;
 
+      tempTitle.index = LABEL_ABL_SETTINGS_UBL;
       sprintf(strchr(tempMsg, '\0'), "\n %s", textSelect(LABEL_BL_SMART_FILL));
       break;
 
@@ -70,8 +70,8 @@ void ablStart(void)
       storeCmd("G29 P3\n");  // run this multiple times since it only fills some missing points, not all
       storeCmd("G29 P3\n");
       storeCmd("G29 P3\n");
-      // Find Mean Mesh Height: with C this will automatically execute a G29 P6 C[mean height].
-      // Ideally the Mesh is adjusted for a Mean Height of 0.00 and the Z-Probe measuring 0.0 at the Z homing position.
+      // find Mean Mesh Height: with option "C" this will automatically execute a G29 P6 C[mean height].
+      // Ideally the Mesh is adjusted for a Mean Height of 0.00 and the Z-Probe measuring 0.0 at the Z homing position
       storeCmd("G29 P5 C\n");
       break;
 

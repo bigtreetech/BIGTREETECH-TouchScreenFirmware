@@ -4,7 +4,7 @@
 #include "GPIO_Init.h"
 #include "HD44780.h"
 
-#if defined(ST7920_EMULATOR)
+#ifdef ST7920_EMULATOR
 
 // TODO:
 // now support SPI2 and PB12 CS only
@@ -138,26 +138,26 @@ void EXTI15_10_IRQHandler(void)
   switch (infoSettings.marlin_type)
   {
     #ifdef LCD2004_EMULATOR
-    case LCD2004:
-      HD44780_writeData();
-      break;
+      case LCD2004:
+        HD44780_writeData();
+        break;
     #endif
 
     #ifdef ST7920_EMULATOR
-    case LCD12864:
-      if ((GPIOB->IDR & (1<<12)) != 0)
-      {
-        SPI_ReEnable(!!(GPIOB->IDR & (1<<13)));  // adaptive spi mode0 / mode3
-        ST7920_SPI_NUM->CR1 |= (1<<6);
-      }
-      else
-      {
-        RCC->APB1RSTR |= 1<<14;
-        RCC->APB1RSTR &= ~(1<<14);               // reset SPI2
-      }
+      case LCD12864:
+        if ((GPIOB->IDR & (1<<12)) != 0)
+        {
+          SPI_ReEnable(!!(GPIOB->IDR & (1<<13)));  // adaptive spi mode0 / mode3
+          ST7920_SPI_NUM->CR1 |= (1<<6);
+        }
+        else
+        {
+          RCC->APB1RSTR |= 1<<14;
+          RCC->APB1RSTR &= ~(1<<14);               // reset SPI2
+        }
 
-      EXTI->PR = 1<<12;                          // clear interrupt status register
-      break;
+        EXTI->PR = 1<<12;                          // clear interrupt status register
+        break;
     #endif
   }
 }

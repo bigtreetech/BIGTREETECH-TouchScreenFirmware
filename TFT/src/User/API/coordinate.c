@@ -123,9 +123,9 @@ void coordinateQueryClearSendingWaiting(void)
 }
 
 /**
- * @brief query gantry position.
+ * @brief Query gantry position
  * @param seconds: Pass 0 to query manually or disable auto report. Pass delay in seconds
- *                 for auto query if available in marlin.
+ *                 for auto query if available in marlin
  */
 void coordinateQuery(uint8_t seconds)
 { // following conditions ordered by importance

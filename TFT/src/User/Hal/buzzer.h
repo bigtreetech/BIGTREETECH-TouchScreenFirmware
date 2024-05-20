@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
+#include <stdint.h>    // for uint16_t etc.
 #include "variants.h"  // for BUZZER_PIN etc.
 
 #ifdef BUZZER_PIN

@@ -104,10 +104,10 @@ void Serial_Forward(SERIAL_PORT_INDEX portIndex, const char * msg)
   {
     // forward data only if serial port is enabled
     if (infoSettings.serial_port[portIndex] > 0
-        #ifdef SERIAL_DEBUG_PORT
-          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
-        #endif
-        )
+      #ifdef SERIAL_DEBUG_PORT
+        && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+      #endif
+      )
       Serial_Put(serialPort[portIndex].port, msg);  // pass on the message to the port
   }
 }
@@ -208,10 +208,10 @@ void Serial_GetFromUART(void)
   {
     // retrieve data only if serial port is enabled
     if (infoSettings.serial_port[portIndex] > 0
-        #ifdef SERIAL_DEBUG_PORT
-          && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
-        #endif
-        )
+      #ifdef SERIAL_DEBUG_PORT
+        && serialPort[portIndex].port != SERIAL_DEBUG_PORT  // do not forward data to serial debug port
+      #endif
+      )
     {
       while (Serial_DataAvailableRX(serialPort[portIndex].port) && Serial_Get(serialPort[portIndex].port, cmd, CMD_MAX_SIZE) != 0)
       {

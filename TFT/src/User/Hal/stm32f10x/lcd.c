@@ -4,15 +4,6 @@
 
 #ifdef STM32_HAS_FSMC
 
-uint16_t LCD_RD_DATA(void)
-{
-  volatile uint16_t ram;
-
-  ram = LCD->LCD_RAM;
-
-  return ram;
-}
-
 static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
@@ -25,6 +16,15 @@ static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
   Delay_us(5);
 
   return LCD_RD_DATA();
+}
+
+uint16_t LCD_RD_DATA(void)
+{
+  volatile uint16_t ram;
+
+  ram = LCD->LCD_RAM;
+
+  return ram;
 }
 
 static inline void LCD_GPIO_Config(void)
@@ -135,7 +135,8 @@ void LCD_HardwareConfig(void)
   #define DATAOUT(x) do{ GPIOE->ODR = x; }while(0)  // Data output  //数据输出
   #define DATAIN()   GPIOE->IDR                     // Data input   //数据输入
 #else
-  /* TFT24-V1.1
+  /*
+   * TFT24-V1.1
    * PB6 :LCD-RD
    * PB7 :LCD-WR
    * PB9 :LCD-CS
@@ -207,65 +208,65 @@ uint16_t LCD_RD_DATA(void)
 
 static inline void LCD_GPIO_Config(void)
 {
-#if defined(MKS_TFT)
-  GPIO_InitTypeDef GPIO_InitStructure;
-  // GPIO Ports Clock Enable
+  #if defined(MKS_TFT)
+    GPIO_InitTypeDef GPIO_InitStructure;
+    // GPIO Ports Clock Enable
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOB, ENABLE);
-  // configure GPIO pin Output Level
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOB, ENABLE);
+    // configure GPIO pin Output Level
 
-  // configure GPIO pins : Pin1_Pin Pin2_Pin
+    // configure GPIO pins : Pin1_Pin Pin2_Pin
 
-  // GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin | FLASH_nCS_Pin | FILAMENT_DI_Pin | POWER_DI_Pin;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_9;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    // GPIO_InitStructure.GPIO_Pin = LCD_nWR_Pin | FLASH_nCS_Pin | FILAMENT_DI_Pin | POWER_DI_Pin;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_9;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-  // GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin | LCD_RS_Pin | LCD_BACKLIGHT_Pin | LCD_nRD_Pin;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_15;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
+    // GPIO_InitStructure.GPIO_Pin = SDCARD_nCS_Pin | LCD_RS_Pin | LCD_BACKLIGHT_Pin | LCD_nRD_Pin;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOD, &GPIO_InitStructure);
 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_Init(GPIOE, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOE, &GPIO_InitStructure);
 
-  LCD_RD_SET;  // set this as we only change it when reading
-#else
-  GPIO_InitTypeDef GPIO_InitStructure;
+    LCD_RD_SET;  // set this as we only change it when reading
+  #else
+    GPIO_InitTypeDef GPIO_InitStructure;
 
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC, ENABLE);
 
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  // D0 - D15: PC0 - PC15
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-  GPIO_SetBits(GPIOC, GPIO_Pin_All);
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    // D0 - D15: PC0 - PC15
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_SetBits(GPIOC, GPIO_Pin_All);
 
-  /*
-   * PB6 :LCD-RD
-   * PB7 :LCD-WR
-   * PB9 :LCD-CS
-   * PB8 :LCD-RS
-   */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
-  GPIO_Init(GPIOB, &GPIO_InitStructure);
-  GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
-#endif
+    /*
+     * PB6 :LCD-RD
+     * PB7 :LCD-WR
+     * PB9 :LCD-CS
+     * PB8 :LCD-RS
+     */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_SetBits(GPIOB, GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9);
+  #endif
 }
 
 void LCD_HardwareConfig(void)

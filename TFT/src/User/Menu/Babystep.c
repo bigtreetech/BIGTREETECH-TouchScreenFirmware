@@ -45,7 +45,7 @@ static void babyReDraw(float babystep, float z_offset, bool force_z_offset, bool
   setFontSize(FONT_SIZE_NORMAL);
 }
 
-// Set Z offset value for MBL bl type
+// set Z offset value for MBL bl type
 static float babyMblOffsetSetValue(float value)
 {
   mustStoreCmd("G29 S4 Z%.2f\n", value);
@@ -54,7 +54,7 @@ static float babyMblOffsetSetValue(float value)
   return value;
 }
 
-// Get current Z offset value for MBL bl type
+// get current Z offset value for MBL bl type
 static float babyMblOffsetGetValue(void)
 {
   return getParameter(P_MBL_OFFSET, 0);
@@ -220,6 +220,7 @@ void menuBabystep(void)
       }
 
       now_babystep = babystep;
+
       babyReDraw(now_babystep, new_z_offset, force_z_offset, false);
     }
 

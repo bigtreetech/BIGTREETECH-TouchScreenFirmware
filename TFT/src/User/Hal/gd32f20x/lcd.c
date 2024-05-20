@@ -4,15 +4,6 @@
 
 #ifdef STM32_HAS_FSMC
 
-uint16_t LCD_RD_DATA(void)
-{
-  volatile uint16_t ram;
-
-  ram = LCD->LCD_RAM;
-
-  return ram;
-}
-
 static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
@@ -25,6 +16,15 @@ static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
   Delay_us(5);
 
   return LCD_RD_DATA();
+}
+
+uint16_t LCD_RD_DATA(void)
+{
+  volatile uint16_t ram;
+
+  ram = LCD->LCD_RAM;
+
+  return ram;
 }
 
 static inline void LCD_GPIO_Config(void)
@@ -112,5 +112,7 @@ void LCD_HardwareConfig(void)
 }
 
 #else
-  #error "don't support LCD-GPIO yet"
-#endif
+
+#error "don't support LCD-GPIO yet"
+
+#endif  // STM32_HAS_FSMC
