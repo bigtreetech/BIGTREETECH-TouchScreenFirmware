@@ -16,7 +16,7 @@ typedef struct {
 // Steps/mm (X, Y, Z, E0, E1, E2)
 static const suffix_t M92_suffix[]= {
   {"X%.4f\n",    VAL_TYPE_FLOAT}, {"Y%.4f\n",    VAL_TYPE_FLOAT}, {"Z%.2f\n", VAL_TYPE_FLOAT},
-  {"T0 E%.2f\n", VAL_TYPE_FLOAT}, {"T1 E%.2f\n", VAL_TYPE_FLOAT}, {"T2 E%.2f\n", VAL_TYPE_FLOAT}, 
+  {"T0 E%.2f\n", VAL_TYPE_FLOAT}, {"T1 E%.2f\n", VAL_TYPE_FLOAT}, {"T2 E%.2f\n", VAL_TYPE_FLOAT},
 };
 // Filament Diameter (Enable, E0, E1, E2)
 static const suffix_t M200_suffix[]= {

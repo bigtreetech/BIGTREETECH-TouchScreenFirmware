@@ -10,7 +10,7 @@
 static uint8_t origEndstopsState = DISABLED;
 static float origAblState = DISABLED;
 
-// Enable probe height.
+// enable probe height.
 // Temporary disable software endstops and save ABL state
 void probeHeightEnable(void)
 {
@@ -26,7 +26,7 @@ void probeHeightEnable(void)
   }
 }
 
-// Disable probe height.
+// disable probe height.
 // Restore original software endstops state and ABL state
 void probeHeightDisable(void)
 {
@@ -42,7 +42,7 @@ void probeHeightDisable(void)
     mustStoreCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S1\n" : "G29 S1\n");  // enable ABL
 }
 
-// Home, disable ABL and raise nozzle
+// home, disable ABL and raise nozzle
 void probeHeightHome(void)
 {
   mustStoreCmd("G28\n");  // home printer
@@ -50,21 +50,21 @@ void probeHeightHome(void)
   probeHeightStop(infoSettings.probing_z_raise);  // raise nozzle
 }
 
-// Home and disable ABL
+// home and disable ABL
 void probeHeightHomeAndNoABL(void)
 {
   mustStoreCmd("G28\n");  // home printer
   mustStoreCmd(infoMachineSettings.firmwareType != FW_REPRAPFW ? "M420 S0\n" : "G29 S2\n");  // disable ABL
 }
 
-// Home and raise nozzle
+// home and raise nozzle
 void probeHeightHomeAndRaise(void)
 {
   mustStoreCmd("G28\n");  // home printer
   probeHeightStop(infoSettings.probing_z_raise);  // raise nozzle
 }
 
-// Start probe height
+// start probe height
 void probeHeightStart(float initialHeight, bool relativeHeight)
 {
   if (relativeHeight)
@@ -78,7 +78,7 @@ void probeHeightStart(float initialHeight, bool relativeHeight)
   probeHeightRelative();                                  // set relative position mode
 }
 
-// Stop probe height
+// stop probe height
 void probeHeightStop(float raisedHeight)
 {
   probeHeightRelative();                                  // set relative position mode
@@ -88,25 +88,25 @@ void probeHeightStop(float raisedHeight)
   probeHeightAbsolute();                                  // set absolute position mode
 }
 
-// Set probe height to relative position mode
+// set probe height to relative position mode
 void probeHeightRelative(void)
 {
   mustStoreCmd("G91\n");  // set relative position mode
 }
 
-// Set probe height to absolute position mode
+// set probe height to absolute position mode
 void probeHeightAbsolute(void)
 {
   mustStoreCmd("G90\n");  // set absolute position mode
 }
 
-// Change probe height
+// change probe height
 void probeHeightMove(float unit)
 {
   storeCmd(MOVE_Z_CMD, unit, infoSettings.level_feedrate[FEEDRATE_Z]);
 }
 
-// Query for new coordinates
+// query for new coordinates
 void probeHeightQueryCoord(void)
 {
   static uint32_t nextUpdateTime = 0;

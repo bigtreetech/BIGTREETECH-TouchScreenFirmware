@@ -71,6 +71,7 @@ bool screenShotBMP(char * bmp)
     for (uint16_t x = 0; x < LCD_WIDTH; x++)
     {
       uint32_t c = LCD_ReadPixel_24Bit(x, y);
+
       f_write(&bmpFile, (char *)&c, 3, &mybw);
     }
   }
@@ -136,7 +137,8 @@ void loopScreenShot(void)
     uint8_t index = 0;
     char fileName[FF_LFN_BUF];
 
-    do {
+    do
+    {
       sprintf(fileName, "%s_%d.bmp", screenShotFileName, index);
       index++;
     } while (!screenShotBMP(fileName) && index < 10);

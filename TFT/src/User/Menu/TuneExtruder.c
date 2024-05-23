@@ -84,8 +84,8 @@ static void menuNewExtruderESteps(void)
         sendParameterCmd(P_STEPS_PER_MM, AXIS_INDEX_E0, new_esteps);
 
         char tempMsg[120];
-
         LABELCHAR(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
+
         sprintf(tempMsg, tempStr, new_esteps);
 
         popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (uint8_t *) tempMsg);
@@ -114,6 +114,7 @@ static void menuNewExtruderESteps(void)
     if (now != measured_length)
     {
       now = measured_length;
+
       showNewESteps(measured_length, old_esteps, &new_esteps);
     }
 
@@ -253,8 +254,8 @@ void menuTuneExtruder(void)
           loadRequested = false;
 
           char tempMsg[120];
-
           LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
+
           sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
 
           popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL, extrudeFilament, NULL, NULL);

@@ -43,7 +43,9 @@ static SERIAL_PORT_INDEX cmd_port_index;        // index of serial port originat
 static uint8_t cmd_base_index;                  // base index in case the gcode has checksum ("Nxx " is present at the beginning of gcode)
 static uint8_t cmd_index;
 static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and M29
-static FIL file;
+#ifdef SERIAL_PORT_2
+  static FIL file;                              // used with writing mode
+#endif
 
 uint8_t getQueueCount(void)
 {
@@ -81,7 +83,7 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
-// Common store cmd.
+// common store cmd
 static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
@@ -91,9 +93,9 @@ static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va
   pQueue->count++;
 }
 
-// Store gcode cmd to cmdQueue queue.
+// store gcode cmd to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
+// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmd(const char * format, ...)
 {
   if (format[0] == 0) return false;
@@ -112,10 +114,10 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
-// Store gcode cmd to cmdQueue queue.
+// store gcode cmd to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed
-// and it will wait for the queue to be able to store the command.
+// and it will wait for the queue to be able to store the command
 void mustStoreCmd(const char * format, ...)
 {
   if (format[0] == 0) return;
@@ -132,8 +134,8 @@ void mustStoreCmd(const char * format, ...)
   va_end(va);
 }
 
-// Store Script cmd to cmdQueue queue.
-// For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n".
+// store Script cmd to cmdQueue queue.
+// For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
 void mustStoreScript(const char * format, ...)
 {
   if (format[0] == 0) return;
@@ -163,9 +165,9 @@ void mustStoreScript(const char * format, ...)
   }
 }
 
-// Store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) to cmdQueue queue.
+// store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) to cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
-// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded.
+// If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
   if (cmd[0] == 0) return false;
@@ -185,14 +187,14 @@ bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
   return true;
 }
 
-// Clear all gcode cmd in cmdQueue queue.
+// clear all gcode cmd in cmdQueue queue
 void clearCmdQueue(void)
 {
   cmdQueue.count = cmdQueue.index_w = cmdQueue.index_r = 0;
 }
 
-// Strip out any leading space from the passed command.
-// Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command.
+// strip out any leading space from the passed command.
+// Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
 static char * stripCmd(char * cmdPtr)
 {
   // skip leading spaces
@@ -209,8 +211,8 @@ static char * stripCmd(char * cmdPtr)
   return cmdPtr;
 }
 
-// Get the data of the next to be sent command in cmdQueue
-// and return "true" if sent from TFT, otherwise "false".
+// get the data of the next to be sent command in cmdQueue
+// and return "true" if sent from TFT, otherwise "false"
 static inline bool getCmd(void)
 {
   cmd_ptr = &cmdQueue.queue[cmdQueue.index_r].gcode[0];          // gcode
@@ -248,7 +250,7 @@ static inline void setCmdRetryInfo(uint32_t lineNumber)
   cmdRetryInfo.gcode_info.port_index = cmd_port_index;                   // copy port index
 }
 
-// Purge gcode cmd or send it to the printer and then remove it from cmdQueue queue.
+// purge gcode cmd or send it to the printer and then remove it from cmdQueue queue
 static bool sendCmd(bool purge, bool avoidTerminal)
 {
   char * purgeStr = "[Purged] ";
@@ -309,8 +311,8 @@ static bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
 
-// Check the presence of the specified "keyword" string in the current gcode command
-// starting the search from index "index".
+// check the presence of the specified "keyword" string in the current gcode command
+// starting the search from index "index"
 static bool cmd_seen_from(uint8_t index, const char * keyword)
 {
   if (index >= cmd_len)
@@ -332,7 +334,7 @@ static bool cmd_seen_from(uint8_t index, const char * keyword)
   return false;
 }
 
-// Check the presence of the specified "code" character in the current gcode command.
+// check the presence of the specified "code" character in the current gcode command
 static bool cmd_seen(const char code)
 {
   cmd_index = cmd_base_index;
@@ -346,13 +348,13 @@ static bool cmd_seen(const char code)
   return false;
 }
 
-// Get the int after "code". Call after cmd_seen(code).
+// get the int after "code". Call after cmd_seen(code)
 static int32_t cmd_value(void)
 {
   return (strtol(&cmd_ptr[cmd_index], NULL, 10));
 }
 
-// Get the int after "/", if any.
+// get the int after "/", if any
 static int32_t cmd_second_value(void)
 {
   char * secondValue = strchr(&cmd_ptr[cmd_index], '/');
@@ -363,11 +365,13 @@ static int32_t cmd_second_value(void)
     return -0.5;
 }
 
-// Get the float after "code". Call after cmd_seen(code).
+// get the float after "code". Call after cmd_seen(code)
 static float cmd_float(void)
 {
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
+
+#ifdef SERIAL_PORT_2
 
 static bool initRemoteTFT(void)
 {
@@ -490,6 +494,8 @@ static inline void writeRemoteTFT(void)
   Serial_Forward(cmd_port_index, "ok\n");
 }
 
+#endif  // SERIAL_PORT_2
+
 static void setWaitHeating(uint8_t index)
 {
   if (cmd_seen('R'))
@@ -547,9 +553,9 @@ void handleCmdLineNumberMismatch(const uint32_t lineNumber)
   }
 }
 
-// Check if the received gcode is an emergency command or not
+// check if the received gcode is an emergency command or not
 // (M108, M112, M410, M524, M876) and parse it accordingly.
-// Otherwise, store the gcode on command queue.
+// Otherwise, store the gcode on command queue
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
   // strip out any leading space from the passed command.
@@ -586,10 +592,10 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
     TASK_LOOP_WHILE(!storeCmdFromUART(cmd, portIndex));
 }
 
-// Send emergency command now.
-// The command parameter must be a clear command, not formatted.
+// send emergency command now.
+// The command parameter must be a clear command, not formatted
 //
-// NOTE: Make sure that the printer can receive the command.
+// NOTE: Make sure that the printer can receive the command
 //
 void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 {
@@ -612,7 +618,7 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
     terminalCache(emergencyCmd, cmdLen, portIndex, SRC_TERMINAL_GCODE);
 }
 
-// Parse and send gcode cmd in cmdQueue queue.
+// parse and send gcode cmd in cmdQueue queue
 void sendQueueCmd(void)
 {
   if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry)) return;
@@ -628,28 +634,30 @@ void sendQueueCmd(void)
 
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
 
-  if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
-  {
-    if (fromTFT)  // ignore any command from TFT media
+  #ifdef SERIAL_PORT_2
+    if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
     {
-      sendCmd(true, avoid_terminal);  // skip the command
-    }
-    else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
-    {
-      writeRemoteTFT();
+      if (fromTFT)  // ignore any command from TFT media
+      {
+        sendCmd(true, avoid_terminal);  // skip the command
+      }
+      else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
+      {
+        writeRemoteTFT();
 
-      sendCmd(true, avoid_terminal);  // skip the command
-    }
-    else  // otherwise, if the command is from remote to onboard media
-    {
-      if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
-        writing_mode = NO_WRITING;
+        sendCmd(true, avoid_terminal);  // skip the command
+      }
+      else  // otherwise, if the command is from remote to onboard media
+      {
+        if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
+          writing_mode = NO_WRITING;
 
-      goto send_cmd;  // send the command
-    }
+        goto send_cmd;  // send the command
+      }
 
-    return;
-  }
+      return;
+    }
+  #endif
 
   switch (cmd_ptr[cmd_base_index])
   {

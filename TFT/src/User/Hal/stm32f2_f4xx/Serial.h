@@ -20,13 +20,13 @@ typedef struct
 // config for USART DMA channels
 typedef struct
 {
-  USART_TypeDef * uart;               // uint32_t
+  USART_TypeDef * uart;                 // uint32_t
   uint32_t dma_rcc;
   uint32_t dma_channel;
-  DMA_Stream_TypeDef * dma_streamRX;  // uint32_t
-#ifdef TX_DMA_WRITE
-  DMA_Stream_TypeDef * dma_streamTX;  // uint32_t
-#endif
+  DMA_Stream_TypeDef * dma_streamRX;    // uint32_t
+  #ifdef TX_DMA_WRITE
+    DMA_Stream_TypeDef * dma_streamTX;  // uint32_t
+  #endif
 } SERIAL_CFG;
 
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];

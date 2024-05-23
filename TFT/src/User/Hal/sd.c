@@ -67,28 +67,30 @@ static void SD_SPI_CS_Set(uint8_t level)
 }
 
 #ifdef SD_CD_PIN
-  // SD_CD insert detect
-  static inline void SD_CD_WP_Init(void)
-  {
-    GPIO_InitSet(SD_CD_PIN, MGPIO_MODE_IPU, 0);
-  }
+
+// SD_CD insert detect
+static inline void SD_CD_WP_Init(void)
+{
+  GPIO_InitSet(SD_CD_PIN, MGPIO_MODE_IPU, 0);
+}
+
 #endif
 
 uint8_t SD_CD_Inserted(void)
 {
-#ifdef SD_CD_PIN
-  return !GPIO_GetLevel(SD_CD_PIN);
-#else
-  return 0;
-#endif
+  #ifdef SD_CD_PIN
+    return !GPIO_GetLevel(SD_CD_PIN);
+  #else
+    return 0;
+  #endif
 }
 
 // initialization
 static inline void SD_SPI_Init(void)
 {
-#ifdef SD_CD_PIN
-  SD_CD_WP_Init();
-#endif
+  #ifdef SD_CD_PIN
+    SD_CD_WP_Init();
+  #endif
   GPIO_InitSet(SD_CS_PIN, MGPIO_MODE_OUT_PP, 0);
   SPI_Config(SD_SPI);
   SD_SPI_CS_Set(1);

@@ -85,6 +85,7 @@ void menuFan(void)
         }
 
         lastFan.set = val;  // avoid unnecessary redraw of values
+
         fanReDraw(fan_index, true);
         break;
       }
@@ -110,6 +111,7 @@ void menuFan(void)
 
           fanSetSpeed(fan_index, fanGetCurSpeed(fan_index));  // set initial desired speed to actual speed
           lastFan = (LASTFAN) {fanGetCurSpeed(fan_index), fanGetSetSpeed(fan_index)};  // avoid unnecessary redraw of values
+
           fanReDraw(fan_index, true);
         }
         else

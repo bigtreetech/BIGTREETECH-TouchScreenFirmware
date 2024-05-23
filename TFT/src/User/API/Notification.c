@@ -132,6 +132,7 @@ void loopToast(void)
   {
     _toastRunning = false;
     _toastAvailable = false;
+
     GUI_ClearPrect(&toastIconRect);
     GUI_ClearPrect(&toastRect);
     menuDrawTitle();

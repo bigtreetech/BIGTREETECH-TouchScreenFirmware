@@ -41,7 +41,7 @@ static FONT_BITMAP font[] = {
     BYTE_WIDTH,
     WORD_UNICODE_ADDR,
     BYTE_HEIGHT,
-    BYTE_WIDTH * 2,  // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
+    BYTE_WIDTH * 2,  // default "word_unicode.fon" dot matrix library font size is 24 * 24 / 16 * 16
     0x0,             // the first character in WORD_UNICODE_ADDR is 0x0000
   },
   { // Greek and Coptic
@@ -51,7 +51,7 @@ static FONT_BITMAP font[] = {
     BYTE_WIDTH,
     WORD_UNICODE_ADDR,
     BYTE_HEIGHT,
-    BYTE_WIDTH * 2,  // default "word_unicode.fon" dot matrix library font size is 24*24 / 16*16
+    BYTE_WIDTH * 2,  // default "word_unicode.fon" dot matrix library font size is 24 * 24 / 16 * 16
     0x0,             // the first character in WORD_UNICODE_ADDR is 0x0000
   },
   { // Cyrillic(Russia)
@@ -71,7 +71,7 @@ static FONT_BITMAP font[] = {
     BYTE_WIDTH,
     WORD_UNICODE_ADDR,
     BYTE_HEIGHT,
-    BYTE_WIDTH * 2,  // default word_unicode.fon dot matrix library font size is 24*24 / 16*16
+    BYTE_WIDTH * 2,  // default word_unicode.fon dot matrix library font size is 24 * 24 / 16 * 16
     0,
   },
   { // default font
@@ -93,7 +93,7 @@ void setFontSize(uint16_t size)
 }
 
 // decode character encode info (UTF8)
-static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
+static void getUTF8EncodeInfo(const uint8_t * ch, CHAR_INFO * pInfo)
 {
   if ((ch[0] & 0x80) == 0)  // 0x00 ~ 0x7F
   {
@@ -128,7 +128,7 @@ static void getUTF8EncodeInfo(const uint8_t *ch, CHAR_INFO *pInfo)
 }
 
 // get character font bitmap info
-static inline void getBitMapFontInfo(CHAR_INFO *pInfo)
+static inline void getBitMapFontInfo(CHAR_INFO * pInfo)
 {
   if (pInfo->codePoint < 9)
   {
@@ -158,7 +158,7 @@ static inline void getBitMapFontInfo(CHAR_INFO *pInfo)
   }
 }
 
-void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
+void getCharacterInfo(const uint8_t * ch, CHAR_INFO * pInfo)
 {
   pInfo->bytes = 0;
 
@@ -170,7 +170,7 @@ void getCharacterInfo(const uint8_t *ch, CHAR_INFO *pInfo)
   getBitMapFontInfo(pInfo);
 }
 
-uint16_t getUTF8Length(const uint8_t *const str)
+uint16_t getUTF8Length(const uint8_t * const str)
 {
   uint16_t i = 0, len = 0;
   CHAR_INFO info;
@@ -213,7 +213,7 @@ uint16_t GUI_StrPixelWidth_label(int16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText((uint8_t*)tempstr, index) == false)
+  if (loadLabelText((uint8_t *)tempstr, index) == false)
     return 0;
 
   return GUI_StrPixelWidth_str(tempstr);

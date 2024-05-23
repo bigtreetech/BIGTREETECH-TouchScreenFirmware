@@ -92,7 +92,7 @@ The following format specifiers are supported:
 | Type   | Output |
 |--------|--------|
 | d or i | Signed decimal integer |
-| u      | Unsigned decimal integer	|
+| u      | Unsigned decimal integer |
 | b      | Unsigned binary |
 | o      | Unsigned octal |
 | x      | Unsigned hexadecimal integer (lowercase) |
@@ -127,7 +127,7 @@ The following format specifiers are supported:
 
 ### Supported Precision
 
-| Precision	| Description |
+| Precision | Description |
 |-----------|-------------|
 | .number   | For integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be written. If the value to be written is shorter than this number, the result is padded with leading zeros. The value is not truncated even if the result is longer. A precision of 0 means that no character is written for the value 0.<br>For f and F specifiers: this is the number of digits to be printed after the decimal point. **By default, this is 6, maximum is 9**.<br>For s: this is the maximum number of characters to be printed. By default all characters are printed until the ending null character is encountered.<br>If the period is specified without an explicit value for precision, 0 is assumed. |
 | .*        | The precision is not specified in the format string, but as an additional integer value argument preceding the argument that has to be formatted. |

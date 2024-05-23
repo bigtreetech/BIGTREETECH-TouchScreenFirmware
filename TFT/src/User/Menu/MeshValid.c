@@ -23,6 +23,7 @@ void menuMeshValid(void)
   PREHEAT_STORE preheatStore;
 
   W25Qxx_ReadBuffer((uint8_t *)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+
   menuDrawPage(&meshValidItems);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
@@ -46,6 +47,7 @@ void menuMeshValid(void)
         mustStoreCmd("G26 H%u B%u R99\n", preheatStore.preheat_hotend[key_num], preheatStore.preheat_bed[key_num]);
         mustStoreCmd("G1 Z10 F%d\n", infoSettings.level_feedrate[FEEDRATE_Z]);
         mustStoreCmd("G1 X0 F%d\n", infoSettings.level_feedrate[FEEDRATE_XY]);
+
         refreshPreheatIcon(&preheatStore, key_num, false);
         break;
 

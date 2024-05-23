@@ -4,7 +4,7 @@
 static float z_offset_value = PROBE_Z_OFFSET_DEFAULT_VALUE;
 static bool probe_offset_enabled = false;
 
-// Enable probe offset
+// enable probe offset
 void probeOffsetEnable(float shim)
 {
   probe_offset_enabled = true;
@@ -35,7 +35,7 @@ void probeOffsetEnable(float shim)
   probeHeightRelative();                                            // set relative position mode
 }
 
-// Disable probe offset
+// disable probe offset
 void probeOffsetDisable(void)
 {
   probe_offset_enabled = false;
@@ -47,13 +47,13 @@ void probeOffsetDisable(void)
   probeHeightDisable();  // restore original software endstops state and ABL state
 }
 
-// Get probe offset status
+// get probe offset status
 bool probeOffsetGetStatus(void)
 {
   return probe_offset_enabled;
 }
 
-// Set Z offset value
+// set Z offset value
 float probeOffsetSetValue(float value)
 {
   sendParameterCmd(P_PROBE_OFFSET, AXIS_INDEX_Z, value);
@@ -63,7 +63,7 @@ float probeOffsetSetValue(float value)
   return z_offset_value;
 }
 
-// Get current Z offset value
+// get current Z offset value
 float probeOffsetGetValue(void)
 {
   z_offset_value = getParameter(P_PROBE_OFFSET, AXIS_INDEX_Z);
@@ -71,7 +71,7 @@ float probeOffsetGetValue(void)
   return z_offset_value;
 }
 
-// Reset Z offset value to default value
+// reset Z offset value to default value
 float probeOffsetResetValue(void)
 {
   if (z_offset_value != PROBE_Z_OFFSET_DEFAULT_VALUE)  // if not default value
@@ -85,7 +85,7 @@ float probeOffsetResetValue(void)
   return z_offset_value;
 }
 
-// Update Z offset value
+// update Z offset value
 float probeOffsetUpdateValue(float unit)
 {
   unit = NOBEYOND(PROBE_Z_OFFSET_MIN_VALUE, z_offset_value + unit, PROBE_Z_OFFSET_MAX_VALUE) - z_offset_value;

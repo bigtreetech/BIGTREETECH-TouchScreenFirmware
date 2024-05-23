@@ -100,6 +100,7 @@ static void menuSetMpcParam(void)
 
         parameter->heater_power = tmpVal;
         setDynamicValue(0, parameter->heater_power);
+
         listViewRefreshMenu();
         break;
       }
@@ -120,6 +121,7 @@ static void menuSetMpcParam(void)
 
         parameter->fil_heat_capcity = tmpVal;
         setDynamicValue(1, parameter->fil_heat_capcity);
+
         listViewRefreshMenu();
         break;
       }
@@ -127,12 +129,14 @@ static void menuSetMpcParam(void)
       case KEY_ICON_2:
         parameter->method = (parameter->method + 1) % MPC_METHOD_COUNT;
         setDynamicTextValue(2, mpcMethod_label[parameter->method]);
+
         listViewRefreshItem(curIndex);
         break;
 
       case KEY_BACK:
         mustStoreCmd("M306 E%d P%d H%.5f\n", curTool_index, parameter->heater_power, parameter->fil_heat_capcity);
-        // CLOSE_MENU();  // commented because listViewCreate() handles it
+
+        //CLOSE_MENU();  // commented because listViewCreate() handles it
         break;
     }
 
@@ -262,7 +266,6 @@ void menuMPC(void)
             {
               popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, (uint8_t *) tempMsg);
             }
-
             break;
           }
 
@@ -271,7 +274,6 @@ void menuMPC(void)
             BUZZER_PLAY(SOUND_ERROR);
 
             popupReminder(DIALOG_TYPE_ERROR, LABEL_MPC_TITLE, LABEL_PROCESS_ABORTED);
-
             break;
           }
 

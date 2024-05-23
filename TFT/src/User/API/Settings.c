@@ -16,7 +16,7 @@ static const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P
 SETTINGS infoSettings;
 MACHINE_SETTINGS infoMachineSettings;
 
-// Init settings data with default values
+// init settings data with default values
 void initSettings(void)
 {
 // General Settings
@@ -188,7 +188,7 @@ void initSettings(void)
                                                  sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 }
 
-// Save settings to Flash only if CRC does not match
+// save settings to Flash only if CRC does not match
 void saveSettings(void)
 {
   // calculate checksum excluding the CRC variable in infoSettings
@@ -202,6 +202,7 @@ void saveSettings(void)
   }
 }
 
+// init machine settings data with default values
 void initMachineSettings(void)
 {
   // some settings are assumes as active unless reported disabled by marlin
@@ -226,6 +227,7 @@ void initMachineSettings(void)
   infoMachineSettings.softwareEndstops        = ENABLED;
 }
 
+// setup machine settings
 void setupMachine(FW_TYPE fwType)
 {
   if (infoMachineSettings.firmwareType != FW_NOT_DETECTED)  // avoid repeated calls caused by manually sending M115 in terminal menu
@@ -282,6 +284,7 @@ void setupMachine(FW_TYPE fwType)
     LED_SendColor(&ledColor);  // set (neopixel) LED light to current color (initialized in HW_Init function)
 }
 
+// get flash used percentage
 float flashUsedPercentage(void)
 {
   uint32_t total = W25Qxx_ReadCapacity();
@@ -290,7 +293,7 @@ float flashUsedPercentage(void)
   return percent;
 }
 
-// Check font/icon/config signature in SPI flash for update
+// check font/icon/config signature in SPI flash for update
 void checkflashSign(void)
 {
   //cur_flash_sign[lang_sign] = flash_sign[lang_sign];  // ignore language signature not implemented yet
@@ -306,28 +309,33 @@ void checkflashSign(void)
   if (!statusfont || !statusicon || !statusconfig)
   {
     int ypos = BYTE_HEIGHT + 5;
+
     GUI_Clear(BLACK);
     GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
 
     ypos += BYTE_HEIGHT;
+
     if (statusfont)
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
 
     ypos += BYTE_HEIGHT;
+
     if (statusconfig)
       GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
 
     ypos += BYTE_HEIGHT;
+
     if (statuslang)
       GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
     else
       GUI_DispString(10, ypos, (uint8_t *)"Language: Update required(Optional)");
 
     ypos += BYTE_HEIGHT;
+
     if (statusicon)
       GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
     else
@@ -340,6 +348,7 @@ void checkflashSign(void)
   }
 }
 
+// get sign status from SPI flash
 bool getFlashSignStatus(int index)
 {
   uint32_t flash_sign[sign_count] = {FONT_CHECK_SIGN, CONFIG_CHECK_SIGN, LANGUAGE_CHECK_SIGN, ICON_CHECK_SIGN};

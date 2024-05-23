@@ -4,15 +4,6 @@
 
 #ifdef STM32_HAS_FSMC
 
-uint16_t LCD_RD_DATA(void)
-{
-  volatile uint16_t ram;
-
-  ram = LCD->LCD_RAM;
-
-  return ram;
-}
-
 static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
@@ -25,6 +16,15 @@ static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
   Delay_us(5);
 
   return LCD_RD_DATA();
+}
+
+uint16_t LCD_RD_DATA(void)
+{
+  volatile uint16_t ram;
+
+  ram = LCD->LCD_RAM;
+
+  return ram;
 }
 
 static inline void LCD_GPIO_Config(void)
@@ -166,6 +166,7 @@ uint16_t LCD_RD_DATA(void)
   #endif
 
   volatile uint16_t ram;
+
   // LCD_DATA_PORT->CRL = 0X88888888;  1000 1000 1000 1000 1000 1000 1000 1000
   // LCD_DATA_PORT->CRH = 0X88888888;  1000 1000 1000 1000 1000 1000 1000 1000
   gpio_init(LCD_DATA_PORT, GPIO_MODE_IPU, 0, GPIO_PIN_ALL);
@@ -185,55 +186,55 @@ uint16_t LCD_RD_DATA(void)
   gpio_init(LCD_DATA_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_ALL);
   // LCD_DATA_PORT->ODR = 0XFFFF;
   gpio_port_write(LCD_DATA_PORT, 0XFFFF);
-  
+
   return ram;
 }
 
 static inline void LCD_GPIO_Config(void)
 {
-#if defined(MKS_TFT)
-  // GPIO_InitTypeDef GPIO_InitStructure;
-  // GPIO Ports Clock Enable
+  #if defined(MKS_TFT)
+    // GPIO_InitTypeDef GPIO_InitStructure;
+    // GPIO Ports Clock Enable
 
-  // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOB, ENABLE);
-  // configure GPIO pin Output Level
+    // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_GPIOB, ENABLE);
+    // configure GPIO pin Output Level
 
-  // configure GPIO pins : Pin1_Pin Pin2_Pin
+    // configure GPIO pins : Pin1_Pin Pin2_Pin
 
-  // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_9;
-  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  // GPIO_Init(GPIOB, &GPIO_InitStructure);
-  gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_14 | GPIO_PIN_9);
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_9;
+    // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    // GPIO_Init(GPIOB, &GPIO_InitStructure);
+    gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_14 | GPIO_PIN_9);
 
-  // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_15;
-  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  // GPIO_Init(GPIOD, &GPIO_InitStructure);
-  gpio_init(GPIOD, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_15);
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_15;
+    // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    // GPIO_Init(GPIOD, &GPIO_InitStructure);
+    gpio_init(GPIOD, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13 | GPIO_PIN_15);
 
-  // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
-  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  // GPIO_Init(GPIOC, &GPIO_InitStructure);
-  gpio_init(GPIOC, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8 | GPIO_PIN_9);
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
+    // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    // GPIO_Init(GPIOC, &GPIO_InitStructure);
+    gpio_init(GPIOC, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8 | GPIO_PIN_9);
 
-  // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  // GPIO_Init(GPIOC, &GPIO_InitStructure);
-  gpio_init(GPIOC, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, GPIO_PIN_5);
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    // GPIO_Init(GPIOC, &GPIO_InitStructure);
+    gpio_init(GPIOC, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, GPIO_PIN_5);
 
-  // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-  // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  // GPIO_Init(GPIOE, &GPIO_InitStructure);
-  gpio_init(GPIOE, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_ALL);
+    // GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+    // GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    // GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    // GPIO_Init(GPIOE, &GPIO_InitStructure);
+    gpio_init(GPIOE, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_ALL);
 
-  LCD_RD_SET;  // set this as we only change it when reading
-#else
-  #error "don't support LCD-GPIO yet"
-#endif
+    LCD_RD_SET;  // set this as we only change it when reading
+  #else
+    #error "don't support LCD-GPIO yet"
+  #endif
 }
 
 void LCD_HardwareConfig(void)

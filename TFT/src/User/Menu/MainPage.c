@@ -78,6 +78,7 @@ void menuMain(void)
         else
         {
           strcpy(infoFile.path, "Macros");
+
           OPEN_MENU(menuCallMacro);
         }
         break;

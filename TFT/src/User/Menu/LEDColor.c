@@ -41,61 +41,61 @@ typedef enum
 
 // key button rectangles
 static const GUI_RECT ledKeyRect[KEY_NUM] = {
-#ifdef KEYBOARD_ON_LEFT
-  // control bar
-  {0 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 1 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // PREV
-  {1 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 2 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // NEXT
+  #ifdef KEYBOARD_ON_LEFT
+    // control bar
+    {0 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 1 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // PREV
+    {1 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 2 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // NEXT
 
-  // menu buttons
-  {2 * KB_WIDTH, 0 * KB_HEIGHT, 3 * KB_WIDTH, 1 * KB_HEIGHT},  // RESET
-  {1 * KB_WIDTH, 0 * KB_HEIGHT, 2 * KB_WIDTH, 1 * KB_HEIGHT},  // CANCEL
-  {0 * KB_WIDTH, 0 * KB_HEIGHT, 1 * KB_WIDTH, 1 * KB_HEIGHT},  // OK
+    // menu buttons
+    {2 * KB_WIDTH, 0 * KB_HEIGHT, 3 * KB_WIDTH, 1 * KB_HEIGHT},  // RESET
+    {1 * KB_WIDTH, 0 * KB_HEIGHT, 2 * KB_WIDTH, 1 * KB_HEIGHT},  // CANCEL
+    {0 * KB_WIDTH, 0 * KB_HEIGHT, 1 * KB_WIDTH, 1 * KB_HEIGHT},  // OK
 
-  // R component
-  {3 * KB_WIDTH, 1 * KB_HEIGHT, 4 * KB_WIDTH, 2 * KB_HEIGHT},  // COLOR
-  {2 * KB_WIDTH, 1 * KB_HEIGHT, 3 * KB_WIDTH, 2 * KB_HEIGHT},  // EDIT
-  {0 * KB_WIDTH, 1 * KB_HEIGHT, 1 * KB_WIDTH, 2 * KB_HEIGHT},  // DEC
-  {1 * KB_WIDTH, 1 * KB_HEIGHT, 2 * KB_WIDTH, 2 * KB_HEIGHT},  // INC
+    // R component
+    {3 * KB_WIDTH, 1 * KB_HEIGHT, 4 * KB_WIDTH, 2 * KB_HEIGHT},  // COLOR
+    {2 * KB_WIDTH, 1 * KB_HEIGHT, 3 * KB_WIDTH, 2 * KB_HEIGHT},  // EDIT
+    {0 * KB_WIDTH, 1 * KB_HEIGHT, 1 * KB_WIDTH, 2 * KB_HEIGHT},  // DEC
+    {1 * KB_WIDTH, 1 * KB_HEIGHT, 2 * KB_WIDTH, 2 * KB_HEIGHT},  // INC
 
-  // G component
-  {3 * KB_WIDTH, 2 * KB_HEIGHT, 4 * KB_WIDTH, 3 * KB_HEIGHT},  // COLOR
-  {2 * KB_WIDTH, 2 * KB_HEIGHT, 3 * KB_WIDTH, 3 * KB_HEIGHT},  // EDIT
-  {0 * KB_WIDTH, 2 * KB_HEIGHT, 1 * KB_WIDTH, 3 * KB_HEIGHT},  // DEC
-  {1 * KB_WIDTH, 2 * KB_HEIGHT, 2 * KB_WIDTH, 3 * KB_HEIGHT},  // INC
+    // G component
+    {3 * KB_WIDTH, 2 * KB_HEIGHT, 4 * KB_WIDTH, 3 * KB_HEIGHT},  // COLOR
+    {2 * KB_WIDTH, 2 * KB_HEIGHT, 3 * KB_WIDTH, 3 * KB_HEIGHT},  // EDIT
+    {0 * KB_WIDTH, 2 * KB_HEIGHT, 1 * KB_WIDTH, 3 * KB_HEIGHT},  // DEC
+    {1 * KB_WIDTH, 2 * KB_HEIGHT, 2 * KB_WIDTH, 3 * KB_HEIGHT},  // INC
 
-  // B component
-  {3 * KB_WIDTH, 3 * KB_HEIGHT, 4 * KB_WIDTH, 4 * KB_HEIGHT},  // COLOR
-  {2 * KB_WIDTH, 3 * KB_HEIGHT, 3 * KB_WIDTH, 4 * KB_HEIGHT},  // EDIT
-  {0 * KB_WIDTH, 3 * KB_HEIGHT, 1 * KB_WIDTH, 4 * KB_HEIGHT},  // DEC
-  {1 * KB_WIDTH, 3 * KB_HEIGHT, 2 * KB_WIDTH, 4 * KB_HEIGHT},  // INC
-#else
-  // control bar
-  {1 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 2 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // PREV
-  {2 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 3 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // NEXT
+    // B component
+    {3 * KB_WIDTH, 3 * KB_HEIGHT, 4 * KB_WIDTH, 4 * KB_HEIGHT},  // COLOR
+    {2 * KB_WIDTH, 3 * KB_HEIGHT, 3 * KB_WIDTH, 4 * KB_HEIGHT},  // EDIT
+    {0 * KB_WIDTH, 3 * KB_HEIGHT, 1 * KB_WIDTH, 4 * KB_HEIGHT},  // DEC
+    {1 * KB_WIDTH, 3 * KB_HEIGHT, 2 * KB_WIDTH, 4 * KB_HEIGHT},  // INC
+  #else
+    // control bar
+    {1 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 2 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // PREV
+    {2 * CTRL_WIDTH, 4 * CTRL_HEIGHT, 3 * CTRL_WIDTH, 5 * CTRL_HEIGHT},  // NEXT
 
-  // menu buttons
-  {1 * KB_WIDTH, 0 * KB_HEIGHT, 2 * KB_WIDTH, 1 * KB_HEIGHT},  // RESET
-  {2 * KB_WIDTH, 0 * KB_HEIGHT, 3 * KB_WIDTH, 1 * KB_HEIGHT},  // CANCEL
-  {3 * KB_WIDTH, 0 * KB_HEIGHT, 4 * KB_WIDTH, 1 * KB_HEIGHT},  // OK
+    // menu buttons
+    {1 * KB_WIDTH, 0 * KB_HEIGHT, 2 * KB_WIDTH, 1 * KB_HEIGHT},  // RESET
+    {2 * KB_WIDTH, 0 * KB_HEIGHT, 3 * KB_WIDTH, 1 * KB_HEIGHT},  // CANCEL
+    {3 * KB_WIDTH, 0 * KB_HEIGHT, 4 * KB_WIDTH, 1 * KB_HEIGHT},  // OK
 
-  // R component
-  {0 * KB_WIDTH, 1 * KB_HEIGHT, 1 * KB_WIDTH, 2 * KB_HEIGHT},  // COLOR
-  {1 * KB_WIDTH, 1 * KB_HEIGHT, 2 * KB_WIDTH, 2 * KB_HEIGHT},  // EDIT
-  {2 * KB_WIDTH, 1 * KB_HEIGHT, 3 * KB_WIDTH, 2 * KB_HEIGHT},  // DEC
-  {3 * KB_WIDTH, 1 * KB_HEIGHT, 4 * KB_WIDTH, 2 * KB_HEIGHT},  // INC
+    // R component
+    {0 * KB_WIDTH, 1 * KB_HEIGHT, 1 * KB_WIDTH, 2 * KB_HEIGHT},  // COLOR
+    {1 * KB_WIDTH, 1 * KB_HEIGHT, 2 * KB_WIDTH, 2 * KB_HEIGHT},  // EDIT
+    {2 * KB_WIDTH, 1 * KB_HEIGHT, 3 * KB_WIDTH, 2 * KB_HEIGHT},  // DEC
+    {3 * KB_WIDTH, 1 * KB_HEIGHT, 4 * KB_WIDTH, 2 * KB_HEIGHT},  // INC
 
-  // G component
-  {0 * KB_WIDTH, 2 * KB_HEIGHT, 1 * KB_WIDTH, 3 * KB_HEIGHT},  // COLOR
-  {1 * KB_WIDTH, 2 * KB_HEIGHT, 2 * KB_WIDTH, 3 * KB_HEIGHT},  // EDIT
-  {2 * KB_WIDTH, 2 * KB_HEIGHT, 3 * KB_WIDTH, 3 * KB_HEIGHT},  // DEC
-  {3 * KB_WIDTH, 2 * KB_HEIGHT, 4 * KB_WIDTH, 3 * KB_HEIGHT},  // INC
+    // G component
+    {0 * KB_WIDTH, 2 * KB_HEIGHT, 1 * KB_WIDTH, 3 * KB_HEIGHT},  // COLOR
+    {1 * KB_WIDTH, 2 * KB_HEIGHT, 2 * KB_WIDTH, 3 * KB_HEIGHT},  // EDIT
+    {2 * KB_WIDTH, 2 * KB_HEIGHT, 3 * KB_WIDTH, 3 * KB_HEIGHT},  // DEC
+    {3 * KB_WIDTH, 2 * KB_HEIGHT, 4 * KB_WIDTH, 3 * KB_HEIGHT},  // INC
 
-  // B component
-  {0 * KB_WIDTH, 3 * KB_HEIGHT, 1 * KB_WIDTH, 4 * KB_HEIGHT},  // COLOR
-  {1 * KB_WIDTH, 3 * KB_HEIGHT, 2 * KB_WIDTH, 4 * KB_HEIGHT},  // EDIT
-  {2 * KB_WIDTH, 3 * KB_HEIGHT, 3 * KB_WIDTH, 4 * KB_HEIGHT},  // DEC
-  {3 * KB_WIDTH, 3 * KB_HEIGHT, 4 * KB_WIDTH, 4 * KB_HEIGHT},  // INC
-#endif
+    // B component
+    {0 * KB_WIDTH, 3 * KB_HEIGHT, 1 * KB_WIDTH, 4 * KB_HEIGHT},  // COLOR
+    {1 * KB_WIDTH, 3 * KB_HEIGHT, 2 * KB_WIDTH, 4 * KB_HEIGHT},  // EDIT
+    {2 * KB_WIDTH, 3 * KB_HEIGHT, 3 * KB_WIDTH, 4 * KB_HEIGHT},  // DEC
+    {3 * KB_WIDTH, 3 * KB_HEIGHT, 4 * KB_WIDTH, 4 * KB_HEIGHT},  // INC
+  #endif
 };
 
 static const GUI_RECT ledColorRect = {

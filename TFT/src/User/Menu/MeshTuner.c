@@ -3,7 +3,7 @@
 
 static uint8_t curUnit_index = 0;
 
-// Init mesh point
+// init mesh point
 static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
 {
 //  probeHeightEnable();  // temporary disable software endstops and save ABL state
@@ -14,7 +14,7 @@ static inline void meshInitPoint(uint16_t col, uint16_t row, float value)
   probeHeightRelative();                                                                  // set relative position mode
 }
 
-// Reset mesh point
+// reset mesh point
 static inline void meshResetPoint(void)
 {
   // Z offset gcode sequence stop
@@ -120,7 +120,6 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
       // change unit
       case KEY_ICON_4:
         curUnit_index = (curUnit_index + 1) % ITEM_FINE_MOVE_LEN_NUM;
-
         meshItems.items[key_num] = itemMoveLen[curUnit_index];
 
         menuDrawItem(&meshItems.items[key_num], key_num);
@@ -152,11 +151,11 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
     if (memcmp(&now, &curValue, sizeof(COORDINATE)))
     {
       coordinateGetAllActual(&now);
+
       meshDraw(col, row, &now);
     }
 
     probeHeightQueryCoord();
-
     loopProcess();
 
     if (MENU_IS_NOT(menuMeshEditor))

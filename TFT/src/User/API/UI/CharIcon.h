@@ -8,12 +8,14 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
+// this list is Auto-Generated. Please add new icons in CharIcon.inc only
 typedef enum
 {
   #define X_CHAR(NAME) CHARICON_##NAME ,
-  #include "CharIcon.inc"
-  #undef  X_CHAR
-  // keep below items always at the end
+    #include "CharIcon.inc"
+  #undef X_CHAR
+
+  // keep the following always at the end of this list
   CHARICON_NUM,
   CHARICON_NULL
 } CHAR_ICON;

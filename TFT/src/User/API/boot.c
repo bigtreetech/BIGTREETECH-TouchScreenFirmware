@@ -348,6 +348,7 @@ static inline void scanRenameUpdate(char * rootDir)
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Deleting old update files...");
       f_remove_full_dir(renamedPath);
     }
+
     f_rename(curPath, renamedPath);
   }
 

@@ -14,6 +14,7 @@ void menuPrintRestore(void)
   {
     char okTxt[MAX_LANG_LABEL_LENGTH];
     char cancelTxt[MAX_LANG_LABEL_LENGTH];
+
     loadLabelText((uint8_t *)okTxt, LABEL_CONFIRM);
     loadLabelText((uint8_t *)cancelTxt, LABEL_CANCEL);
 
@@ -28,7 +29,9 @@ void menuPrintRestore(void)
       {
         case KEY_POPUP_CONFIRM:
           powerFailedSetRestore(true);
+
           CLOSE_MENU();     // close the menu first
+
           startPrinting();  // start print and open Printing menu
           break;
 
@@ -38,6 +41,7 @@ void menuPrintRestore(void)
           // in case the calling function is menuPrintFromSource,
           // remove the filename from path to allow the files scanning from its folder avoiding a scanning error message
           exitFolder();
+
           CLOSE_MENU();
           break;
       }
@@ -46,6 +50,7 @@ void menuPrintRestore(void)
         if (volumeExists(infoFile.source) != true)
         {
           resetInfoFile();
+
           CLOSE_MENU();
         }
       #endif

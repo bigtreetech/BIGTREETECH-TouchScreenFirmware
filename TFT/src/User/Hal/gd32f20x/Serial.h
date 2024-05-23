@@ -24,9 +24,9 @@ typedef struct
   rcu_periph_enum dma_rcc;  // uint32_t
   uint32_t dma_stream;
   uint32_t dma_channelRX;
-#ifdef TX_DMA_WRITE
-  uint32_t dma_channelTX;
-#endif
+  #ifdef TX_DMA_WRITE
+    uint32_t dma_channelTX;
+  #endif
 } SERIAL_CFG;
 
 extern DMA_CIRCULAR_BUFFER dmaL1DataRX[_UART_CNT];

@@ -48,11 +48,11 @@ static bool sfs_alive = false;  // use an encoder disc to toggles the runout. Su
 void FIL_Runout_Init(void)
 {
   GPIO_MODE pull =
-  #if defined(MKS_TFT)
-    MGPIO_MODE_IPN;  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
-  #else
-    (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) ^ GET_BIT(infoSettings.runout, RUNOUT_NO_NC)) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
-  #endif
+    #if defined(MKS_TFT)
+      MGPIO_MODE_IPN;  // MKS TFTs already have an external pull-up resistor on PB0 and PB1 pins
+    #else
+      (GET_BIT(infoSettings.runout, RUNOUT_INVERTED) ^ GET_BIT(infoSettings.runout, RUNOUT_NO_NC)) ? MGPIO_MODE_IPD : MGPIO_MODE_IPU;
+    #endif
 
   GPIO_InitSet(FIL_RUNOUT_PIN, pull, 0);
 

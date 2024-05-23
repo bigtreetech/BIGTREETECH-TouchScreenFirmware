@@ -9,7 +9,7 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>  // for size_t
 
-// Macros to make a string from a macro
+// macros to make a string from a macro
 #define STRINGIFY_(M) #M
 #define STRINGIFY(M)  STRINGIFY_(M)
 
@@ -23,27 +23,27 @@ extern "C" {
 #define WITHIN(N, L, H) ((N) >= (L) && (N) <= (H))
 #define NUMERIC(a)      WITHIN(a, '0', '9')
 
-// Bitwise macros
+// bitwise macros
 
-// Get bit status at selected index
+// get bit status at selected index
 #define GET_BIT(num, index) (((num) >> (index)) & 1)
 
-// Set bit status at selected index to 1
+// get bit status at selected index to 1
 #define SET_BIT_ON(num, index) ((num) |= (1 << (index)))
 
-// Set bit status at selected index to 0
+// set bit status at selected index to 0
 #define SET_BIT_OFF(num, index) ((num) &= ~(1 << (index)))
 
-// Set bit status value (0 or 1) at selected index
+// set bit status value (0 or 1) at selected index
 #define SET_BIT_VALUE(num, index, value) ((num) = ((num) & (~(1 << (index)))) | ((value) << (index)))
 
-// Toggle bit status at selected index
+// toggle bit status at selected index
 #define TOGGLE_BIT(num, index) ((num) ^= (1 << (index)))
 
-// Flip all bits
+// flip all bits
 #define FLIP_BITS(num) ~num
 
-// Time conversion
+// time conversion
 #define SEC_TO_MS(t)  (t * 1000)           // seconds to milliseconds
 #define MS_TO_SEC(t)  (t / 1000)           // milliseconds to seconds
 #define MIN_TO_SEC(t) (t * 60)             // minute to seconds
@@ -56,7 +56,8 @@ extern "C" {
 #define strtod strtod_ligth  // light weight strtod() function without exponential support
 
 #define strncpy(...) \
-  do { \
+  do                 \
+  {                  \
     _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strncpy_pad() or strncpy_no_pad()\""); \
   } while (0)
 

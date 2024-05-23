@@ -62,6 +62,7 @@ void menuNotification(void)
 
   menuDrawListPage(&notificationItems);
   loadNotificationItems();
+
   setNotificationHandler(loadNotificationItems);
 
   while (MENU_IS(menuNotification))

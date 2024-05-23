@@ -22,7 +22,7 @@
     #define FIL_RUNOUT_PIN PB0
   #endif
 #endif
-  
+
 #include "pin_MKS_TFT32_V1_4.h"
 
 #endif

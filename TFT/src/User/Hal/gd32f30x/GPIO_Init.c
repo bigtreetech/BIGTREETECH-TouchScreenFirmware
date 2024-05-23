@@ -24,6 +24,7 @@
 #define GPIO_AF15    15
 
 #ifndef GPIO_AF_RTC_50Hz
+
   /**
    * @brief   AF 0 selection
    */

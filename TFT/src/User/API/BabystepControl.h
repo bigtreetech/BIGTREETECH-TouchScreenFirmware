@@ -7,17 +7,10 @@ extern "C" {
 
 #include <stdint.h>
 
-// Set current babystep value
-void babystepSetValue(float value);
-
-// Get current babystep value
-float babystepGetValue(void);
-
-// Reset babystep value to default value
-float babystepResetValue(void);
-
-// Update babystep value
-float babystepUpdateValue(float unit);
+void babystepSetValue(float value);     // set current babystep value
+float babystepGetValue(void);           // get current babystep value
+float babystepResetValue(void);         // reset babystep value to default value
+float babystepUpdateValue(float unit);  // update babystep value
 
 #ifdef __cplusplus
 }

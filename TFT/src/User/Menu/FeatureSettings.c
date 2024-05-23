@@ -36,20 +36,22 @@ typedef enum
 
 // parameter values
 
-#define ITEM_TOGGLE_AUTO_NUM 3
-static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
-{
-  LABEL_OFF,
-  LABEL_ON,
-  LABEL_AUTO
-};
+#ifdef FIL_RUNOUT_PIN
+  #define ITEM_TOGGLE_AUTO_NUM 3
+  static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] = {
+    LABEL_OFF,
+    LABEL_ON,
+    LABEL_AUTO
+  };
+#endif
 
-#define ITEM_TOGGLE_SMART_NUM 2
-static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
-{
-  LABEL_ON,
-  LABEL_SMART
-};
+#ifdef PS_ON_PIN
+  #define ITEM_TOGGLE_SMART_NUM 2
+  static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] = {
+    LABEL_ON,
+    LABEL_SMART
+  };
+#endif
 
 static uint16_t fe_cur_page = 0;
 
@@ -57,6 +59,7 @@ static void resetSettings(void)
 {
   initSettings();
   storePara();
+
   popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }
 
@@ -179,6 +182,7 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
         case SKEY_FIL_RUNOUT:
         {
           LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
+
           item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF;
           break;
         }

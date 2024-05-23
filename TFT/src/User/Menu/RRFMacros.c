@@ -5,7 +5,7 @@
 static const char * running_macro_name;
 static const GUI_RECT titleRect;
 
-// Scan files in RRF
+// scan files in RRF
 static void scanInfoFilesFs(void)
 {
   clearInfoFile();
@@ -24,6 +24,7 @@ void rrfShowRunningMacro(void)
 static inline void runMacro(const char *display_name)
 {
   running_macro_name = display_name;
+
   rrfShowRunningMacro();
 
   request_M98(infoFile.path);
@@ -31,8 +32,8 @@ static inline void runMacro(const char *display_name)
   exitFolder();
 }
 
-// Draw Macro file list
-// update items in list mode
+// draw Macro file list.
+// Update items in list mode
 static void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
 {
   if (index < infoFile.folderCount)
@@ -55,11 +56,12 @@ static void macroListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
   }
 }
 
-// View and run macros stored in RRF firmware
+// view and run macros stored in RRF firmware
 void menuCallMacro(void)
 {
   uint16_t key_num = KEY_IDLE;
   uint8_t update = 1;
+
   infoFile.curPage = 0;
   infoFile.source = FS_ONBOARD_MEDIA;
 
@@ -80,11 +82,12 @@ void menuCallMacro(void)
     {
       case KEY_BACK:
         infoFile.curPage = 0;
+
         if (isRootFolder() == true)
         {
           clearInfoFile();
+
           CLOSE_MENU();
-          break;
         }
         else
         {
@@ -104,6 +107,7 @@ void menuCallMacro(void)
           {
             if (enterFolder(infoFile.folder[key_num]) == false)
               break;
+
             scanInfoFilesFs();
             update = 1;
             infoFile.curPage = 0;
