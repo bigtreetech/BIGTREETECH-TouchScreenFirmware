@@ -425,7 +425,7 @@
  * Show banner text at the top of the TFT in Marlin Mode.
  *   Options: [disable: 0, enable: 1]
  */
-#define MARLIN_SHOW_TITLE 1  // Default: 1
+#define MARLIN_SHOW_TITLE 0  // Default: 0
 
 /**
  * Marlin Mode Title
