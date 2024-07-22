@@ -13,7 +13,7 @@
 #define STRING_ACK_NOTIFICATION       "Onay mesajı stili"
 #define STRING_FILES_SORT_BY          "Sort files by"
 #define STRING_FILES_LIST_MODE        "Liste Görünümü"
-#define STRING_FILENAME_EXTENSION     "Show filename extension"
+#define STRING_FILENAME_EXTENSION     "Dosya uzantısını göster"
 #define STRING_FAN_SPEED_PERCENTAGE   "Yüzdesel Fan Hızı"
 #define STRING_PERSISTENT_INFO        "Kalıcı Durum Mesajı"
 #define STRING_TERMINAL_ACK           "Terminalde onay mesajları"
@@ -369,12 +369,12 @@
 #define STRING_EXT_TEMPLOW            "Ekstruder sıcaklığı minimum sıcaklığın altında (%d℃)."
 #define STRING_HEAT_HOTEND            "Ekstruderi %d℃ ye ısıt?"
 #define STRING_DESIRED_TEMPLOW        "Hotend temperature is below\ndesired temperature (%d℃)."
-#define STRING_WAIT_HEAT_UP           "Wait for it to heat up."
+#define STRING_WAIT_HEAT_UP           "Isınmasını bekleyin."
 #define STRING_Z_ALIGN                "Z Hizala"
 #define STRING_MACROS                 "Macros"
 #define STRING_MESH_VALID             "Mesh Validation"
 #define STRING_CONNECT_PROBE          "Connect probe before starting the process. Make sure to disconnect it afterwards."
 #define STRING_DISCONNECT_PROBE       "Make sure you have disconnected probe before using this feature."
-#define STRING_CALIBRATION            "Calibrate"
+#define STRING_CALIBRATION            "Kalibre Et"
 
 #endif
