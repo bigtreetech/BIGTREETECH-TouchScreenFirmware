@@ -25,7 +25,7 @@ void menuHome(void)
 
   while (MENU_IS(menuHome))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

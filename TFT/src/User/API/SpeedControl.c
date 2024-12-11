@@ -36,12 +36,12 @@ uint16_t speedGetCurPercent(const uint8_t tool)
 
 void loopCheckSpeed(void)
 {
-  static uint32_t nextUpdateTime = 0;
+  static uint32_t lastUpdateTime = 0;
 
-  if (OS_GetTimeMs() < nextUpdateTime)  // avoid rapid fire, clogging the queue
+  if ((OS_GetTimeMs() - lastUpdateTime) < SPEED_REFRESH_TIME)  // avoid rapid fire, clogging the queue
     return;
 
-  nextUpdateTime = OS_GetTimeMs() + SPEED_REFRESH_TIME;  // extend next check time
+  lastUpdateTime = OS_GetTimeMs(); // extend next check time
 
   for (uint8_t i = 0; i < SPEED_NUM; i++)
   {

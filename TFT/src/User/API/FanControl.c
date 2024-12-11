@@ -74,12 +74,12 @@ uint8_t fanGetCurPercent(const uint8_t i)
 
 void loopCheckFan(void)
 {
-  static uint32_t nextUpdateTime = 0;
+  static uint32_t lastUpdateTime = 0;
 
-  if (OS_GetTimeMs() < nextUpdateTime)  // avoid rapid fire, clogging the queue
+  if (OS_GetTimeMs() - lastUpdateTime < FAN_REFRESH_TIME)  // avoid rapid fire, clogging the queue
     return;
 
-  nextUpdateTime = OS_GetTimeMs() + FAN_REFRESH_TIME;  // extend next check time
+  lastUpdateTime = OS_GetTimeMs();
 
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {

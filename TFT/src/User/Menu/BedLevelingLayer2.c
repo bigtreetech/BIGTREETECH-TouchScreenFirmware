@@ -72,7 +72,7 @@ void menuBedLevelingLayer2(void)
 
   while (MENU_IS(menuBedLevelingLayer2))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

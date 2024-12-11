@@ -50,7 +50,7 @@ static void pidRun(void)
 
 static inline void pidStart(void)
 {
-  pidTimeout = OS_GetTimeMs() + PID_PROCESS_TIMEOUT;  // set timeout for overall PID process
+  pidTimeout = OS_GetTimeMs();  // set timeout for overall PID process
 
   LED_SetEventColor(&ledRed, false);  // set (neopixel) LED light to RED
   LCD_SET_KNOB_LED_IDLE(false);       // set infoSettings.knob_led_idle temporary to OFF
@@ -159,7 +159,7 @@ void menuPid(void)
   {
     if (pidStatus == PID_IDLE)
     {
-      key_num = menuKeyGetValue();
+      key_num = menuKeyGetValue(false);
 
       switch (key_num)
       {
@@ -242,7 +242,7 @@ void menuPid(void)
       if (getMenuType() != MENU_TYPE_SPLASH)
         popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
 
-      if (OS_GetTimeMs() >= pidTimeout)
+      if (OS_GetTimeMs() - pidTimeout >= PID_PROCESS_TIMEOUT)
         pidUpdateStatus(PID_TIMEOUT);
 
       if (pidStatus != PID_RUNNING)

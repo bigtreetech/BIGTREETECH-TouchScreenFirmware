@@ -78,7 +78,7 @@ void drawToast(bool redraw)
     if (!redraw)  // if notification is new
     {
       BUZZER_PLAY(curSound);  // play sound
-      nextToastTime = OS_GetTimeMs() + SEC_TO_MS(TOAST_DURATION);  // set new timer
+      nextToastTime = OS_GetTimeMs();
     }
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -121,7 +121,7 @@ static inline bool toastAvailable(void)
 void loopToast(void)
 {
   // if no new toast is available or it is not yet expired on screen or in case a full screen menu is displayed, do nothing
-  if (_toastAvailable == false || OS_GetTimeMs() < nextToastTime || getMenuType() == MENU_TYPE_FULLSCREEN)
+  if (_toastAvailable == false || ((OS_GetTimeMs() - nextToastTime) < SEC_TO_MS(TOAST_DURATION)) || getMenuType() == MENU_TYPE_FULLSCREEN)
     return;
 
   if (toastAvailable())

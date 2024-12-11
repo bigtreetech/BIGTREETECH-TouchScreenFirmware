@@ -41,7 +41,7 @@ enum
   FILAMENT_SENSOR_SMART,
 };
 
-static uint32_t posE_nextUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
+static uint32_t posE_lastUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
 static bool posE_sendingWaiting = false;
 static bool sfs_alive = false;  // use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
 
@@ -87,9 +87,9 @@ static bool FIL_NormalRunoutDetect(void)
 {
   static bool runout = false;
   static int32_t trigBalance = 0;
-  static uint32_t nextUpdateTime = 0;
+  static uint32_t lastUpdateTime = 0;
 
-  if (OS_GetTimeMs() < nextUpdateTime)
+  if (OS_GetTimeMs() - lastUpdateTime < infoSettings.runout_noise)
   {
     bool pinState = false;
     uint8_t toolNum = heatGetToolIndex();
@@ -144,7 +144,7 @@ static bool FIL_NormalRunoutDetect(void)
 
   runout = (trigBalance > 0);
   trigBalance = 0;
-  nextUpdateTime = OS_GetTimeMs() + infoSettings.runout_noise;
+  lastUpdateTime = OS_GetTimeMs();
 
   return runout;
 }
@@ -160,10 +160,10 @@ static inline bool FIL_SmartRunoutDetect(void)
   do
   { // send M114 E to query extrude position continuously
 
-    if (OS_GetTimeMs() < posE_nextUpdateTime)  // if next check time not yet elapsed, do nothing
+    if (OS_GetTimeMs() - posE_lastUpdateTime < FIL_POS_E_REFRESH_TIME)  // if next check time not yet elapsed, do nothing
       break;
 
-    posE_nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_REFRESH_TIME;  // extend next check time
+    posE_lastUpdateTime = OS_GetTimeMs();  // extend next check time
 
     // if M114 previously enqueued and not yet sent or pending command
     // (to avoid collision in gcode response processing), do nothing
@@ -219,7 +219,7 @@ void FIL_BE_CheckRunout(void)
 
 void FIL_FE_CheckRunout(void)
 {
-  static uint32_t nextReminderTime = 0;
+  static uint32_t lastReminderTime = 0;
 
   if (!getPrintRunout() && !getRunoutAlarm())
     return;
@@ -230,10 +230,10 @@ void FIL_FE_CheckRunout(void)
     popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_FILAMENT_RUNOUT, LABEL_CONFIRM, LABEL_NULL, setRunoutAlarmFalse, NULL, NULL);
   }
 
-  if (OS_GetTimeMs() >= nextReminderTime && getRunoutAlarm())
+  if ((OS_GetTimeMs() - lastReminderTime >= FIL_ALARM_REMINDER_TIME) && getRunoutAlarm())
   {
     BUZZER_PLAY(SOUND_ERROR);
-    nextReminderTime = OS_GetTimeMs() + FIL_ALARM_REMINDER_TIME;
+    lastReminderTime = OS_GetTimeMs();
   }
 }
 

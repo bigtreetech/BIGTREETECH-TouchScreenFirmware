@@ -94,7 +94,7 @@ void menuBedLeveling(void)
 
   while (MENU_IS(menuBedLeveling))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

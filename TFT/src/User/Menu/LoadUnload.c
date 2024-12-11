@@ -48,7 +48,7 @@ void menuLoadUnload(void)
 
   while (MENU_IS(menuLoadUnload))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     // show reminder for process running if any button is pressed
     if (isPendingCmd() && key_num != KEY_IDLE)

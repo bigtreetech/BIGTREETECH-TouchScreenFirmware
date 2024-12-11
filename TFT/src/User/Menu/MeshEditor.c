@@ -808,7 +808,7 @@ void menuMeshEditor(void)
 
   while (MENU_IS(menuMeshEditor))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

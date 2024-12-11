@@ -662,7 +662,7 @@ void menuPrinting(void)
 
     toggleInfo();
 
-    KEY_VALUES key_num = menuKeyGetValue();
+    KEY_VALUES key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

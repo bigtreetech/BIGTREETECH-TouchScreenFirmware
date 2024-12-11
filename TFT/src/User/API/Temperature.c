@@ -216,10 +216,10 @@ void heatSyncUpdateSeconds(const uint8_t seconds)
 
 void heatSetNextUpdateTime(void)
 {
-  heat_next_update_time = OS_GetTimeMs() + SEC_TO_MS(heat_update_seconds);
+  heat_next_update_time = OS_GetTimeMs();
 
-  if (infoMachineSettings.autoReportTemp)
-    heat_next_update_time += AUTOREPORT_TIMEOUT;
+//  if (infoMachineSettings.autoReportTemp)
+//    heat_next_update_time += AUTOREPORT_TIMEOUT;
 }
 
 void heatClearSendingWaiting(void)
@@ -234,10 +234,11 @@ void loopCheckHeater(void)
     // feature to automatically report the temperatures or (if M155 is supported) check temperature auto-report timeout
     // and resend M155 command in case of timeout expired
 
-    if (OS_GetTimeMs() < heat_next_update_time)  // if next check time not yet elapsed, do nothing
-      break;
+    if ((OS_GetTimeMs() - heat_next_update_time) < (SEC_TO_MS(heat_update_seconds) + (infoMachineSettings.autoReportTemp ? AUTOREPORT_TIMEOUT : 0)))  // if next check time not yet elapsed, do nothing
+        break;
 
-    heatSetNextUpdateTime();  // extend next check time
+//    heatSetNextUpdateTime();  // extend next check time
+    heat_next_update_time = OS_GetTimeMs();
 
     // if M105/M155 previously enqueued and not yet sent or pending command
     // (to avoid collision in gcode response processing), do nothing

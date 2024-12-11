@@ -49,13 +49,18 @@ void menuHeat(void)
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = setTarget = heatGetTargetTemp(tool_index);
-    key_num = menuKeyGetValue();
-
+    key_num = menuKeyGetValue(true);
+    bool longPressed = (key_num & KEY_LONG_PRESSED);
+    key_num %= KEY_LONG_PRESSED;
+    
     switch (key_num)
     {
       case KEY_ICON_0:
       case KEY_DECREASE:
-        setTarget -= degreeSteps[degreeSteps_index];
+        if (longPressed)
+          setTarget = 0;
+        else
+          setTarget -= degreeSteps[degreeSteps_index];
         break;
 
       case KEY_INFOBOX:
@@ -68,7 +73,16 @@ void menuHeat(void)
 
       case KEY_ICON_3:
       case KEY_INCREASE:
-        setTarget += degreeSteps[degreeSteps_index];
+        if (longPressed)
+        {
+          BUZZER_PLAY(SOUND_OK);
+          if (tool_index < infoSettings.hotend_count)
+            setTarget = 200;
+          else
+            setTarget = 75;
+        }
+        else
+          setTarget += degreeSteps[degreeSteps_index];
         break;
 
       case KEY_ICON_4:

@@ -97,7 +97,7 @@ void OS_TaskLoop(OS_TASK * task_t)
   if (task_t->is_exist == 0)
     return;
 
-  if (OS_GetTimeMs() < task_t->next_time)
+  if ((OS_GetTimeMs() - task_t->next_time) < task_t->time_ms)
     return;
 
   if (task_t->is_repeat == 0)
@@ -106,7 +106,7 @@ void OS_TaskLoop(OS_TASK * task_t)
   }
   else
   {
-    task_t->next_time = OS_GetTimeMs() + task_t->time_ms;
+    task_t->next_time = OS_GetTimeMs();
   }
 
   (*task_t->task)(task_t->para);
@@ -116,7 +116,7 @@ void OS_TaskEnable(OS_TASK * task_t, uint8_t is_exec, uint8_t is_repeat)
 {
   task_t->is_exist =1;
   task_t->is_repeat = is_repeat;
-  task_t->next_time = OS_GetTimeMs() + task_t->time_ms;
+  task_t->next_time = OS_GetTimeMs();
 
   if (is_exec)
     (*task_t->task)(task_t->para);

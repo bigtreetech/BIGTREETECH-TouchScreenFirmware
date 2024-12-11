@@ -197,7 +197,7 @@ void menuMPC(void)
   {
     if (mpcTuning.status == DONE)
     {
-      key_num = menuKeyGetValue();
+      key_num = menuKeyGetValue(false);
 
       switch (key_num)
       {

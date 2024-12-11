@@ -156,7 +156,7 @@ uint8_t listViewGetCurPage(void)
 
 uint16_t listViewGetSelectedIndex(void)
 {
-  KEY_VALUES key_num = menuKeyGetValue();
+  KEY_VALUES key_num = menuKeyGetValue(false);
 
   if (key_num < LISTITEM_PER_PAGE)
   {

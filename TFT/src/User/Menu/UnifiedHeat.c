@@ -25,7 +25,7 @@ void menuUnifiedHeat(void)
 
   while (MENU_IS(menuUnifiedHeat))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

@@ -26,7 +26,7 @@ static bool extrusionDuringPause = false;  // flag for extrusion during Print ->
 static bool filamentRunoutAlarm = false;
 static float lastEPos = 0;                 // used only to update stats in infoPrintSummary
 
-static uint32_t nextUpdateTime = 0;
+static uint32_t lastUpdateTime = 0;
 static bool sendingWaiting = false;
 
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
@@ -917,7 +917,7 @@ void loopPrintFromTFT(void)
 
 void printSetNextUpdateTime(void)
 {
-  nextUpdateTime = OS_GetTimeMs() + SEC_TO_MS(infoSettings.m27_refresh_time);
+  lastUpdateTime = OS_GetTimeMs();
 }
 
 void printClearSendingWaiting(void)
@@ -940,10 +940,11 @@ void loopPrintFromOnboard(void)
   do
   { // send M27 to query SD print status continuously
 
-    if (OS_GetTimeMs() < nextUpdateTime)  // if next check time not yet elapsed, do nothing
+    if ((OS_GetTimeMs() - lastUpdateTime) < SEC_TO_MS(infoSettings.m27_refresh_time))  // if next check time not yet elapsed, do nothing
       break;
 
-    printSetNextUpdateTime();  // extend next check time
+    //printSetNextUpdateTime();  // extend next check time
+    lastUpdateTime = OS_GetTimeMs();
 
     // if M27 previously enqueued and not yet sent, do nothing
     if (sendingWaiting)

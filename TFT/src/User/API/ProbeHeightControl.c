@@ -109,12 +109,12 @@ void probeHeightMove(float unit)
 // query for new coordinates
 void probeHeightQueryCoord(void)
 {
-  static uint32_t nextUpdateTime = 0;
+  static uint32_t lastUpdateTime = 0;
 
-  if (OS_GetTimeMs() < nextUpdateTime)
+  if ((OS_GetTimeMs() - lastUpdateTime) < PROBE_REFRESH_TIME)
     return;
 
-  nextUpdateTime = OS_GetTimeMs() + PROBE_REFRESH_TIME;
+  lastUpdateTime = OS_GetTimeMs();
 
   coordinateQuery(0);  // query position manually for delay less than 1 second
 }

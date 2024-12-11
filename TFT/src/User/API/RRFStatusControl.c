@@ -121,12 +121,12 @@ void rrfStatusQuery(void)
 {
   if (infoHost.connected)
   {
-    static uint32_t rrf_next_query_time = 0;
+    static uint32_t rrf_last_query_time = 0;
 
-    if (OS_GetTimeMs() < rrf_next_query_time)
+    if ((OS_GetTimeMs() - rrf_last_query_time) < rrf_query_interval)
       return;
 
-    rrf_next_query_time = OS_GetTimeMs() + rrf_query_interval;
+    rrf_last_query_time = OS_GetTimeMs();
 
     // don't send status queries while in the terminal menu to avoid flooding the console
     if (MENU_IS(menuTerminal))

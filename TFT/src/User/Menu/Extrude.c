@@ -61,7 +61,9 @@ void menuExtrude(void)
 
   while (MENU_IS(menuExtrude))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(true);
+    bool longPressed = (key_num & KEY_LONG_PRESSED);
+    key_num %= KEY_LONG_PRESSED;
 
     switch (key_num)
     {
@@ -82,7 +84,7 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_4:
-        if (infoSettings.ext_count > 1)
+        if ((infoSettings.ext_count > 1) && (!longPressed))
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
 
@@ -90,6 +92,9 @@ void menuExtrude(void)
         }
         else
         {
+          if (longPressed && (infoSettings.ext_count > 1)) // long pressed sound
+            BUZZER_PLAY(SOUND_OK);
+          
           heatSetCurrentIndex(curExtruder_index);  // preselect current nozzle for "Heat" menu
 
           OPEN_MENU(menuHeat);

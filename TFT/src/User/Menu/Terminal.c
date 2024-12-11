@@ -562,7 +562,7 @@ static inline void menuKeyboardView(void)
     if (MENU_IS_NOT(menuTerminal))
       break;
 
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {
@@ -851,18 +851,22 @@ static void menuTerminalView(void)
     if (MENU_IS_NOT(menuTerminal))
       break;
 
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {
       case TERM_PAGE_UP:  // page up
         if (terminalData->pageIndex < terminalData->pageCount)
           terminalData->pageIndex++;
+        else
+          terminalData->pageIndex = 0;
         break;
 
       case TERM_PAGE_DOWN:  // page down
         if (terminalData->pageIndex > 0)
           terminalData->pageIndex--;
+        else
+          terminalData->pageIndex = terminalData->pageCount;
         break;
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal

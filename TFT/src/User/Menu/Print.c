@@ -251,7 +251,7 @@ void menuPrintFromSource(void)
     if (list_mode != true)  // select item from icon view
     {
       pageCount = (infoFile.folderCount + infoFile.fileCount + (NUM_PER_PAGE - 1)) / NUM_PER_PAGE;
-      key_num = menuKeyGetValue();
+      key_num = menuKeyGetValue(false);
 
       switch (key_num)
       {
@@ -422,7 +422,7 @@ void menuPrint(void)
 
   while (MENU_IS(menuPrint))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {
