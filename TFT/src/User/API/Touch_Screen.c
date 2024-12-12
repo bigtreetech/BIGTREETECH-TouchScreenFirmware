@@ -84,7 +84,7 @@ uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT * menuRect)
     if ((x >= menuRect[i].x0) && (x <= menuRect[i].x1) && (y >= menuRect[i].y0) && (y <= menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        if (TS_Sound == true)
+        if (TS_Sound)
           BUZZER_PLAY(SOUND_KEYPRESS);
       #endif
 
@@ -106,21 +106,21 @@ uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT * menuRect)
   {
     if (firstPress)
     {
-      key_num = TS_KeyValue(totalRect, menuRect); // store the pressed key number
+      key_num = TS_KeyValue(totalRect, menuRect);  // store the pressed key number
       firstPress = false;
 
       if (TS_ReDrawIcon)
         TS_ReDrawIcon(key_num, 1);
     }
   }
-  else // not pressed
+  else  // not pressed
   {
-    if (!firstPress) // not pressed anymore
+    if (!firstPress)  // not pressed anymore
     {
       if (TS_ReDrawIcon)
         TS_ReDrawIcon(key_num, 0);
 
-      key_return = key_num; // return stored key number
+      key_return = key_num;  // return stored key number
       key_num = IDLE_TOUCH;
       firstPress = true;
 

@@ -64,7 +64,7 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
       break;
 
     case FROM_CMD:
-      if (GET_BIT(heat_feedback_waiting, index) == false)
+      if (!GET_BIT(heat_feedback_waiting, index))
       {
         heater.T[index].target = temp;
         SET_BIT_ON(heat_feedback_waiting, index);
@@ -113,14 +113,14 @@ void heatCoolDown(void)
 
 bool heatGetIsWaiting(const uint8_t index)
 {
-  return (heater.T[index].waiting == true);
+  return (heater.T[index].waiting);
 }
 
 bool heatHasWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if (heater.T[i].waiting == true)
+    if (heater.T[i].waiting)
       return true;
   }
 
@@ -136,9 +136,9 @@ void heatSetIsWaiting(uint8_t index, const bool isWaiting)
 
   heater.T[index].waiting = isWaiting;
 
-  if (isWaiting == true)  // wait heating now, query more frequently
+  if (isWaiting)  // wait heating now, query more frequently
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-  else if (heatHasWaiting() == false)
+  else if (!heatHasWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 

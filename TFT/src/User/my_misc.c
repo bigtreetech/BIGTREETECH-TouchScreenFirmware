@@ -72,10 +72,8 @@ uint8_t * uint8_2_string(uint8_t num, uint8_t * str)
 
     if (_4bits <= 9)
       str[i] = _4bits + '0';
-    else if (_4bits >= 0xA && _4bits <= 0xF)
-      str[i] = _4bits - 0xA + 'A';
     else
-      str[i] = 'F';
+      str[i] = _4bits - 0xA + 'A';
 
     num <<= 4;
   }

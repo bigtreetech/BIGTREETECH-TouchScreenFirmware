@@ -33,7 +33,7 @@ void menuLoadUnload(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
 
-  if (eAxisBackup.handled == false)
+  if (!eAxisBackup.handled)
   {
     TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
@@ -168,10 +168,10 @@ void menuLoadUnload(void)
     loopProcess();
   }
 
-  if (eAxisBackup.handled == false)                       // the user exited from menu (not any other process/popup/etc)
+  if (!eAxisBackup.handled)                               // the user exited from menu (not any other process/popup/etc)
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);  // reset E axis position in Marlin to pre - load/unload state
 
   // set slow update time if not waiting for target temperature
-  if (heatHasWaiting() == false)
+  if (!heatHasWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

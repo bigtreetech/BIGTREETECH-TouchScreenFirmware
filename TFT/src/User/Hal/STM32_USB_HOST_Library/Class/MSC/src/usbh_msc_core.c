@@ -349,7 +349,7 @@ static USBH_Status USBH_MSC_Handle(USB_OTG_CORE_HANDLE *pdev ,
         MSC_Machine.maxLun = *(MSC_Machine.buff) ;
 
         /* If device has more that one logical unit then it is not supported */
-        if((MSC_Machine.maxLun > 0) && (maxLunExceed == FALSE))
+        if((MSC_Machine.maxLun > 0) && !maxLunExceed)
         {
           maxLunExceed = TRUE;
           pphost->usr_cb->DeviceNotSupported();

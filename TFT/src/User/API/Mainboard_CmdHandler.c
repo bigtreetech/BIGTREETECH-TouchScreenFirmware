@@ -417,7 +417,7 @@ static bool openRemoteTFT(bool writingMode)
   if (!writingMode)  // if reading mode
   {
     // mount FS and open the file (infoFile.source and infoFile.path are used)
-    if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+    if (mountFS() && f_open(&file, infoFile.path, FA_OPEN_EXISTING | FA_READ) == FR_OK)
     {
       char buf[10];
 
@@ -436,7 +436,7 @@ static bool openRemoteTFT(bool writingMode)
   else  // if writing mode
   {
     // mount FS and open the file (infoFile.source and infoFile.path are used)
-    if (mountFS() == true && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
+    if (mountFS() && f_open(&file, infoFile.path, FA_OPEN_ALWAYS | FA_WRITE) == FR_OK)
     {
       Serial_Forward(cmd_port_index, "Writing to file: ");
       Serial_Forward(cmd_port_index, infoFile.path);
@@ -700,7 +700,7 @@ void sendQueueCmd(void)
                 Serial_Forward(cmd_port_index, "Begin file list\n");
 
                 // then mount FS and scan for files (infoFile.source and infoFile.path are used)
-                if (mountFS() == true && scanPrintFiles() == true)
+                if (mountFS() && scanPrintFiles())
                 {
                   for (uint16_t i = 0; i < infoFile.fileCount; i++)
                   {
@@ -857,7 +857,7 @@ void sendQueueCmd(void)
               if (initRemoteTFT())  // examples: "M30 SD:/test/cap2.gcode\n", "M30 S /test/cap2.gcode\n"
               {
                 // then mount FS and delete the file (infoFile.source and infoFile.path are used)
-                if (mountFS() == true && f_unlink(infoFile.path) == FR_OK)
+                if (mountFS() && f_unlink(infoFile.path) == FR_OK)
                   Serial_Forward(cmd_port_index, "File deleted: ");
                 else
                   Serial_Forward(cmd_port_index, "Deletion failed, File: ");
@@ -912,7 +912,7 @@ void sendQueueCmd(void)
             msgText = parseM118(rawMsg, &hasE, &hasA);
 
             // format: <E prefix> + <A prefix> + <text> + "\n"
-            snprintf(msg, CMD_MAX_SIZE, "%s%s%s\n", (hasE == true) ? "echo:" : "", (hasA == true) ? "//" : "", msgText);
+            snprintf(msg, CMD_MAX_SIZE, "%s%s%s\n", hasE ? "echo:" : "", hasA ? "//" : "", msgText);
 
             int32_t fwdPort = cmd_seen('P') ? cmd_value() : SUP_PORTS;
 
@@ -1570,7 +1570,7 @@ send_cmd:
   //   - if TFT is connected, update tx slots and tx count
   //   - if TFT is not connected, consider the command as an out of band message
   //
-  if (sendCmd(false, avoid_terminal) == true && infoHost.connected == true)
+  if (sendCmd(false, avoid_terminal) && infoHost.connected)
   {
     // decrease the number of available tx slots and increase the pending commands tx count
     //

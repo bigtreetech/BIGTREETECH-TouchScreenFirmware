@@ -140,7 +140,7 @@ static void menuUBLSaveLoad(void)
         break;
 
       case KEY_ICON_7:
-        if (ublSlotSaved == true && infoMachineSettings.EEPROM == 1)
+        if (ublSlotSaved && infoMachineSettings.EEPROM == 1)
           popupDialog(DIALOG_TYPE_QUESTION, LABEL_ABL_SETTINGS_UBL, LABEL_ABL_SLOT_EEPROM, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
 
         ublSlotSaved = false;

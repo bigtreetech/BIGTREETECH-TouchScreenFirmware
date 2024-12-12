@@ -432,7 +432,7 @@ static inline void drawPrintInfo(void)
                           rect_of_keySS[KEY_INFOBOX].y0 + STATUS_MSG_ICON_YOFFSET,
                           rect_of_keySS[KEY_INFOBOX].x1 - STATUS_MSG_TITLE_XOFFSET,
                           rect_of_keySS[KEY_INFOBOX].y1 - STATUS_MSG_ICON_YOFFSET,
-                          (uint8_t *)textSelect((isAborted() == true) ? LABEL_PROCESS_ABORTED : LABEL_PRINT_FINISHED));
+                          (uint8_t *)textSelect((isAborted()) ? LABEL_PROCESS_ABORTED : LABEL_PRINT_FINISHED));
 
   GUI_SetColor(INFOMSG_FONT_COLOR);
   GUI_SetBkColor(INFOMSG_BG_COLOR);
@@ -447,7 +447,7 @@ void printSummaryPopup(void)
 
   time_2_string(showInfo, (char *)textSelect(LABEL_PRINT_TIME), infoPrintSummary.time);
 
-  if (isAborted() == true)
+  if (isAborted())
   {
     sprintf(tempstr, "\n\n%s", (char *)textSelect(LABEL_PROCESS_ABORTED));
     strcat(showInfo, tempstr);
@@ -514,7 +514,7 @@ void menuPrinting(void)
 
   memset(&nowHeat, 0, sizeof(HEATER));
 
-  if (lastPrinting == true)
+  if (lastPrinting)
   {
     setPauseResumeIcon(&printingItems, lastPause);
     printingItems.items[KEY_ICON_5].icon = (infoFile.source < FS_ONBOARD_MEDIA && isPrintModelIcon()) ? ICON_PREVIEW : ICON_BABYSTEP;
@@ -540,7 +540,7 @@ void menuPrinting(void)
   drawLiveInfo();
 
   #ifndef PORTRAIT_MODE
-    if (lastPrinting == false)
+    if (!lastPrinting)
       drawPrintInfo();
   #endif
 
@@ -604,7 +604,7 @@ void menuPrinting(void)
         if (ABS(curLayerHeight - usedLayerHeight) >= LAYER_DELTA)
           layerDrawEnabled = true;
 
-        if (layerDrawEnabled == true)
+        if (layerDrawEnabled)
         {
           usedLayerHeight = curLayerHeight;
 
@@ -653,7 +653,7 @@ void menuPrinting(void)
       lastPrinting = isPrinting();
 
       #ifdef PORTRAIT_MODE
-        if (lastPrinting == false)
+        if (!lastPrinting)
           printSummaryPopup();
       #endif
 
@@ -709,7 +709,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_6:
-        if (lastPrinting == true)  // if printing
+        if (lastPrinting)  // if printing
         { // Pause button
           if (getHostDialog())
             addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_BUSY));
@@ -733,7 +733,7 @@ void menuPrinting(void)
         break;
 
       case PS_KEY_9:
-        if (lastPrinting == true)  // if printing
+        if (lastPrinting)  // if printing
         { // Stop button
           popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_STOP_PRINT, LABEL_CONFIRM, LABEL_CANCEL, abortPrint, NULL, NULL);
         }

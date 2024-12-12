@@ -94,7 +94,7 @@ static inline void gcodeIconDraw(void)
     // in order to properly access the file (e.g. for print thumbnail preview, printing etc.), FQDN short (not long)
     // filename (filename extension must be restored, if previously hidden) must be used for the file path
     //
-    if (enterFolder(restoreFilenameExtension(baseIndex + i - infoFile.folderCount)) == false)
+    if (!enterFolder(restoreFilenameExtension(baseIndex + i - infoFile.folderCount)))
       break;
 
     // if model preview bmp exists, display bmp directly without writing to flash
@@ -153,7 +153,7 @@ static bool printPageItemSelected(uint16_t index)
     // in order to properly access the folder (e.g. for browsing its files and folders), short (not long)
     // folder name must be used for the file path
     //
-    if (enterFolder(infoFile.folder[index]) == false)
+    if (!enterFolder(infoFile.folder[index]))
     {
       hasUpdate = false;
     }
@@ -173,7 +173,7 @@ static bool printPageItemSelected(uint16_t index)
     // in order to properly access the file (e.g. for print thumbnail preview, printing etc.), FQDN short (not long)
     // filename (filename extension must be restored, if previously hidden) must be used for the file path
     //
-    if (infoHost.connected == false || enterFolder(infoFile.file[infoFile.fileIndex]) == false)
+    if (!infoHost.connected || !enterFolder(infoFile.file[infoFile.fileIndex]))
     {
       hasUpdate = false;
     }
@@ -222,7 +222,7 @@ void menuPrintFromSource(void)
   GUI_Clear(infoSettings.bg_color);
   GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, LABEL_LOADING);
 
-  if (mountFS() == true && scanPrintFiles() == true)
+  if (mountFS() && scanPrintFiles())
   {
     if (MENU_IS_NOT(menuPrintFromSource))  // menu index has to be modified when "scanPrintFilesGcodeFs" (echo,error,warning popup windows)
       return;
@@ -276,7 +276,7 @@ void menuPrintFromSource(void)
         case KEY_ICON_7:
           infoFile.curPage = 0;
 
-          if (isRootFolder() == true)
+          if (isRootFolder())
           {
             clearInfoFile();
 
@@ -306,7 +306,7 @@ void menuPrintFromSource(void)
       switch (key_num)
       {
         case KEY_BACK:
-          if (isRootFolder() == true)
+          if (isRootFolder())
           {
             clearInfoFile();
 

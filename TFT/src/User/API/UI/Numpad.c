@@ -234,7 +234,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
   setMenu(MENU_TYPE_FULLSCREEN, NULL, COUNT(rect_of_numkey), rect_of_numkey, drawKeypadButton, NULL);
   Draw_keyboard(numTitle, false, negative);
 
-  while (TS_Sound == false)  // TS_TouchSound gets true only when exit from numpad is requested
+  while (!TS_Sound)  // TS_TouchSound gets true only when exit from numpad is requested
   {
     key_num = menuKeyGetValue(false);
 
@@ -286,7 +286,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
       case NUM_KEY_8:
       case NUM_KEY_9:
       case NUM_KEY_0:
-        if (valueFirstPress == true)
+        if (valueFirstPress)
         {
           valueFirstPress = false;
           bufIndex = lastIndex = 0;
@@ -314,7 +314,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
         break;
 
       case NUM_KEY_DEC:
-        if (valueFirstPress == true)
+        if (valueFirstPress)
         {
           valueFirstPress = false;
           parameterBuf[0] = '0';
@@ -342,7 +342,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
       case NUM_KEY_MINUS:
         if (negative)
         {
-          if (valueFirstPress == true)
+          if (valueFirstPress)
           {
             valueFirstPress = false;
             parameterBuf[0] = '0';
@@ -419,7 +419,7 @@ int32_t numPadInt(uint8_t * title, int32_t param_val, int32_t reset_val, bool ne
 
   drawValue(parameterBuf);
 
-  while (TS_Sound == false)  // TS_TouchSound gets true only when exit from numpad is requested
+  while (!TS_Sound)  // TS_TouchSound gets true only when exit from numpad is requested
   {
     key_num = menuKeyGetValue(false);
 
@@ -467,7 +467,7 @@ int32_t numPadInt(uint8_t * title, int32_t param_val, int32_t reset_val, bool ne
       case NUM_KEY_8:
       case NUM_KEY_9:
       case NUM_KEY_0:
-        if (valueFirstPress == true)
+        if (valueFirstPress)
         {
           valueFirstPress = false;
           val = 0;

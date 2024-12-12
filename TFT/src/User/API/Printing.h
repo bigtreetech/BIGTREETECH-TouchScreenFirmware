@@ -12,7 +12,7 @@ extern "C" {
 
 #ifdef RAPID_SERIAL_COMM
   #define RAPID_SERIAL_LOOP() loopBackEnd()
-  #define RAPID_PRINTING_COMM() if (isPrinting() == true && infoSettings.serial_always_on != 1) {loopBackEnd();}
+  #define RAPID_PRINTING_COMM() if (isPrinting() && infoSettings.serial_always_on != 1) {loopBackEnd();}
 #else
   #define RAPID_SERIAL_LOOP()
   #define RAPID_PRINTING_COMM()

@@ -1129,7 +1129,7 @@ static bool readConfigFile(const char * path, void (* lineParser)(), uint16_t ma
   CONFIGFILE configFile;
   CurConfigFile = &configFile;
 
-  if (f_file_exists(path) == false)
+  if (!f_file_exists(path))
     return false;
 
   if (f_open(&configFile.file, path, FA_OPEN_EXISTING | FA_READ) != FR_OK)
@@ -1322,7 +1322,7 @@ void resetConfig(void)
 
 bool getConfigFromFile(char * configPath)
 {
-  if (f_file_exists(configPath) == false)
+  if (!f_file_exists(configPath))
   {
     PRINTDEBUG("configFile not found\n");
 

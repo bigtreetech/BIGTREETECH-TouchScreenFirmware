@@ -9,7 +9,7 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
-#define KEY_LONG_PRESSED 1024             // Use power of 2 for efficiency
+#define KEY_LONG_PRESSED 1024  // use power of 2 for efficiency
 #define IDLE_TOUCH (KEY_LONG_PRESSED - 1)
 
 #define ITEM_PER_PAGE     8

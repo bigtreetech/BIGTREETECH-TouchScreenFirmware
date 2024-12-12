@@ -10,7 +10,7 @@ void menuPrintRestore(void)
 
   GUI_DispString((LCD_WIDTH - GUI_StrPixelWidth(LABEL_LOADING)) / 2, LCD_HEIGHT / 2 - BYTE_HEIGHT, LABEL_LOADING);
 
-  if (mountFS() == true && powerFailedExist())  // powerFailedExist function sets both infoFile.path and PLR filename
+  if (mountFS() && powerFailedExist())  // powerFailedExist function sets both infoFile.path and PLR filename
   {
     char okTxt[MAX_LANG_LABEL_LENGTH];
     char cancelTxt[MAX_LANG_LABEL_LENGTH];

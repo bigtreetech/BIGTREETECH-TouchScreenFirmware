@@ -45,7 +45,7 @@ void drawToast(bool redraw)
   if (!redraw)
     curToastDisplay = (curToastDisplay + 1) % TOAST_MSG_COUNT;
 
-  if (toastlist[curToastDisplay].isNew == true || redraw)
+  if (toastlist[curToastDisplay].isNew || redraw)
   {
     // set toast notification running status
     _toastRunning = true;
@@ -110,7 +110,7 @@ static inline bool toastAvailable(void)
 {
   for (int i = 0; i < TOAST_MSG_COUNT; i++)
   {
-    if (toastlist[i].isNew == true)
+    if (toastlist[i].isNew)
       return true;
   }
 
@@ -121,14 +121,14 @@ static inline bool toastAvailable(void)
 void loopToast(void)
 {
   // if no new toast is available or it is not yet expired on screen or in case a full screen menu is displayed, do nothing
-  if (_toastAvailable == false || ((OS_GetTimeMs() - nextToastTime) < SEC_TO_MS(TOAST_DURATION)) || getMenuType() == MENU_TYPE_FULLSCREEN)
+  if (!_toastAvailable || ((OS_GetTimeMs() - nextToastTime) < SEC_TO_MS(TOAST_DURATION)) || getMenuType() == MENU_TYPE_FULLSCREEN)
     return;
 
   if (toastAvailable())
   {
     drawToast(false);
   }
-  else if (_toastRunning == true)
+  else if (_toastRunning)
   {
     _toastRunning = false;
     _toastAvailable = false;

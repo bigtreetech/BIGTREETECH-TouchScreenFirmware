@@ -10,7 +10,7 @@
 static bool temperatureStatusValid(void)
 {
   if (infoSettings.persistent_info != 1) return false;
-  if (infoHost.connected == false) return false;
+  if (!infoHost.connected) return false;
   if (toastRunning()) return false;
 
   if (MENU_IS(menuPrinting)) return false;

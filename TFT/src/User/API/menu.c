@@ -269,7 +269,7 @@ const GUI_RECT rect_of_keyPS[] = { // PS = PRINT SCREEN, This template is used t
 };
 
 #ifdef PORTRAIT_MODE
-  static const GUI_RECT rect_of_keyPS_draw[] = { // VERTICAL GUI Printing menu for drawing UI
+  static const GUI_RECT rect_of_keyPS_draw[] = {  // VERTICAL GUI Printing menu for drawing UI
     {0, 0, 0, 0},
     {0, 0, 0, 0},
     {0, 0, 0, 0},
@@ -1049,7 +1049,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
   }
 
   GUI_RestoreColorDefault();
-} // showLiveInfo
+}  // showLiveInfo
 
 void displayExhibitHeader(const char * titleStr, const char * unitStr)
 {
@@ -1153,11 +1153,11 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
     return KEY_IDLE;
   }
 
-  if (returnLongPressed && longPressed && (tempkey != KEY_IDLE)) // register long pressed flag
-    tempkey = KEY_LONG_PRESSED + tempkey; // signal long pressed
+  if (returnLongPressed && longPressed && (tempkey != KEY_IDLE))  // register long pressed flag
+    tempkey = KEY_LONG_PRESSED + tempkey;  // signal long pressed
 
   #if LCD_ENCODER_SUPPORT
-    if (tempkey == KEY_IDLE) // nothing pressed, check encoder status
+    if (tempkey == KEY_IDLE)  // nothing pressed, check encoder status
       tempkey = LCD_Enc_KeyValue();
   #endif
 
@@ -1165,30 +1165,30 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
     static bool backHeld = false;
   #endif
 
-  if (!TS_IsPressed()) // not pressed (anymore)
+  if (!TS_IsPressed())  // not pressed (anymore)
   {
     if (longPressed)
-      longPressed--; // don't immediately cancel longPressed, delay by 1 cycle
+      longPressed--;  // don't immediately cancel longPressed, delay by 1 cycle
 
     #ifdef HAS_EMULATOR
       backHeld = false;
     #else
-      Touch_Enc_ReadPen(0); // reset TSC press timer
+      Touch_Enc_ReadPen(0);  // reset TSC press timer
     #endif
   }
 
-  if (isPrinting() ||                    // no jump to "main menu" while printing
-      getMenuType() != MENU_TYPE_ICON || // only jump if in a "icon menu"
-      infoMenu.cur == 0 ||               // already in "main menu"
-      MENU_IS(menuMode))                 // no jump from "mode switching menu"
+  if (isPrinting() ||                     // no jump to "main menu" while printing
+      getMenuType() != MENU_TYPE_ICON ||  // only jump if in a "icon menu"
+      infoMenu.cur == 0 ||                // already in "main menu"
+      MENU_IS(menuMode))                  // no jump from "mode switching menu"
     return tempkey;
 
   #ifdef HAS_EMULATOR
     if (backHeld)  // prevent mode selection or screenshot if Back button is held
-      backHeld = Touch_Enc_ReadPen(0); // reset TSC press timer
+      backHeld = Touch_Enc_ReadPen(0);  // reset TSC press timer
   #endif
 
-  if (!longPressed && Touch_Enc_ReadPen(LONG_TOUCH)) // detect long press
+  if (!longPressed && Touch_Enc_ReadPen(LONG_TOUCH))  // detect long press
   { // check if longpressed already handled and check if TSC is pressed and held
     KEY_VALUES tempkey2 = KEY_IDLE;
 
@@ -1203,7 +1203,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
 
     if (tempkey2 < COUNT(getCurMenuItems()->items))
     {
-      longPressed = 2; // enable longPressed status for at least 2 cycles
+      longPressed = 2;  // enable longPressed status for at least 2 cycles
 
       if (getCurMenuItems()->items[tempkey2].label.index == LABEL_BACK)  // check if Back button is held
       {
@@ -1212,10 +1212,10 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
         #endif
 
         #ifdef SMART_HOME
-          BUZZER_PLAY(SOUND_OK); // sound to indicate back to root menu is triggered
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
+          BUZZER_PLAY(SOUND_OK);  // sound to indicate back to root menu is triggered
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];   // prepare menu tree for jump to 0
           infoMenu.cur = 1;
-        #endif // SMART_HOME
+        #endif  // SMART_HOME
       }
       else
         if (returnLongPressed)

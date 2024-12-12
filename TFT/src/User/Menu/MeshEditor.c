@@ -827,7 +827,7 @@ void menuMeshEditor(void)
         break;
 
       case ME_KEY_EDIT:
-        if (coordinateIsKnown() == false)
+        if (!coordinateIsKnown())
           probeHeightHome();  // home, disable ABL and raise nozzle
 
         // call mesh tuner menu and set current mesh value, if changed

@@ -583,7 +583,7 @@ static inline void menuKeyboardView(void)
       case GKEY_SEND:
         if (nowIndex)
         {
-          if (saveEnabled == true)  // avoid saving again a gcode called from gcode history table
+          if (saveEnabled)  // avoid saving again a gcode called from gcode history table
           {
             strcpy(keyboardData->gcodeTable[saveGcodeIndex], gcodeBuf);  // save gcode to history table
             saveGcodeIndex = (saveGcodeIndex + 1) % MAX_GCODE_COUNT;     // move to next save index in the gcode history table
