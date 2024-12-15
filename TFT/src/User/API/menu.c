@@ -1049,7 +1049,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
   }
 
   GUI_RestoreColorDefault();
-}  // showLiveInfo
+} // showLiveInfo
 
 void displayExhibitHeader(const char * titleStr, const char * unitStr)
 {
@@ -1120,10 +1120,6 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
       {
         tempkey = (KEY_VALUES)KEY_GetValue(COUNT(rect_of_key), rect_of_key);
       }
-
-      // let label press work as if icon was pressed
-      if ((tempkey >= KEY_LABEL_0) && (tempkey <= KEY_LABEL_7))
-        tempkey = tempkey - KEY_LABEL_0;
       break;
     }
 
@@ -1175,6 +1171,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
     #else
       Touch_Enc_ReadPen(0);  // reset TSC press timer
     #endif
+    return tempkey;
   }
 
   if (isPrinting() ||                     // no jump to "main menu" while printing
@@ -1185,7 +1182,10 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
 
   #ifdef HAS_EMULATOR
     if (backHeld)  // prevent mode selection or screenshot if Back button is held
+    {
       backHeld = Touch_Enc_ReadPen(0);  // reset TSC press timer
+      return tempkey;
+    }
   #endif
 
   if (!longPressed && Touch_Enc_ReadPen(LONG_TOUCH))  // detect long press
@@ -1213,7 +1213,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
 
         #ifdef SMART_HOME
           BUZZER_PLAY(SOUND_OK);  // sound to indicate back to root menu is triggered
-          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];   // prepare menu tree for jump to 0
+          infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
           infoMenu.cur = 1;
         #endif  // SMART_HOME
       }
