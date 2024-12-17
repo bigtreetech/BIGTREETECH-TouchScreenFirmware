@@ -164,6 +164,7 @@ static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
   if (lcd_x < x + TS_ERR_RANGE && lcd_x > x - TS_ERR_RANGE && lcd_y > y - TS_ERR_RANGE && lcd_y < y + TS_ERR_RANGE)
   {
     Buzzer_AddSound(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
+
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_OK);
     Delay_ms(1000);
   }
@@ -171,11 +172,12 @@ static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
   {
     while (TS_IsPressed());
 
+    Buzzer_AddSound(100, 200);
+
     GUI_SetColor(RED);
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_FAILED);
     GUI_DispDec(0, 0, lcd_x, 3, 0);
     GUI_DispDec(0, 20, lcd_y, 3, 0);
-    Buzzer_AddSound(100, 200);
     Delay_ms(1000);
 
     return 0;
@@ -214,6 +216,7 @@ void TS_Calibrate(void)
       }
 
       while (!TS_IsPressed());
+
       Buzzer_AddSound(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
      
       TP_X[tp_num] = XPT2046_Repeated_Compare_AD(CMD_RDX);

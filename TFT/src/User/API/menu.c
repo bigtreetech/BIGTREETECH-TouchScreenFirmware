@@ -4,6 +4,7 @@
 #include "Notification.h"
 
 #define STATUS_BAR_REFRESH_TIME 2000  // refresh time in ms
+
 uint8_t longPressed = 0;
 
 const GUI_RECT exhibitRect = {
@@ -658,6 +659,7 @@ void drawBusySign(void)
 
     busySign.status = SYS_STATUS_BUSY;
   }
+
   busySign.time = OS_GetTimeMs();
 }
 
@@ -710,6 +712,7 @@ LISTITEMS * getCurListItems(void)
 GUI_POINT getIconStartPoint(int index)
 {
   GUI_POINT p = {curRect[index].x0, curRect[index].y0};
+
   return p;
 }
 
@@ -765,6 +768,7 @@ void menuRefreshListPage(void)
   for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
   {
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
+
     menuDrawListItem(&curListItems->items[i], i);
   }
 }
@@ -798,6 +802,7 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
 void menuSetTitle(const LABEL * title)
 {
   curTitle = title;
+
   menuDrawTitle();
 }
 
@@ -818,6 +823,7 @@ void menuDrawTitle(void)
   if (toastRunning())
   {
     drawToast(true);
+
     return;
   }
 
@@ -857,12 +863,16 @@ void menuDrawTitle(void)
 // when there is a button value, the icon changes color and redraws
 static void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
-  if (position > KEY_ICON_7) return;
+  if (position > KEY_ICON_7)
+    return;
 
   if (menuType == MENU_TYPE_ICON)
   {
-    if (curMenuItems == NULL) return;
-    if (curMenuItems->items[position].icon == ICON_NULL) return;
+    if (curMenuItems == NULL)
+      return;
+
+    if (curMenuItems->items[position].icon == ICON_NULL)
+      return;
 
     const GUI_RECT * rect = curRect + position;
 
@@ -873,13 +883,15 @@ static void itemDrawIconPress(uint8_t position, uint8_t is_press)
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   { // draw rec over list item if pressed
-    if (curListItems == NULL) return;
+    if (curListItems == NULL)
+      return;
 
     const GUI_RECT * rect = rect_of_keyListView + position;
 
     if (curListItems->items[position].icon == CHARICON_NULL)
     {
       GUI_ClearPrect(rect);
+
       return;
     }
 
@@ -897,6 +909,7 @@ static void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
     return;
 
   position -= PS_TOUCH_OFFSET;
+
   const GUI_RECT * rect = curRect + position;
 
   if (is_press)  // turn green when pressed
@@ -945,6 +958,7 @@ void menuDrawPage(const MENUITEMS * menuItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&curMenuItems->items[i], i);
+
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 
@@ -1057,6 +1071,7 @@ void displayExhibitHeader(const char * titleStr, const char * unitStr)
   if (titleStr != NULL)
   {
     char tempstr[20];
+
     sprintf(tempstr, "%-8s", titleStr);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
   }
