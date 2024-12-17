@@ -62,6 +62,7 @@ void menuExtrude(void)
   while (MENU_IS(menuExtrude))
   {
     key_num = menuKeyGetValue(true);
+
     bool longPressed = (key_num & KEY_LONG_PRESSED);
     key_num %= KEY_LONG_PRESSED;
 

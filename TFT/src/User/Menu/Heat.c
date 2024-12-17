@@ -50,6 +50,7 @@ void menuHeat(void)
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = setTarget = heatGetTargetTemp(tool_index);
     key_num = menuKeyGetValue(true);
+
     bool longPressed = (key_num & KEY_LONG_PRESSED);
     key_num %= KEY_LONG_PRESSED;
     
@@ -82,7 +83,9 @@ void menuHeat(void)
             setTarget = 75;
         }
         else
+        {
           setTarget += degreeSteps[degreeSteps_index];
+        }
         break;
 
       case KEY_ICON_4:

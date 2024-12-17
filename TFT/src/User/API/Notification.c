@@ -19,7 +19,7 @@ static bool _toastRunning = false;        // "true" when a toast notification is
 static bool _toastAvailable = false;      // "true" when a new toast is added. "false" when no more toasts to display are available
 static uint8_t nextToastIndex = 0;        // next index to store new toast
 static uint8_t curToastDisplay = 0;       // current toast notification being displayed
-static uint32_t nextToastTime = 0;        // time to change to next toast notification
+static uint32_t lastToastTime = 0;        // time to change to next toast notification
 
 // message notification variables
 static NOTIFICATION msglist[MAX_MSG_COUNT];    // message notification array
@@ -78,7 +78,7 @@ void drawToast(bool redraw)
     if (!redraw)  // if notification is new
     {
       BUZZER_PLAY(curSound);  // play sound
-      nextToastTime = OS_GetTimeMs();
+      lastToastTime = OS_GetTimeMs();
     }
 
     GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -121,7 +121,7 @@ static inline bool toastAvailable(void)
 void loopToast(void)
 {
   // if no new toast is available or it is not yet expired on screen or in case a full screen menu is displayed, do nothing
-  if (!_toastAvailable || ((OS_GetTimeMs() - nextToastTime) < SEC_TO_MS(TOAST_DURATION)) || getMenuType() == MENU_TYPE_FULLSCREEN)
+  if (!_toastAvailable || ((OS_GetTimeMs() - lastToastTime) < SEC_TO_MS(TOAST_DURATION)) || getMenuType() == MENU_TYPE_FULLSCREEN)
     return;
 
   if (toastAvailable())

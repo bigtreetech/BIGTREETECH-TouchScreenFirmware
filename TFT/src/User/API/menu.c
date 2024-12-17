@@ -1053,6 +1053,7 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
       {
         GUI_SetTextMode(liveicon->lines[i].text_mode);
         GUI_SetBkColor(liveicon->lines[i].bk_color);
+
         GUI_DispString(iconPt.x + loc.x, iconPt.y + loc.y, liveicon->lines[i].text);
       }
       else
@@ -1161,6 +1162,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
   if (menuType != MENU_TYPE_FULLSCREEN && tempkey == KEY_TITLEBAR)
   {
     titleBarPress();
+
     return KEY_IDLE;
   }
 
@@ -1186,6 +1188,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
     #else
       Touch_Enc_ReadPen(0);  // reset TSC press timer
     #endif
+
     return tempkey;
   }
 
@@ -1233,8 +1236,10 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
         #endif  // SMART_HOME
       }
       else
+      {
         if (returnLongPressed)
           BUZZER_PLAY(SOUND_KEYPRESS);
+      }
     }
   }
 

@@ -142,6 +142,7 @@ void menuMove(void)
   while (MENU_IS(menuMove))
   {
     key_num = menuKeyGetValue(true);
+
     bool longPressed = (key_num & KEY_LONG_PRESSED);
     key_num %= KEY_LONG_PRESSED;
 
@@ -153,12 +154,15 @@ void menuMove(void)
         case KEY_ICON_2: storeMoveCmd(Z_AXIS, amount); break;   // Z move up if no invert
 
         case KEY_ICON_3:
-          if (longPressed) {
+          if (longPressed)
+          {
             infoSettings.move_speed = (infoSettings.move_speed + 1) % ITEM_SPEED_NUM;
             if (infoSettings.move_speed == 0)
               addToast(DIALOG_TYPE_INFO, (char *) textSelect(LABEL_SLOW));
+
             if (infoSettings.move_speed == 1)
               addToast(DIALOG_TYPE_INFO, (char *) textSelect(LABEL_NORMAL));
+
             if (infoSettings.move_speed == 2)
               addToast(DIALOG_TYPE_INFO, (char *) textSelect(LABEL_FAST));
           }
@@ -166,7 +170,9 @@ void menuMove(void)
           {              
             item_moveLen_index = (item_moveLen_index + 1) % ITEM_MOVE_LEN_NUM;
             moveItems.items[key_num] = itemMoveLen[item_moveLen_index];
+            
             menuDrawItem(&moveItems.items[key_num], key_num);
+            
             amount = moveLenSteps[item_moveLen_index];
           }
           break;
