@@ -75,7 +75,7 @@ void menuLevelCorner(void)
 
   while (MENU_IS(menuLevelCorner))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

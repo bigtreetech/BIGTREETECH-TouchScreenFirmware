@@ -81,10 +81,10 @@ uint16_t TS_KeyValue(uint8_t totalRect, const GUI_RECT * menuRect)
 
   for (i = 0; i < totalRect; i++)
   {
-    if ((x > menuRect[i].x0) && (x < menuRect[i].x1) && (y > menuRect[i].y0) && (y < menuRect[i].y1))
+    if ((x >= menuRect[i].x0) && (x <= menuRect[i].x1) && (y >= menuRect[i].y0) && (y <= menuRect[i].y1))
     {
       #ifdef BUZZER_PIN
-        if (TS_Sound == true)
+        if (TS_Sound)
           BUZZER_PLAY(SOUND_KEYPRESS);
       #endif
 
@@ -106,21 +106,21 @@ uint16_t KEY_GetValue(uint8_t totalRect, const GUI_RECT * menuRect)
   {
     if (firstPress)
     {
-      key_num = TS_KeyValue(totalRect, menuRect);
+      key_num = TS_KeyValue(totalRect, menuRect);  // store the pressed key number
       firstPress = false;
 
       if (TS_ReDrawIcon)
         TS_ReDrawIcon(key_num, 1);
     }
   }
-  else
+  else  // not pressed
   {
-    if (firstPress == false)
+    if (!firstPress)  // not pressed anymore
     {
       if (TS_ReDrawIcon)
         TS_ReDrawIcon(key_num, 0);
 
-      key_return = key_num;
+      key_return = key_num;  // return stored key number
       key_num = IDLE_TOUCH;
       firstPress = true;
 
@@ -163,12 +163,16 @@ static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
 
   if (lcd_x < x + TS_ERR_RANGE && lcd_x > x - TS_ERR_RANGE && lcd_y > y - TS_ERR_RANGE && lcd_y < y + TS_ERR_RANGE)
   {
+    Buzzer_AddSound(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
+
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_OK);
     Delay_ms(1000);
   }
   else
   {
     while (TS_IsPressed());
+
+    Buzzer_AddSound(100, 200);
 
     GUI_SetColor(RED);
     GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_FAILED);
@@ -211,12 +215,14 @@ void TS_Calibrate(void)
         GUI_DrawPoint(LCD_X[tp_num], LCD_Y[tp_num] - i);
       }
 
-      while (TS_IsPressed() == false);
+      while (!TS_IsPressed());
 
+      Buzzer_AddSound(BUZZER_FREQUENCY_HZ, BUZZER_FREQUENCY_DURATION_MS);
+     
       TP_X[tp_num] = XPT2046_Repeated_Compare_AD(CMD_RDX);
       TP_Y[tp_num] = XPT2046_Repeated_Compare_AD(CMD_RDY);
 
-      while (TS_IsPressed() != false);
+      while (TS_IsPressed());
     }
 
     K = (X1 - X3) * (Y2 - Y3) - (X2 - X3) * (Y1 - Y3);

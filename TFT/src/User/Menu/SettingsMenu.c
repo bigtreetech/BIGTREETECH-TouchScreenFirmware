@@ -156,7 +156,7 @@ void menuSettings(void)
 
   while (MENU_IS(menuSettings))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

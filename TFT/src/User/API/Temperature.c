@@ -64,7 +64,7 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
       break;
 
     case FROM_CMD:
-      if (GET_BIT(heat_feedback_waiting, index) == false)
+      if (!GET_BIT(heat_feedback_waiting, index))
       {
         heater.T[index].target = temp;
         SET_BIT_ON(heat_feedback_waiting, index);
@@ -113,14 +113,14 @@ void heatCoolDown(void)
 
 bool heatGetIsWaiting(const uint8_t index)
 {
-  return (heater.T[index].waiting == true);
+  return (heater.T[index].waiting);
 }
 
 bool heatHasWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
-    if (heater.T[i].waiting == true)
+    if (heater.T[i].waiting)
       return true;
   }
 
@@ -136,9 +136,9 @@ void heatSetIsWaiting(uint8_t index, const bool isWaiting)
 
   heater.T[index].waiting = isWaiting;
 
-  if (isWaiting == true)  // wait heating now, query more frequently
+  if (isWaiting)  // wait heating now, query more frequently
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-  else if (heatHasWaiting() == false)
+  else if (!heatHasWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 
@@ -216,10 +216,10 @@ void heatSyncUpdateSeconds(const uint8_t seconds)
 
 void heatSetNextUpdateTime(void)
 {
-  heat_next_update_time = OS_GetTimeMs() + SEC_TO_MS(heat_update_seconds);
+  heat_next_update_time = OS_GetTimeMs();
 
-  if (infoMachineSettings.autoReportTemp)
-    heat_next_update_time += AUTOREPORT_TIMEOUT;
+//  if (infoMachineSettings.autoReportTemp)
+//    heat_next_update_time += AUTOREPORT_TIMEOUT;
 }
 
 void heatClearSendingWaiting(void)
@@ -234,10 +234,11 @@ void loopCheckHeater(void)
     // feature to automatically report the temperatures or (if M155 is supported) check temperature auto-report timeout
     // and resend M155 command in case of timeout expired
 
-    if (OS_GetTimeMs() < heat_next_update_time)  // if next check time not yet elapsed, do nothing
-      break;
+    if ((OS_GetTimeMs() - heat_next_update_time) < (SEC_TO_MS(heat_update_seconds) + (infoMachineSettings.autoReportTemp ? AUTOREPORT_TIMEOUT : 0)))  // if next check time not yet elapsed, do nothing
+        break;
 
-    heatSetNextUpdateTime();  // extend next check time
+//    heatSetNextUpdateTime();  // extend next check time
+    heat_next_update_time = OS_GetTimeMs();
 
     // if M105/M155 previously enqueued and not yet sent or pending command
     // (to avoid collision in gcode response processing), do nothing

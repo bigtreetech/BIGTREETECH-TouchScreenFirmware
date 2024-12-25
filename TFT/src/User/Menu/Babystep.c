@@ -132,7 +132,7 @@ void menuBabystep(void)
   {
     unit = moveLenSteps[moveLenSteps_index];
     babystep = babystepGetValue();  // always load current babystep
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

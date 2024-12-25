@@ -38,7 +38,7 @@ void menuExtrude(void)
 
   menuDrawPage(&extrudeItems);
 
-  if (eAxisBackup.handled == false)
+  if (!eAxisBackup.handled)
   {
     TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
@@ -54,14 +54,17 @@ void menuExtrude(void)
 
   extruderReDraw(curExtruder_index, extrAmount, true);
 
-  if (eAxisBackup.relative == false)  // set extruder to relative
+  if (!eAxisBackup.relative)  // set extruder to relative
     mustStoreCmd("M83\n");
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
 
   while (MENU_IS(menuExtrude))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(true);
+
+    bool longPressed = (key_num & KEY_LONG_PRESSED);
+    key_num %= KEY_LONG_PRESSED;
 
     switch (key_num)
     {
@@ -82,7 +85,7 @@ void menuExtrude(void)
         break;
 
       case KEY_ICON_4:
-        if (infoSettings.ext_count > 1)
+        if ((infoSettings.ext_count > 1) && (!longPressed))
         {
           curExtruder_index = (curExtruder_index + 1) % infoSettings.ext_count;
 
@@ -90,6 +93,9 @@ void menuExtrude(void)
         }
         else
         {
+          if (longPressed && (infoSettings.ext_count > 1))  // long pressed sound
+            BUZZER_PLAY(SOUND_OK);
+          
           heatSetCurrentIndex(curExtruder_index);  // preselect current nozzle for "Heat" menu
 
           OPEN_MENU(menuHeat);
@@ -163,16 +169,16 @@ void menuExtrude(void)
     loopProcess();
   }
 
-  if (eAxisBackup.handled == false)  // the user exited from menu (not any other process/popup/etc)
+  if (!eAxisBackup.handled)  // the user exited from menu (not any other process/popup/etc)
   { // restore E axis coordinate, feedrate and relativeness to pre-extrude state
     mustStoreCmd("G92 E%.5f\n", eAxisBackup.coordinate);
     mustStoreCmd("G0 F%d\n", eAxisBackup.feedrate);
 
-    if (eAxisBackup.relative == false)
+    if (!eAxisBackup.relative)
       mustStoreCmd("M82\n");  // set extruder to absolute
   }
 
   // set slow update time if not waiting for target temperature
-  if (heatHasWaiting() == false)
+  if (!heatHasWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

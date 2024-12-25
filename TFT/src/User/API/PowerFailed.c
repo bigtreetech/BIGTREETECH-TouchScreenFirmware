@@ -149,7 +149,7 @@ bool powerFailedInitRestore(void)
     mustStoreCmd("G92 E%.5f\nG1 F%d\n", infoBreakPoint.axis[E_AXIS], infoBreakPoint.feedrate);
     mustStoreCmd(infoBreakPoint.relative ? "G91\n" : "G90\n");
 
-    if (infoBreakPoint.relative_e == false)
+    if (!infoBreakPoint.relative_e)
       mustStoreCmd("M82\n");
   }
 

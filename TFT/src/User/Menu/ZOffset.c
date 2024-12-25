@@ -138,7 +138,7 @@ void menuZOffset(void)
   {
     unit = moveLenSteps[curUnit_index];
     z_offset = offsetGetValue();  // always load current Z offset
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

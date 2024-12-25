@@ -72,7 +72,7 @@ void levelingMoveToPoint(LEVELING_POINT point)
 
   levelingGetPointCoords(coords);
 
-  if (coordinateIsKnown() == false)
+  if (!coordinateIsKnown())
     storeCmd("G28\n");
 
   storeCmd("G0 Z%.3f F%d\n", infoSettings.level_z_raise, infoSettings.level_feedrate[FEEDRATE_Z]);
@@ -86,7 +86,7 @@ void levelingProbePoint(LEVELING_POINT point)
 
   levelingGetPointCoords(coords);
 
-  if (coordinateIsKnown() == false)
+  if (!coordinateIsKnown())
     probeHeightHomeAndRaise();  // home and raise nozzle
 
   if (infoSettings.touchmi_sensor != 0)

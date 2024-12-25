@@ -85,6 +85,9 @@
   #define SERIAL_PORT_HOST  _USART3  // default USART port for host communication
 #endif
 
+#define USART6_TX_PIN PC6
+#define USART6_RX_PIN PC7
+
 // Serial port for debugging
 #ifdef SERIAL_DEBUG_ENABLED
   #define SERIAL_DEBUG_PORT SERIAL_PORT_3

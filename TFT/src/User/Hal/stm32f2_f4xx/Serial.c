@@ -287,7 +287,7 @@ void Serial_Put(uint8_t port, const char * msg)
 // ISR, serial interrupt handler
 void USART_IRQHandler(uint8_t port)
 {
-  #if IDLE_LINE_IT == true  // IDLE Line interrupt
+  #if IDLE_LINE_IT  // IDLE Line interrupt
     if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt
     {
       Serial[port].uart->SR;                               // clear IDLE Line bit

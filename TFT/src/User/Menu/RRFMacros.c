@@ -83,7 +83,7 @@ void menuCallMacro(void)
       case KEY_BACK:
         infoFile.curPage = 0;
 
-        if (isRootFolder() == true)
+        if (isRootFolder())
         {
           clearInfoFile();
 
@@ -105,7 +105,7 @@ void menuCallMacro(void)
         {
           if (key_num < infoFile.folderCount)  // folder
           {
-            if (enterFolder(infoFile.folder[key_num]) == false)
+            if (!enterFolder(infoFile.folder[key_num]))
               break;
 
             scanInfoFilesFs();
@@ -114,10 +114,10 @@ void menuCallMacro(void)
           }
           else if (key_num < infoFile.fileCount + infoFile.folderCount)  // gcode
           {
-            if (infoHost.connected == false)
+            if (!infoHost.connected)
               break;
 
-            if (enterFolder(infoFile.longFile[key_num - infoFile.folderCount]) == false)
+            if (!enterFolder(infoFile.longFile[key_num - infoFile.folderCount]))
               break;
 
             runMacro(infoFile.file[key_num - infoFile.folderCount]);

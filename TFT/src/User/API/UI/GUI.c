@@ -939,7 +939,7 @@ void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispString(x, y, tempstr);
@@ -949,7 +949,7 @@ const uint8_t * _GUI_DispLenLabel(int16_t x, int16_t y, uint16_t index, uint16_t
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return NULL;
 
   return _GUI_DispLenString(x, y, tempstr, pixelWidth, truncate);
@@ -959,7 +959,7 @@ void _GUI_DispLabelRight(int16_t x, int16_t y, uint16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringRight(x, y, tempstr);
@@ -969,7 +969,7 @@ void _GUI_DispLabelCenter(int16_t x, int16_t y, uint16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringCenter(x, y, tempstr);
@@ -979,7 +979,7 @@ void _GUI_DispLabelInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringInRect(sx, sy, ex, ey, tempstr);
@@ -989,7 +989,7 @@ void _GUI_DispLabelInPrect(const GUI_RECT * rect, uint16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringInPrect(rect, tempstr);
@@ -999,7 +999,7 @@ void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uin
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringInRectEOL(sx, sy, ex, ey, tempstr);
@@ -1009,7 +1009,7 @@ void _GUI_DispLabelInPrectEOL(const GUI_RECT * rect, uint16_t index)
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringInPrectEOL(rect, tempstr);
@@ -1019,7 +1019,7 @@ void _GUI_DispLabelOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT tex
 {
   uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
 
-  if (loadLabelText(tempstr, index) == false)
+  if (!loadLabelText(tempstr, index))
     return;
 
   _GUI_DispStringOnIcon(iconIndex, iconPoint, textPos, tempstr);

@@ -8,7 +8,6 @@ bool Touch_Enc_ReadPen(uint16_t duration)
   if (XPT2046_Read_Pen())  // if touch screen not pressed
   {
     lastTime = OS_GetTimeMs();
-
     return false;
   }
 

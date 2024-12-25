@@ -26,7 +26,7 @@ static bool extrusionDuringPause = false;  // flag for extrusion during Print ->
 static bool filamentRunoutAlarm = false;
 static float lastEPos = 0;                 // used only to update stats in infoPrintSummary
 
-static uint32_t nextUpdateTime = 0;
+static uint32_t lastUpdateTime = 0;
 static bool sendingWaiting = false;
 
 PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
@@ -614,7 +614,7 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
   {
     case FS_TFT_SD:
     case FS_TFT_USB:
-      if (isPause == true && pauseType == PAUSE_M0)
+      if (isPause && pauseType == PAUSE_M0)
         TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
 
       static COORDINATE tmp;
@@ -632,8 +632,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         {
           coordinateGetAll(&tmp);
 
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isCoorRelative)    mustStoreCmd("G90\n");
+          if (isExtrudeRelative) mustStoreCmd("M82\n");
 
           if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
@@ -648,8 +648,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
                          infoSettings.pause_feedrate[FEEDRATE_XY]);
           }
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isCoorRelative)    mustStoreCmd("G91\n");
+          if (isExtrudeRelative) mustStoreCmd("M83\n");
         }
 
         // store pause type only on pause
@@ -663,10 +663,10 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         }
         else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
         {
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isCoorRelative)    mustStoreCmd("G90\n");
+          if (isExtrudeRelative) mustStoreCmd("M82\n");
 
-          if (extrusionDuringPause == true)  // check if extrusion done during Print -> Pause
+          if (extrusionDuringPause)  // check if extrusion done during Print -> Pause
           { // no purge
             extrusionDuringPause = false;
           }
@@ -685,8 +685,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
           mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
           mustStoreCmd("G1 F%d\n", tmp.feedrate);
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isCoorRelative)    mustStoreCmd("G91\n");
+          if (isExtrudeRelative) mustStoreCmd("M83\n");
         }
       }
       break;
@@ -917,7 +917,7 @@ void loopPrintFromTFT(void)
 
 void printSetNextUpdateTime(void)
 {
-  nextUpdateTime = OS_GetTimeMs() + SEC_TO_MS(infoSettings.m27_refresh_time);
+  lastUpdateTime = OS_GetTimeMs();
 }
 
 void printClearSendingWaiting(void)
@@ -940,10 +940,11 @@ void loopPrintFromOnboard(void)
   do
   { // send M27 to query SD print status continuously
 
-    if (OS_GetTimeMs() < nextUpdateTime)  // if next check time not yet elapsed, do nothing
+    if ((OS_GetTimeMs() - lastUpdateTime) < SEC_TO_MS(infoSettings.m27_refresh_time))  // if next check time not yet elapsed, do nothing
       break;
 
-    printSetNextUpdateTime();  // extend next check time
+    //printSetNextUpdateTime();  // extend next check time
+    lastUpdateTime = OS_GetTimeMs();
 
     // if M27 previously enqueued and not yet sent, do nothing
     if (sendingWaiting)

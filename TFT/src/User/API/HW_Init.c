@@ -109,7 +109,7 @@ void HW_Init(void)
       LCD_Enc_InitActiveSignal();
   #endif
 
-  if (readIsTSCExist() == false)  // read settings parameter
+  if (!readIsTSCExist())  // read settings parameter
   {
     LCD_RefreshDirection(infoSettings.rotated_ui);
     TS_Calibrate();

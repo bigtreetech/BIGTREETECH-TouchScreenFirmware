@@ -44,7 +44,7 @@ void menuUnifiedMove(void)
 
   while (MENU_IS(menuUnifiedMove))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

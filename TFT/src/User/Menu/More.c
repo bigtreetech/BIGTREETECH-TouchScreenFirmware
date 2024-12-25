@@ -41,7 +41,7 @@ void menuMore(void)
 
   while (MENU_IS(menuMore))
   {
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

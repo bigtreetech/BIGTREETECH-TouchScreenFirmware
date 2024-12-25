@@ -101,7 +101,7 @@ float menuMeshTuner(uint16_t col, uint16_t row, float value)
   {
     unit = moveLenSteps[curUnit_index];
     coordinateGetAllActual(&curValue);
-    key_num = menuKeyGetValue();
+    key_num = menuKeyGetValue(false);
 
     switch (key_num)
     {

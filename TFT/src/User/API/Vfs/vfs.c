@@ -188,7 +188,7 @@ static char * isSupportedFile(const char * filename)
 // add a file name or folder name to file list
 bool addFile(bool isFile, const char * shortName, const char * longName)
 {
-  if (isFile == true)  // if file
+  if (isFile)  // if file
   {
     // if file list is full or filename doesn't provide a supported filename extension
     if (infoFile.fileCount >= FILE_NUM || isSupportedFile(shortName) == NULL)

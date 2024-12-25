@@ -378,7 +378,7 @@ void parseAck(void)
     // TFT to printer connection handling
     //----------------------------------------
 
-    if (infoHost.connected == false)
+    if (!infoHost.connected)
     {
       // parse error information even though not connected to printer
       if (ack_seen(magic_error))

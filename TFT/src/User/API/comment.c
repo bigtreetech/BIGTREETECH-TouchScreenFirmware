@@ -59,7 +59,7 @@ void parseComment(void)
     }
 
     // check for "time" keyword in comment to retrieve total or elapsed time, Cura specific
-    else if (strcmp(token, "time") == 0 && slicerTimePresence == false)  // check if first word is "time"
+    else if (strcmp(token, "time") == 0 && !slicerTimePresence)  // check if first word is "time"
     {
       if ((token = strtok(NULL, TOKEN_DELIMITERS)) != NULL)
       {
@@ -86,7 +86,7 @@ void parseComment(void)
     }
 
     // check for "remaining" keyword in comment to retrieve remaining time, IdeaMaker specific
-    else if (strcmp(token, "remaining") == 0 && slicerTimePresence == false)  // check if first word is "remaining"
+    else if (strcmp(token, "remaining") == 0 && !slicerTimePresence)  // check if first word is "remaining"
     {
       if ((token = strtok(NULL, TOKEN_DELIMITERS)) != NULL)
       {
