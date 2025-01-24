@@ -41,7 +41,7 @@ enum
   FILAMENT_SENSOR_SMART,
 };
 
-static uint32_t posE_lastUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
+static uint32_t posE_lastUpdateTime = 0;  // give TFT time to connect to mainboard first before polling for runout
 static bool posE_sendingWaiting = false;
 static bool sfs_alive = false;  // use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
 
