@@ -236,7 +236,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
 
   while (!TS_Sound)  // TS_TouchSound gets true only when exit from numpad is requested
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {
@@ -421,7 +421,7 @@ int32_t numPadInt(uint8_t * title, int32_t param_val, int32_t reset_val, bool ne
 
   while (!TS_Sound)  // TS_TouchSound gets true only when exit from numpad is requested
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

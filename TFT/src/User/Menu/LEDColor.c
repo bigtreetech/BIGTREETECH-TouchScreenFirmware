@@ -332,7 +332,7 @@ static void menuLEDColorCustom(void)
 
   while (MENU_IS(menuLEDColorCustom))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {
@@ -489,7 +489,7 @@ void menuLEDColor(void)
 
   while (MENU_IS(menuLEDColor))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

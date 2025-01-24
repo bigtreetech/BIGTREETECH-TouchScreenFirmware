@@ -562,7 +562,7 @@ static inline void menuKeyboardView(void)
     if (MENU_IS_NOT(menuTerminal))
       break;
 
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {
@@ -851,7 +851,7 @@ static void menuTerminalView(void)
     if (MENU_IS_NOT(menuTerminal))
       break;
 
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

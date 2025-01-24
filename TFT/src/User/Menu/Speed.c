@@ -66,7 +66,7 @@ void menuSpeed(void)
 
   while (MENU_IS(menuSpeed))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

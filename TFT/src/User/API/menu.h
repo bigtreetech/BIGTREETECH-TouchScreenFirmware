@@ -9,8 +9,7 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
-#define KEY_LONG_PRESSED 1024  // use power of 2 for efficiency
-#define IDLE_TOUCH (KEY_LONG_PRESSED - 1)
+#define IDLE_TOUCH 0xFFFF
 
 #define ITEM_PER_PAGE     8
 #define PS_TOUCH_OFFSET   2                            // printing screen icon index offset for touch input
@@ -199,7 +198,8 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon);
 void displayExhibitHeader(const char * titleStr, const char * unitStr);
 void displayExhibitValue(const char * valueStr);
 
-KEY_VALUES menuKeyGetValue(bool returnLongPressed);
+bool menuKeyIsLongPress();
+KEY_VALUES menuKeyGetValue();
 
 // smart home
 #ifdef SMART_HOME

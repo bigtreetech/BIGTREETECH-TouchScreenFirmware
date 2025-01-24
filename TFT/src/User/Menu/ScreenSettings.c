@@ -564,7 +564,7 @@ void menuScreenSettings(void)
 
   while (MENU_IS(menuScreenSettings))
   {
-    curIndex = menuKeyGetValue(false);
+    curIndex = menuKeyGetValue();
 
     switch (curIndex)
     {

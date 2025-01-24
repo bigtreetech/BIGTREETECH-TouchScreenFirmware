@@ -52,7 +52,7 @@ static void menuEepromSettings(void)
 
   while (MENU_IS(menuEepromSettings))
   {
-    curIndex = menuKeyGetValue(false);
+    curIndex = menuKeyGetValue();
 
     switch (curIndex)
     {
@@ -132,7 +132,7 @@ void menuMachineSettings(void)
 
   while (MENU_IS(menuMachineSettings))
   {
-    curIndex = menuKeyGetValue(false);
+    curIndex = menuKeyGetValue();
 
     switch (curIndex)
     {

@@ -1094,8 +1094,14 @@ void displayExhibitValue(const char * valueStr)
   setFontSize(FONT_SIZE_NORMAL);
 }
 
+// Menu can check if the press was a long press
+bool menuKeyIsLongPress()
+{
+  return (longPressed > 0)
+}
+
 // get button value
-KEY_VALUES menuKeyGetValue(bool returnLongPressed)
+KEY_VALUES menuKeyGetValue()
 {
   KEY_VALUES tempkey = KEY_IDLE;
 
@@ -1166,9 +1172,6 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
     return KEY_IDLE;
   }
 
-  if (returnLongPressed && longPressed && (tempkey != KEY_IDLE))  // register long pressed flag
-    tempkey = KEY_LONG_PRESSED + tempkey;  // signal long pressed
-
   #if LCD_ENCODER_SUPPORT
     if (tempkey == KEY_IDLE)  // nothing pressed, check encoder status
       tempkey = LCD_Enc_KeyValue();
@@ -1221,6 +1224,7 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
 
     if (tempkey2 < COUNT(getCurMenuItems()->items))
     {
+      BUZZER_PLAY(SOUND_KEYPRESS); // inform user the long press was registered
       longPressed = 2;  // enable longPressed status for at least 2 cycles
 
       if (getCurMenuItems()->items[tempkey2].label.index == LABEL_BACK)  // check if Back button is held
@@ -1234,11 +1238,6 @@ KEY_VALUES menuKeyGetValue(bool returnLongPressed)
           infoMenu.menu[1] = infoMenu.menu[infoMenu.cur];  // prepare menu tree for jump to 0
           infoMenu.cur = 1;
         #endif  // SMART_HOME
-      }
-      else
-      {
-        if (returnLongPressed)
-          BUZZER_PLAY(SOUND_KEYPRESS);
       }
     }
   }

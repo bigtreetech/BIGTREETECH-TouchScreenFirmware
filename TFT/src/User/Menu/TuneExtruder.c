@@ -65,7 +65,7 @@ static void menuNewExtruderESteps(void)
 
   while (MENU_IS(menuNewExtruderESteps))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {
@@ -186,7 +186,7 @@ void menuTuneExtruder(void)
   {
     actCurrent = heatGetCurrentTemp(tool_index);
     actTarget = heatGetTargetTemp(tool_index);
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

@@ -50,7 +50,7 @@ void menuFan(void)
 
   while (MENU_IS(menuFan))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

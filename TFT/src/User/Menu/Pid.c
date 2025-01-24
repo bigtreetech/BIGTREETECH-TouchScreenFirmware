@@ -159,7 +159,7 @@ void menuPid(void)
   {
     if (pidStatus == PID_IDLE)
     {
-      key_num = menuKeyGetValue(false);
+      key_num = menuKeyGetValue();
 
       switch (key_num)
       {

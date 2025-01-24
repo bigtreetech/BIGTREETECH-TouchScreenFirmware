@@ -172,7 +172,7 @@ void menuMBL(void)
   {
     unit = moveLenSteps[curUnit_index];
     coordinateGetAllActual(&curValue);
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

@@ -141,10 +141,9 @@ void menuMove(void)
 
   while (MENU_IS(menuMove))
   {
-    key_num = menuKeyGetValue(true);
+    key_num = menuKeyGetValue();
 
-    bool longPressed = (key_num & KEY_LONG_PRESSED);
-    key_num %= KEY_LONG_PRESSED;
+    bool longPressed = menuKeyIsLongPress();
 
     switch (key_num)
     {

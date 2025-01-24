@@ -153,7 +153,7 @@ void menuConnectionSettings(void)
 
   while (MENU_IS(menuConnectionSettings))
   {
-    curIndex = menuKeyGetValue(false);
+    curIndex = menuKeyGetValue();
 
     switch (curIndex)
     {

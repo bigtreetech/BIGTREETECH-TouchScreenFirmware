@@ -39,7 +39,7 @@ void menuMain(void)
 
   while (MENU_IS(menuMain))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {

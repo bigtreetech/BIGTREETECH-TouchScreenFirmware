@@ -67,7 +67,7 @@ void menuNotification(void)
 
   while (MENU_IS(menuNotification))
   {
-    key_num = menuKeyGetValue(false);
+    key_num = menuKeyGetValue();
 
     switch (key_num)
     {
