@@ -209,7 +209,7 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   #endif
 };
 
-const GUI_RECT rect_of_keyPS[] = { // PS = PRINT SCREEN, This template is used to locate the live icons on the Printing Screen.
+const GUI_RECT rect_of_keyPS[] = {  // PS = PRINT SCREEN. This template is used to locate the live icons on the Printing menu
   #ifdef PORTRAIT_MODE
     // hotend area VERTICAL GUI
     {START_X+PS_ICON_LG_WIDTH*0+PS_ICON_SPACE_X*0,                    PS_ICON_START_Y+PS_ICON_HEIGHT*0+PS_ICON_SPACE_Y*0,
@@ -268,7 +268,7 @@ const GUI_RECT rect_of_keyPS[] = { // PS = PRINT SCREEN, This template is used t
 };
 
 #ifdef PORTRAIT_MODE
-  static const GUI_RECT rect_of_keyPS_draw[] = { // VERTICAL GUI Printing menu for drawing UI
+  static const GUI_RECT rect_of_keyPS_draw[] = {  // VERTICAL GUI Printing menu for drawing UI
     {0, 0, 0, 0},
     {0, 0, 0, 0},
     {0, 0, 0, 0},
