@@ -7,7 +7,7 @@ static void updateListeningMode(MENUITEMS * menu)
 {
   menu->items[4].label.index = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1) ? LABEL_OFF : LABEL_ON;
 
-  InfoHost_UpdateListeningMode();  // update listening mode
+  InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
 }
 
 // disconnect (free uart), wait for a key press and finally connect again (set uart pins to input)

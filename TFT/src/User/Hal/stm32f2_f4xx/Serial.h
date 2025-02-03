@@ -12,9 +12,10 @@ typedef struct
 {
   char * cache;
   uint32_t cacheSize;
-  volatile uint32_t wIndex;  // writing index
-  volatile uint32_t rIndex;  // reading index
-  volatile uint32_t flag;    // custom flag (for custom usage by the application)
+  volatile uint32_t wIndex;     // writing index
+  volatile uint32_t rIndex;     // reading index
+  volatile uint32_t flag;       // custom flag (for custom usage by the application)
+  volatile uint32_t timestamp;  // keep track of message timestamp (currently used only by TX message queue)
 } DMA_CIRCULAR_BUFFER;
 
 // config for USART DMA channels
@@ -53,6 +54,16 @@ static inline uint32_t Serial_GetReadingIndexRX(uint8_t port)
 static inline uint32_t Serial_GetWritingIndexRX(uint8_t port)
 {
   return dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
+}
+
+// retrieve the last submitted or sent message timestamp in the TX message queue of the provided physical serial port
+// based on Interrupt/DMA status while writing serial data in the background:
+//   - port: physical serial port
+//
+//   - return value: last submitted or sent message timestamp
+static inline uint32_t Serial_GetTimestampTX(uint8_t port)
+{
+  return dmaL1DataTX[port].timestamp;
 }
 
 // send a zero terminated message to UART port

@@ -41,7 +41,6 @@ enum
   FILAMENT_SENSOR_SMART,
 };
 
-static uint32_t posE_nextUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
 static bool posE_sendingWaiting = false;
 static bool sfs_alive = false;  // use an encoder disc to toggles the runout. Suitable for BigTreeTech Smart Filament Sensor
 
@@ -153,6 +152,7 @@ static inline bool FIL_SmartRunoutDetect(void)
 {
   static float lastPosE = 0.0f;
   static bool lastRunout = false;
+  static uint32_t nextUpdateTime = FIL_ALARM_REMINDER_TIME;  // give TFT time to connect to mainboard first before polling for runout
 
   float posE = coordinateGetExtruderActual();
   bool runout = FIL_NormalRunoutDetect();
@@ -160,10 +160,10 @@ static inline bool FIL_SmartRunoutDetect(void)
   do
   { // send M114 E to query extrude position continuously
 
-    if (OS_GetTimeMs() < posE_nextUpdateTime)  // if next check time not yet elapsed, do nothing
+    if (OS_GetTimeMs() < nextUpdateTime)  // if next check time not yet elapsed, do nothing
       break;
 
-    posE_nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_REFRESH_TIME;  // extend next check time
+    nextUpdateTime = OS_GetTimeMs() + FIL_POS_E_REFRESH_TIME;  // extend next check time
 
     // if M114 previously enqueued and not yet sent or pending command
     // (to avoid collision in gcode response processing), do nothing

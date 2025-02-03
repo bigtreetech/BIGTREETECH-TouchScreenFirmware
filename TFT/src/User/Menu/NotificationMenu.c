@@ -86,6 +86,7 @@ void menuNotification(void)
 
       #ifdef DEBUG_MONITORING
         case KEY_ICON_6:
+          monitoringSetMenu(false);  // use Monitoring menu
           OPEN_MENU(menuMonitoring);
           break;
       #endif

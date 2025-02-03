@@ -26,7 +26,7 @@ static const MENUITEMS settingsItems = {
 //   {2 * LCD_WIDTH / 3, 1 * BYTE_HEIGHT},};
 
 static char firmware_name[64] = "Unknown system";  // Marlin firmware version
-char machine_type[64]         = "3D Printer";      // Marlin machine type
+static char machine_type[64]  = "3D Printer";      // Marlin machine type
 static char access_point[64]  = "Connecting...";   // access point for RepRapFirmware
 static char ip_address[20]    = "0.0.0.0";         // IP address for RepRapFirmware
 
@@ -42,6 +42,11 @@ void infoSetMachineType(char * machine, uint8_t type_len)
   strncpy_no_pad(machine_type, machine, MIN(sizeof(machine_type), type_len));
 
   statusSetReady();
+}
+
+const char * infoGetMachineType(void)
+{
+  return machine_type;
 }
 
 void infoSetAccessPoint(char * ssid, uint8_t ssid_len)

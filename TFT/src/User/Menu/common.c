@@ -218,9 +218,9 @@ void fanReDraw(uint8_t fanIndex, bool drawHeader)
     displayExhibitHeader(fanID[fanIndex], (infoSettings.fan_percentage == 1) ? " % " : "PWM");
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurrentPercent(fanIndex), fanGetTargetPercent(fanIndex));
   else
-    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurrentSpeed(fanIndex), fanGetTargetSpeed(fanIndex));
 
   displayExhibitValue(tempstr);
 }
@@ -246,7 +246,7 @@ void percentageReDraw(uint8_t itemIndex, bool drawHeader)
   if (drawHeader)
     displayExhibitHeader((char *)textSelect((itemIndex == 0) ? LABEL_PERCENTAGE_SPEED : LABEL_PERCENTAGE_FLOW), "%");
 
-  sprintf(tempstr, DUAL_VAL_FORMAT, speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
+  sprintf(tempstr, DUAL_VAL_FORMAT, speedGetCurrentPercent(itemIndex), speedGetTargetPercent(itemIndex));
 
   displayExhibitValue(tempstr);
 }
@@ -304,12 +304,10 @@ NOZZLE_STATUS warmupNozzle(void)
     if (heatGetCurrentTemp(toolIndex) < infoSettings.min_ext_temp)
     { // low temperature warning
       char tempMsg[200];
-      char tempStr[100];
 
       sprintf(tempMsg, (char *)textSelect(LABEL_EXT_TEMPLOW), infoSettings.min_ext_temp);
-      sprintf(tempStr, (char *)textSelect(LABEL_HEAT_HOTEND), infoSettings.min_ext_temp);
       strcat(tempMsg, "\n");
-      strcat(tempMsg, tempStr);
+      strcat(tempMsg, (char *)textSelect(LABEL_WAIT_HEAT_UP));
 
       popupDialog(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg, LABEL_CONFIRM, LABEL_CANCEL, heatToMinTemp, NULL, NULL);
 
@@ -328,12 +326,10 @@ NOZZLE_STATUS warmupNozzle(void)
     if (heatGetCurrentTemp(toolIndex) < heatGetTargetTemp(toolIndex) - NOZZLE_TEMP_LAG)
     { // low temperature warning
       char tempMsg[200];
-      char tempStr[100];
 
       sprintf(tempMsg, (char *)textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(toolIndex));
-      sprintf(tempStr, (char *)textSelect(LABEL_WAIT_HEAT_UP));
       strcat(tempMsg, "\n");
-      strcat(tempMsg, tempStr);
+      strcat(tempMsg, (char *)textSelect(LABEL_WAIT_HEAT_UP));
 
       popupReminder(DIALOG_TYPE_ERROR, LABEL_WARNING, (uint8_t *)tempMsg);
 

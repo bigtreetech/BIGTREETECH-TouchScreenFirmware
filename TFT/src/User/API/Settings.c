@@ -1,6 +1,9 @@
 #include "Settings.h"
 #include "includes.h"
 
+SETTINGS infoSettings;
+MACHINE_SETTINGS infoMachineSettings;
+
 static const uint8_t default_serial_port[]  = {SP_1, SP_2, SP_3, SP_4};
 static const uint16_t default_max_temp[]    = MAX_TEMP;
 static const uint16_t default_max_fan[]     = FAN_MAX;
@@ -13,17 +16,16 @@ static const uint16_t default_pause_speed[] = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_
 static const uint16_t default_level_speed[] = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
 static const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
 
-SETTINGS infoSettings;
-MACHINE_SETTINGS infoMachineSettings;
-
 // init settings data with default values
 void initSettings(void)
 {
 // General Settings
   infoSettings.tx_slots               = TX_SLOTS;
+  infoSettings.tx_delay               = TX_DELAY;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
-                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
                                          (COMMAND_CHECKSUM << INDEX_COMMAND_CHECKSUM) |
+                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
+                                         (TX_PREFETCH << INDEX_TX_PREFETCH) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
                                          (EVENT_LED << INDEX_EVENT_LED) |

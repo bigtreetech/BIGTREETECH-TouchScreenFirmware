@@ -6,14 +6,14 @@
 #define POPUP_MAX_CHAR (X_MAX_CHAR * MAX_MSG_LINES)
 
 static const GUI_RECT singleBtnRect = POPUP_RECT_SINGLE_CONFIRM;
-const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
+static const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
 
 static BUTTON bottomSingleBtn = {
   // button location                      color before pressed   color after pressed
   POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
 };
 
-BUTTON bottomDoubleBtn[] = {
+static BUTTON bottomDoubleBtn[] = {
   {POPUP_RECT_DOUBLE_CONFIRM, NULL, 5, 1, DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN},
   {POPUP_RECT_DOUBLE_CANCEL,  NULL, 5, 1, MAT_RED,     MAT_RED,  MAT_LOWWHITE,   MAT_RED, WHITE,   MAT_RED},
 };
@@ -44,6 +44,15 @@ static uint8_t popup_msg[POPUP_MAX_CHAR];
 static uint8_t popup_ok[24];
 static uint8_t popup_cancel[24];
 static DIALOG_TYPE popup_type;
+
+const GUI_RECT * dialogGetDoubleBtnRect(void)
+{
+  return doubleBtnRect;
+}
+const BUTTON * dialogGetBottomDoubleBtn(void)
+{
+  return bottomDoubleBtn;
+}
 
 void _setDialogTitleStr(uint8_t * str)
 {

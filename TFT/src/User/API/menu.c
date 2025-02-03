@@ -624,7 +624,7 @@ void loopReminderManage(void)
     else
       setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
   }
-  else if (infoHost.listening_mode == true || isWritingMode() == true)
+  else if (infoHost.listening_mode == true || isCmdWritingMode() == true)
   {
     if (reminder.status == SYS_STATUS_LISTENING)  // no change, return
       return;

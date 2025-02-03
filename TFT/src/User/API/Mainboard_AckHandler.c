@@ -17,22 +17,22 @@ typedef struct
 
 // notify or ignore messages starting with following text
 static const ECHO knownEcho[] = {
-  {ECHO_NOTIFY_NONE, "busy: paused for user"},
-  {ECHO_NOTIFY_NONE, "busy: processing"},
-  {ECHO_NOTIFY_NONE, "Now fresh file:"},
-  {ECHO_NOTIFY_NONE, "Now doing file:"},
-  {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
-  {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
-  {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
-  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},        // M503
-  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},         // M503
-  {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
-  {ECHO_NOTIFY_NONE, "Config:"},                  // M360
-  {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
-  {ECHO_NOTIFY_TOAST, "echo:Bed"},                // M420
-  {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
-  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
-  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
+  {ECHO_NOTIFY_NONE,  "busy: paused for user"},
+  {ECHO_NOTIFY_NONE,  "busy: processing"},
+  {ECHO_NOTIFY_NONE,  "Now fresh file:"},
+  {ECHO_NOTIFY_NONE,  "Now doing file:"},
+  {ECHO_NOTIFY_NONE,  "echo:;"},                   // M503
+  {ECHO_NOTIFY_NONE,  "echo:  G"},                 // M503
+  {ECHO_NOTIFY_NONE,  "echo:  M"},                 // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},         // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},          // M503
+  {ECHO_NOTIFY_NONE,  "Cap:"},                     // M115
+  {ECHO_NOTIFY_NONE,  "Config:"},                  // M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},          // M500
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},                 // M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},                // M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},     // Tool Change
+  {ECHO_NOTIFY_NONE,  "Unknown command: \"M150"},  // M150
 };
 
 static const char magic_error[]   = "Error:";
@@ -438,7 +438,7 @@ void parseAck(void)
 
       detectAdvancedOk();
 
-      InfoHost_UpdateListeningMode();
+      InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
     }
 
     //----------------------------------------
@@ -557,7 +557,7 @@ void parseAck(void)
       // if regular OK response ("ok\n")
       if (ack_cache[ack_index] == '\n')
       {
-        InfoHost_HandleAckOk(infoSettings.tx_slots);
+        InfoHost_HandleAckOk(infoHost.target_tx_slots);
 
         goto parse_end;  // nothing else to do
       }
@@ -580,7 +580,7 @@ void parseAck(void)
     // "wait" response handling
     //----------------------------------------
 
-    // it is checked second (and not later on) because it is the most frequent response during printer idle
+    // it is checked second (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("wait"))
     {
       avoid_terminal = !infoSettings.terminal_ack;  // suppress "wait" from terminal
@@ -644,17 +644,17 @@ void parseAck(void)
     // parse and store feed rate percentage
     else if (ack_seen("FR:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Speed factor at ")))
     {
-      speedSetCurPercent(0, ack_value());
+      speedSetCurrentPercent(0, ack_value());
     }
     // parse and store flow rate percentage
     else if (ack_seen("Flow:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Flow rate at ")))
     {
-      speedSetCurPercent(1, ack_value());
+      speedSetCurrentPercent(1, ack_value());
     }
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))
     {
-      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
+      fanSetCurrentSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     #ifdef BUZZER_PIN
       // parse M300 sound coming from mainboard, play on TFT
@@ -676,10 +676,10 @@ void parseAck(void)
     else if (ack_starts_with("M710"))
     {
       if (ack_seen("S"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT, ack_value());
 
       if (ack_seen("I"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
     }
     // parse pause message
     else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
@@ -1281,18 +1281,20 @@ void parseAck(void)
       {
         string = &ack_cache[ack_index];
         string_start = ack_index;
+        string_end = string_start;
 
         if (ack_seen("KINEMATICS:"))  // as of MarlinFirmware/Marlin@3fd175a
           string_end = ack_index - sizeof("KINEMATICS:");
-        else if (ack_seen("EXTRUDER_COUNT:"))
-        {
-          if (MIXING_EXTRUDER == 0)
-            infoSettings.ext_count = ack_value();
-
+        else if (ack_seen("EXTRUDER_COUNT:"))  // for backward compatibility with older Marlin firmwares (not yet reporting "KINEMATICS:")
           string_end = ack_index - sizeof("EXTRUDER_COUNT:");
-        }
 
         infoSetMachineType(string, string_end - string_start);  // set printer name
+      }
+
+      if (ack_seen("EXTRUDER_COUNT:"))
+      {
+        if (MIXING_EXTRUDER == 0)
+          infoSettings.ext_count = ack_value();
       }
     }
     else if (ack_starts_with("Cap:"))

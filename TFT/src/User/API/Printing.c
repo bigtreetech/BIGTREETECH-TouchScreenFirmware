@@ -1,6 +1,8 @@
 #include "Printing.h"
 #include "includes.h"
 
+PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
+
 typedef struct
 {
   FIL        file;
@@ -28,8 +30,6 @@ static float lastEPos = 0;                 // used only to update stats in infoP
 
 static uint32_t nextUpdateTime = 0;
 static bool sendingWaiting = false;
-
-PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
 
 void setExtrusionDuringPause(bool extruded)
 {
@@ -104,6 +104,9 @@ static void waitForAbort(void)
   uint16_t rIndex_old = -1;  // out of band value -1 will guarantee the beginning of M108 transmission loop
   uint16_t rIndex;
 
+  popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+  loopPopup();  // trigger the immediate draw of the above popup
+
   TASK_LOOP_WHILE(!infoPrinting.aborted,
                   if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
@@ -112,8 +115,8 @@ static void waitForAbort(void)
                   }
                  );
 
-  // remove any enqueued command that could come from a supplementary serial port or TFT media
-  // (if printing from remote host or TFT media) during the loop above
+  // remove any enqueued command that could come from TFT media or a supplementary serial port
+  // (if printing from TFT media or remote host) during the loop above
   clearQueueAndMore();
 }
 
@@ -133,7 +136,7 @@ void updatePrintTime(void)
   {
     infoPrinting.elapsedTime++;
 
-    if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
+    if (infoPrinting.remainingTime > 0 && !heatIsWaiting())
       infoPrinting.remainingTime--;
   }
 }
@@ -145,7 +148,7 @@ uint32_t getPrintTime(void)
 
 void setPrintRemainingTime(int32_t remainingTime)
 {
-  float speedFactor = (float) (speedGetCurPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
+  float speedFactor = (float) (speedGetCurrentPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
 
   // Cura slicer put a negative value at the end instead of zero
   if (remainingTime < 0 || speedFactor <= 0.0f)
@@ -311,11 +314,11 @@ static void preparePrintSummary(void)
 {
   infoPrintSummary.time = infoPrinting.elapsedTime;
 
-  if (speedGetCurPercent(1) != 100)
+  if (speedGetCurrentPercent(1) != 100)
   {
-    infoPrintSummary.length = (infoPrintSummary.length * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    infoPrintSummary.weight = (infoPrintSummary.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    infoPrintSummary.cost   = (infoPrintSummary.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.length = (infoPrintSummary.length * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.weight = (infoPrintSummary.weight * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.cost   = (infoPrintSummary.cost   * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
   }
 }
 
@@ -389,7 +392,7 @@ static void completePrint(void)
       break;
   }
 
-  heatClearIsWaiting();
+  heatClearWaiting();
 }
 
 bool startPrintFromRemoteHost(const char * filename)
@@ -564,9 +567,6 @@ void abortPrint(void)
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-      loopPopup();  // trigger the immediate draw of the above popup
-
       abortAndTerminate();  // send a print abort command before calling the following waitForAbort() function
       break;
 
@@ -615,12 +615,18 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
     case FS_TFT_SD:
     case FS_TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
+      {
+        // update pause status just to block command queue feeding with gcodes from TFT media avoiding
+        // a possible deadlock in loop condition TASK_LOOP_WHILE(isNotEmptyCmdQueue())
+        infoPrinting.paused = true;
+
         TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
+      }
 
       static COORDINATE tmp;
 
-      bool isCoorRelative = coorGetRelative();
-      bool isExtrudeRelative = eGetRelative();
+      bool isRelative = coordinateGetRelative();
+      bool isRelativeE = coordinateGetRelativeExtruder();
 
       if (isPause)  // pause
       {
@@ -632,8 +638,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         {
           coordinateGetAll(&tmp);
 
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isRelative == true)  mustStoreCmd("G90\n");
+          if (isRelativeE == true) mustStoreCmd("M82\n");
 
           if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
@@ -648,8 +654,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
                          infoSettings.pause_feedrate[FEEDRATE_XY]);
           }
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isRelative == true)  mustStoreCmd("G91\n");
+          if (isRelativeE == true) mustStoreCmd("M83\n");
         }
 
         // store pause type only on pause
@@ -663,8 +669,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         }
         else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
         {
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isRelative == true)  mustStoreCmd("G90\n");
+          if (isRelativeE == true) mustStoreCmd("M82\n");
 
           if (extrusionDuringPause == true)  // check if extrusion done during Print -> Pause
           { // no purge
@@ -685,8 +691,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
           mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
           mustStoreCmd("G1 F%d\n", tmp.feedrate);
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isRelative == true)  mustStoreCmd("G91\n");
+          if (isRelativeE == true) mustStoreCmd("M83\n");
         }
       }
       break;
@@ -793,12 +799,12 @@ void setPrintResume(HOST_STATUS hostStatus)
     infoHost.status = hostStatus;  // if printing from (remote) onboard media
 }
 
-// get gcode command from TFT media (e.g. TFT SD card or TFT USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
-  if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // if not printing from TFT media
-  if (infoPrinting.paused || heatHasWaiting() || isNotEmptyCmdQueue()) return;
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return;      // if not printing from TFT media
+  if (infoPrinting.paused || heatIsWaiting()) return;
+  if (!InfoHost_IsCmdFromTFTSendable()) return;         // if gcode command from TFT media is not sendable
 
   // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:
   //   - initialize print restore, if any, storing a set of commands on command queue

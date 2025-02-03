@@ -39,11 +39,11 @@
 #define TS_DEBOUNCE_MS 20  // 20 ms
 #define TS_ERR_RANGE   10
 
-static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
-
 int32_t TS_CalPara[7];
 bool TS_Sound = true;
 void (* TS_ReDrawIcon)(uint8_t position, uint8_t isPressed) = NULL;
+
+static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
 
 void TS_GetCoordinates(uint16_t * x, uint16_t * y)
 {

@@ -29,17 +29,17 @@ static const GUI_POINT ss_val_point     = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 
 // info box msg area
 #ifdef PORTRAIT_MODE
-  const  GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                             START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y + 1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+  static const GUI_RECT msgRect = {START_X + 0.5 * ICON_WIDTH + 0 * SPACE_X + 2, ICON_START_Y + 0 * ICON_HEIGHT + 0 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                                   START_X + 2.5 * ICON_WIDTH + 1 * SPACE_X - 2, ICON_START_Y + 1 * ICON_HEIGHT + 0 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT recGantry = {START_X - 3,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
-                              START_X + 3 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+  static const GUI_RECT recGantry = {START_X - 3,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                                     START_X + 3 + 3 * ICON_WIDTH + 2 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #else
-  const  GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
-                             START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
+  static const GUI_RECT msgRect = {START_X + 1 * ICON_WIDTH + 1 * SPACE_X + 2, ICON_START_Y + 1 * ICON_HEIGHT + 1 * SPACE_Y + STATUS_MSG_BODY_YOFFSET,
+                                   START_X + 3 * ICON_WIDTH + 2 * SPACE_X - 2, ICON_START_Y + 2 * ICON_HEIGHT + 1 * SPACE_Y - STATUS_MSG_BODY_BOTTOM};
 
-  const GUI_RECT recGantry = {START_X,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
-                              START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
+  static const GUI_RECT recGantry = {START_X,                                SS_ICON_HEIGHT + ICON_START_Y + STATUS_GANTRY_YOFFSET,
+                                     START_X + 4 * ICON_WIDTH + 3 * SPACE_X, ICON_HEIGHT + SPACE_Y + ICON_START_Y - STATUS_GANTRY_YOFFSET};
 #endif
 
 static const MENUITEMS statusItems = {
@@ -75,6 +75,11 @@ static bool msgNeedRefresh = false;
 static char msgTitle[20];
 static char msgBody[MAX_MSG_LENGTH];
 
+const GUI_RECT * statusGetMsgRect(void)
+{
+  return &msgRect;
+}
+
 void statusSetMsg(const uint8_t * title, const uint8_t * msg)
 {
   strncpy_no_pad(msgTitle, (char *)title, sizeof(msgTitle));
@@ -89,7 +94,7 @@ void statusSetReady(void)
   if (infoHost.connected == false)
     strncpy_no_pad(msgBody, (char *)textSelect(LABEL_UNCONNECTED), sizeof(msgBody));
   else
-    snprintf(msgBody, sizeof(msgBody), "%s %s", machine_type, (char *)textSelect(LABEL_READY));
+    snprintf(msgBody, sizeof(msgBody), "%s %s", infoGetMachineType(), (char *)textSelect(LABEL_READY));
 
   msgNeedRefresh = true;
 }
@@ -175,9 +180,9 @@ static void statusDraw(void)
   lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
+    sprintf(tempstr, "%3d%%", fanGetCurrentPercent(currentFan));
   else
-    sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
+    sprintf(tempstr, "%3d", fanGetCurrentSpeed(currentFan));
 
   lvIcon.lines[1].text = (uint8_t *)tempstr;
 
@@ -187,7 +192,7 @@ static void statusDraw(void)
     // SPEED
     lvIcon.iconIndex = ICON_STATUS_SPEED;
     lvIcon.lines[0].text = (uint8_t *)speedID[0];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(0));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(0));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(3, &lvIcon, false);
@@ -195,7 +200,7 @@ static void statusDraw(void)
     // FLOW
     lvIcon.iconIndex = ICON_STATUS_FLOW;
     lvIcon.lines[0].text = (uint8_t *)speedID[1];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(1));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(1));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(4, &lvIcon, false);
@@ -203,7 +208,7 @@ static void statusDraw(void)
     // SPEED / FLOW
     lvIcon.iconIndex = speedIcons[currentSpeedID];
     lvIcon.lines[0].text = (uint8_t *)speedID[currentSpeedID];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(currentSpeedID));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(3, &lvIcon, true);

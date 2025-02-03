@@ -6,17 +6,17 @@
 const char * fanID[MAX_FAN_COUNT]  = FAN_DISPLAY_ID;
 const char * fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
-static uint8_t setFanSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t curFanSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t needSetFanSpeed = 0;
+static uint8_t targetSpeed[MAX_FAN_COUNT]  = {0};
+static uint8_t currentSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t targetSpeedNeeded           = 0;
 
 static bool ctrlFanSendingWaiting = false;
 
 void fanResetSpeed(void)
 {
-  needSetFanSpeed = 0;
-  memset(setFanSpeed, 0, sizeof(setFanSpeed));
-  memset(curFanSpeed, 0, sizeof(curFanSpeed));
+  memset(targetSpeed, 0, sizeof(targetSpeed));
+  memset(currentSpeed, 0, sizeof(currentSpeed));
+  targetSpeedNeeded = 0;
 }
 
 bool fanIsValid(const uint8_t index)
@@ -31,45 +31,45 @@ bool fanIsValid(const uint8_t index)
     return true;
 }
 
-void fanSetSpeed(const uint8_t i, const uint8_t speed)
+void fanSetTargetSpeed(const uint8_t i, const uint8_t speed)
 {
-  SET_BIT_VALUE(needSetFanSpeed, i, fanGetCurSpeed(i) != speed);
-  setFanSpeed[i] = speed;
+  SET_BIT_VALUE(targetSpeedNeeded, i, fanGetCurrentSpeed(i) != speed);
+  targetSpeed[i] = speed;
 }
 
-uint8_t fanGetSetSpeed(const uint8_t i)
+uint8_t fanGetTargetSpeed(const uint8_t i)
 {
-  return setFanSpeed[i];
+  return targetSpeed[i];
 }
 
-void fanSetPercent(const uint8_t i, const uint8_t percent)
+void fanSetTargetPercent(const uint8_t i, const uint8_t percent)
 {
-  fanSetSpeed(i, (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100);
+  fanSetTargetSpeed(i, (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100);
 }
 
-uint8_t fanGetSetPercent(const uint8_t i)
+uint8_t fanGetTargetPercent(const uint8_t i)
 {
-  return (setFanSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
+  return (targetSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
-void fanSetCurSpeed(const uint8_t i, const uint8_t speed)
+void fanSetCurrentSpeed(const uint8_t i, const uint8_t speed)
 {
-  curFanSpeed[i] = speed;
+  currentSpeed[i] = speed;
 }
 
-uint8_t fanGetCurSpeed(const uint8_t i)
+uint8_t fanGetCurrentSpeed(const uint8_t i)
 {
-  return curFanSpeed[i];
+  return currentSpeed[i];
 }
 
-void fanSetCurPercent(const uint8_t i, const uint8_t percent)
+void fanSetCurrentPercent(const uint8_t i, const uint8_t percent)
 {
-  curFanSpeed[i] = (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100;
+  currentSpeed[i] = (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100;
 }
 
-uint8_t fanGetCurPercent(const uint8_t i)
+uint8_t fanGetCurrentPercent(const uint8_t i)
 {
-  return (curFanSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
+  return (currentSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
 void loopCheckFan(void)
@@ -83,10 +83,10 @@ void loopCheckFan(void)
 
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (GET_BIT(needSetFanSpeed, i))
+    if (GET_BIT(targetSpeedNeeded, i))
     {
-      if (storeCmd(fanCmd[i], setFanSpeed[i]))
-        SET_BIT_OFF(needSetFanSpeed, i);
+      if (storeCmd(fanCmd[i], targetSpeed[i]))
+        SET_BIT_OFF(targetSpeedNeeded, i);
     }
   }
 }

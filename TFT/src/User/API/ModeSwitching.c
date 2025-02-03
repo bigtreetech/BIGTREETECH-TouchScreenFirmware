@@ -2,18 +2,17 @@
 #include "includes.h"
 
 static bool modeFreshBoot = true;
-
-bool modeSwitching = false;
+static bool modeSwitching = false;
 
 // change UI mode
 void Mode_Switch(void)
 {
-  int8_t nowMode = GET_BIT(infoSettings.mode, 0);  // Marlin mode or Touch mode
+  int8_t mode = GET_BIT(infoSettings.mode, 0);  // Marlin mode or Touch mode
   infoMenu.cur = 0;
 
-  HW_InitMode(nowMode);
+  HW_InitMode(mode);
 
-  switch (nowMode)
+  switch (mode)
   {
     case MODE_SERIAL_TSC:
       GUI_RestoreColorDefault();
@@ -53,6 +52,11 @@ void Mode_Switch(void)
       #endif
       break;
   }
+}
+
+void Mode_EnableSwitching(bool isEnabled)
+{
+  modeSwitching = isEnabled;
 }
 
 void Mode_CheckSwitching(void)

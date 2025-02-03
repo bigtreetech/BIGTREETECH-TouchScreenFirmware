@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20240203
+#define CONFIG_VERSION 20250130
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -42,6 +42,64 @@
 #define SP_4 0  // Default: 0
 
 /**
+ * Command Checksum
+ * If enabled:
+ * - The TFT enriches each G-code to be sent to the mainboard adding a leading sequential line number
+ *   and a trailing checksum appended after an "*" character used as separator.
+ *   The checksum is based on algorithm "CheckSum8 Xor" and it is calculated on the G-code with the
+ *   applied line number. E.g. "G28" is firstly enriched with a line number (e.g. "N1 G28") and
+ *   finally a checksum calculated on that enriched G-code is appended (e.g. "N1 G28*18").
+ *   A data integrity check (sequential line number check and checksum check) will be performed on
+ *   the mainboard.
+ *   In case of data mismatch (e.g. data corruption due to EMI on communication serial line):
+ *   - The mainboard will send to the TFT an error ACK message followed by a "Resend: " ACK message
+ *     to ask TFT to resend the G-code with the requested line number.
+ *   - The TFT will check the presence on an internal buffer of the G-code with the requested line
+ *     number:
+ *     - If found, the G-code is resent for a maximum of 3 attempts.
+ *     - If not found or the maximum number of attempts has been reached, the TFT will reset the line
+ *       number, with an "M110" G-code (immediately sent bypassing any other enqueued G-code), to the
+ *       requested line number just to try to avoid further retransmission requests for the same line
+ *       number or for any out of synch command already sent to the mainboard (if ADVANCED_OK feature
+ *       (see description of next setting "ADVANCED_OK") is enabled).
+ *
+ * NOTE: Disable it in case:
+ *       - Printing is controlled by a remote host (e.g. ESP3D, OctoPrint etc.) and a COMMAND_CHECKSUM
+ *         feature is enabled and managed by the remote host. Otherwise (COMMAND_CHECKSUM feature also
+ *         enabled in TFT), the TFT's COMMAND_CHECKSUM feature will always replace the one provided by
+ *         the remote host causing conflicts in case data mismatch will be notified by the mainboard.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define COMMAND_CHECKSUM 0  // Default: 0
+
+/**
+ * Advanced OK
+ * If enabled:
+ * - If "ADVANCED_OK" feature is enabled in Configuration_adv.h in Marlin firmware, the TFT will use
+ *   the available G-code TX slots indication provided by the mainboard to schedule the transmission
+ *   of multiple G-codes, if any, for a maximum of the given indication.
+ * - If "ADVANCED_OK" feature is disabled in Configuration_adv.h in Marlin firmware, the TFT will
+ *   support the transmission of G-codes according to the configured "TX_SLOTS" setting (see
+ *   description of next setting "TX_SLOTS").
+ * If disabled, the TFT will provide the standard transmission logic based on one G-code per time.
+ *
+ * NOTE: Disable it in case:
+ *       - No ADVANCED_OK feature is requested/needed by the user.
+ *       - ADVANCED_OK feature is not providing good printing results or if the mainboard notifies
+ *         frequent error ACK messages (e.g. unknown command or command checksum missmatch (if
+ *         COMMAND_CHECKSUM feature is enabled)) to the TFT during printing even using high values
+ *         (e.g. 5 or more) for "TX_DELAY" setting (see description of next setting "TX_DELAY").
+ *         Furthermore, in case COMMAND_CHECKSUM feature is enabled any out of synch command already
+ *         sent to the mainboard will be discarded by the mainboard and not resent by the TFT due the
+ *         current implementation of COMMAND_CHECKSUM feature on the TFT is limited to buffer only
+ *         the last sent command and not all the pending commands.
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define ADVANCED_OK 0  // Default: 0
+
+/**
  * TX Slots
  * Used/effective only in case "ADVANCED_OK" is also enabled.
  * Maximum number of G-code TX slots used by the TFT for the communication with the printer.
@@ -51,7 +109,7 @@
  *   - This setting allows a sort of static "ADVANCED_OK" feature implementation on TFT side just in
  *     case "ADVANCED_OK" feature is disabled in Marlin firmware. You have to set it according to the
  *     following key requirements:
- *     - a value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
+ *     - A value not bigger than "BUFSIZE" configured in Configuration_adv.h in Marlin firmware.
  *     - "RX_BUFFER_SIZE" properly configured in Configuration_adv.h in Marlin firmware.
  *       To be safe you need (MAX_CMD_SIZE * BUFSIZE) RX buffer. By default this is 96 * 4 bytes so
  *       you would need to at least set RX_BUFFER_SIZE to 512 bytes, practically half of that will
@@ -65,58 +123,46 @@
 #define TX_SLOTS 2  // Default: 1
 
 /**
- * Advanced OK
- * If enabled:
- * - if "ADVANCED_OK" feature is enabled in Configuration_adv.h in Marlin firmware, the TFT will use
- *   the available G-code TX slots indication provided by the mainboard to schedule the transmission
- *   of multiple G-codes, if any, for a maximum of the given indication.
- * - if "ADVANCED_OK" feature is disabled in Configuration_adv.h in Marlin firmware, the TFT will
- *   support the transmission of G-codes according to the configured "TX_SLOTS" setting.
- * If disabled, the TFT will provide the standard transmission logic based on one G-code per time.
+ * TX Delay
+ * Minimum delay (in ms) to apply between the last sent G-code and the next one to be sent to the
+ * mainboard.
+ * Minimum delay for the next G-code to send depends on ADVANCED_OK feature status:
+ * - If disabled: the delay is applied to the last received ACK message OK response timestamp.
+ * - If enabled: the delay is applied to the last sent G-code timestamp (timestamp taken when the
+ *   G-code transmission on serial line is completed).
  *
- * NOTE: Disable it in case:
- *       - no ADVANCED_OK feature is requested/needed by the user.
- *       - ADVANCED_OK feature is not providing good printing results or if the mainboard notifies
- *         frequent error ACK messages (e.g. unknown command) to the TFT during printing.
- *       - COMMAND_CHECKSUM feature (see description of next setting "COMMAND_CHECKSUM") is
- *         requested/needed by the user.
+ * NOTE: Increase it in case:
+ *       - The mainboard notifies frequent error ACK messages (e.g. unknown command or command checksum
+ *         missmatch (if COMMAND_CHECKSUM feature is enabled)) to the TFT during printing in particular
+ *         when the reported command is slightly misswritten at the beginning (e.g. "M14 E" instead of
+ *         "M114 E", "20" instead of "M220", "221" instead of "M221", "GX108.607 Y96.632 E0.02052"
+ *         instead of "G1 X108.607 Y96.632 E0.02052" etc.).
+ *         Typically, to avoid those error messages:
+ *         - A value of 1-2 is emough if ADVANCED_OK feature is disabled.
+ *         - A value of 3-4 is emough if ADVANCED_OK feature is enabled.
  *
- *   Options: [disable: 0, enable: 1]
+ *   Unit: [time in milliseconds]
+ *   Value range: [min: 0, max: 10]
  */
-#define ADVANCED_OK 0  // Default: 0
+#define TX_DELAY 0  // Default: 0
 
 /**
- * Command Checksum
- * The TFT enriches each G-code to be sent to the mainboard adding a leading sequential line number
- * and a trailing checksum appended after an "*" character used as separator.
- * The checksum is based on algorithm "CheckSum8 Xor" and it is calculated on the G-code with the
- * applied line number. E.g. "G28" is firstly enriched with a line number (e.g. "N1 G28") and finally
- * a checksum calculated on that enriched G-code is appended (e.g. "N1 G28*18").
- * A data integrity check (sequential line number check and checksum check) will be performed on the
- * mainboard. In case of data mismatch (e.g. data corruption due to EMI on communication serial line):
- * - the mainboard will send to the TFT an error ACK message followed by a "Resend: " ACK message to
- *   ask TFT to resend the G-code with the requested line number.
- * - the TFT will check the presence on an internal buffer of the G-code with the requested line number:
- *   - if found, the G-code is resent for a maximum of 3 attempts.
- *   - if not found or the maximum number of attempts has been reached, the TFT will reset the line
- *     number with an "M110" G-code (immediately sent bypassing any other enqueued G-code) to the
- *     requested line number just to try to avoid further retransmission requests for the same line
- *     number or for any out of synch command already sent to the mainboard (e.g. in case ADVANCED_OK
- *     feature is enabled in TFT).
+ * TX Prefetch
+ * Used/effective only when printing from TFT SD card / TFT USB disk.
+ * The TFT prefetches from TFT SD card / TFT USB disk the next G-code to be sent to the mainboard
+ * so it will be immediately ready to be sent to the mainboard (no extra latency to read, parse
+ * and enqueue from TFT media) when the G-code is scheduled to be sent.
  *
  * NOTE: Disable it in case:
- *       - printing is controlled by a remote host (e.g. ESP3D, OctoPrint etc.) and a COMMAND_CHECKSUM
- *         feature is enabled and managed by the remote host. Otherwise (COMMAND_CHECKSUM feature also
- *         enabled in TFT), the TFT's COMMAND_CHECKSUM feature will always replace the one provided by
- *         the remote host causing conflicts in case data mismatch will be notified by the mainboard.
- *       - ADVANCED_OK feature is enabled in TFT. Otherwise, any out of synch command already sent to
- *         the mainboard will be discarded by the mainboard and not resent by the TFT due the current
- *         implementation of COMMAND_CHECKSUM feature on the TFT buffers only the last sent command
- *         and not all the pending commands.
+ *       - The mainboard notifies frequent error ACK messages (e.g. unknown command or command checksum
+ *         missmatch (if COMMAND_CHECKSUM feature is enabled)) to the TFT during printing in particular
+ *         when the reported command is slightly misswritten at the beginning (e.g. "M14 E" instead of
+ *         "M114 E", "20" instead of "M220", "221" instead of "M221", "GX108.607 Y96.632 E0.02052"
+ *         instead of "G1 X108.607 Y96.632 E0.02052" etc.).
  *
  *   Options: [disable: 0, enable: 1]
  */
-#define COMMAND_CHECKSUM 0  // Default: 0
+#define TX_PREFETCH 0  // Default: 0
 
 /**
  * Emulated M600
@@ -1477,7 +1523,7 @@
  * Uncomment to enable a progress bar with 10% markers.
  * Comment to enable a standard progress bar.
  */
-//#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
+#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
 
 /**
  * Live Text Common Color Layout (Status Screen menu)

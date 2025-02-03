@@ -14,8 +14,8 @@ enum
   KEY_POPUP_CANCEL,
 };
 
-extern const GUI_RECT doubleBtnRect[];
-extern BUTTON bottomDoubleBtn[];
+const GUI_RECT * dialogGetDoubleBtnRect(void);
+const BUTTON * dialogGetBottomDoubleBtn(void);
 
 void _setDialogTitleStr(uint8_t * str);
 void _setDialogMsgStr(uint8_t * str);

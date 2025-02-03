@@ -47,7 +47,7 @@ static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and
   static FIL file;                              // used with writing mode
 #endif
 
-uint8_t getQueueCount(void)
+uint8_t getCmdQueueCount(void)
 {
   return cmdQueue.count;
 }
@@ -62,12 +62,17 @@ bool isFullCmdQueue(void)
   return (cmdQueue.count >= CMD_QUEUE_SIZE);
 }
 
-bool isNotEmptyCmdQueue(void)
+bool isIdleCmdQueue(void)
 {
-  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if queue not empty or no available gcode tx slot
+  return (cmdQueue.count == 0 && infoHost.tx_count == 0);  // if empty command queue and no pending command
 }
 
-bool isEnqueued(const CMD cmd)
+bool isNotEmptyCmdQueue(void)
+{
+  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if not empty command queue or no available command tx slot
+}
+
+bool isEnqueuedCmd(const CMD cmd)
 {
   for (int i = 0; i < cmdQueue.count; i++)
   {
@@ -78,12 +83,12 @@ bool isEnqueued(const CMD cmd)
   return false;
 }
 
-bool isWritingMode(void)
+bool isCmdWritingMode(void)
 {
   return (writing_mode != NO_WRITING);
 }
 
-// common store cmd
+// common store gcode cmd on cmdQueue queue
 static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
@@ -93,7 +98,7 @@ static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va
   pQueue->count++;
 }
 
-// store gcode cmd to cmdQueue queue.
+// store gcode cmd on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmd(const char * format, ...)
@@ -114,7 +119,7 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
-// store gcode cmd to cmdQueue queue.
+// store gcode cmd on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed
 // and it will wait for the queue to be able to store the command
@@ -134,7 +139,7 @@ void mustStoreCmd(const char * format, ...)
   va_end(va);
 }
 
-// store Script cmd to cmdQueue queue.
+// store script cmd on cmdQueue queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
 void mustStoreScript(const char * format, ...)
 {
@@ -165,7 +170,7 @@ void mustStoreScript(const char * format, ...)
   }
 }
 
-// store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) to cmdQueue queue.
+// store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
@@ -211,7 +216,7 @@ static char * stripCmd(char * cmdPtr)
   return cmdPtr;
 }
 
-// get the data of the next to be sent command in cmdQueue
+// get the data of the next command in command queue to be sent
 // and return "true" if sent from TFT, otherwise "false"
 static inline bool getCmd(void)
 {
@@ -221,7 +226,7 @@ static inline bool getCmd(void)
   // strip out any leading space from the passed command.
   // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
   //
-  // set cmd_base_index with index of gcode command
+  // set cmd_base_index with index of gcode
   //
   cmd_base_index = stripCmd(cmd_ptr) - cmd_ptr;                 // e.g. "N1   G28*18\n" -> "G28*18\n"
 
@@ -267,8 +272,8 @@ static bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    // if the message under processing is from command queue and COMMAND_CHECKSUM feature is enabled,
-    // apply line number and checksum and store the new gcode in the retry buffer
+    // if the command under processing is from command queue and COMMAND_CHECKSUM feature is enabled,
+    // apply line number and checksum and store the new gcode on the retry buffer
     if (!cmdRetryInfo.retry && GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM) == 1)
       setCmdRetryInfo(addCmdLineNumberAndChecksum(cmd_ptr, cmd_base_index, &cmd_len));  // cmd_ptr and cmd_len are updated
 
@@ -289,7 +294,7 @@ static bool sendCmd(bool purge, bool avoidTerminal)
     Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
-  if (!cmdRetryInfo.retry)  // if the message under processing is from command queue, dequeue the command
+  if (!cmdRetryInfo.retry)  // if the command under processing is from command queue, dequeue the command
   {
     cmdQueue.count--;
     cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
@@ -311,7 +316,7 @@ static bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
 
-// check the presence of the specified "keyword" string in the current gcode command
+// check the presence of the specified "keyword" string in the current command
 // starting the search from index "index"
 static bool cmd_seen_from(uint8_t index, const char * keyword)
 {
@@ -334,7 +339,7 @@ static bool cmd_seen_from(uint8_t index, const char * keyword)
   return false;
 }
 
-// check the presence of the specified "code" character in the current gcode command
+// check the presence of the specified "code" character in the current command
 static bool cmd_seen(const char code)
 {
   cmd_index = cmd_base_index;
@@ -496,16 +501,16 @@ static inline void writeRemoteTFT(void)
 
 #endif  // SERIAL_PORT_2
 
-static void setWaitHeating(uint8_t index)
+static void setHeatingWaiting(uint8_t index)
 {
   if (cmd_seen('R'))
   {
     cmd_ptr[cmd_index - 1] = 'S';
-    heatSetIsWaiting(index, true);
+    heatSetWaiting(index, true);
   }
   else if (cmd_seen('S'))
   {
-    heatSetIsWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
+    heatSetWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
   }
 }
 
@@ -621,7 +626,9 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 // parse and send gcode cmd in cmdQueue queue
 void sendQueueCmd(void)
 {
-  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry)) return;
+  // if no gcode tx slot available, or no gcode in command queue and no pending command retry,
+  // or no minimum delay for next sending is elapsed, nothing to do
+  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) || InfoHost_IsCmdDelayElapsed()) return;
 
   bool avoid_terminal = false;
 
@@ -964,11 +971,11 @@ void sendQueueCmd(void)
         #endif
 
         case 82:  // M82
-          eSetRelative(false);
+          coordinateSetRelativeExtruder(false);
           break;
 
         case 83:  // M83
-          eSetRelative(true);
+          coordinateSetRelativeExtruder(true);
           break;
 
         case 105:  // M105
@@ -996,11 +1003,11 @@ void sendQueueCmd(void)
           break;
 
         case 106:  // M106
-          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, cmd_seen('S') ? cmd_value() : 100);
+          fanSetCurrentSpeed(cmd_seen('P') ? cmd_value() : 0, cmd_seen('S') ? cmd_value() : 100);
           break;
 
         case 107:  // M107
-          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
+          fanSetCurrentSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
           break;
 
         case 109:  // M109
@@ -1010,7 +1017,7 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin, send M104
-            setWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+            setHeatingWaiting(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
         // no break here. The data processing of M109 is the same as that of M104 below
         case 104:  // M104
@@ -1080,7 +1087,7 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin, send M140
-            setWaitHeating(BED);
+            setHeatingWaiting(BED);
           }
         // no break here. The data processing of M190 is the same as that of M140 below
         case 140:  // M140
@@ -1094,7 +1101,7 @@ void sendQueueCmd(void)
           if (fromTFT)
           {
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin, send M141
-            setWaitHeating(CHAMBER);
+            setHeatingWaiting(CHAMBER);
           }
         // no break here. The data processing of M191 is the same as that of M141 below
         case 141:  // M141
@@ -1198,7 +1205,7 @@ void sendQueueCmd(void)
 
         case 220:  // M220
           if (cmd_seen('S'))
-            speedSetCurPercent(0, cmd_value());
+            speedSetCurrentPercent(0, cmd_value());
 
           if (fromTFT)
             speedQueryClearSendingWaiting();
@@ -1206,7 +1213,7 @@ void sendQueueCmd(void)
 
         case 221:  // M221
           if (cmd_seen('S'))
-            speedSetCurPercent(1, cmd_value());
+            speedSetCurrentPercent(1, cmd_value());
 
           if (fromTFT)
             speedQueryClearSendingWaiting();
@@ -1389,10 +1396,10 @@ void sendQueueCmd(void)
 
         case 710:  // M710 controller fan
           if (cmd_seen('S'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
+            fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
 
           if (cmd_seen('I'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
+            fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
 
           if (fromTFT)
             ctrlFanQueryClearSendingWaiting();
@@ -1463,7 +1470,7 @@ void sendQueueCmd(void)
         {
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
-            if (cmd_seen(axis_id[i]))
+            if (cmd_seen(axisID[i]))
               coordinateSetAxisTarget(i, cmd_float());
           }
 
@@ -1517,31 +1524,31 @@ void sendQueueCmd(void)
         #endif
 
         case 90:  // G90, set absolute position mode, in Marlin this includes the extruder position unless overridden by M83
-          coorSetRelative(false);
+          coordinateSetRelative(false);
 
           if (infoMachineSettings.firmwareType == FW_MARLIN)
-            eSetRelative(false);
+            coordinateSetRelativeExtruder(false);
           break;
 
         case 91:  // G91, set relative position mode, in Marlin this includes the extruder position unless overridden by M82
-          coorSetRelative(true);
+          coordinateSetRelative(true);
 
           if (infoMachineSettings.firmwareType == FW_MARLIN)
-            eSetRelative(true);
+            coordinateSetRelativeExtruder(true);
           break;
 
         case 92:  // G92
         {
-          bool coorRelative = coorGetRelative();
-          bool eRelative = eGetRelative();
+          bool relative = coordinateGetRelative();
+          bool relativeE = coordinateGetRelativeExtruder();
 
           // set to absolute mode
-          coorSetRelative(false);
-          eSetRelative(false);
+          coordinateSetRelative(false);
+          coordinateSetRelativeExtruder(false);
 
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
-            if (cmd_seen(axis_id[i]))
+            if (cmd_seen(axisID[i]))
             {
               coordinateSetAxisTarget(i, cmd_float());
 
@@ -1553,8 +1560,8 @@ void sendQueueCmd(void)
           }
 
           // restore mode
-          coorSetRelative(coorRelative);
-          eSetRelative(eRelative);
+          coordinateSetRelative(relative);
+          coordinateSetRelativeExtruder(relativeE);
           break;
         }
       }

@@ -281,9 +281,9 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
 
       case ICON_POS_FAN:
         if (infoSettings.fan_percentage == 1)
-          sprintf(tempstrBottom, "%3d%%", fanGetCurPercent(currentFan));  // 4 chars
+          sprintf(tempstrBottom, "%3d%%", fanGetCurrentPercent(currentFan));  // 4 chars
         else
-          sprintf(tempstrBottom, "%3d ", fanGetCurSpeed(currentFan));  // 4 chars
+          sprintf(tempstrBottom, "%3d ", fanGetCurrentSpeed(currentFan));  // 4 chars
         break;
 
       case ICON_POS_TIM:
@@ -303,7 +303,7 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case ICON_POS_SPD:
-        sprintf(tempstrBottom, "%3d%%", speedGetCurPercent(currentSpeedID));
+        sprintf(tempstrBottom, "%3d%%", speedGetCurrentPercent(currentSpeedID));
         break;
 
       default:
@@ -436,7 +436,7 @@ static inline void drawPrintInfo(void)
 
   GUI_SetColor(INFOMSG_FONT_COLOR);
   GUI_SetBkColor(INFOMSG_BG_COLOR);
-  GUI_DispStringInPrect(&msgRect, LABEL_CLICK_FOR_MORE);
+  GUI_DispStringInPrect(statusGetMsgRect(), LABEL_CLICK_FOR_MORE);
   GUI_RestoreColorDefault();
 }
 
@@ -568,9 +568,9 @@ void menuPrinting(void)
     }
 
     // check fan speed change
-    if (nowFan[currentFan] != fanGetCurSpeed(currentFan))
+    if (nowFan[currentFan] != fanGetCurrentSpeed(currentFan))
     {
-      nowFan[currentFan] = fanGetCurSpeed(currentFan);
+      nowFan[currentFan] = fanGetCurrentSpeed(currentFan);
 
       reDrawPrintingValue(ICON_POS_FAN, LIVE_INFO_BOTTOM_ROW);
     }
@@ -631,9 +631,9 @@ void menuPrinting(void)
     }
 
     // check change in speed or flow
-    if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
+    if (curspeed[currentSpeedID] != speedGetCurrentPercent(currentSpeedID))
     {
-      curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
+      curspeed[currentSpeedID] = speedGetCurrentPercent(currentSpeedID);
 
       reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_BOTTOM_ROW);
     }

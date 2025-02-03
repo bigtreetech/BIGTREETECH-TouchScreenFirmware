@@ -198,7 +198,7 @@ void powerFailedCreate(char * path)
       // if PLR file not loaded, initilaize data. Otherwise use loaded data
       // so also powerFailedInitRestore() function can be used
       if (!load_ok)
-        memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
+        memset(&infoBreakPoint, 0, sizeof(infoBreakPoint));
 
       if (f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
       {
@@ -219,7 +219,6 @@ void powerFailedCache(uint32_t offset)
   if (!create_ok) return;  // if PLR file not created
 
   if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // if Z axis not changed
-  if (isNotEmptyCmdQueue()) return;
 
   if (!isPaused())  // if not paused, update printing progress status
   {
@@ -231,8 +230,8 @@ void powerFailedCache(uint32_t offset)
     }
 
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetCurPercent(0);  // speed percent
-    infoBreakPoint.flow = speedGetCurPercent(1);   // flow percent
+    infoBreakPoint.speed = speedGetCurrentPercent(0);  // speed percent
+    infoBreakPoint.flow = speedGetCurrentPercent(1);   // flow percent
 
     for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // tool nozzle
     {
@@ -248,11 +247,11 @@ void powerFailedCache(uint32_t offset)
 
     for (uint8_t i = 0; i < infoSettings.fan_count; i++)
     {
-      infoBreakPoint.fan[i] = fanGetCurSpeed(i);
+      infoBreakPoint.fan[i] = fanGetCurrentSpeed(i);
     }
 
-    infoBreakPoint.relative = coorGetRelative();
-    infoBreakPoint.relative_e = eGetRelative();
+    infoBreakPoint.relative = coordinateGetRelative();
+    infoBreakPoint.relative_e = coordinateGetRelativeExtruder();
   }
   else if (infoBreakPoint.pause)  // if paused and the pause state has been saved, nothing to do
   {

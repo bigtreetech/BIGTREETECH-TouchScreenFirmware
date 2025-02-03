@@ -62,7 +62,7 @@ uint8_t Touch_Enc_ReadPos(void)
   {
     move = false;
     sy = 0;
-    modeSwitching = false;  // resume mode switching
+    Mode_EnableSwitching(false);  // resume mode switching
 
     return 0;
   }
@@ -79,9 +79,9 @@ uint8_t Touch_Enc_ReadPos(void)
   move = true;
 
   if (ex > LCD_FREE_WIDTH)  // if touched navigation area, stop mode switching
-    modeSwitching = true;
+    Mode_EnableSwitching(true);
   else
-    modeSwitching = false;
+    Mode_EnableSwitching(false);
 
   if (ex > LCD_FREE_WIDTH)
   {

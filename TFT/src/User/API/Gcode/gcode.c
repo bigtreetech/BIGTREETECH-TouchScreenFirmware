@@ -61,7 +61,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmdQueue());  // wait for the communication to be clean
 
   requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
@@ -72,14 +72,14 @@ static void resetRequestCommandInfo(
 
 void detectAdvancedOk(void)
 {
-  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);  // backup the configured ADVANCED_OK setting
+  uint8_t advanced_ok = GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK);  // save the configured ADVANCED_OK feature status
   uint8_t cmd_index = 0;
 
-  // temporary disable the ADVANCED_OK feature (if enabled) just to allow the TFT to send only one gcode
+  // temporary disable ADVANCED_OK feature (if enabled) just to allow the TFT to send only one gcode
   // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
   SET_BIT_OFF(infoSettings.general_settings, INDEX_ADVANCED_OK);
 
-  TASK_LOOP_WHILE(isPendingCmd() && isNotEmptyCmdQueue());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmdQueue());  // wait for the communication to be clean
 
   resetRequestCommandInfo("ok",   // the magic to identify the start
                           "ok",   // the magic to identify the stop
@@ -98,15 +98,15 @@ void detectAdvancedOk(void)
     {
       if (strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10) != 0)  // if different than 0
       {
-        // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
-        infoHost.target_tx_slots = infoSettings.tx_slots = strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10);
+        // update target tx slots to the value detected by TFT
+        InfoHost_UpdateTargetTxSlots((uint8_t) strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10));
       }
     }
   }
 
   clearRequestCommandInfo();
 
-  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);  // restore the configured ADVANCED_OK setting
+  SET_BIT_VALUE(infoSettings.general_settings, INDEX_ADVANCED_OK, advanced_ok);  // restore the configured ADVANCED_OK feature status
 }
 
 /**
@@ -305,7 +305,7 @@ void request_M98(const char * filename)
   mustStoreCmd(command);
 
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
-  TASK_LOOP_WHILE(isEnqueued(command));
+  TASK_LOOP_WHILE(isEnqueuedCmd(command));
 
   rrfStatusQueryFast();
 

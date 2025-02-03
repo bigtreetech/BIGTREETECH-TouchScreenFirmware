@@ -4,16 +4,15 @@
 #define RRF_NORMAL_STATUS_QUERY_MS 1000
 #define RRF_FAST_STATUS_QUERY_MS   500
 
+bool starting_print = false;
+
 // available status: status:
 // I=idle, P=printing from SD card, S=stopped (i.e. needs a reset), C=running config file (i.e starting up),
 // A=paused, D=pausing, R=resuming from a pause, B=busy (e.g. running a macro), F=performing firmware update
 static char rrf_status = 'I';
 static bool was_printing = false;
-
 static uint16_t rrf_query_interval = RRF_NORMAL_STATUS_QUERY_MS;
 static bool macro_busy = false;
-
-bool starting_print = false;
 
 void rrfStatusSet(char status)
 {

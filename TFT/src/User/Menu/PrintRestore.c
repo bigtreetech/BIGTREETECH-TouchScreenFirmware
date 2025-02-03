@@ -18,12 +18,12 @@ void menuPrintRestore(void)
     loadLabelText((uint8_t *)okTxt, LABEL_CONFIRM);
     loadLabelText((uint8_t *)cancelTxt, LABEL_CANCEL);
 
-    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t *)infoFile.path,
+    popupDrawPage(DIALOG_TYPE_QUESTION, (BUTTON *) dialogGetBottomDoubleBtn(), textSelect(LABEL_POWER_FAILED), (uint8_t *)infoFile.path,
                   (uint8_t *)okTxt, (uint8_t *)cancelTxt);
 
     while (MENU_IS(menuPrintRestore))
     {
-      key_num = KEY_GetValue(2, doubleBtnRect);
+      key_num = KEY_GetValue(2, dialogGetDoubleBtnRect());
 
       switch (key_num)
       {

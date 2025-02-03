@@ -149,7 +149,7 @@ static inline void Serial_DMA_Config(uint8_t port)
 
 static void Serial_ClearData(uint8_t port)
 {
-  dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].cacheSize = 0;
+  dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].timestamp = dmaL1DataRX[port].cacheSize = 0;
 
   if (dmaL1DataRX[port].cache != NULL)
   {
@@ -157,7 +157,7 @@ static void Serial_ClearData(uint8_t port)
     dmaL1DataRX[port].cache = NULL;
   }
 
-  dmaL1DataTX[port].wIndex = dmaL1DataTX[port].rIndex = dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize = 0;
+  dmaL1DataTX[port].wIndex = dmaL1DataTX[port].rIndex = dmaL1DataTX[port].flag = dmaL1DataTX[port].timestamp = dmaL1DataTX[port].cacheSize = 0;
 
   if (dmaL1DataTX[port].cache != NULL)
   {
@@ -218,6 +218,8 @@ static void Serial_Send_TX(uint8_t port)
 
 void Serial_Put(uint8_t port, const char * msg)
 {
+  dmaL1DataTX[port].timestamp = OS_GetTimeMs();  // keep track of last submitted message timestamp
+
   while (*msg)
   {
     // setup TX DMA, if no '\n' yet, but buffer is full AND DMA is not in progress already (waiting for Transfer Complete interrupt)
@@ -232,7 +234,7 @@ void Serial_Put(uint8_t port, const char * msg)
     dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
 
     if ((*msg == '\n') && ((USART_CTL0(Serial[port].uart) & USART_CTL0_TCIE) == 0))
-      Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
+      Serial_Send_TX(port);  // start DMA process if message is complete and DMA is not in progress already
 
     msg++;  // let the compiler optimize this, no need to do it manually!
   }
@@ -242,6 +244,8 @@ void Serial_Put(uint8_t port, const char * msg)
 
 void Serial_Put(uint8_t port, const char * msg)
 {
+  dmaL1DataTX[port].timestamp = OS_GetTimeMs();  // keep track of last submitted message timestamp
+
   while (*msg)
   {
     // blocking! wait for buffer to become available
@@ -279,10 +283,13 @@ void USART_IRQHandler(uint8_t port)
       //
       if (DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channelTX) == 0)  // sending is complete
       {
+        // NOTE: it marks message timestamp twice if transfer was split into 2 parts
+        dmaL1DataTX[port].timestamp = OS_GetTimeMs();              // keep track of last sent message timestamp
+
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + dmaL1DataTX[port].flag) % dmaL1DataTX[port].cacheSize;
         dmaL1DataTX[port].flag = 0;
 
-        if (dmaL1DataTX[port].wIndex != dmaL1DataTX[port].rIndex)  // is more data available?
+        if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)  // is more data available?
           Serial_Send_TX(port);                                    // continue sending data
         else
           USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TCIE;       // disable Transfer Complete (TC) interrupt, nothing more to do
@@ -290,17 +297,20 @@ void USART_IRQHandler(uint8_t port)
       // else: more data is coming, wait for next Transfer Complete (TC) interrupt
     }
   #else  // TX interrupt based serial writing
-    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)  // check for TBE interrupt
+    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)                                 // check for TBE interrupt
     {
-      if (dmaL1DataTX[port].rIndex == dmaL1DataTX[port].wIndex)       // no more data?
+      if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                      // is more data available?
       {
-        USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TBEIE;           // disable TBE interrupt
-      }
-      else
-      {
+        if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                               // is message complete?
+          dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                              // keep track of last sent message timestamp
+
         USART_DATA(Serial[port].uart) = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];  // write next available character
 
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;     // increase reading index
+      }
+      else
+      {
+        USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TBEIE;                                          // disable TXE interrupt, nothing more to do
       }
     }
   #endif

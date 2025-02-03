@@ -54,8 +54,8 @@ void menuSpeed(void)
 
   speedQuery();
 
-  speedSetPercent(item_index, speedGetCurPercent(item_index));
-  lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
+  speedSetTargetPercent(item_index, speedGetCurrentPercent(item_index));
+  lastSpeed = (LASTSPEED) {speedGetCurrentPercent(item_index), speedGetTargetPercent(item_index)};
 
   percentageItems.title.index = itemPercentTypeTitle[item_index];
   percentageItems.items[KEY_ICON_4] = itemPercentType[item_index];
@@ -72,16 +72,16 @@ void menuSpeed(void)
     {
       case KEY_ICON_0:
       case KEY_DECREASE:
-        if (speedGetSetPercent(item_index) > SPEED_MIN)
-          speedSetPercent(item_index, speedGetSetPercent(item_index) - percentSteps[percentSteps_index]);
+        if (speedGetTargetPercent(item_index) > SPEED_MIN)
+          speedSetTargetPercent(item_index, speedGetTargetPercent(item_index) - percentSteps[percentSteps_index]);
         break;
 
       case KEY_INFOBOX:
       {
-        uint16_t val = editIntValue(SPEED_MIN, SPEED_MAX, 100, speedGetCurPercent(item_index));
+        uint16_t val = editIntValue(SPEED_MIN, SPEED_MAX, 100, speedGetCurrentPercent(item_index));
 
-        if (val != speedGetSetPercent(item_index))
-          speedSetPercent(item_index, val);
+        if (val != speedGetTargetPercent(item_index))
+          speedSetTargetPercent(item_index, val);
 
         percentageReDraw(item_index, true);
         break;
@@ -89,8 +89,8 @@ void menuSpeed(void)
 
       case KEY_ICON_3:
       case KEY_INCREASE:
-        if (speedGetSetPercent(item_index) < SPEED_MAX)
-          speedSetPercent(item_index, speedGetSetPercent(item_index) + percentSteps[percentSteps_index]);
+        if (speedGetTargetPercent(item_index) < SPEED_MAX)
+          speedSetTargetPercent(item_index, speedGetTargetPercent(item_index) + percentSteps[percentSteps_index]);
         break;
 
       case KEY_ICON_4:
@@ -113,7 +113,7 @@ void menuSpeed(void)
         break;
 
       case KEY_ICON_6:
-        speedSetPercent(item_index, 100);
+        speedSetTargetPercent(item_index, 100);
         break;
 
       case KEY_ICON_7:
@@ -124,9 +124,9 @@ void menuSpeed(void)
         break;
     }
 
-    if ((lastSpeed.cur != speedGetCurPercent(item_index)) || (lastSpeed.set != speedGetSetPercent(item_index)))
+    if ((lastSpeed.cur != speedGetCurrentPercent(item_index)) || (lastSpeed.set != speedGetTargetPercent(item_index)))
     {
-      lastSpeed = (LASTSPEED) {speedGetCurPercent(item_index), speedGetSetPercent(item_index)};
+      lastSpeed = (LASTSPEED) {speedGetCurrentPercent(item_index), speedGetTargetPercent(item_index)};
 
       percentageReDraw(item_index, false);
     }

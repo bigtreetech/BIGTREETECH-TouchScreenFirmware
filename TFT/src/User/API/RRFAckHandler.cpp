@@ -156,12 +156,12 @@ void ParseACKJsonParser::value(const char * value)
       break;
 
     case sfactor:
-      speedSetCurPercent(0, strtod((char *)value, NULL));
+      speedSetCurrentPercent(0, strtod((char *)value, NULL));
       break;
 
     case efactor:
       if (index == heatGetToolIndex())
-        speedSetCurPercent(1, strtod((char *)value, NULL));
+        speedSetCurrentPercent(1, strtod((char *)value, NULL));
       break;
 
     case baby_step:
@@ -176,7 +176,7 @@ void ParseACKJsonParser::value(const char * value)
 
     case fan_percent:
       if (index != 0 && index <= infoSettings.fan_count)  // index 0 is an alias for default tool fan
-        fanSetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
+        fanSetTargetPercent(index - 1, strtod((char *)value, NULL) + 0.5f);
       break;
 
     case fanRPM:

@@ -5,33 +5,33 @@
 
 static const char * const speedCmd[SPEED_NUM] = {"M220", "M221"};
 
-static uint16_t setPercent[SPEED_NUM] = {100, 100};
-static uint16_t curPercent[SPEED_NUM] = {100, 100};
-static uint8_t needSetPercent = 0;
+static uint16_t targetPercent[SPEED_NUM]  = {100, 100};
+static uint16_t currentPercent[SPEED_NUM] = {100, 100};
+static uint8_t targetPercentNeeded        = 0;
 
 static bool speedSendingWaiting = false;
 
-void speedSetPercent(const uint8_t tool, const uint16_t per)
+void speedSetTargetPercent(const uint8_t tool, const uint16_t per)
 {
   uint16_t value = NOBEYOND(SPEED_MIN, per, SPEED_MAX);
 
-  SET_BIT_VALUE(needSetPercent, tool, value != curPercent[tool]);
-  setPercent[tool] = value;
+  SET_BIT_VALUE(targetPercentNeeded, tool, value != currentPercent[tool]);
+  targetPercent[tool] = value;
 }
 
-uint16_t speedGetSetPercent(const uint8_t tool)
+uint16_t speedGetTargetPercent(const uint8_t tool)
 {
-  return setPercent[tool];
+  return targetPercent[tool];
 }
 
-void speedSetCurPercent(const uint8_t tool, const uint16_t per)
+void speedSetCurrentPercent(const uint8_t tool, const uint16_t per)
 {
-  curPercent[tool] = per;
+  currentPercent[tool] = per;
 }
 
-uint16_t speedGetCurPercent(const uint8_t tool)
+uint16_t speedGetCurrentPercent(const uint8_t tool)
 {
-  return curPercent[tool];
+  return currentPercent[tool];
 }
 
 void loopCheckSpeed(void)
@@ -48,10 +48,10 @@ void loopCheckSpeed(void)
     if (infoSettings.ext_count == 0 && i > 0)  // don't poll M221 if there are no extruders
       continue;
 
-    if (GET_BIT(needSetPercent, i))
+    if (GET_BIT(targetPercentNeeded, i))
     {
-      if (storeCmd("%s S%d D%d\n", speedCmd[i], setPercent[i], heatGetToolIndex()))
-        SET_BIT_OFF(needSetPercent, i);
+      if (storeCmd("%s S%d D%d\n", speedCmd[i], targetPercent[i], heatGetToolIndex()))
+        SET_BIT_OFF(targetPercentNeeded, i);
     }
   }
 }

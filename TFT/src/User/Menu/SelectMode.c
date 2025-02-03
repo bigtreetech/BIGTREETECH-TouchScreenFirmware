@@ -41,13 +41,13 @@ static inline MKEY_VALUES MKeyGetValue(void)
   return (MKEY_VALUES)KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
 }
 
-static void drawSelectedMode(int8_t nowMode)
+static void drawSelectedMode(int8_t mode)
 {
   const uint8_t border_off = 4;
 
   for (uint8_t i = 0; i < MODE_COUNT; i++)
   {
-    GUI_SetColor(i == nowMode ? infoSettings.marlin_font_color : MENU_BACKGROUND_COLOR);
+    GUI_SetColor(i == mode ? infoSettings.marlin_font_color : MENU_BACKGROUND_COLOR);
     GUI_DrawRect(rect_of_mode[i].x0 - border_off, rect_of_mode[i].y0 - border_off,
                  rect_of_mode[i].x1 + border_off, rect_of_mode[i].y1 + border_off);
   }

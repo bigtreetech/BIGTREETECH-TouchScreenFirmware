@@ -51,8 +51,8 @@ static inline void DrawListItemPress(const GUI_RECT * rect, bool pressed)
     GUI_SetColor(infoSettings.bg_color);
     GUI_DrawPrect(rect);
     GUI_SetColor(infoSettings.list_border_color);
-    GUI_DrawLine(rect->x0, rect->y0 - 1, rect->x1 - 1, rect->y0 - 1);
-    GUI_DrawLine(rect->x0, rect->y1 - 1, rect->x1 - 1, rect->y1 - 1);
+    GUI_HLine(rect->x0, rect->y0, rect->x1 - rect->x0);
+    GUI_HLine(rect->x0, rect->y1 - 1, rect->x1 - rect->x0);
   }
 
   GUI_RestoreColorDefault();

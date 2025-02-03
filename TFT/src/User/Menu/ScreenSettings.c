@@ -233,7 +233,7 @@ static void menuLanguage(void)
   LISTITEM totalItems[LANGUAGE_NUM];
   uint16_t curIndex = KEY_IDLE;
   uint16_t curItem = infoSettings.language;
-  SETTINGS now = infoSettings;
+  SETTINGS orig = infoSettings;
 
   char * firstLanguage = (char *)default_pack[LABEL_LANGUAGE];  // get first language name directly from memory
   char secondLanguage[MAX_LANG_LABEL_LENGTH];
@@ -279,7 +279,7 @@ static void menuLanguage(void)
     loopProcess();
   }
 
-  if (memcmp(&now, &infoSettings, sizeof(SETTINGS)))
+  if (memcmp(&orig, &infoSettings, sizeof(SETTINGS)))
   {
     statusSetReady();  // restore msg buffer when language is changed
     storePara();

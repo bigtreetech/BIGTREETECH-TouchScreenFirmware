@@ -3,8 +3,10 @@
 
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 #define STRING_LANGUAGE               "Italiano"
-#define STRING_ADVANCED_OK            "OK avanzato"
 #define STRING_COMMAND_CHECKSUM       "Checksum comando"
+#define STRING_ADVANCED_OK            "OK avanzato"
+#define STRING_TX_DELAY               "Ritardo TX"
+#define STRING_TX_PREFETCH            "Precarica TX"
 #define STRING_EMULATED_M600          "M600 emulato"
 #define STRING_EMULATED_M109_M190     "M109 / M190 emulati"
 #define STRING_EVENT_LED              "LED evento"
