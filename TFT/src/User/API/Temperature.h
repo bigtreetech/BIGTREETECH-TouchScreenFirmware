@@ -25,7 +25,7 @@ typedef enum
 {
   FROM_HOST = 0,  // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
   FROM_GUI,       // temperature requested from TFT's GUI
-  FROM_CMD,       // temperature requested in command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
+  FROM_CMD,       // temperature requested in command queue (from gcode file, TFT's GUI or external source connected to TFT) and ready to be sent to mainboard
 } TEMP_SOURCE;
 
 enum
@@ -74,7 +74,7 @@ extern const char * const extruderDisplayID[];
 extern const char * const toolChange[];
 
 void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE tempSource);  // set target temperature
-uint16_t heatGetTargetTemp(uint8_t index);                   // get target temperature
+int16_t heatGetTargetTemp(uint8_t index);                    // get target temperature
 void heatSetCurrentTemp(uint8_t index, const int16_t temp);  // set current temperature
 int16_t heatGetCurrentTemp(uint8_t index);                   // get current temperature
 void heatCoolDown(void);                                     // disable all heaters/hotends

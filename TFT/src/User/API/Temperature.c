@@ -13,10 +13,10 @@ const char * const extruderDisplayID[]             = EXTRUDER_ID;
 const char * const toolChange[]                    = TOOL_CHANGE;
 
 static HEATER heater = {{}, NOZZLE0};
-static bool heat_waiting = false;             // "false" if no heater waiting for target temperature. "true" otherwise
-static uint32_t heat_timestamp = 0;           // keep track of last sent heating command
-static uint8_t heat_feedback_waiting = 0;
-static uint8_t heat_gui_sending_waiting = 0;  // command submitted by GUI waiting for sending
+static bool heat_waiting = false;            // "false" if no heater waiting for target temperature. "true" otherwise
+static uint32_t heat_timestamp = 0;          // keep track of timestamp of last heating command sent to mainboard
+static uint8_t heat_feedback_waiting = 0;    // "true" if command requested from GUI has been enqueued or a command has been sent to mainboard
+static uint8_t heat_enqueueing_waiting = 0;  // "true" if command requested from GUI and waiting for enqueueing in command queue
 
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static uint32_t heat_next_update_time = 0;
@@ -51,13 +51,12 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
   {
     // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
     case FROM_HOST:
-      // set target temperature if not waiting for feedback (it avoids to set old target temperature in case of multiple
-      // commands issued from GUI) and if not waiting for heating, just to avoid a potential deadlock on waiting for
-      // target temperature (if waiting for heating flag is set) in case a wrong target temperature is reported
+      // set target temperature if not waiting for feedback and pending command request from GUI (it avoids to
+      // set old target temperature in case of multiple commands issued from GUI) and if not waiting for heating
       //
-      if (GET_BIT(heat_feedback_waiting, index))    // if waiting for feedback, clear flag
+      if (GET_BIT(heat_feedback_waiting, index))          // if waiting for feedback, clear flag
         SET_BIT_OFF(heat_feedback_waiting, index);
-      else if (!heater.T[index].waiting)            // if not waiting for heating, set target temperature
+      else if (!GET_BIT(heat_enqueueing_waiting, index))  // if no pending command request from GUI, set target temperature
         heater.T[index].target = temp;
       break;
 
@@ -70,23 +69,24 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
       else
         heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
 
-      SET_BIT_ON(heat_gui_sending_waiting, index);
+      SET_BIT_ON(heat_enqueueing_waiting, index);
       break;
 
-    // temperature requested in command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
+    // temperature requested in command queue (from gcode file, TFT's GUI or external source connected to TFT) and ready to be sent to mainboard
     case FROM_CMD:
       heat_timestamp = OS_GetTimeMs();  // update timestamp
 
-      // always set target temperature, just to avoid a potential deadlock on
-      // waiting for target temperature (if waiting for heating flag is set)
-      heater.T[index].target = temp;
+      if (!GET_BIT(heat_feedback_waiting, index))
+      {
+        heater.T[index].target = temp;
 
-      SET_BIT_ON(heat_feedback_waiting, index);
+        SET_BIT_ON(heat_feedback_waiting, index);
+      }
       break;
   }
 }
 
-uint16_t heatGetTargetTemp(uint8_t index)
+int16_t heatGetTargetTemp(uint8_t index)
 {
   index = heaterIndexFix(index);
 
@@ -297,12 +297,12 @@ void loopCheckHeater(void)
       heater.T[i].status = SETTLED;
     }
 
-    // send a pending command submitted by GUI only if there is no pending feedback
-    if (GET_BIT(heat_gui_sending_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
+    // send a pending command requested by GUI only if there is no pending feedback
+    if (GET_BIT(heat_enqueueing_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
     {
       if (storeCmd("%s S%u\n", heatCmd[i], heatGetTargetTemp(i)))
       {
-        SET_BIT_OFF(heat_gui_sending_waiting, i);
+        SET_BIT_OFF(heat_enqueueing_waiting, i);
         SET_BIT_ON(heat_feedback_waiting, i);
       }
     }
