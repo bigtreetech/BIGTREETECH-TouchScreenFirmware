@@ -94,6 +94,7 @@ static inline bool listViewNextPage(void)
 
   listViewSetCurPage(curPageIndex);
   menuRefreshListPage();
+
   return true;
 }
 
@@ -111,6 +112,7 @@ static inline bool listViewPreviousPage(void)
 
   listViewSetCurPage(curPageIndex);
   menuRefreshListPage();
+
   return true;
 }
 
@@ -167,8 +169,8 @@ uint16_t listViewGetSelectedIndex(void)
     {
       if (totalItems[cur_index].icon != CHARICON_NULL)
         return cur_index;
-      else
-        return KEY_IDLE;
+
+      return KEY_IDLE;
     }
   }
 

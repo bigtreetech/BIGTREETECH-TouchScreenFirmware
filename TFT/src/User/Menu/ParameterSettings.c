@@ -196,7 +196,7 @@ static void menuShowParameter(void)
           if (val_type == VAL_TYPE_FLOAT || val_type == VAL_TYPE_NEG_FLOAT)
             val = numPadFloat(NULL, val, val, negative_val);  // parameter is a decimal number
           else
-            val = (float)numPadInt(NULL, val, val, negative_val);  // parameter is an integer
+            val = (float) numPadInt(NULL, val, val, negative_val);  // parameter is an integer
 
           if (val != getParameter(curParameter, elementIndex))
             sendParameterCmd(curParameter, elementIndex, val);
@@ -274,7 +274,8 @@ void menuParameterSettings(void)
         {
           parametersChanged = false;
 
-          popupDialog(DIALOG_TYPE_QUESTION, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                      saveEepromSettings, NULL, NULL);
         }
         else
         {
@@ -306,15 +307,18 @@ void menuParameterSettings(void)
           {
             parametersChanged = false;
 
-            popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                        saveEepromSettings, NULL, NULL);
           }
           else if (curIndex_e == P_RESET_SETTINGS)
           {
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                        resetEepromSettings, NULL, NULL);
           }
           else if (curIndex_e == P_RESTORE_SETTINGS)
           {
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL, restoreEepromSettings, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESTORE, LABEL_EEPROM_RESTORE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                        restoreEepromSettings, NULL, NULL);
           }
         }
         break;

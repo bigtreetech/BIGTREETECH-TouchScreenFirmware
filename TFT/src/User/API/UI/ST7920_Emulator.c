@@ -86,7 +86,7 @@ void ST7920_Init(ST7920 * pStruct)
   pSt7920->reg = st7920_inti_reg;
   ST7920_ClearRAM();
   // Init 8x16Font
-  W25Qxx_ReadBuffer((uint8_t *)pSt7920->_8x16Font, _8X16_FONT_ADDR, sizeof(pSt7920->_8x16Font));
+  W25Qxx_ReadBuffer((uint8_t *) pSt7920->_8x16Font, _8X16_FONT_ADDR, sizeof(pSt7920->_8x16Font));
 }
 
 // When I/D = "1", cursor moves right, address counter (AC) is increased by 1
@@ -395,8 +395,8 @@ static inline uint8_t ST7920_IsCtrlByte(uint8_t data)
 {
   if (data == ST7920_WCMD || data == ST7920_WDATA || data == ST7920_RCMD || data == ST7920_RDATA)
     return true;
-  else
-    return false;
+
+  return false;
 }
 
 // Parse queue data

@@ -49,7 +49,8 @@ bool powerFailedLoad(FIL * print_fp)
   restore_ok = false;
 
   // if print restore flag is disabled, nothing to do
-  if (!restore) return false;
+  if (!restore)
+    return false;
 
   // disable print restore flag (one shot flag) for the next print.
   // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
@@ -93,7 +94,8 @@ bool powerFailedLoad(FIL * print_fp)
 bool powerFailedInitRestore(void)
 {
   // if print restore initialization flag is disabled, nothing to do
-  if (!restore_ok) return false;
+  if (!restore_ok)
+    return false;
 
   // disable print restore initialization flag (one shot flag) for the next print
   restore_ok = false;
@@ -175,12 +177,17 @@ bool powerFailedExist(void)
   return access_ok;
 }
 
-void powerFailedCreate(char * path)
+void powerFailedCreate(const char * path)
 {
-  powerFailedDelete();  // close and delete PLR file, if any, first
+  // close and delete PLR file, if any, first
+  powerFailedDelete();
 
-  if (!infoSettings.plr) return;                    // if PLR is disabled
-  if (infoFile.source >= FS_ONBOARD_MEDIA) return;  // onboard media not supported now
+  // if PLR is disabled, nothing to do
+  if (!infoSettings.plr)
+    return;
+
+  if (infoFile.source >= FS_ONBOARD_MEDIA)  // onboard media not supported now
+    return;
 
   UINT br;
 
@@ -216,9 +223,12 @@ void powerFailedCreate(char * path)
 
 void powerFailedCache(uint32_t offset)
 {
-  if (!create_ok) return;  // if PLR file not created
+  // if PLR file not created, nothing to do
+  if (!create_ok)
+    return;
 
-  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // if Z axis not changed
+  if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS))  // if Z axis not changed
+    return;
 
   if (!isPaused())  // if not paused, update printing progress status
   {

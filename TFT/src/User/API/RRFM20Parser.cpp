@@ -54,28 +54,28 @@ static const TCHAR * skip_number(const TCHAR * value)
 
 static int compare_items(void * arg, const void * a, const void * b)
 {
-  bool macro_sort = *(bool *)arg;
+  bool macro_sort = *(bool *) arg;
 
   if (macro_sort)
-    return strcasecmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
+    return strcasecmp(((M20_LIST_ITEM *) a)->file_name, ((M20_LIST_ITEM *) b)->file_name);
 
   switch (infoSettings.files_sort_by)
   {
     // if M20 S3 ever works, we can make use of this
     case SORT_DATE_NEW_FIRST:
-      return ((M20_LIST_ITEM *)b)->timestamp - ((M20_LIST_ITEM *)a)->timestamp;
+      return ((M20_LIST_ITEM *) b)->timestamp - ((M20_LIST_ITEM *) a)->timestamp;
 
     case SORT_DATE_OLD_FIRST:
-      return ((M20_LIST_ITEM *)a)->timestamp - ((M20_LIST_ITEM *)b)->timestamp;
+      return ((M20_LIST_ITEM *) a)->timestamp - ((M20_LIST_ITEM *) b)->timestamp;
 
     case SORT_NAME_ASCENDING:
-      return strcasecmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
+      return strcasecmp(((M20_LIST_ITEM *) a)->file_name, ((M20_LIST_ITEM *) b)->file_name);
 
     case SORT_NAME_DESCENDING:
-      return strcasecmp(((M20_LIST_ITEM *)b)->file_name, ((M20_LIST_ITEM *)a)->file_name);
+      return strcasecmp(((M20_LIST_ITEM *) b)->file_name, ((M20_LIST_ITEM *) a)->file_name);
   }
 
-  return strcmp(((M20_LIST_ITEM *)a)->file_name, ((M20_LIST_ITEM *)b)->file_name);
+  return strcmp(((M20_LIST_ITEM *) a)->file_name, ((M20_LIST_ITEM *) b)->file_name);
 }
 
 void RRFM20Parser::startObject(void)
@@ -180,13 +180,13 @@ void RRFM20Parser::value(const char * value)
 
       case name:
       {
-        if ((fileList[fileCount].file_name = (TCHAR *)malloc(len)) != NULL)
+        if ((fileList[fileCount].file_name = (TCHAR *) malloc(len)) != NULL)
           strcpy(fileList[fileCount].file_name, value);
 
         const char * skipped = macro_sort ? skip_number(value) : value;
         len = strlen(skipped) + 1;
 
-        if (macro_sort && value != skipped && (fileList[fileCount].display_name = (TCHAR *)malloc(len)) != NULL)
+        if (macro_sort && value != skipped && (fileList[fileCount].display_name = (TCHAR *) malloc(len)) != NULL)
           strcpy(fileList[fileCount].display_name, skipped);
         else
           fileList[fileCount].display_name = fileList[fileCount].file_name;
@@ -228,13 +228,13 @@ void RRFM20Parser::value(const char * value)
 
     uint16_t len = strlen(value) + 1;
 
-    if ((fileList[current].file_name = (TCHAR *)malloc(len)) != NULL)
+    if ((fileList[current].file_name = (TCHAR *) malloc(len)) != NULL)
       strcpy(fileList[current].file_name, value);
 
     value = macro_sort ? skip_number(value) : value;
     len = strlen(value) + 1;
 
-    if ((fileList[current].display_name = (TCHAR *)malloc(len)) != NULL)
+    if ((fileList[current].display_name = (TCHAR *) malloc(len)) != NULL)
       strcpy(fileList[current].display_name, value);
   }
 }

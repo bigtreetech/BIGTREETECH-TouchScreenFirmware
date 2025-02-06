@@ -148,7 +148,7 @@ uint32_t getPrintTime(void)
 
 void setPrintRemainingTime(int32_t remainingTime)
 {
-  float speedFactor = (float) (speedGetCurrentPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
+  float speedFactor = (float)(speedGetCurrentPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
 
   // Cura slicer put a negative value at the end instead of zero
   if (remainingTime < 0 || speedFactor <= 0.0f)
@@ -164,7 +164,7 @@ void parsePrintRemainingTime(char * buffer)
   int hour, min, sec;
 
   sscanf(buffer, "%dh%dm%ds", &hour, &min, &sec);
-  setPrintRemainingTime(((int32_t) (hour) * 3600) + ((int32_t) (min) * 60) + (int32_t) (sec));
+  setPrintRemainingTime(((int32_t)(hour) * 3600) + ((int32_t)(min) * 60) + (int32_t)(sec));
 }
 
 uint32_t getPrintRemainingTime(void)
@@ -240,7 +240,7 @@ uint8_t updatePrintProgress(void)
       break;  // progress percentage already updated by the slicer or RRF direct percentage report ("fraction_printed")
 
     case PROG_TIME:
-      infoPrinting.progress = ((float)infoPrinting.elapsedTime / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
+      infoPrinting.progress = ((float)(infoPrinting.elapsedTime) / (infoPrinting.elapsedTime + infoPrinting.remainingTime)) * 100;
       break;
   }
 
@@ -272,6 +272,7 @@ static void shutdown(void)
   }
 
   mustStoreCmd("M81\n");
+
   popupReminder(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, LABEL_SHUTTING_DOWN);
 }
 
@@ -288,17 +289,16 @@ static void shutdownLoop(void)
 
 static void shutdownStart(void)
 {
-  char tempstr[75];
-  LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
+  char tempMsg[MAX_MSG_LENGTH];
 
-  sprintf(tempstr, tempbody, infoSettings.auto_shutdown_temp);
+  snprintf(tempMsg, MAX_MSG_LENGTH, textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), infoSettings.auto_shutdown_temp);
+
+  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, tempMsg, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
-
-  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, (uint8_t *)tempstr, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 }
 
 static void initPrintSummary(void)
@@ -327,7 +327,7 @@ static void sendPrintCodes(uint8_t index)
 {
   PRINT_GCODES printcodes;
 
-  W25Qxx_ReadBuffer((uint8_t *)&printcodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *) &printcodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
 
   switch (index)
   {
@@ -540,6 +540,7 @@ void endPrint(void)
   }
 
   BUZZER_PLAY(SOUND_SUCCESS);
+
   completePrint();
 
   if (infoSettings.auto_shutdown)  // auto shutdown after print
@@ -765,6 +766,7 @@ void setPrintAbort(void)
   infoPrinting.aborted = true;
 
   BUZZER_PLAY(SOUND_ERROR);
+
   completePrint();
 }
 
@@ -915,6 +917,7 @@ void loopPrintFromTFT(void)
   else if (ip_cur > ip_size)  // in case of print abort (ip_cur == ip_size + 1), display an error message and abort the print
   {
     BUZZER_PLAY(SOUND_ERROR);
+
     popupReminder(DIALOG_TYPE_ERROR, (infoFile.source == FS_TFT_SD) ? LABEL_TFT_SD_READ_ERROR : LABEL_TFT_USB_READ_ERROR, LABEL_PROCESS_ABORTED);
 
     abortPrint();

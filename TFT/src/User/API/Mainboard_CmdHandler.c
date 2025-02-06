@@ -103,15 +103,18 @@ static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmd(const char * format, ...)
 {
-  if (format[0] == 0) return false;
+  if (format[0] == 0)
+    return false;
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
+
     return false;
   }
 
   va_list va;
+
   va_start(va, format);
   commonStoreCmd(&cmdQueue, format, va);
   va_end(va);
@@ -125,7 +128,8 @@ bool storeCmd(const char * format, ...)
 // and it will wait for the queue to be able to store the command
 void mustStoreCmd(const char * format, ...)
 {
-  if (format[0] == 0) return;
+  if (format[0] == 0)
+    return;
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
@@ -134,6 +138,7 @@ void mustStoreCmd(const char * format, ...)
   }
 
   va_list va;
+
   va_start(va, format);
   commonStoreCmd(&cmdQueue, format, va);
   va_end(va);
@@ -143,10 +148,12 @@ void mustStoreCmd(const char * format, ...)
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
 void mustStoreScript(const char * format, ...)
 {
-  if (format[0] == 0) return;
+  if (format[0] == 0)
+    return;
 
   char script[256];
   va_list va;
+
   va_start(va, format);
   vsnprintf(script, 256, format, va);
   va_end(va);
@@ -158,7 +165,10 @@ void mustStoreScript(const char * format, ...)
   for (;;)
   {
     char c = *p++;
-    if (!c) return;
+
+    if (!c)
+      return;
+
     cmd[i++] = c;
 
     if (c == '\n')
@@ -175,11 +185,13 @@ void mustStoreScript(const char * format, ...)
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
-  if (cmd[0] == 0) return false;
+  if (cmd[0] == 0)
+    return false;
 
   if (cmdQueue.count >= CMD_QUEUE_SIZE)
   {
     setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);
+
     return false;
   }
 
@@ -356,7 +368,7 @@ static bool cmd_seen(const char code)
 // get the int after "code". Call after cmd_seen(code)
 static int32_t cmd_value(void)
 {
-  return (strtol(&cmd_ptr[cmd_index], NULL, 10));
+  return strtol(&cmd_ptr[cmd_index], NULL, 10);
 }
 
 // get the int after "/", if any
@@ -365,15 +377,15 @@ static int32_t cmd_second_value(void)
   char * secondValue = strchr(&cmd_ptr[cmd_index], '/');
 
   if (secondValue != NULL)
-    return (strtol(secondValue + 1, NULL, 10));
-  else
-    return -0.5;
+    return strtol(secondValue + 1, NULL, 10);
+
+  return -0.5;
 }
 
 // get the float after "code". Call after cmd_seen(code)
 static float cmd_float(void)
 {
-  return (strtod(&cmd_ptr[cmd_index], NULL));
+  return strtod(&cmd_ptr[cmd_index], NULL);
 }
 
 #ifdef SERIAL_PORT_2
@@ -628,7 +640,8 @@ void sendQueueCmd(void)
 {
   // if no gcode tx slot available, or no gcode in command queue and no pending command retry,
   // or no minimum delay for next sending is elapsed, nothing to do
-  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) || InfoHost_IsCmdDelayElapsed()) return;
+  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) || InfoHost_IsCmdDelayElapsed())
+    return;
 
   bool avoid_terminal = false;
 
@@ -801,7 +814,7 @@ void sendQueueCmd(void)
             {
               if (isPrintingFromTFT())  // if printing from TFT media
               {
-                char buf[55];
+                char buf[60];
 
                 if (cmd_seen('C'))
                 {
@@ -1028,7 +1041,7 @@ void sendQueueCmd(void)
           break;
 
         case 110:  // M110
-          setCmdLineNumberBase(cmd_seen('N') ? (uint32_t)cmd_value() : 0);
+          setCmdLineNumberBase(cmd_seen('N') ? (uint32_t) cmd_value() : 0);
           break;
 
         case 114:  // M114
@@ -1073,10 +1086,10 @@ void sendQueueCmd(void)
             stripCmdChecksum(rawMsg);
             msgText = stripCmdHead(rawMsg);
 
-            statusSetMsg((uint8_t *)"M117", (uint8_t *)msgText);
+            statusSetMsg("M117", msgText);
 
             if (MENU_IS_NOT(menuStatus))
-              addToast(DIALOG_TYPE_INFO, (char *)msgText);
+              addToast(DIALOG_TYPE_INFO, msgText);
           }
           break;
 

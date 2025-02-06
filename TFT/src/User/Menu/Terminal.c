@@ -739,7 +739,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
   if (index >= TERM_KEY_COUNT)
     return;
 
-  const char * terminalKey[] = {"<", ">", (char *)textSelect(itemToggle[infoSettings.terminal_ack].index), "Back"};
+  const char * terminalKey[] = {"<", ">", textSelect(itemToggle[infoSettings.terminal_ack].index), "Back"};
 
   #ifdef KEYBOARD_MATERIAL_THEME
     uint16_t fontcolor = KEY_FONT_COLOR;
@@ -755,7 +755,7 @@ static inline void terminalDrawButton(uint8_t index, uint8_t isPressed)
 
     BUTTON btn = {.fontColor  = fontcolor,
                   .backColor  = bgcolor,
-                  .context    = (uint8_t *)terminalKey[index],
+                  .context    = (uint8_t *) terminalKey[index],
                   .lineColor  = bgcolor,
                   .lineWidth  = 0,
                   .pBackColor = fontcolor,

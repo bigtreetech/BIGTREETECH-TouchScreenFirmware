@@ -23,12 +23,14 @@ bool fanIsValid(const uint8_t index)
 {
   if (index >= infoSettings.fan_count && index < MAX_COOLING_FAN_COUNT)  // invalid cooling fan index
     return false;
-  else if (!infoSettings.ctrl_fan_en && index >= MAX_COOLING_FAN_COUNT)  // controller cooling fan is disabled
+
+  if (!infoSettings.ctrl_fan_en && index >= MAX_COOLING_FAN_COUNT)  // controller cooling fan is disabled
     return false;
-  else if (index >= (MAX_COOLING_FAN_COUNT + MAX_CTRL_FAN_COUNT))  // invalid controller cooling fan index (not active/idle)
+
+  if (index >= (MAX_COOLING_FAN_COUNT + MAX_CTRL_FAN_COUNT))  // invalid controller cooling fan index (not active/idle)
     return false;
-  else
-    return true;
+
+  return true;
 }
 
 void fanSetTargetSpeed(const uint8_t i, const uint8_t speed)

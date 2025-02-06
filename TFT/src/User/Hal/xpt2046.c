@@ -130,6 +130,6 @@ uint16_t XPT2046_Repeated_Compare_AD(uint8_t CMD)
 
   if ((ad2 <= ad1 && ad1 < ad2 + ERR_RANGE) || (ad1 <= ad2 && ad2 < ad1 + ERR_RANGE))  // the error before and after is less than ERR_RANGE
     return (ad1 + ad2) / 2;
-  else
-    return 0;
+
+  return 0;
 }

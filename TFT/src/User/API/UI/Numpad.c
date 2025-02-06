@@ -103,7 +103,7 @@ static void drawKeypadButton(uint8_t index, uint8_t isPressed)
 
     BUTTON btn = {.fontColor  = fontcolor,
                   .backColor  = bgcolor,
-                  .context    = (uint8_t *)numPadKeyChar[index],
+                  .context    = (uint8_t *) numPadKeyChar[index],
                   .lineColor  = bgcolor,
                   .lineWidth  = 0,
                   .pBackColor = fontcolor,
@@ -127,7 +127,7 @@ static void drawKeypadButton(uint8_t index, uint8_t isPressed)
   #endif  // KEYBOARD_MATERIAL_THEME
 }
 
-static void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
+static void Draw_keyboard(char * title, bool numberOnly, bool negative)
 {
   numpadType = (negative << 1) | (numberOnly << 0);  // numpad type identfier
   GUI_SetTextMode(GUI_TEXTMODE_TRANS);
@@ -171,14 +171,14 @@ static void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     for (uint8_t i = 0; i < KEY_COUNT; i++)
     {
       if (!(i == NUM_KEY_DEC || i == NUM_KEY_MINUS || (i % 4) == 3))  // || i == NUM_KEY_DEL || i == NUM_KEY_EXIT || i == NUM_KEY_RESET))
-        GUI_DispStringInPrect(&rect_of_numkey[i], (uint8_t *)numPadKeyChar[i]);
+        GUI_DispStringInPrect(&rect_of_numkey[i], (uint8_t *) numPadKeyChar[i]);
     }
 
     if (!numberOnly)
-      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC],(uint8_t *)numPadKeyChar[NUM_KEY_DEC]);
+      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_DEC], (uint8_t *) numPadKeyChar[NUM_KEY_DEC]);
 
     if (negative)
-      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS],(uint8_t *)numPadKeyChar[NUM_KEY_MINUS]);
+      GUI_DispStringInPrect(&rect_of_numkey[NUM_KEY_MINUS], (uint8_t *) numPadKeyChar[NUM_KEY_MINUS]);
 
     setFontSize(FONT_SIZE_LARGE);
 
@@ -188,13 +188,13 @@ static void Draw_keyboard(uint8_t * title, bool numberOnly, bool negative)
     drawCharIcon(&rect_of_numkey[NUM_KEY_RESET], CENTER, CHARICON_RESET, false, 0);
   #endif  // KEYBOARD_MATERIAL_THEME
 
-  GUI_DispStringInPrect(&arrowRect,(uint8_t *)"\u089A");
+  GUI_DispStringInPrect(&arrowRect, (uint8_t *) "\u089A");
   setFontSize(FONT_SIZE_LARGE);
 
-  if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str(title))
+  if ((oldParameterRect.x1 - oldParameterRect.x0) <= GUI_StrPixelWidth_str((uint8_t *) title))
     setFontSize(FONT_SIZE_NORMAL);
 
-  GUI_DispStringInPrect(&oldParameterRect, title);
+  GUI_DispStringInPrect(&oldParameterRect, (uint8_t *) title);
   setFontSize(FONT_SIZE_NORMAL);
 }
 
@@ -207,14 +207,14 @@ static void drawValue(char * str)
   GUI_ClearPrect(&newParameterRect);
 
   setFontSize(FONT_SIZE_LARGE);
-  GUI_DispStringInPrect(&newParameterRect, (uint8_t *)str);
+  GUI_DispStringInPrect(&newParameterRect, (uint8_t *) str);
   setFontSize(FONT_SIZE_NORMAL);
 }
 
-double numPadFloat(uint8_t * title, double param_val, double reset_val, bool negative)
+double numPadFloat(const char * title, double param_val, double reset_val, bool negative)
 {
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
-  uint8_t * numTitle = title;
+  char * numTitle = (char *) title;
   uint8_t bufIndex;
   uint8_t lastIndex = 0;
   char parameterBuf[FLOAT_BUF_LENGTH + 1] = {0};  // "+1" -> make room for terminal char '\0'
@@ -322,7 +322,7 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
           bufIndex = lastIndex = 1;
         }
 
-        if (strchr((const char *)parameterBuf, '.') == NULL && bufIndex < (FLOAT_BUF_LENGTH - 1))  // check if there's already a decimal sign (".")
+        if (strchr(parameterBuf, '.') == NULL && bufIndex < (FLOAT_BUF_LENGTH - 1))  // check if there's already a decimal sign (".")
         {
           if (bufIndex == 1 && parameterBuf[0] == '-')  // check if minus sign and no other number
           {
@@ -395,10 +395,10 @@ double numPadFloat(uint8_t * title, double param_val, double reset_val, bool neg
   return param_val;
 }
 
-int32_t numPadInt(uint8_t * title, int32_t param_val, int32_t reset_val, bool negative)
+int32_t numPadInt(const char * title, int32_t param_val, int32_t reset_val, bool negative)
 {
   NUM_KEY_VALUES key_num = NUM_KEY_IDLE;
-  uint8_t * numTitle = title;
+  char * numTitle = (char *) title;
   uint8_t len = 0;
   char parameterBuf[INT_BUF_LENGTH + 1];
   int32_t val = param_val, prev_val = 0;

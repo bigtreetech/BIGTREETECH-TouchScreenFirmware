@@ -8,7 +8,7 @@ static uint8_t curSubmenu_index = 0;
 // show an error notification
 static void zOffsetNotifyError(bool isStarted)
 {
-  LABELCHAR(tempMsg, LABEL_PROBE_OFFSET)
+  LABEL_CHAR(tempMsg, LABEL_PROBE_OFFSET)
 
   if (!probeOffsetMenu)
     sprintf(tempMsg, "%s", textSelect(LABEL_HOME_OFFSET));
@@ -212,7 +212,8 @@ void menuZOffset(void)
           // save to EEPROM
           case 2:
             if (infoMachineSettings.EEPROM == 1)
-              popupDialog(DIALOG_TYPE_QUESTION, zOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+              popupDialog(DIALOG_TYPE_QUESTION, zOffsetItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                          saveEepromSettings, NULL, NULL);
             break;
 
           // set level Z pos (shim)

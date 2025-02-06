@@ -75,7 +75,8 @@ void menuUnifiedMove(void)
           #if DELTA_PROBE_TYPE != 2  // if not removable probe
             deltaCalibration();
           #else  // if removable probe
-            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL, deltaCalibration, NULL, NULL);
+            popupDialog(DIALOG_TYPE_ALERT, LABEL_WARNING, LABEL_CONNECT_PROBE, LABEL_CONTINUE, LABEL_CANCEL,
+                        deltaCalibration, NULL, NULL);
           #endif
         #endif
         break;

@@ -20,7 +20,7 @@ void HAL_FlashRead(uint8_t * data, uint32_t len)
 
   for (i = 0; i < len; i++)
   {
-    data[i] = *(volatile uint8_t *)(SIGN_ADDRESS + i);
+    data[i] = *((volatile uint8_t *)(SIGN_ADDRESS + i));
   }
 }
 

@@ -760,7 +760,7 @@ const uint8_t * _GUI_DispLenString(int16_t x, int16_t y, const uint8_t * p, uint
       {
         // truncate indicator if 2 more characters OR not enough space for current character in reserved space
         if (*(p + 2) || info.pixelWidth > BYTE_HEIGHT)
-          getCharacterInfo((uint8_t *)"…", &info);
+          getCharacterInfo((uint8_t *) "…", &info);
 
         GUI_DispOne(x, y, &info);
       }
@@ -777,19 +777,19 @@ const uint8_t * _GUI_DispLenString(int16_t x, int16_t y, const uint8_t * p, uint
   return p;
 }
 
-void _GUI_DispStringRight(int16_t x, int16_t y, const uint8_t *p)
+void _GUI_DispStringRight(int16_t x, int16_t y, const uint8_t * p)
 {
   x -= GUI_StrPixelWidth(p);
   _GUI_DispString(x, y, p);
 }
 
-void _GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t *p)
+void _GUI_DispStringCenter(int16_t x, int16_t y, const uint8_t * p)
 {
   x -= GUI_StrPixelWidth(p) / 2;
   _GUI_DispString(x, y, p);
 }
 
-void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t *p)
+void _GUI_DispStringInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, const uint8_t * p)
 {
   uint16_t stringlen = GUI_StrPixelWidth(p);
   uint16_t width = ex - sx;
@@ -873,13 +873,13 @@ void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, co
       if (bufLength)
       {
         // draw word from buffer before reading next word
-        cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *)buf);
+        cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *) buf);
         bufLength = 0;
         buf[bufLength] = 0;
       }
 
       // draw space or new line individually
-      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *)((*p == ' ') ? " " : "\n"));
+      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *) ((*p == ' ') ? " " : "\n"));
     }
     else  // copy word character to buffer
     {
@@ -891,7 +891,7 @@ void _GUI_DispStringInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, co
 
     if (!*p && bufLength)  // draw remaining text if reached end of string
     {
-      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *)buf);
+      cursor = GUI_DisplayWordInPrect(&rect, cursor, (uint8_t *) buf);
       bufLength = 0;
       buf[bufLength] = 0;
     }
@@ -903,7 +903,7 @@ void _GUI_DispStringInPrectEOL(const GUI_RECT * rect, const uint8_t * p)
   _GUI_DispStringInRectEOL(rect->x0, rect->y0, rect->x1, rect->y1, p);
 }
 
-void _GUI_DispStringOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT textPos, const uint8_t *p)
+void _GUI_DispStringOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT textPos, const uint8_t * p)
 {
   if (p == NULL)
     return;
@@ -937,92 +937,47 @@ void _GUI_DispStringOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT te
 
 void _GUI_DispLabel(int16_t x, int16_t y, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispString(x, y, tempstr);
+  _GUI_DispString(x, y, (uint8_t *) textSelect(index));
 }
 
-const uint8_t * _GUI_DispLenLabel(int16_t x, int16_t y, uint16_t index, uint16_t pixelWidth, bool truncate)
+void _GUI_DispLenLabel(int16_t x, int16_t y, uint16_t index, uint16_t pixelWidth, bool truncate)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return NULL;
-
-  return _GUI_DispLenString(x, y, tempstr, pixelWidth, truncate);
+  _GUI_DispLenString(x, y, (uint8_t *) textSelect(index), pixelWidth, truncate);
 }
 
 void _GUI_DispLabelRight(int16_t x, int16_t y, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringRight(x, y, tempstr);
+  _GUI_DispStringRight(x, y, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelCenter(int16_t x, int16_t y, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringCenter(x, y, tempstr);
+  _GUI_DispStringCenter(x, y, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelInRect(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringInRect(sx, sy, ex, ey, tempstr);
+  _GUI_DispStringInRect(sx, sy, ex, ey, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelInPrect(const GUI_RECT * rect, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringInPrect(rect, tempstr);
+  _GUI_DispStringInPrect(rect, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelInRectEOL(int16_t sx, int16_t sy, int16_t ex, int16_t ey, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringInRectEOL(sx, sy, ex, ey, tempstr);
+  _GUI_DispStringInRectEOL(sx, sy, ex, ey, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelInPrectEOL(const GUI_RECT * rect, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringInPrectEOL(rect, tempstr);
+  _GUI_DispStringInPrectEOL(rect, (uint8_t *) textSelect(index));
 }
 
 void _GUI_DispLabelOnIcon(uint16_t iconIndex, GUI_POINT iconPoint, GUI_POINT textPos, uint16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText(tempstr, index) == false)
-    return;
-
-  _GUI_DispStringOnIcon(iconIndex, iconPoint, textPos, tempstr);
+  _GUI_DispStringOnIcon(iconIndex, iconPoint, textPos, (uint8_t *) textSelect(index));
 }
 
 void GUI_DispDec(int16_t x, int16_t y, int32_t num, uint8_t len, uint8_t leftOrRight)
@@ -1204,8 +1159,8 @@ void Scroll_CreatePara(SCROLL * para, const uint8_t * pstr, const GUI_RECT * pre
 
   getCharacterInfo(pstr, &info);
   memset(para,0,sizeof(SCROLL));
-  para->text = (uint8_t * const)pstr;
-  para->maxByte = strlen((char *)pstr);
+  para->text = (uint8_t *) pstr;
+  para->maxByte = strlen((char *) pstr);
   para->curPixelWidth = para->totalPixelWidth = GUI_StrPixelWidth(pstr);
   para->maxPixelWidth = prect->x1 - prect->x0;
   para->rect.x0 = prect->x0;
@@ -1428,7 +1383,7 @@ void GUI_DrawWindow(const WINDOW * window, const uint8_t * title, const uint8_t 
   // draw info text
   GUI_SetColor(window->info.fontColor);
 
-  if ((GUI_StrPixelWidth(inf) < window->rect.x1 - window->rect.x0) && (strchr((const char *)inf,'\n') == NULL))
+  if ((GUI_StrPixelWidth(inf) < window->rect.x1 - window->rect.x0) && (strchr((char *) inf,'\n') == NULL))
     GUI_DispStringInRect(window->rect.x0, title_y1, window->rect.x1, info_y1, inf);
   else
     GUI_DispStringInRectEOL(window->rect.x0 + margin, title_y1 + margin, window->rect.x1 - margin, info_y1 - margin, inf);

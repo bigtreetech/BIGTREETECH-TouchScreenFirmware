@@ -108,6 +108,7 @@ bool scanPrintFilesGcodeFs(void)
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
     rrfScanPrintFilesGcodeFs();
+
     return true;
   }
 
@@ -247,5 +248,6 @@ bool scanPrintFilesGcodeFs(void)
   }
 
   free(data);
+
   return true;
 }

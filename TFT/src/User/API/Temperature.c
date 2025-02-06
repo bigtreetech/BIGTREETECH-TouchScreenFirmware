@@ -212,14 +212,9 @@ uint8_t heatGetCurrentHotend(void)
 
 bool heaterDisplayIsValid(const uint8_t index)
 {
-  if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT)
-    return false;
-
-  if (!infoSettings.bed_en && index == BED)
-    return false;
-
-  if (!infoSettings.chamber_en && index == CHAMBER)
-    return false;
+  if (index >= infoSettings.hotend_count && index < MAX_HOTEND_COUNT) return false;
+  if (!infoSettings.bed_en && index == BED) return false;
+  if (!infoSettings.chamber_en && index == CHAMBER) return false;
 
   return true;
 }

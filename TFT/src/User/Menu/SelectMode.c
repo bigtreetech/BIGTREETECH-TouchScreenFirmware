@@ -32,13 +32,13 @@ static inline void drawModeIcon(void)
   };
 
   GUI_RestoreColorDefault();
-  GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"Marlin Mode");
-  GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
+  GUI_DispStringInPrect(&mode_title_rect[0], (uint8_t *) "Marlin Mode");
+  GUI_DispStringInPrect(&mode_title_rect[1], (uint8_t *) "Touch Mode");
 }
 
 static inline MKEY_VALUES MKeyGetValue(void)
 {
-  return (MKEY_VALUES)KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
+  return (MKEY_VALUES) KEY_GetValue(COUNT(rect_of_mode), rect_of_mode);
 }
 
 static void drawSelectedMode(int8_t mode)

@@ -169,7 +169,7 @@ static inline uint8_t I2C_Write(I2C_TypeDef * I2Cx, const uint8_t * buf, uint8_t
 
     // write first byte EV8_1
     if (nbyte > 16)
-      GUI_DispString(200, 0, (uint8_t *)"large byte write");
+      GUI_DispString(200, 0, (uint8_t *) "large byte write");
 
     I2C_SendData(I2Cx, *buf++);
 
@@ -314,12 +314,12 @@ void i2C_Init_EEPROM(void)
 
 void EEPROM_FlashRead(uint8_t * data, uint16_t len)
 {
-  EEPROM_ReadBuffer(data, 0, (uint16_t)len);
+  EEPROM_ReadBuffer(data, 0, (uint16_t) len);
 }
 
 void EEPROM_FlashWrite(uint8_t * data, uint16_t len)
 {
-  EEPROM_WriteData(0x0, data, (uint16_t)len);
+  EEPROM_WriteData(0x0, data, (uint16_t) len);
 }
 
 #endif  // I2C_EEPROM

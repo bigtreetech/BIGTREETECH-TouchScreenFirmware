@@ -52,7 +52,7 @@
   #error "Error: invalid language defined"
 #endif
 
-static uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
+static char tempLabelString[MAX_LANG_LABEL_LENGTH];
 
 // this list is Auto-Generated. Please add new keywords in Language.inc file only
 const char * const default_pack[LABEL_NUM] = {
@@ -76,28 +76,26 @@ uint32_t getLabelFlashAddr(uint16_t index)
   return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
 }
 
-uint8_t * textSelect(uint16_t index)
+const char * textSelect(uint16_t index)
 {
+  if (index >= LABEL_NUM)
+    return "";
+
   switch (infoSettings.language)
   {
     case LANG_DEFAULT:
-      return (uint8_t *)default_pack[index];
+      return default_pack[index];
 
     case LANG_FLASH:
-      W25Qxx_ReadBuffer(tempLabelString, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
+      W25Qxx_ReadBuffer((uint8_t *) tempLabelString, getLabelFlashAddr(index), MAX_LANG_LABEL_LENGTH);
       return tempLabelString;
 
     default:
-      return NULL;
+      return "";
   }
 }
 
-bool loadLabelText(uint8_t * buf, uint16_t index)
+void loadLabelText(char * buf, uint16_t index)
 {
-  if (index >= LABEL_NUM)
-    return false;
-
   memcpy(buf, textSelect(index), sizeof(tempLabelString));
-
-  return true;
 }

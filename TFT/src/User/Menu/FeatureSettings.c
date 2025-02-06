@@ -156,7 +156,8 @@ static inline void updateFeatureSettings(uint8_t item_index)
       break;
 
     case SKEY_RESET_SETTINGS:
-      popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL, resetSettings, NULL, NULL);
+      popupDialog(DIALOG_TYPE_ALERT, LABEL_SETTINGS_RESET, LABEL_SETTINGS_RESET_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                  resetSettings, NULL, NULL);
       break;
 
     default:
@@ -177,7 +178,7 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
         break;
 
       case SKEY_TX_DELAY:
-        setDynamicTextValue(SKEY_TX_DELAY, (char *)labelTxDelay[infoSettings.tx_delay]);
+        setDynamicTextValue(SKEY_TX_DELAY, labelTxDelay[infoSettings.tx_delay]);
         break;
 
       case SKEY_TX_PREFETCH:

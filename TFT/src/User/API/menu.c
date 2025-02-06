@@ -209,7 +209,7 @@ const GUI_RECT rect_of_keySS[SS_RECT_COUNT] = {
   #endif
 };
 
-const GUI_RECT rect_of_keyPS[] = {  // PS = PRINT SCREEN. This template is used to locate the live icons on the Printing menu
+const GUI_RECT rect_of_keyPS[] = { // PS = PRINT SCREEN. This template is used to locate the live icons on the Printing menu
   #ifdef PORTRAIT_MODE
     // hotend area VERTICAL GUI
     {START_X+PS_ICON_LG_WIDTH*0+PS_ICON_SPACE_X*0,                    PS_ICON_START_Y+PS_ICON_HEIGHT*0+PS_ICON_SPACE_Y*0,
@@ -268,7 +268,7 @@ const GUI_RECT rect_of_keyPS[] = {  // PS = PRINT SCREEN. This template is used 
 };
 
 #ifdef PORTRAIT_MODE
-  static const GUI_RECT rect_of_keyPS_draw[] = {  // VERTICAL GUI Printing menu for drawing UI
+  static const GUI_RECT rect_of_keyPS_draw[] = { // VERTICAL GUI Printing menu for drawing UI
     {0, 0, 0, 0},
     {0, 0, 0, 0},
     {0, 0, 0, 0},
@@ -593,7 +593,8 @@ static void drawReminderMsg(void)
 
 void setReminderMsg(int16_t inf, SYS_STATUS status)
 {
-  if (toastRunning()) return;
+  if (toastRunning())
+    return;
 
   LCD_WAKE();
 
@@ -615,28 +616,29 @@ void setReminderMsg(int16_t inf, SYS_STATUS status)
 
 void loopReminderManage(void)
 {
-  if (reminder.status == SYS_STATUS_IDLE || OS_GetTimeMs() < reminder.time) return;
+  if (reminder.status == SYS_STATUS_IDLE || OS_GetTimeMs() < reminder.time)
+    return;
 
   if (infoHost.connected == false)
   {
     if (reminder.status == SYS_STATUS_DISCONNECTED)  // no change, return
       return;
-    else
-      setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
+
+    setReminderMsg(LABEL_UNCONNECTED, SYS_STATUS_DISCONNECTED);  // set the no printer attached reminder
   }
   else if (infoHost.listening_mode == true || isCmdWritingMode() == true)
   {
     if (reminder.status == SYS_STATUS_LISTENING)  // no change, return
       return;
-    else
-      setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // set reminder for TFT in listening mode
+
+    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // set reminder for TFT in listening mode
   }
   else if (isFullCmdQueue())
   {
     if (reminder.status == SYS_STATUS_BUSY)  // no change, return
       return;
-    else
-      setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);  // set reminder for busy status
+
+    setReminderMsg(LABEL_BUSY, SYS_STATUS_BUSY);  // set reminder for busy status
   }
   else
   { // clear status message
@@ -697,12 +699,12 @@ void GUI_RestoreColorDefault(void)
 
 MENUITEMS * getCurMenuItems(void)
 {
-  return (MENUITEMS *)curMenuItems;
+  return (MENUITEMS *) curMenuItems;
 }
 
 LISTITEMS * getCurListItems(void)
 {
-  return (LISTITEMS *)curListItems;
+  return (LISTITEMS *) curListItems;
 }
 
 // get the top left point of the corresponding icon position)
@@ -713,14 +715,15 @@ GUI_POINT getIconStartPoint(int index)
   return p;
 }
 
-uint8_t * labelGetAddress(const LABEL * label)
+const char * labelGetAddress(const LABEL * label)
 {
   if (label == NULL || label->index == LABEL_NULL)  // no content in label
     return NULL;
+
   if (label->index < LABEL_NUM)  // index of language
     return textSelect(label->index);
-  else  // address of string
-    return label->address;
+
+  return label->address;  // address of string
 }
 
 void menuDrawItem(const ITEM * item, uint8_t position)
@@ -741,13 +744,13 @@ void menuDrawIconOnly(const ITEM * item, uint8_t position)
 
 void menuDrawIconText(const ITEM * item, uint8_t position)
 {
-  uint8_t * content = labelGetAddress(&item->label);
+  const char * content = labelGetAddress(&item->label);
   const GUI_RECT * rect = curRect + ITEM_PER_PAGE + position;
 
   GUI_ClearPrect(rect);
 
   if (content)
-    GUI_DispStringInPrect(rect, content);
+    GUI_DispStringInPrect(rect, (uint8_t *) content);
 }
 
 void menuDrawListItem(const LISTITEM * item, uint8_t position)
@@ -780,9 +783,8 @@ MENU_TYPE getMenuType(void)
   return menuType;
 }
 
-void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void (* action_redraw)(uint8_t position, uint8_t is_press),
-             void (* menu_redraw)(void))
+void setMenu(MENU_TYPE menu_type, const LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
+             void (* action_redraw)(uint8_t position, uint8_t is_press), void (* menu_redraw)(void))
 {
   menuType = menu_type;
   curRect = menuRect;
@@ -832,16 +834,16 @@ void menuDrawTitle(void)
   // NOTE: load the label just before displaying it. This is needed only in case a secondary language pack (.ini file) is used
   //       by the TFT (secondary language shares a common buffer where all labels are loaded from flash memory) just to avoid the
   //       possibility to display a wrong label
-  uint8_t * titleString = labelGetAddress(curTitle);
+  const char * titleString = labelGetAddress(curTitle);
 
   GUI_SetBkColor(infoSettings.title_bg_color);
 
   if (titleString)
   {
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
-    GUI_DispLenString(10, start_y, titleString, LCD_WIDTH - 20, true);
+    GUI_DispLenString(10, start_y, (uint8_t *) titleString, LCD_WIDTH - 20, true);
 
-    start_x += GUI_StrPixelWidth(titleString);
+    start_x += GUI_StrPixelWidth((uint8_t *) titleString);
 
     if (start_x > LCD_WIDTH - 20)
       start_x = LCD_WIDTH - 20;
@@ -860,7 +862,8 @@ void menuDrawTitle(void)
 // when there is a button value, the icon changes color and redraws
 static void itemDrawIconPress(uint8_t position, uint8_t is_press)
 {
-  if (position > KEY_ICON_7) return;
+  if (position > KEY_ICON_7)
+    return;
 
   if (menuType == MENU_TYPE_ICON)
   {
@@ -876,7 +879,8 @@ static void itemDrawIconPress(uint8_t position, uint8_t is_press)
   }
   else if (menuType == MENU_TYPE_LISTVIEW)
   { // draw rec over list item if pressed
-    if (curListItems == NULL) return;
+    if (curListItems == NULL)
+      return;
 
     const GUI_RECT * rect = rect_of_keyListView + position;
 
@@ -897,7 +901,8 @@ static void itemDrawIconPress(uint8_t position, uint8_t is_press)
 // when there is a button value, the icon changes color and redraws
 static void itemDrawIconPress_PS(uint8_t position, uint8_t is_press)
 {
-  if (position < PS_KEY_6 || position > PS_KEY_9) return;
+  if (position < PS_KEY_6 || position > PS_KEY_9)
+    return;
 
   position -= PS_TOUCH_OFFSET;
 
@@ -1009,11 +1014,11 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
       switch (liveicon->lines[i].h_align)
       {
         case CENTER:
-          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth(liveicon->lines[i].text) / 2;
+          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth((uint8_t *) liveicon->lines[i].text) / 2;
           break;
 
         case RIGHT:
-          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth(liveicon->lines[i].text);
+          loc.x = liveicon->lines[i].pos.x - GUI_StrPixelWidth((uint8_t *) liveicon->lines[i].text);
           break;
 
         default:
@@ -1045,11 +1050,11 @@ void showLiveInfo(uint8_t index, const LIVE_INFO * liveicon, bool redrawIcon)
         GUI_SetTextMode(liveicon->lines[i].text_mode);
         GUI_SetBkColor(liveicon->lines[i].bk_color);
 
-        GUI_DispString(iconPt.x + loc.x, iconPt.y + loc.y, liveicon->lines[i].text);
+        GUI_DispString(iconPt.x + loc.x, iconPt.y + loc.y, (uint8_t *) liveicon->lines[i].text);
       }
       else
       {
-        GUI_DispStringOnIcon(liveicon->iconIndex, iconPt, loc, liveicon->lines[i].text);
+        GUI_DispStringOnIcon(liveicon->iconIndex, iconPt, loc, (uint8_t *) liveicon->lines[i].text);
       }
     }
   }
@@ -1064,15 +1069,15 @@ void displayExhibitHeader(const char * titleStr, const char * unitStr)
   {
     char tempstr[20];
 
-    sprintf(tempstr, "%-8s", titleStr);
-    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)tempstr);
+    snprintf(tempstr, sizeof(tempstr), "%-8s", titleStr);
+    GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   }
 
   // draw unit string
   if (unitStr != NULL)
   {
     setFontSize(FONT_SIZE_LARGE);
-    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *)unitStr);
+    GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1) >> 1, exhibitRect.y0, (uint8_t *) unitStr);
   }
 
   setFontSize(FONT_SIZE_NORMAL);

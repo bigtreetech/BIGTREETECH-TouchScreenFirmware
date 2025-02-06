@@ -297,20 +297,20 @@ void USART_IRQHandler(uint8_t port)
       // else: more data is coming, wait for next Transfer Complete (TC) interrupt
     }
   #else  // TX interrupt based serial writing
-    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)                                 // check for TBE interrupt
+    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)                                  // check for TBE interrupt
     {
-      if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                      // is more data available?
+      if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                       // is more data available?
       {
-        if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                               // is message complete?
-          dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                              // keep track of last sent message timestamp
+        if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                                // is message complete?
+          dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                               // keep track of last sent message timestamp
 
-        USART_DATA(Serial[port].uart) = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];  // write next available character
+        USART_DATA(Serial[port].uart) = (uint8_t) dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];  // write next available character
 
-        dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;     // increase reading index
+        dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;      // increase reading index
       }
       else
       {
-        USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TBEIE;                                          // disable TXE interrupt, nothing more to do
+        USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TBEIE;                                           // disable TXE interrupt, nothing more to do
       }
     }
   #endif

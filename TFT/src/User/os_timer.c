@@ -11,7 +11,7 @@ void OS_InitTimerMs(void)
     rcu_periph_clock_enable(RCU_TIMER6);
     TIMER_CAR(TIMER6) = 1000 - 1;
     TIMER_PSC(TIMER6) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
-    TIMER_INTF(TIMER6) = (uint16_t)~(1<<0);
+    TIMER_INTF(TIMER6) = (uint16_t) ~(1<<0);
     TIMER_DMAINTEN(TIMER6) |= 1<<0;
     TIMER_CTL0(TIMER6) |= 0x01;
   #else
@@ -26,7 +26,7 @@ void OS_InitTimerMs(void)
     RCC->APB1ENR |= 1<<5;
     TIM7->ARR = 1000 - 1;
     TIM7->PSC = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
-    TIM7->SR = (uint16_t)~(1<<0);
+    TIM7->SR = (uint16_t) ~(1<<0);
     TIM7->DIER |= 1<<0;
     TIM7->CR1 |= 0x01;
   #endif

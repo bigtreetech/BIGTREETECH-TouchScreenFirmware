@@ -71,22 +71,22 @@ void menuInfo(void)
   GUI_SetColor(GRAY);
 
   // sprintf(buf, "SYS:%dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
-  // GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[0].x, clocks[0].y, (uint8_t *) buf);
 
   // sprintf(buf, "APB1:%dMhz", mcuClocks.rccClocks.PCLK1_Frequency / 1000000);
-  // GUI_DispString(clocks[1].x, clocks[1].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[1].x, clocks[1].y, (uint8_t *) buf);
 
   // sprintf(buf, "P1Tim:%dMhz", mcuClocks.PCLK1_Timer_Frequency / 1000000);
-  // GUI_DispString(clocks[2].x, clocks[2].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[2].x, clocks[2].y, (uint8_t *) buf);
 
   // sprintf(buf, "AHB:%dMhz", mcuClocks.rccClocks.HCLK_Frequency / 1000000);
-  // GUI_DispString(clocks[3].x, clocks[3].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[3].x, clocks[3].y, (uint8_t *) buf);
 
   // sprintf(buf, "APB2:%dMhz", mcuClocks.rccClocks.PCLK2_Frequency / 1000000);
-  // GUI_DispString(clocks[4].x, clocks[4].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[4].x, clocks[4].y, (uint8_t *) buf);
 
   // sprintf(buf, "P2Tim:%dMhz", mcuClocks.PCLK2_Timer_Frequency / 1000000);
-  // GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *)buf);
+  // GUI_DispString(clocks[5].x, clocks[5].y, (uint8_t *) buf);
 
   // GUI_HLine(0, clocks[5].y + BYTE_HEIGHT, LCD_WIDTH);
 
@@ -103,44 +103,44 @@ void menuInfo(void)
   };
 
   // draw titles
-  GUI_DispString(0, version[0].y0, (uint8_t *)"System  :");
-  GUI_DispString(0, version[1].y0, (uint8_t *)"Machine :");
-  GUI_DispString(0, version[2].y0, (uint8_t *)"Board   :");
-  GUI_DispString(0, version[3].y0, (uint8_t *)"Firmware:");
-  GUI_DispString(0, version[4].y0, (uint8_t *)"SPIFlash:");
+  GUI_DispString(0, version[0].y0, (uint8_t *) "System  :");
+  GUI_DispString(0, version[1].y0, (uint8_t *) "Machine :");
+  GUI_DispString(0, version[2].y0, (uint8_t *) "Board   :");
+  GUI_DispString(0, version[3].y0, (uint8_t *) "Firmware:");
+  GUI_DispString(0, version[4].y0, (uint8_t *) "SPIFlash:");
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    GUI_DispString(0, version[5].y0, (uint8_t *)"WIFI    :");
-    GUI_DispString(0, version[6].y0, (uint8_t *)"IP      :");
+    GUI_DispString(0, version[5].y0, (uint8_t *) "WIFI    :");
+    GUI_DispString(0, version[6].y0, (uint8_t *) "IP      :");
   }
 
   // draw info
   GUI_SetColor(0xDB40);
-  GUI_DispStringInPrectEOL(&version[0], (uint8_t *)firmware_name);
-  GUI_DispStringInPrectEOL(&version[1], (uint8_t *)machine_type);
-  GUI_DispStringInPrectEOL(&version[2], (uint8_t *)hardware);
+  GUI_DispStringInPrectEOL(&version[0], (uint8_t *) firmware_name);
+  GUI_DispStringInPrectEOL(&version[1], (uint8_t *) machine_type);
+  GUI_DispStringInPrectEOL(&version[2], (uint8_t *) hardware);
 
   sprintf(buf, "V"STRINGIFY(SOFTWARE_VERSION) " " __DATE__ " in %dMhz", mcuClocks.rccClocks.SYSCLK_Frequency / 1000000);
-  GUI_DispStringInPrectEOL(&version[3], (uint8_t *)buf);
+  GUI_DispStringInPrectEOL(&version[3], (uint8_t *) buf);
 
   // spi flash info
-  float usedMB = (float)FLASH_USED / 1048576;
+  float usedMB = (float)(FLASH_USED) / 1048576;
 
   sprintf(buf, "Used %.2f%% (%.2fMB/%uMB)", flashUsedPercentage(), usedMB, (W25Qxx_ReadCapacity() / 1048576));
-  GUI_DispStringInPrectEOL(&version[4], (uint8_t *)buf);
+  GUI_DispStringInPrectEOL(&version[4], (uint8_t *) buf);
 
   if (infoMachineSettings.firmwareType == FW_REPRAPFW)
   {
-    GUI_DispStringInPrectEOL(&version[5], (uint8_t *)access_point);
-    GUI_DispStringInPrectEOL(&version[6], (uint8_t *)ip_address);
+    GUI_DispStringInPrectEOL(&version[5], (uint8_t *) access_point);
+    GUI_DispStringInPrectEOL(&version[6], (uint8_t *) ip_address);
   }
 
   GUI_SetColor(GRAY);
 
   GUI_HLine(0, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH);
 
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH-20, LCD_HEIGHT, (uint8_t *) textSelect(LABEL_TOUCH_TO_EXIT));
 
   while (!TS_IsPressed()) { loopBackEnd(); }
 

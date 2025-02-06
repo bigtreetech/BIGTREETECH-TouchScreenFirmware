@@ -9,7 +9,7 @@ extern "C" {
 #include "GUI.h"
 
 const GUI_RECT * statusGetMsgRect(void);
-void statusSetMsg(const uint8_t * title,const uint8_t * msg);
+void statusSetMsg(const char * title,const char * msg);
 void statusSetReady(void);
 void menuStatus(void);
 

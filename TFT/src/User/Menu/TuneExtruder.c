@@ -18,16 +18,16 @@ static void showNewESteps(const float measured_length, const float old_esteps, f
   // first we calculate the new E-step value
   *new_esteps = (EXTRUDE_LEN * old_esteps) / (EXTRUDE_LEN - (measured_length - REMAINING_LEN));
 
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, textSelect(LABEL_TUNE_EXT_MEASURED));
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) textSelect(LABEL_TUNE_EXT_MEASURED));
 
   sprintf(tempstr, "  %0.2fmm  ", measured_length);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
 
-  sprintf(tempstr, (char *)textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *)tempstr);
+  sprintf(tempstr, textSelect(LABEL_TUNE_EXT_OLD_ESTEP), old_esteps);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1 - BYTE_HEIGHT, (uint8_t *) tempstr);
 
-  sprintf(tempstr, (char *)textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
-  GUI_DispString(exhibitRect.x0,  exhibitRect.y1, (uint8_t *)tempstr);
+  sprintf(tempstr, textSelect(LABEL_TUNE_EXT_NEW_ESTEP), *new_esteps);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y1, (uint8_t *) tempstr);
 }
 
 static void menuNewExtruderESteps(void)
@@ -83,12 +83,11 @@ static void menuNewExtruderESteps(void)
       {
         sendParameterCmd(P_STEPS_PER_MM, AXIS_INDEX_E0, new_esteps);
 
-        char tempMsg[120];
-        LABELCHAR(tempStr, LABEL_TUNE_EXT_ESTEPS_SAVED);
+        char tempMsg[MAX_MSG_LENGTH];
 
-        sprintf(tempMsg, tempStr, new_esteps);
+        snprintf(tempMsg, MAX_MSG_LENGTH, textSelect(LABEL_TUNE_EXT_ESTEPS_SAVED), new_esteps);
 
-        popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, (uint8_t *) tempMsg);
+        popupReminder(DIALOG_TYPE_QUESTION, newExtruderESteps.title.index, tempMsg);
         break;
       }
 
@@ -253,12 +252,12 @@ void menuTuneExtruder(void)
         {
           loadRequested = false;
 
-          char tempMsg[120];
-          LABELCHAR(tempStr, LABEL_TUNE_EXT_MARK120MM);
+          char tempMsg[MAX_MSG_LENGTH];
 
-          sprintf(tempMsg, tempStr, textSelect(LABEL_EXTRUDE));
+          snprintf(tempMsg, MAX_MSG_LENGTH, textSelect(LABEL_TUNE_EXT_MARK120MM), textSelect(LABEL_EXTRUDE));
 
-          popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, (uint8_t *) tempMsg, LABEL_EXTRUDE, LABEL_CANCEL, extrudeFilament, NULL, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, tuneExtruderItems.title.index, tempMsg, LABEL_EXTRUDE, LABEL_CANCEL,
+                      extrudeFilament, NULL, NULL);
           break;
         }
       }

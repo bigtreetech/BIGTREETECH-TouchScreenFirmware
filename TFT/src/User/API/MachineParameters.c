@@ -609,6 +609,7 @@ VAL_TYPE getParameterValType(PARAMETER_NAME para, uint8_t index)
 void sendParameterCmd(PARAMETER_NAME name, uint8_t elementIndex, float Value)
 {
   char tempCmd[30];
+
   snprintf(tempCmd, sizeof(tempCmd),"%s %s", parameter_list[name].prefix, parameter_list[name].suffix[elementIndex].suffix);
   mustStoreScript(tempCmd, Value);  // mustStoreScript() used because parameterCmd[] can have more than one command
 }

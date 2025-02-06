@@ -17,31 +17,31 @@ enum
 const GUI_RECT * dialogGetDoubleBtnRect(void);
 const BUTTON * dialogGetBottomDoubleBtn(void);
 
-void _setDialogTitleStr(uint8_t * str);
-void _setDialogMsgStr(uint8_t * str);
-uint8_t * getDialogMsgStr(void);
-void _setDialogOkTextStr(uint8_t * str);
-void _setDialogCancelTextStr(uint8_t * str);
+void _setDialogTitleStr(const char * str);
+void _setDialogMsgStr(const char * str);
+const char * getDialogMsgStr(void);
+void _setDialogOkTextStr(const char * str);
+void _setDialogCancelTextStr(const char * str);
 
 void _setDialogTitleLabel(int16_t index);
 void _setDialogMsgLabel(int16_t index);
 void _setDialogOkTextLabel(int16_t index);
 void _setDialogCancelTextLabel(int16_t index);
 
-#define setDialogTitle(x) _Generic(((x+0)), const uint8_t *: _setDialogTitleStr, \
-                                                  uint8_t *: _setDialogTitleStr, \
-                                                    default: _setDialogTitleLabel)(x)
-#define setDialogMsg(x) _Generic(((x+0)), const uint8_t *: _setDialogMsgStr, \
-                                                uint8_t *: _setDialogMsgStr, \
-                                                  default: _setDialogMsgLabel)(x)
-#define setDialogOkText(x) _Generic(((x+0)), const uint8_t *: _setDialogOkTextStr, \
-                                                   uint8_t *: _setDialogOkTextStr, \
-                                                     default: _setDialogOkTextLabel)(x)
-#define setDialogCancelText(x) _Generic(((x+0)), const uint8_t *: _setDialogCancelTextStr, \
-                                                       uint8_t *: _setDialogCancelTextStr, \
-                                                         default: _setDialogCancelTextLabel)(x)
+#define setDialogTitle(x)      _Generic(((x + 0)), const char *: _setDialogTitleStr, \
+                                                         char *: _setDialogTitleStr, \
+                                                        default: _setDialogTitleLabel)(x)
+#define setDialogMsg(x)        _Generic(((x + 0)), const char *: _setDialogMsgStr, \
+                                                         char *: _setDialogMsgStr, \
+                                                        default: _setDialogMsgLabel)(x)
+#define setDialogOkText(x)     _Generic(((x + 0)), const char *: _setDialogOkTextStr, \
+                                                         char *: _setDialogOkTextStr, \
+                                                        default: _setDialogOkTextLabel)(x)
+#define setDialogCancelText(x) _Generic(((x + 0)), const char *: _setDialogCancelTextStr, \
+                                                         char *: _setDialogCancelTextStr, \
+                                                        default: _setDialogCancelTextLabel)(x)
 
-// set text from LABEL index or pointer (uint8_t *)
+// set text from LABEL index or pointer (char *)
 #define setDialogText(title, msg, oktext, canceltext) \
   {                                                   \
     setDialogTitle(title);                            \
@@ -50,10 +50,9 @@ void _setDialogCancelTextLabel(int16_t index);
     setDialogCancelText(canceltext);                  \
   }
 
-void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context,
-                   const uint8_t * yes, const uint8_t * no);
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const char * title, const char * context, const char * yes, const char * no);
 void menuDialog(void);
-void showDialog(DIALOG_TYPE type, void (* ok_action)(), void (* cancel_action)(), void (* loop_action)());
+void showDialog(DIALOG_TYPE type, void (* ok_action)(void), void (* cancel_action)(void), void (* loop_action)(void));
 void loopPopup(void);
 
 /**
@@ -73,7 +72,6 @@ void loopPopup(void);
     setDialogText(_title, _msg, _oktext, _canceltext);                                                   \
     showDialog(_type, _ok_action, _cancel_action, _loop_action);                                         \
   }
-
 
 /**
  * @brief Displays a popup for a reminder, it needs user confirmation to close it

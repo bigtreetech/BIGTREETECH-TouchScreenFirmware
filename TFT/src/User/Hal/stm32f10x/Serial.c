@@ -281,7 +281,7 @@ void USART_IRQHandler(uint8_t port)
         if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                            // is message complete?
           dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                           // keep track of last sent message timestamp
 
-        Serial[port].uart->DR = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];       // write next available character
+        Serial[port].uart->DR = (uint8_t) dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];      // write next available character
 
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;  // increase reading index
       }

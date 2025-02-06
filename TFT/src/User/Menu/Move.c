@@ -35,20 +35,21 @@ static void storeMoveCmd(const AXIS xyz, const float amount)
 
 static void drawXYZ(void)
 {
-  if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning()) return;
+  if (getReminderStatus() != SYS_STATUS_IDLE || toastRunning())
+    return;
 
   char tempstr[30];
 
   GUI_SetColor(infoSettings.status_color);
 
   sprintf(tempstr, "X:%.2f  ", coordinateGetAxisActual(X_AXIS));
-  GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  GUI_DispString(START_X + (OFFSET + 0) * SPACE_X + (OFFSET + 0) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *) tempstr);
 
   sprintf(tempstr, "Y:%.2f  ", coordinateGetAxisActual(Y_AXIS));
-  GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  GUI_DispString(START_X + (OFFSET + 1) * SPACE_X + (OFFSET + 1) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *) tempstr);
 
   sprintf(tempstr, "Z:%.2f  ", coordinateGetAxisActual(Z_AXIS));
-  GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *)tempstr);
+  GUI_DispString(START_X + (OFFSET + 2) * SPACE_X + (OFFSET + 2) * ICON_WIDTH, (TITLE_END_Y - BYTE_HEIGHT) / 2, (uint8_t *) tempstr);
 
   GUI_SetColor(infoSettings.font_color);
 }

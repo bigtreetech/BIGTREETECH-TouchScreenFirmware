@@ -42,7 +42,7 @@ static void pidRun(void)
 
   if (tool < MAX_HEATER_PID_COUNT)
   {
-    mustStoreCmd("%s S%d\n", (infoMachineSettings.firmwareType != FW_REPRAPFW) ? pidCmdMarlin[tool] : pidCmdRRF[tool], (int)pidHeaterTarget[tool]);  // start PID autotune
+    mustStoreCmd("%s S%d\n", (infoMachineSettings.firmwareType != FW_REPRAPFW) ? pidCmdMarlin[tool] : pidCmdRRF[tool], (int) pidHeaterTarget[tool]);  // start PID autotune
 
     pidStatus = PID_RUNNING;
   }
@@ -64,13 +64,13 @@ static inline void pidResultAction(void)
   {
     memset(pidHeaterTarget, 0, sizeof(pidHeaterTarget));  // reset pidHeaterTarget[] to 0
 
-    LABELCHAR(tempMsg, LABEL_TIMEOUT_REACHED);
+    LABEL_CHAR(tempMsg, LABEL_TIMEOUT_REACHED);
 
     sprintf(strchr(tempMsg, '\0'), "\n %s", textSelect(LABEL_BUSY));
 
     BUZZER_PLAY(SOUND_NOTIFY);
 
-    popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, (uint8_t *) tempMsg);
+    popupReminder(DIALOG_TYPE_ALERT, LABEL_PID_TITLE, tempMsg);
   }
   else if (pidStatus == PID_FAILED)
   {
@@ -88,23 +88,23 @@ static inline void pidResultAction(void)
     {
       BUZZER_PLAY(SOUND_SUCCESS);
 
-      LABELCHAR(tempMsg, LABEL_PROCESS_COMPLETED);
+      LABEL_CHAR(tempMsg, LABEL_PROCESS_COMPLETED);
 
       if (infoMachineSettings.EEPROM == 1)
       {
         sprintf(strchr(tempMsg, '\0'), "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-        popupDialog(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+        popupDialog(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
       }
       else
       {
-        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, (uint8_t *) tempMsg);
+        popupReminder(DIALOG_TYPE_SUCCESS, LABEL_PID_TITLE, tempMsg);
       }
     }
     else  // PID tuning process not finished for all tools
     {
       #ifdef ENABLE_PID_STATUS_UPDATE_NOTIFICATION
-        LABELCHAR(tempMsg, LABEL_PID_TITLE);
+        LABEL_CHAR(tempMsg, LABEL_PID_TITLE);
 
         sprintf(strchr(tempMsg, '\0'), " %s", textSelect(LABEL_PROCESS_COMPLETED));
 
@@ -217,11 +217,12 @@ void menuPid(void)
         case KEY_ICON_6:
           if (checkFirstValidPID() == MAX_HEATER_PID_COUNT)  // if no temperature was set to a value > 0
           {
-            addToast(DIALOG_TYPE_ERROR, (char *) textSelect(LABEL_INVALID_VALUE));
+            addToast(DIALOG_TYPE_ERROR, textSelect(LABEL_INVALID_VALUE));
           }
           else
           {
-            popupDialog(DIALOG_TYPE_QUESTION, pidItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL, pidStart, NULL, NULL);
+            popupDialog(DIALOG_TYPE_QUESTION, pidItems.title.index, LABEL_TUNE_START_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                        pidStart, NULL, NULL);
           }
           break;
 

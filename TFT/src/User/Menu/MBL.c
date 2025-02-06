@@ -59,17 +59,17 @@ void mblUpdateStatus(bool succeeded)
   {
     BUZZER_PLAY(SOUND_SUCCESS);
 
-    LABELCHAR(tempMsg, LABEL_BL_COMPLETE);
+    LABEL_CHAR(tempMsg, LABEL_BL_COMPLETE);
 
     if (infoMachineSettings.EEPROM == 1)
     {
       sprintf(strchr(tempMsg, '\0'), "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-      popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+      popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
     }
     else
     {
-      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, (uint8_t *) tempMsg);
+      popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MBL_SETTINGS, tempMsg);
     }
   }
   else  // if bed leveling process failed, provide an error dialog
@@ -83,7 +83,7 @@ void mblUpdateStatus(bool succeeded)
 // show an error notification
 static void mblNotifyError(bool isStarted)
 {
-  LABELCHAR(tempMsg, LABEL_MBL);
+  LABEL_CHAR(tempMsg, LABEL_MBL);
 
   sprintf(strchr(tempMsg, '\0'), " %s", isStarted ? textSelect(LABEL_ON) : textSelect(LABEL_OFF));
 

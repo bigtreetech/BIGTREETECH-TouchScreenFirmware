@@ -173,6 +173,6 @@ uint8_t GPIO_GetLevel(uint16_t io)
 
   if ((uint32_t)RESET != (GPIO_ISTAT(GPIO_Port[port]) & (1<<pin)))
     return 1;
-  else
-    return 0;
+
+  return 0;
 }

@@ -53,8 +53,8 @@ bool mountFS(void)
     case FS_ONBOARD_MEDIA:
       if (isPrintingFromOnboard())
         return true;  // no mount while printing
-      else
-        return mountGcodeSDCard();
+
+      return mountGcodeSDCard();
 
     default:
       return false;
@@ -265,8 +265,8 @@ const char * getFoldername(uint8_t index)
 {
   if (infoFile.longFolder[index] != NULL)
     return infoFile.longFolder[index];
-  else
-    return infoFile.folder[index];
+
+  return infoFile.folder[index];
 }
 
 // return the long file name if exists, otherwise the short one
@@ -274,8 +274,8 @@ const char * getFilename(uint8_t index)
 {
   if (infoFile.longFile[index] != NULL)
     return infoFile.longFile[index];
-  else
-    return infoFile.file[index];
+
+  return infoFile.file[index];
 }
 
 static const char * hideExtension(const char * filename)

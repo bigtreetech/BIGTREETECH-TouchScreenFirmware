@@ -72,12 +72,10 @@ void loopBackEnd(void)
   {
     char tempMsg[200];
 
-    sprintf(tempMsg, (char *) textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(heatGetToolIndex()));
-    strcat(tempMsg, "\n");
-    strcat(tempMsg, (char *) textSelect(LABEL_WAIT_HEAT_UP));
-    strcat(tempMsg, "?");
+    sprintf(tempMsg, textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(heatGetToolIndex()));
+    sprintf(strchr(tempMsg, '\0'), "\n%s?", textSelect(LABEL_WAIT_HEAT_UP));
 
-    popupDialog(DIALOG_TYPE_ERROR, LABEL_TIMEOUT_REACHED, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_RESUME, NULL, heatClearWaiting, NULL);
+    popupDialog(DIALOG_TYPE_ERROR, LABEL_TIMEOUT_REACHED, tempMsg, LABEL_CONFIRM, LABEL_RESUME, NULL, heatClearWaiting, NULL);
   }
 
   // fan speed monitor

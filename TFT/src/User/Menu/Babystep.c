@@ -157,7 +157,8 @@ void menuBabystep(void)
           //
           orig_z_offset = offsetSetValue(new_z_offset);
 
-          popupDialog(DIALOG_TYPE_QUESTION, babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, babyStepItems.title.index, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                      saveEepromSettings, NULL, NULL);
         }
         break;
 

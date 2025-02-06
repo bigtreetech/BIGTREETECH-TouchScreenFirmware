@@ -182,6 +182,6 @@ uint8_t GPIO_GetLevel(uint16_t io)
 
   if ((GPIO_Port[port]->IDR & (1 << pin)) != 0)
     return 1;
-  else
-    return 0;
+
+  return 0;
 }
