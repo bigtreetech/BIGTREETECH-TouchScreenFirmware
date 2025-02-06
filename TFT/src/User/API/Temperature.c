@@ -51,8 +51,8 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
   {
     // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
     case FROM_HOST:
-      // set target temperature if not waiting for feedback and pending command request from GUI (it avoids to
-      // set old target temperature in case of multiple commands issued from GUI) and if not waiting for heating
+      // set target temperature if not waiting for feedback and no pending command request from GUI
+      // (it avoids to set old target temperature in case of multiple commands issued from GUI)
       //
       if (GET_BIT(heat_feedback_waiting, index))          // if waiting for feedback, clear flag
         SET_BIT_OFF(heat_feedback_waiting, index);
