@@ -613,7 +613,7 @@ When on Printing menu, pressing on the **pause**, **resume** and **stop** button
 The remote host must properly handle the received notifications. For example, if `//action:notification remote pause` is received then the remote host must effectively pause the print and send `M118 P0 A1 action:pause` in order to trigger the pause action to the TFT.
 
 **NOTES:**
-- The [_BTT TFT Touchscreen Support_ plugin](https://github.com/jounathaen/octoprint_btt_touch_support) provides this integration for Octoprint
+- The [_BTT TFT Touchscreen Support_ plugin](https://github.com/jounathaen/octoprint_btt_touch_support) provides this integration for OctoPrint
 - With the exception of TFT70, the maximum number of displayable layer count is 999 (there's no space to display layer number and count if the layer count is above 999)
 
 ### Adding Gcode Thumbnails
