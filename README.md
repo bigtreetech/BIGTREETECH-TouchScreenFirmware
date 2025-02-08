@@ -257,10 +257,12 @@ For **MKS TFTs**:
 
 For **MKS GD TFTs**:
 
-For MKS TFT28 mounting GD32 MCU (GigaDevice MCU) (like the newest version of Genious Pro), you need to:
-1. Rename the right binary (e.g. `MKS_GD_TFT28_V1_2_4.27.x.bin`) to `MKSTFT28EVO.bin`
-2. Create an empty file named `MKSTFT28.bin`
-3. Create two empty directories named `MKS_FONT` and `MKS_PIC`
+1. The firmwares use the naming convention `MKS_GD_TFT*_V*_*.*.x.bin`
+2. Any binary file for an MKS GD firmware (e.g. `MKS_GD_TFT28_V4_0.27.x.bin`) MUST be renamed to `MKSTFT*EVO.bin` (e.g. `MKSTFT28EVO.bin`, `MKSTFT35EVO.bin` etc.) in order it can be recognized and installed by the TFT
+3. In addition to the deployment file (e.g. `MKSTFT28EVO.bin`), in order to be able to update the firmware some files/folders MUST always be present on the SD Card:
+   - empty `mks_font` folder
+   - empty `mks_pic` folder
+   - empty `mks_config.txt` file
 
 For example, for BTT TFT35 V3 select:
 
