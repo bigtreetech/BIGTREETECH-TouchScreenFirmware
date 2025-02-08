@@ -241,20 +241,18 @@ void Serial_Put(uint8_t port, const char * msg)
 void USART_IRQHandler(uint8_t port)
 {
   #if IDLE_LINE_IT == true  // IDLE Line interrupt
-    if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt
+    if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt flag
     {
-      Serial[port].uart->SR;                               // clear IDLE Line bit
-      Serial[port].uart->DR;
+      dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
 
-      dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_channelRX->CNDTR;
+      Serial[port].uart->DR;                               // clear RXNE pending flag
+      Serial[port].uart->SR;                               // as last, clear IDLE Line interrupt flag
     }
   #endif
 
   #ifdef TX_DMA_WRITE  // TX DMA based serial writing
-    if ((Serial[port].uart->SR & USART_SR_TC) != RESET)  // check for Transfer Complete (TC) interrupt
+    if ((Serial[port].uart->SR & USART_SR_TC) != RESET)            // check for Transfer Complete (TC) interrupt flag
     {
-      Serial[port].uart->SR &= ~USART_SR_TC;             // clear Transfer Complete (TC) bit
-
       // NOTE 1: use the serial TC, not the DMA TC because this only indicates DMA is done, peripheral might be still busy
       // NOTE 2: the TC interrupt is sometimes called while DMA is still active, so check NDTR status!
       //
@@ -272,9 +270,11 @@ void USART_IRQHandler(uint8_t port)
           Serial[port].uart->CR1 &= ~USART_CR1_TCIE;               // disable Transfer Complete (TC) interrupt, nothing more to do
       }
       // else: more data is coming, wait for next Transfer Complete (TC) interrupt
+
+      Serial[port].uart->SR &= ~USART_SR_TC;                       // as last, clear Transfer Complete (TC) interrupt flag
     }
   #else  // TX interrupt based serial writing
-    if ((Serial[port].uart->SR & USART_SR_TXE) != RESET)                                          // check for TXE interrupt
+    if ((Serial[port].uart->SR & USART_SR_TXE) != RESET)                                          // check for TXE interrupt flag
     {
       if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                   // is more data available?
       {

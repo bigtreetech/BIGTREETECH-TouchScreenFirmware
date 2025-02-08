@@ -264,40 +264,40 @@ void Serial_Put(uint8_t port, const char * msg)
 void USART_IRQHandler(uint8_t port)
 {
   #if IDLE_LINE_IT == true  // IDLE Line interrupt
-    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_IDLEF) != RESET)  // check for IDLE Line interrupt
+    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_IDLEF) != RESET)  // check for IDLE Line interrupt flag
     {
-      USART_STAT0(Serial[port].uart);                                   // clear IDLE Line bit
-      USART_DATA(Serial[port].uart);
-
       dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channelRX);
+
+      USART_DATA(Serial[port].uart);                                    // clear RXNE pending flag
+      USART_STAT0(Serial[port].uart);                                   // as last, clear IDLE Line interrupt flag
     }
   #endif
 
   #ifdef TX_DMA_WRITE  // TX DMA based serial writing
-    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TC) != RESET)  // check for Transfer Complete (TC) interrupt
+    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TC) != RESET)             // check for Transfer Complete (TC) interrupt flag
     {
-      USART_STAT0(Serial[port].uart) &= ~USART_STAT0_TC;             // clear Transfer Complete (TC) bit
-
       // NOTE 1: use the serial TC, not the DMA TC because this only indicates DMA is done, peripheral might be still busy
       // NOTE 2: the TC interrupt is sometimes called while DMA is still active, so check NDTR status!
       //
       if (DMA_CHCNT(Serial[port].dma_stream, Serial[port].dma_channelTX) == 0)  // sending is complete
       {
         // NOTE: it marks message timestamp twice if transfer was split into 2 parts
-        dmaL1DataTX[port].timestamp = OS_GetTimeMs();              // keep track of last sent message timestamp
+        dmaL1DataTX[port].timestamp = OS_GetTimeMs();                           // keep track of last sent message timestamp
 
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + dmaL1DataTX[port].flag) % dmaL1DataTX[port].cacheSize;
         dmaL1DataTX[port].flag = 0;
 
-        if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)  // is more data available?
-          Serial_Send_TX(port);                                    // continue sending data
+        if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)               // is more data available?
+          Serial_Send_TX(port);                                                 // continue sending data
         else
-          USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TCIE;       // disable Transfer Complete (TC) interrupt, nothing more to do
+          USART_CTL0(Serial[port].uart) &= ~USART_CTL0_TCIE;                    // disable Transfer Complete (TC) interrupt, nothing more to do
       }
       // else: more data is coming, wait for next Transfer Complete (TC) interrupt
+
+      USART_STAT0(Serial[port].uart) &= ~USART_STAT0_TC;                        // as last, clear Transfer Complete (TC) interrupt flag
     }
   #else  // TX interrupt based serial writing
-    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)                                  // check for TBE interrupt
+    if ((USART_STAT0(Serial[port].uart) & USART_STAT0_TBE) != RESET)                                  // check for TBE interrupt flag
     {
       if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                       // is more data available?
       {

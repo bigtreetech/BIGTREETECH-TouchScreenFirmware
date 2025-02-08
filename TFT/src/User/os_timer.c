@@ -36,10 +36,8 @@ void OS_InitTimerMs(void)
 
 void TIMER6_IRQHandler(void)
 {
-  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)
+  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)  // check for TIMER6 interrupt flag
   {
-    TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // clear interrupt flag
-
     os_counter.ms++;
     os_counter.sec--;
 
@@ -53,6 +51,8 @@ void TIMER6_IRQHandler(void)
     }
 
     TS_CheckPress();  // check touch screen once a millisecond
+
+    TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // as last, clear TIMER6 interrupt flag
   }
 }
 
@@ -60,10 +60,8 @@ void TIMER6_IRQHandler(void)
 
 void TIM7_IRQHandler(void)
 {
-  if ((TIM7->SR & TIM_SR_UIF) != 0)
+  if ((TIM7->SR & TIM_SR_UIF) != 0)  // check for TIM7 interrupt flag
   {
-    TIM7->SR &= ~TIM_SR_UIF;  // clear interrupt flag
-
     os_counter.ms++;
     os_counter.sec--;
 
@@ -77,6 +75,8 @@ void TIM7_IRQHandler(void)
     }
 
     TS_CheckPress();  // check touch screen once a millisecond
+
+    TIM7->SR &= ~TIM_SR_UIF;  // as last, clear TIM7 interrupt flag
   }
 }
 

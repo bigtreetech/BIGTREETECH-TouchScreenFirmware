@@ -147,10 +147,8 @@ void Buzzer_AddSound(const uint16_t frequency, const uint16_t duration)
 
 void TIMER2_IRQHandler(void)  // GD32F2XX and GD32F3XX timer ISR
 {
-  if ((TIMER_INTF(TIMER2) & TIMER_INTF_UPIF) != 0)  // check for timer2 interrupt flag
+  if ((TIMER_INTF(TIMER2) & TIMER_INTF_UPIF) != 0)  // check for TIMER2 interrupt flag
   {
-    TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;         // clear interrupt flag
-
     if (buzzer.toggles > 0)                           // if a sound has to be played
     {
       buzzer.toggles--;
@@ -168,6 +166,8 @@ void TIMER2_IRQHandler(void)  // GD32F2XX and GD32F3XX timer ISR
         buzzer.toggles++;               // silence, no toggling, only counting
       }
     }
+
+    TIMER_INTF(TIMER2) &= ~TIMER_INTF_UPIF;  // as last, clear TIMER2 interrupt flag
   }
 }
 
@@ -177,8 +177,6 @@ void TIM3_IRQHandler(void)  // STM32FXX timer ISR
 {
   if ((TIM3->SR & TIM_SR_UIF) != 0)  // check for TIM3 interrupt flag
   {
-    TIM3->SR &= ~TIM_SR_UIF;         // clear interrupt flag
-
     if (buzzer.toggles > 0)                           // if a sound has to be played
     {
       buzzer.toggles--;
@@ -196,6 +194,8 @@ void TIM3_IRQHandler(void)  // STM32FXX timer ISR
         buzzer.toggles++;            // silence, no toggling, only counting
       }
     }
+
+    TIM3->SR &= ~TIM_SR_UIF;  // as last, clear TIM3 interrupt flag
   }
 }
 
