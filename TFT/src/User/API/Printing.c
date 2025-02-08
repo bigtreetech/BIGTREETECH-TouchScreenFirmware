@@ -806,9 +806,9 @@ void setPrintResume(HOST_STATUS hostStatus)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
-  if (infoFile.source >= FS_ONBOARD_MEDIA) return;      // if not printing from TFT media
+  if (infoFile.source >= FS_ONBOARD_MEDIA) return;     // if not printing from TFT media
   if (infoPrinting.paused || heatIsWaiting()) return;
-  if (!InfoHost_IsCmdFromTFTSendable()) return;         // if gcode command from TFT media is not sendable
+  if (!InfoHost_IsCmdFromTFTSendable()) return;        // if gcode command from TFT media is not sendable
 
   // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:
   //   - initialize print restore, if any, storing a set of commands on command queue
