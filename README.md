@@ -734,3 +734,7 @@ The inclusion of the filament data into the G-code can be automated. In Cura all
 In case the G-code file has been generated using the [BTT 3D Plug-In Suit](https://github.com/bigtreetech/Bigtree3DPluginSuit), the data is automatically added.
 
 In case filament data is not present in the G-code, the filament length data is calculated during print. Length is calculated regardless of using the TFT USB, TFT SD or the onboard media. Calculations are done in both absolute or relative extrusion mode. Filament data takes into account the flow rate also but with a caveat. It has to be the same flow rate during the entire time of the printing, because the end result is calculated based on the flow rate at the time the print has finished. If flow rate changes during the print the results will not be accurate anymore.
+
+### License 
+
+GPL 3.0 - GNU General Public License v3.0 or later https://www.gnu.org/licenses/gpl-3.0-standalone.html
