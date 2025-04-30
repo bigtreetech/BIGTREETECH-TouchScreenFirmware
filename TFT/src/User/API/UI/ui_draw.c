@@ -70,9 +70,9 @@ void getBMPsize(BMP_INFO * bmp)
   if (!bmp->address && bmp->index < ICON_NULL)
     bmp->address = ICON_ADDR(bmp->index);
 
-  W25Qxx_ReadBuffer((uint8_t *)&bmp->width, bmp->address, COLOR_BYTE_SIZE);
+  W25Qxx_ReadBuffer((uint8_t *) &bmp->width, bmp->address, COLOR_BYTE_SIZE);
   bmp->address += COLOR_BYTE_SIZE;
-  W25Qxx_ReadBuffer((uint8_t *)&bmp->height, bmp->address, COLOR_BYTE_SIZE);
+  W25Qxx_ReadBuffer((uint8_t *) &bmp->height, bmp->address, COLOR_BYTE_SIZE);
   bmp->address += COLOR_BYTE_SIZE;
 }
 
@@ -321,7 +321,7 @@ static uint16_t color_alpha_565(const uint8_t r0, const uint8_t g0, const uint8_
 
 static inline void on_draw_png_pixel(pngle_t * pngle, uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t rgba[4])
 {
-  GUI_POINT * pos = (GUI_POINT *)pngle_get_user_data(pngle);
+  GUI_POINT * pos = (GUI_POINT *) pngle_get_user_data(pngle);
 
   LCD_SetWindow(pos->x + x, pos->y + y, pos->x + x, pos->y + y);
   LCD_WR_16BITS_DATA(color_alpha_565(0, 0, 0, rgba[0], rgba[1], rgba[2], rgba[3]));
@@ -440,9 +440,9 @@ static inline bool model_DecodeToFlash_Base64PNG(FIL * gcodeFile, uint32_t addr)
 
   W25Qxx_DECODE session = {0, addr, {}};
 
-  memcpy(session.buf, (uint8_t *)&w, sizeof(uint16_t));
+  memcpy(session.buf, (uint8_t *) &w, sizeof(uint16_t));
   session.bnum += sizeof(uint16_t);
-  memcpy(session.buf + session.bnum, (uint8_t *)&h, sizeof(uint16_t));
+  memcpy(session.buf + session.bnum, (uint8_t *) &h, sizeof(uint16_t));
   session.bnum += sizeof(uint16_t);
 
   return model_Process_Base64PNG(gcodeFile, &session, on_decode_png_pixel, on_decode_png_pixel_done);

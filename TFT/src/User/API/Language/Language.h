@@ -59,16 +59,16 @@ extern const char * const default_pack[LABEL_NUM];
 extern const char * const lang_key_list[LABEL_NUM];
 
 // use only once in any function call. Calling multiple times will overwrite previous text
-uint8_t * textSelect(uint16_t sel);
+const char * textSelect(uint16_t sel);
 
 // get the address of the label in SPI flash
 uint32_t getLabelFlashAddr(uint16_t index);
 
-// load selected label text into buffer form spi flash
-bool loadLabelText(uint8_t * buf, uint16_t index);
+// load selected label text into buffer from spi flash
+void loadLabelText(char * buf, uint16_t index);
 
 // initialize and preload label text
-#define LABELCHAR(x, i) char x[MAX_LANG_LABEL_LENGTH]; loadLabelText((uint8_t *)&x, i);
+#define LABEL_CHAR(x, i) char x[MAX_LANG_LABEL_LENGTH]; loadLabelText(x, i);
 
 #ifdef __cplusplus
 }

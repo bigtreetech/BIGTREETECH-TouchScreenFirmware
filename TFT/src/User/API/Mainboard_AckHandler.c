@@ -17,22 +17,22 @@ typedef struct
 
 // notify or ignore messages starting with following text
 static const ECHO knownEcho[] = {
-  {ECHO_NOTIFY_NONE, "busy: paused for user"},
-  {ECHO_NOTIFY_NONE, "busy: processing"},
-  {ECHO_NOTIFY_NONE, "Now fresh file:"},
-  {ECHO_NOTIFY_NONE, "Now doing file:"},
-  {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
-  {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
-  {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
-  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},        // M503
-  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},         // M503
-  {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
-  {ECHO_NOTIFY_NONE, "Config:"},                  // M360
-  {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
-  {ECHO_NOTIFY_TOAST, "echo:Bed"},                // M420
-  {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
-  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
-  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
+  {ECHO_NOTIFY_NONE,  "busy: paused for user"},
+  {ECHO_NOTIFY_NONE,  "busy: processing"},
+  {ECHO_NOTIFY_NONE,  "Now fresh file:"},
+  {ECHO_NOTIFY_NONE,  "Now doing file:"},
+  {ECHO_NOTIFY_NONE,  "echo:;"},                   // M503
+  {ECHO_NOTIFY_NONE,  "echo:  G"},                 // M503
+  {ECHO_NOTIFY_NONE,  "echo:  M"},                 // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},         // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},          // M503
+  {ECHO_NOTIFY_NONE,  "Cap:"},                     // M115
+  {ECHO_NOTIFY_NONE,  "Config:"},                  // M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},          // M500
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},                 // M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},                // M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},     // Tool Change
+  {ECHO_NOTIFY_NONE,  "Unknown command: \"M150"},  // M150
 };
 
 static const char magic_error[]   = "Error:";
@@ -138,7 +138,7 @@ static bool ack_continue_seen(const char * str)
 
 static float ack_value(void)
 {
-  return (strtod(&ack_cache[ack_index], NULL));
+  return strtod(&ack_cache[ack_index], NULL);
 }
 
 // read the value after "/", if any
@@ -147,9 +147,9 @@ static float ack_second_value(void)
   char * secondValue = strchr(&ack_cache[ack_index], '/');
 
   if (secondValue != NULL)
-    return (strtod(secondValue + 1, NULL));
-  else
-    return -0.5;
+    return strtod(secondValue + 1, NULL);
+
+  return -0.5;
 }
 
 static void ack_values_sum(float * data)
@@ -193,13 +193,13 @@ static void ackPopupInfo(const char * info)
 
     // show notification based on notificaiton settings
     if (infoSettings.ack_notification == 1)
-      addNotification(DIALOG_TYPE_INFO, (char *)info, (char *)ack_cache + ack_index, show_dialog);
+      addNotification(DIALOG_TYPE_INFO, info, ack_cache + ack_index, show_dialog);
     else if (infoSettings.ack_notification == 2)
       addToast(DIALOG_TYPE_INFO, ack_cache);  // show toast notificaion if turned on
   }
   else
   {
-    addNotification(DIALOG_TYPE_ERROR, (char *)info, (char *)ack_cache + ack_index, show_dialog);
+    addNotification(DIALOG_TYPE_ERROR, info, ack_cache + ack_index, show_dialog);
   }
 }
 
@@ -233,7 +233,8 @@ static inline bool processKnownEcho(void)
     else if (knownEcho[i].notifyType == ECHO_NOTIFY_DIALOG)
     {
       BUZZER_PLAY(SOUND_NOTIFY);
-      addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)ack_cache + ack_index, true);
+
+      addNotification(DIALOG_TYPE_INFO, magic_echo, ack_cache + ack_index, true);
     }
   }
 
@@ -249,7 +250,7 @@ static inline void hostActionCommands(void)
     if (ack_continue_seen("Time Left"))  // parsing printing time left
     {
       // format: "Time Left <XX>h<YY>m<ZZ>s" (e.g. "Time Left 02h04m06s")
-      parsePrintRemainingTime((char *)ack_cache + ack_index);
+      parsePrintRemainingTime((char *)(ack_cache + ack_index));
     }
     else if (ack_continue_seen("Layer Left"))  // parsing printing layer left
     {
@@ -264,7 +265,7 @@ static inline void hostActionCommands(void)
     }
     else
     {
-      statusSetMsg((uint8_t *)magic_echo, (uint8_t *)ack_cache + index);  // always display the notification on status screen
+      statusSetMsg(magic_echo, ack_cache + index);  // always display the notification on status screen
 
       if (!ack_continue_seen("Ready."))  // avoid to display unneeded/frequent useless notifications (e.g. "My printer Ready.")
       {
@@ -272,7 +273,7 @@ static inline void hostActionCommands(void)
           addToast(DIALOG_TYPE_INFO, ack_cache + index);
 
         if (infoSettings.notification_m117 == ENABLED)
-          addNotification(DIALOG_TYPE_INFO, (char *)magic_echo, (char *)ack_cache + index, false);
+          addNotification(DIALOG_TYPE_INFO, magic_echo, ack_cache + index, false);
       }
     }
   }
@@ -309,7 +310,7 @@ static inline void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_begin "))
   {
-    strcpy(hostAction.prompt_begin, ack_cache + ack_index);
+    strncpy_no_pad(hostAction.prompt_begin, ack_cache + ack_index, sizeof(hostAction.prompt_begin));
     hostAction.button = 0;
     hostAction.prompt_show = true;
 
@@ -332,7 +333,7 @@ static inline void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    strcpy(hostAction.prompt_button[hostAction.button++], ack_cache + ack_index);
+    strncpy_no_pad(hostAction.prompt_button[hostAction.button++], ack_cache + ack_index, sizeof(hostAction.prompt_button[0]));
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
@@ -341,18 +342,18 @@ static inline void hostActionCommands(void)
     switch (hostAction.button)
     {
       case 0:
-        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Message", (uint8_t *)hostAction.prompt_begin,
+        popupDialog(DIALOG_TYPE_ALERT, "Message", hostAction.prompt_begin,
                     LABEL_CONFIRM, LABEL_NULL, setRunoutAlarmFalse, NULL, NULL);
         break;
 
       case 1:
-        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
-                    (uint8_t *)hostAction.prompt_button[0], LABEL_NULL, breakAndContinue, NULL, NULL);
+        popupDialog(DIALOG_TYPE_ALERT, "Action command", hostAction.prompt_begin,
+                    hostAction.prompt_button[0], LABEL_NULL, breakAndContinue, NULL, NULL);
         break;
 
       case 2:
-        popupDialog(DIALOG_TYPE_ALERT, (uint8_t *)"Action command", (uint8_t *)hostAction.prompt_begin,
-                    (uint8_t *)hostAction.prompt_button[0], (uint8_t *)hostAction.prompt_button[1], resumeAndPurge, resumeAndContinue, NULL);
+        popupDialog(DIALOG_TYPE_ALERT, "Action command", hostAction.prompt_begin,
+                    hostAction.prompt_button[0], hostAction.prompt_button[1], resumeAndPurge, resumeAndContinue, NULL);
         break;
     }
   }
@@ -438,7 +439,7 @@ void parseAck(void)
 
       detectAdvancedOk();
 
-      InfoHost_UpdateListeningMode();
+      InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
     }
 
     //----------------------------------------
@@ -557,7 +558,7 @@ void parseAck(void)
       // if regular OK response ("ok\n")
       if (ack_cache[ack_index] == '\n')
       {
-        InfoHost_HandleAckOk(infoSettings.tx_slots);
+        InfoHost_HandleAckOk(infoHost.target_tx_slots);
 
         goto parse_end;  // nothing else to do
       }
@@ -580,7 +581,7 @@ void parseAck(void)
     // "wait" response handling
     //----------------------------------------
 
-    // it is checked second (and not later on) because it is the most frequent response during printer idle
+    // it is checked second (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("wait"))
     {
       avoid_terminal = !infoSettings.terminal_ack;  // suppress "wait" from terminal
@@ -644,17 +645,17 @@ void parseAck(void)
     // parse and store feed rate percentage
     else if (ack_seen("FR:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Speed factor at ")))
     {
-      speedSetCurPercent(0, ack_value());
+      speedSetCurrentPercent(0, ack_value());
     }
     // parse and store flow rate percentage
     else if (ack_seen("Flow:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Flow rate at ")))
     {
-      speedSetCurPercent(1, ack_value());
+      speedSetCurrentPercent(1, ack_value());
     }
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))
     {
-      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
+      fanSetCurrentSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     #ifdef BUZZER_PIN
       // parse M300 sound coming from mainboard, play on TFT
@@ -676,15 +677,15 @@ void parseAck(void)
     else if (ack_starts_with("M710"))
     {
       if (ack_seen("S"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT, ack_value());
 
       if (ack_seen("I"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
     }
     // parse pause message
     else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
     {
-      popupDialog(DIALOG_TYPE_QUESTION, (uint8_t *)"Printer is Paused", (uint8_t *)"Paused for user\ncontinue?",
+      popupDialog(DIALOG_TYPE_QUESTION, "Printer is Paused", "Paused for user\ncontinue?",
                   LABEL_CONFIRM, LABEL_NULL, breakAndContinue, NULL, NULL);
     }
     // parse host action commands. Required "HOST_ACTION_COMMANDS" and other settings in Marlin
@@ -789,7 +790,7 @@ void parseAck(void)
     // "Resend:" response handling. Required COMMAND_CHECKSUM feature enabled in TFT or managed by remote host
     else if (ack_starts_with("Resend:"))
     {
-      handleCmdLineNumberMismatch((uint32_t)ack_value());
+      handleCmdLineNumberMismatch((uint32_t) ack_value());
     }
 
     //----------------------------------------
@@ -842,20 +843,20 @@ void parseAck(void)
       if (ack_continue_seen("Range:"))
         sprintf(strchr(tmpMsg, '\0'), "\nRange: %0.5f", ack_value());
 
-      popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
+      popupReminder(DIALOG_TYPE_INFO, "Repeatability Test", tmpMsg);
     }
     // parse M48, standard deviation
     else if (ack_seen("Standard Deviation:"))
     {
       char tmpMsg[100];
-      char * dialogMsg = (char *)getDialogMsgStr();
+      const char * dialogMsg = getDialogMsgStr();
 
       if (memcmp(dialogMsg, "Mean:", 5) == 0)
       {
         levelingSetProbedPoint(-1, -1, ack_value());  // save probed Z value
         sprintf(tmpMsg, "%s\nStandard Deviation: %0.5f", dialogMsg, ack_value());
 
-        popupReminder(DIALOG_TYPE_INFO, (uint8_t *)"Repeatability Test", (uint8_t *)tmpMsg);
+        popupReminder(DIALOG_TYPE_INFO, "Repeatability Test", tmpMsg);
       }
     }
     // parse and store M211 or M503, software endstops state (e.g. from Probe Offset, MBL, Mesh Editor menus)
@@ -968,6 +969,7 @@ void parseAck(void)
     else if (ack_seen("Z Probe Past Bed"))
     {
       levelingSetProbedPoint(-1, -1, 0);  // cancel waiting for coordinates
+
       BUZZER_PLAY(SOUND_ERROR);
     }
     #if DELTA_PROBE_TYPE != 0
@@ -1281,18 +1283,20 @@ void parseAck(void)
       {
         string = &ack_cache[ack_index];
         string_start = ack_index;
+        string_end = string_start;
 
         if (ack_seen("KINEMATICS:"))  // as of MarlinFirmware/Marlin@3fd175a
           string_end = ack_index - sizeof("KINEMATICS:");
-        else if (ack_seen("EXTRUDER_COUNT:"))
-        {
-          if (MIXING_EXTRUDER == 0)
-            infoSettings.ext_count = ack_value();
-
+        else if (ack_seen("EXTRUDER_COUNT:"))  // for backward compatibility with older Marlin firmwares (not yet reporting "KINEMATICS:")
           string_end = ack_index - sizeof("EXTRUDER_COUNT:");
-        }
 
         infoSetMachineType(string, string_end - string_start);  // set printer name
+      }
+
+      if (ack_seen("EXTRUDER_COUNT:"))
+      {
+        if (MIXING_EXTRUDER == 0)
+          infoSettings.ext_count = ack_value();
       }
     }
     else if (ack_starts_with("Cap:"))
@@ -1385,9 +1389,9 @@ void parseAck(void)
       // Required COMMAND_CHECKSUM feature enabled in TFT or managed by remote host
       if (ack_continue_seen("Last Line:"))
       {
-        if (getCmdLineNumberOk() != (uint32_t)ack_value())  // if error message not already displayed for the same line number
+        if (getCmdLineNumberOk() != (uint32_t) ack_value())  // if error message not already displayed for the same line number
         {
-          setCmdLineNumberOk((uint32_t)ack_value());
+          setCmdLineNumberOk((uint32_t) ack_value());
           ack_seen(magic_error);      // just to reset ack_index to the beginning of the full error message to display
           ackPopupInfo(magic_error);  // display error message
         }

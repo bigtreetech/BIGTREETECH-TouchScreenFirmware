@@ -24,8 +24,8 @@ typedef enum
 typedef enum
 {
   FROM_HOST = 0,  // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
-  FROM_GUI,       // temperature requested from the TFT's GUI
-  FROM_CMD,       // temperature requested in the command queue (from gcode or external source connected to the TFT)
+  FROM_GUI,       // temperature requested from TFT's GUI
+  FROM_CMD,       // temperature requested in command queue (from gcode file, TFT's GUI or external source connected to TFT) and ready to be sent to mainboard
 } TEMP_SOURCE;
 
 enum
@@ -74,15 +74,15 @@ extern const char * const extruderDisplayID[];
 extern const char * const toolChange[];
 
 void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE tempSource);  // set target temperature
-uint16_t heatGetTargetTemp(uint8_t index);                   // get target temperature
+int16_t heatGetTargetTemp(uint8_t index);                    // get target temperature
 void heatSetCurrentTemp(uint8_t index, const int16_t temp);  // set current temperature
 int16_t heatGetCurrentTemp(uint8_t index);                   // get current temperature
 void heatCoolDown(void);                                     // disable all heaters/hotends
 
-bool heatGetIsWaiting(const uint8_t index);                  // is heating waiting to heat up
-bool heatHasWaiting(void);                                   // check all heater if there is a heater waiting to be waited
-void heatSetIsWaiting(uint8_t index, const bool isWaiting);  // set heater waiting status
-void heatClearIsWaiting(void);
+void heatSetWaiting(uint8_t index, const bool isWaiting);  // called in sendQueueCmd(). Set heater waiting status
+bool heatIsWaiting(void);                                  // called in loopPrintFromTFT(). Check for at least an heater waiting for target temperature
+bool heatIsWaitingTimedout(void);                          // caslled in loopBackEnd()
+void heatClearWaiting(void);                               // called in completePrint()
 
 bool heatSetTool(const uint8_t tool);               // set current tool (extruder). Used when tool change command is from TFT
 void heatSetToolIndex(const uint8_t toolIndex);     // set current Tool (extruder)

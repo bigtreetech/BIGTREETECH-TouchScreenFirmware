@@ -11,7 +11,7 @@ void OS_InitTimerMs(void)
     rcu_periph_clock_enable(RCU_TIMER6);
     TIMER_CAR(TIMER6) = 1000 - 1;
     TIMER_PSC(TIMER6) = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
-    TIMER_INTF(TIMER6) = (uint16_t)~(1<<0);
+    TIMER_INTF(TIMER6) = (uint16_t) ~(1<<0);
     TIMER_DMAINTEN(TIMER6) |= 1<<0;
     TIMER_CTL0(TIMER6) |= 0x01;
   #else
@@ -26,7 +26,7 @@ void OS_InitTimerMs(void)
     RCC->APB1ENR |= 1<<5;
     TIM7->ARR = 1000 - 1;
     TIM7->PSC = mcuClocks.PCLK1_Timer_Frequency / 1000000 - 1;
-    TIM7->SR = (uint16_t)~(1<<0);
+    TIM7->SR = (uint16_t) ~(1<<0);
     TIM7->DIER |= 1<<0;
     TIM7->CR1 |= 0x01;
   #endif
@@ -36,10 +36,8 @@ void OS_InitTimerMs(void)
 
 void TIMER6_IRQHandler(void)
 {
-  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)
+  if ((TIMER_INTF(TIMER6) & TIMER_INTF_UPIF) != 0)  // check for TIMER6 interrupt flag
   {
-    TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // clear interrupt flag
-
     os_counter.ms++;
     os_counter.sec--;
 
@@ -53,6 +51,8 @@ void TIMER6_IRQHandler(void)
     }
 
     TS_CheckPress();  // check touch screen once a millisecond
+
+    TIMER_INTF(TIMER6) &= ~TIMER_INTF_UPIF;  // as last, clear TIMER6 interrupt flag
   }
 }
 
@@ -60,10 +60,8 @@ void TIMER6_IRQHandler(void)
 
 void TIM7_IRQHandler(void)
 {
-  if ((TIM7->SR & TIM_SR_UIF) != 0)
+  if ((TIM7->SR & TIM_SR_UIF) != 0)  // check for TIM7 interrupt flag
   {
-    TIM7->SR &= ~TIM_SR_UIF;  // clear interrupt flag
-
     os_counter.ms++;
     os_counter.sec--;
 
@@ -77,6 +75,8 @@ void TIM7_IRQHandler(void)
     }
 
     TS_CheckPress();  // check touch screen once a millisecond
+
+    TIM7->SR &= ~TIM_SR_UIF;  // as last, clear TIM7 interrupt flag
   }
 }
 

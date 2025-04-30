@@ -77,11 +77,11 @@ uint32_t calculateCRC16(const uint8_t * data, uint32_t length);  // calculate CR
 
 uint8_t string_2_uint8(const uint8_t * str);                                // string convert to uint8, MSB ("2C" to 0x2C)
 uint8_t * uint8_2_string(uint8_t num, uint8_t * str);                       // uint8 convert to string, MSB (0x2C to "2C")
-uint32_t string_2_uint32(const uint8_t * str, const uint8_t bytes_num);     // string convert to uint32, MSB
+uint32_t string_2_uint32(const uint8_t * str, uint8_t bytes_num);           // string convert to uint32, MSB
 uint8_t * uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t * str);  // uint32 convert to string, MSB
-void time_2_string(char * buf, char * str_format, uint32_t time);           // convert time to string with given formatting
+void time_2_string(char * buf, const char * str_format, uint32_t time);     // convert time to string with given formatting
 
-double strtod_ligth(char * str, char ** endptr);               // light weight strtod() function without exponential support
+double strtod_ligth(char * str, char ** end_ptr);              // light weight strtod() function without exponential support
 void strncpy_pad(char * dest, const char * src, size_t n);     // light weight and safe strncpy() function with padding
 void strncpy_no_pad(char * dest, const char * src, size_t n);  // light weight and safe strncpy() function without padding
 

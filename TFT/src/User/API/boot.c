@@ -97,9 +97,9 @@ static BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 
   // store size of BMP
   bnum = 0;
-  memcpy(buf, (uint8_t *)&w, sizeof(uint16_t));
+  memcpy(buf, (uint8_t *) &w, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
-  memcpy(buf + bnum, (uint8_t *)&h, sizeof(uint16_t));
+  memcpy(buf + bnum, (uint8_t *) &h, sizeof(uint16_t));
   bnum += sizeof(uint16_t);
 
   for (int j = 0; j < h; j++)
@@ -108,7 +108,7 @@ static BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
 
     for (int i = 0; i < w; i++)
     {
-      f_read(&bmpFile, (char *)&lcdColor, bpp, &mybr);
+      f_read(&bmpFile, (char *) &lcdColor, bpp, &mybr);
 
       pix.RGB.r = lcdColor[2] >> 3;
       pix.RGB.g = lcdColor[1] >> 2;
@@ -135,14 +135,14 @@ static BMPUPDATE_STAT bmpDecode(char * bmp, uint32_t addr)
   return BMP_SUCCESS;
 }
 
-static void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
+static void dispIconFail(char * lbl, BMPUPDATE_STAT bmpState)
 {
   char * statTxt;
   char errorTxt[30];
 
   GUI_SetColor(infoSettings.reminder_color);
   GUI_ClearPrect(&labelFailedRect);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, lbl);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0, (uint8_t *) lbl);
 
   switch (bmpState)
   {
@@ -161,7 +161,7 @@ static void dispIconFail(uint8_t * lbl, BMPUPDATE_STAT bmpState)
   }
 
   sprintf(errorTxt, "Error: %s", statTxt);
-  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *)errorTxt);
+  GUI_DispString(labelFailedRect.x0, labelFailedRect.y0 + BYTE_HEIGHT + 2, (uint8_t *) errorTxt);
   GUI_RestoreColorDefault();
   Delay_ms(1000);  // give some time to the user to read failed icon name.
 }
@@ -175,7 +175,7 @@ static inline bool updateIcon(char * rootDir)
   BMPUPDATE_STAT bmpState;
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispString(5, PADDING, (uint8_t *)"Updating Logo");
+  GUI_DispString(5, PADDING, (uint8_t *) "Updating Logo");
   GUI_ClearPrect(&iconUpdateRect);
 
   GET_FULL_PATH(curBmpPath, rootDir, BMP_UPDATE_DIR "/Logo" STR_PORTRAIT ".bmp");
@@ -189,11 +189,11 @@ static inline bool updateIcon(char * rootDir)
   else
   {
     notFound++;
-    dispIconFail((uint8_t *)(curBmpPath), bmpState);
+    dispIconFail(curBmpPath, bmpState);
   }
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispString(5, PADDING, (uint8_t *)"Updating Icons");
+  GUI_DispString(5, PADDING, (uint8_t *) "Updating Icons");
 
   for (int i = 0; i < COUNT(iconBmpName); i++)
   {
@@ -203,7 +203,7 @@ static inline bool updateIcon(char * rootDir)
     bmpState = bmpDecode(curBmpPath, ICON_ADDR(i));
 
     GUI_ClearPrect(&labelUpdateRect);
-    GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (uint8_t *)curBmpPath);
+    GUI_DispString(labelUpdateRect.x0, labelUpdateRect.y0, (uint8_t *) curBmpPath);
     GUI_ClearRect(iconUpdateRect.x0, iconUpdateRect.y0, iconUpdateRect.x0 + lastSize.x, iconUpdateRect.y0 + lastSize.y);
 
     if (bmpState == BMP_SUCCESS)
@@ -214,12 +214,12 @@ static inline bool updateIcon(char * rootDir)
     else
     { // display bmp update fail
       notFound++;
-      dispIconFail((uint8_t *)curBmpPath, bmpState);
+      dispIconFail(curBmpPath, bmpState);
     }
 
     // display icon update progress
     sprintf(tempStr, "Updated: %d | Not Updated: %d", found, notFound);
-    GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (uint8_t *)tempStr);
+    GUI_DispString(statUpdateRect.x0, statUpdateRect.y0, (uint8_t *) tempStr);
   }
 
   GET_FULL_PATH(curBmpPath, rootDir, BMP_UPDATE_DIR "/InfoBox.bmp");
@@ -233,7 +233,7 @@ static inline bool updateIcon(char * rootDir)
   else
   {
     notFound++;
-    dispIconFail((uint8_t *)(curBmpPath), bmpState);
+    dispIconFail(curBmpPath, bmpState);
   }
 
   return !notFound;
@@ -256,11 +256,11 @@ static inline bool updateFont(char * font, uint32_t addr)
     return false;
 
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispString(5, PADDING, (uint8_t *)"Updating Fonts");
-  GUI_DispString(0, BYTE_HEIGHT * 3 + PADDING, (uint8_t *)font);
-  GUI_DispString(0, BYTE_HEIGHT * 4 + PADDING, (uint8_t *)"Size:    KB");
-  GUI_DispDec(0 + BYTE_WIDTH * 5, BYTE_HEIGHT * 4 + PADDING, (uint32_t)f_size(&myfp) >> 10, 4, RIGHT);
-  GUI_DispString(0, BYTE_HEIGHT * 5 + PADDING, (uint8_t *)"Updating:   %");
+  GUI_DispString(5, PADDING, (uint8_t *) "Updating Fonts");
+  GUI_DispString(0, BYTE_HEIGHT * 3 + PADDING, (uint8_t *) font);
+  GUI_DispString(0, BYTE_HEIGHT * 4 + PADDING, (uint8_t *) "Size:    KB");
+  GUI_DispDec(0 + BYTE_WIDTH * 5, BYTE_HEIGHT * 4 + PADDING, (uint32_t) f_size(&myfp) >> 10, 4, RIGHT);
+  GUI_DispString(0, BYTE_HEIGHT * 5 + PADDING, (uint8_t *) "Updating:   %");
 
   while (!f_eof(&myfp))
   {
@@ -345,7 +345,7 @@ static inline void scanRenameUpdate(char * rootDir)
     {
       GUI_Clear(infoSettings.bg_color);
       // It will take some time to delete the old directory, so display "Deleting" on the screen to tell user.
-      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Deleting old update files...");
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *) "Deleting old update files...");
       f_remove_full_dir(renamedPath);
     }
 
@@ -393,7 +393,7 @@ void scanUpdates(void)
   bool updatedFlashSign = false;
   uint32_t savedFlashSign[sign_count];
 
-  W25Qxx_ReadBuffer((uint8_t *)&savedFlashSign, FLASH_SIGN_ADDR, sizeof(savedFlashSign));
+  W25Qxx_ReadBuffer((uint8_t *) &savedFlashSign, FLASH_SIGN_ADDR, sizeof(savedFlashSign));
 
   // check for font update
   GET_FULL_PATH(curFilePath, rootDir, FONT_UPDATE_DIR);
@@ -453,5 +453,5 @@ void scanUpdates(void)
 
   // update flash sign
   if (updatedFlashSign)
-    saveflashSign((uint8_t *)savedFlashSign, sizeof(savedFlashSign));
+    saveflashSign((uint8_t *) savedFlashSign, sizeof(savedFlashSign));
 }

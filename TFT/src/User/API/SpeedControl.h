@@ -12,10 +12,10 @@ extern "C" {
 #define SPEED_MIN 10
 #define SPEED_MAX 999
 
-void speedSetPercent(const uint8_t tool, const uint16_t per);
-uint16_t speedGetSetPercent(const uint8_t tool);
-void speedSetCurPercent(const uint8_t tool, const uint16_t per);
-uint16_t speedGetCurPercent(const uint8_t tool);
+void speedSetTargetPercent(const uint8_t tool, const uint16_t per);   // set target speed percentage
+uint16_t speedGetTargetPercent(const uint8_t tool);                   // get target speed percentage
+void speedSetCurrentPercent(const uint8_t tool, const uint16_t per);  // set current speed percentage
+uint16_t speedGetCurrentPercent(const uint8_t tool);                  // get current speed percentage
 
 void loopCheckSpeed(void);                 // called in loopBackEnd(). Loop for check on speed
 void speedQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for speed query

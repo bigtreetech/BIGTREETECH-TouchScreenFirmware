@@ -17,7 +17,11 @@ void menuTuning(void)
         {ICON_NULL,                    LABEL_NULL},
       #endif
       {ICON_NULL,                    LABEL_NULL},
-      {ICON_NULL,                    LABEL_NULL},
+      #ifdef DEBUG_MONITORING
+        {ICON_FAST_SPEED,              LABEL_TEST},
+      #else
+        {ICON_NULL,                    LABEL_NULL},
+      #endif
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
@@ -89,6 +93,13 @@ void menuTuning(void)
           }
         #endif
         break;
+
+      #ifdef DEBUG_MONITORING
+        case KEY_ICON_5:
+          monitoringSetMenu(true);  // use Stress Test Monitoring menu
+          OPEN_MENU(menuMonitoring);
+          break;
+      #endif
 
       case KEY_ICON_7:
         CLOSE_MENU();

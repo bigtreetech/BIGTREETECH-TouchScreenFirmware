@@ -31,13 +31,13 @@ typedef struct
   bool handled;
 } E_AXIS_BACKUP;
 
-extern const char axis_id[TOTAL_AXIS];
+extern const char axisID[TOTAL_AXIS];
 extern E_AXIS_BACKUP eAxisBackup;
 
-bool coorGetRelative(void);
-void coorSetRelative(bool mode);
-bool eGetRelative(void);
-void eSetRelative(bool mode);
+bool coordinateGetRelative(void);
+void coordinateSetRelative(bool mode);
+bool coordinateGetRelativeExtruder(void);
+void coordinateSetRelativeExtruder(bool mode);
 bool coordinateIsKnown(void);
 void coordinateSetKnown(bool known);
 float coordinateGetAxisTarget(AXIS axis);

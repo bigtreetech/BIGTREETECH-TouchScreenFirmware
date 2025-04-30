@@ -7,10 +7,9 @@ extern "C" {
 
 #include <stdint.h>
 
-extern char machine_type[64];
-
 void infoSetFirmwareName(char * name, uint8_t name_len);
 void infoSetMachineType(char * machine, uint8_t type_len);
+const char * infoGetMachineType(void);
 void infoSetAccessPoint(char * ssid, uint8_t ssid_len);
 void infoSetIPAddress(char * ip, uint8_t ip_len);
 void menuInfo(void);

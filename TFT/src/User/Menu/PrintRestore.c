@@ -12,18 +12,17 @@ void menuPrintRestore(void)
 
   if (mountFS() == true && powerFailedExist())  // powerFailedExist function sets both infoFile.path and PLR filename
   {
-    char okTxt[MAX_LANG_LABEL_LENGTH];
-    char cancelTxt[MAX_LANG_LABEL_LENGTH];
+    // textSelect() can use a shared buffer (if a language package is being used)
+    // so we need to buffer 2 of the 3 labels provided in popupDrawPage()
+    LABEL_CHAR(confirm, LABEL_CONFIRM);
+    LABEL_CHAR(cancel, LABEL_CANCEL);
 
-    loadLabelText((uint8_t *)okTxt, LABEL_CONFIRM);
-    loadLabelText((uint8_t *)cancelTxt, LABEL_CANCEL);
-
-    popupDrawPage(DIALOG_TYPE_QUESTION, bottomDoubleBtn, textSelect(LABEL_POWER_FAILED), (uint8_t *)infoFile.path,
-                  (uint8_t *)okTxt, (uint8_t *)cancelTxt);
+    popupDrawPage(DIALOG_TYPE_QUESTION, (BUTTON *) dialogGetBottomDoubleBtn(), textSelect(LABEL_POWER_FAILED), infoFile.path,
+                  confirm, cancel);
 
     while (MENU_IS(menuPrintRestore))
     {
-      key_num = KEY_GetValue(2, doubleBtnRect);
+      key_num = KEY_GetValue(2, dialogGetDoubleBtnRect());
 
       switch (key_num)
       {

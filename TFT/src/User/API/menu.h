@@ -132,14 +132,14 @@ typedef struct
 
 typedef struct
 {
-  const uint8_t * text;
-  GUI_POINT       pos;      // relative to icon top left corner
-  uint8_t         h_align;  // left, right or center of pos point
-  uint8_t         v_align;  // top, bottom or center of pos point
-  uint16_t        fn_color;
-  uint16_t        bk_color;
-  GUI_TEXT_MODE   text_mode;
-  uint16_t        font;
+  const char *  text;
+  GUI_POINT     pos;      // relative to icon top left corner
+  uint8_t       h_align;  // left, right or center of pos point
+  uint8_t       v_align;  // top, bottom or center of pos point
+  uint16_t      fn_color;
+  uint16_t      bk_color;
+  GUI_TEXT_MODE text_mode;
+  uint16_t      font;
 } LIVE_DATA;
 
 typedef struct
@@ -177,7 +177,7 @@ void GUI_RestoreColorDefault(void);
 MENUITEMS * getCurMenuItems(void);
 LISTITEMS * getCurListItems(void);
 GUI_POINT getIconStartPoint(int index);
-uint8_t * labelGetAddress(const LABEL * label);
+const char * labelGetAddress(const LABEL * label);
 void menuDrawItem (const ITEM * menuItem, uint8_t position);
 void menuDrawIconOnly(const ITEM * item, uint8_t position);
 void menuDrawIconText(const ITEM * item, uint8_t position);
@@ -186,9 +186,8 @@ void menuRefreshListPage(void);
 
 void setMenuType(MENU_TYPE type);
 MENU_TYPE getMenuType(void);
-void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
-             void (* action_redraw)(uint8_t position, uint8_t is_press),
-             void (* menu_redraw)(void));
+void setMenu(MENU_TYPE menu_type, const LABEL * title, uint16_t rectCount, const GUI_RECT * menuRect,
+             void (* action_redraw)(uint8_t position, uint8_t is_press), void (* menu_redraw)(void));
 void menuSetTitle(const LABEL * title);
 void menuDrawTitle(void);
 void menuDrawPage(const MENUITEMS * menuItems);

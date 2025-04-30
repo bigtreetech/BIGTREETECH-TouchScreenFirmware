@@ -155,7 +155,7 @@ uint8_t SD_Wait_Ready(void)
       return 0;  // OK
 
     t++;
-  } while (t<0XFFFFFF);  // wait
+  } while (t < 0XFFFFFF);  // wait
 
   return 1;
 }
@@ -174,8 +174,8 @@ uint8_t SD_Get_Ack(uint8_t Response)
 
   if (Count == 0)
     return SD_RESPONSE_FAILURE;  // get response failed
-  else
-    return SD_RESPONSE_NO_ERROR;  // respond correctly
+
+  return SD_RESPONSE_NO_ERROR;  // respond correctly
 }
 
 /************************************************************************************
@@ -292,8 +292,8 @@ uint8_t SD_GetCID(uint8_t * cid_data)
 
   if (r1)
     return 1;
-  else
-    return 0;
+
+  return 0;
 }
 
 /************************************************************************************
@@ -315,8 +315,8 @@ uint8_t SD_GetCSD(uint8_t * csd_data)
 
   if (r1)
     return 1;
-  else
-    return 0;
+
+  return 0;
 }
 
 /************************************************************************************
@@ -438,7 +438,8 @@ uint8_t SD_Init(void)
 
   if (SD_Type)
     return 0;
-  else if (r1)
+
+  if (r1)
     return r1;
 
   return 0xaa;

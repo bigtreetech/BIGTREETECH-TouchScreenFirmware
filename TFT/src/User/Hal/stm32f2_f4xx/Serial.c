@@ -177,7 +177,7 @@ static inline void Serial_DMA_Config(uint8_t port)
 
 static void Serial_ClearData(uint8_t port)
 {
-  dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].cacheSize = 0;
+  dmaL1DataRX[port].wIndex = dmaL1DataRX[port].rIndex = dmaL1DataRX[port].flag = dmaL1DataRX[port].timestamp = dmaL1DataRX[port].cacheSize = 0;
 
   if (dmaL1DataRX[port].cache != NULL)
   {
@@ -185,7 +185,7 @@ static void Serial_ClearData(uint8_t port)
     dmaL1DataRX[port].cache = NULL;
   }
 
-  dmaL1DataTX[port].wIndex = dmaL1DataTX[port].rIndex = dmaL1DataTX[port].flag = dmaL1DataTX[port].cacheSize = 0;
+  dmaL1DataTX[port].wIndex = dmaL1DataTX[port].rIndex = dmaL1DataTX[port].flag = dmaL1DataTX[port].timestamp = dmaL1DataTX[port].cacheSize = 0;
 
   if (dmaL1DataTX[port].cache != NULL)
   {
@@ -246,6 +246,8 @@ static void Serial_Send_TX(uint8_t port)
 
 void Serial_Put(uint8_t port, const char * msg)
 {
+  dmaL1DataTX[port].timestamp = OS_GetTimeMs();  // keep track of last submitted message timestamp
+
   while (*msg)
   {
     // setup TX DMA, if no '\n' yet, but buffer is full AND DMA is not in progress already (waiting for Transfer Complete interrupt)
@@ -260,7 +262,7 @@ void Serial_Put(uint8_t port, const char * msg)
     dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
 
     if ((*msg == '\n') && ((Serial[port].uart->CR1 & USART_CR1_TCIE) == 0))
-      Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
+      Serial_Send_TX(port);  // start DMA process if message is complete and DMA is not in progress already
 
     msg++;  // let the compiler optimize this, no need to do it manually!
   }
@@ -270,6 +272,8 @@ void Serial_Put(uint8_t port, const char * msg)
 
 void Serial_Put(uint8_t port, const char * msg)
 {
+  dmaL1DataTX[port].timestamp = OS_GetTimeMs();  // keep track of last submitted message timestamp
+
   while (*msg)
   {
     // blocking! wait for buffer to become available
@@ -288,47 +292,53 @@ void Serial_Put(uint8_t port, const char * msg)
 void USART_IRQHandler(uint8_t port)
 {
   #if IDLE_LINE_IT == true  // IDLE Line interrupt
-    if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt
+    if ((Serial[port].uart->SR & USART_SR_IDLE) != RESET)  // check for IDLE Line interrupt flag
     {
-      Serial[port].uart->SR;                               // clear IDLE Line bit
-      Serial[port].uart->DR;
-
       dmaL1DataRX[port].wIndex = dmaL1DataRX[port].cacheSize - Serial[port].dma_streamRX->NDTR;
+
+      Serial[port].uart->DR;                               // clear RXNE pending flag
+      Serial[port].uart->SR;                               // as last, clear IDLE Line interrupt flag
     }
   #endif
 
   #ifdef TX_DMA_WRITE  // TX DMA based serial writing
-    if ((Serial[port].uart->SR & USART_SR_TC) != RESET)  // check for Transfer Complete (TC) interrupt
+    if ((Serial[port].uart->SR & USART_SR_TC) != RESET)            // check for Transfer Complete (TC) interrupt flag
     {
-      Serial[port].uart->SR &= ~USART_SR_TC;             // clear Transfer Complete (TC) bit
-
       // NOTE 1: use the serial TC, not the DMA TC because this only indicates DMA is done, peripheral might be still busy
       // NOTE 2: the TC interrupt is sometimes called while DMA is still active, so check NDTR status!
       //
-      if (Serial[port].dma_streamTX->NDTR == 0)          // sending is complete
+      if (Serial[port].dma_streamTX->NDTR == 0)                    // sending is complete
       {
+        // NOTE: it marks message timestamp twice if transfer was split into 2 parts
+        dmaL1DataTX[port].timestamp = OS_GetTimeMs();              // keep track of last sent message timestamp
+
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + dmaL1DataTX[port].flag) % dmaL1DataTX[port].cacheSize;
         dmaL1DataTX[port].flag = 0;
 
-        if (dmaL1DataTX[port].wIndex != dmaL1DataTX[port].rIndex)  // is more data available?
+        if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)  // is more data available?
           Serial_Send_TX(port);                                    // continue sending data
         else
           Serial[port].uart->CR1 &= ~USART_CR1_TCIE;               // disable Transfer Complete (TC) interrupt, nothing more to do
       }
       // else: more data is coming, wait for next Transfer Complete (TC) interrupt
+
+      Serial[port].uart->SR &= ~USART_SR_TC;                       // as last, clear Transfer Complete (TC) interrupt flag
     }
   #else  // TX interrupt based serial writing
-    if ((Serial[port].uart->SR & USART_SR_TXE) != RESET)         // check for TXE interrupt
+    if ((Serial[port].uart->SR & USART_SR_TXE) != RESET)                                          // check for TXE interrupt flag
     {
-      if (dmaL1DataTX[port].rIndex == dmaL1DataTX[port].wIndex)  // no more data?
+      if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                   // is more data available?
       {
-        Serial[port].uart->CR1 &= ~USART_CR1_TXEIE;              // disable TXE interrupt
+        if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                            // is message complete?
+          dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                           // keep track of last sent message timestamp
+
+        Serial[port].uart->DR = (uint8_t) dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];      // write next available character
+
+        dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;  // increase reading index
       }
       else
       {
-        Serial[port].uart->DR = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];       // write next available character
-
-        dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;  // increase reading index
+        Serial[port].uart->CR1 &= ~USART_CR1_TXEIE;                                               // disable TXE interrupt, nothing more to do
       }
     }
   #endif

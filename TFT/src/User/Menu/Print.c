@@ -56,14 +56,14 @@ static const int16_t labelVolumeError[3] = {LABEL_TFT_SD_READ_ERROR, LABEL_TFT_U
 
 static bool list_mode = true;
 
-static void normalNameDisp(const GUI_RECT * rect, uint8_t * name)
+static void normalNameDisp(const GUI_RECT * rect, const char * name)
 {
   if (name == NULL)
     return;
 
   GUI_ClearPrect(rect);
   GUI_SetRange(rect->x0, rect->y0, rect->x1, rect->y1);
-  GUI_DispStringInPrect(rect, name);
+  GUI_DispStringInPrect(rect, (uint8_t *) name);
   GUI_CancelRange();
 }
 
@@ -85,7 +85,7 @@ static inline void gcodeIconDraw(void)
     curItem.icon = ICON_FOLDER;
 
     menuDrawItem(&curItem, i);
-    normalNameDisp(&gcodeRect[i], (uint8_t *)getFoldername(baseIndex + i));  // display folder name
+    normalNameDisp(&gcodeRect[i], getFoldername(baseIndex + i));  // display folder name
   }
 
   // draw gcode files
@@ -108,7 +108,7 @@ static inline void gcodeIconDraw(void)
     exitFolder();
 
     // display filename hiding filename extension if filename extension feature is disabled
-    normalNameDisp(&gcodeRect[i], (uint8_t *)hideFilenameExtension(baseIndex + i - infoFile.folderCount));
+    normalNameDisp(&gcodeRect[i], hideFilenameExtension(baseIndex + i - infoFile.folderCount));
   }
 
   // clear blank icons
@@ -130,7 +130,7 @@ static void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->titlelabel.index = LABEL_DYNAMIC;
 
     // display short or long folder name
-    setDynamicLabel(itemPos, (char *)getFoldername(index));
+    setDynamicLabel(itemPos, getFoldername(index));
   }
   else if (index < infoFile.folderCount + infoFile.fileCount)  // gcode file
   {
@@ -139,7 +139,7 @@ static void gcodeListDraw(LISTITEM * item, uint16_t index, uint8_t itemPos)
     item->titlelabel.index = LABEL_DYNAMIC;
 
     // display short or long filename hiding filename extension if filename extension feature is disabled
-    setDynamicLabel(itemPos, (char *)hideFilenameExtension(index - infoFile.folderCount));
+    setDynamicLabel(itemPos, hideFilenameExtension(index - infoFile.folderCount));
   }
 }
 
@@ -184,11 +184,10 @@ static bool printPageItemSelected(uint16_t index)
 
       char temp_info[FILE_NUM + 50];
 
-      sprintf(temp_info, (char *)textSelect(LABEL_START_PRINT), (uint8_t *)(filename));  // display short or long filename
+      sprintf(temp_info, textSelect(LABEL_START_PRINT), filename);  // display short or long filename
 
       // confirm file selection
-      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, (uint8_t *)temp_info, LABEL_CONFIRM, LABEL_CANCEL,
-                  startPrinting, exitFolder, NULL);
+      popupDialog(DIALOG_TYPE_QUESTION, LABEL_PRINT, temp_info, LABEL_CONFIRM, LABEL_CANCEL, startPrinting, exitFolder, NULL);
 
       hasUpdate = false;
     }
@@ -229,7 +228,7 @@ void menuPrintFromSource(void)
 
     if (list_mode != true)
     {
-      printIconItems.title.address = (uint8_t *)infoFile.path;
+      printIconItems.title.address = infoFile.path;
 
       menuDrawPage(&printIconItems);
     }
@@ -237,7 +236,7 @@ void menuPrintFromSource(void)
   else
   {
     if (infoFile.source == FS_ONBOARD_MEDIA)  // error when the filesystem selected from TFT media not available
-      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)requestCommandInfo.cmd_rev_buf);
+      GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *) requestCommandInfo.cmd_rev_buf);
     else
       GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, labelVolumeError[infoFile.source]);
 
@@ -337,7 +336,7 @@ void menuPrintFromSource(void)
     {
       if (list_mode != true)
       {
-        printIconItems.title.address = (uint8_t *)infoFile.path;
+        printIconItems.title.address = infoFile.path;
 
         gcodeIconDraw();
 
@@ -346,11 +345,11 @@ void menuPrintFromSource(void)
       }
       else
       { // title bar is also drawn by listViewCreate
-        listViewCreate((LABEL){.address = (uint8_t *)infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
+        listViewCreate((LABEL){.address = infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
                        &infoFile.curPage, false, NULL, gcodeListDraw);
       }
 
-      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.path, &titleRect);
+      Scroll_CreatePara(&scrollLine, (uint8_t *) infoFile.path, &titleRect);
 
       update = 0;  // finally reset update request
     }
@@ -430,7 +429,7 @@ void menuPrint(void)
         #ifdef SD_CD_PIN
           if (!volumeExists(FS_TFT_SD))
           {
-            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_SD_NOT_DETECTED));
+            addToast(DIALOG_TYPE_ERROR, textSelect(LABEL_TFT_SD_NOT_DETECTED));
           }
           else
         #endif
@@ -459,7 +458,7 @@ void menuPrint(void)
           }
           else
           {
-            addToast(DIALOG_TYPE_ERROR, (char *)textSelect(LABEL_TFT_USB_NOT_DETECTED));
+            addToast(DIALOG_TYPE_ERROR, textSelect(LABEL_TFT_USB_NOT_DETECTED));
           }
           break;
       #endif

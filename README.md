@@ -257,10 +257,12 @@ For **MKS TFTs**:
 
 For **MKS GD TFTs**:
 
-For MKS TFT28 mounting GD32 MCU (GigaDevice MCU) (like the newest version of Genious Pro), you need to:
-1. Rename the right binary (e.g. `MKS_GD_TFT28_V1_2_4.27.x.bin`) to `MKSTFT28EVO.bin`
-2. Create an empty file named `MKSTFT28.bin`
-3. Create two empty directories named `MKS_FONT` and `MKS_PIC`
+1. The firmwares use the naming convention `MKS_GD_TFT*_V*_*.*.x.bin`
+2. Any binary file for an MKS GD firmware (e.g. `MKS_GD_TFT28_V4_0.27.x.bin`) MUST be renamed to `MKSTFT*EVO.bin` (e.g. `MKSTFT28EVO.bin`, `MKSTFT35EVO.bin` etc.) in order it can be recognized and installed by the TFT
+3. In addition to the deployment file (e.g. `MKSTFT28EVO.bin`), in order to be able to update the firmware some files/folders MUST always be present on the SD Card:
+   - empty `mks_font` folder
+   - empty `mks_pic` folder
+   - empty `mks_config.txt` file
 
 For example, for BTT TFT35 V3 select:
 
@@ -611,7 +613,7 @@ When on Printing menu, pressing on the **pause**, **resume** and **stop** button
 The remote host must properly handle the received notifications. For example, if `//action:notification remote pause` is received then the remote host must effectively pause the print and send `M118 P0 A1 action:pause` in order to trigger the pause action to the TFT.
 
 **NOTES:**
-- The [_BTT TFT Touchscreen Support_ plugin](https://github.com/jounathaen/octoprint_btt_touch_support) provides this integration for Octoprint
+- The [_BTT TFT Touchscreen Support_ plugin](https://github.com/jounathaen/octoprint_btt_touch_support) provides this integration for OctoPrint
 - With the exception of TFT70, the maximum number of displayable layer count is 999 (there's no space to display layer number and count if the layer count is above 999)
 
 ### Adding Gcode Thumbnails

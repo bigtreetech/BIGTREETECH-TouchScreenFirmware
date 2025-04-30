@@ -8,9 +8,8 @@ extern "C" {
 #include <stdint.h>
 #include "GUI.h"
 
-extern const GUI_RECT msgRect;
-
-void statusSetMsg(const uint8_t * title,const uint8_t * msg);
+const GUI_RECT * statusGetMsgRect(void);
+void statusSetMsg(const char * title,const char * msg);
 void statusSetReady(void);
 void menuStatus(void);
 

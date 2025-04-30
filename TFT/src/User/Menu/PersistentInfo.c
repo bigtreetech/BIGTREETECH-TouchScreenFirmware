@@ -128,8 +128,9 @@ int16_t drawTemperatureStatus(void)
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);
 
     sprintf(tempstr, "%d/%d", heatGetCurrentTemp(tmpHeater[tmpIndex]), heatGetTargetTemp(tmpHeater[tmpIndex]));
-    x_offset -= GUI_StrPixelWidth((uint8_t *)tempstr);
-    GUI_DispString(x_offset, start_y, (uint8_t *)tempstr);  // value
+
+    x_offset -= GUI_StrPixelWidth((uint8_t *) tempstr);
+    GUI_DispString(x_offset, start_y, (uint8_t *) tempstr);  // value
 
     x_offset -= GLOBALICON_INTERVAL;
     GUI_ClearRect(x_offset, start_y, x_offset + GLOBALICON_INTERVAL, start_y + GLOBALICON_HEIGHT);

@@ -1,6 +1,9 @@
 #include "Settings.h"
 #include "includes.h"
 
+SETTINGS infoSettings;
+MACHINE_SETTINGS infoMachineSettings;
+
 static const uint8_t default_serial_port[]  = {SP_1, SP_2, SP_3, SP_4};
 static const uint16_t default_max_temp[]    = MAX_TEMP;
 static const uint16_t default_max_fan[]     = FAN_MAX;
@@ -13,17 +16,16 @@ static const uint16_t default_pause_speed[] = {NOZZLE_PAUSE_XY_FEEDRATE, NOZZLE_
 static const uint16_t default_level_speed[] = {LEVELING_XY_FEEDRATE, LEVELING_Z_FEEDRATE};
 static const uint8_t default_led_color[]    = {LED_R, LED_G, LED_B, LED_W, LED_P, LED_I};
 
-SETTINGS infoSettings;
-MACHINE_SETTINGS infoMachineSettings;
-
 // init settings data with default values
 void initSettings(void)
 {
 // General Settings
   infoSettings.tx_slots               = TX_SLOTS;
+  infoSettings.tx_delay               = TX_DELAY;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
-                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
                                          (COMMAND_CHECKSUM << INDEX_COMMAND_CHECKSUM) |
+                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
+                                         (TX_PREFETCH << INDEX_TX_PREFETCH) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
                                          (EVENT_LED << INDEX_EVENT_LED) |
@@ -184,16 +186,16 @@ void initSettings(void)
   resetConfig();
 
   // calculate checksum excluding the CRC variable in infoSettings
-  infoSettings.CRC_checksum = calculateCRC16((uint8_t *)&infoSettings + sizeof(infoSettings.CRC_checksum),
-                                                 sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+  infoSettings.CRC_checksum = calculateCRC16((uint8_t *) &infoSettings + sizeof(infoSettings.CRC_checksum),
+                                                  sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 }
 
 // save settings to Flash only if CRC does not match
 void saveSettings(void)
 {
   // calculate checksum excluding the CRC variable in infoSettings
-  uint32_t curCRC = calculateCRC16((uint8_t *)&infoSettings + sizeof(infoSettings.CRC_checksum),
-                                       sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
+  uint32_t curCRC = calculateCRC16((uint8_t *) &infoSettings + sizeof(infoSettings.CRC_checksum),
+                                        sizeof(infoSettings) - sizeof(infoSettings.CRC_checksum));
 
   if (curCRC != infoSettings.CRC_checksum)  // save to Flash only if CRC does not match
   {
@@ -288,7 +290,7 @@ void setupMachine(FW_TYPE fwType)
 float flashUsedPercentage(void)
 {
   uint32_t total = W25Qxx_ReadCapacity();
-  float percent = ((float)FLASH_USED * 100) / total;
+  float percent = ((float)(FLASH_USED) * 100) / total;
 
   return percent;
 }
@@ -311,39 +313,39 @@ void checkflashSign(void)
     int ypos = BYTE_HEIGHT + 5;
 
     GUI_Clear(BLACK);
-    GUI_DispString(5, 5, (uint8_t *)"Found outdated data:");
+    GUI_DispString(5, 5, (uint8_t *) "Found outdated data:");
 
     ypos += BYTE_HEIGHT;
 
     if (statusfont)
-      GUI_DispString(10, ypos, (uint8_t *)"Fonts: OK");
+      GUI_DispString(10, ypos, (uint8_t *) "Fonts: OK");
     else
-      GUI_DispString(10, ypos, (uint8_t *)"Fonts: Update required");
+      GUI_DispString(10, ypos, (uint8_t *) "Fonts: Update required");
 
     ypos += BYTE_HEIGHT;
 
     if (statusconfig)
-      GUI_DispString(10, ypos, (uint8_t *)"Config: OK");
+      GUI_DispString(10, ypos, (uint8_t *) "Config: OK");
     else
-      GUI_DispString(10, ypos, (uint8_t *)"Config: Update required");
+      GUI_DispString(10, ypos, (uint8_t *) "Config: Update required");
 
     ypos += BYTE_HEIGHT;
 
     if (statuslang)
-      GUI_DispString(10, ypos, (uint8_t *)"Language: OK");
+      GUI_DispString(10, ypos, (uint8_t *) "Language: OK");
     else
-      GUI_DispString(10, ypos, (uint8_t *)"Language: Update required(Optional)");
+      GUI_DispString(10, ypos, (uint8_t *) "Language: Update required(Optional)");
 
     ypos += BYTE_HEIGHT;
 
     if (statusicon)
-      GUI_DispString(10, ypos, (uint8_t *)"Icons: OK");
+      GUI_DispString(10, ypos, (uint8_t *) "Icons: OK");
     else
-      GUI_DispString(10, ypos, (uint8_t *)"Icons: Update required");
+      GUI_DispString(10, ypos, (uint8_t *) "Icons: Update required");
 
     ypos += BYTE_HEIGHT;
-    GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)"Insert the SD card with the required\n"
-                                                                             "files and press the reset button\nto update.");
+    GUI_DispStringInRectEOL(10, ypos + 10, LCD_WIDTH, LCD_HEIGHT, (uint8_t *) "Insert the SD card with the required\n"
+                                                                              "files and press the reset button\nto update.");
     while (1);
   }
 }
@@ -356,7 +358,7 @@ bool getFlashSignStatus(int index)
   uint32_t addr = FLASH_SIGN_ADDR;
   uint32_t len = sizeof(flash_sign);
 
-  W25Qxx_ReadBuffer((uint8_t *)&cur_flash_sign, addr, len);
+  W25Qxx_ReadBuffer((uint8_t *) &cur_flash_sign, addr, len);
 
   return (flash_sign[index] == cur_flash_sign[index]);
 }

@@ -6,14 +6,14 @@
 #define POPUP_MAX_CHAR (X_MAX_CHAR * MAX_MSG_LINES)
 
 static const GUI_RECT singleBtnRect = POPUP_RECT_SINGLE_CONFIRM;
-const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
+static const GUI_RECT doubleBtnRect[] = {POPUP_RECT_DOUBLE_CONFIRM, POPUP_RECT_DOUBLE_CANCEL};
 
 static BUTTON bottomSingleBtn = {
   // button location                      color before pressed   color after pressed
   POPUP_RECT_SINGLE_CONFIRM, NULL, 5, 1,  DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN
 };
 
-BUTTON bottomDoubleBtn[] = {
+static BUTTON bottomDoubleBtn[] = {
   {POPUP_RECT_DOUBLE_CONFIRM, NULL, 5, 1, DARKGREEN, DARKGREEN,  MAT_LOWWHITE, DARKGREEN, WHITE, DARKGREEN},
   {POPUP_RECT_DOUBLE_CANCEL,  NULL, 5, 1, MAT_RED,     MAT_RED,  MAT_LOWWHITE,   MAT_RED, WHITE,   MAT_RED},
 };
@@ -34,90 +34,82 @@ static BUTTON * windowButton =  NULL;
 static uint16_t buttonNum = 0;
 
 static const GUI_RECT * cur_btn_rect = NULL;
-static void (* action_ok)() = NULL;
-static void (* action_cancel)() = NULL;
-static void (* action_loop)() = NULL;
+static void (* action_ok)(void) = NULL;
+static void (* action_cancel)(void) = NULL;
+static void (* action_loop)(void) = NULL;
 
 static bool popup_redraw = false;
-static uint8_t popup_title[X_MAX_CHAR];
-static uint8_t popup_msg[POPUP_MAX_CHAR];
-static uint8_t popup_ok[24];
-static uint8_t popup_cancel[24];
+static char popup_title[X_MAX_CHAR];
+static char popup_msg[POPUP_MAX_CHAR];
+static char popup_ok[24];
+static char popup_cancel[24];
 static DIALOG_TYPE popup_type;
 
-void _setDialogTitleStr(uint8_t * str)
+const GUI_RECT * dialogGetDoubleBtnRect(void)
 {
-  strncpy_no_pad((char *)popup_title, (char *)str, sizeof(popup_title));
+  return doubleBtnRect;
+}
+const BUTTON * dialogGetBottomDoubleBtn(void)
+{
+  return bottomDoubleBtn;
 }
 
-void _setDialogMsgStr(uint8_t * str)
+void _setDialogTitleStr(const char * str)
 {
-  strncpy_no_pad((char *)popup_msg, (char *)str, sizeof(popup_msg));
+  strncpy_no_pad(popup_title, str, sizeof(popup_title));
 }
 
-uint8_t * getDialogMsgStr(void)
+void _setDialogMsgStr(const char * str)
 {
-  return (uint8_t *)popup_msg;
+  strncpy_no_pad(popup_msg, str, sizeof(popup_msg));
 }
 
-void _setDialogOkTextStr(uint8_t * str)
+const char * getDialogMsgStr(void)
 {
-  strncpy_no_pad((char *)popup_ok, (char *)str, sizeof(popup_ok));
+  return popup_msg;
 }
 
-void _setDialogCancelTextStr(uint8_t * str)
+void _setDialogOkTextStr(const char * str)
 {
-  strncpy_no_pad((char *)popup_cancel, (char *)str, sizeof(popup_cancel));
+  strncpy_no_pad(popup_ok, str, sizeof(popup_ok));
+}
+
+void _setDialogCancelTextStr(const char * str)
+{
+  strncpy_no_pad(popup_cancel, str, sizeof(popup_cancel));
 }
 
 void _setDialogTitleLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
-
-  loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_title, (char *)tempstr, sizeof(popup_title));
+  strncpy_no_pad(popup_title, textSelect(index), sizeof(popup_title));
 }
 
 void _setDialogMsgLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
-
-  loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_msg, (char *)tempstr, sizeof(popup_msg));
+  strncpy_no_pad(popup_msg, textSelect(index), sizeof(popup_msg));
 }
 
 void _setDialogOkTextLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
-
-  loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_ok, (char *)tempstr, sizeof(popup_ok));
+  strncpy_no_pad(popup_ok, textSelect(index), sizeof(popup_ok));
 }
 
 void _setDialogCancelTextLabel(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH] = {0};
-
-  loadLabelText(tempstr, index);
-  strncpy_no_pad((char *)popup_cancel, (char *)tempstr, sizeof(popup_cancel));
+  strncpy_no_pad(popup_cancel, textSelect(index), sizeof(popup_cancel));
 }
 
 static void windowReDrawButton(uint8_t position, uint8_t pressed)
 {
-  if (position >= buttonNum)
-    return;
-  if (pressed >= 2)
-    return;
-  if (windowButton == NULL)
-    return;
-  if (windowButton->context == NULL)
-    return;
+  if (position >= buttonNum) return;
+  if (pressed >= 2) return;
+  if (windowButton == NULL) return;
+  if (windowButton->context == NULL) return;
 
   GUI_DrawButton(windowButton + position, pressed);
 }
 
-void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const uint8_t * context, const uint8_t * yes,
-                   const uint8_t * no)
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const char * title, const char * context, const char * yes, const char * no)
 {
   window.type = type;  // window.type is used by GUI_DrawWindow() function so it must be set before the function invokation
   TS_ReDrawIcon = windowReDrawButton;
@@ -128,13 +120,13 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
     windowButton = btn;
 
     if (yes && yes[0])
-      windowButton[buttonNum++].context = yes;
+      windowButton[buttonNum++].context = (uint8_t *) yes;
 
     if (no && no[0])
-      windowButton[buttonNum++].context = no;
+      windowButton[buttonNum++].context = (uint8_t *) no;
 
     // draw a window with buttons bar
-    GUI_DrawWindow(&window, title, context, true);
+    GUI_DrawWindow(&window, (uint8_t *) title, (uint8_t *) context, true);
 
     for (uint8_t i = 0; i < buttonNum; i++)
     {
@@ -145,7 +137,7 @@ void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const uint8_t * title, const 
   }
   else
   { // draw a window with no buttons bar
-    GUI_DrawWindow(&window, title, context, false);
+    GUI_DrawWindow(&window, (uint8_t *) title, (uint8_t *) context, false);
 
     setMenuType(MENU_TYPE_SPLASH);
   }
@@ -194,7 +186,7 @@ void menuDialog(void)
  * @param cancel_action pointer to a function to perform if Cancel is pressed.(pass NULL if no action need to be performed)
  * @param loop_action pointer to a function to perform whilst the dialog is active (visible/not answered)
  */
-void showDialog(DIALOG_TYPE type, void (* ok_action)(), void (* cancel_action)(), void (* loop_action)())
+void showDialog(DIALOG_TYPE type, void (* ok_action)(void), void (* cancel_action)(void), void (* loop_action)(void))
 {
   if ((infoSettings.mode == MODE_MARLIN) || (infoSettings.mode == MODE_BLOCKED_MARLIN))  // if standard/blocked Marlin mode, then exit
     return;

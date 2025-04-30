@@ -7,6 +7,8 @@ PRIORITY_COUNTER priorityCounter;
 HOST infoHost;
 MENU infoMenu;
 
+static bool InfoHost_HandleAckTimeout(void);  // forward declaration
+
 static inline void resetInfoQueries(void)
 {
   fanResetSpeed();
@@ -38,7 +40,7 @@ void loopBackEnd(void)
   // handle a print from TFT media, if any
   loopPrintFromTFT();
 
-  // parse and send gcode commands in the queue
+  // parse and send gcodes in command queue
   sendQueueCmd();
 
   // parse the received slave response information
@@ -59,7 +61,22 @@ void loopBackEnd(void)
 
   // handle ACK message timeout
   if (InfoHost_HandleAckTimeout())  // if ACK message timeout, unlock any pending query waiting for an update
+  {
+    addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
+
     resetPendingQueries();
+  }
+
+  // handle heating timeout
+  if (heatIsWaitingTimedout())
+  {
+    char tempMsg[200];
+
+    sprintf(tempMsg, textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(heatGetToolIndex()));
+    sprintf(strchr(tempMsg, '\0'), "\n%s?", textSelect(LABEL_WAIT_HEAT_UP));
+
+    popupDialog(DIALOG_TYPE_ERROR, LABEL_TIMEOUT_REACHED, tempMsg, LABEL_CONFIRM, LABEL_RESUME, NULL, heatClearWaiting, NULL);
+  }
 
   // fan speed monitor
   loopCheckFan();
@@ -173,14 +190,28 @@ void loopProcessAndGUI(void)
   }
 }
 
+// handle ACK message timeout, if any. Return "true" if ACK message timed out
+static bool InfoHost_HandleAckTimeout(void)
+{
+  if (OS_GetTimeMs() - infoHost.rx_timestamp < ACK_TIMEOUT || infoHost.tx_count == 0)  // if no timeout or no pending gcode
+    return false;
+
+  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
+
+  InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
+
+  return true;
+}
+
 void InfoHost_Init(bool isConnected)
 {
-  infoHost.target_tx_slots = infoSettings.tx_slots;
+  infoHost.target_tx_slots = infoHost.cur_target_tx_slots = infoSettings.tx_slots;
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
-  infoHost.rx_timestamp = OS_GetTimeMs();
+  infoHost.tx_delay = infoSettings.tx_delay;
+  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();
   infoHost.connected = isConnected;
-  infoHost.listening_mode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()
+  infoHost.listening_mode = false;  // temporary disable listening mode. Its configured status will be restored later by InfoHost_UpdateListeningMode()
   infoHost.status = HOST_STATUS_IDLE;
 
   if (!isConnected)
@@ -193,8 +224,40 @@ void InfoHost_Init(bool isConnected)
   }
 }
 
+void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots)
+{
+  infoHost.target_tx_slots = infoHost.cur_target_tx_slots = target_tx_slots;
+}
+
+void InfoHost_UpdateTxDelay(void)
+{
+  infoHost.tx_delay = infoSettings.tx_delay;
+}
+
+void InfoHost_UpdateListeningMode(void)
+{
+  infoHost.listening_mode = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1);
+
+  if (infoHost.listening_mode)
+    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // if TFT in listening mode, display a reminder message
+}
+
+bool InfoHost_IsCmdDelayElapsed(void)
+{
+  return (OS_GetTimeMs() - (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0 ?
+          infoHost.rx_ok_timestamp : Serial_GetTimestampTX(SERIAL_PORT)) < infoHost.tx_delay);
+}
+
+bool InfoHost_IsCmdFromTFTSendable(void)
+{
+  return (GET_BIT(infoSettings.general_settings, INDEX_TX_PREFETCH) == 0 ?
+          !isNotEmptyCmdQueue() : getCmdQueueCount() < CMD_PREFETCH_COUNT);
+}
+
 void InfoHost_HandleAckOk(int16_t target_tx_slots)
 {
+  infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
+
   // the following check should always be matched unless:
   // - an ACK message not related to a gcode originated by the TFT is received
   // - an ACK message for an out of band gcode (e.g. emergency gcode) is received
@@ -221,12 +284,12 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     // UPPER LIMITER
     //
     // the following check is matched in case:
-    // - ADVANCED_OK is enabled in TFT. infoSettings.tx_slots for static ADVANCED_OK configured in TFT is used
+    // - ADVANCED_OK is enabled in TFT. infoHost.target_tx_slots for static ADVANCED_OK configured in TFT (infoSettings.tx_slots) is used
     // - ADVANCED_OK is enabled in Marlin but the mainboard reply (target_tx_slots) is out of sync (above) with the current
-    //   pending gcodes (it happens sometimes). infoSettings.tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
+    //   pending gcodes (it happens sometimes). infoHost.target_tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
     //
-    if (target_tx_slots + infoHost.tx_count >= infoSettings.tx_slots)
-      infoHost.tx_slots = infoSettings.tx_slots - infoHost.tx_count;
+    if (target_tx_slots + infoHost.tx_count >= infoHost.target_tx_slots)
+      infoHost.tx_slots = infoHost.target_tx_slots - infoHost.tx_count;
     //
     // LOWER LIMITER (only for Marlin ADVANCED_OK)
     //
@@ -238,7 +301,7 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     else                                                      // if printing from onboard media
       infoHost.tx_slots = 1;
 
-    infoHost.target_tx_slots = infoHost.tx_slots;  // set new current target
+    infoHost.cur_target_tx_slots = infoHost.tx_slots;  // set new current target
   }
   //
   // if generic OK response handling (e.g. temperature response), increment the current value up to current target
@@ -249,34 +312,12 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     //
     // limit the current value up to current target or to 1 if current target was set to 0 and there are no more pending gcodes
     //
-    if (infoHost.tx_slots < infoHost.target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
+    if (infoHost.tx_slots < infoHost.cur_target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
       infoHost.tx_slots++;
   }
 }
 
-bool InfoHost_HandleAckTimeout(void)
-{
-  if (OS_GetTimeMs() - infoHost.rx_timestamp < ACK_TIMEOUT || infoHost.tx_count == 0)  // if no timeout or no pending gcode
-    return false;
-
-  infoHost.rx_timestamp = OS_GetTimeMs();  // update timestamp
-
-  InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
-
-  //addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
-
-  return true;
-}
-
 void InfoHost_UpdateAckTimestamp(void)
 {
-  infoHost.rx_timestamp = OS_GetTimeMs();
-}
-
-void InfoHost_UpdateListeningMode(void)
-{
-  infoHost.listening_mode = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1);
-
-  if (infoHost.listening_mode)
-    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // if TFT in listening mode, display a reminder message
+  infoHost.rx_timestamp = OS_GetTimeMs();  // update timestamp
 }

@@ -6,7 +6,7 @@ void menuCustom(void)
   CUSTOM_GCODES customcodes;
 
   // load custom codes
-  W25Qxx_ReadBuffer((uint8_t *)&customcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *) &customcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
   LABEL title = {LABEL_CUSTOM};
   LISTITEM customItems[customcodes.count];
@@ -17,7 +17,7 @@ void menuCustom(void)
   {
     customItems[i].icon = CHARICON_CODE;
     customItems[i].itemType = LIST_LABEL;
-    customItems[i].titlelabel.address = (uint8_t *)customcodes.name[i];
+    customItems[i].titlelabel.address = customcodes.name[i];
   }
 
   listViewCreate(title, customItems, customcodes.count, NULL, true, NULL, NULL);

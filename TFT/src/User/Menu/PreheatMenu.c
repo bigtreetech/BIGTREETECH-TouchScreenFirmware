@@ -71,7 +71,7 @@ void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redraw
   lvIcon.lines[2].pos = preheat_val_bed;
   lvIcon.lines[2].font = FONT_SIZE_NORMAL;
 
-  lvIcon.lines[0].text = (uint8_t *)preheatStore->preheat_name[index];
+  lvIcon.lines[0].text = preheatStore->preheat_name[index];
 
   char temptool[5];
   char tempbed[5];
@@ -79,8 +79,8 @@ void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redraw
   sprintf(temptool, "%d", preheatStore->preheat_hotend[index]);
   sprintf(tempbed, "%d", preheatStore->preheat_bed[index]);
 
-  lvIcon.lines[1].text = (uint8_t *)temptool;
-  lvIcon.lines[2].text = (uint8_t *)tempbed;
+  lvIcon.lines[1].text = temptool;
+  lvIcon.lines[2].text = tempbed;
 
   showLiveInfo(index, &lvIcon, redrawIcon);
 }
@@ -112,7 +112,7 @@ void menuPreheat(void)
 
   menuDrawPage(&preheatItems);
 
-  W25Qxx_ReadBuffer((uint8_t *)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *) &preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {

@@ -7,15 +7,15 @@ static void updateListeningMode(MENUITEMS * menu)
 {
   menu->items[4].label.index = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1) ? LABEL_OFF : LABEL_ON;
 
-  InfoHost_UpdateListeningMode();  // update listening mode
+  InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
 }
 
 // disconnect (free uart), wait for a key press and finally connect again (set uart pins to input)
 static void refreshConnection(void)
 {
   GUI_Clear(infoSettings.bg_color);
-  GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_DISCONNECT_INFO));
-  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
+  GUI_DispStringInRect(20, 0, LCD_WIDTH - 20, LCD_HEIGHT, (uint8_t *) textSelect(LABEL_DISCONNECT_INFO));
+  GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, (uint8_t *) textSelect(LABEL_TOUCH_TO_EXIT));
 
   Serial_DeInit(ALL_PORTS);
 
@@ -62,7 +62,7 @@ static void menuBaudrate(void)
     }
 
     totalItems[i].itemType = LIST_LABEL;
-    totalItems[i].titlelabel.address = (uint8_t *) baudrateNames[i + minIndex];
+    totalItems[i].titlelabel.address = (char *) baudrateNames[i + minIndex];
   }
 
   curPage = curItem / LISTITEM_PER_PAGE;
@@ -105,9 +105,9 @@ static void menuSerialPorts(void)
   {
     totalItems[i].icon = CHARICON_EDIT;
     totalItems[i].itemType = LIST_CUSTOMVALUE;
-    totalItems[i].titlelabel.address = (uint8_t *) serialPort[i].desc;
+    totalItems[i].titlelabel.address = (char *) serialPort[i].desc;
     totalItems[i].valueLabel.index = LABEL_DYNAMIC;  // must be LABEL_DYNAMIC or LABEL_CUSTOM_VALUE in order to use dynamic text
-    setDynamicTextValue(i, (char *) baudrateNames[infoSettings.serial_port[i]]);
+    setDynamicTextValue(i, baudrateNames[infoSettings.serial_port[i]]);
   }
 
   listViewCreate(title, totalItems, SERIAL_PORT_COUNT, NULL, true, NULL, NULL);

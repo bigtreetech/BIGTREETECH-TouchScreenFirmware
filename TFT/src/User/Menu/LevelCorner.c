@@ -34,7 +34,7 @@ static void setLevelEdgeMin(void)
 // draw values under icons
 static void refreshValue(MENUITEMS * levelItems, uint8_t index)
 {
-  sprintf((char *)levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
+  sprintf((char *) levelItems->items[valIconIndex[index]].label.address, "%.4f", levelCornerPosition[index]);
 
   menuDrawIconText(&levelItems->items[valIconIndex[index]], valIconIndex[index]);
 }
@@ -68,7 +68,7 @@ void menuLevelCorner(void)
 
   for (uint8_t i = 0; i < LEVELING_POINT_COUNT - 1; i++)
   {
-    levelCornerItems.items[valIconIndex[i]].label.address = (uint8_t *)iconText[i];
+    levelCornerItems.items[valIconIndex[i]].label.address = iconText[i];
   }
 
   menuDrawPage(&levelCornerItems);
@@ -109,7 +109,8 @@ void menuLevelCorner(void)
                                                getLevelEdgeDefault(), infoSettings.level_edge);
 
         if (curLevelEdge >= getLevelEdgeMin() && infoSettings.level_edge < getLevelEdgeMin())  // if new value is below min limit
-          popupDialog(DIALOG_TYPE_QUESTION, LABEL_WARNING, LABEL_LEVEL_CORNER_INFO, LABEL_CONFIRM, LABEL_CANCEL, setLevelEdgeMin, NULL, NULL);
+          popupDialog(DIALOG_TYPE_QUESTION, LABEL_WARNING, LABEL_LEVEL_CORNER_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                      setLevelEdgeMin, NULL, NULL);
         break;
       }
 

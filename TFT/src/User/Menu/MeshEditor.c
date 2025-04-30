@@ -61,7 +61,7 @@ typedef struct
   uint8_t rowsToSkip;
   bool rowsInverted;
 
-  char saveTitle[120];
+  char saveTitle[50];
 } MESH_DATA;
 
 enum
@@ -320,7 +320,7 @@ static inline bool processKnownDataFormat(const char * dataRow)
   {
     if (strstr(dataRow, meshDataFormat[i].echoMsg))
     {
-      char * title;
+      const char * title;
 
       meshData->colsToSkip = meshDataFormat[i].colsToSkip;
       meshData->rowsToSkip = meshDataFormat[i].rowsToSkip;
@@ -329,23 +329,23 @@ static inline bool processKnownDataFormat(const char * dataRow)
       switch (infoMachineSettings.leveling)
       {
         case BL_BBL:
-          title = (char *)textSelect(LABEL_ABL_SETTINGS_BBL);
+          title = textSelect(LABEL_ABL_SETTINGS_BBL);
           break;
 
         case BL_UBL:
-          title = (char *)textSelect(LABEL_ABL_SETTINGS_UBL);
+          title = textSelect(LABEL_ABL_SETTINGS_UBL);
           break;
 
         case BL_MBL:
-          title = (char *)textSelect(LABEL_MBL_SETTINGS);
+          title = textSelect(LABEL_MBL_SETTINGS);
           break;
 
         default:
-          title = (char *)textSelect(LABEL_ABL_SETTINGS);
+          title = textSelect(LABEL_ABL_SETTINGS);
           break;
       }
 
-      strcpy(meshData->saveTitle, title);
+      strncpy_no_pad(meshData->saveTitle, title, sizeof(meshData->saveTitle));
 
       return true;
     }
@@ -609,7 +609,8 @@ static void meshDrawMenu(void)
 static void meshSave(void)
 {
   if (infoMachineSettings.EEPROM == 1)
-    popupDialog(DIALOG_TYPE_QUESTION, (uint8_t *) meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL, meshSaveCallback, NULL, NULL);
+    popupDialog(DIALOG_TYPE_QUESTION, meshData->saveTitle, LABEL_EEPROM_SAVE_INFO, LABEL_CONFIRM, LABEL_CANCEL,
+                meshSaveCallback, NULL, NULL);
 }
 
 static inline bool meshIsWaitingFirstData(void)
@@ -774,7 +775,7 @@ void meshUpdateData(char * dataRow)
 
     snprintf(tempMsg, MAX_STRING_LENGTH, "%s\n-> %s", textSelect(LABEL_PROCESS_ABORTED), dataRow);
 
-    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, (uint8_t *) tempMsg);
+    popupReminder(DIALOG_TYPE_ERROR, LABEL_MESH_EDITOR, tempMsg);
 
     // trigger exit from mesh editor menu. It avoids to loop in case of persistent error
     CLOSE_MENU();

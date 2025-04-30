@@ -18,10 +18,10 @@ void rrfShowRunningMacro(void)
   GUI_SetColor(infoSettings.reminder_color);
   GUI_DispStringInPrectEOL(&titleRect, LABEL_BUSY);
   GUI_RestoreColorDefault();
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *)running_macro_name);
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *) running_macro_name);
 }
 
-static inline void runMacro(const char *display_name)
+static inline void runMacro(const char * display_name)
 {
   running_macro_name = display_name;
 
@@ -66,7 +66,7 @@ void menuCallMacro(void)
   infoFile.source = FS_ONBOARD_MEDIA;
 
   GUI_Clear(MENU_BACKGROUND_COLOR);
-  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, textSelect(LABEL_LOADING));
+  GUI_DispStringInRect(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint8_t *) textSelect(LABEL_LOADING));
 
   scanInfoFilesFs();
 
@@ -131,11 +131,11 @@ void menuCallMacro(void)
     {
       update = 0;
 
-      listViewCreate((LABEL){.address = (uint8_t *)infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
+      listViewCreate((LABEL){.address = infoFile.path}, NULL, infoFile.folderCount + infoFile.fileCount,
                      &infoFile.curPage, false, NULL, macroListDraw);
 
       // set scrolling title text
-      Scroll_CreatePara(&scrollLine, (uint8_t *)infoFile.path, &titleRect);
+      Scroll_CreatePara(&scrollLine, (uint8_t *) infoFile.path, &titleRect);
       GUI_SetBkColor(infoSettings.title_bg_color);
       GUI_ClearRect(0, 0, LCD_WIDTH, TITLE_END_Y);
       GUI_SetBkColor(infoSettings.bg_color);

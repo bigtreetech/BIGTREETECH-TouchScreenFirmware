@@ -123,6 +123,6 @@ void menuHeat(void)
     last_nozzle_index = tool_index;  // save last used hotend index
 
   // set slow update time if not waiting for target temperature
-  if (heatHasWaiting() == false)
+  if (heatIsWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

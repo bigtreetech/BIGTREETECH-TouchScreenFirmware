@@ -211,10 +211,5 @@ uint16_t GUI_StrPixelWidth_str(const uint8_t * str)
 // decode UTF-8 char display bit width
 uint16_t GUI_StrPixelWidth_label(int16_t index)
 {
-  uint8_t tempstr[MAX_LANG_LABEL_LENGTH];
-
-  if (loadLabelText((uint8_t *)tempstr, index) == false)
-    return 0;
-
-  return GUI_StrPixelWidth_str(tempstr);
+  return GUI_StrPixelWidth_str((uint8_t *) textSelect(index));
 }

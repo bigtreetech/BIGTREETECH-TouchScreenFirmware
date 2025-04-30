@@ -28,7 +28,7 @@ bool powerFailedInitRestore(void);  // initialize print restore, if any, if not 
 bool powerFailedLoad(FIL * print_fp);
 
 bool powerFailedExist(void);
-void powerFailedCreate(char * path);
+void powerFailedCreate(const char * path);
 void powerFailedCache(uint32_t offset);
 void powerFailedDelete(void);
 

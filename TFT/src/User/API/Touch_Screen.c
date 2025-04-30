@@ -39,11 +39,11 @@
 #define TS_DEBOUNCE_MS 20  // 20 ms
 #define TS_ERR_RANGE   10
 
-static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
-
 int32_t TS_CalPara[7];
 bool TS_Sound = true;
 void (* TS_ReDrawIcon)(uint8_t position, uint8_t isPressed) = NULL;
+
+static volatile uint8_t touchCountdown = TS_DEBOUNCE_MS;
 
 void TS_GetCoordinates(uint16_t * x, uint16_t * y)
 {
@@ -163,7 +163,7 @@ static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
 
   if (lcd_x < x + TS_ERR_RANGE && lcd_x > x - TS_ERR_RANGE && lcd_y > y - TS_ERR_RANGE && lcd_y < y + TS_ERR_RANGE)
   {
-    GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_OK);
+    GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, LABEL_ADJUST_OK);
     Delay_ms(1000);
   }
   else
@@ -171,7 +171,7 @@ static inline uint8_t TS_CalibrationEnsure(uint16_t x, uint16_t y)
     while (TS_IsPressed());
 
     GUI_SetColor(RED);
-    GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, (int32_t)LABEL_ADJUST_FAILED);
+    GUI_DispStringCenter(LCD_WIDTH / 2, LCD_HEIGHT - 40, LABEL_ADJUST_FAILED);
     GUI_DispDec(0, 0, lcd_x, 3, 0);
     GUI_DispDec(0, 20, lcd_y, 3, 0);
     Delay_ms(1000);
@@ -195,8 +195,8 @@ void TS_Calibrate(void)
     GUI_Clear(WHITE);
     GUI_SetColor(BLACK);
     GUI_SetBkColor(WHITE);
-    GUI_DispStringCenter(LCD_WIDTH / 2, 5, (int32_t)LABEL_ADJUST_TITLE);
-    GUI_DispStringCenter(LCD_WIDTH / 2, 25, (int32_t)LABEL_ADJUST_INFO);
+    GUI_DispStringCenter(LCD_WIDTH / 2, 5, LABEL_ADJUST_TITLE);
+    GUI_DispStringCenter(LCD_WIDTH / 2, 25, LABEL_ADJUST_INFO);
     GUI_SetColor(RED);
 
     for (tp_num = 0; tp_num < 3; tp_num++)

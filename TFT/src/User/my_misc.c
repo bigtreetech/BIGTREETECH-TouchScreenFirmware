@@ -84,7 +84,7 @@ uint8_t * uint8_2_string(uint8_t num, uint8_t * str)
 }
 
 // string convert to uint32, MSB
-uint32_t string_2_uint32(const uint8_t * str, const uint8_t bytes_num)
+uint32_t string_2_uint32(const uint8_t * str, uint8_t bytes_num)
 {
   uint32_t rtv = 0;
 
@@ -112,7 +112,7 @@ uint8_t * uint32_2_string(uint32_t num, uint8_t bytes_num, uint8_t * str)
 }
 
 // convert time to string with given formatting
-void time_2_string(char * buf, char * str_format, uint32_t time)
+void time_2_string(char * buf, const char * str_format, uint32_t time)
 {
   uint8_t hour = HOURS(time);
   uint8_t min = MINUTES(time);
@@ -123,7 +123,7 @@ void time_2_string(char * buf, char * str_format, uint32_t time)
 
 // light weight strtod() function without exponential support.
 // Convert string to double (without exponential support)
-double strtod_ligth(char * str, char ** endptr)
+double strtod_ligth(char * str, char ** end_ptr)
 {
   char * p = str;
   double val = 0.0;
@@ -160,15 +160,15 @@ double strtod_ligth(char * str, char ** endptr)
     }
     else  // read value after decimal point
     {
-      val = val + (*p - 48) / (double)prec;
+      val = val + (*p - 48) / (double) prec;
       prec = prec * 10;
     }
 
     p++;
   }
 
-  if (endptr != NULL)
-    *endptr = p;  // asign pointer to remaining string
+  if (end_ptr != NULL)
+    *end_ptr = p;  // asign pointer to remaining string
 
   return val * sign;
 }

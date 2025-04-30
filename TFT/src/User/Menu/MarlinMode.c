@@ -25,9 +25,9 @@ void menuMarlinMode(void)
   {
     STRINGS_STORE tempST;
 
-    W25Qxx_ReadBuffer((uint8_t *)&tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
+    W25Qxx_ReadBuffer((uint8_t *) &tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
 
-    GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
+    GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *) tempST.marlin_title);
   }
 
   #ifdef ST7920_EMULATOR

@@ -72,7 +72,7 @@ bool screenShotBMP(char * bmp)
     {
       uint32_t c = LCD_ReadPixel_24Bit(x, y);
 
-      f_write(&bmpFile, (char *)&c, 3, &mybw);
+      f_write(&bmpFile, (char *) &c, 3, &mybw);
     }
   }
 
@@ -116,11 +116,11 @@ void loopScreenShot(void)
     switch (getMenuType())
     {
       case MENU_TYPE_ICON:
-        strcat(screenShotFileName, (char *)labelGetAddress(&getCurMenuItems()->title));
+        strcat(screenShotFileName, labelGetAddress(&getCurMenuItems()->title));
         break;
 
       case MENU_TYPE_LISTVIEW:
-        strcat(screenShotFileName, (char *)labelGetAddress(&getCurListItems()->title));
+        strcat(screenShotFileName, labelGetAddress(&getCurListItems()->title));
         break;
 
       default:

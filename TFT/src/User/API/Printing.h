@@ -146,7 +146,7 @@ void setPrintAbort(void);
 void setPrintPause(HOST_STATUS hostStatus, PAUSE_TYPE pauseType);
 void setPrintResume(HOST_STATUS hostStatus);
 
-void loopPrintFromTFT(void);          // called in loopBackEnd(). It handles a print from TFT media, if any
+void loopPrintFromTFT(void);          // called in loopBackEnd(). It handles a print from TFT media (e.g. TFT SD card or TFT USB disk), if any
 
 void printSetNextUpdateTime(void);    // called in parseAck(). Set next printing query time or timeout
 void printClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for printing query

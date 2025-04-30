@@ -34,7 +34,7 @@ void knob_LED_Init(void)
   NEOPIXEL_TIMER_CLOCK_ENABLE();
   NEOPIXEL_TIMER_CNT() = 0;
   NEOPIXEL_TIMER_PSC() = 1 - 1;
-  NEOPIXEL_TIMER_SR() = (uint16_t)~(1 << 0);
+  NEOPIXEL_TIMER_SR() = (uint16_t) ~(1 << 0);
 }
 
 void knob_LED_DeInit(void)

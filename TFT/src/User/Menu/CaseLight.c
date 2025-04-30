@@ -15,8 +15,9 @@ static void caseLightPercentReDraw(void)
   char tempstr[20];
 
   sprintf(tempstr, "  %d%%  ", caseLightPercent);
+
   setFontSize(FONT_SIZE_LARGE);
-  GUI_DispStringInPrect(&exhibitRect, (uint8_t *)tempstr);
+  GUI_DispStringInPrect(&exhibitRect, (uint8_t *) tempstr);
   setFontSize(FONT_SIZE_NORMAL);
 }
 

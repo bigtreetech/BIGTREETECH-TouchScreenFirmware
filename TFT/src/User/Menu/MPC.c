@@ -47,17 +47,17 @@ static void mpcDisplayValues(void)
   MPC_Parameter * parameter = &mpcParameter[curTool_index];
 
   setFontSize(FONT_SIZE_LARGE);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *)toolChange[curTool_index]);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) toolChange[curTool_index]);
   setFontSize(FONT_SIZE_NORMAL);
 
   sprintf(tmpStr, "P: %d W  ", parameter->heater_power);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 2 * BYTE_HEIGHT, (uint8_t *)tmpStr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 2 * BYTE_HEIGHT, (uint8_t *) tmpStr);
 
   sprintf(tmpStr, "H: %.5f J/mm", parameter->fil_heat_capcity);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 3 * BYTE_HEIGHT, (uint8_t *)tmpStr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 3 * BYTE_HEIGHT, (uint8_t *) tmpStr);
 
   sprintf(tmpStr, "%s %s", textSelect(LABEL_MPC_METHOD), mpcMethod_label[parameter->method]);
-  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 4 * BYTE_HEIGHT, (uint8_t *)tmpStr);
+  GUI_DispString(exhibitRect.x0, exhibitRect.y0 + 4 * BYTE_HEIGHT, (uint8_t *) tmpStr);
 }
 
 static void menuSetMpcParam(void)
@@ -90,7 +90,7 @@ static void menuSetMpcParam(void)
 
         do
         {
-          tmpVal = numPadInt((uint8_t *)"1 ~ 255", parameter->heater_power, DEF_HEATER_POWER, false);
+          tmpVal = numPadInt("1 ~ 255", parameter->heater_power, DEF_HEATER_POWER, false);
 
           if (WITHIN(tmpVal, 1, 255))
             break;
@@ -111,7 +111,7 @@ static void menuSetMpcParam(void)
 
         do
         {
-          tmpVal = numPadFloat((uint8_t *)"0.001 ~ 0.1", parameter->fil_heat_capcity, DEF_FIL_HEAT_CAPACITY, false);
+          tmpVal = numPadFloat("0.001 ~ 0.1", parameter->fil_heat_capcity, DEF_FIL_HEAT_CAPACITY, false);
 
           if (WITHIN(tmpVal, 0.001f, 0.1f))
             break;
@@ -252,19 +252,19 @@ void menuMPC(void)
         {
           case FINISHED:
           {
-            LABELCHAR(tempMsg, LABEL_PROCESS_COMPLETED);
-
             BUZZER_PLAY(SOUND_SUCCESS);
+
+            LABEL_CHAR(tempMsg, LABEL_PROCESS_COMPLETED);
 
             if (infoMachineSettings.EEPROM == 1)
             {
               sprintf(strchr(tempMsg, '\0'), "\n %s", textSelect(LABEL_EEPROM_SAVE_INFO));
 
-              popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
+              popupDialog(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, tempMsg, LABEL_CONFIRM, LABEL_CANCEL, saveEepromSettings, NULL, NULL);
             }
             else
             {
-              popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, (uint8_t *) tempMsg);
+              popupReminder(DIALOG_TYPE_SUCCESS, LABEL_MPC_TITLE, tempMsg);
             }
             break;
           }

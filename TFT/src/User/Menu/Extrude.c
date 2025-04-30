@@ -44,7 +44,7 @@ void menuExtrude(void)
 
     eAxisBackup.coordinate = coordinateGetAxis(E_AXIS);
     eAxisBackup.feedrate = coordinateGetFeedRate();
-    eAxisBackup.relative = eGetRelative();
+    eAxisBackup.relative = coordinateGetRelativeExtruder();
     eAxisBackup.handled = true;
   }
   else
@@ -173,6 +173,6 @@ void menuExtrude(void)
   }
 
   // set slow update time if not waiting for target temperature
-  if (heatHasWaiting() == false)
+  if (heatIsWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

@@ -5,9 +5,11 @@
 
 //-----------------------------General Settings
 #define CONFIG_SERIAL_PORT           "serial_port:"
-#define CONFIG_TX_SLOTS              "tx_slots:"
-#define CONFIG_ADVANCED_OK           "advanced_ok:"
 #define CONFIG_COMMAND_CHECKSUM      "command_checksum:"
+#define CONFIG_ADVANCED_OK           "advanced_ok:"
+#define CONFIG_TX_SLOTS              "tx_slots:"
+#define CONFIG_TX_DELAY              "tx_delay:"
+#define CONFIG_TX_PREFETCH           "tx_prefetch:"
 #define CONFIG_EMULATED_M600         "emulated_m600:"
 #define CONFIG_EMULATED_M109_M190    "emulated_m109_m190:"
 #define CONFIG_EVENT_LED             "event_led:"
@@ -232,10 +234,10 @@ static uint8_t customcode_index = 0;
 static uint8_t customcode_good[CUSTOM_GCODES_COUNT];
 static bool scheduleRotate = false;
 
-static void drawProgressPage(uint8_t * title)
+static void drawProgressPage(char * title)
 {
   GUI_Clear(BLACK);
-  GUI_DispString(2, 2, title);
+  GUI_DispString(2, 2, (uint8_t *) title);
   GUI_FillRectColor(rectTitleline.x0, rectTitleline.y0, rectTitleline.x1, rectTitleline.y1, BLUE);
   GUI_DrawPrect(&rectProgressframe);
 }
@@ -245,7 +247,7 @@ static void drawProgress(void)
   char tempstr[50];
 
   sprintf(tempstr, "Total keywords found: %d", foundkeys);
-  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *)tempstr);
+  GUI_DispString(pointProgressText.x, pointProgressText.y, (uint8_t *) tempstr);
 
   uint16_t p = map(CurConfigFile->cur, 0, CurConfigFile->size, rectProgressframe.x0, rectProgressframe.x1);
 
@@ -294,8 +296,8 @@ static void showError(CONFIG_STATS stat)
       break;
   }
 
-  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t *)ttl);
-  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t *)txt);
+  GUI_DispString(recterrortxt.x0, recterrortxt.y0, (uint8_t *) ttl);
+  GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1, (uint8_t *) txt);
   GUI_SetColor(WHITE);
   Delay_ms(5000);
 }
@@ -358,7 +360,7 @@ static bool inLimit(int val, int min, int max)
 // get the int after config keyword
 static inline int config_int(void)
 {
-  return (strtol(&cur_line[c_index], NULL, 10));
+  return strtol(&cur_line[c_index], NULL, 10);
 }
 
 // get valid int value or old value
@@ -366,8 +368,8 @@ static inline int valid_intValue(int min, int max, int defaultVal)
 {
   if (inLimit(config_int(), min, max))
     return config_int();
-  else
-    return defaultVal;
+
+  return defaultVal;
 }
 
 // treat all values other than 0 as 1
@@ -375,14 +377,14 @@ static int8_t getOnOff(void)
 {
   if (config_int() == 0)
     return 0;
-  else
-    return 1;
+
+  return 1;
 }
 
 // get the float after config keyword
 static inline float config_float(void)
 {
-  return (strtod(&cur_line[c_index], NULL));
+  return strtod(&cur_line[c_index], NULL);
 }
 
 // get valid float value or old value
@@ -390,8 +392,8 @@ static inline float valid_floatValue(float min, float max, float defaultVal)
 {
   if (inLimit(config_float(), min, max))
     return config_float();
-  else
-    return defaultVal;
+
+  return defaultVal;
 }
 
 // check if value is hex format
@@ -403,7 +405,7 @@ static inline bool config_is_hex(void)
 // get the hex after config keyword
 static inline uint32_t config_hex(void)
 {
-  return (strtol(&cur_line[c_index], NULL, 16));
+  return strtol(&cur_line[c_index], NULL, 16);
 }
 
 // convert RGB888 to RGB565
@@ -442,17 +444,25 @@ static void parseConfigKey(uint16_t index)
       if (key_seen("P4:")) SET_VALID_INT_VALUE(infoSettings.serial_port[3], 0, BAUDRATE_COUNT - 1);
       break;
 
+    case C_INDEX_COMMAND_CHECKSUM:
+    case C_INDEX_ADVANCED_OK:
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_COMMAND_CHECKSUM) + INDEX_COMMAND_CHECKSUM), getOnOff());
+      break;
+
     case C_INDEX_TX_SLOTS:
       SET_VALID_INT_VALUE(infoSettings.tx_slots, MIN_TX_SLOTS, MAX_TX_SLOTS);
       break;
 
-    case C_INDEX_ADVANCED_OK:
-    case C_INDEX_COMMAND_CHECKSUM:
+    case C_INDEX_TX_DELAY:
+      SET_VALID_INT_VALUE(infoSettings.tx_delay, MIN_TX_DELAY, MAX_TX_DELAY);
+      break;
+
+    case C_INDEX_TX_PREFETCH:
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
     case C_INDEX_EVENT_LED:
     case C_INDEX_FILE_COMMENT_PARSING:
-      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_ADVANCED_OK) + INDEX_ADVANCED_OK), getOnOff());
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_TX_PREFETCH) + INDEX_TX_PREFETCH), getOnOff());
       break;
 
     //----------------------------UI Settings
@@ -514,11 +524,11 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_TERMINAL_COLOR_SCHEME:
-      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, MIN_COLOR_SCHEME, MAX_COLOR_SCHEME);
       break;
 
     case C_INDEX_ACK_NOTIFICATION:
-      SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.ack_notification, MIN_ACK_NOTIF, MAX_ACK_NOTIF);
       break;
 
     case C_INDEX_FILES_SORT_BY:
@@ -550,15 +560,15 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_PROG_SOURCE:
-      SET_VALID_INT_VALUE(infoSettings.prog_source, 0, 1);
+      SET_VALID_INT_VALUE(infoSettings.prog_source, MIN_PROG_SOURCE, MAX_PROG_SOURCE);
       break;
 
     case C_INDEX_PROG_DISP_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, MIN_PROG_DISP_TYPE, MAX_PROG_DISP_TYPE);
       break;
 
     case C_INDEX_LAYER_DISP_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, MIN_LAYER_DISP_TYPE, MAX_LAYER_DISP_TYPE);
       break;
 
     //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
@@ -592,10 +602,10 @@ static void parseConfigKey(uint16_t index)
       case C_INDEX_MARLIN_TITLE:
       {
         char * pchr = strchr(cur_line, ':') + 1;
-        int utf8len = getUTF8Length((uint8_t *)pchr);
+        int utf8len = getUTF8Length((uint8_t *) pchr);
         int bytelen = strlen(pchr) + 1;
 
-        if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
+        if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_GCODE_LENGTH))
           strcpy(configStringsStore->marlin_title, pchr);
         break;
       }
@@ -693,7 +703,7 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_ONBOARD_SD:
-      SET_VALID_INT_VALUE(infoSettings.onboard_sd, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.onboard_sd, MIN_ONBOARD_SD, MAX_ONBOARD_SD);
       break;
 
     case C_INDEX_M27_REFRESH_TIME:
@@ -705,7 +715,7 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_LONG_FILENAME:
-      SET_VALID_INT_VALUE(infoSettings.long_filename, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.long_filename, MIN_LONG_FILENAME, MAX_LONG_FILENAME);
       break;
 
     case C_INDEX_PAUSE_RETRACT:
@@ -781,10 +791,10 @@ static void parseConfigKey(uint16_t index)
 
       strcpy(pchr, strchr(cur_line, ':') + 1);
 
-      int utf8len = getUTF8Length((uint8_t *)pchr);
+      int utf8len = getUTF8Length((uint8_t *) pchr);
       int bytelen = strlen(pchr) + 1;
 
-      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
+      if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_STRING_LENGTH))
         strcpy(configPreheatStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
       break;
     }
@@ -811,7 +821,7 @@ static void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_PS_AUTO_SHUTDOWN:
-        SET_VALID_INT_VALUE(infoSettings.auto_shutdown, 0, 2);
+        SET_VALID_INT_VALUE(infoSettings.auto_shutdown, MIN_AUTO_SHUTDOWN, MAX_AUTO_SHUTDOWN);
         break;
 
       case C_INDEX_PS_AUTO_SHUTDOWN_TEMP:
@@ -823,7 +833,7 @@ static void parseConfigKey(uint16_t index)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_FIL_RUNOUT:
-        if (inLimit(config_int(), 0, 3))
+        if (inLimit(config_int(), MIN_FIL_RUNOUT, MAX_FIL_RUNOUT))
         {
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_ENABLED, GET_BIT(config_int(), RUNOUT_ENABLED));
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_SENSOR_TYPE, GET_BIT(config_int(), RUNOUT_SENSOR_TYPE));
@@ -948,10 +958,10 @@ static void parseConfigKey(uint16_t index)
 
       strcpy(pchr, strchr(cur_line, ':') + 1);
 
-      int utf8len = getUTF8Length((uint8_t *)pchr);
+      int utf8len = getUTF8Length((uint8_t *) pchr);
       int bytelen = strlen(pchr) + 1;
 
-      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
         customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1;  // set name was found ok
@@ -986,7 +996,7 @@ static void parseConfigKey(uint16_t index)
       int len = strlen(pchr) + 1;
 
       // check if gcode length is ok and the name was ok
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
         strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
       else if (customcode_good[lineIndex] == 1)  // if name was ok but gcode is not ok then reduce count
         customcode_index--;
@@ -1006,12 +1016,12 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->start_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                               (uint8_t *)configPrintGcodes->start_gcode);
+                               (uint8_t *) configPrintGcodes->start_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif
@@ -1024,12 +1034,12 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->end_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                               (uint8_t *)configPrintGcodes->end_gcode);
+                               (uint8_t *) configPrintGcodes->end_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif
@@ -1042,12 +1052,12 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->cancel_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                               (uint8_t *)configPrintGcodes->cancel_gcode);
+                               (uint8_t *) configPrintGcodes->cancel_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif
@@ -1068,7 +1078,7 @@ static void parseConfigLine(void)
     if (param_seen(config_keywords[i]))
     {
       PRINTDEBUG("\n");
-      PRINTDEBUG((char *)config_keywords[i]);
+      PRINTDEBUG((char *) config_keywords[i]);
 
       parseConfigKey(i);
       foundkeys++;
@@ -1088,18 +1098,18 @@ static void parseLangLine(void)
     if (key_seen(lang_key_list[i]))
     {
       PRINTDEBUG("\n");
-      PRINTDEBUG((char *)lang_key_list[i]);
+      PRINTDEBUG((char *) lang_key_list[i]);
 
       uint32_t key_addr = LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * i);
-      uint8_t * pchr = (uint8_t *)strchr(cur_line, ':') + 1;
-      int bytelen = strlen((char *)pchr);
+      uint8_t * pchr = (uint8_t *) strchr(cur_line, ':') + 1;
+      int bytelen = strlen((char *) pchr);
 
       if (inLimit(bytelen, 1, MAX_LANG_LABEL_LENGTH))
       {
         char check[MAX_LANG_LABEL_LENGTH];
 
         W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
-        W25Qxx_ReadBuffer((uint8_t *)&check, key_addr, MAX_LANG_LABEL_LENGTH);
+        W25Qxx_ReadBuffer((uint8_t *) &check, key_addr, MAX_LANG_LABEL_LENGTH);
 
         if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
           showError(CSTAT_SPI_WRITE_FAIL);
@@ -1256,14 +1266,14 @@ static void writeConfig(uint8_t * dataBytes, uint16_t numBytes, uint32_t addr, u
 
 static void saveConfig(void)
 {
-  writeConfig((uint8_t *)configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
-  writeConfig((uint8_t *)configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
-  writeConfig((uint8_t *)configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
-  writeConfig((uint8_t *)configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
+  writeConfig((uint8_t *) configStringsStore, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *) configPreheatStore, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
+  writeConfig((uint8_t *) configPrintGcodes, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *) configCustomGcodes, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
 
   #ifdef CONFIG_DEBUG
     CUSTOM_GCODES tempgcode;  // = NULL;
-    uint8_t * data_r = (uint8_t *)&tempgcode;
+    uint8_t * data_r = (uint8_t *) &tempgcode;
 
     W25Qxx_ReadBuffer(data_r, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
@@ -1314,10 +1324,10 @@ void resetConfig(void)
   tempCG.count = n;
 
   // write restored config
-  writeConfig((uint8_t *)&tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
-  writeConfig((uint8_t *)&tempPH, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
-  writeConfig((uint8_t *)&tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
-  writeConfig((uint8_t *)&tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
+  writeConfig((uint8_t *) &tempST, sizeof(STRINGS_STORE), STRINGS_STORE_ADDR, STRINGS_STORE_MAX_SIZE);
+  writeConfig((uint8_t *) &tempPH, sizeof(PREHEAT_STORE), PREHEAT_STORE_ADDR, PREHEAT_STORE_MAX_SIZE);
+  writeConfig((uint8_t *) &tempPC, sizeof(PRINT_GCODES), PRINT_GCODES_ADDR, PRINT_GCODES_MAX_SIZE);
+  writeConfig((uint8_t *) &tempCG, sizeof(CUSTOM_GCODES), CUSTOM_GCODE_ADDR, CUSTOM_GCODE_MAX_SIZE);
 }
 
 bool getConfigFromFile(char * configPath)
@@ -1339,10 +1349,10 @@ bool getConfigFromFile(char * configPath)
   PRINT_GCODES tempPrintCodes;
   CUSTOM_GCODES tempCustomGcodes;
 
-  W25Qxx_ReadBuffer((uint8_t *)&tempStringStore, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
-  W25Qxx_ReadBuffer((uint8_t *)&tempPreheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
-  W25Qxx_ReadBuffer((uint8_t *)&tempPrintCodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
-  W25Qxx_ReadBuffer((uint8_t *)&tempCustomGcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *) &tempStringStore, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
+  W25Qxx_ReadBuffer((uint8_t *) &tempPreheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *) &tempPrintCodes, PRINT_GCODES_ADDR, sizeof(PRINT_GCODES));
+  W25Qxx_ReadBuffer((uint8_t *) &tempCustomGcodes, CUSTOM_GCODE_ADDR, sizeof(CUSTOM_GCODES));
 
   configStringsStore = &tempStringStore;
   configPreheatStore = &tempPreheatStore;
@@ -1355,7 +1365,7 @@ bool getConfigFromFile(char * configPath)
 
   cur_line = cur_line_buffer;
 
-  drawProgressPage((uint8_t *)"Updating Configuration...");
+  drawProgressPage("Updating Configuration...");
 
   if (readConfigFile(configPath, parseConfigLine, LINE_MAX_CHAR))
   {
@@ -1410,7 +1420,7 @@ bool getLangFromFile(char * rootDir)
 
   cur_line = cur_line_buffer;
 
-  drawProgressPage((uint8_t *)f.fname);
+  drawProgressPage((char *) f.fname);
 
   // erase part of flash to be rewritten
   for (int i = 0; i < (LANGUAGE_SIZE / W25QXX_SECTOR_SIZE); i++)

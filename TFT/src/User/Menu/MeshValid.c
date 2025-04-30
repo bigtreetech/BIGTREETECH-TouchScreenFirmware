@@ -22,7 +22,7 @@ void menuMeshValid(void)
   KEY_VALUES key_num;
   PREHEAT_STORE preheatStore;
 
-  W25Qxx_ReadBuffer((uint8_t *)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
+  W25Qxx_ReadBuffer((uint8_t *) &preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
 
   menuDrawPage(&meshValidItems);
 
