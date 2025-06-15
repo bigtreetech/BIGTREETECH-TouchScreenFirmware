@@ -1283,7 +1283,7 @@ void parseAck(void)
       {
         string = &ack_cache[ack_index];
         string_start = ack_index;
-        string_end = string_start;
+        string_end = ack_index - sizeof("MACHINE_TYPE:");
 
         if (ack_seen("KINEMATICS:"))  // as of MarlinFirmware/Marlin@3fd175a
           string_end = ack_index - sizeof("KINEMATICS:");
