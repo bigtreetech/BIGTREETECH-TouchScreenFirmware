@@ -447,7 +447,7 @@ static void menuLEDColorCustom(void)
 
     if ((sendingNeeded && nextScreenUpdate(LED_REFRESH_TIME)) || updateForced)
     {
-      LED_SendColor(&ledColor);
+      LED_SetEventColor(&ledColor, false);
 
       updateForced = sendingNeeded = false;
     }
@@ -481,7 +481,7 @@ void menuLEDColor(void)
   bool forceLedOff, forceExit;
 
   LED_SetColor(&infoSettings.led_color, false);  // set (neopixel) LED light current color to configured color
-  LED_SendColor(&ledColor);                      // set (neopixel) LED light to current color
+  LED_SetEventColor(&ledColor, false);                      // set (neopixel) LED light to current color
   forceLedOff = false;
   forceExit = false;
 
@@ -520,7 +520,7 @@ void menuLEDColor(void)
 
       // switch off
       case KEY_ICON_6:
-        LED_SendColor(&ledOff);
+        LED_SetEventColor(&ledOff, false);
 
         forceLedOff = true;
         break;
@@ -537,7 +537,7 @@ void menuLEDColor(void)
 
     if (key_num <= KEY_ICON_5)  // change LED color
     {
-      LED_SendColor(&ledColor);
+      LED_SetEventColor(&ledColor, false);
       LED_GetColor(&infoSettings.led_color);  // set (neopixel) LED light configured color to current color
 
       forceLedOff = false;
