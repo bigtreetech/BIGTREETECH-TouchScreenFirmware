@@ -1524,6 +1524,7 @@
  * Comment to enable a standard progress bar.
  */
 //#define MARKED_PROGRESS_BAR  // Default: commented (disabled)
+#define MARKED_PROGRESS_BAR  // Comment to restore the upstream standard progress bar
 
 /**
  * Live Text Common Color Layout (Status Screen menu)
