@@ -203,13 +203,7 @@
 //
 
 // ST7920 Emulator SPI pins
-// Marlin mode (LCD emulation) is enabled only for the Artillery Sidewinder X1 / Genius
-// build, which sets the MKS_TFT28_V1_0_ARTILLERY marker in platformio.ini. This keeps
-// upstream pin behaviour for the other variants sharing this pin file.
-#if defined(MKS_TFT28_V1_0_ARTILLERY)
-  #define ST7920_EMULATOR
-#endif
-//#define ST7920_EMULATOR  // uncomment to enable Marlin mode
+#define ST7920_EMULATOR  // uncomment to enable Marlin mode
 #ifdef ST7920_EMULATOR
   #define ST7920_SPI _SPI3
 #endif
