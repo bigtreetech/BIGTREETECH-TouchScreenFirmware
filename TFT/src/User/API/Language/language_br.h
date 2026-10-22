@@ -64,6 +64,7 @@
 #define STRING_BED_PID                "Bed PID"
 #define STRING_STEALTH_CHOP           "TMC StealthChop"
 #define STRING_INPUT_SHAPING          "Input Shaping"
+#define STRING_FT_MOTION              "FT Motion"
 #define STRING_DELTA_CONFIGURATION    "Configuração Delta"
 #define STRING_DELTA_TOWER_ANGLE      "Guarnição do ângulo da torre" //
 #define STRING_DELTA_DIAGONAL_ROD     "Diagonal Rod Trim"

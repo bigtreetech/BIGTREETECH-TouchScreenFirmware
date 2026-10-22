@@ -64,6 +64,7 @@
 #define STRING_BED_PID                "Hotbed PID"
 #define STRING_STEALTH_CHOP           "TMC StealthChop"
 #define STRING_INPUT_SHAPING          "Input Shaping"
+#define STRING_FT_MOTION              "FT Motion"
 #define STRING_DELTA_CONFIGURATION    "Delta konfiguracija"
 #define STRING_DELTA_TOWER_ANGLE      "Delta kut tornja"
 #define STRING_DELTA_DIAGONAL_ROD     "Dijagonalni trim šipke"

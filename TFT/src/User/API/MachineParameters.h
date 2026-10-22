@@ -28,6 +28,7 @@ typedef enum
   P_ABL_STATE,
   P_STEALTH_CHOP,
   P_INPUT_SHAPING,
+  P_FT_MOTION,
   P_DELTA_CONFIGURATION,
   P_DELTA_TOWER_ANGLE,
   P_DELTA_DIAGONAL_ROD,
@@ -97,6 +98,7 @@ extern char * const bedPidDisplayID[];
 extern char * const ablStateDisplayID[];
 extern char * const stealthChopDisplayID[];
 extern char * const inputShapingDisplayID[];
+extern char * const ftMotionDisplayID[];
 extern char * const deltaConfigurationDisplayID[];
 extern char * const deltaTowerAngleDisplayID[];
 extern char * const deltaDiagonalRodDisplayID[];

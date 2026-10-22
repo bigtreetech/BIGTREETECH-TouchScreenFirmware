@@ -1348,6 +1348,42 @@ void sendQueueCmd(void)
           break;
         }
 
+        case 493:  // M493 Fixed-Time Motion (only for Marlin)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+          {
+            // C (shaper), A (base frequency) and I (zeta) apply to the flagged axes,
+            // XY is assumed if none of X, Y, Z, E is given. Only X and Y are handled by the TFT
+
+            bool hasAxis = cmd_seen('Z') || cmd_seen('E');
+            bool setX = cmd_seen('X');
+            bool setY = cmd_seen('Y');
+
+            hasAxis |= setX || setY;
+
+            if (!hasAxis) setX = setY = true;
+
+            if (cmd_seen('S')) setParameter(P_FT_MOTION, 0, cmd_value());
+            if (cmd_seen('H')) setParameter(P_FT_MOTION, 1, cmd_value());
+            if (cmd_seen('D')) setParameter(P_FT_MOTION, 2, cmd_value());
+
+            if (setX)
+            {
+              if (cmd_seen('C')) setParameter(P_FT_MOTION, 3, cmd_value());
+              if (cmd_seen('A')) setParameter(P_FT_MOTION, 4, cmd_float());
+              if (cmd_seen('I')) setParameter(P_FT_MOTION, 5, cmd_float());
+            }
+
+            if (setY)
+            {
+              if (cmd_seen('C')) setParameter(P_FT_MOTION, 6, cmd_value());
+              if (cmd_seen('A')) setParameter(P_FT_MOTION, 7, cmd_float());
+              if (cmd_seen('I')) setParameter(P_FT_MOTION, 8, cmd_float());
+            }
+          }
+          break;
+        }
+
         case 569:  // M569 TMC stepping mode
         {
           float isStealthChop = (cmd_seen('S')) ? cmd_value() : 0;  // integer type value also casted to float type
