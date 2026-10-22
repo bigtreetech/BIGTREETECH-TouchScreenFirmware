@@ -97,7 +97,7 @@ void OS_TaskLoop(OS_TASK * task_t)
   if (task_t->is_exist == 0)
     return;
 
-  if (OS_GetTimeMs() < task_t->next_time)
+  if ((int32_t)(OS_GetTimeMs() - task_t->next_time) < 0)  // wraparound safe
     return;
 
   if (task_t->is_repeat == 0)
