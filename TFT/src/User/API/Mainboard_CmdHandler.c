@@ -1308,22 +1308,24 @@ void sendQueueCmd(void)
           if (infoMachineSettings.firmwareType == FW_MARLIN)
           {
             // M593 accepts its parameters in any order,
-            // if both X and Y axis are missing than the rest
+            // if no axis is specified than the rest
             // of the parameters are referring to each axis
 
             enum
             {
-              SET_NONE = 0B00,
-              SET_X = 0B01,
-              SET_Y = 0B10,
-              SET_BOTH = 0B11
+              SET_NONE = 0B000,
+              SET_X = 0B001,
+              SET_Y = 0B010,
+              SET_Z = 0B100,
+              SET_ALL = 0B011  // X and Y only, Z is updated only if explicitly provided (it is optional on Marlin)
             } setAxis = SET_NONE;
 
             float pValue;
 
             if (cmd_seen('X')) setAxis |= SET_X;
             if (cmd_seen('Y')) setAxis |= SET_Y;
-            if (setAxis == SET_NONE) setAxis = SET_BOTH;
+            if (cmd_seen('Z')) setAxis |= SET_Z;
+            if (setAxis == SET_NONE) setAxis = SET_ALL;
 
             if (cmd_seen('F'))
             {
@@ -1331,6 +1333,7 @@ void sendQueueCmd(void)
 
               if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 0, pValue);
               if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 2, pValue);
+              if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 4, pValue);
             }
 
             if (cmd_seen('D'))
@@ -1339,8 +1342,10 @@ void sendQueueCmd(void)
 
               if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 1, pValue);
               if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 3, pValue);
+              if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 5, pValue);
             }
           }
+          break;
         }
 
         case 569:  // M569 TMC stepping mode
