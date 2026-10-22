@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Натисніть, щоб повернутися"
 #define STRING_MAINMENU               "Меню"
 #define STRING_TUNING                 "Налагодження"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC автоналаштування"
 #define STRING_MPC_METHOD             "метод:"

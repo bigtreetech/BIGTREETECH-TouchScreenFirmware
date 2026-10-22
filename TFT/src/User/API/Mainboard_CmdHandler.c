@@ -571,7 +571,7 @@ void handleCmdLineNumberMismatch(const uint32_t lineNumber)
 }
 
 // check if the received gcode is an emergency command or not
-// (M108, M112, M410, M524, M876) and parse it accordingly.
+// (M108, M112, M410, M496, M524, M876) and parse it accordingly.
 // Otherwise, store the gcode on command queue
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
@@ -589,6 +589,7 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
       case 108:  // M108
       case 112:  // M112
       case 410:  // M410
+      case 496:  // M496 (abort resonance test)
       case 876:  // M876
         sendEmergencyCmd(cmd, portIndex);
         return;

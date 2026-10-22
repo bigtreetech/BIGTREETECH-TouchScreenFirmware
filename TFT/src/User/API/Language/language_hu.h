@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Érintsd meg a kilépéshez."
 #define STRING_MAINMENU               "Főmenü"
 #define STRING_TUNING                 "Hangolás"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC önhangolás"
 #define STRING_MPC_METHOD             "Módszer:"

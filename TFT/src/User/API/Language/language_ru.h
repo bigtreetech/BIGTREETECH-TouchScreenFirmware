@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Нажмите для возврата"
 #define STRING_MAINMENU               "Меню"
 #define STRING_TUNING                 "Наладка"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC автонастройка"
 #define STRING_MPC_METHOD             "Метод:"

@@ -150,6 +150,7 @@
 #include "StatusScreen.h"
 #include "Terminal.h"
 #include "Touchmi.h"
+#include "ResonanceTest.h"
 #include "TuneExtruder.h"
 #include "Tuning.h"
 #include "UnifiedHeat.h"

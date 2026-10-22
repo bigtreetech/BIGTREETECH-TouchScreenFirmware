@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "触摸任意点退出当前界面"
 #define STRING_MAINMENU               "菜单"
 #define STRING_TUNING                 "调整"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC自动整定"
 #define STRING_MPC_METHOD             "方法:"

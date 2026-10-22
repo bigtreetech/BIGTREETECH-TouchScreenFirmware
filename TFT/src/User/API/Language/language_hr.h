@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Dodirnite bilo gdje za izlaz"
 #define STRING_MAINMENU               "Izbornik"
 #define STRING_TUNING                 "Podesi"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC auto"
 #define STRING_MPC_METHOD             "Metoda:"

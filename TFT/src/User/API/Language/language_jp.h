@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "クリックして終了します"
 #define STRING_MAINMENU               "メニュー"
 #define STRING_TUNING                 "Tuning"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC autotune"
 #define STRING_MPC_METHOD             "方法:"

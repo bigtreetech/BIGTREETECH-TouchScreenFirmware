@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Pro návrat se dotkněte obrazovky..."
 #define STRING_MAINMENU               "Menu"
 #define STRING_TUNING                 "Kalibrace"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC autokalibrace"
 #define STRING_MPC_METHOD             "Metoda:"

@@ -345,6 +345,7 @@ extern "C" {
 #define LANG_KEY_TOUCH_TO_EXIT          "label_touch_to_exit:"
 #define LANG_KEY_MAINMENU               "label_mainmenu:"
 #define LANG_KEY_TUNING                 "label_tuning:"
+#define LANG_KEY_RESONANCE_TEST         "label_resonance_test:"
 #define LANG_KEY_MPC                    "label_mpc:"
 #define LANG_KEY_MPC_TITLE              "label_mpc_title:"
 #define LANG_KEY_MPC_METHOD             "label_mpc_method:"

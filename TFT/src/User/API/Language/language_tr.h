@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Çıkmak için ekrana dokunun"
 #define STRING_MAINMENU               "Menü"
 #define STRING_TUNING                 "Ayar"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "MPC oto. ayar"
 #define STRING_MPC_METHOD             "Yöntem:"

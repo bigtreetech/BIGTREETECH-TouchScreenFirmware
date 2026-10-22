@@ -338,6 +338,7 @@
 #define STRING_TOUCH_TO_EXIT          "Tocca ovunque per uscire"
 #define STRING_MAINMENU               "Menù"
 #define STRING_TUNING                 "Regola"
+#define STRING_RESONANCE_TEST        "Resonance Test"
 #define STRING_MPC                    "MPC"
 #define STRING_MPC_TITLE              "Autoregolazione MPC"
 #define STRING_MPC_METHOD             "Metodo:"
