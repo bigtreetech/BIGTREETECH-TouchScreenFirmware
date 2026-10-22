@@ -16,7 +16,7 @@ char * const ablStateDisplayID[]           = {"S "  ONOFF_DISPLAY_ID, "Z fade he
 char * const stealthChopDisplayID[]        = {"X "  ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "  ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
                                               "Z "  ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
                                               "E0 " ONOFF_DISPLAY_ID, "E1 " ONOFF_DISPLAY_ID, "E2 " ONOFF_DISPLAY_ID};
-char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
+char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:", "Z -> F:", "Z -> D:"};
 char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
 char * const deltaTowerAngleDisplayID[]    = {"Tx", "Ty", "Tz"};
 char * const deltaDiagonalRodDisplayID[]   = {"Dx", "Dy", "Dz"};
@@ -133,10 +133,10 @@ static const suffix_t M569_suffix[] = {
   {"S%.0f T1 E\n", VAL_TYPE_INT}, {"S%.0f T2 E\n", VAL_TYPE_INT},
 };
 
-// Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
+// Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor, Z damping frequency, Z damping factor)
 static const suffix_t M593_suffix[] = {
   {"X F%.3f\n", VAL_TYPE_FLOAT}, {"X D%.3f\n", VAL_TYPE_FLOAT}, {"Y F%.3f\n", VAL_TYPE_FLOAT},
-  {"Y D%.3f\n", VAL_TYPE_FLOAT},
+  {"Y D%.3f\n", VAL_TYPE_FLOAT}, {"Z F%.3f\n", VAL_TYPE_FLOAT}, {"Z D%.3f\n", VAL_TYPE_FLOAT},
 };
 
 // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
