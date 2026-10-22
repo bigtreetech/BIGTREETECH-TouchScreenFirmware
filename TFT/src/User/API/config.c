@@ -390,8 +390,12 @@ static inline float config_float(void)
 // get valid float value or old value
 static inline float valid_floatValue(float min, float max, float defaultVal)
 {
-  if (inLimit(config_float(), min, max))
-    return config_float();
+  float val = config_float();
+
+  if (val >= min && val <= max)  // float comparison (inLimit() would truncate the value to int)
+    return val;
+
+  showError(CSTAT_INVALID_VALUE);
 
   return defaultVal;
 }
