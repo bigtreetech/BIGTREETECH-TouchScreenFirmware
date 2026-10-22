@@ -563,8 +563,9 @@ void parseAck(void)
         goto parse_end;  // nothing else to do
       }
 
-      // if ADVANCED_OK response (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin
-      if (ack_continue_seen("P") && ack_continue_seen("B"))
+      // if ADVANCED_OK response (e.g. "ok N10 P15 B3\n"). Required "ADVANCED_OK" in Marlin.
+      // Exclude M105 responses, that can also contain "P" and "B" (e.g. "ok T:200.00 /200.00 P:35.00 /0.00 @:127 B@:64\n")
+      if (!ack_seen("T:") && ack_seen("P") && ack_continue_seen("B"))
       {
         InfoHost_HandleAckOk(ack_value());
 
