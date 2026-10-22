@@ -33,12 +33,13 @@ float babystepResetValue(void)
 
     step_count = ((BABYSTEP_DEFAULT_VALUE - babystep_value) * direction) / BABYSTEP_MAX_STEP;
 
+    // compute the remaining unit before the loop below, which consumes step_count
+    last_unit = (BABYSTEP_DEFAULT_VALUE - babystep_value) - (BABYSTEP_MAX_STEP * step_count * direction);
+
     for (; step_count > 0; step_count--)
     {
       mustStoreCmd(babyStepCmd, BABYSTEP_MAX_STEP * direction);
     }
-
-    last_unit = (BABYSTEP_DEFAULT_VALUE - babystep_value) - (BABYSTEP_MAX_STEP * step_count * direction);
 
     if (last_unit != 0.0f)
       mustStoreCmd(babyStepCmd, last_unit);
