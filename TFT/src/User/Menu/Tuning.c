@@ -1,6 +1,53 @@
 #include "Tuning.h"
 #include "includes.h"
 
+typedef enum
+{
+  TUNE_MPC = 0,
+  TUNE_PID,
+  TUNE_EXTRUDER,
+  TUNE_H_OFFSET,
+  TUNE_RESONANCE,
+  #ifdef DEBUG_MONITORING
+    TUNE_MONITORING,
+  #endif
+  TUNE_COUNT
+} TUNE_ITEM;
+
+static const ITEM tuneItems[TUNE_COUNT] = {
+  // icon                          label
+  {ICON_MPC_PID,                   LABEL_MPC},
+  {ICON_MPC_PID,                   LABEL_PID},
+  {ICON_TUNE_EXTRUDER,             LABEL_TUNE_EXTRUDER},
+  {ICON_PROBE_OFFSET,              LABEL_H_OFFSET},
+  {ICON_PARAMETER,                 LABEL_RESONANCE_TEST},
+  #ifdef DEBUG_MONITORING
+    {ICON_FAST_SPEED,              LABEL_TEST},
+  #endif
+};
+
+// check if an item must be displayed
+static bool isTuneItemEnabled(TUNE_ITEM item)
+{
+  switch (item)
+  {
+    case TUNE_MPC:
+      return hasMPC();
+
+    case TUNE_PID:  // PID is replaced by MPC for the bed if the bed is not available
+      return !hasMPC() || infoSettings.bed_en;
+
+    case TUNE_H_OFFSET:
+      return DELTA_PROBE_TYPE == 0;  // not available on Delta printers
+
+    case TUNE_RESONANCE:
+      return hasResonanceTest();
+
+    default:
+      return true;
+  }
+}
+
 void menuTuning(void)
 {
   MENUITEMS TuningItems = {
@@ -8,39 +55,28 @@ void menuTuning(void)
     LABEL_TUNING,
     // icon                          label
     {
-      {ICON_MPC_PID,                 LABEL_MPC},
-      {ICON_MPC_PID,                 LABEL_PID},
-      {ICON_TUNE_EXTRUDER,           LABEL_TUNE_EXTRUDER},
-      #if DELTA_PROBE_TYPE == 0  // if not Delta printer
-        {ICON_PROBE_OFFSET,            LABEL_H_OFFSET},
-      #else
-        {ICON_NULL,                    LABEL_NULL},
-      #endif
       {ICON_NULL,                    LABEL_NULL},
-      #ifdef DEBUG_MONITORING
-        {ICON_FAST_SPEED,              LABEL_TEST},
-      #else
-        {ICON_NULL,                    LABEL_NULL},
-      #endif
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
+      {ICON_NULL,                    LABEL_NULL},
       {ICON_NULL,                    LABEL_NULL},
       {ICON_BACK,                    LABEL_BACK},
     }
   };
 
+  TUNE_ITEM keyAction[7];
   KEY_VALUES key_num = KEY_IDLE;
+  uint8_t slots = 0;
 
-  if (!hasMPC())
+  // fill the enabled items sequentially, so no gap is left between them
+  for (uint8_t i = 0; i < TUNE_COUNT && slots < 7; i++)
   {
-    for (uint8_t i = 0; i < 4; i++)
+    if (isTuneItemEnabled(i))
     {
-      TuningItems.items[i] = TuningItems.items[i + 1];
-    }
-  }
-  else if (!infoSettings.bed_en)
-  {
-    for (uint8_t i = 1; i < 4; i++)
-    {
-      TuningItems.items[i] = TuningItems.items[i + 1];
+      TuningItems.items[slots] = tuneItems[i];
+      keyAction[slots++] = i;
     }
   }
 
@@ -50,63 +86,47 @@ void menuTuning(void)
   {
     key_num = menuKeyGetValue();
 
-    switch (key_num)
+    if (key_num == KEY_ICON_7)
     {
-      case KEY_ICON_0:
-        if (hasMPC())
+      CLOSE_MENU();
+    }
+    else if (key_num < slots)
+    {
+      switch (keyAction[key_num])
+      {
+        case TUNE_MPC:
           OPEN_MENU(menuMPC);
-        else
-          OPEN_MENU(menuPid);
-        break;
-
-      case KEY_ICON_1:
-        if (hasMPC() && infoSettings.bed_en)
-          OPEN_MENU(menuPid);
-        else
-          OPEN_MENU(menuTuneExtruder);
-        break;
-
-      case KEY_ICON_2:
-        if (hasMPC() && infoSettings.bed_en)
-        {
-          OPEN_MENU(menuTuneExtruder);
-        }
-        #if DELTA_PROBE_TYPE == 0  // if not Delta printer
-          else
-          {
-            storeCmd("M206\n");
-
-            zOffsetSetMenu(false);  // use Home Offset menu
-            OPEN_MENU(menuZOffset);
-          }
-        #endif
-        break;
-
-      case KEY_ICON_3:
-        #if DELTA_PROBE_TYPE == 0  // if not Delta printer
-          if (hasMPC() && infoSettings.bed_en)
-          {
-            storeCmd("M206\n");
-
-            zOffsetSetMenu(false);  // use Home Offset menu
-            OPEN_MENU(menuZOffset);
-          }
-        #endif
-        break;
-
-      #ifdef DEBUG_MONITORING
-        case KEY_ICON_5:
-          monitoringSetMenu(true);  // use Stress Test Monitoring menu
-          OPEN_MENU(menuMonitoring);
           break;
-      #endif
 
-      case KEY_ICON_7:
-        CLOSE_MENU();
-        break;
+        case TUNE_PID:
+          OPEN_MENU(menuPid);
+          break;
 
-      default:
-        break;
+        case TUNE_EXTRUDER:
+          OPEN_MENU(menuTuneExtruder);
+          break;
+
+        case TUNE_H_OFFSET:
+          storeCmd("M206\n");
+
+          zOffsetSetMenu(false);  // use Home Offset menu
+          OPEN_MENU(menuZOffset);
+          break;
+
+        case TUNE_RESONANCE:
+          OPEN_MENU(menuResonanceTest);
+          break;
+
+        #ifdef DEBUG_MONITORING
+          case TUNE_MONITORING:
+            monitoringSetMenu(true);  // use Stress Test Monitoring menu
+            OPEN_MENU(menuMonitoring);
+            break;
+        #endif
+
+        default:
+          break;
+      }
     }
 
     loopProcess();

@@ -16,7 +16,10 @@ char * const ablStateDisplayID[]           = {"S "  ONOFF_DISPLAY_ID, "Z fade he
 char * const stealthChopDisplayID[]        = {"X "  ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "  ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
                                               "Z "  ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
                                               "E0 " ONOFF_DISPLAY_ID, "E1 " ONOFF_DISPLAY_ID, "E2 " ONOFF_DISPLAY_ID};
-char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
+char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:", "Z -> F:", "Z -> D:"};
+char * const ftMotionDisplayID[]           = {"S " ONOFF_DISPLAY_ID, "Axis sync " ONOFF_DISPLAY_ID, "Dyn. freq. mode (0-2)",
+                                              "X -> Shaper (0-8)", "X -> Freq (Hz)", "X -> Zeta",
+                                              "Y -> Shaper (0-8)", "Y -> Freq (Hz)", "Y -> Zeta"};
 char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
 char * const deltaTowerAngleDisplayID[]    = {"Tx", "Ty", "Tz"};
 char * const deltaDiagonalRodDisplayID[]   = {"Dx", "Dy", "Dz"};
@@ -133,10 +136,18 @@ static const suffix_t M569_suffix[] = {
   {"S%.0f T1 E\n", VAL_TYPE_INT}, {"S%.0f T2 E\n", VAL_TYPE_INT},
 };
 
-// Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor)
+// Input Shape (X damping frequency, X damping factor, Y damping frequency, Y damping factor, Z damping frequency, Z damping factor)
 static const suffix_t M593_suffix[] = {
   {"X F%.3f\n", VAL_TYPE_FLOAT}, {"X D%.3f\n", VAL_TYPE_FLOAT}, {"Y F%.3f\n", VAL_TYPE_FLOAT},
-  {"Y D%.3f\n", VAL_TYPE_FLOAT},
+  {"Y D%.3f\n", VAL_TYPE_FLOAT}, {"Z F%.3f\n", VAL_TYPE_FLOAT}, {"Z D%.3f\n", VAL_TYPE_FLOAT},
+};
+
+// Fixed-Time Motion (Active, Axis sync, Dynamic freq. mode,
+//                    X shaper, X base freq., X zeta, Y shaper, Y base freq., Y zeta)
+static const suffix_t M493_suffix[] = {
+  {"S%.0f\n", VAL_TYPE_INT}, {"H%.0f\n", VAL_TYPE_INT}, {"D%.0f\n", VAL_TYPE_INT},
+  {"X C%.0f\n", VAL_TYPE_INT}, {"X A%.2f\n", VAL_TYPE_FLOAT}, {"X I%.3f\n", VAL_TYPE_FLOAT},
+  {"Y C%.0f\n", VAL_TYPE_INT}, {"Y A%.2f\n", VAL_TYPE_FLOAT}, {"Y I%.3f\n", VAL_TYPE_FLOAT},
 };
 
 // Delta Configuration (Height, Segment per sec, Radius, Diagonal Rod)
@@ -233,6 +244,8 @@ static parameter_member_t parameter_list[] = {
   {"M569", M569_suffix,           COUNT(M569_suffix)},
   // Input Shape
   {"M593", M593_suffix,           COUNT(M593_suffix)},
+  // Fixed-Time Motion
+  {"M493", M493_suffix,           COUNT(M493_suffix)},
   // Delta Configuration
   {"M665", M665_hsrl_suffix,      COUNT(M665_hsrl_suffix)},
   // Delta Tower Angle
@@ -274,6 +287,7 @@ typedef struct
   float ABLState[COUNT(M420_suffix)];
   float StealthChop[COUNT(M569_suffix)];
   float InputShaping[COUNT(M593_suffix)];
+  float FtMotion[COUNT(M493_suffix)];
   float DeltaConfiguration[COUNT(M665_hsrl_suffix)];
   float DeltaTowerAngle[COUNT(M665_xyz_suffix)];
   float DeltaDiagonalRod[COUNT(M665_abc_suffix)];
@@ -438,6 +452,9 @@ float getParameter(PARAMETER_NAME name, uint8_t index)
     case P_INPUT_SHAPING:
       return infoParameters.InputShaping[index];
 
+    case P_FT_MOTION:
+      return infoParameters.FtMotion[index];
+
     case P_DELTA_CONFIGURATION:
       return infoParameters.DeltaConfiguration[index];
 
@@ -549,6 +566,10 @@ void setParameter(PARAMETER_NAME name, uint8_t index, float val)
 
     case P_INPUT_SHAPING:
       infoParameters.InputShaping[index] = val;
+      break;
+
+    case P_FT_MOTION:
+      infoParameters.FtMotion[index] = val;
       break;
 
     case P_DELTA_CONFIGURATION:

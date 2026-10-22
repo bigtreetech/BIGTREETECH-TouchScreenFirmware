@@ -571,7 +571,7 @@ void handleCmdLineNumberMismatch(const uint32_t lineNumber)
 }
 
 // check if the received gcode is an emergency command or not
-// (M108, M112, M410, M524, M876) and parse it accordingly.
+// (M108, M112, M410, M496, M524, M876) and parse it accordingly.
 // Otherwise, store the gcode on command queue
 void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
 {
@@ -589,6 +589,7 @@ void handleCmd(CMD cmd, const SERIAL_PORT_INDEX portIndex)
       case 108:  // M108
       case 112:  // M112
       case 410:  // M410
+      case 496:  // M496 (abort resonance test)
       case 876:  // M876
         sendEmergencyCmd(cmd, portIndex);
         return;
@@ -1308,22 +1309,24 @@ void sendQueueCmd(void)
           if (infoMachineSettings.firmwareType == FW_MARLIN)
           {
             // M593 accepts its parameters in any order,
-            // if both X and Y axis are missing than the rest
+            // if no axis is specified than the rest
             // of the parameters are referring to each axis
 
             enum
             {
-              SET_NONE = 0B00,
-              SET_X = 0B01,
-              SET_Y = 0B10,
-              SET_BOTH = 0B11
+              SET_NONE = 0B000,
+              SET_X = 0B001,
+              SET_Y = 0B010,
+              SET_Z = 0B100,
+              SET_ALL = 0B011  // X and Y only, Z is updated only if explicitly provided (it is optional on Marlin)
             } setAxis = SET_NONE;
 
             float pValue;
 
             if (cmd_seen('X')) setAxis |= SET_X;
             if (cmd_seen('Y')) setAxis |= SET_Y;
-            if (setAxis == SET_NONE) setAxis = SET_BOTH;
+            if (cmd_seen('Z')) setAxis |= SET_Z;
+            if (setAxis == SET_NONE) setAxis = SET_ALL;
 
             if (cmd_seen('F'))
             {
@@ -1331,6 +1334,7 @@ void sendQueueCmd(void)
 
               if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 0, pValue);
               if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 2, pValue);
+              if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 4, pValue);
             }
 
             if (cmd_seen('D'))
@@ -1339,8 +1343,46 @@ void sendQueueCmd(void)
 
               if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 1, pValue);
               if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 3, pValue);
+              if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 5, pValue);
             }
           }
+          break;
+        }
+
+        case 493:  // M493 Fixed-Time Motion (only for Marlin)
+        {
+          if (infoMachineSettings.firmwareType == FW_MARLIN)
+          {
+            // C (shaper), A (base frequency) and I (zeta) apply to the flagged axes,
+            // XY is assumed if none of X, Y, Z, E is given. Only X and Y are handled by the TFT
+
+            bool hasAxis = cmd_seen('Z') || cmd_seen('E');
+            bool setX = cmd_seen('X');
+            bool setY = cmd_seen('Y');
+
+            hasAxis |= setX || setY;
+
+            if (!hasAxis) setX = setY = true;
+
+            if (cmd_seen('S')) setParameter(P_FT_MOTION, 0, cmd_value());
+            if (cmd_seen('H')) setParameter(P_FT_MOTION, 1, cmd_value());
+            if (cmd_seen('D')) setParameter(P_FT_MOTION, 2, cmd_value());
+
+            if (setX)
+            {
+              if (cmd_seen('C')) setParameter(P_FT_MOTION, 3, cmd_value());
+              if (cmd_seen('A')) setParameter(P_FT_MOTION, 4, cmd_float());
+              if (cmd_seen('I')) setParameter(P_FT_MOTION, 5, cmd_float());
+            }
+
+            if (setY)
+            {
+              if (cmd_seen('C')) setParameter(P_FT_MOTION, 6, cmd_value());
+              if (cmd_seen('A')) setParameter(P_FT_MOTION, 7, cmd_float());
+              if (cmd_seen('I')) setParameter(P_FT_MOTION, 8, cmd_float());
+            }
+          }
+          break;
         }
 
         case 569:  // M569 TMC stepping mode

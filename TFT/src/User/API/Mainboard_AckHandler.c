@@ -1102,22 +1102,24 @@ void parseAck(void)
     else if (ack_starts_with("M593") && infoMachineSettings.firmwareType == FW_MARLIN)
     {
       // M593 accepts its parameters in any order,
-      // if both X and Y axis are missing than the rest
+      // if no axis is specified than the rest
       // of the parameters are referring to each axis
 
       enum
       {
-        SET_NONE = 0B00,
-        SET_X = 0B01,
-        SET_Y = 0B10,
-        SET_BOTH = 0B11
+        SET_NONE = 0B000,
+        SET_X = 0B001,
+        SET_Y = 0B010,
+        SET_Z = 0B100,
+        SET_ALL = 0B011  // X and Y only, Z is updated only if explicitly provided (it is optional on Marlin)
       } setAxis = SET_NONE;
 
       float pValue;
 
       if (ack_seen("X")) setAxis |= SET_X;
       if (ack_seen("Y")) setAxis |= SET_Y;
-      if (setAxis == SET_NONE) setAxis = SET_BOTH;
+      if (ack_seen("Z")) setAxis |= SET_Z;
+      if (setAxis == SET_NONE) setAxis = SET_ALL;
 
       if (ack_seen("F"))
       {
@@ -1125,6 +1127,7 @@ void parseAck(void)
 
         if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 0, pValue);
         if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 2, pValue);
+        if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 4, pValue);
       }
 
       if (ack_seen("D"))
@@ -1133,6 +1136,37 @@ void parseAck(void)
 
         if (setAxis & SET_X) setParameter(P_INPUT_SHAPING, 1, pValue);
         if (setAxis & SET_Y) setParameter(P_INPUT_SHAPING, 3, pValue);
+        if (setAxis & SET_Z) setParameter(P_INPUT_SHAPING, 5, pValue);
+      }
+    }
+    // parse and store fixed-time motion parameters (only for Marlin)
+    //
+    // Reported by M503 as:
+    //   M493 S<active> D<dyn. freq. mode> H<axis sync>
+    //   M493 <axis> C<shaper> A<base freq.> [F<dyn. freq. scaling>] I<zeta> [Q<vtol>]
+    //
+    else if (ack_starts_with("M493") && infoMachineSettings.firmwareType == FW_MARLIN)
+    {
+      uint8_t base = 0;  // 0 = global settings, 3 = X axis, 6 = Y axis
+
+      if (ack_seen("X"))
+        base = 3;
+      else if (ack_seen("Y"))
+        base = 6;
+      else if (ack_seen("Z") || ack_seen("E"))
+        base = 0xFF;  // axes not handled by the TFT
+
+      if (base == 0)
+      {
+        if (ack_seen("S")) setParameter(P_FT_MOTION, 0, ack_value());
+        if (ack_seen("H")) setParameter(P_FT_MOTION, 1, ack_value());
+        if (ack_seen("D")) setParameter(P_FT_MOTION, 2, ack_value());
+      }
+      else if (base != 0xFF)
+      {
+        if (ack_seen("C")) setParameter(P_FT_MOTION, base + 0, ack_value());
+        if (ack_seen("A")) setParameter(P_FT_MOTION, base + 1, ack_value());
+        if (ack_seen("I")) setParameter(P_FT_MOTION, base + 2, ack_value());
       }
     }
     // parse and store Delta configuration / Delta tower angle (M665) and Delta endstop adjustments (M666)
