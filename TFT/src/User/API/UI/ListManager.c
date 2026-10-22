@@ -138,7 +138,8 @@ void listViewRefreshItem(uint16_t item)
 
   if (item < maxItemCount)
   {
-    listItems.items[cur_i] = totalItems[item];
+    if (totalItems != NULL)  // items can be provided only by action_prepareItem()
+      listItems.items[cur_i] = totalItems[item];
 
     if (action_prepareItem != NULL)
       action_prepareItem(&listItems.items[cur_i], item, cur_i);
@@ -167,7 +168,10 @@ uint16_t listViewGetSelectedIndex(void)
 
     if (cur_index < maxItemCount)
     {
-      if (totalItems[cur_index].icon != CHARICON_NULL)
+      // if no static item list is provided, check the item currently displayed on the page
+      uint16_t icon = (totalItems != NULL) ? totalItems[cur_index].icon : listItems.items[key_num].icon;
+
+      if (icon != CHARICON_NULL)
         return cur_index;
 
       return KEY_IDLE;
