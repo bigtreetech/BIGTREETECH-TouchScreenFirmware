@@ -164,7 +164,13 @@ uint16_t Serial_Get(uint8_t port, char * buf, uint16_t bufSize)
   //       If so, the check could be commented out just to improve performance. Just keep it to make the code more robust
   //
   if (bufSize < (msgSize + 1))  // +1 is for the terminating null character '\0'
+  {
+    // discard the message, otherwise it would never be consumed and the port would be stuck on it forever
+    dmaL1Data_ptr->rIndex = (flag + 1) % cacheSize;
+    dmaL1Data_ptr->flag = dmaL1Data_ptr->rIndex;
+
     return 0;
+  }
 
   // if data is one chunk only, retrieve data from upper part of circular cache
   if (rIndex <= flag)
