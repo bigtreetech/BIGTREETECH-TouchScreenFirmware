@@ -333,7 +333,8 @@ static inline void hostActionCommands(void)
   }
   else if (ack_seen(":prompt_button "))
   {
-    strncpy_no_pad(hostAction.prompt_button[hostAction.button++], ack_cache + ack_index, sizeof(hostAction.prompt_button[0]));
+    if (hostAction.button < COUNT(hostAction.prompt_button))  // ignore any button beyond the supported ones
+      strncpy_no_pad(hostAction.prompt_button[hostAction.button++], ack_cache + ack_index, sizeof(hostAction.prompt_button[0]));
   }
   else if (ack_seen(":prompt_show") && hostAction.prompt_show)
   {
