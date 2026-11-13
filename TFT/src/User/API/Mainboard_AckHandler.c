@@ -285,6 +285,25 @@ static inline void hostActionCommands(void)
   {
     endPrint();
   }
+  else if (ack_seen(":listening_on") || ack_seen(":listening_off"))  // set listening mode from remote host
+  {
+    // format: "//action:listening_on [save]" or "//action:listening_off [save]"
+    // (e.g. sent with "M118 P0 A1 action:listening_on").
+    // Without "save", the new state is applied in RAM only (no flash write) and the state stored
+    // in flash is restored at next TFT boot / reconnection. With "save", the state is also stored in flash
+    bool enable = ack_seen(":listening_on");
+    bool save = ack_continue_seen("save");
+
+    if (enable)
+      SET_BIT_ON(infoSettings.general_settings, INDEX_LISTENING_MODE);
+    else
+      SET_BIT_OFF(infoSettings.general_settings, INDEX_LISTENING_MODE);
+
+    if (save)
+      storePara();
+
+    InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
+  }
   else if (ack_seen(":pause") || ack_seen(":paused"))
   {
     if (infoMachineSettings.firmwareType == FW_MARLIN && ack_seen(":paused"))
